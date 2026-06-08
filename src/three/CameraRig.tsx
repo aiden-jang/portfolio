@@ -1,5 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 import { KEYFRAMES } from '../config';
 import { clamp, lerp, lerpAngle } from '../math';
 import { useAppStore } from '../store';
@@ -23,6 +24,9 @@ const TAP_THRESHOLD_PX = 3;
 const REV_DECAY_RATE = 1.8;
 const REV_RUMBLE_FREQ_HZ = 90 / (2 * Math.PI);
 const REV_SHAKE_AMP = 0.12;
+
+const SECTION_PUNCH_DURATION = 0.55; // seconds
+const SECTION_PUNCH_FOV_DELTA = 6; // degrees added at peak
 
 const NON_DRAGGABLE_SELECTOR = 'a, button, .panel, #nav, #theme-toggle';
 
@@ -62,6 +66,24 @@ export function CameraRig({ getScrollT }: Props) {
     introT: 0,
   });
   const baseKf = useRef<Keyframe>({ ...KEYFRAMES[0] });
+  const baseFov = useRef(camera instanceof THREE.PerspectiveCamera ? camera.fov : 35);
+  const sectionPunchTimer = useRef(0);
+  const lastSection = useRef<number | null>(null);
+
+  // Briefly bump FOV when the section changes to give navigation some weight.
+  useEffect(() => {
+    const unsub = useAppStore.subscribe((s) => {
+      if (lastSection.current === null) {
+        lastSection.current = s.sectionIndex;
+        return;
+      }
+      if (s.sectionIndex !== lastSection.current) {
+        lastSection.current = s.sectionIndex;
+        sectionPunchTimer.current = SECTION_PUNCH_DURATION;
+      }
+    });
+    return unsub;
+  }, []);
 
   useEffect(() => {
     const isNonDraggable = (target: EventTarget | null) =>
@@ -174,6 +196,21 @@ export function CameraRig({ getScrollT }: Props) {
 
     camera.position.set(x, y, z);
     camera.lookAt(0, tgtY, 0);
+
+    // Section punch: brief FOV bell-curve pulse on nav changes for a cinematic
+    // "reaction" to the section change. Returns FOV to baseline at the end.
+    if (camera instanceof THREE.PerspectiveCamera) {
+      if (sectionPunchTimer.current > 0) {
+        sectionPunchTimer.current = Math.max(0, sectionPunchTimer.current - dt);
+        const elapsed = 1 - sectionPunchTimer.current / SECTION_PUNCH_DURATION;
+        const punch = Math.sin(elapsed * Math.PI); // 0 → 1 → 0
+        camera.fov = baseFov.current + punch * SECTION_PUNCH_FOV_DELTA;
+        camera.updateProjectionMatrix();
+      } else if (camera.fov !== baseFov.current) {
+        camera.fov = baseFov.current;
+        camera.updateProjectionMatrix();
+      }
+    }
 
     // Rev envelope: shake the camera + bleed rev intensity.
     if (refs.revT > 0) {
