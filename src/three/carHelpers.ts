@@ -61,13 +61,24 @@ export function autoFitToLength(model: THREE.Object3D) {
   return { scale, orientedSize };
 }
 
+/** Compute a mesh's bounding box in WORLD space. We can't trust the geometry's
+ *  local boundingBox after `EXT_meshopt_compression` — positions there are
+ *  normalized int16 (values in [-1, 1]) that only reach real-world units after
+ *  the world-matrix dequantization applied per-frame. `Box3.setFromObject`
+ *  handles this for us. */
+const _bbox = new THREE.Box3();
+function worldBox(mesh: THREE.Mesh): THREE.Box3 | null {
+  _bbox.setFromObject(mesh);
+  return _bbox.isEmpty() ? null : _bbox;
+}
+
 /** Hide flat ground/shadow/decal planes baked into the GLB. */
 export function hideBakedPlanes(model: THREE.Object3D): void {
+  model.updateMatrixWorld(true);
   model.traverse((obj) => {
     const m = obj as THREE.Mesh;
     if (!m.isMesh) return;
-    if (!m.geometry.boundingBox) m.geometry.computeBoundingBox();
-    const bb = m.geometry.boundingBox;
+    const bb = worldBox(m);
     if (!bb) return;
     const sx = bb.max.x - bb.min.x;
     const sy = bb.max.y - bb.min.y;
@@ -111,12 +122,12 @@ type Mat = ColorMaterial & {
  *  Materials named "paint" / "body" win iff their weighted score is at least
  *  25% of the top weighted score (so a tiny "Body_Paint" trim doesn't fool us). */
 export function detectBodyMaterial(model: THREE.Object3D): ColorMaterial | null {
+  model.updateMatrixWorld(true);
   const rawByMat = new Map<Mat, number>();
   model.traverse((obj) => {
     const m = obj as THREE.Mesh;
     if (!m.isMesh || !m.geometry || !m.visible) return;
-    if (!m.geometry.boundingBox) m.geometry.computeBoundingBox();
-    const bb = m.geometry.boundingBox;
+    const bb = worldBox(m);
     if (!bb) return;
     const sx = bb.max.x - bb.min.x;
     const sy = bb.max.y - bb.min.y;
