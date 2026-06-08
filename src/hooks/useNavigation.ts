@@ -3,7 +3,10 @@ import { SECTION_IDS, type SectionId } from '../config';
 import { clamp } from '../math';
 import { useAppStore } from '../store';
 
-const SNAP_LOCK_MS = 700;
+const SNAP_LOCK_MS = 1100;
+/** Wheel events with |deltaY| below this are treated as trackpad-inertia tail
+ *  and ignored. Real user-initiated scrolls have deltaY >> this. */
+const MIN_WHEEL_DELTA = 10;
 
 /** Wheel/keyboard-hijacked section navigation. Each wheel tick or arrow key
  *  commits to moving exactly one section; nav-link clicks jump directly.
@@ -36,6 +39,8 @@ export function useNavigation() {
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
+      // Drop trackpad inertia-tail events (tiny deltas).
+      if (Math.abs(e.deltaY) < MIN_WHEEL_DELTA) return;
       if (performance.now() < snapLockUntil.current) return;
       if (e.deltaY > 0) goToSection(currentSection.current + 1);
       else if (e.deltaY < 0) goToSection(currentSection.current - 1);
