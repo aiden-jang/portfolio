@@ -11,6 +11,29 @@ const P_LI =
   'text-[clamp(0.95rem,1.3vw,1.05rem)] leading-[1.55] text-[rgba(244,240,255,0.78)]';
 const UL_BASE = 'list-none p-0 mt-4 [&>li]:py-2.5 [&>li]:border-t [&>li]:border-white/[0.07] [&>li:last-child]:border-b [&>li:last-child]:border-white/[0.07]';
 
+const WORK_ITEMS = [
+  "Helped move the platform's backend off a legacy monolith. Built a Django REST API and rewrote the UI in React.",
+  'Built a Playwright testing framework that uses LLM agents to write E2E tests and fix them when they break.',
+  "Cut the Line Item Details page's API calls down from 120 per load to one. Ops noticed.",
+  'At Zeta, built Sponsorships, Audience Extension, and Blackout Periods. Data models, APIs, UIs.',
+  'At LiveIntent, owned Creative Mapping v2 across the MySQL schema, the REST layer, and an Angular frontend.',
+];
+
+/** Editorial-row item used in the Work section: oversized mono index on the
+ *  left, sentence on the right, with a thin top border between rows. */
+function WorkRow({ index, text }: { index: number; text: string }) {
+  return (
+    <div className="flex gap-5 py-4 border-t border-[var(--color-line)] last:border-b">
+      <span className="font-[var(--font-mono)] text-[1.6rem] leading-none text-[var(--color-muted)] tabular-nums shrink-0 w-[2.4rem]">
+        {String(index).padStart(2, '0')}
+      </span>
+      <p className="text-[rgba(244,240,255,0.82)] text-[clamp(0.95rem,1.25vw,1.02rem)] leading-[1.55] m-0">
+        {text}
+      </p>
+    </div>
+  );
+}
+
 /** Compact stat callout used in the Work section header. */
 function Stat({ value, label }: { value: ReactNode; label: string }) {
   return (
@@ -56,7 +79,7 @@ export function Sections() {
       </Section>
 
       <Section id="sec-work" side="right">
-        <div className={PANEL_BASE}>
+        <div className="panel pointer-events-auto max-w-[540px]">
           <span className={EYEBROW}>01 / WORK</span>
           <h2 className={H2}>Selected work</h2>
           <div className="mt-5 grid grid-cols-3 gap-4 border-y border-[var(--color-line)] py-4">
@@ -64,13 +87,11 @@ export function Sections() {
             <Stat value={<StatCounter to={2500} suffix="+" />} label="Publisher newsletters" />
             <Stat value={<><StatCounter to={120} /><span className="text-[var(--color-muted)] mx-1">→</span><StatCounter to={1} /></>} label="API calls / load" />
           </div>
-          <ul className={`${UL_BASE} ${P_LI}`}>
-            <li>Helped move the platform&apos;s backend off a legacy monolith. Built a Django REST API and rewrote the UI in React.</li>
-            <li>Built a Playwright testing framework that uses LLM agents to write E2E tests and fix them when they break.</li>
-            <li>Cut the Line Item Details page&apos;s API calls down from 120 per load to one. Ops noticed.</li>
-            <li>At Zeta, built Sponsorships, Audience Extension, and Blackout Periods. Data models, APIs, UIs.</li>
-            <li>At LiveIntent, owned Creative Mapping v2 across the MySQL schema, the REST layer, and an Angular frontend.</li>
-          </ul>
+          <div className="mt-2">
+            {WORK_ITEMS.map((item, i) => (
+              <WorkRow key={i} index={i + 1} text={item} />
+            ))}
+          </div>
         </div>
       </Section>
 
