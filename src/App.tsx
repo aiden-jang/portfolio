@@ -5,6 +5,7 @@ import { Brand } from './ui/Brand';
 import { Hint } from './ui/Hint';
 import { Nav } from './ui/Nav';
 import { Sections } from './ui/Sections';
+import { SectionDots } from './ui/SectionDots';
 
 /** Composition root: 3D canvas + DOM chrome side-by-side. */
 export function App() {
@@ -16,6 +17,7 @@ export function App() {
       <Scene getScrollT={getScrollT} />
       <Brand />
       <Nav onLink={scrollToSection} />
+      <SectionDots onJump={scrollToSection} />
       <Sections />
       <Hint />
     </>
