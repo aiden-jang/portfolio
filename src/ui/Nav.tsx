@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { useMagnetic } from '../hooks/useMagnetic';
 import { SECTION_IDS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { CarSwitcher } from './CarSwitcher';
@@ -30,27 +32,49 @@ export function Nav({ onLink }: Props) {
       "
     >
       {ITEMS.map((item) => (
-        <a
+        <NavLink
           key={item.id}
-          href={`#${item.id}`}
-          data-section={item.key}
-          onClick={(e) => {
-            e.preventDefault();
-            onLink(item.id);
-          }}
-          className={`
-            py-1.5 border-b transition-colors
-            ${activeId === item.id
-              ? 'text-[var(--color-fg)] border-[var(--color-neon)]'
-              : 'text-[var(--color-muted)] border-transparent hover:text-[var(--color-fg)] hover:border-[var(--color-neon)]'}
-          `}
-        >
-          {item.label}
-        </a>
+          item={item}
+          active={activeId === item.id}
+          onClick={() => onLink(item.id)}
+        />
       ))}
       <CarSwitcher />
       <ColorSwatches />
       <ThemeToggle />
     </nav>
+  );
+}
+
+function NavLink({
+  item,
+  active,
+  onClick,
+}: {
+  item: { id: SectionId; label: string; key: string };
+  active: boolean;
+  onClick: () => void;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  useMagnetic(ref, 0.35);
+  return (
+    <a
+      ref={ref}
+      href={`#${item.id}`}
+      data-section={item.key}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick();
+      }}
+      className={`
+        py-1.5 border-b transition-[color,border-color,transform] duration-200
+        will-change-transform
+        ${active
+          ? 'text-[var(--color-fg)] border-[var(--color-neon)]'
+          : 'text-[var(--color-muted)] border-transparent hover:text-[var(--color-fg)] hover:border-[var(--color-neon)]'}
+      `}
+    >
+      {item.label}
+    </a>
   );
 }
