@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useMagnetic } from '../hooks/useMagnetic';
 import { useAppStore } from '../store';
 
 /** Round day/night toggle button. Updates the `data-theme` attribute on
@@ -6,6 +7,8 @@ import { useAppStore } from '../store';
 export function ThemeToggle() {
   const themeName = useAppStore((s) => s.themeName);
   const toggleTheme = useAppStore((s) => s.toggleTheme);
+  const ref = useRef<HTMLButtonElement>(null);
+  useMagnetic(ref, 0.4);
 
   useEffect(() => {
     document.body.dataset.theme = themeName;
@@ -13,6 +16,7 @@ export function ThemeToggle() {
 
   return (
     <button
+      ref={ref}
       id="theme-toggle"
       type="button"
       aria-label="Toggle day/night"
@@ -20,7 +24,9 @@ export function ThemeToggle() {
       className="
         bg-transparent border border-[var(--color-line)] rounded-full
         w-9 h-9 inline-grid place-items-center cursor-pointer
-        transition-colors hover:border-[var(--color-neon)]
+        transition-[border-color,background,transform] duration-200
+        will-change-transform
+        hover:border-[var(--color-neon)]
       "
     >
       <span
