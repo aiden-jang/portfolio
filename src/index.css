@@ -40,6 +40,20 @@
   }
 }
 
+/* Film grain jitter — small discrete shifts so the noise feels alive. */
+@keyframes filmgrain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1%, -1%); }
+  20% { transform: translate(1%, 0.5%); }
+  30% { transform: translate(-1.5%, 1%); }
+  40% { transform: translate(1.5%, -1%); }
+  50% { transform: translate(-0.5%, 1.5%); }
+  60% { transform: translate(1%, -1.5%); }
+  70% { transform: translate(-1.5%, -0.5%); }
+  80% { transform: translate(0.5%, 1.5%); }
+  90% { transform: translate(-1%, -1.5%); }
+}
+
 @layer components {
   /* Reveal animations on scroll-in. */
   .panel > * {
