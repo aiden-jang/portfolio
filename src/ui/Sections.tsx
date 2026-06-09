@@ -66,43 +66,23 @@ const WORK_ITEMS: WorkDetail[] = [
 ];
 
 /** Editorial-row item used in the Work section. Clicking opens the full
- *  case-study modal. Hover lifts the muted index toward the neon accent. */
-function WorkRow({
-  index,
-  item,
-  onOpen,
-}: {
-  index: number;
-  item: WorkDetail;
-  onOpen: () => void;
-}) {
+ *  case-study modal. Borders + bg appear only on hover, matching the
+ *  paragraph-style rhythm of the other sections. */
+function WorkRow({ item, onOpen }: { item: WorkDetail; onOpen: () => void }) {
   return (
     <button
       type="button"
       onClick={onOpen}
       className="
-        group w-full text-left flex gap-5 py-4
-        border-t border-[var(--color-line)] last:border-b
-        transition-colors hover:bg-white/[0.02]
+        group w-full text-left block py-2.5
+        border-y border-transparent rounded-md -mx-2 px-2
+        transition-colors duration-200
+        hover:border-[var(--color-line)] hover:bg-white/[0.02]
       "
     >
-      <span
-        className="
-          font-[var(--font-mono)] text-[1.6rem] leading-none tabular-nums shrink-0 w-[2.4rem]
-          text-[var(--color-muted)] transition-colors
-          group-hover:text-[var(--color-neon)]
-        "
-      >
-        {String(index).padStart(2, '0')}
-      </span>
-      <div className="flex-1">
-        <p className="text-[rgba(244,240,255,0.82)] text-[clamp(0.95rem,1.25vw,1.02rem)] leading-[1.55] m-0">
-          {item.summary}
-        </p>
-        <span className="mt-1 inline-flex items-center gap-1 font-[var(--font-mono)] text-[0.62rem] tracking-[0.22em] uppercase text-[var(--color-muted)] opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">
-          Read more →
-        </span>
-      </div>
+      <p className="text-[rgba(244,240,255,0.82)] text-[clamp(0.95rem,1.25vw,1.02rem)] leading-[1.55] m-0 transition-colors group-hover:text-[var(--color-fg)]">
+        {item.summary}
+      </p>
     </button>
   );
 }
@@ -145,7 +125,6 @@ export function Sections() {
             {WORK_ITEMS.map((item, i) => (
               <WorkRow
                 key={i}
-                index={i + 1}
                 item={item}
                 onOpen={() => setActiveWork(item)}
               />
