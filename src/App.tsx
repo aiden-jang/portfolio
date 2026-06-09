@@ -1,4 +1,3 @@
-import { useEasterEggs } from './hooks/useEasterEggs';
 import { useNavigation } from './hooks/useNavigation';
 import { useReveal } from './hooks/useReveal';
 import { Scene } from './three/Scene';
@@ -11,7 +10,6 @@ import { Sections } from './ui/Sections';
 export function App() {
   const { getScrollT, scrollToSection } = useNavigation();
   useReveal();
-  useEasterEggs();
 
   return (
     <>

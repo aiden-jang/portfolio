@@ -17,10 +17,16 @@ export function Hint() {
         <kbd className={KBD}>drag</kbd> orbit
       </span>
       <span className="inline-flex items-center gap-2">
-        <kbd className={KBD}>wheel</kbd> / <kbd className={KBD}>↑↓</kbd> navigate
+        <kbd className={KBD}>scroll</kbd> / <kbd className={KBD}>↑↓</kbd> sections
       </span>
       <span className="inline-flex items-center gap-2">
-        <kbd className={KBD}>click</kbd> rev
+        <kbd className={KBD}>swipe</kbd> / <kbd className={KBD}>←→</kbd> cars
+      </span>
+      <span className="inline-flex items-center gap-2">
+        <kbd className={KBD}>C</kbd> color
+      </span>
+      <span className="inline-flex items-center gap-2">
+        <kbd className={KBD}>B</kbd> background
       </span>
     </div>
   );

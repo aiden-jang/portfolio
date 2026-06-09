@@ -4,8 +4,11 @@ import { clamp } from '../math';
 import { useAppStore } from '../store';
 
 const SNAP_LOCK_MS = 1100;
-/** Wheel events with |deltaY| below this are treated as trackpad-inertia tail
- *  and ignored. Real user-initiated scrolls have deltaY >> this. */
+/** Cooldown between car cycles (lighter than section snap since GLB swap is
+ *  async and self-throttling). */
+const CAR_LOCK_MS = 600;
+/** Wheel events with |delta| below this are treated as trackpad-inertia tail
+ *  and ignored. Real user-initiated scrolls have delta >> this. */
 const MIN_WHEEL_DELTA = 10;
 
 /** Wheel/keyboard-hijacked section navigation. Each wheel tick or arrow key
@@ -15,6 +18,20 @@ export function useNavigation() {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
   const snapLockUntil = useRef(0);
   const currentSection = useRef(0);
+  const carLockUntil = useRef(0);
+
+  const cycleCarThrottled = useCallback(() => {
+    const now = performance.now();
+    if (now < carLockUntil.current) return;
+    carLockUntil.current = now + CAR_LOCK_MS;
+    useAppStore.getState().cycleCar();
+  }, []);
+  const prevCarThrottled = useCallback(() => {
+    const now = performance.now();
+    if (now < carLockUntil.current) return;
+    carLockUntil.current = now + CAR_LOCK_MS;
+    useAppStore.getState().prevCar();
+  }, []);
 
   const getScrollT = useCallback((): number => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -39,13 +56,27 @@ export function useNavigation() {
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      // Drop trackpad inertia-tail events (tiny deltas).
-      if (Math.abs(e.deltaY) < MIN_WHEEL_DELTA) return;
+      const absX = Math.abs(e.deltaX);
+      const absY = Math.abs(e.deltaY);
+      // Horizontal trackpad swipe → cycle through cars.
+      if (absX > absY && absX >= MIN_WHEEL_DELTA) {
+        if (e.deltaX > 0) cycleCarThrottled();
+        else prevCarThrottled();
+        return;
+      }
+      // Vertical scroll → section navigation.
+      if (absY < MIN_WHEEL_DELTA) return;
       if (performance.now() < snapLockUntil.current) return;
       if (e.deltaY > 0) goToSection(currentSection.current + 1);
       else if (e.deltaY < 0) goToSection(currentSection.current - 1);
     };
     const onKey = (e: KeyboardEvent) => {
+      // Don't intercept letter keys while the user is typing in a form field.
+      const target = e.target as HTMLElement | null;
+      const inField =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        !!target?.isContentEditable;
       switch (e.key) {
         case 'ArrowDown':
         case 'PageDown':
@@ -58,6 +89,14 @@ export function useNavigation() {
           e.preventDefault();
           goToSection(currentSection.current - 1);
           break;
+        case 'ArrowRight':
+          e.preventDefault();
+          cycleCarThrottled();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          prevCarThrottled();
+          break;
         case 'Home':
           e.preventDefault();
           goToSection(0);
@@ -65,6 +104,18 @@ export function useNavigation() {
         case 'End':
           e.preventDefault();
           goToSection(SECTION_IDS.length - 1);
+          break;
+        case 'c':
+        case 'C':
+          if (inField) return;
+          e.preventDefault();
+          useAppStore.getState().cycleBodyColor();
+          break;
+        case 'b':
+        case 'B':
+          if (inField) return;
+          e.preventDefault();
+          useAppStore.getState().toggleTheme();
           break;
       }
     };
