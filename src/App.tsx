@@ -3,6 +3,7 @@ import { useReveal } from './hooks/useReveal';
 import { Scene } from './three/Scene';
 import { Brand } from './ui/Brand';
 import { Hint } from './ui/Hint';
+import { LoadingBar } from './ui/LoadingBar';
 import { Nav } from './ui/Nav';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
@@ -15,6 +16,7 @@ export function App() {
   return (
     <>
       <Scene getScrollT={getScrollT} />
+      <LoadingBar />
       <Brand />
       <Nav onLink={scrollToSection} />
       <SectionDots onJump={scrollToSection} />

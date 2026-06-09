@@ -1,45 +1,33 @@
 import { useEffect, useState } from 'react';
-import { useAppStore } from '../store';
+import { BODY_COLOR_PALETTE, useAppStore } from '../store';
 
-const SWATCHES: { color: string; title: string }[] = [
-  { color: '#ff6b1c', title: 'Signal Orange' },
-  { color: '#b00020', title: 'Crimson' },
-  { color: '#0a0a0c', title: 'Gloss Black' },
-  { color: '#f5f1e8', title: 'Pearl White' },
-  { color: '#194527', title: 'Racing Green' },
-  { color: '#163a8a', title: 'Royal Blue' },
-];
+const SWATCH_TITLES: Record<string, string> = {
+  '#ff6b1c': 'Signal Orange',
+  '#b00020': 'Crimson',
+  '#0a0a0c': 'Gloss Black',
+  '#f5f1e8': 'Pearl White',
+  '#194527': 'Racing Green',
+  '#163a8a': 'Royal Blue',
+};
 
 /** Body-color swatches. Applies to the detected body material on the current
- *  car. Resets to "Original" whenever the car changes. */
+ *  car. The "active" indicator reads from the store, so the same indicator
+ *  also reflects keyboard-triggered color changes (e.g. pressing `C`). */
 export function ColorSwatches() {
   const carIndex = useAppStore((s) => s.carIndex);
+  const activeBodyColor = useAppStore((s) => s.activeBodyColor);
+  const applyBodyColor = useAppStore((s) => s.applyBodyColor);
   const refs = useAppStore((s) => s.refs);
-  const [activeColor, setActiveColor] = useState<string>('original');
   const [hasBody, setHasBody] = useState(false);
 
   // Poll for the body material once after a car load (the GLB load is async,
   // so we can't read it synchronously after the carIndex changes).
   useEffect(() => {
-    setActiveColor('original');
-    const check = () => {
-      setHasBody(!!refs.bodyMaterial?.color);
-    };
+    const check = () => setHasBody(!!refs.bodyMaterial?.color);
     check();
     const id = window.setInterval(check, 200);
     return () => window.clearInterval(id);
   }, [carIndex, refs]);
-
-  const apply = (color: string) => {
-    const mat = refs.bodyMaterial;
-    if (!mat?.color) return;
-    if (color === 'original') {
-      if (refs.bodyOriginalColor) mat.color.copy(refs.bodyOriginalColor);
-    } else {
-      mat.color.set(color);
-    }
-    setActiveColor(color);
-  };
 
   // Always rendered so the nav layout doesn't shift when the body material
   // finishes detecting. Visually muted + non-interactive while we wait.
@@ -57,16 +45,16 @@ export function ColorSwatches() {
       <SwatchButton
         original
         title="Original"
-        active={activeColor === 'original'}
-        onClick={() => apply('original')}
+        active={activeBodyColor === 'original'}
+        onClick={() => applyBodyColor('original')}
       />
-      {SWATCHES.map((s) => (
+      {BODY_COLOR_PALETTE.map((color) => (
         <SwatchButton
-          key={s.color}
-          color={s.color}
-          title={s.title}
-          active={activeColor === s.color}
-          onClick={() => apply(s.color)}
+          key={color}
+          color={color}
+          title={SWATCH_TITLES[color] ?? color}
+          active={activeBodyColor === color}
+          onClick={() => applyBodyColor(color)}
         />
       ))}
     </div>

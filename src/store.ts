@@ -18,11 +18,24 @@ type Refs = {
   introArmed: boolean;
 };
 
+/** "original" restores the GLB's as-loaded color; any other value is a hex. */
+export type ActiveBodyColor = 'original' | string;
+
+export const BODY_COLOR_PALETTE = [
+  '#ff6b1c', // signal orange
+  '#b00020', // crimson
+  '#0a0a0c', // gloss black
+  '#f5f1e8', // pearl white
+  '#194527', // racing green
+  '#163a8a', // royal blue
+];
+
 type AppState = {
   // ---- React state (rare changes, triggers re-renders) ----
   carIndex: number;
   themeName: ThemeName;
   sectionIndex: number;
+  activeBodyColor: ActiveBodyColor;
 
   // ---- Imperative refs (high-frequency, do not trigger re-renders) ----
   refs: Refs;
@@ -35,19 +48,13 @@ type AppState = {
   setSectionIndex: (i: number) => void;
   triggerRev: () => void;
   armIntro: () => void;
-  /** Set the currently-loaded car's body material to a random palette color
-   *  (skipping whatever it already is). No-op if no body material detected. */
+  /** Set the body material to a palette color (or restore the original).
+   *  Both the swatch click handler and the keyboard cycle route through here
+   *  so the UI's active-swatch indicator stays in sync. */
+  applyBodyColor: (color: ActiveBodyColor) => void;
+  /** Pick a random palette color (skipping the current one) and apply it. */
   cycleBodyColor: () => void;
 };
-
-const BODY_COLOR_PALETTE = [
-  '#ff6b1c', // signal orange
-  '#b00020', // crimson
-  '#0a0a0c', // gloss black
-  '#f5f1e8', // pearl white
-  '#194527', // racing green
-  '#163a8a', // royal blue
-];
 
 /** Single source of truth. React state for things that change on user actions
  *  (car, theme, section). High-frequency values (rev, body material, lamps)
@@ -56,6 +63,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   carIndex: 0,
   themeName: 'dusk',
   sectionIndex: 0,
+  activeBodyColor: 'original',
   refs: {
     bodyMaterial: null,
     bodyOriginalColor: null,
@@ -64,10 +72,14 @@ export const useAppStore = create<AppState>((set, get) => ({
     revT: 0,
     introArmed: false,
   },
-  setCarIndex: (i) => set({ carIndex: i }),
-  cycleCar: () => set({ carIndex: (get().carIndex + 1) % CARS.length }),
+  setCarIndex: (i) => set({ carIndex: i, activeBodyColor: 'original' }),
+  cycleCar: () =>
+    set({ carIndex: (get().carIndex + 1) % CARS.length, activeBodyColor: 'original' }),
   prevCar: () =>
-    set({ carIndex: (get().carIndex - 1 + CARS.length) % CARS.length }),
+    set({
+      carIndex: (get().carIndex - 1 + CARS.length) % CARS.length,
+      activeBodyColor: 'original',
+    }),
   toggleTheme: () =>
     set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
   setSectionIndex: (i) => set({ sectionIndex: i }),
@@ -77,12 +89,23 @@ export const useAppStore = create<AppState>((set, get) => ({
   armIntro: () => {
     get().refs.introArmed = true;
   },
-  cycleBodyColor: () => {
-    const mat = get().refs.bodyMaterial;
+  applyBodyColor: (color) => {
+    const refs = get().refs;
+    const mat = refs.bodyMaterial;
     if (!mat?.color) return;
-    const currentHex = '#' + mat.color.getHexString();
-    const choices = BODY_COLOR_PALETTE.filter((c) => c.toLowerCase() !== currentHex);
-    mat.color.set(choices[Math.floor(Math.random() * choices.length)]);
+    if (color === 'original') {
+      if (refs.bodyOriginalColor) mat.color.copy(refs.bodyOriginalColor);
+    } else {
+      mat.color.set(color);
+    }
+    set({ activeBodyColor: color });
+  },
+  cycleBodyColor: () => {
+    // Cycle in the visual order shown in the nav: Original → palette[0] → ... → wrap.
+    const order: ActiveBodyColor[] = ['original', ...BODY_COLOR_PALETTE];
+    const idx = order.indexOf(get().activeBodyColor);
+    const next = order[(idx + 1) % order.length];
+    get().applyBodyColor(next);
   },
 }));
 
