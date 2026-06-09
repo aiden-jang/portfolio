@@ -23,6 +23,21 @@
     font-family: var(--font-display);
     min-height: 100vh;
   }
+
+  /* Keyboard focus rings: visible only when navigating via keyboard
+     (`:focus-visible`), so mouse clicks don't leave a ring behind. Inherits
+     border-radius from the focused element, so round elements get round rings. */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--color-neon);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  /* Buttons that are already rounded should keep their shape. */
+  button:focus-visible,
+  a:focus-visible {
+    border-radius: inherit;
+  }
 }
 
 @layer components {

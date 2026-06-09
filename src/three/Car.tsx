@@ -96,6 +96,22 @@ export function Car() {
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
 
         if (!refs.introArmed) armIntro();
+
+        // Prefetch the adjacent cars so a ←/→ swipe feels instant. Uses
+        // `fetch` (not GLTFLoader) so it only warms the HTTP cache without
+        // parsing or running the meshopt decoder. Fired after the current
+        // load completes to keep the active swap unblocked.
+        const adjacent = [
+          (carIndex + 1) % CARS.length,
+          (carIndex - 1 + CARS.length) % CARS.length,
+        ];
+        for (const i of adjacent) {
+          const a = CARS[i];
+          if (a && a.file !== spec.file) {
+            // Browser cache is enough; we don't need the result.
+            fetch(`/models/${a.file}`, { priority: 'low' } as RequestInit).catch(() => {});
+          }
+        }
       },
       undefined,
       (err) => {
