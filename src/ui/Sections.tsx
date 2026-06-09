@@ -1,50 +1,109 @@
-import { type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { CARS } from '../config';
-import { StatCounter, formatCompact } from './StatCounter';
+import { WorkModal, type WorkDetail } from './WorkModal';
 
 const PANEL_BASE = 'panel pointer-events-auto max-w-[420px]';
 const EYEBROW =
   'font-[var(--font-mono)] text-[0.66rem] tracking-[0.4em] text-[var(--color-muted)] uppercase';
 const H2 =
-  'mt-3 mb-3 text-[clamp(2.4rem,6.5vw,4rem)] leading-[0.92] font-semibold tracking-[-0.045em]';
+  'mt-3 mb-2.5 text-[clamp(1.8rem,4vw,2.6rem)] leading-[0.98] font-semibold tracking-[-0.03em]';
 const P_LI =
   'text-[clamp(0.95rem,1.3vw,1.05rem)] leading-[1.55] text-[rgba(244,240,255,0.78)]';
 const UL_BASE = 'list-none p-0 mt-4 [&>li]:py-2.5 [&>li]:border-t [&>li]:border-white/[0.07] [&>li:last-child]:border-b [&>li:last-child]:border-white/[0.07]';
 
-const WORK_ITEMS = [
-  "Helped move the platform's backend off a legacy monolith. Built a Django REST API and rewrote the UI in React.",
-  'Built a Playwright testing framework that uses LLM agents to write E2E tests and fix them when they break.',
-  "Cut the Line Item Details page's API calls down from 120 per load to one. Ops noticed.",
-  'At Zeta, built Sponsorships, Audience Extension, and Blackout Periods. Data models, APIs, UIs.',
-  'At LiveIntent, owned Creative Mapping v2 across the MySQL schema, the REST layer, and an Angular frontend.',
+const WORK_ITEMS: WorkDetail[] = [
+  {
+    title: 'Monolith → Django REST + React rewrite',
+    context: 'Zeta Global · 2024–present',
+    summary: 'Migrated the platform off a legacy monolith. Django REST + React rewrite.',
+    body: [
+      'Co-led a platform-wide migration from a legacy PHP monolith to a Django REST API. The new system powers self-service native ad onboarding across 2,500+ publisher newsletters reaching ~240M readers.',
+      'Owned both ends: data modeling and Django serializers on the backend, React + TypeScript components and hooks on the frontend. Shipped continuously alongside the existing system, with feature flags routing traffic to the new stack.',
+    ],
+    stack: ['Django', 'Python', 'REST', 'PostgreSQL', 'React', 'TypeScript'],
+  },
+  {
+    title: 'Agentic AI Playwright framework',
+    context: 'Zeta Global',
+    summary: 'Playwright framework where LLM agents write and self-heal E2E tests.',
+    body: [
+      'Three-stage pipeline — Planner, Generator, Healer. The Planner reads a feature spec and decomposes it into test scenarios. The Generator turns each scenario into a runnable Playwright spec. The Healer watches for flakes and rewrites selectors / waits when DOM changes shift the page out from under existing tests.',
+      'Established baseline frontend E2E coverage across the platform without burning weeks on hand-rolled fixtures.',
+    ],
+    stack: ['Playwright', 'TypeScript', 'Claude API', 'Node.js'],
+  },
+  {
+    title: 'Line Item Details: 120 → 1 API call',
+    context: 'Zeta Global',
+    summary: 'Cut a key admin page from 120 API calls per load down to one.',
+    body: [
+      "The page used a per-row component pattern that issued one API call per visible row — dozens of round-trips before the page even rendered. Consolidated everything into a single batched endpoint with the joined data the page actually needs.",
+      'Load time went from "go get coffee" to instant. The internal ops and sales teams who used it daily said thanks in #engineering.',
+    ],
+    stack: ['Django', 'REST', 'React', 'TypeScript', 'PostgreSQL'],
+  },
+  {
+    title: 'Sponsorships, Audience Extension, Blackout Periods',
+    context: 'Zeta Global',
+    summary: 'Three publisher-config tools at Zeta. Data models, APIs, UIs.',
+    body: [
+      'Sponsorships v1.0 — Creatives + Demand Controls. Publisher monetization configuration across media groups, sensitive categories, and RTB exchange settings.',
+      'Audience Extension — campaign scheduling with bulk DMA / zip-code audience targeting.',
+      'Blackout Periods — time-window controls that suppress specific creatives or exchanges. Owned data models, Django REST APIs, and React/TypeScript UIs for all three.',
+    ],
+    stack: ['Django', 'REST', 'PostgreSQL', 'React', 'TypeScript'],
+  },
+  {
+    title: 'Creative Mapping v2',
+    context: 'LiveIntent · 2023–2024',
+    summary: 'Owned Creative Mapping v2 across MySQL, REST, and Angular.',
+    body: [
+      'Creative-to-placement targeting for the ad-serving XML pipeline. Designed the MySQL schema for the new mapping model, built the REST API on the legacy backend, and delivered the Angular UI for publisher ops to configure targeting rules.',
+      'Shipped alongside a stack of related work: third-party demand controls for RTB native + hybrid slots, five publisher data migrations, and resolution of a critical search-endpoint performance regression.',
+    ],
+    stack: ['MySQL', 'PHP', 'REST', 'Angular', 'TypeScript', 'XML'],
+  },
 ];
 
-/** Editorial-row item used in the Work section: oversized mono index on the
- *  left, sentence on the right, with a thin top border between rows. */
-function WorkRow({ index, text }: { index: number; text: string }) {
+/** Editorial-row item used in the Work section. Clicking opens the full
+ *  case-study modal. Hover lifts the muted index toward the neon accent. */
+function WorkRow({
+  index,
+  item,
+  onOpen,
+}: {
+  index: number;
+  item: WorkDetail;
+  onOpen: () => void;
+}) {
   return (
-    <div className="flex gap-5 py-4 border-t border-[var(--color-line)] last:border-b">
-      <span className="font-[var(--font-mono)] text-[1.6rem] leading-none text-[var(--color-muted)] tabular-nums shrink-0 w-[2.4rem]">
+    <button
+      type="button"
+      onClick={onOpen}
+      className="
+        group w-full text-left flex gap-5 py-4
+        border-t border-[var(--color-line)] last:border-b
+        transition-colors hover:bg-white/[0.02]
+      "
+    >
+      <span
+        className="
+          font-[var(--font-mono)] text-[1.6rem] leading-none tabular-nums shrink-0 w-[2.4rem]
+          text-[var(--color-muted)] transition-colors
+          group-hover:text-[var(--color-neon)]
+        "
+      >
         {String(index).padStart(2, '0')}
       </span>
-      <p className="text-[rgba(244,240,255,0.82)] text-[clamp(0.95rem,1.25vw,1.02rem)] leading-[1.55] m-0">
-        {text}
-      </p>
-    </div>
-  );
-}
-
-/** Compact stat callout used in the Work section header. */
-function Stat({ value, label }: { value: ReactNode; label: string }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="text-[clamp(1.4rem,2.6vw,2rem)] leading-none font-semibold tracking-[-0.03em] text-[var(--color-fg)]">
-        {value}
-      </span>
-      <span className="font-[var(--font-mono)] text-[0.6rem] tracking-[0.18em] uppercase text-[var(--color-muted)]">
-        {label}
-      </span>
-    </div>
+      <div className="flex-1">
+        <p className="text-[rgba(244,240,255,0.82)] text-[clamp(0.95rem,1.25vw,1.02rem)] leading-[1.55] m-0">
+          {item.summary}
+        </p>
+        <span className="mt-1 inline-flex items-center gap-1 font-[var(--font-mono)] text-[0.62rem] tracking-[0.22em] uppercase text-[var(--color-muted)] opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">
+          Read more →
+        </span>
+      </div>
+    </button>
   );
 }
 
@@ -63,14 +122,14 @@ function Section({ id, side, children }: { id: string; side: 'left' | 'right' | 
 }
 
 export function Sections() {
+  const [activeWork, setActiveWork] = useState<WorkDetail | null>(null);
   return (
     <main id="scroll" className="relative z-10">
       <Section id="sec-intro" side="center">
-        <div className="panel pointer-events-auto max-w-[860px] text-center px-4">
+        <div className="panel pointer-events-auto max-w-[640px] text-center px-4">
           <span className={EYEBROW}>Software · Interfaces · Motion</span>
-          <h2 className="mt-4 mb-4 text-[clamp(3.2rem,10vw,7rem)] leading-[0.88] font-semibold tracking-[-0.055em]">
-            Software engineer<br />
-            <span className="text-[var(--color-neon)]">building</span> for the web.
+          <h2 className="mt-3 mb-3 text-[clamp(2.4rem,5vw,3.6rem)] leading-[0.95] font-semibold tracking-[-0.035em]">
+            Software engineer building for the web.
           </h2>
           <p className={`${P_LI} max-w-[40ch] mx-auto`}>
             Scroll to look around. Click and drag to orbit the car.
@@ -79,17 +138,17 @@ export function Sections() {
       </Section>
 
       <Section id="sec-work" side="right">
-        <div className="panel pointer-events-auto max-w-[540px]">
+        <div className="panel pointer-events-auto max-w-[500px]">
           <span className={EYEBROW}>01 / WORK</span>
           <h2 className={H2}>Selected work</h2>
-          <div className="mt-5 grid grid-cols-3 gap-4 border-y border-[var(--color-line)] py-4">
-            <Stat value={<StatCounter to={240} format={formatCompact} suffix="+" />} label="Readers reached" />
-            <Stat value={<StatCounter to={2500} suffix="+" />} label="Publisher newsletters" />
-            <Stat value={<><StatCounter to={120} /><span className="text-[var(--color-muted)] mx-1">→</span><StatCounter to={1} /></>} label="API calls / load" />
-          </div>
-          <div className="mt-2">
+          <div className="mt-4">
             {WORK_ITEMS.map((item, i) => (
-              <WorkRow key={i} index={i + 1} text={item} />
+              <WorkRow
+                key={i}
+                index={i + 1}
+                item={item}
+                onOpen={() => setActiveWork(item)}
+              />
             ))}
           </div>
         </div>
@@ -100,10 +159,10 @@ export function Sections() {
           <span className={EYEBROW}>02 / ABOUT</span>
           <h2 className={H2}>What I do</h2>
           <ul className={`${UL_BASE} ${P_LI}`}>
-            <li>Software engineer at Zeta Global in New York. Was at LiveIntent for two and a half years before that.</li>
-            <li>Python and TypeScript are my daily drivers. Plenty of SQL too.</li>
-            <li>Most of my work is in Django, React, Postgres, Docker, and AWS. Have shipped real things in Angular and FastAPI as well.</li>
-            <li>Lately learning more about agentic AI for testing and LLM dev workflows. Also Three.js, which is how this site happened.</li>
+            <li>Software engineer at Zeta Global. Previously LiveIntent, ~2.5 years.</li>
+            <li>Python and TypeScript day-to-day. Plenty of SQL.</li>
+            <li>Comfortable across Django, React, Postgres, AWS. Angular and FastAPI too.</li>
+            <li>Lately: agentic AI testing, LLM dev workflows, Three.js.</li>
           </ul>
         </div>
       </Section>
@@ -156,6 +215,7 @@ export function Sections() {
           <Credits />
         </div>
       </Section>
+      <WorkModal item={activeWork} onClose={() => setActiveWork(null)} />
     </main>
   );
 }
