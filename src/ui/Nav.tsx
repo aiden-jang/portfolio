@@ -67,14 +67,22 @@ function NavLink({
         onClick();
       }}
       className={`
-        py-1.5 border-b transition-[color,border-color,transform] duration-200
-        will-change-transform
+        group relative py-1.5
+        transition-[color,transform] duration-200 will-change-transform
         ${active
-          ? 'text-[var(--color-fg)] border-[var(--color-neon)]'
-          : 'text-[var(--color-muted)] border-transparent hover:text-[var(--color-fg)] hover:border-[var(--color-neon)]'}
+          ? 'text-[var(--color-fg)]'
+          : 'text-[var(--color-muted)] hover:text-[var(--color-fg)]'}
       `}
     >
       {item.label}
+      <span
+        className={`
+          pointer-events-none absolute left-0 right-0 bottom-0 h-px
+          bg-[var(--color-neon)] origin-left
+          transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+          ${active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
+        `}
+      />
     </a>
   );
 }
