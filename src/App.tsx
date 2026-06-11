@@ -1,3 +1,5 @@
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useNavigation } from './hooks/useNavigation';
 import { useReveal } from './hooks/useReveal';
 import { Scene } from './three/Scene';
@@ -24,6 +26,8 @@ export function App() {
       <SectionDots onJump={scrollToSection} />
       <Sections />
       <Hint />
+      <Analytics />
+      <SpeedInsights />
     </>
   );
 }
