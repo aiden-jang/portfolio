@@ -13,6 +13,17 @@ const UL_BASE = 'list-none p-0 mt-4 [&>li]:py-2.5 [&>li]:border-t [&>li]:border-
 
 const WORK_ITEMS: WorkDetail[] = [
   {
+    title: 'Blossom',
+    context: 'Side project · 2025',
+    summary: 'A side project of mine. Click to learn more and try it.',
+    body: [
+      'A web app I built on the side. Full-stack: data model, API, UI, all of it.',
+      'Live at blossom.aidenjang.com — give it a spin.',
+    ],
+    stack: ['TypeScript', 'React', 'Node.js'],
+    link: { label: 'Visit Blossom', url: 'https://blossom.aidenjang.com' },
+  },
+  {
     title: 'Monolith → Django REST + React rewrite',
     context: 'Zeta Global · 2024–present',
     summary: 'Migrated the platform off a legacy monolith. Django REST + React rewrite.',
@@ -81,6 +92,19 @@ function WorkRow({ item, onOpen }: { item: WorkDetail; onOpen: () => void }) {
       "
     >
       <p className="text-[rgba(244,240,255,0.82)] text-[clamp(0.95rem,1.25vw,1.02rem)] leading-[1.55] m-0 transition-colors group-hover:text-[var(--color-fg)]">
+        {item.link && (
+          <span
+            className="
+              inline-flex items-center gap-1 mr-2 px-2 py-0.5 rounded-full align-[1px]
+              font-[var(--font-mono)] text-[0.6rem] tracking-[0.18em] uppercase
+              text-[var(--color-neon)] bg-[rgba(255,107,28,0.1)]
+              border border-[rgba(255,107,28,0.4)]
+            "
+          >
+            <span className="inline-block w-1 h-1 rounded-full bg-[var(--color-neon)] animate-pulse" />
+            Live
+          </span>
+        )}
         {item.summary}
       </p>
     </button>
