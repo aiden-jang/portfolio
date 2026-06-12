@@ -6,6 +6,8 @@ export type WorkDetail = {
   context: string;
   body: string[];
   stack: string[];
+  /** Optional external link rendered as a "Visit" button at the bottom. */
+  link?: { label: string; url: string };
 };
 
 type Props = {
@@ -101,6 +103,23 @@ export function WorkModal({ item, onClose }: Props) {
                 </span>
               ))}
             </div>
+            {item.link && (
+              <a
+                href={item.link.url}
+                target="_blank"
+                rel="noopener"
+                className="
+                  inline-flex items-center gap-2 mt-6 px-5 py-2.5 rounded-full
+                  border border-[var(--color-line)]
+                  font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase
+                  text-[var(--color-fg)] no-underline transition-colors
+                  hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
+                "
+              >
+                {item.link.label}
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
           </>
         )}
       </div>
