@@ -27,7 +27,8 @@ export function Nav({ onLink }: Props) {
     <nav
       id="nav"
       className="
-        fixed top-[4vh] right-[5vw] z-20 flex items-center gap-[1.4rem]
+        hidden md:flex
+        fixed top-[4vh] right-[5vw] z-20 items-center gap-[1.4rem]
         font-[var(--font-mono)] text-[0.74rem] tracking-[0.18em] uppercase
       "
     >

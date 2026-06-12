@@ -8,24 +8,30 @@ export function Hint() {
       id="hint"
       className="
         fixed left-1/2 -translate-x-1/2 bottom-[3vh] z-20
-        flex items-center gap-[1.4rem] whitespace-nowrap pointer-events-none
-        font-[var(--font-mono)] text-[0.7rem] tracking-[0.22em] uppercase
+        flex items-center justify-center gap-3 md:gap-[1.4rem]
+        whitespace-nowrap pointer-events-none
+        font-[var(--font-mono)] text-[0.58rem] md:text-[0.7rem]
+        tracking-[0.18em] md:tracking-[0.22em] uppercase
         text-[var(--color-muted)]
       "
     >
-      <span className="inline-flex items-center gap-2">
+      {/* Mobile-only minimal hint */}
+      <span className="md:hidden">Swipe to navigate</span>
+
+      {/* Desktop hints */}
+      <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>drag</kbd> orbit
       </span>
-      <span className="inline-flex items-center gap-2">
+      <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>scroll</kbd> / <kbd className={KBD}>↑↓</kbd> sections
       </span>
-      <span className="inline-flex items-center gap-2">
+      <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>swipe</kbd> / <kbd className={KBD}>←→</kbd> cars
       </span>
-      <span className="inline-flex items-center gap-2">
+      <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>C</kbd> color
       </span>
-      <span className="inline-flex items-center gap-2">
+      <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>B</kbd> background
       </span>
     </div>

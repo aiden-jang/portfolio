@@ -88,13 +88,22 @@ function WorkRow({ item, onOpen }: { item: WorkDetail; onOpen: () => void }) {
 }
 
 function Section({ id, side, children }: { id: string; side: 'left' | 'right' | 'center'; children: ReactNode }) {
-  const justify =
-    side === 'left' ? 'justify-start' : side === 'right' ? 'justify-end' : 'justify-center';
-  const text = side === 'center' ? 'text-center' : 'text-left';
+  // On desktop, panels alternate left/right/center per the design. On mobile
+  // we force center + add vertical padding so the panel sits clear of the
+  // Brand block (top) and the section-dots / hint strip (bottom).
+  const desktopJustify =
+    side === 'left' ? 'md:justify-start' : side === 'right' ? 'md:justify-end' : 'md:justify-center';
+  const desktopText = side === 'center' ? 'md:text-center' : 'md:text-left';
   return (
     <section
       id={id}
-      className={`min-h-screen flex items-center px-[5vw] pointer-events-none ${justify} ${text}`}
+      className={`
+        min-h-screen flex items-center pointer-events-none
+        px-[6vw] md:px-[5vw]
+        pt-[22vh] pb-[22vh] md:py-0
+        justify-center text-center
+        ${desktopJustify} ${desktopText}
+      `}
     >
       {children}
     </section>

@@ -10,6 +10,15 @@ const CAR_LOCK_MS = 600;
 /** Wheel events with |delta| below this are treated as trackpad-inertia tail
  *  and ignored. Real user-initiated scrolls have delta >> this. */
 const MIN_WHEEL_DELTA = 10;
+/** Touch-swipe gates: must be a clear, quick flick to count as nav (slow
+ *  drags are reserved for the camera-rig orbit). Requires both a minimum
+ *  distance AND a minimum velocity. */
+const SWIPE_MIN_DIST = 60;
+const SWIPE_MAX_MS = 300;
+const SWIPE_MIN_VELOCITY = 0.5; // pixels per ms
+/** Axis dominance ratio — the main-axis distance must beat the cross-axis
+ *  by at least this factor, so diagonal drags (orbit) don't trigger nav. */
+const SWIPE_AXIS_RATIO = 1.6;
 
 /** Wheel/keyboard-hijacked section navigation. Each wheel tick or arrow key
  *  commits to moving exactly one section; nav-link clicks jump directly.
@@ -127,15 +136,65 @@ export function useNavigation() {
         setSectionIndex(idx);
       }
     };
+    // Touch swipes (mobile): horizontal → cars, vertical → sections.
+    // Single-touch only so pinch-zoom and multi-finger gestures pass through.
+    let touchX = 0;
+    let touchY = 0;
+    let touchTime = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) {
+        touchTime = 0;
+        return;
+      }
+      const t = e.touches[0];
+      touchX = t.clientX;
+      touchY = t.clientY;
+      touchTime = performance.now();
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if (!touchTime || e.changedTouches.length !== 1) return;
+      const elapsed = performance.now() - touchTime;
+      touchTime = 0;
+      // Must be a quick gesture — slower touches are camera-rig drags.
+      if (elapsed > SWIPE_MAX_MS) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchX;
+      const dy = t.clientY - touchY;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      const dist = Math.max(absX, absY);
+      if (dist < SWIPE_MIN_DIST) return;
+      // Must be a clear flick (not a careful slow swipe).
+      if (dist / elapsed < SWIPE_MIN_VELOCITY) return;
+      // Must be clearly axis-aligned (not a diagonal orbit drag).
+      if (absX > absY && absX < absY * SWIPE_AXIS_RATIO) return;
+      if (absY > absX && absY < absX * SWIPE_AXIS_RATIO) return;
+      // Let modals / interactive elements consume their own touches.
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('a, button, input, [role="dialog"]')) return;
+      if (absX > absY) {
+        if (dx < 0) cycleCarThrottled();
+        else prevCarThrottled();
+      } else {
+        if (performance.now() < snapLockUntil.current) return;
+        if (dy < 0) goToSection(currentSection.current + 1);
+        else goToSection(currentSection.current - 1);
+      }
+    };
+
     window.addEventListener('wheel', onWheel, { passive: false });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
     return () => {
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchend', onTouchEnd);
     };
-  }, [getScrollT, goToSection, setSectionIndex]);
+  }, [getScrollT, goToSection, setSectionIndex, cycleCarThrottled, prevCarThrottled]);
 
   return { goToSection, getScrollT, scrollToSection: (id: SectionId) => goToSection(SECTION_IDS.indexOf(id)) };
 }

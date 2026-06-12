@@ -22,8 +22,10 @@ export function SectionDots({ onJump }: Props) {
     <nav
       aria-label="Section progress"
       className="
-        fixed right-[2.4vw] top-1/2 -translate-y-1/2 z-20
-        flex flex-col gap-4
+        fixed z-20 flex gap-4
+        md:right-[2.4vw] md:top-1/2 md:-translate-y-1/2 md:flex-col
+        bottom-[10vh] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0
+        flex-row
       "
     >
       {SECTION_IDS.map((id, i) => {
@@ -35,12 +37,12 @@ export function SectionDots({ onJump }: Props) {
             onClick={() => onJump(id)}
             aria-label={`Go to ${LABELS[id]}`}
             aria-current={active ? 'true' : undefined}
-            className="group relative flex items-center justify-end h-3 cursor-pointer"
+            className="group relative flex items-center justify-center w-3 h-3 cursor-pointer"
           >
-            {/* Floating label, revealed on hover */}
+            {/* Floating label, revealed on hover (desktop only). */}
             <span
               className="
-                absolute right-6 font-[var(--font-mono)] text-[0.62rem]
+                hidden md:block absolute right-6 font-[var(--font-mono)] text-[0.62rem]
                 tracking-[0.24em] uppercase text-[var(--color-muted)]
                 opacity-0 -translate-x-1 transition-all duration-150 whitespace-nowrap
                 group-hover:opacity-100 group-hover:translate-x-0
