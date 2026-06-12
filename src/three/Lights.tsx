@@ -7,6 +7,29 @@ import { useAppStore } from '../store';
 
 const TRANSITION_RATE = 2.5;
 
+/** Sun arc geometry — radius from origin, fixed forward offset on Z. */
+const SUN_RADIUS = 12;
+const SUN_Z = 5;
+/** At deep night the key light dims to this fraction of its theme intensity,
+ *  so the scene still has some specular shape even when the sun is below
+ *  the horizon. */
+const NIGHT_KEY_FLOOR = 0.2;
+
+/** Returns the sun's position vector (and a 0..1 daylight factor) based on
+ *  the visitor's local hour. The sun rises in the east at 6am, peaks overhead
+ *  at noon, sets in the west at 6pm, dips below the horizon overnight. */
+function computeSunPosition(date: Date) {
+  const hours = date.getHours() + date.getMinutes() / 60;
+  // Map [0..24h] to [-π/2..3π/2] so 6am is angle 0 (east horizon), 12 is π/2
+  // (overhead), 18 is π (west horizon), 0/24 is -π/2 (below).
+  const angle = (hours - 6) * (Math.PI / 12);
+  const x = Math.cos(angle) * SUN_RADIUS;
+  const y = Math.sin(angle) * SUN_RADIUS;
+  // Daylight factor: 1 at high noon, 0 at horizon, negative below — clamp.
+  const daylight = Math.max(0, Math.sin(angle));
+  return { x, y, z: SUN_Z, daylight };
+}
+
 /** Ambient + hemisphere + 3-point key/fill/rim. Eased toward the active
  *  theme each frame so toggles fade smoothly instead of snapping. */
 export function Lights() {
@@ -39,7 +62,13 @@ export function Lights() {
     c.key.color = smoothColorHex(c.key.color, target.key.color, k);
     c.key.intensity = smoothTowards(c.key.intensity, target.key.intensity, k);
     key.current.color.setHex(c.key.color);
-    key.current.intensity = c.key.intensity;
+
+    // Time-of-day sun: position the key light on an arc that matches the
+    // visitor's local hour, and scale intensity by how high the sun is.
+    const sun = computeSunPosition(new Date());
+    key.current.position.set(sun.x, Math.max(sun.y, 0.5), sun.z);
+    const sunFactor = NIGHT_KEY_FLOOR + (1 - NIGHT_KEY_FLOOR) * sun.daylight;
+    key.current.intensity = c.key.intensity * sunFactor;
 
     c.fill.color = smoothColorHex(c.fill.color, target.fill.color, k);
     c.fill.intensity = smoothTowards(c.fill.intensity, target.fill.intensity, k);
