@@ -25,7 +25,7 @@ export function SectionDots({ onJump }: Props) {
       className="
         fixed z-20 flex gap-4
         md:right-[2.4vw] md:top-1/2 md:-translate-y-1/2 md:flex-col
-        bottom-[8vh] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0
+        bottom-[13vh] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0
         flex-row
       "
     >
@@ -40,8 +40,9 @@ export function SectionDots({ onJump }: Props) {
             aria-current={active ? 'true' : undefined}
             className="
               group relative cursor-pointer
-              flex flex-col items-center gap-1.5
-              md:w-3 md:h-3 md:gap-0 md:justify-center
+              flex flex-col items-center justify-center gap-1.5
+              min-w-[44px] min-h-[44px]
+              md:w-3 md:h-3 md:min-w-0 md:min-h-0 md:gap-0
             "
           >
             {/* Mobile: always-visible label stacked above the dot. */}
