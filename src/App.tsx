@@ -26,6 +26,7 @@ export function App() {
   return (
     <>
       <Scene getScrollT={getScrollT} />
+      <div className="vignette" aria-hidden="true" />
       <FilmGrain />
       <LoadingBar />
       {!isCleanMode && (

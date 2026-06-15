@@ -61,6 +61,29 @@
 }
 
 @layer components {
+  /* Soft radial vignette overlay. Frames the canvas as a stage with the car
+     as the focal point, and gives chrome at the corners (brand, nav, dots)
+     a slightly darker substrate to read against. Lives between the canvas
+     (z-0) and the DOM content (z-10). */
+  .vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 100% 100% at center,
+      transparent 55%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+  }
+
+  /* Panel text gets a soft dark halo. Invisible against the (dark) base bg,
+     but kicks in over bright car highlights / reflections, so text stays
+     readable wherever the 3D scene happens to be that frame. */
+  .panel {
+    text-shadow: 0 0 24px rgba(0, 0, 0, 0.5);
+  }
+
   /* Reveal animations on scroll-in. */
   .panel > * {
     opacity: 0;
