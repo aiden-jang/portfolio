@@ -7,8 +7,8 @@ const SNAP_LOCK_MS = 1100;
 /** Cooldown between car cycles (lighter than section snap since GLB swap is
  *  async and self-throttling). */
 const CAR_LOCK_MS = 600;
-/** Wheel events with |delta| below this are treated as trackpad-inertia tail
- *  and ignored. Real user-initiated scrolls have delta >> this. */
+/** Horizontal wheel events below this magnitude are ignored — small jitter
+ *  from a mouse should not cycle the car. */
 const MIN_WHEEL_DELTA = 10;
 /** Touch-swipe gates: must be a clear, quick flick to count as nav (slow
  *  drags are reserved for the camera-rig orbit). Requires both a minimum
@@ -20,8 +20,9 @@ const SWIPE_MIN_VELOCITY = 0.5; // pixels per ms
  *  by at least this factor, so diagonal drags (orbit) don't trigger nav. */
 const SWIPE_AXIS_RATIO = 1.6;
 
-/** Wheel/keyboard-hijacked section navigation. Each wheel tick or arrow key
- *  commits to moving exactly one section; nav-link clicks jump directly.
+/** Keyboard/touch section navigation. Vertical wheel/scroll is handled
+ *  natively (CSS `scroll-snap-type: y mandatory` does the snapping) so
+ *  trackpad muscle memory is respected. Horizontal wheel still cycles cars.
  *  Exposes `getScrollT` for the camera rig to interpolate keyframes by. */
 export function useNavigation() {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
@@ -64,20 +65,14 @@ export function useNavigation() {
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
-      // Horizontal trackpad swipe → cycle through cars.
+      // Horizontal trackpad swipe → cycle through cars. Vertical wheel/scroll
+      // is intentionally left to the browser so CSS scroll-snap can handle it.
       if (absX > absY && absX >= MIN_WHEEL_DELTA) {
         if (e.deltaX > 0) cycleCarThrottled();
         else prevCarThrottled();
-        return;
       }
-      // Vertical scroll → section navigation.
-      if (absY < MIN_WHEEL_DELTA) return;
-      if (performance.now() < snapLockUntil.current) return;
-      if (e.deltaY > 0) goToSection(currentSection.current + 1);
-      else if (e.deltaY < 0) goToSection(currentSection.current - 1);
     };
     const onKey = (e: KeyboardEvent) => {
       // Don't intercept letter keys while the user is typing in a form field.
@@ -182,7 +177,7 @@ export function useNavigation() {
       }
     };
 
-    window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
