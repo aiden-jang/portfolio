@@ -30,6 +30,15 @@ const SECTION_PUNCH_FOV_DELTA = 6; // degrees added at peak
 
 const NON_DRAGGABLE_SELECTOR = 'a, button, .panel, #nav, #theme-toggle';
 
+/** `?clean` URL param freezes the camera in a true 3/4 front pose and skips
+ *  intro tween + idle spin — used to grab a consistent OG screenshot. The live
+ *  site's KEYFRAMES[0] sits closer to the nose (~14°); the OG shot wants more
+ *  flank visible (~37°), hence the override. */
+const isCleanMode =
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).has('clean');
+const CLEAN_AZIMUTH = 0.65;
+
 type RigState = {
   dragAzimuth: number;
   dragElevation: number;
@@ -146,8 +155,11 @@ export function CameraRig({ getScrollT }: Props) {
     const refs = useAppStore.getState().refs;
 
     // Idle spin advances only when scroll has settled AND not dragging.
+    // Clean mode freezes the camera at the intro keyframe for OG screenshots.
     s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
-    if (s.scrollActiveTimer === 0 && !s.isDown) s.idleSpin += dt * IDLE_SPIN_RATE;
+    if (s.scrollActiveTimer === 0 && !s.isDown && !isCleanMode) {
+      s.idleSpin += dt * IDLE_SPIN_RATE;
+    }
     if (!s.isDown) {
       const k = Math.min(1, dt * DRAG_DECAY_RATE);
       s.dragAzimuth *= 1 - k * DRAG_DECAY_FRACTION;
@@ -166,7 +178,7 @@ export function CameraRig({ getScrollT }: Props) {
     kf.distance = lerp(a.distance, b.distance, f);
     kf.targetY = lerp(a.targetY, b.targetY, f);
 
-    const az = kf.azimuth + s.dragAzimuth + s.idleSpin;
+    const az = isCleanMode ? CLEAN_AZIMUTH : kf.azimuth + s.dragAzimuth + s.idleSpin;
     const dist = kf.distance;
     const tgtY = kf.targetY;
 
@@ -180,8 +192,8 @@ export function CameraRig({ getScrollT }: Props) {
     let y = Math.sin(el) * dist + tgtY;
     let z = Math.cos(az) * Math.cos(el) * dist;
 
-    // Cinematic intro tween.
-    if (refs.introArmed && s.introT < 1) {
+    // Cinematic intro tween (skipped in clean mode for static OG framing).
+    if (refs.introArmed && s.introT < 1 && !isCleanMode) {
       s.introT = Math.min(1, s.introT + dt / INTRO_DURATION);
       const t = 1 - Math.pow(1 - s.introT, 3);
       const wideDist = dist * INTRO_WIDE_DIST_MUL;
