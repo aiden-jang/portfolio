@@ -50,25 +50,31 @@ function EmailRow() {
   };
 
   return (
-    <li className="py-1.5 flex flex-wrap items-center justify-center gap-3">
-      <a href={`mailto:${EMAIL}`} className={LINK_CLASS}>
-        {EMAIL}
-      </a>
-      <button
-        type="button"
-        onClick={handleCopy}
-        aria-label={copied ? 'Email address copied' : 'Copy email address'}
-        className={`
-          pointer-events-auto
-          font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase
-          px-2.5 py-1 rounded-full border transition-colors
-          ${copied
-            ? 'border-[var(--color-neon)] text-[var(--color-neon)]'
-            : 'border-[var(--color-line)] text-[var(--color-muted)] hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]'}
-        `}
-      >
-        {copied ? 'Copied ✓' : 'Copy'}
-      </button>
+    <li className="py-1.5 text-center">
+      {/* inline-block sizes to the email alone, so text-center centers the
+       *  address itself — matching the links below. The copy pill is taken
+       *  out of flow (absolute) so it can't pull the email off-center. */}
+      <span className="relative inline-block">
+        <a href={`mailto:${EMAIL}`} className={LINK_CLASS}>
+          {EMAIL}
+        </a>
+        <button
+          type="button"
+          onClick={handleCopy}
+          aria-label={copied ? 'Email address copied' : 'Copy email address'}
+          className={`
+            pointer-events-auto whitespace-nowrap
+            absolute left-full ml-3 top-1/2 -translate-y-1/2
+            font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase
+            px-2.5 py-1 rounded-full border transition-colors
+            ${copied
+              ? 'border-[var(--color-neon)] text-[var(--color-neon)]'
+              : 'border-[var(--color-line)] text-[var(--color-muted)] hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]'}
+          `}
+        >
+          {copied ? 'Copied ✓' : 'Copy'}
+        </button>
+      </span>
     </li>
   );
 }
