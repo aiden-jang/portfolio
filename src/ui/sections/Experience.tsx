@@ -1,4 +1,4 @@
-import { CTA_BUTTON, EYEBROW, H2, P_LI, PANEL_BASE, Section, UL_BASE } from './shared';
+import { EYEBROW, H2, P_LI, PANEL_BASE, Section, UL_BASE } from './shared';
 
 const ROLES = [
   'Software Engineer · Zeta Global · 2024–present',
@@ -17,9 +17,6 @@ export function ExperienceSection() {
             <li key={r}>{r}</li>
           ))}
         </ul>
-        <a href="/resume.pdf" className={CTA_BUTTON}>
-          Download PDF →
-        </a>
       </div>
     </Section>
   );
