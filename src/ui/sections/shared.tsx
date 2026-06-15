@@ -46,7 +46,7 @@ export function Section({
     <section
       id={id}
       className={`
-        min-h-screen flex items-center pointer-events-none
+        snap-start min-h-screen flex items-center pointer-events-none
         px-[6vw] md:px-[5vw]
         pt-[22vh] pb-[22vh] md:py-0
         justify-center text-center
