@@ -26,6 +26,21 @@ export function App() {
 
   return (
     <>
+      {/* First focusable element: lets keyboard users jump past the chrome
+       *  straight into the page content. Hidden until focused. */}
+      <a
+        href="#scroll"
+        className="
+          sr-only focus:not-sr-only
+          focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:pointer-events-auto
+          focus:px-4 focus:py-2 focus:rounded-full
+          focus:bg-[var(--color-bg)] focus:border focus:border-[var(--color-neon)]
+          focus:font-[var(--font-mono)] focus:text-[0.72rem] focus:tracking-[0.2em]
+          focus:uppercase focus:text-[var(--color-fg)] focus:no-underline
+        "
+      >
+        Skip to content
+      </a>
       <Scene getScrollT={getScrollT} />
       <div className="vignette" aria-hidden="true" />
       <FilmGrain />
