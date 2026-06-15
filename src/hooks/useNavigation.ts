@@ -21,10 +21,10 @@ const SWIPE_MIN_VELOCITY = 0.3; // pixels per ms
  *  by at least this factor, so diagonal drags (orbit) don't trigger nav. */
 const SWIPE_AXIS_RATIO = 1.6;
 
-/** Keyboard/touch section navigation. Vertical wheel/scroll is handled
- *  natively (CSS `scroll-snap-type: y mandatory` does the snapping) so
- *  trackpad muscle memory is respected. Horizontal wheel still cycles cars.
- *  Exposes `getScrollT` for the camera rig to interpolate keyframes by. */
+/** Keyboard/touch section navigation. Vertical wheel/scroll is left to the
+ *  browser (no scroll snapping) so trackpad and mouse-wheel muscle memory is
+ *  respected. Horizontal wheel still cycles cars. Exposes `getScrollT` for the
+ *  camera rig to interpolate keyframes by. */
 export function useNavigation() {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
   const snapLockUntil = useRef(0);
@@ -69,7 +69,7 @@ export function useNavigation() {
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
       // Horizontal trackpad swipe → cycle through cars. Vertical wheel/scroll
-      // is intentionally left to the browser so CSS scroll-snap can handle it.
+      // is intentionally left to the browser as plain native scrolling.
       if (absX > absY && absX >= MIN_WHEEL_DELTA) {
         if (e.deltaX > 0) cycleCarThrottled();
         else prevCarThrottled();
@@ -133,9 +133,9 @@ export function useNavigation() {
       }
     };
     // Touch swipes (mobile): horizontal flick → cycle cars. Vertical scrolling
-    // is left entirely to native CSS scroll-snap, matching the desktop wheel
-    // behavior. Single-touch only so pinch-zoom / multi-finger gestures pass
-    // through untouched.
+    // is left entirely to native scroll, matching the desktop wheel behavior.
+    // Single-touch only so pinch-zoom / multi-finger gestures pass through
+    // untouched.
     let touchX = 0;
     let touchY = 0;
     let touchTime = 0;
