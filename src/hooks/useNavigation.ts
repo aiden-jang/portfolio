@@ -11,9 +11,16 @@ const SNAP_LOCK_MS = 1100;
 const SETTLE_DELAY_MS = 150;
 /** Already within this many px of a section top: leave it, don't nudge. */
 const SETTLE_TOLERANCE_PX = 4;
-/** Lock the settle scroll briefly so its own scroll events don't re-trigger it
- *  mid-animation. Shorter than SNAP_LOCK_MS since a sub-viewport glide is quick. */
-const SETTLE_LOCK_MS = 700;
+/** The settle glide is a custom eased tween (smoother than native smooth
+ *  scroll). Duration scales with distance, clamped to this range, so a short
+ *  nudge and a near-full-screen glide both feel right. */
+const SETTLE_MS_PER_PX = 0.85;
+const SETTLE_MIN_MS = 380;
+const SETTLE_MAX_MS = 720;
+
+/** Smooth, symmetric ease (slow in, slow out) for the settle glide. */
+const easeInOutCubic = (t: number): number =>
+  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 /** Cooldown between car cycles (lighter than section snap since GLB swap is
  *  async and self-throttling). */
 const CAR_LOCK_MS = 600;
@@ -77,6 +84,7 @@ export function useNavigation() {
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
+      cancelTween(); // a real wheel tick should hand control back instantly
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
       // Horizontal trackpad swipe → cycle through cars. Vertical wheel/scroll
@@ -87,6 +95,7 @@ export function useNavigation() {
       }
     };
     const onKey = (e: KeyboardEvent) => {
+      cancelTween(); // any keypress hands control back from an in-flight glide
       // Don't intercept letter keys while the user is typing in a form field.
       const target = e.target as HTMLElement | null;
       const inField =
@@ -135,10 +144,37 @@ export function useNavigation() {
           break;
       }
     };
+    // Custom eased scroll tween — smoother and more tunable than native
+    // `scrollTo({behavior:'smooth'})`. Any user input (wheel/touch/key) calls
+    // cancelTween to hand control straight back, so it never fights you.
+    let settleTimer = 0;
+    let tweenRaf = 0;
+    const cancelTween = () => {
+      if (!tweenRaf) return;
+      cancelAnimationFrame(tweenRaf);
+      tweenRaf = 0;
+      snapLockUntil.current = 0; // we were mid-settle; release so input takes over
+    };
+    const tweenScrollTo = (targetY: number) => {
+      cancelTween();
+      const startY = window.scrollY;
+      const dist = targetY - startY;
+      const duration = clamp(Math.abs(dist) * SETTLE_MS_PER_PX, SETTLE_MIN_MS, SETTLE_MAX_MS);
+      // Hold the lock across the whole glide (+ the settle debounce) so the
+      // tween's own scroll events don't re-trigger a settle mid-flight.
+      snapLockUntil.current = performance.now() + duration + SETTLE_DELAY_MS + 60;
+      const start = performance.now();
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        window.scrollTo(0, startY + dist * easeInOutCubic(t));
+        tweenRaf = t < 1 ? requestAnimationFrame(step) : 0;
+      };
+      tweenRaf = requestAnimationFrame(step);
+    };
+
     // Ease to the nearest section after scrolling has stopped. Uses each
     // section's real offsetTop (sections aren't a fixed viewport tall on mobile,
     // where padding can make them taller) so it lands true.
-    let settleTimer = 0;
     const settleToNearest = () => {
       // A keyboard / nav-link / dot jump owns the scroll while its lock holds.
       if (performance.now() < snapLockUntil.current) return;
@@ -160,13 +196,13 @@ export function useNavigation() {
       if (!el) return;
       const targetY = clamp(el.offsetTop, 0, max);
       if (Math.abs(targetY - y) <= SETTLE_TOLERANCE_PX) return;
-      snapLockUntil.current = performance.now() + SETTLE_LOCK_MS;
       currentSection.current = best;
       setSectionIndex(best);
-      window.scrollTo({
-        top: targetY,
-        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      });
+      if (prefersReducedMotion()) {
+        window.scrollTo(0, targetY);
+        return;
+      }
+      tweenScrollTo(targetY);
     };
     const onScroll = () => {
       const t = getScrollT() * (SECTION_IDS.length - 1);
@@ -186,6 +222,7 @@ export function useNavigation() {
     let touchY = 0;
     let touchTime = 0;
     const onTouchStart = (e: TouchEvent) => {
+      cancelTween(); // a finger on the screen interrupts the settle glide
       if (e.touches.length !== 1) {
         touchTime = 0;
         return;
@@ -226,6 +263,7 @@ export function useNavigation() {
     window.addEventListener('touchend', onTouchEnd, { passive: true });
     return () => {
       window.clearTimeout(settleTimer);
+      cancelTween();
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('scroll', onScroll);
