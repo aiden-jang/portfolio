@@ -13,8 +13,9 @@ type Props = {
   onJump: (id: SectionId) => void;
 };
 
-/** Fixed vertical dot strip on the right edge that mirrors the current
- *  section and lets the user jump directly. Labels reveal on hover. */
+/** Fixed section nav: vertical dot strip on the right (desktop) or horizontal
+ *  labeled strip at the bottom (mobile). Desktop dots reveal labels on
+ *  hover/focus; mobile labels are always visible since there's no top nav. */
 export function SectionDots({ onJump }: Props) {
   const activeIndex = useAppStore((s) => s.sectionIndex);
 
@@ -24,7 +25,7 @@ export function SectionDots({ onJump }: Props) {
       className="
         fixed z-20 flex gap-4
         md:right-[2.4vw] md:top-1/2 md:-translate-y-1/2 md:flex-col
-        bottom-[10vh] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0
+        bottom-[8vh] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0
         flex-row
       "
     >
@@ -37,21 +38,38 @@ export function SectionDots({ onJump }: Props) {
             onClick={() => onJump(id)}
             aria-label={`Go to ${LABELS[id]}`}
             aria-current={active ? 'true' : undefined}
-            className="group relative flex items-center justify-center w-3 h-3 cursor-pointer"
+            className="
+              group relative cursor-pointer
+              flex flex-col items-center gap-1.5
+              md:w-3 md:h-3 md:gap-0 md:justify-center
+            "
           >
-            {/* Floating label, revealed on hover (desktop only). */}
+            {/* Mobile: always-visible label stacked above the dot. */}
+            <span
+              className={`
+                md:hidden font-[var(--font-mono)] text-[0.55rem] tracking-[0.2em]
+                uppercase whitespace-nowrap transition-colors
+                ${active ? 'text-[var(--color-neon)]' : 'text-[var(--color-muted)]'}
+              `}
+            >
+              {LABELS[id]}
+            </span>
+
+            {/* Desktop: floating label to the left, revealed on hover or focus. */}
             <span
               className="
                 hidden md:block absolute right-6 font-[var(--font-mono)] text-[0.62rem]
                 tracking-[0.24em] uppercase text-[var(--color-muted)]
                 opacity-0 -translate-x-1 transition-all duration-150 whitespace-nowrap
                 group-hover:opacity-100 group-hover:translate-x-0
+                group-focus-visible:opacity-100 group-focus-visible:translate-x-0
                 pointer-events-none
               "
             >
               {LABELS[id]}
             </span>
-            {/* The dot itself */}
+
+            {/* The dot itself. */}
             <span
               className={`
                 block rounded-full transition-all duration-200
