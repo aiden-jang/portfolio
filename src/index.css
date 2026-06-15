@@ -17,13 +17,11 @@
     margin: 0;
     padding: 0;
   }
-  html {
-    /* Section snapping. `proximity` (not `mandatory`) so the wheel scrolls
-       freely and only snaps when you land near a section edge. Mandatory
-       fought every small wheel tick, which felt sticky. Each <section>
-       opts in via `snap-start`. */
-    scroll-snap-type: y proximity;
-  }
+  /* No scroll snapping. A mouse wheel emits large discrete jumps, and the
+     browser re-snaps after each one, so the page fought every wheel tick
+     (mandatory and proximity both did this). Plain native scroll feels
+     right with a wheel; the camera rig interpolates continuously off
+     scrollY regardless, so sections still read as distinct stops. */
   body {
     background: var(--color-bg);
     color: var(--color-fg);
