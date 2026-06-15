@@ -31,7 +31,7 @@ export const BODY_COLOR_SWATCHES: { hex: string; name: string }[] = [
   { hex: '#194527', name: 'Racing Green' },
   { hex: '#163a8a', name: 'Royal Blue' },
 ];
-export const BODY_COLOR_PALETTE = BODY_COLOR_SWATCHES.map((s) => s.hex);
+const BODY_COLOR_PALETTE = BODY_COLOR_SWATCHES.map((s) => s.hex);
 
 type AppState = {
   // ---- React state (rare changes, triggers re-renders) ----
@@ -39,6 +39,9 @@ type AppState = {
   themeName: ThemeName;
   sectionIndex: number;
   activeBodyColor: ActiveBodyColor;
+  /** True once a car has loaded and its body material has been detected.
+   *  Used by `ColorSwatches` to fade the swatch strip in. */
+  hasBodyMaterial: boolean;
 
   // ---- Imperative refs (high-frequency, do not trigger re-renders) ----
   refs: Refs;
@@ -51,6 +54,7 @@ type AppState = {
   setSectionIndex: (i: number) => void;
   triggerRev: () => void;
   armIntro: () => void;
+  setHasBodyMaterial: (v: boolean) => void;
   /** Set the body material to a palette color (or restore the original).
    *  Both the swatch click handler and the keyboard cycle route through here
    *  so the UI's active-swatch indicator stays in sync. */
@@ -67,6 +71,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   themeName: 'dusk',
   sectionIndex: 0,
   activeBodyColor: 'original',
+  hasBodyMaterial: false,
   refs: {
     bodyMaterial: null,
     bodyOriginalColor: null,
@@ -92,6 +97,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   armIntro: () => {
     get().refs.introArmed = true;
   },
+  setHasBodyMaterial: (v) => set({ hasBodyMaterial: v }),
   applyBodyColor: (color) => {
     const refs = get().refs;
     const mat = refs.bodyMaterial;
@@ -112,5 +118,3 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 }));
 
-/** Read-only accessor for the imperative refs bag. */
-export const useRefsBag = (): Refs => useAppStore((s) => s.refs);
