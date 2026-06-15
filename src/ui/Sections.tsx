@@ -11,7 +11,7 @@ import { WorkModal, type WorkDetail } from './WorkModal';
 export function Sections() {
   const [activeWork, setActiveWork] = useState<WorkDetail | null>(null);
   return (
-    <main id="scroll" className="relative z-10">
+    <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
       <IntroSection />
       <WorkSection onOpen={setActiveWork} />
       <AboutSection />
