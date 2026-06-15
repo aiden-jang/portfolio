@@ -18,10 +18,11 @@
     padding: 0;
   }
   html {
-    /* Section snapping — native scroll handles the section transitions so
-       the wheel doesn't have to be hijacked. Each <section> opts in via
-       `snap-start`. */
-    scroll-snap-type: y mandatory;
+    /* Section snapping. `proximity` (not `mandatory`) so the wheel scrolls
+       freely and only snaps when you land near a section edge. Mandatory
+       fought every small wheel tick, which felt sticky. Each <section>
+       opts in via `snap-start`. */
+    scroll-snap-type: y proximity;
   }
   body {
     background: var(--color-bg);
