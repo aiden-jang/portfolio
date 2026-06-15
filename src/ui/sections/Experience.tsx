@@ -6,11 +6,11 @@ const ROLES = [
   'Associate Software Engineer · LiveIntent · 2022–2023',
 ];
 
-export function ResumeSection() {
+export function ExperienceSection() {
   return (
-    <Section id="sec-resume" side="right">
+    <Section id="sec-experience" side="right">
       <div className={PANEL_BASE}>
-        <span className={EYEBROW}>03 / RESUME</span>
+        <span className={EYEBROW}>03 / EXPERIENCE</span>
         <h2 className={H2}>Experience</h2>
         <ul className={`${UL_BASE} ${P_LI}`}>
           {ROLES.map((r) => (
