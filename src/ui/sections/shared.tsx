@@ -12,16 +12,6 @@ export const P_LI =
 export const UL_BASE =
   'list-none p-0 mt-4 [&>li]:py-2.5 [&>li]:border-t [&>li]:border-white/[0.07] [&>li:last-child]:border-b [&>li:last-child]:border-white/[0.07]';
 
-/** Pill-button link used by the Experience section's "Download PDF" and
- *  similar CTAs. */
-export const CTA_BUTTON = `
-  inline-block mt-5 px-5 py-2.5 rounded-full
-  border border-[var(--color-line)]
-  font-[var(--font-mono)] text-[0.78rem] tracking-[0.22em] uppercase
-  text-[var(--color-fg)] no-underline transition-colors
-  hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
-`;
-
 export type SectionSide = 'left' | 'right' | 'center';
 
 /** Full-screen scroll-section wrapper. On desktop the content aligns per the
