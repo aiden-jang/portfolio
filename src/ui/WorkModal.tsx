@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 export type WorkDetail = {
   title: string;
@@ -6,6 +6,9 @@ export type WorkDetail = {
   context: string;
   body: string[];
   stack: string[];
+  /** Optional screenshot shown as a banner at the top of the detail card.
+   *  Missing files degrade gracefully — the banner hides itself on load error. */
+  image?: string;
   /** Optional external link rendered as a "Visit" button at the bottom. */
   link?: { label: string; url: string };
 };
@@ -75,6 +78,9 @@ export function WorkModal({ item, onClose }: Props) {
 
         {item && (
           <>
+            {item.image && (
+              <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
+            )}
             <Eyebrow>{item.context}</Eyebrow>
             <h3 className="mt-3 mb-1 text-[clamp(1.6rem,3.2vw,2.2rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
               {item.title}
@@ -132,5 +138,24 @@ function Eyebrow({ children }: { children: ReactNode }) {
     <span className="font-[var(--font-mono)] text-[0.66rem] tracking-[0.36em] uppercase text-[var(--color-muted)]">
       {children}
     </span>
+  );
+}
+
+/** Full-bleed screenshot banner at the top of the card. Bleeds past the card
+ *  padding (negative margins match the `p-7 pt-6` panel). Hides itself if the
+ *  image fails to load so a missing file never leaves a broken-image icon. */
+function WorkBanner({ src, alt }: { src: string; alt: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return null;
+  return (
+    <div className="-mx-7 -mt-6 mb-5 border-b border-[var(--color-line)] overflow-hidden">
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onError={() => setFailed(true)}
+        className="block w-full h-auto max-h-[300px] object-cover object-top"
+      />
+    </div>
   );
 }

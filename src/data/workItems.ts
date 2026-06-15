@@ -12,6 +12,7 @@ export const WORK_ITEMS: WorkDetail[] = [
       'Live at blossom.aidenjang.com — give it a spin.',
     ],
     stack: ['TypeScript', 'React', 'Node.js'],
+    image: '/work/blossom.png',
     link: { label: 'Visit Blossom', url: 'https://blossom.aidenjang.com' },
   },
   {
