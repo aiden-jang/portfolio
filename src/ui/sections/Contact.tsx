@@ -50,7 +50,7 @@ function EmailRow() {
   };
 
   return (
-    <li className="py-1.5 flex flex-wrap items-center gap-3">
+    <li className="py-1.5 flex flex-wrap items-center justify-center gap-3">
       <a href={`mailto:${EMAIL}`} className={LINK_CLASS}>
         {EMAIL}
       </a>
