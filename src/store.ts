@@ -21,14 +21,17 @@ type Refs = {
 /** "original" restores the GLB's as-loaded color; any other value is a hex. */
 export type ActiveBodyColor = 'original' | string;
 
-export const BODY_COLOR_PALETTE = [
-  '#ff6b1c', // signal orange
-  '#b00020', // crimson
-  '#0a0a0c', // gloss black
-  '#f5f1e8', // pearl white
-  '#194527', // racing green
-  '#163a8a', // royal blue
+/** Single source of truth for the body-color picker — drives both the swatch
+ *  UI and the `cycleBodyColor` keyboard action. Order = swatch order. */
+export const BODY_COLOR_SWATCHES: { hex: string; name: string }[] = [
+  { hex: '#ff6b1c', name: 'Signal Orange' },
+  { hex: '#b00020', name: 'Crimson' },
+  { hex: '#0a0a0c', name: 'Gloss Black' },
+  { hex: '#f5f1e8', name: 'Pearl White' },
+  { hex: '#194527', name: 'Racing Green' },
+  { hex: '#163a8a', name: 'Royal Blue' },
 ];
+export const BODY_COLOR_PALETTE = BODY_COLOR_SWATCHES.map((s) => s.hex);
 
 type AppState = {
   // ---- React state (rare changes, triggers re-renders) ----

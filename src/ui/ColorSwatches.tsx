@@ -1,14 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BODY_COLOR_PALETTE, useAppStore } from '../store';
-
-const SWATCH_TITLES: Record<string, string> = {
-  '#ff6b1c': 'Signal Orange',
-  '#b00020': 'Crimson',
-  '#0a0a0c': 'Gloss Black',
-  '#f5f1e8': 'Pearl White',
-  '#194527': 'Racing Green',
-  '#163a8a': 'Royal Blue',
-};
+import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
 
 /** Body-color swatches. Applies to the detected body material on the current
  *  car. The "active" indicator reads from the store, so the same indicator
@@ -48,13 +39,13 @@ export function ColorSwatches() {
         active={activeBodyColor === 'original'}
         onClick={() => applyBodyColor('original')}
       />
-      {BODY_COLOR_PALETTE.map((color) => (
+      {BODY_COLOR_SWATCHES.map(({ hex, name }) => (
         <SwatchButton
-          key={color}
-          color={color}
-          title={SWATCH_TITLES[color] ?? color}
-          active={activeBodyColor === color}
-          onClick={() => applyBodyColor(color)}
+          key={hex}
+          color={hex}
+          title={name}
+          active={activeBodyColor === hex}
+          onClick={() => applyBodyColor(hex)}
         />
       ))}
     </div>
