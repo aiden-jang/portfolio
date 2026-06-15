@@ -49,7 +49,7 @@ export function App() {
         <>
           <Brand />
           <Nav onLink={scrollToSection} />
-          {/* Mobile-only floating résumé CTA — desktop renders ResumeButton
+          {/* Mobile-only floating resume CTA. Desktop renders ResumeButton
            *  inside Nav so it shares the top-right chrome row. */}
           <div className="md:hidden fixed top-[4vh] right-[5vw] z-20">
             <ResumeButton />

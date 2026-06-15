@@ -12,7 +12,8 @@ export const P_LI =
 export const UL_BASE =
   'list-none p-0 mt-4 [&>li]:py-2.5 [&>li]:border-t [&>li]:border-white/[0.07] [&>li:last-child]:border-b [&>li:last-child]:border-white/[0.07]';
 
-/** Pill-button link used by Resume "Download PDF" and similar CTAs. */
+/** Pill-button link used by the Experience section's "Download PDF" and
+ *  similar CTAs. */
 export const CTA_BUTTON = `
   inline-block mt-5 px-5 py-2.5 rounded-full
   border border-[var(--color-line)]

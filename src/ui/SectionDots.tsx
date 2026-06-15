@@ -5,7 +5,7 @@ const LABELS: Record<SectionId, string> = {
   'sec-intro': 'Intro',
   'sec-work': 'Work',
   'sec-about': 'About',
-  'sec-resume': 'Resume',
+  'sec-experience': 'Experience',
   'sec-contact': 'Contact',
 };
 

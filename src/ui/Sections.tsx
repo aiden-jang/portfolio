@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { AboutSection } from './sections/About';
 import { ContactSection } from './sections/Contact';
+import { ExperienceSection } from './sections/Experience';
 import { IntroSection } from './sections/Intro';
-import { ResumeSection } from './sections/Resume';
 import { WorkSection } from './sections/Work';
 import { WorkModal, type WorkDetail } from './WorkModal';
 
@@ -15,7 +15,7 @@ export function Sections() {
       <IntroSection />
       <WorkSection onOpen={setActiveWork} />
       <AboutSection />
-      <ResumeSection />
+      <ExperienceSection />
       <ContactSection />
       <WorkModal item={activeWork} onClose={() => setActiveWork(null)} />
     </main>
