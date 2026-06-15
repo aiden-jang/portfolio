@@ -2,8 +2,18 @@ import { useCallback, useEffect, useRef } from 'react';
 import { SECTION_IDS, type SectionId } from '../config';
 import { clamp } from '../math';
 import { useAppStore } from '../store';
+import { prefersReducedMotion } from './useReducedMotion';
 
 const SNAP_LOCK_MS = 1100;
+/** Settle-to-section: scrolling stays fully native (so the wheel/trackpad never
+ *  fight an active gesture), then this long after scrolling STOPS we ease to the
+ *  nearest section so the page never rests partway between sections. */
+const SETTLE_DELAY_MS = 150;
+/** Already within this many px of a section top: leave it, don't nudge. */
+const SETTLE_TOLERANCE_PX = 4;
+/** Lock the settle scroll briefly so its own scroll events don't re-trigger it
+ *  mid-animation. Shorter than SNAP_LOCK_MS since a sub-viewport glide is quick. */
+const SETTLE_LOCK_MS = 700;
 /** Cooldown between car cycles (lighter than section snap since GLB swap is
  *  async and self-throttling). */
 const CAR_LOCK_MS = 600;
@@ -21,10 +31,11 @@ const SWIPE_MIN_VELOCITY = 0.3; // pixels per ms
  *  by at least this factor, so diagonal drags (orbit) don't trigger nav. */
 const SWIPE_AXIS_RATIO = 1.6;
 
-/** Keyboard/touch section navigation. Vertical wheel/scroll is left to the
- *  browser (no scroll snapping) so trackpad and mouse-wheel muscle memory is
- *  respected. Horizontal wheel still cycles cars. Exposes `getScrollT` for the
- *  camera rig to interpolate keyframes by. */
+/** Keyboard/touch section navigation. Vertical scrolling is fully native (no
+ *  CSS scroll-snap, which fought the mouse wheel); instead, once scrolling
+ *  stops we ease to the nearest section so it still settles cleanly without
+ *  fighting any input mid-gesture. Horizontal wheel still cycles cars. Exposes
+ *  `getScrollT` for the camera rig to interpolate keyframes by. */
 export function useNavigation() {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
   const snapLockUntil = useRef(0);
@@ -124,6 +135,39 @@ export function useNavigation() {
           break;
       }
     };
+    // Ease to the nearest section after scrolling has stopped. Uses each
+    // section's real offsetTop (sections aren't a fixed viewport tall on mobile,
+    // where padding can make them taller) so it lands true.
+    let settleTimer = 0;
+    const settleToNearest = () => {
+      // A keyboard / nav-link / dot jump owns the scroll while its lock holds.
+      if (performance.now() < snapLockUntil.current) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max <= 0) return;
+      const y = window.scrollY;
+      let best = 0;
+      let bestDist = Infinity;
+      for (let i = 0; i < SECTION_IDS.length; i++) {
+        const el = document.getElementById(SECTION_IDS[i]);
+        if (!el) continue;
+        const d = Math.abs(el.offsetTop - y);
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
+        }
+      }
+      const el = document.getElementById(SECTION_IDS[best]);
+      if (!el) return;
+      const targetY = clamp(el.offsetTop, 0, max);
+      if (Math.abs(targetY - y) <= SETTLE_TOLERANCE_PX) return;
+      snapLockUntil.current = performance.now() + SETTLE_LOCK_MS;
+      currentSection.current = best;
+      setSectionIndex(best);
+      window.scrollTo({
+        top: targetY,
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      });
+    };
     const onScroll = () => {
       const t = getScrollT() * (SECTION_IDS.length - 1);
       const idx = Math.round(t);
@@ -131,6 +175,8 @@ export function useNavigation() {
         currentSection.current = idx;
         setSectionIndex(idx);
       }
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(settleToNearest, SETTLE_DELAY_MS);
     };
     // Touch swipes (mobile): horizontal flick → cycle cars. Vertical scrolling
     // is left entirely to native scroll, matching the desktop wheel behavior.
@@ -179,6 +225,7 @@ export function useNavigation() {
     window.addEventListener('touchstart', onTouchStart, { passive: true });
     window.addEventListener('touchend', onTouchEnd, { passive: true });
     return () => {
+      window.clearTimeout(settleTimer);
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('scroll', onScroll);
