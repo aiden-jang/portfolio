@@ -68,7 +68,8 @@ export function Car() {
     const spec = CARS[carIndex];
     if (!spec) return;
     const refs = useAppStore.getState().refs;
-    refs.exposureCurrent = refs.exposureCurrent; // no-op, leaves easing in tick
+    const setHasBodyMaterial = useAppStore.getState().setHasBodyMaterial;
+    setHasBodyMaterial(false);
     let cancelled = false;
 
     loader.load(
@@ -94,6 +95,7 @@ export function Car() {
         refs.lamps = buildLamps(group, orientedSize, scale);
         refs.bodyMaterial = detectBodyMaterial(model);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
+        setHasBodyMaterial(!!refs.bodyMaterial);
 
         if (!refs.introArmed) armIntro();
 

@@ -1,24 +1,12 @@
-import { useEffect, useState } from 'react';
 import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
 
 /** Body-color swatches. Applies to the detected body material on the current
  *  car. The "active" indicator reads from the store, so the same indicator
  *  also reflects keyboard-triggered color changes (e.g. pressing `C`). */
 export function ColorSwatches() {
-  const carIndex = useAppStore((s) => s.carIndex);
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const applyBodyColor = useAppStore((s) => s.applyBodyColor);
-  const refs = useAppStore((s) => s.refs);
-  const [hasBody, setHasBody] = useState(false);
-
-  // Poll for the body material once after a car load (the GLB load is async,
-  // so we can't read it synchronously after the carIndex changes).
-  useEffect(() => {
-    const check = () => setHasBody(!!refs.bodyMaterial?.color);
-    check();
-    const id = window.setInterval(check, 200);
-    return () => window.clearInterval(id);
-  }, [carIndex, refs]);
+  const hasBody = useAppStore((s) => s.hasBodyMaterial);
 
   // Always rendered so the nav layout doesn't shift when the body material
   // finishes detecting. Visually muted + non-interactive while we wait.

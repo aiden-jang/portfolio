@@ -8,7 +8,7 @@ import { useAppStore } from '../store';
 
 extend({ Reflector });
 
-export const FLOOR_RADIUS = 14;
+const FLOOR_RADIUS = 14;
 const REFLECTOR_RESOLUTION = 1024;
 const TRANSITION_RATE = 2.5;
 

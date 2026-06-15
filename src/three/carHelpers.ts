@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import type { ColorMaterial, Lamp } from '../types';
 
-export const TARGET_LENGTH = 4.5;
+const TARGET_LENGTH = 4.5;
 const FLAT_PLANE_THICKNESS = 0.15;
 const FLAT_PLANE_MIN_FOOTPRINT = 0.3;
 const FLAT_PLANE_MAX_Y = 0.1;
