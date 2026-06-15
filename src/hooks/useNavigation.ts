@@ -10,12 +10,13 @@ const CAR_LOCK_MS = 600;
 /** Horizontal wheel events below this magnitude are ignored — small jitter
  *  from a mouse should not cycle the car. */
 const MIN_WHEEL_DELTA = 10;
-/** Touch-swipe gates: must be a clear, quick flick to count as nav (slow
- *  drags are reserved for the camera-rig orbit). Requires both a minimum
- *  distance AND a minimum velocity. */
+/** Touch-swipe gates: must be a clear, quick flick to count as a car cycle
+ *  (slow drags are reserved for the camera-rig orbit). Requires both a
+ *  minimum distance AND a minimum velocity. Tuned loose enough that a normal
+ *  thumb-flick registers without forcing a hard snap. */
 const SWIPE_MIN_DIST = 60;
-const SWIPE_MAX_MS = 300;
-const SWIPE_MIN_VELOCITY = 0.5; // pixels per ms
+const SWIPE_MAX_MS = 450;
+const SWIPE_MIN_VELOCITY = 0.3; // pixels per ms
 /** Axis dominance ratio — the main-axis distance must beat the cross-axis
  *  by at least this factor, so diagonal drags (orbit) don't trigger nav. */
 const SWIPE_AXIS_RATIO = 1.6;
@@ -131,8 +132,10 @@ export function useNavigation() {
         setSectionIndex(idx);
       }
     };
-    // Touch swipes (mobile): horizontal → cars, vertical → sections.
-    // Single-touch only so pinch-zoom and multi-finger gestures pass through.
+    // Touch swipes (mobile): horizontal flick → cycle cars. Vertical scrolling
+    // is left entirely to native CSS scroll-snap, matching the desktop wheel
+    // behavior. Single-touch only so pinch-zoom / multi-finger gestures pass
+    // through untouched.
     let touchX = 0;
     let touchY = 0;
     let touchTime = 0;
@@ -157,24 +160,17 @@ export function useNavigation() {
       const dy = t.clientY - touchY;
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
-      const dist = Math.max(absX, absY);
-      if (dist < SWIPE_MIN_DIST) return;
-      // Must be a clear flick (not a careful slow swipe).
-      if (dist / elapsed < SWIPE_MIN_VELOCITY) return;
-      // Must be clearly axis-aligned (not a diagonal orbit drag).
-      if (absX > absY && absX < absY * SWIPE_AXIS_RATIO) return;
-      if (absY > absX && absY < absX * SWIPE_AXIS_RATIO) return;
+      // Vertical gestures fall through to native scroll-snap — only a clearly
+      // horizontal flick (not a diagonal orbit drag) cycles cars.
+      if (absX < absY * SWIPE_AXIS_RATIO) return;
+      if (absX < SWIPE_MIN_DIST) return;
+      // Must be a clear flick, not a careful slow swipe.
+      if (absX / elapsed < SWIPE_MIN_VELOCITY) return;
       // Let modals / interactive elements consume their own touches.
       const target = e.target as HTMLElement | null;
       if (target?.closest('a, button, input, [role="dialog"]')) return;
-      if (absX > absY) {
-        if (dx < 0) cycleCarThrottled();
-        else prevCarThrottled();
-      } else {
-        if (performance.now() < snapLockUntil.current) return;
-        if (dy < 0) goToSection(currentSection.current + 1);
-        else goToSection(currentSection.current - 1);
-      }
+      if (dx < 0) cycleCarThrottled();
+      else prevCarThrottled();
     };
 
     window.addEventListener('wheel', onWheel, { passive: true });

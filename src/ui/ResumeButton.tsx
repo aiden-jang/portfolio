@@ -14,7 +14,8 @@ export function ResumeButton() {
       rel="noopener noreferrer"
       className="
         group pointer-events-auto
-        inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full
+        inline-flex items-center justify-center gap-1.5
+        px-4 py-1.5 min-h-[44px] md:px-3.5 md:min-h-0 rounded-full
         border border-[var(--color-line)]
         font-[var(--font-mono)] text-[0.7rem] tracking-[0.22em] uppercase
         text-[var(--color-fg)] no-underline

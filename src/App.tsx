@@ -4,6 +4,7 @@ import { useNavigation } from './hooks/useNavigation';
 import { useReveal } from './hooks/useReveal';
 import { Scene } from './three/Scene';
 import { Brand } from './ui/Brand';
+import { ColorSwatches } from './ui/ColorSwatches';
 import { FilmGrain } from './ui/FilmGrain';
 import { Hint } from './ui/Hint';
 import { LoadingBar } from './ui/LoadingBar';
@@ -37,6 +38,11 @@ export function App() {
            *  inside Nav so it shares the top-right chrome row. */}
           <div className="md:hidden fixed top-[4vh] right-[5vw] z-20">
             <ResumeButton />
+          </div>
+          {/* Mobile-only color swatches — desktop renders them inside Nav.
+           *  Pinned low so they sit in the one-handed thumb zone. */}
+          <div className="md:hidden fixed left-1/2 -translate-x-1/2 bottom-[7vh] z-20">
+            <ColorSwatches bordered={false} />
           </div>
           <SectionDots onJump={scrollToSection} />
           <Sections />
