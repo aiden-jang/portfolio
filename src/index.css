@@ -74,6 +74,19 @@
     transform: translateY(0);
   }
 
+  /* Reduced-motion: collapse every CSS animation and transition to ~instant.
+     Catches the film-grain jitter, brand-clock pulse, panel reveal, hover
+     transitions, etc. JS-driven motion (camera tweens, magnetic hover) is
+     gated separately via prefersReducedMotion() / useReducedMotion(). */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Original-color swatch — diagonal slash icon. */
   .swatch-original {
     background:

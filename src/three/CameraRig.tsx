@@ -2,6 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { KEYFRAMES } from '../config';
+import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import { clamp, lerp, lerpAngle } from '../math';
 import { useAppStore } from '../store';
 import type { Keyframe } from '../types';
@@ -153,11 +154,13 @@ export function CameraRig({ getScrollT }: Props) {
   useFrame((three, dt) => {
     const s = state.current;
     const refs = useAppStore.getState().refs;
+    const reduced = prefersReducedMotion();
 
     // Idle spin advances only when scroll has settled AND not dragging.
     // Clean mode freezes the camera at the intro keyframe for OG screenshots.
+    // Reduced motion: skip the ambient drift entirely.
     s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
-    if (s.scrollActiveTimer === 0 && !s.isDown && !isCleanMode) {
+    if (s.scrollActiveTimer === 0 && !s.isDown && !isCleanMode && !reduced) {
       s.idleSpin += dt * IDLE_SPIN_RATE;
     }
     if (!s.isDown) {
@@ -192,8 +195,9 @@ export function CameraRig({ getScrollT }: Props) {
     let y = Math.sin(el) * dist + tgtY;
     let z = Math.cos(az) * Math.cos(el) * dist;
 
-    // Cinematic intro tween (skipped in clean mode for static OG framing).
-    if (refs.introArmed && s.introT < 1 && !isCleanMode) {
+    // Cinematic intro tween (skipped in clean mode for static OG framing,
+    // and skipped under reduced motion).
+    if (refs.introArmed && s.introT < 1 && !isCleanMode && !reduced) {
       s.introT = Math.min(1, s.introT + dt / INTRO_DURATION);
       const t = 1 - Math.pow(1 - s.introT, 3);
       const wideDist = dist * INTRO_WIDE_DIST_MUL;
@@ -211,9 +215,12 @@ export function CameraRig({ getScrollT }: Props) {
 
     // Section punch: brief FOV bell-curve pulse on nav changes for a cinematic
     // "reaction" to the section change. Returns FOV to baseline at the end.
+    // Suppressed under reduced motion (FOV held at baseline).
     if (camera instanceof THREE.PerspectiveCamera) {
       if (sectionPunchTimer.current > 0) {
         sectionPunchTimer.current = Math.max(0, sectionPunchTimer.current - dt);
+      }
+      if (sectionPunchTimer.current > 0 && !reduced) {
         const elapsed = 1 - sectionPunchTimer.current / SECTION_PUNCH_DURATION;
         const punch = Math.sin(elapsed * Math.PI); // 0 → 1 → 0
         camera.fov = baseFov.current + punch * SECTION_PUNCH_FOV_DELTA;
@@ -224,9 +231,12 @@ export function CameraRig({ getScrollT }: Props) {
       }
     }
 
-    // Rev envelope: shake the camera + bleed rev intensity.
+    // Rev envelope: shake the camera + bleed rev intensity. The rev counter
+    // still decays so taps register a "click", but no visual shake is applied.
     if (refs.revT > 0) {
       refs.revT = Math.max(0, refs.revT - dt * REV_DECAY_RATE);
+    }
+    if (refs.revT > 0 && !reduced) {
       const time = three.clock.elapsedTime;
       const rumble =
         (Math.sin(time * REV_RUMBLE_FREQ_HZ * 2 * Math.PI) * 0.6 +
