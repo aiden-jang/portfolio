@@ -4,6 +4,7 @@ import { SECTION_IDS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { CarSwitcher } from './CarSwitcher';
 import { ColorSwatches } from './ColorSwatches';
+import { ResumeButton } from './ResumeButton';
 import { ThemeToggle } from './ThemeToggle';
 
 const ITEMS: { id: SectionId; label: string; key: string }[] = [
@@ -43,6 +44,7 @@ export function Nav({ onLink }: Props) {
       <CarSwitcher />
       <ColorSwatches />
       <ThemeToggle />
+      <ResumeButton />
     </nav>
   );
 }
