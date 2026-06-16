@@ -88,8 +88,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       carIndex: (get().carIndex - 1 + CARS.length) % CARS.length,
       activeBodyColor: 'original',
     }),
-  toggleTheme: () =>
-    set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
+  toggleTheme: () => set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
   setSectionIndex: (i) => set({ sectionIndex: i }),
   triggerRev: () => {
     get().refs.revT = 1;
@@ -117,4 +116,3 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().applyBodyColor(next);
   },
 }));
-

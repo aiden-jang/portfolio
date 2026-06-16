@@ -180,7 +180,11 @@ export function detectBodyMaterial(model: THREE.Object3D): ColorMaterial | null 
 
 /** Attach front headlights + rear taillights as PointLights at the car's
  *  bumper extents. Returns the new Lamp[] for the caller to track. */
-export function buildLamps(parent: THREE.Object3D, orientedSize: THREE.Vector3, scale: number): Lamp[] {
+export function buildLamps(
+  parent: THREE.Object3D,
+  orientedSize: THREE.Vector3,
+  scale: number,
+): Lamp[] {
   const halfL = TARGET_LENGTH / 2;
   const halfW = (orientedSize.x * scale) / 2;
   const out: Lamp[] = [];

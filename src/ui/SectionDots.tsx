@@ -48,9 +48,11 @@ export function SectionDots({ onJump, placement }: Props) {
                 <span
                   className={`
                     block rounded-full transition-all duration-200
-                    ${active
-                      ? 'w-2 h-2 bg-[var(--color-neon)] shadow-[0_0_10px_rgba(255,107,28,0.6)]'
-                      : 'w-1.5 h-1.5 bg-[var(--color-muted)]'}
+                    ${
+                      active
+                        ? 'w-2 h-2 bg-[var(--color-neon)] shadow-[0_0_10px_rgba(255,107,28,0.6)]'
+                        : 'w-1.5 h-1.5 bg-[var(--color-muted)]'
+                    }
                   `}
                 />
               </button>
@@ -97,9 +99,11 @@ export function SectionDots({ onJump, placement }: Props) {
             <span
               className={`
                 block rounded-full transition-all duration-200
-                ${active
-                  ? 'w-2.5 h-2.5 bg-[var(--color-neon)] shadow-[0_0_10px_rgba(255,107,28,0.6)]'
-                  : 'w-1.5 h-1.5 bg-[var(--color-muted)] group-hover:bg-[var(--color-fg)] group-hover:scale-125'}
+                ${
+                  active
+                    ? 'w-2.5 h-2.5 bg-[var(--color-neon)] shadow-[0_0_10px_rgba(255,107,28,0.6)]'
+                    : 'w-1.5 h-1.5 bg-[var(--color-muted)] group-hover:bg-[var(--color-fg)] group-hover:scale-125'
+                }
               `}
             />
           </button>

@@ -5,7 +5,7 @@ export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t
 
 /** Lerp on angles taking the shortest path around the circle. */
 export const lerpAngle = (a: number, b: number, t: number): number => {
-  const d = ((b - a) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI;
+  const d = ((((b - a) % (Math.PI * 2)) + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
   return a + d * t;
 };
 
