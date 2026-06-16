@@ -71,9 +71,11 @@ function EmailRow() {
             md:mt-0 md:absolute md:left-full md:ml-3 md:top-1/2 md:-translate-y-1/2
             font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase
             px-2.5 py-1 rounded-full border transition-colors
-            ${copied
-              ? 'border-[var(--color-neon)] text-[var(--color-neon)]'
-              : 'border-[var(--color-line)] text-[var(--color-muted)] hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]'}
+            ${
+              copied
+                ? 'border-[var(--color-neon)] text-[var(--color-neon)]'
+                : 'border-[var(--color-line)] text-[var(--color-muted)] hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]'
+            }
           `}
         >
           {copied ? 'Copied ✓' : 'Copy'}

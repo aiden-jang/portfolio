@@ -72,9 +72,11 @@ function NavLink({
       className={`
         group relative py-1.5
         transition-[color,transform] duration-200 will-change-transform
-        ${active
-          ? 'text-[var(--color-fg)]'
-          : 'text-[var(--color-muted)] hover:text-[var(--color-fg)]'}
+        ${
+          active
+            ? 'text-[var(--color-fg)]'
+            : 'text-[var(--color-muted)] hover:text-[var(--color-fg)]'
+        }
       `}
     >
       {item.label}

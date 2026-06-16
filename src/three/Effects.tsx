@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import { useRef } from 'react';
+import type { BloomEffect } from 'postprocessing';
+import { useRef, type ComponentProps } from 'react';
 import { THEMES } from '../config';
 import { smoothTowards } from '../math';
 import { useAppStore } from '../store';
@@ -11,7 +12,7 @@ const BLOOM_RADIUS = 0.6;
 /** UnrealBloom via @react-three/postprocessing. Strength and threshold are
  *  eased toward the active theme each frame. */
 export function Effects() {
-  const bloomRef = useRef<any>(null);
+  const bloomRef = useRef<BloomEffect>(null);
   const currentStrength = useRef(THEMES.dusk.bloomStrength);
   const currentThreshold = useRef(THEMES.dusk.bloomThreshold);
 
@@ -22,14 +23,17 @@ export function Effects() {
     currentThreshold.current = smoothTowards(currentThreshold.current, target.bloomThreshold, k);
     if (bloomRef.current) {
       bloomRef.current.intensity = currentStrength.current;
-      bloomRef.current.luminanceThreshold = currentThreshold.current;
+      bloomRef.current.luminanceMaterial.threshold = currentThreshold.current;
     }
   });
 
   return (
     <EffectComposer>
       <Bloom
-        ref={bloomRef}
+        // @react-three/postprocessing types this ref as the BloomEffect class
+        // rather than the instance it actually assigns, so the instance-typed
+        // ref needs a cast at this one boundary.
+        ref={bloomRef as unknown as ComponentProps<typeof Bloom>['ref']}
         intensity={THEMES.dusk.bloomStrength}
         luminanceThreshold={THEMES.dusk.bloomThreshold}
         luminanceSmoothing={BLOOM_RADIUS}

@@ -17,8 +17,7 @@ import { SectionDots } from './ui/SectionDots';
 /** `?clean` URL param strips all DOM chrome — used to grab a clean canvas
  *  screenshot for the OG image, and handy for demos / press shots. */
 const isCleanMode =
-  typeof window !== 'undefined' &&
-  new URLSearchParams(window.location.search).has('clean');
+  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('clean');
 
 /** Composition root: 3D canvas + DOM chrome side-by-side. */
 export function App() {

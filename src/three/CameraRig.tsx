@@ -44,8 +44,7 @@ const NON_DRAGGABLE_SELECTOR = 'a, button, .panel, #nav, #theme-toggle';
  *  site's KEYFRAMES[0] sits closer to the nose (~14°); the OG shot wants more
  *  flank visible (~37°), hence the override. */
 const isCleanMode =
-  typeof window !== 'undefined' &&
-  new URLSearchParams(window.location.search).has('clean');
+  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('clean');
 const CLEAN_AZIMUTH = 0.65;
 
 type RigState = {
@@ -258,8 +257,7 @@ export function CameraRig({ getScrollT }: Props) {
     if (refs.revT > 0 && !reduced) {
       const time = three.clock.elapsedTime;
       const rumble =
-        (Math.sin(time * REV_RUMBLE_FREQ_HZ * 2 * Math.PI) * 0.6 +
-          (Math.random() - 0.5) * 0.4) *
+        (Math.sin(time * REV_RUMBLE_FREQ_HZ * 2 * Math.PI) * 0.6 + (Math.random() - 0.5) * 0.4) *
         refs.revT *
         REV_SHAKE_AMP;
       camera.position.x += rumble;

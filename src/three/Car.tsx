@@ -103,10 +103,7 @@ export function Car() {
         // `fetch` (not GLTFLoader) so it only warms the HTTP cache without
         // parsing or running the meshopt decoder. Fired after the current
         // load completes to keep the active swap unblocked.
-        const adjacent = [
-          (carIndex + 1) % CARS.length,
-          (carIndex - 1 + CARS.length) % CARS.length,
-        ];
+        const adjacent = [(carIndex + 1) % CARS.length, (carIndex - 1 + CARS.length) % CARS.length];
         for (const i of adjacent) {
           const a = CARS[i];
           if (a && a.file !== spec.file) {
@@ -147,7 +144,11 @@ export function Car() {
 
     // Per-car exposure easing (read by Floor for final tone-mapping).
     const targetExposure = CARS[useAppStore.getState().carIndex]?.exposure ?? 1;
-    refs.exposureCurrent = smoothTowards(refs.exposureCurrent, targetExposure, Math.min(1, dt * EXPOSURE_RATE));
+    refs.exposureCurrent = smoothTowards(
+      refs.exposureCurrent,
+      targetExposure,
+      Math.min(1, dt * EXPOSURE_RATE),
+    );
 
     // Breathing pulse + rev-driven surge on underglow opacity.
     const time = state.clock.elapsedTime;

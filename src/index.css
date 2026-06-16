@@ -6,8 +6,7 @@
   --color-muted: rgba(244, 240, 255, 0.55);
   --color-neon: #ff6b1c;
   --color-line: rgba(255, 255, 255, 0.12);
-  --font-display:
-    'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
 }
 
@@ -50,7 +49,9 @@
   /* Keyboard focus rings: visible only when navigating via keyboard
      (`:focus-visible`), so mouse clicks don't leave a ring behind. Inherits
      border-radius from the focused element, so round elements get round rings. */
-  :focus { outline: none; }
+  :focus {
+    outline: none;
+  }
   :focus-visible {
     outline: 2px solid var(--color-neon);
     outline-offset: 3px;
@@ -65,16 +66,37 @@
 
 /* Film grain jitter — small discrete shifts so the noise feels alive. */
 @keyframes filmgrain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-1%, -1%); }
-  20% { transform: translate(1%, 0.5%); }
-  30% { transform: translate(-1.5%, 1%); }
-  40% { transform: translate(1.5%, -1%); }
-  50% { transform: translate(-0.5%, 1.5%); }
-  60% { transform: translate(1%, -1.5%); }
-  70% { transform: translate(-1.5%, -0.5%); }
-  80% { transform: translate(0.5%, 1.5%); }
-  90% { transform: translate(-1%, -1.5%); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-1%, -1%);
+  }
+  20% {
+    transform: translate(1%, 0.5%);
+  }
+  30% {
+    transform: translate(-1.5%, 1%);
+  }
+  40% {
+    transform: translate(1.5%, -1%);
+  }
+  50% {
+    transform: translate(-0.5%, 1.5%);
+  }
+  60% {
+    transform: translate(1%, -1.5%);
+  }
+  70% {
+    transform: translate(-1.5%, -0.5%);
+  }
+  80% {
+    transform: translate(0.5%, 1.5%);
+  }
+  90% {
+    transform: translate(-1%, -1.5%);
+  }
 }
 
 @layer components {
@@ -110,11 +132,21 @@
       transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: opacity, transform;
   }
-  .panel.visible > *:nth-child(1) { transition-delay: 0ms; }
-  .panel.visible > *:nth-child(2) { transition-delay: 90ms; }
-  .panel.visible > *:nth-child(3) { transition-delay: 180ms; }
-  .panel.visible > *:nth-child(4) { transition-delay: 270ms; }
-  .panel.visible > *:nth-child(5) { transition-delay: 360ms; }
+  .panel.visible > *:nth-child(1) {
+    transition-delay: 0ms;
+  }
+  .panel.visible > *:nth-child(2) {
+    transition-delay: 90ms;
+  }
+  .panel.visible > *:nth-child(3) {
+    transition-delay: 180ms;
+  }
+  .panel.visible > *:nth-child(4) {
+    transition-delay: 270ms;
+  }
+  .panel.visible > *:nth-child(5) {
+    transition-delay: 360ms;
+  }
   .panel.visible > * {
     opacity: 1;
     transform: translateY(0);
@@ -125,7 +157,9 @@
      transitions, etc. JS-driven motion (camera tweens, magnetic hover) is
      gated separately via prefersReducedMotion() / useReducedMotion(). */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;

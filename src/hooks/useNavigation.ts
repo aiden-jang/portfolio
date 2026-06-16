@@ -232,5 +232,9 @@ export function useNavigation() {
     };
   }, [getScrollT, goToSection, setSectionIndex, cycleCarThrottled, prevCarThrottled]);
 
-  return { goToSection, getScrollT, scrollToSection: (id: SectionId) => goToSection(SECTION_IDS.indexOf(id)) };
+  return {
+    goToSection,
+    getScrollT,
+    scrollToSection: (id: SectionId) => goToSection(SECTION_IDS.indexOf(id)),
+  };
 }
