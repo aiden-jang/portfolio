@@ -27,22 +27,18 @@ const CAR_LOCK_MS = 600;
 /** Horizontal wheel events below this magnitude are ignored — small jitter
  *  from a mouse should not cycle the car. */
 const MIN_WHEEL_DELTA = 10;
-/** Touch-swipe gates: must be a clear, quick flick to count as a car cycle
- *  (slow drags are reserved for the camera-rig orbit). Requires both a
- *  minimum distance AND a minimum velocity. Tuned loose enough that a normal
- *  thumb-flick registers without forcing a hard snap. */
-const SWIPE_MIN_DIST = 60;
-const SWIPE_MAX_MS = 450;
-const SWIPE_MIN_VELOCITY = 0.3; // pixels per ms
-/** Axis dominance ratio — the main-axis distance must beat the cross-axis
- *  by at least this factor, so diagonal drags (orbit) don't trigger nav. */
-const SWIPE_AXIS_RATIO = 1.6;
 
-/** Keyboard/touch section navigation. Vertical scrolling is fully native (no
+/** Mobile (≤ the md breakpoint) pages sections with native CSS scroll-snap, so
+ *  the JS settle glide below is disabled there to avoid the two fighting. */
+const snapsNatively = () =>
+  typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+
+/** Keyboard/wheel section navigation. Vertical scrolling is fully native (no
  *  CSS scroll-snap, which fought the mouse wheel); instead, once scrolling
  *  stops we ease to the nearest section so it still settles cleanly without
- *  fighting any input mid-gesture. Horizontal wheel still cycles cars. Exposes
- *  `getScrollT` for the camera rig to interpolate keyframes by. */
+ *  fighting any input mid-gesture. Horizontal trackpad wheel cycles cars on
+ *  desktop; on mobile that's an explicit control (no swipe), so touch only
+ *  ever scrolls vertically. Exposes `getScrollT` for the camera rig. */
 export function useNavigation() {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
   const snapLockUntil = useRef(0);
@@ -211,56 +207,21 @@ export function useNavigation() {
         currentSection.current = idx;
         setSectionIndex(idx);
       }
+      // Mobile pages sections via native CSS scroll-snap; the JS settle glide
+      // is desktop-only so the two never fight.
+      if (snapsNatively()) return;
       window.clearTimeout(settleTimer);
       settleTimer = window.setTimeout(settleToNearest, SETTLE_DELAY_MS);
     };
-    // Touch swipes (mobile): horizontal flick → cycle cars. Vertical scrolling
-    // is left entirely to native scroll, matching the desktop wheel behavior.
-    // Single-touch only so pinch-zoom / multi-finger gestures pass through
-    // untouched.
-    let touchX = 0;
-    let touchY = 0;
-    let touchTime = 0;
-    const onTouchStart = (e: TouchEvent) => {
-      cancelTween(); // a finger on the screen interrupts the settle glide
-      if (e.touches.length !== 1) {
-        touchTime = 0;
-        return;
-      }
-      const t = e.touches[0];
-      touchX = t.clientX;
-      touchY = t.clientY;
-      touchTime = performance.now();
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (!touchTime || e.changedTouches.length !== 1) return;
-      const elapsed = performance.now() - touchTime;
-      touchTime = 0;
-      // Must be a quick gesture — slower touches are camera-rig drags.
-      if (elapsed > SWIPE_MAX_MS) return;
-      const t = e.changedTouches[0];
-      const dx = t.clientX - touchX;
-      const dy = t.clientY - touchY;
-      const absX = Math.abs(dx);
-      const absY = Math.abs(dy);
-      // Vertical gestures fall through to native scroll-snap — only a clearly
-      // horizontal flick (not a diagonal orbit drag) cycles cars.
-      if (absX < absY * SWIPE_AXIS_RATIO) return;
-      if (absX < SWIPE_MIN_DIST) return;
-      // Must be a clear flick, not a careful slow swipe.
-      if (absX / elapsed < SWIPE_MIN_VELOCITY) return;
-      // Let modals / interactive elements consume their own touches.
-      const target = e.target as HTMLElement | null;
-      if (target?.closest('a, button, input, [role="dialog"]')) return;
-      if (dx < 0) cycleCarThrottled();
-      else prevCarThrottled();
-    };
+    // A finger on the screen during the settle glide hands control straight
+    // back to native scroll, so the tween never fights a drag. Car cycling on
+    // mobile is an explicit control now (not a swipe), so touch only scrolls.
+    const onTouchStart = () => cancelTween();
 
     window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchend', onTouchEnd, { passive: true });
     return () => {
       window.clearTimeout(settleTimer);
       cancelTween();
@@ -268,7 +229,6 @@ export function useNavigation() {
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchend', onTouchEnd);
     };
   }, [getScrollT, goToSection, setSectionIndex, cycleCarThrottled, prevCarThrottled]);
 

@@ -52,8 +52,11 @@ function EmailRow() {
   return (
     <li className="py-1.5 text-center">
       {/* inline-block sizes to the email alone, so text-center centers the
-       *  address itself — matching the links below. The copy pill is taken
-       *  out of flow (absolute) so it can't pull the email off-center. */}
+       *  address itself — matching the links below. On desktop the copy pill
+       *  is taken out of flow (absolute, to the right) so it can't pull the
+       *  email off-center. On mobile that absolute pill would shoot past the
+       *  viewport edge and create a sideways scroll, so there it sits centered
+       *  on its own line below the address instead. */}
       <span className="relative inline-block">
         <a href={`mailto:${EMAIL}`} className={LINK_CLASS}>
           {EMAIL}
@@ -64,7 +67,8 @@ function EmailRow() {
           aria-label={copied ? 'Email address copied' : 'Copy email address'}
           className={`
             pointer-events-auto whitespace-nowrap
-            absolute left-full ml-3 top-1/2 -translate-y-1/2
+            mt-2 block mx-auto
+            md:mt-0 md:absolute md:left-full md:ml-3 md:top-1/2 md:-translate-y-1/2
             font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase
             px-2.5 py-1 rounded-full border transition-colors
             ${copied

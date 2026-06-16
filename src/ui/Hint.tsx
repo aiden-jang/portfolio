@@ -8,17 +8,15 @@ export function Hint() {
       id="hint"
       className="
         fixed left-1/2 -translate-x-1/2 bottom-[3vh] z-20
-        flex items-center justify-center gap-3 md:gap-[1.4rem]
+        hidden md:flex items-center justify-center gap-3 md:gap-[1.4rem]
         whitespace-nowrap pointer-events-none
         font-[var(--font-mono)] text-[0.58rem] md:text-[0.7rem]
         tracking-[0.18em] md:tracking-[0.22em] uppercase
         text-[var(--color-muted)]
       "
     >
-      {/* Mobile-only minimal hint */}
-      <span className="md:hidden">Swipe to navigate</span>
-
-      {/* Desktop hints */}
+      {/* Desktop hints (mobile guidance now lives in the bottom bar: named
+       *  section dots + the prev/next car control). */}
       <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>drag</kbd> orbit
       </span>

@@ -17,6 +17,24 @@
     margin: 0;
     padding: 0;
   }
+  /* Belt-and-suspenders against sideways scroll on mobile: clip horizontal
+     overflow at the scroll root. Applied to <html> only (the document
+     scroller) so vertical scrolling — which the camera rig reads off
+     window.scrollY / scrollHeight — is untouched. */
+  html {
+    overflow-x: hidden;
+  }
+  /* Mobile section paging: a touch swipe should always come to rest on a
+     section, never partway between. CSS scroll-snap does this natively and
+     feels right with a finger (unlike a mouse wheel, which is why desktop
+     stays free-scroll + the JS settle in useNavigation). snap-stop:always
+     keeps a hard flick from skipping past a section. The sections carry the
+     matching scroll-snap-align (max-md:snap-start). */
+  @media (max-width: 767px) {
+    html {
+      scroll-snap-type: y mandatory;
+    }
+  }
   /* No scroll snapping. A mouse wheel emits large discrete jumps, and the
      browser re-snaps after each one, so the page fought every wheel tick
      (mandatory and proximity both did this). Plain native scroll feels

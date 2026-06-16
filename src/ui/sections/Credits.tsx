@@ -10,9 +10,9 @@ export function Credits() {
       id="credit"
       aria-live="polite"
       className="
-        mt-10 pt-5 border-t border-[var(--color-line)]
-        font-[var(--font-mono)] text-[0.66rem] tracking-[0.16em] uppercase
-        text-[var(--color-muted)] leading-[1.7] text-left
+        mt-5 md:mt-10 pt-3 md:pt-5 border-t border-[var(--color-line)]
+        font-[var(--font-mono)] text-[0.6rem] md:text-[0.66rem] tracking-[0.16em] uppercase
+        text-[var(--color-muted)] leading-[1.5] md:leading-[1.7] text-left
       "
     >
       <span className="block text-[var(--color-fg)] mb-1.5 tracking-[0.32em] text-[0.62rem]">
@@ -22,7 +22,7 @@ export function Credits() {
         {credited.map((c) => {
           const credit = c.credit!;
           return (
-            <li key={c.name} className="py-1">
+            <li key={c.name} className="py-0.5 md:py-1">
               {c.name} ·{' '}
               <a
                 href={credit.url}

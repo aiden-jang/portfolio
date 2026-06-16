@@ -4,6 +4,7 @@ import { useNavigation } from './hooks/useNavigation';
 import { useReveal } from './hooks/useReveal';
 import { Scene } from './three/Scene';
 import { Brand } from './ui/Brand';
+import { MobileCarSwitcher } from './ui/CarSwitcher';
 import { ColorSwatches } from './ui/ColorSwatches';
 import { FilmGrain } from './ui/FilmGrain';
 import { Hint } from './ui/Hint';
@@ -54,12 +55,26 @@ export function App() {
           <div className="md:hidden fixed top-[4vh] right-[5vw] z-20">
             <ResumeButton />
           </div>
-          {/* Mobile-only color swatches — desktop renders them inside Nav.
-           *  Pinned low so they sit in the one-handed thumb zone. */}
-          <div className="md:hidden fixed left-1/2 -translate-x-1/2 bottom-[7vh] z-20">
-            <ColorSwatches bordered={false} />
+          {/* Mobile bottom bar: section progress + car + color in one
+           *  bottom-anchored stack, so the pieces never overlap each other
+           *  across phone sizes (sections reserve this zone with their bottom
+           *  padding). The soft gradient lets content fade under the controls
+           *  instead of colliding with them. Desktop renders these inside Nav
+           *  and the dot rail on the right edge. */}
+          <div
+            className="
+              md:hidden fixed inset-x-0 bottom-0 z-30 pointer-events-none
+              flex flex-col items-center gap-2.5 pt-6 pb-[3vh]
+              bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/70 to-transparent
+            "
+          >
+            <SectionDots onJump={scrollToSection} placement="bar" />
+            <MobileCarSwitcher />
+            <span className="pointer-events-auto">
+              <ColorSwatches bordered={false} />
+            </span>
           </div>
-          <SectionDots onJump={scrollToSection} />
+          <SectionDots onJump={scrollToSection} placement="rail" />
           <Sections />
           <Hint />
         </>
