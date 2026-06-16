@@ -9,7 +9,10 @@ export function IntroSection() {
           Software engineer building for the web.
         </h2>
         <p className={`${P_LI} max-w-[40ch] mx-auto`}>
-          Scroll to look around. Click and drag to orbit the car.
+          <span className="md:hidden">Swipe to explore.</span>
+          <span className="hidden md:inline">
+            Scroll to look around. Click and drag to orbit the car.
+          </span>
         </p>
       </div>
     </Section>

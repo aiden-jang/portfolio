@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { useMagnetic } from '../hooks/useMagnetic';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
@@ -37,6 +37,63 @@ export function CarSwitcher() {
         </span>
         <span className="text-[var(--color-muted)] text-[1.05em] leading-none">›</span>
       </span>
+    </button>
+  );
+}
+
+/** Mobile car control: explicit prev/next arrows flanking the current car
+ *  name. Replaces the horizontal swipe gesture (which fought vertical scroll
+ *  and the camera-orbit drag) with a discoverable, tappable affordance. */
+export function MobileCarSwitcher() {
+  const carIndex = useAppStore((s) => s.carIndex);
+  const cycleCar = useAppStore((s) => s.cycleCar);
+  const prevCar = useAppStore((s) => s.prevCar);
+  const car = CARS[carIndex];
+
+  return (
+    <div
+      className="
+        pointer-events-auto inline-flex items-center
+        bg-white/[0.04] border border-[var(--color-line)] rounded-full
+        font-[var(--font-mono)] text-[0.72rem] tracking-[0.16em] uppercase
+        text-[var(--color-fg)]
+      "
+    >
+      <ArrowButton label="Previous car" onClick={prevCar}>
+        ‹
+      </ArrowButton>
+      <span className="min-w-[8.5rem] px-1 text-center truncate">
+        {car?.name ?? '—'}
+      </span>
+      <ArrowButton label="Next car" onClick={cycleCar}>
+        ›
+      </ArrowButton>
+    </div>
+  );
+}
+
+function ArrowButton({
+  label,
+  onClick,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className="
+        min-w-[44px] min-h-[44px] flex items-center justify-center
+        text-[1.3em] leading-none text-[var(--color-muted)]
+        rounded-full cursor-pointer transition-colors
+        active:text-[var(--color-neon)]
+      "
+    >
+      {children}
     </button>
   );
 }

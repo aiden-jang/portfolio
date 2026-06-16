@@ -29,6 +29,14 @@ const REV_SHAKE_AMP = 0.12;
 const SECTION_PUNCH_DURATION = 0.55; // seconds
 const SECTION_PUNCH_FOV_DELTA = 6; // degrees added at peak
 
+/** Keyframe distances are framed for a wide (desktop) viewport. On a narrow /
+ *  portrait screen the horizontal field of view shrinks, so the car reads as
+ *  over-zoomed and crops. Pull the camera back as the viewport gets narrower.
+ *  Softened with a sqrt and capped so phones get a sensible step-back without
+ *  the car shrinking into the distance. */
+const FRAME_BASE_ASPECT = 1.5;
+const FRAME_MAX_DIST_MUL = 1.85;
+
 const NON_DRAGGABLE_SELECTOR = 'a, button, .panel, #nav, #theme-toggle';
 
 /** `?clean` URL param freezes the camera in a true 3/4 front pose and skips
@@ -44,6 +52,7 @@ type RigState = {
   dragAzimuth: number;
   dragElevation: number;
   isDown: boolean;
+  isTouch: boolean;
   dragMoved: boolean;
   lastX: number;
   lastY: number;
@@ -68,6 +77,7 @@ export function CameraRig({ getScrollT }: Props) {
     dragAzimuth: 0,
     dragElevation: 0,
     isDown: false,
+    isTouch: false,
     dragMoved: false,
     lastX: 0,
     lastY: 0,
@@ -103,6 +113,7 @@ export function CameraRig({ getScrollT }: Props) {
       if (isNonDraggable(e.target)) return;
       const s = state.current;
       s.isDown = true;
+      s.isTouch = e.pointerType === 'touch';
       s.dragMoved = false;
       s.lastX = e.clientX;
       s.lastY = e.clientY;
@@ -115,6 +126,11 @@ export function CameraRig({ getScrollT }: Props) {
       s.lastX = e.clientX;
       s.lastY = e.clientY;
       if (Math.abs(dx) + Math.abs(dy) > TAP_THRESHOLD_PX) s.dragMoved = true;
+      // Touch reserves the swipe for native scroll / section snap — only a
+      // stationary tap (handled on pointer-up as a rev) is honored, never an
+      // orbit, so a scroll gesture can't fight the camera. Mouse drag (desktop)
+      // still orbits freely.
+      if (s.isTouch) return;
       s.dragAzimuth += dx * DRAG_YAW_SENSITIVITY;
       s.dragElevation = clamp(
         s.dragElevation - dy * DRAG_PITCH_SENSITIVITY,
@@ -182,7 +198,10 @@ export function CameraRig({ getScrollT }: Props) {
     kf.targetY = lerp(a.targetY, b.targetY, f);
 
     const az = isCleanMode ? CLEAN_AZIMUTH : kf.azimuth + s.dragAzimuth + s.idleSpin;
-    const dist = kf.distance;
+    // Pull back on narrow / portrait viewports so the car isn't over-zoomed.
+    const aspect = three.size.height > 0 ? three.size.width / three.size.height : FRAME_BASE_ASPECT;
+    const distMul = clamp(Math.sqrt(FRAME_BASE_ASPECT / aspect), 1, FRAME_MAX_DIST_MUL);
+    const dist = kf.distance * distMul;
     const tgtY = kf.targetY;
 
     // Floor clamp: ensure camera y stays above MIN_CAM_Y.
