@@ -4,16 +4,60 @@ import type { WorkDetail } from '../ui/WorkModal';
  *  badge automatically because it has a `link`. Add new entries here. */
 export const WORK_ITEMS: WorkDetail[] = [
   {
-    title: 'Blossom',
-    context: 'Side project · 2025',
-    summary: 'A side project of mine. Click to learn more and try it.',
+    title: 'A platform of shipped side projects',
+    context: 'Personal platform · 2025–present',
+    summary: 'Several apps of my own on one $0 Cloudflare stack, tied together by a shared sign-in I built.',
     body: [
-      'A web app I built on the side. Full-stack: data model, API, UI, all of it.',
-      'Live at blossom.aidenjang.com — give it a spin.',
+      'Everything runs on Cloudflare’s free tier (Workers, D1, Durable Objects) under a hard $0-hosting budget with no cold starts. The connective tissue is a shared identity service: one sign-in that every app on *.aidenjang.com trusts.',
+      'The auth Worker issues an httpOnly session cookie on the parent domain, and a published npm SDK (@aidenjang/auth-client) is the single place the session contract lives. Apps never touch the session secret; they forward the cookie to /auth/me from their own Worker. Email + password (PBKDF2), Google OIDC, and passwordless magic links, all enforced server-side.',
+      'Each app below is its own repo that consumes the shared SDK as a versioned dependency, so the session contract has exactly one source of truth. Signing in is optional everywhere: it syncs your data across apps, but nothing gates on an account.',
     ],
-    stack: ['TypeScript', 'React', 'Node.js'],
-    image: '/work/blossom.png',
-    link: { label: 'Visit Blossom', url: 'https://blossom.aidenjang.com' },
+    stack: ['Cloudflare Workers', 'Durable Objects', 'D1', 'OIDC', 'TypeScript', 'React'],
+    link: { label: 'Visit the sign-in hub', url: 'https://accounts.aidenjang.com' },
+  },
+  {
+    title: 'iguess: realtime draw-and-guess vs an AI',
+    context: 'Side project · 2025–present',
+    summary: 'A multiplayer draw-and-guess game where an AI vision model races you to guess the drawing.',
+    body: [
+      'skribbl.io-style realtime rooms, but the twist is an AI that actually looks at the canvas. One Cloudflare Durable Object per room is the single authority for that room’s WebSocket and game state; a separate Worker rasterizes the live strokes and calls a vision model to guess.',
+      'Three game modes (AI guesser, AI drawer, and a humans-vs-AI team battle) run on one unchanged shared engine. The abstraction that unlocked it was a transport-agnostic draw() verb, so strokes no longer have to originate from a human socket. Reconnect is handled with a client-asserted id and a full state replay on connect.',
+    ],
+    stack: ['Cloudflare Workers', 'Durable Objects', 'WebSockets', 'Canvas', 'Vision LLM', 'React'],
+    link: { label: 'Play iguess', url: 'https://iguess.aidenjang.com' },
+  },
+  {
+    title: 'owewell: split bills, settle up',
+    context: 'Side project · 2025–present',
+    summary: 'A live bill-splitting app that untangles who owes whom and minimizes the payments to settle up.',
+    body: [
+      'Groups, itemized expenses, and multiple split methods (evenly, by shares, or exact amounts), all synced live. Money is stored as integer cents end to end, so no floating-point drift ever creeps into a balance.',
+      'Built on Hono + D1/Drizzle with a Durable Object for the live session, React/Vite/Tailwind on top. The settle-up step computes a minimal set of transactions to zero everyone out, and pay links deep-link into the right app with the amount prefilled.',
+    ],
+    stack: ['Cloudflare Workers', 'Hono', 'D1', 'Drizzle', 'Durable Objects', 'React'],
+    link: { label: 'Open owewell', url: 'https://owewell.aidenjang.com' },
+  },
+  {
+    title: 'wherever: group restaurant picking',
+    context: 'Side project · 2025–present',
+    summary: 'A group picks a place to eat by swiping; majority vote wins, so nobody has to decide alone.',
+    body: [
+      'Everyone joins a session and swipes through nearby spots pulled from Google Places; the first option to clear a majority wins the room. Built as an installable PWA so it feels native on a phone.',
+      'One Cloudflare Durable Object per session holds the live vote state over WebSockets, backed by D1/Drizzle. It handles the messy realtime cases: a host who leaves is auto-promoted so a session never stalls, and stale sessions are pruned on a cron.',
+    ],
+    stack: ['Cloudflare Workers', 'Hono', 'Durable Objects', 'D1', 'Drizzle', 'PWA', 'React'],
+    link: { label: 'Open wherever', url: 'https://wherever.aidenjang.com' },
+  },
+  {
+    title: 'bloomnote: write a note, grow a garden',
+    context: 'Side project · 2025–present',
+    summary: 'Leave someone a note and an LLM grows them a one-of-a-kind generative garden from it.',
+    body: [
+      'A small, gift-like app: you write a message, and a language model interprets it into a unique garden that blooms for the recipient. The charm is that no two notes ever grow the same thing.',
+      'Runs on the same $0 Cloudflare stack as the rest. The model call is wrapped for reliability (a request timeout plus a retry) so a slow or flaky LLM degrades gracefully instead of leaving a blank page.',
+    ],
+    stack: ['Cloudflare Workers', 'LLM', 'TypeScript', 'React'],
+    link: { label: 'Open bloomnote', url: 'https://bloomnote.aidenjang.com' },
   },
   {
     title: 'Monolith → Django REST + React rewrite',
