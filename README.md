@@ -119,4 +119,11 @@ array.
 ## Credits
 
 All car models are CC BY 4.0. Authors and Sketchfab links live in `src/config.ts`
-and on the live site's Contact section.
+and on the live site's Contact section. The models have been modified (mesh +
+texture compression, and recolored at runtime).
+
+## License
+
+Source code is [MIT](LICENSE) © Aiden Jang. The MIT license covers the code only;
+the CC BY 4.0 car models under `public/models/` are third-party and keep their own
+license and attribution (see Credits).
