@@ -1,8 +1,11 @@
+import { lazy, Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useNavigation } from './hooks/useNavigation';
 import { useReveal } from './hooks/useReveal';
-import { Scene } from './three/Scene';
+// Lazy-loaded so the ~1 MB Three/R3F bundle isn't on the critical path — the DOM chrome and
+// section content paint immediately, then the canvas mounts when its chunk arrives.
+const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 import { Brand } from './ui/Brand';
 import { MobileCarSwitcher } from './ui/CarSwitcher';
 import { ColorSwatches } from './ui/ColorSwatches';
@@ -41,7 +44,9 @@ export function App() {
       >
         Skip to content
       </a>
-      <Scene getScrollT={getScrollT} />
+      <Suspense fallback={null}>
+        <Scene getScrollT={getScrollT} />
+      </Suspense>
       <div className="vignette" aria-hidden="true" />
       <FilmGrain />
       <LoadingBar />
