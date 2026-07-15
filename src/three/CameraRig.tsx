@@ -22,6 +22,11 @@ const DRAG_DECAY_FRACTION = 0.6;
 const IDLE_SPIN_RATE = 0.18;
 const SCROLL_PAUSE_DURATION = 0.2;
 const TAP_THRESHOLD_PX = 3;
+/** Touch hold-to-orbit: press and stay within HOLD_MOVE_TOLERANCE for HOLD_MS
+ *  to switch from scrolling the page to orbiting the car. A larger movement
+ *  before that fires is a scroll, and cancels the hold. */
+const HOLD_MS = 300;
+const HOLD_MOVE_TOLERANCE = 10;
 const REV_DECAY_RATE = 1.8;
 const REV_RUMBLE_FREQ_HZ = 90 / (2 * Math.PI);
 const REV_SHAKE_AMP = 0.12;
@@ -53,6 +58,9 @@ type RigState = {
   isDown: boolean;
   isTouch: boolean;
   dragMoved: boolean;
+  /** Touch only: set once a stationary press passes the hold threshold, which
+   *  switches the gesture from page-scroll to car-orbit. */
+  orbitHold: boolean;
   lastX: number;
   lastY: number;
   idleSpin: number;
@@ -78,6 +86,7 @@ export function CameraRig({ getScrollT }: Props) {
     isDown: false,
     isTouch: false,
     dragMoved: false,
+    orbitHold: false,
     lastX: 0,
     lastY: 0,
     idleSpin: 0,
@@ -108,14 +117,34 @@ export function CameraRig({ getScrollT }: Props) {
     const isNonDraggable = (target: EventTarget | null) =>
       !!(target as HTMLElement | null)?.closest?.(NON_DRAGGABLE_SELECTOR);
 
+    let holdTimer = 0;
+    const endGesture = (s: RigState) => {
+      window.clearTimeout(holdTimer);
+      s.orbitHold = false;
+      document.body.classList.remove('orbiting');
+    };
+
     const onPointerDown = (e: PointerEvent) => {
       if (isNonDraggable(e.target)) return;
       const s = state.current;
       s.isDown = true;
       s.isTouch = e.pointerType === 'touch';
       s.dragMoved = false;
+      s.orbitHold = false;
       s.lastX = e.clientX;
       s.lastY = e.clientY;
+      // Touch: a stationary press-and-hold switches the gesture from scrolling
+      // the page to orbiting the car, so a normal swipe still scrolls.
+      if (s.isTouch) {
+        window.clearTimeout(holdTimer);
+        holdTimer = window.setTimeout(() => {
+          if (s.isDown && !s.dragMoved) {
+            s.orbitHold = true;
+            document.body.classList.add('orbiting');
+            navigator.vibrate?.(12);
+          }
+        }, HOLD_MS);
+      }
     };
     const onPointerMove = (e: PointerEvent) => {
       const s = state.current;
@@ -125,13 +154,14 @@ export function CameraRig({ getScrollT }: Props) {
       s.lastX = e.clientX;
       s.lastY = e.clientY;
       if (Math.abs(dx) + Math.abs(dy) > TAP_THRESHOLD_PX) s.dragMoved = true;
-      // Touch reserves the swipe for native scroll / section snap — only a
-      // stationary tap (handled on pointer-up as a rev) is honored, never an
-      // orbit, so a scroll gesture can't fight the camera. Mouse drag (desktop)
-      // still orbits freely.
-      if (s.isTouch) return;
-      // Actively orbiting with the mouse: fade the DOM text so the car reads
-      // clean. Restored on pointer up/cancel. CSS handles the transition.
+      // Touch scrolls the page unless hold-to-orbit has engaged; a real move
+      // before the hold fires cancels it (it was a scroll, not a hold).
+      if (s.isTouch && !s.orbitHold) {
+        if (Math.abs(dx) + Math.abs(dy) > HOLD_MOVE_TOLERANCE) window.clearTimeout(holdTimer);
+        return;
+      }
+      // Orbiting (mouse drag, or an engaged touch hold): fade the DOM text so
+      // the car reads clean. Restored on pointer up/cancel. CSS transitions it.
       if (s.dragMoved) document.body.classList.add('orbiting');
       s.dragAzimuth += dx * DRAG_YAW_SENSITIVITY;
       s.dragElevation = clamp(
@@ -140,18 +170,27 @@ export function CameraRig({ getScrollT }: Props) {
         MAX_ELEVATION_FREE,
       );
     };
+    // Non-passive so a hold-orbit on touch can suppress the page scroll while
+    // the finger drags the car. Only preventDefaults once the hold engaged.
+    const onTouchMove = (e: TouchEvent) => {
+      if (state.current.orbitHold) e.preventDefault();
+    };
     const onPointerUp = () => {
       const s = state.current;
-      if (!s.isDown) return;
-      if (!s.dragMoved) triggerRev();
+      if (!s.isDown) {
+        endGesture(s);
+        return;
+      }
+      // A tap (no move, no hold) revs; a hold-orbit does not.
+      if (!s.dragMoved && !s.orbitHold) triggerRev();
       s.idleSpin += s.dragAzimuth;
       s.dragAzimuth = 0;
       s.isDown = false;
-      document.body.classList.remove('orbiting');
+      endGesture(s);
     };
     const onPointerCancel = () => {
       state.current.isDown = false;
-      document.body.classList.remove('orbiting');
+      endGesture(state.current);
     };
     const onScroll = () => {
       state.current.scrollActiveTimer = SCROLL_PAUSE_DURATION;
@@ -159,12 +198,15 @@ export function CameraRig({ getScrollT }: Props) {
 
     window.addEventListener('pointerdown', onPointerDown);
     window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
     window.addEventListener('pointerup', onPointerUp);
     window.addEventListener('pointercancel', onPointerCancel);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
+      window.clearTimeout(holdTimer);
       window.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('pointercancel', onPointerCancel);
       window.removeEventListener('scroll', onScroll);

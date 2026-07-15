@@ -1,11 +1,10 @@
-import { EYEBROW, P_LI, Section } from './shared';
+import { P_LI, Section } from './shared';
 
 export function IntroSection() {
   return (
     <Section id="sec-intro" side="center">
       <div className="panel pointer-events-auto max-w-[640px] px-4 text-center">
-        <span className={EYEBROW}>Aiden Jang · Software Engineer</span>
-        <h2 className="mt-3 mb-3 text-[clamp(2.4rem,5vw,3.6rem)] leading-[0.95] font-semibold tracking-[-0.035em]">
+        <h2 className="mb-3 text-[clamp(2.4rem,5vw,3.6rem)] leading-[0.95] font-semibold tracking-[-0.035em]">
           I build full-stack web apps, end to end.
         </h2>
         <p className={`${P_LI} max-w-[46ch] mx-auto`}>

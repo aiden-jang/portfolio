@@ -15,6 +15,7 @@ import { LoadingBar } from './ui/LoadingBar';
 import { Nav } from './ui/Nav';
 import { ResumeButton } from './ui/ResumeButton';
 import { SceneBoundary } from './ui/SceneBoundary';
+import { MobileThemeButton } from './ui/ThemeToggle';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 
@@ -61,7 +62,10 @@ export function App() {
           <Nav onLink={scrollToSection} />
           {/* Mobile-only floating resume CTA. Desktop renders ResumeButton
            *  inside Nav so it shares the top-right chrome row. */}
-          <div className="md:hidden fixed top-[max(4vh,env(safe-area-inset-top))] right-[5vw] z-20">
+          <div
+            id="mobile-resume"
+            className="md:hidden fixed top-[max(4vh,env(safe-area-inset-top))] right-[5vw] z-20"
+          >
             <ResumeButton />
           </div>
           {/* Mobile bottom bar: section progress + car + color in one
@@ -79,10 +83,11 @@ export function App() {
             "
           >
             <SectionDots onJump={scrollToSection} placement="bar" />
-            {/* Car switcher + color on one line to keep the bar compact. */}
+            {/* Car switcher + color + background on one line to keep it compact. */}
             <div className="flex items-center gap-2">
               <MobileCarSwitcher />
               <MobileColorButton />
+              <MobileThemeButton />
             </div>
           </div>
           {/* Desktop car + color dock. These used to sit in the top-right Nav

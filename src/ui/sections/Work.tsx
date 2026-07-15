@@ -19,9 +19,9 @@ export function WorkSection({ onOpen }: Props) {
     <Section id="sec-work" side="right">
       <div className="panel pointer-events-auto w-full max-w-[560px]">
         <span className={EYEBROW}>02 / PROJECTS</span>
-        <h2 className={H2}>Side projects</h2>
+        <h2 className={H2}>Things I&apos;ve built</h2>
 
-        <div className="mt-4 grid grid-cols-2 gap-2.5">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2.5">
           {apps.map((item, i) => (
             <AppCard
               key={item.title}
@@ -63,7 +63,7 @@ function AppCard({
         border border-[var(--color-line)] bg-[rgba(10,10,18,0.55)] p-3
         transition-[transform,border-color,background-color] duration-200
         hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-[rgba(14,14,26,0.72)]
-        flex items-center gap-3 ${featured ? 'col-span-2' : ''}
+        flex items-center gap-3 ${featured ? 'md:col-span-2' : ''}
       `}
     >
       <span className="relative block w-11 h-11 rounded-lg overflow-hidden shrink-0 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.7)]">
@@ -94,7 +94,7 @@ function AppCard({
           </span>
           <LiveDot />
         </span>
-        <span className="mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] line-clamp-1">
+        <span className="mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] line-clamp-1 max-md:hidden">
           {item.summary}
         </span>
       </span>
