@@ -2,8 +2,6 @@ import { useRef } from 'react';
 import { useMagnetic } from '../hooks/useMagnetic';
 import { SECTION_IDS, type SectionId } from '../config';
 import { useAppStore } from '../store';
-import { CarSwitcher } from './CarSwitcher';
-import { ColorSwatches } from './ColorSwatches';
 import { ResumeButton } from './ResumeButton';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -33,16 +31,22 @@ export function Nav({ onLink }: Props) {
         font-[var(--font-mono)] text-[0.74rem] tracking-[0.18em] uppercase
       "
     >
-      {ITEMS.map((item) => (
-        <NavLink
-          key={item.id}
-          item={item}
-          active={activeId === item.id}
-          onClick={() => onLink(item.id)}
-        />
-      ))}
-      <CarSwitcher />
-      <ColorSwatches />
+      {/* Section links only appear at lg+, where they fit beside the brand.
+          Below that (tablet), five links + the brand can't share the row
+          without overlapping, so navigation falls to the section-dots rail. */}
+      <div className="hidden lg:flex items-center gap-[1.4rem]">
+        {ITEMS.map((item) => (
+          <NavLink
+            key={item.id}
+            item={item}
+            active={activeId === item.id}
+            onClick={() => onLink(item.id)}
+          />
+        ))}
+      </div>
+      {/* Car + color controls live in the bottom dock (see App.tsx), not here:
+          packed into this right-anchored row they made the nav wide enough to
+          run back under the brand wordmark even on wide viewports. */}
       <ThemeToggle />
       <ResumeButton />
     </nav>

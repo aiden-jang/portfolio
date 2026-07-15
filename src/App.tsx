@@ -7,7 +7,7 @@ import { useReveal } from './hooks/useReveal';
 // section content paint immediately, then the canvas mounts when its chunk arrives.
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 import { Brand } from './ui/Brand';
-import { MobileCarSwitcher } from './ui/CarSwitcher';
+import { CarSwitcher, MobileCarSwitcher } from './ui/CarSwitcher';
 import { ColorSwatches } from './ui/ColorSwatches';
 import { FilmGrain } from './ui/FilmGrain';
 import { Hint } from './ui/Hint';
@@ -74,6 +74,24 @@ export function App() {
           >
             <SectionDots onJump={scrollToSection} placement="bar" />
             <MobileCarSwitcher />
+            <span className="pointer-events-auto">
+              <ColorSwatches bordered={false} />
+            </span>
+          </div>
+          {/* Desktop car + color dock. These used to sit in the top-right Nav
+           *  row, but that made the nav wide enough to overlap the brand on
+           *  most laptop widths. Bottom-center, just above the Hint, keeps them
+           *  discoverable while the top row stays clear. Mobile has its own
+           *  copy in the bottom bar above. */}
+          <div
+            className="
+              hidden md:flex fixed left-1/2 -translate-x-1/2 bottom-[5.5rem] z-20
+              items-center gap-3 pointer-events-none
+            "
+          >
+            <span className="pointer-events-auto">
+              <CarSwitcher />
+            </span>
             <span className="pointer-events-auto">
               <ColorSwatches bordered={false} />
             </span>
