@@ -5,7 +5,7 @@ import type { WorkDetail } from '../ui/WorkModal';
 export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'A platform of shipped side projects',
-    context: 'Personal platform · 2025–present',
+    context: 'Personal platform',
     summary: 'Several apps of my own on one $0 Cloudflare stack, tied together by a shared sign-in I built.',
     body: [
       'Everything runs on Cloudflare’s free tier (Workers, D1, Durable Objects) under a hard $0-hosting budget with no cold starts. The connective tissue is a shared identity service: one sign-in that every app on *.aidenjang.com trusts.',
@@ -19,7 +19,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'iguess: realtime draw-and-guess vs an AI',
-    context: 'Side project · 2025–present',
+    context: 'Side project',
     summary: 'A multiplayer draw-and-guess game where an AI vision model races you to guess the drawing.',
     body: [
       'skribbl.io-style realtime rooms, but the twist is an AI that actually looks at the canvas. One Cloudflare Durable Object per room is the single authority for that room’s WebSocket and game state; a separate Worker rasterizes the live strokes and calls a vision model to guess.',
@@ -32,7 +32,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'owewell: split bills, settle up',
-    context: 'Side project · 2025–present',
+    context: 'Side project',
     summary: 'A live bill-splitting app that untangles who owes whom and minimizes the payments to settle up.',
     body: [
       'Groups, itemized expenses, and multiple split methods (evenly, by shares, or exact amounts), all synced live. Money is stored as integer cents end to end, so no floating-point drift ever creeps into a balance.',
@@ -45,7 +45,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'wherever: group restaurant picking',
-    context: 'Side project · 2025–present',
+    context: 'Side project',
     summary: 'A group picks a place to eat by swiping; majority vote wins, so nobody has to decide alone.',
     body: [
       'Everyone joins a session and swipes through nearby spots pulled from Google Places; the first option to clear a majority wins the room. Built as an installable PWA so it feels native on a phone.',
@@ -58,7 +58,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'bloomnote: write a note, grow a garden',
-    context: 'Side project · 2025–present',
+    context: 'Side project',
     summary: 'Leave someone a note and an LLM grows them a one-of-a-kind generative garden from it.',
     body: [
       'A small, gift-like app: you write a message, and a language model interprets it into a unique garden that blooms for the recipient. The charm is that no two notes ever grow the same thing.',

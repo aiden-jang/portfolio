@@ -8,19 +8,19 @@ const SNAP_LOCK_MS = 1100;
 /** Settle-to-section: scrolling stays fully native (so the wheel/trackpad never
  *  fight an active gesture), then this long after scrolling STOPS we ease to the
  *  nearest section so the page never rests partway between sections. */
-const SETTLE_DELAY_MS = 150;
+const SETTLE_DELAY_MS = 40;
 /** Already within this many px of a section top: leave it, don't nudge. */
 const SETTLE_TOLERANCE_PX = 4;
 /** How far into the gap toward the next section you must scroll before the
  *  settle completes to it (vs. staying on the current one). Keeps the settle
  *  moving with you instead of snapping back to whichever section is nearest. */
-const SETTLE_COMMIT_FRACTION = 0.25;
+const SETTLE_COMMIT_FRACTION = 0.15;
 /** The settle glide is a custom eased tween (smoother than native smooth
  *  scroll). Duration scales with distance, clamped to this range, so a short
  *  nudge and a near-full-screen glide both feel right. */
-const SETTLE_MS_PER_PX = 0.85;
-const SETTLE_MIN_MS = 380;
-const SETTLE_MAX_MS = 720;
+const SETTLE_MS_PER_PX = 0.55;
+const SETTLE_MIN_MS = 240;
+const SETTLE_MAX_MS = 460;
 
 /** Smooth, symmetric ease (slow in, slow out) for the settle glide. */
 const easeInOutCubic = (t: number): number =>
