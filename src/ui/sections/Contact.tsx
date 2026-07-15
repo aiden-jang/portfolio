@@ -10,7 +10,7 @@ const SOCIAL_LINKS: { label: string; url: string }[] = [
 ];
 
 const LINK_CLASS =
-  'text-[var(--color-fg)] no-underline border-b border-[var(--color-neon)] hover:text-[var(--color-neon)]';
+  'inline-block py-1 text-[var(--color-fg)] no-underline border-b border-[var(--color-neon)] hover:text-[var(--color-neon)]';
 
 export function ContactSection() {
   return (
@@ -67,10 +67,10 @@ function EmailRow() {
           aria-label={copied ? 'Email address copied' : 'Copy email address'}
           className={`
             pointer-events-auto whitespace-nowrap
-            mt-2 block mx-auto
-            md:mt-0 md:absolute md:left-full md:ml-3 md:top-1/2 md:-translate-y-1/2
+            mt-2 flex w-fit mx-auto items-center justify-center min-h-[40px]
+            md:mt-0 md:min-h-0 md:w-auto md:block md:absolute md:left-full md:ml-3 md:top-1/2 md:-translate-y-1/2
             font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase
-            px-2.5 py-1 rounded-full border transition-colors
+            px-3.5 py-2 md:px-2.5 md:py-1 rounded-full border transition-colors
             ${
               copied
                 ? 'border-[var(--color-neon)] text-[var(--color-neon)]'
