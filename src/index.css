@@ -64,38 +64,42 @@
   }
 }
 
-/* Film grain jitter — small discrete shifts so the noise feels alive. */
+/* Film grain jitter — small discrete shifts so the noise feels alive. Shifts
+   the tiling noise via background-position (not transform), so the overlay can
+   stay exactly viewport-sized (inset-0) and never overflow — a translated,
+   oversized fixed element caused sideways scroll on mobile. The noise tiles
+   seamlessly, so moving the position never exposes an edge. */
 @keyframes filmgrain {
   0%,
   100% {
-    transform: translate(0, 0);
+    background-position: 0 0;
   }
   10% {
-    transform: translate(-1%, -1%);
+    background-position: -3px -3px;
   }
   20% {
-    transform: translate(1%, 0.5%);
+    background-position: 3px 1px;
   }
   30% {
-    transform: translate(-1.5%, 1%);
+    background-position: -4px 3px;
   }
   40% {
-    transform: translate(1.5%, -1%);
+    background-position: 4px -3px;
   }
   50% {
-    transform: translate(-0.5%, 1.5%);
+    background-position: -1px 4px;
   }
   60% {
-    transform: translate(1%, -1.5%);
+    background-position: 3px -4px;
   }
   70% {
-    transform: translate(-1.5%, -0.5%);
+    background-position: -4px -1px;
   }
   80% {
-    transform: translate(0.5%, 1.5%);
+    background-position: 1px 4px;
   }
   90% {
-    transform: translate(-1%, -1.5%);
+    background-position: -3px -4px;
   }
 }
 
