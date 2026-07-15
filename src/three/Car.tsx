@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { CARS, THEMES } from '../config';
+import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import { smoothColorHex, smoothTowards } from '../math';
 import { useAppStore } from '../store';
 import {
@@ -170,14 +171,18 @@ export function Car() {
       Math.min(1, dt * EXPOSURE_RATE),
     );
 
-    // Breathing pulse + rev-driven surge on underglow opacity.
+    // Breathing pulse + rev-driven surge on underglow opacity. Both are
+    // continuous/decorative motion, so hold them at a steady state for visitors
+    // who ask for reduced motion (the camera + section glides already do).
+    const reduced = prefersReducedMotion();
     const time = state.clock.elapsedTime;
-    const breath = 0.5 + Math.sin(time * 0.7) * 0.5;
-    underglowMat.opacity = 0.42 + breath * 0.16 + refs.revT * 0.7;
+    const breath = reduced ? 0.5 : 0.5 + Math.sin(time * 0.7) * 0.5;
+    const rev = reduced ? 0 : refs.revT;
+    underglowMat.opacity = 0.42 + breath * 0.16 + rev * 0.7;
 
     // Rev surges rear lamps.
     for (const l of refs.lamps) {
-      const boost = !l.isHeadlight ? 1 + refs.revT * 6 : 1;
+      const boost = !l.isHeadlight ? 1 + rev * 6 : 1;
       l.light.intensity = l.baseIntensity * boost;
     }
   });

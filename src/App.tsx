@@ -14,6 +14,7 @@ import { Hint } from './ui/Hint';
 import { LoadingBar } from './ui/LoadingBar';
 import { Nav } from './ui/Nav';
 import { ResumeButton } from './ui/ResumeButton';
+import { SceneBoundary } from './ui/SceneBoundary';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 
@@ -44,12 +45,16 @@ export function App() {
       >
         Skip to content
       </a>
-      <Suspense fallback={null}>
-        <Scene getScrollT={getScrollT} />
-      </Suspense>
+      <SceneBoundary>
+        <Suspense fallback={null}>
+          <Scene getScrollT={getScrollT} />
+        </Suspense>
+        {/* Inside the boundary so a WebGL failure also clears the loading bar,
+            which would otherwise sit stuck at 0% with the scene never arriving. */}
+        <LoadingBar />
+      </SceneBoundary>
       <div className="vignette" aria-hidden="true" />
       <FilmGrain />
-      <LoadingBar />
       {!isCleanMode && (
         <>
           <Brand />

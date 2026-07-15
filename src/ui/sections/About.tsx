@@ -1,7 +1,7 @@
 import { EYEBROW, H2, P_LI, PANEL_BASE, Section, UL_BASE } from './shared';
 
 const BULLETS = [
-  'Software engineer at Zeta Global. Previously LiveIntent, ~2.5 years.',
+  'Software engineer at Zeta Global, ~3 years. Previously LiveIntent.',
   'Python and TypeScript day-to-day. Plenty of SQL.',
   'Comfortable across Django, React, Postgres, AWS. Angular and FastAPI too.',
   'On the side: a $0 Cloudflare-native platform (SSO, realtime, AI) running several apps I built and ship.',
