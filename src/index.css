@@ -123,6 +123,27 @@
     text-shadow: 0 0 24px rgba(0, 0, 0, 0.5);
   }
 
+  /* Radial scrim behind the hero copy (Intro). The hero text is centered over
+     the car, which is often bright; this darkens directly behind the copy and
+     fades to transparent before the car's edges, so the value-prop line stays
+     readable without hiding the focal point. Sits under the panel (z-[1]). */
+  .hero-scrim {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 200%;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(5, 5, 13, 0.72) 0%,
+      rgba(5, 5, 13, 0.45) 42%,
+      transparent 72%
+    );
+  }
+
   /* Reveal animations on scroll-in. */
   .panel > * {
     opacity: 0;
