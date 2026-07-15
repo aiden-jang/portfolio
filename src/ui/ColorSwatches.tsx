@@ -1,8 +1,9 @@
 import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
 
-/** Single tappable color control for the mobile bottom bar. The 7-swatch row is
- *  too dense and wide on a phone, so this cycles the car's body color on tap and
- *  shows the current one as a dot (a 44px touch target). */
+/** Compact tappable color control for the mobile bottom bar. The 7-swatch row
+ *  is too dense on a phone, so this is a single 44px round button that cycles
+ *  the car's body color on tap and shows the current one as a dot — small
+ *  enough to sit on one line beside the car switcher, even on a 320px screen. */
 export function MobileColorButton() {
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const cycleBodyColor = useAppStore((s) => s.cycleBodyColor);
@@ -13,23 +14,22 @@ export function MobileColorButton() {
     <button
       type="button"
       aria-label="Change car color"
+      title="Change car color"
       onClick={cycleBodyColor}
       disabled={!hasBody}
       className="
-        pointer-events-auto inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full
+        pointer-events-auto inline-flex items-center justify-center w-11 h-11 shrink-0 rounded-full
         bg-white/[0.04] border border-[var(--color-line)]
-        font-[var(--font-mono)] text-[0.72rem] tracking-[0.16em] uppercase text-[var(--color-fg)]
         transition-colors active:border-[var(--color-neon)]
         disabled:opacity-30 disabled:pointer-events-none
       "
     >
       <span
-        className={`swatch w-4 h-4 rounded-full border border-[var(--color-line)] ${
+        className={`swatch w-5 h-5 rounded-full border border-[var(--color-line)] ${
           isOriginal ? 'swatch-original' : ''
         }`}
         style={isOriginal ? undefined : { background: activeBodyColor }}
       />
-      Color
     </button>
   );
 }
