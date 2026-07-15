@@ -37,6 +37,13 @@ export const THEMES: Record<ThemeName, Theme> = {
   },
 };
 
+// Order matters for load cost. The first car is the default that loads on
+// arrival, and Car.tsx prefetches the two cars adjacent to the current one so a
+// ←/→ swipe feels instant. So index 0 and its two neighbors (index 1 and the
+// last entry) are deliberately the three lightest models — Ferrari 1.3MB,
+// Mercedes 0.4MB, BMW M4 1.3MB — keeping the initial prefetch under ~2MB instead
+// of the ~19MB it was when the 13.7MB Porsche RWB sat next to the default. The
+// heavier models live in the middle, reached only once a visitor starts cycling.
 export const CARS: CarSpec[] = [
   {
     name: 'Ferrari F40',
@@ -44,20 +51,6 @@ export const CARS: CarSpec[] = [
     file: 'ferrari-f120-f40.glb',
     exposure: 1.0,
     credit: { author: 'vecarz', license: 'CC BY 4.0', url: 'https://skfb.ly/p8I7O' },
-  },
-  {
-    name: 'Porsche 911 RWB',
-    code: '930',
-    file: 'porsche-930-911-rwb.glb',
-    exposure: 1.0,
-    credit: { author: 'SWIZ', license: 'CC BY 4.0', url: 'https://skfb.ly/oBxqx' },
-  },
-  {
-    name: 'BMW M4 ADRO',
-    code: 'G82',
-    file: 'bmw-g82-m4-adro.glb',
-    exposure: 1.0,
-    credit: { author: 'vecarz', license: 'CC BY 4.0', url: 'https://skfb.ly/pusEX' },
   },
   {
     name: 'Mercedes 300 SL',
@@ -74,6 +67,13 @@ export const CARS: CarSpec[] = [
     credit: { author: 'Lionsharp Studios', license: 'CC BY 4.0', url: 'https://skfb.ly/6WZyV' },
   },
   {
+    name: 'Porsche 911 RWB',
+    code: '930',
+    file: 'porsche-930-911-rwb.glb',
+    exposure: 1.0,
+    credit: { author: 'SWIZ', license: 'CC BY 4.0', url: 'https://skfb.ly/oBxqx' },
+  },
+  {
     name: 'BMW M3',
     code: 'E30',
     file: 'bmw-e30-m3.glb',
@@ -86,6 +86,13 @@ export const CARS: CarSpec[] = [
     file: 'datsun-s30-280z.glb',
     exposure: 1.0,
     credit: { author: 'Martin Trafas', license: 'CC BY 4.0', url: 'https://skfb.ly/o9J9r' },
+  },
+  {
+    name: 'BMW M4 ADRO',
+    code: 'G82',
+    file: 'bmw-g82-m4-adro.glb',
+    exposure: 1.0,
+    credit: { author: 'vecarz', license: 'CC BY 4.0', url: 'https://skfb.ly/pusEX' },
   },
 ];
 

@@ -18,6 +18,21 @@ import {
 const TRANSITION_RATE = 2.5;
 const EXPOSURE_RATE = 2.5;
 
+/** Whether it's polite to prefetch neighbor car models. Skips on Save-Data or a
+ *  2g-class connection, where quietly pulling models the visitor may never look
+ *  at isn't worth the bytes. When the Network Information API is unavailable
+ *  (Safari, Firefox), assume prefetch is fine. */
+function prefetchAllowed(): boolean {
+  const conn = (
+    navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }
+  ).connection;
+  if (!conn) return true;
+  if (conn.saveData) return false;
+  return conn.effectiveType !== '2g' && conn.effectiveType !== 'slow-2g';
+}
+
 /** Loads the currently-selected GLB into a group, auto-fits it, attaches
  *  lamps + underglow, and animates the breathing pulse + rev surge. */
 export function Car() {
@@ -103,12 +118,17 @@ export function Car() {
         // `fetch` (not GLTFLoader) so it only warms the HTTP cache without
         // parsing or running the meshopt decoder. Fired after the current
         // load completes to keep the active swap unblocked.
-        const adjacent = [(carIndex + 1) % CARS.length, (carIndex - 1 + CARS.length) % CARS.length];
-        for (const i of adjacent) {
-          const a = CARS[i];
-          if (a && a.file !== spec.file) {
-            // Browser cache is enough; we don't need the result.
-            fetch(`/models/${a.file}`, { priority: 'low' } as RequestInit).catch(() => {});
+        if (prefetchAllowed()) {
+          const adjacent = [
+            (carIndex + 1) % CARS.length,
+            (carIndex - 1 + CARS.length) % CARS.length,
+          ];
+          for (const i of adjacent) {
+            const a = CARS[i];
+            if (a && a.file !== spec.file) {
+              // Browser cache is enough; we don't need the result.
+              fetch(`/models/${a.file}`, { priority: 'low' } as RequestInit).catch(() => {});
+            }
           }
         }
       },
