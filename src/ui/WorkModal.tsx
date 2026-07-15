@@ -62,6 +62,7 @@ export function WorkModal({ item, onClose }: Props) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
+        style={open ? { viewTransitionName: 'work-morph' } : undefined}
         className={`
           relative w-full max-w-[640px] max-h-[80vh] overflow-auto
           bg-[#0a0a14] border border-[var(--color-line)] rounded-xl
