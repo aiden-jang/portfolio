@@ -6,7 +6,7 @@ import { ACCENTS, marks } from '../marks';
 import { EYEBROW, H2, Section } from './shared';
 
 type Props = {
-  onOpen: (item: WorkDetail) => void;
+  onOpen: (item: WorkDetail, el: HTMLElement) => void;
 };
 
 /** Work section. The shipped apps (entries with a `mark`) render as a product
@@ -25,7 +25,12 @@ export function WorkSection({ onOpen }: Props) {
 
         <div className="mt-4 grid grid-cols-2 gap-2.5">
           {apps.map((item, i) => (
-            <AppCard key={item.title} item={item} featured={i === 0} onOpen={() => onOpen(item)} />
+            <AppCard
+              key={item.title}
+              item={item}
+              featured={i === 0}
+              onOpen={(el) => onOpen(item, el)}
+            />
           ))}
         </div>
 
@@ -34,7 +39,7 @@ export function WorkSection({ onOpen }: Props) {
         </p>
         <div>
           {rest.map((item) => (
-            <WorkRow key={item.title} item={item} onOpen={() => onOpen(item)} />
+            <WorkRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
           ))}
         </div>
       </div>
@@ -52,7 +57,7 @@ function AppCard({
 }: {
   item: WorkDetail;
   featured: boolean;
-  onOpen: () => void;
+  onOpen: (el: HTMLElement) => void;
 }) {
   const [clipFailed, setClipFailed] = useState(false);
   const accent = item.mark ? ACCENTS[item.mark] : 'var(--color-neon)';
@@ -62,7 +67,7 @@ function AppCard({
   return (
     <button
       type="button"
-      onClick={onOpen}
+      onClick={(e) => onOpen(e.currentTarget)}
       style={{ '--accent': accent } as CSSProperties}
       className={`
         group relative text-left rounded-xl overflow-hidden
@@ -114,11 +119,11 @@ function AppCard({
 
 /** Editorial-row item used for the professional (non-app) work. Clicking opens
  *  the full case-study modal. */
-function WorkRow({ item, onOpen }: { item: WorkDetail; onOpen: () => void }) {
+function WorkRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLElement) => void }) {
   return (
     <button
       type="button"
-      onClick={onOpen}
+      onClick={(e) => onOpen(e.currentTarget)}
       className="
         group w-full text-left block py-2.5
         border-y border-transparent rounded-md -mx-2 px-2

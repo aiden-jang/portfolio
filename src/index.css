@@ -173,6 +173,19 @@
     transform: translateY(0);
   }
 
+  /* View Transitions: opening/closing a work card morphs it into the modal via
+     the shared `work-morph` name (see Sections.tsx). Keep the fixed 3D backdrop
+     static — animating the root would cross-fade the whole WebGL canvas, which
+     is expensive and flickers — so only the morph itself animates. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+  ::view-transition-group(work-morph) {
+    animation-duration: 340ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   /* Reduced-motion: collapse every CSS animation and transition to ~instant.
      Catches the film-grain jitter, brand-clock pulse, panel reveal, hover
      transitions, etc. JS-driven motion (camera tweens, magnetic hover) is
