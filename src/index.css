@@ -210,6 +210,16 @@
     pointer-events: none;
   }
 
+  /* When a work/case-study modal is open, hide the mobile bottom bar — its
+     car switcher + color control would otherwise show through the overlay and
+     overlap the modal content on phones. Hidden via opacity (not display),
+     because Tailwind's `flex` utility on the bar sits in the later utilities
+     layer and would win over a component-layer `display` rule. */
+  body.modal-open #mobile-bar {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   /* Reduced-motion: collapse every CSS animation and transition to ~instant.
      Catches the film-grain jitter, brand-clock pulse, panel reveal, hover
      transitions, etc. JS-driven motion (camera tweens, magnetic hover) is

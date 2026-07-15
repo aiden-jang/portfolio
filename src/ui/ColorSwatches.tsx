@@ -1,5 +1,39 @@
 import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
 
+/** Single tappable color control for the mobile bottom bar. The 7-swatch row is
+ *  too dense and wide on a phone, so this cycles the car's body color on tap and
+ *  shows the current one as a dot (a 44px touch target). */
+export function MobileColorButton() {
+  const activeBodyColor = useAppStore((s) => s.activeBodyColor);
+  const cycleBodyColor = useAppStore((s) => s.cycleBodyColor);
+  const hasBody = useAppStore((s) => s.hasBodyMaterial);
+  const isOriginal = activeBodyColor === 'original';
+
+  return (
+    <button
+      type="button"
+      aria-label="Change car color"
+      onClick={cycleBodyColor}
+      disabled={!hasBody}
+      className="
+        pointer-events-auto inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full
+        bg-white/[0.04] border border-[var(--color-line)]
+        font-[var(--font-mono)] text-[0.72rem] tracking-[0.16em] uppercase text-[var(--color-fg)]
+        transition-colors active:border-[var(--color-neon)]
+        disabled:opacity-30 disabled:pointer-events-none
+      "
+    >
+      <span
+        className={`swatch w-4 h-4 rounded-full border border-[var(--color-line)] ${
+          isOriginal ? 'swatch-original' : ''
+        }`}
+        style={isOriginal ? undefined : { background: activeBodyColor }}
+      />
+      Color
+    </button>
+  );
+}
+
 /** Body-color swatches. Applies to the detected body material on the current
  *  car. The "active" indicator reads from the store, so the same indicator
  *  also reflects keyboard-triggered color changes (e.g. pressing `C`).

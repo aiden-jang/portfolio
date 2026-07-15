@@ -8,7 +8,7 @@ import { useReveal } from './hooks/useReveal';
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 import { Brand } from './ui/Brand';
 import { CarSwitcher, MobileCarSwitcher } from './ui/CarSwitcher';
-import { ColorSwatches } from './ui/ColorSwatches';
+import { ColorSwatches, MobileColorButton } from './ui/ColorSwatches';
 import { FilmGrain } from './ui/FilmGrain';
 import { Hint } from './ui/Hint';
 import { LoadingBar } from './ui/LoadingBar';
@@ -71,17 +71,16 @@ export function App() {
            *  instead of colliding with them. Desktop renders these inside Nav
            *  and the dot rail on the right edge. */}
           <div
+            id="mobile-bar"
             className="
               md:hidden fixed inset-x-0 bottom-0 z-30 pointer-events-none
-              flex flex-col items-center gap-2.5 pt-6 pb-[3vh]
+              flex flex-col items-center gap-2.5 pt-6 pb-[max(3vh,env(safe-area-inset-bottom))]
               bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/70 to-transparent
             "
           >
             <SectionDots onJump={scrollToSection} placement="bar" />
             <MobileCarSwitcher />
-            <span className="pointer-events-auto">
-              <ColorSwatches bordered={false} />
-            </span>
+            <MobileColorButton />
           </div>
           {/* Desktop car + color dock. These used to sit in the top-right Nav
            *  row, but that made the nav wide enough to overlap the brand on
