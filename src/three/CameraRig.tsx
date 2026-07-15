@@ -130,6 +130,9 @@ export function CameraRig({ getScrollT }: Props) {
       // orbit, so a scroll gesture can't fight the camera. Mouse drag (desktop)
       // still orbits freely.
       if (s.isTouch) return;
+      // Actively orbiting with the mouse: fade the DOM text so the car reads
+      // clean. Restored on pointer up/cancel. CSS handles the transition.
+      if (s.dragMoved) document.body.classList.add('orbiting');
       s.dragAzimuth += dx * DRAG_YAW_SENSITIVITY;
       s.dragElevation = clamp(
         s.dragElevation - dy * DRAG_PITCH_SENSITIVITY,
@@ -144,9 +147,11 @@ export function CameraRig({ getScrollT }: Props) {
       s.idleSpin += s.dragAzimuth;
       s.dragAzimuth = 0;
       s.isDown = false;
+      document.body.classList.remove('orbiting');
     };
     const onPointerCancel = () => {
       state.current.isDown = false;
+      document.body.classList.remove('orbiting');
     };
     const onScroll = () => {
       state.current.scrollActiveTimer = SCROLL_PAUSE_DURATION;
@@ -163,6 +168,7 @@ export function CameraRig({ getScrollT }: Props) {
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('pointercancel', onPointerCancel);
       window.removeEventListener('scroll', onScroll);
+      document.body.classList.remove('orbiting');
     };
   }, [triggerRev]);
 

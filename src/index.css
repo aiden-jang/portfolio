@@ -192,6 +192,23 @@
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  /* Orbit fade: while the visitor drags to orbit the car (body.orbiting, set in
+     CameraRig), fade the DOM text + chrome out of the way so the car reads
+     clean, then fade it back on release. */
+  #scroll,
+  header,
+  #nav,
+  #hint {
+    transition: opacity 0.3s ease;
+  }
+  body.orbiting #scroll,
+  body.orbiting header,
+  body.orbiting #nav,
+  body.orbiting #hint {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   /* Reduced-motion: collapse every CSS animation and transition to ~instant.
      Catches the film-grain jitter, brand-clock pulse, panel reveal, hover
      transitions, etc. JS-driven motion (camera tweens, magnetic hover) is
