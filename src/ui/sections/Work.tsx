@@ -59,7 +59,7 @@ function AppCard({
       onClick={(e) => onOpen(e.currentTarget)}
       style={{ '--accent': accent } as CSSProperties}
       className={`
-        group relative text-left rounded-xl overflow-hidden
+        group relative text-left rounded-xl overflow-hidden cursor-pointer
         border border-[var(--color-line)] bg-[rgba(10,10,18,0.55)] p-3
         transition-[transform,border-color,background-color] duration-200
         hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-[rgba(14,14,26,0.72)]

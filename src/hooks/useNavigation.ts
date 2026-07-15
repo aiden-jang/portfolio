@@ -11,6 +11,10 @@ const SNAP_LOCK_MS = 1100;
 const SETTLE_DELAY_MS = 150;
 /** Already within this many px of a section top: leave it, don't nudge. */
 const SETTLE_TOLERANCE_PX = 4;
+/** How far into the gap toward the next section you must scroll before the
+ *  settle completes to it (vs. staying on the current one). Keeps the settle
+ *  moving with you instead of snapping back to whichever section is nearest. */
+const SETTLE_COMMIT_FRACTION = 0.25;
 /** The settle glide is a custom eased tween (smoother than native smooth
  *  scroll). Duration scales with distance, clamped to this range, so a short
  *  nudge and a near-full-screen glide both feel right. */
@@ -168,32 +172,37 @@ export function useNavigation() {
       tweenRaf = requestAnimationFrame(step);
     };
 
-    // Ease to the nearest section after scrolling has stopped. Uses each
-    // section's real offsetTop (sections aren't a fixed viewport tall on mobile,
-    // where padding can make them taller) so it lands true.
+    // Settle in the DIRECTION of travel after scrolling stops. Once you've
+    // scrolled ~a quarter of the way toward the next section, complete to it;
+    // otherwise stay on the current one. The old version snapped to the nearest
+    // section, which yanked you backward when you stopped mid-gap. Uses real
+    // offsetTops (sections can be taller than the viewport on mobile).
+    let lastScrollY = window.scrollY;
+    let scrollDir = 0;
     const settleToNearest = () => {
       // A keyboard / nav-link / dot jump owns the scroll while its lock holds.
       if (performance.now() < snapLockUntil.current) return;
       const max = document.documentElement.scrollHeight - window.innerHeight;
       if (max <= 0) return;
       const y = window.scrollY;
-      let best = 0;
-      let bestDist = Infinity;
-      for (let i = 0; i < SECTION_IDS.length; i++) {
-        const el = document.getElementById(SECTION_IDS[i]);
-        if (!el) continue;
-        const d = Math.abs(el.offsetTop - y);
-        if (d < bestDist) {
-          bestDist = d;
-          best = i;
-        }
-      }
-      const el = document.getElementById(SECTION_IDS[best]);
-      if (!el) return;
-      const targetY = clamp(el.offsetTop, 0, max);
+      const offsets = SECTION_IDS.map((id) => document.getElementById(id)?.offsetTop ?? 0);
+      // The section boundary at or just above the current scroll position.
+      let lower = 0;
+      for (let i = 0; i < offsets.length; i++) if (offsets[i] <= y + 1) lower = i;
+      const upper = Math.min(lower + 1, offsets.length - 1);
+      const span = Math.max(1, offsets[upper] - offsets[lower]);
+      const f = clamp((y - offsets[lower]) / span, 0, 1);
+
+      let target: number;
+      if (lower === upper) target = lower;
+      else if (scrollDir > 0) target = f >= SETTLE_COMMIT_FRACTION ? upper : lower;
+      else if (scrollDir < 0) target = f <= 1 - SETTLE_COMMIT_FRACTION ? lower : upper;
+      else target = f < 0.5 ? lower : upper; // no clear direction: nearest
+
+      const targetY = clamp(offsets[target], 0, max);
       if (Math.abs(targetY - y) <= SETTLE_TOLERANCE_PX) return;
-      currentSection.current = best;
-      setSectionIndex(best);
+      currentSection.current = target;
+      setSectionIndex(target);
       if (prefersReducedMotion()) {
         window.scrollTo(0, targetY);
         return;
@@ -201,6 +210,11 @@ export function useNavigation() {
       tweenScrollTo(targetY);
     };
     const onScroll = () => {
+      const y = window.scrollY;
+      if (y !== lastScrollY) {
+        scrollDir = y > lastScrollY ? 1 : -1;
+        lastScrollY = y;
+      }
       const t = getScrollT() * (SECTION_IDS.length - 1);
       const idx = Math.round(t);
       if (performance.now() >= snapLockUntil.current) {
