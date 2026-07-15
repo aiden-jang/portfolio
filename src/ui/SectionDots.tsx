@@ -3,7 +3,7 @@ import { useAppStore } from '../store';
 
 const LABELS: Record<SectionId, string> = {
   'sec-intro': 'Intro',
-  'sec-work': 'Work',
+  'sec-work': 'Projects',
   'sec-about': 'About',
   'sec-experience': 'Experience',
   'sec-contact': 'Contact',

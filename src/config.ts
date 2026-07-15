@@ -108,9 +108,9 @@ export const KEYFRAMES: Keyframe[] = [
 
 export const SECTION_IDS = [
   'sec-intro',
+  'sec-experience',
   'sec-work',
   'sec-about',
-  'sec-experience',
   'sec-contact',
 ] as const;
 export type SectionId = (typeof SECTION_IDS)[number];

@@ -12,7 +12,7 @@ export function AboutSection() {
   return (
     <Section id="sec-about" side="left">
       <div className={PANEL_BASE}>
-        <span className={EYEBROW}>02 / ABOUT</span>
+        <span className={EYEBROW}>03 / ABOUT</span>
         <h2 className={H2}>What I do</h2>
         <ul className={`${UL_BASE} ${P_LI}`}>
           {BULLETS.map((b) => (

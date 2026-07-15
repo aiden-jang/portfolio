@@ -7,9 +7,9 @@ import { ThemeToggle } from './ThemeToggle';
 
 const ITEMS: { id: SectionId; label: string; key: string }[] = [
   { id: 'sec-intro', label: 'Intro', key: 'intro' },
-  { id: 'sec-work', label: 'Work', key: 'work' },
-  { id: 'sec-about', label: 'About', key: 'about' },
   { id: 'sec-experience', label: 'Experience', key: 'experience' },
+  { id: 'sec-work', label: 'Projects', key: 'work' },
+  { id: 'sec-about', label: 'About', key: 'about' },
   { id: 'sec-contact', label: 'Contact', key: 'contact' },
 ];
 

@@ -9,19 +9,17 @@ type Props = {
   onOpen: (item: WorkDetail, el: HTMLElement) => void;
 };
 
-/** Work section. The shipped apps (entries with a `mark`) render as a product
- *  card grid; everything else stays as editorial rows below. The panel scrolls
- *  internally if it outgrows the viewport, so the scroll-snap section model
- *  (one screen per section) holds on short displays. */
+/** Side-projects section: the shipped apps (entries with a `mark`) as a product
+ *  card grid. The professional highlights live in the Experience section above;
+ *  these stand on their own as what I build outside of work. */
 export function WorkSection({ onOpen }: Props) {
   const apps = WORK_ITEMS.filter((i) => i.mark);
-  const rest = WORK_ITEMS.filter((i) => !i.mark);
 
   return (
     <Section id="sec-work" side="right">
       <div className="panel pointer-events-auto w-full max-w-[560px]">
-        <span className={EYEBROW}>01 / WORK</span>
-        <h2 className={H2}>Selected work</h2>
+        <span className={EYEBROW}>02 / PROJECTS</span>
+        <h2 className={H2}>Side projects</h2>
 
         <div className="mt-4 grid grid-cols-2 gap-2.5">
           {apps.map((item, i) => (
@@ -31,15 +29,6 @@ export function WorkSection({ onOpen }: Props) {
               featured={i === 0}
               onOpen={(el) => onOpen(item, el)}
             />
-          ))}
-        </div>
-
-        <p className="mt-4 mb-0.5 font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase text-[var(--color-muted)]">
-          Before the side projects
-        </p>
-        <div>
-          {rest.map((item) => (
-            <WorkRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
           ))}
         </div>
       </div>
@@ -109,27 +98,6 @@ function AppCard({
           {item.summary}
         </span>
       </span>
-    </button>
-  );
-}
-
-/** Editorial-row item used for the professional (non-app) work. Clicking opens
- *  the full case-study modal. */
-function WorkRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLElement) => void }) {
-  return (
-    <button
-      type="button"
-      onClick={(e) => onOpen(e.currentTarget)}
-      className="
-        group w-full text-left block py-[0.4rem]
-        border-y border-transparent rounded-md -mx-2 px-2
-        transition-colors duration-200
-        hover:border-[var(--color-line)] hover:bg-white/[0.02]
-      "
-    >
-      <p className="text-[rgba(244,240,255,0.8)] text-[0.85rem] leading-[1.45] m-0 line-clamp-1 transition-colors group-hover:text-[var(--color-fg)]">
-        {item.summary}
-      </p>
     </button>
   );
 }
