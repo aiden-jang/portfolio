@@ -13,6 +13,8 @@ export const WORK_ITEMS: WorkDetail[] = [
       'Each app below is its own repo that consumes the shared SDK as a versioned dependency, so the session contract has exactly one source of truth. Signing in is optional everywhere: it syncs your data across apps, but nothing gates on an account.',
     ],
     stack: ['Cloudflare Workers', 'Durable Objects', 'D1', 'OIDC', 'TypeScript', 'React'],
+    mark: 'auth',
+    shortName: 'The platform',
     link: { label: 'Visit the sign-in hub', url: 'https://accounts.aidenjang.com' },
   },
   {
@@ -24,6 +26,8 @@ export const WORK_ITEMS: WorkDetail[] = [
       'Three game modes (AI guesser, AI drawer, and a humans-vs-AI team battle) run on one unchanged shared engine. The abstraction that unlocked it was a transport-agnostic draw() verb, so strokes no longer have to originate from a human socket. Reconnect is handled with a client-asserted id and a full state replay on connect.',
     ],
     stack: ['Cloudflare Workers', 'Durable Objects', 'WebSockets', 'Canvas', 'Vision LLM', 'React'],
+    mark: 'iguess',
+    shortName: 'iguess',
     link: { label: 'Play iguess', url: 'https://iguess.aidenjang.com' },
   },
   {
@@ -35,6 +39,8 @@ export const WORK_ITEMS: WorkDetail[] = [
       'Built on Hono + D1/Drizzle with a Durable Object for the live session, React/Vite/Tailwind on top. The settle-up step computes a minimal set of transactions to zero everyone out, and pay links deep-link into the right app with the amount prefilled.',
     ],
     stack: ['Cloudflare Workers', 'Hono', 'D1', 'Drizzle', 'Durable Objects', 'React'],
+    mark: 'owewell',
+    shortName: 'owewell',
     link: { label: 'Open owewell', url: 'https://owewell.aidenjang.com' },
   },
   {
@@ -46,6 +52,8 @@ export const WORK_ITEMS: WorkDetail[] = [
       'One Cloudflare Durable Object per session holds the live vote state over WebSockets, backed by D1/Drizzle. It handles the messy realtime cases: a host who leaves is auto-promoted so a session never stalls, and stale sessions are pruned on a cron.',
     ],
     stack: ['Cloudflare Workers', 'Hono', 'Durable Objects', 'D1', 'Drizzle', 'PWA', 'React'],
+    mark: 'wherever',
+    shortName: 'wherever',
     link: { label: 'Open wherever', url: 'https://wherever.aidenjang.com' },
   },
   {
@@ -57,6 +65,8 @@ export const WORK_ITEMS: WorkDetail[] = [
       'Runs on the same $0 Cloudflare stack as the rest. The model call is wrapped for reliability (a request timeout plus a retry) so a slow or flaky LLM degrades gracefully instead of leaving a blank page.',
     ],
     stack: ['Cloudflare Workers', 'LLM', 'TypeScript', 'React'],
+    mark: 'bloomnote',
+    shortName: 'bloomnote',
     link: { label: 'Open bloomnote', url: 'https://bloomnote.aidenjang.com' },
   },
   {

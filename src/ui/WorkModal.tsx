@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
+import type { MarkKey } from './marks';
 
 export type WorkDetail = {
   title: string;
@@ -11,6 +12,14 @@ export type WorkDetail = {
   image?: string;
   /** Optional external link rendered as a "Visit" button at the bottom. */
   link?: { label: string; url: string };
+  /** Shipped-app fields, set on the live entries so they render as product
+   *  cards in the Work grid (the rest render as editorial rows). */
+  mark?: MarkKey;
+  /** Short product name for the card (the title carries the longer form). */
+  shortName?: string;
+  /** Optional looping preview clip (webm/mp4) played on hover in the card.
+   *  Falls back to the mark when absent or on load error. */
+  preview?: string;
 };
 
 type Props = {
