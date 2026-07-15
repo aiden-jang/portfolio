@@ -50,7 +50,7 @@ function HighlightRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLEle
       type="button"
       onClick={(e) => onOpen(e.currentTarget)}
       className="
-        group w-full text-left block py-[0.4rem] cursor-pointer
+        group w-full text-left block py-2.5 md:py-[0.4rem] cursor-pointer
         border-y border-transparent rounded-md -mx-2 px-2
         transition-colors duration-200
         hover:border-[var(--color-line)] hover:bg-white/[0.02]
