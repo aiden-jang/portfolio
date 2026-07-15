@@ -12,7 +12,7 @@ export function FilmGrain() {
   return (
     <div
       aria-hidden="true"
-      className="fixed -inset-[10%] z-[100] pointer-events-none opacity-[0.06] mix-blend-overlay [animation:filmgrain_0.7s_steps(8)_infinite]"
+      className="fixed inset-0 z-[100] pointer-events-none opacity-[0.06] mix-blend-overlay [animation:filmgrain_0.7s_steps(8)_infinite]"
       style={{
         backgroundImage: `url("${NOISE_SVG}")`,
         backgroundSize: '200px 200px',
