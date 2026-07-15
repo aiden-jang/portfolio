@@ -41,9 +41,13 @@ export function WorkModal({ item, onClose }: Props) {
     window.addEventListener('keydown', onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    // Lets CSS hide fixed chrome (the mobile bottom bar) that would otherwise
+    // bleed through the overlay and overlap the modal on phones.
+    document.body.classList.add('modal-open');
     return () => {
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
+      document.body.classList.remove('modal-open');
     };
   }, [open, onClose]);
 
@@ -54,8 +58,8 @@ export function WorkModal({ item, onClose }: Props) {
       aria-hidden={!open}
       onClick={onClose}
       className={`
-        fixed inset-0 z-50 flex items-center justify-center px-4
-        bg-[rgba(5,5,13,0.78)]
+        fixed inset-0 z-50 flex items-center justify-center px-4 py-4
+        bg-[rgba(5,5,13,0.9)]
         transition-opacity duration-200
         ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
       `}
@@ -64,9 +68,9 @@ export function WorkModal({ item, onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
         style={open ? { viewTransitionName: 'work-morph' } : undefined}
         className={`
-          relative w-full max-w-[640px] max-h-[80vh] overflow-auto
+          relative w-full max-w-[640px] max-h-[85dvh] overflow-auto
           bg-[#0a0a14] border border-[var(--color-line)] rounded-xl
-          p-7 pt-6
+          p-5 pt-5 md:p-7 md:pt-6
           transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
           ${open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
         `}
@@ -76,7 +80,7 @@ export function WorkModal({ item, onClose }: Props) {
           onClick={onClose}
           aria-label="Close"
           className="
-            absolute top-3 right-3 w-9 h-9 rounded-full
+            absolute top-2.5 right-2.5 w-11 h-11 md:w-9 md:h-9 rounded-full
             border border-[var(--color-line)] bg-transparent
             text-[var(--color-muted)] text-xl leading-none
             hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
@@ -158,7 +162,7 @@ function WorkBanner({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
   return (
-    <div className="-mx-7 -mt-6 mb-5 border-b border-[var(--color-line)] overflow-hidden">
+    <div className="-mx-5 -mt-5 md:-mx-7 md:-mt-6 mb-5 border-b border-[var(--color-line)] overflow-hidden">
       <img
         src={src}
         alt={alt}
