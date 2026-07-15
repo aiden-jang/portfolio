@@ -3,7 +3,6 @@ import { useMagnetic } from '../hooks/useMagnetic';
 import { SECTION_IDS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { ResumeButton } from './ResumeButton';
-import { ThemeToggle } from './ThemeToggle';
 
 const ITEMS: { id: SectionId; label: string; key: string }[] = [
   { id: 'sec-intro', label: 'Intro', key: 'intro' },
@@ -44,10 +43,9 @@ export function Nav({ onLink }: Props) {
           />
         ))}
       </div>
-      {/* Car + color controls live in the bottom dock (see App.tsx), not here:
-          packed into this right-anchored row they made the nav wide enough to
-          run back under the brand wordmark even on wide viewports. */}
-      <ThemeToggle />
+      {/* Scene controls (car, color, background) all live in the bottom dock
+          (see App.tsx), not here — packing them into this right-anchored row
+          made the nav wide enough to run under the brand wordmark. */}
       <ResumeButton />
     </nav>
   );

@@ -15,7 +15,7 @@ import { LoadingBar } from './ui/LoadingBar';
 import { Nav } from './ui/Nav';
 import { ResumeButton } from './ui/ResumeButton';
 import { SceneBoundary } from './ui/SceneBoundary';
-import { MobileThemeButton } from './ui/ThemeToggle';
+import { MobileThemeButton, ThemeToggle } from './ui/ThemeToggle';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 
@@ -106,6 +106,9 @@ export function App() {
             </span>
             <span className="pointer-events-auto">
               <ColorSwatches bordered={false} />
+            </span>
+            <span className="pointer-events-auto">
+              <ThemeToggle />
             </span>
           </div>
           <SectionDots onJump={scrollToSection} placement="rail" />

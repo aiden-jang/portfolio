@@ -143,11 +143,13 @@
   .panel::before {
     content: "";
     position: absolute;
-    inset: -1rem -1.25rem;
+    inset: -0.85rem -1.1rem;
     z-index: -1;
-    border-radius: 1.5rem;
-    background: rgba(6, 6, 12, 0.66);
-    filter: blur(20px);
+    border-radius: 1.25rem;
+    /* A mostly-opaque dark card (soft, blurred edges rather than a hard box)
+       so text reads cleanly over the car without the fuzzy-shadow look. */
+    background: rgba(9, 9, 15, 0.82);
+    filter: blur(7px);
     pointer-events: none;
   }
 
