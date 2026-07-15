@@ -19,7 +19,7 @@ export function WorkSection({ onOpen }: Props) {
 
   return (
     <Section id="sec-work" side="right">
-      <div className="panel pointer-events-auto w-full max-w-[560px] max-h-[82vh] overflow-y-auto pr-1">
+      <div className="panel pointer-events-auto w-full max-w-[560px]">
         <span className={EYEBROW}>01 / WORK</span>
         <h2 className={H2}>Selected work</h2>
 
@@ -34,7 +34,7 @@ export function WorkSection({ onOpen }: Props) {
           ))}
         </div>
 
-        <p className="mt-6 mb-1 font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase text-[var(--color-muted)]">
+        <p className="mt-4 mb-0.5 font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase text-[var(--color-muted)]">
           Before the side projects
         </p>
         <div>
@@ -71,10 +71,10 @@ function AppCard({
       style={{ '--accent': accent } as CSSProperties}
       className={`
         group relative text-left rounded-xl overflow-hidden
-        border border-[var(--color-line)] bg-white/[0.03] p-3
+        border border-[var(--color-line)] bg-[rgba(10,10,18,0.55)] p-3
         transition-[transform,border-color,background-color] duration-200
-        hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-white/[0.06]
-        ${featured ? 'col-span-2 flex items-center gap-3.5' : 'flex flex-col gap-2'}
+        hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-[rgba(14,14,26,0.72)]
+        flex items-center gap-3 ${featured ? 'col-span-2' : ''}
       `}
     >
       <span className="relative block w-11 h-11 rounded-lg overflow-hidden shrink-0 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.7)]">
@@ -105,11 +105,7 @@ function AppCard({
           </span>
           <LiveDot />
         </span>
-        <span
-          className={`block mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] ${
-            featured ? 'line-clamp-1' : 'line-clamp-2'
-          }`}
-        >
+        <span className="block mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] line-clamp-1">
           {item.summary}
         </span>
       </span>
@@ -125,13 +121,13 @@ function WorkRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLElement)
       type="button"
       onClick={(e) => onOpen(e.currentTarget)}
       className="
-        group w-full text-left block py-2.5
+        group w-full text-left block py-[0.4rem]
         border-y border-transparent rounded-md -mx-2 px-2
         transition-colors duration-200
         hover:border-[var(--color-line)] hover:bg-white/[0.02]
       "
     >
-      <p className="text-[rgba(244,240,255,0.82)] text-[clamp(0.9rem,1.2vw,1rem)] leading-[1.5] m-0 transition-colors group-hover:text-[var(--color-fg)]">
+      <p className="text-[rgba(244,240,255,0.8)] text-[0.85rem] leading-[1.45] m-0 line-clamp-1 transition-colors group-hover:text-[var(--color-fg)]">
         {item.summary}
       </p>
     </button>

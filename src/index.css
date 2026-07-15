@@ -120,7 +120,13 @@
      but kicks in over bright car highlights / reflections, so text stays
      readable wherever the 3D scene happens to be that frame. */
   .panel {
-    text-shadow: 0 0 24px rgba(0, 0, 0, 0.5);
+    /* Layered halo: a tight dark edge on every glyph plus a soft spread, so
+       text stays legible wherever it crosses the (often bright) car, without
+       needing an opaque box behind it. */
+    text-shadow:
+      0 0 3px rgba(0, 0, 0, 0.85),
+      0 1px 10px rgba(0, 0, 0, 0.65),
+      0 2px 24px rgba(0, 0, 0, 0.45);
   }
 
   /* Radial scrim behind the hero copy (Intro). The hero text is centered over
