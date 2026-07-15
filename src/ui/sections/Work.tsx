@@ -94,7 +94,7 @@ function AppCard({
           </span>
           <LiveDot />
         </span>
-        <span className="block mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] line-clamp-1">
+        <span className="mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] line-clamp-1">
           {item.summary}
         </span>
       </span>
