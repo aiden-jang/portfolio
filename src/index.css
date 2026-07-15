@@ -120,36 +120,37 @@
      but kicks in over bright car highlights / reflections, so text stays
      readable wherever the 3D scene happens to be that frame. */
   .panel {
+    position: relative;
+    isolation: isolate;
     /* Layered halo: a tight dark edge on every glyph plus a soft spread, so
-       text stays legible wherever it crosses the (often bright) car, without
-       needing an opaque box behind it. */
+       text stays legible wherever it crosses the (often bright) car. */
     text-shadow:
       0 0 3px rgba(0, 0, 0, 0.85),
       0 1px 10px rgba(0, 0, 0, 0.65),
       0 2px 24px rgba(0, 0, 0, 0.45);
   }
 
+  /* Soft dark backing behind every panel's text. A blurred, rounded shape
+     (not a hard card) that fades into the scene at its edges, so the copy
+     reads cleanly over the car while the car still frames it. The blur is on
+     the shape itself (no backdrop-filter), so there's no per-frame cost over
+     the animating canvas. Sits under the text (z-index -1 in the panel's own
+     stacking context). */
+  .panel::before {
+    content: "";
+    position: absolute;
+    inset: -1rem -1.25rem;
+    z-index: -1;
+    border-radius: 1.5rem;
+    background: rgba(6, 6, 12, 0.55);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+
   /* Radial scrim behind the hero copy (Intro). The hero text is centered over
      the car, which is often bright; this darkens directly behind the copy and
      fades to transparent before the car's edges, so the value-prop line stays
      readable without hiding the focal point. Sits under the panel (z-[1]). */
-  .hero-scrim {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 150%;
-    height: 200%;
-    z-index: 0;
-    pointer-events: none;
-    background: radial-gradient(
-      ellipse at center,
-      rgba(5, 5, 13, 0.72) 0%,
-      rgba(5, 5, 13, 0.45) 42%,
-      transparent 72%
-    );
-  }
-
   /* Reveal animations on scroll-in. */
   .panel > * {
     opacity: 0;
@@ -193,18 +194,14 @@
   }
 
   /* Orbit fade: while the visitor drags to orbit the car (body.orbiting, set in
-     CameraRig), fade the DOM text + chrome out of the way so the car reads
-     clean, then fade it back on release. */
-  #scroll,
-  header,
-  #nav,
-  #hint {
+     CameraRig), fade only the big section text out of the way so the car reads
+     clean, then fade it back on release. The brand, top nav, and the bottom
+     control hint all stay put — small edge chrome that keeps the visitor
+     oriented and reminds them what they can do while they play with the car. */
+  #scroll {
     transition: opacity 0.3s ease;
   }
-  body.orbiting #scroll,
-  body.orbiting header,
-  body.orbiting #nav,
-  body.orbiting #hint {
+  body.orbiting #scroll {
     opacity: 0;
     pointer-events: none;
   }
