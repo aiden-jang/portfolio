@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aiden Jang · Software Engineer</title>
     <meta name="description" content="Software engineer in New York." />
+    <link rel="canonical" href="https://aidenjang.com/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/src/index.css" />
 
@@ -24,6 +25,36 @@
     <meta name="twitter:title" content="Aiden Jang · Software Engineer" />
     <meta name="twitter:description" content="Software engineer in New York." />
     <meta name="twitter:image" content="https://aidenjang.com/og-image.png" />
+
+    <!-- Structured data: helps search + AI crawlers identify the person behind
+         the site. Add more profiles (LinkedIn, etc.) to sameAs as desired. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Aiden Jang",
+        "jobTitle": "Software Engineer",
+        "url": "https://aidenjang.com",
+        "image": "https://aidenjang.com/og-image.png",
+        "sameAs": ["https://github.com/aiden-jang"],
+        "worksFor": { "@type": "Organization", "name": "Zeta Global" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "New York",
+          "addressRegion": "NY",
+          "addressCountry": "US"
+        },
+        "knowsAbout": [
+          "Django",
+          "React",
+          "TypeScript",
+          "Python",
+          "Cloudflare Workers",
+          "Durable Objects",
+          "PostgreSQL"
+        ]
+      }
+    </script>
   </head>
   <body data-theme="dusk">
     <div id="root"></div>
