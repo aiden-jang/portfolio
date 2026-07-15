@@ -88,8 +88,8 @@ function AppCard({
       </span>
 
       <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-1.5">
-          <span className="font-semibold text-[0.95rem] tracking-[-0.01em] text-[var(--color-fg)]">
+        <span className="flex items-center gap-1.5 min-w-0">
+          <span className="truncate font-semibold text-[0.95rem] tracking-[-0.01em] text-[var(--color-fg)]">
             {item.shortName}
           </span>
           <LiveDot />

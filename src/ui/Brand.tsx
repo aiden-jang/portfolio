@@ -4,7 +4,7 @@ import { useLocalTime } from '../hooks/useLocalTime';
 export function Brand() {
   const time = useLocalTime();
   return (
-    <header className="fixed top-[4vh] left-[5vw] z-20 pointer-events-none max-w-[70vw] md:max-w-none">
+    <header className="fixed top-[max(4vh,env(safe-area-inset-top))] left-[5vw] z-20 pointer-events-none max-w-[70vw] md:max-w-none">
       <h1 className="mb-1.5 text-[clamp(1.4rem,3.2vw,2.6rem)] font-semibold tracking-[-0.04em] leading-[0.95] [text-shadow:0_0_40px_rgba(255,107,28,0.22)]">
         Aiden Jang
       </h1>

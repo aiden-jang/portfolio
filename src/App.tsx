@@ -61,7 +61,7 @@ export function App() {
           <Nav onLink={scrollToSection} />
           {/* Mobile-only floating resume CTA. Desktop renders ResumeButton
            *  inside Nav so it shares the top-right chrome row. */}
-          <div className="md:hidden fixed top-[4vh] right-[5vw] z-20">
+          <div className="md:hidden fixed top-[max(4vh,env(safe-area-inset-top))] right-[5vw] z-20">
             <ResumeButton />
           </div>
           {/* Mobile bottom bar: section progress + car + color in one
@@ -79,8 +79,11 @@ export function App() {
             "
           >
             <SectionDots onJump={scrollToSection} placement="bar" />
-            <MobileCarSwitcher />
-            <MobileColorButton />
+            {/* Car switcher + color on one line to keep the bar compact. */}
+            <div className="flex items-center gap-2">
+              <MobileCarSwitcher />
+              <MobileColorButton />
+            </div>
           </div>
           {/* Desktop car + color dock. These used to sit in the top-right Nav
            *  row, but that made the nav wide enough to overlap the brand on
