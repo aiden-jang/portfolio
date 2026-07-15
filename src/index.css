@@ -134,27 +134,23 @@
       0 2px 24px rgba(0, 0, 0, 0.45);
   }
 
-  /* Soft dark backing behind every panel's text. A blurred, rounded shape
-     (not a hard card) that fades into the scene at its edges, so the copy
-     reads cleanly over the car while the car still frames it. The blur is on
-     the shape itself (no backdrop-filter), so there's no per-frame cost over
-     the animating canvas. Sits under the text (z-index -1 in the panel's own
-     stacking context). */
+  /* Soft, edgeless dark scrim behind every panel's text. A radial that darkens
+     directly behind the copy and fades to nothing before its edges — no card,
+     no box, so the car stays visible while the text stays legible (helped by
+     the halo above). No backdrop-filter, so no per-frame cost over the animating
+     canvas. Sits under the text (z-index -1 in the panel's own stacking context). */
   .panel::before {
     content: "";
     position: absolute;
-    inset: -0.85rem -1.1rem;
+    inset: -14% -8%;
     z-index: -1;
-    border-radius: 1.25rem;
-    /* Frosted glass: a crisp rounded card that blurs the car behind the text
-       (backdrop-filter) with a light tint + hairline edge — reads clean, not
-       like the fuzzy dark blob a blurred shape produced. */
-    background: rgba(10, 10, 17, 0.5);
-    -webkit-backdrop-filter: blur(14px) saturate(115%);
-    backdrop-filter: blur(14px) saturate(115%);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: 0 8px 40px -14px rgba(0, 0, 0, 0.65);
     pointer-events: none;
+    background: radial-gradient(
+      ellipse 80% 72% at center,
+      rgba(5, 5, 13, 0.64) 0%,
+      rgba(5, 5, 13, 0.4) 48%,
+      transparent 78%
+    );
   }
 
   /* Radial scrim behind the hero copy (Intro). The hero text is centered over
