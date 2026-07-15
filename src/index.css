@@ -146,7 +146,7 @@
     inset: -1rem -1.25rem;
     z-index: -1;
     border-radius: 1.5rem;
-    background: rgba(6, 6, 12, 0.55);
+    background: rgba(6, 6, 12, 0.66);
     filter: blur(20px);
     pointer-events: none;
   }
@@ -210,12 +210,16 @@
     pointer-events: none;
   }
 
-  /* When a work/case-study modal is open, hide the mobile bottom bar — its
-     car switcher + color control would otherwise show through the overlay and
-     overlap the modal content on phones. Hidden via opacity (not display),
-     because Tailwind's `flex` utility on the bar sits in the later utilities
+  /* When a work/case-study modal is open, hide the fixed chrome — the bottom
+     bar, brand, nav, and mobile resume would otherwise show through the
+     translucent overlay (it's not a z-index bug; the modal is above them, but
+     the overlay lets the layers below peek through). Hidden via opacity (not
+     display), because Tailwind's layout utilities sit in the later utilities
      layer and would win over a component-layer `display` rule. */
-  body.modal-open #mobile-bar {
+  body.modal-open #mobile-bar,
+  body.modal-open header,
+  body.modal-open #nav,
+  body.modal-open #mobile-resume {
     opacity: 0;
     pointer-events: none;
   }

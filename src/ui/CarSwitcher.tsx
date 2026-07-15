@@ -62,7 +62,7 @@ export function MobileCarSwitcher() {
       <ArrowButton label="Previous car" onClick={prevCar}>
         ‹
       </ArrowButton>
-      <span className="min-w-[8.5rem] px-1 text-center truncate">{car?.name ?? '—'}</span>
+      <span className="min-w-[6rem] px-1 text-center truncate">{car?.name ?? '—'}</span>
       <ArrowButton label="Next car" onClick={cycleCar}>
         ›
       </ArrowButton>
