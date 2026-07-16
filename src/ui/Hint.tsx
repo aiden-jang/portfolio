@@ -15,10 +15,22 @@ export function Hint() {
         text-[var(--color-muted)]/80
       "
     >
-      {/* Only the non-obvious control — the car/color/background controls are
-       *  visible in the dock, and scrolling is self-evident. */}
+      {/* Keyboard + gesture reference. The click controls live in the dock;
+       *  this lists the shortcut for each, kept uniform across all of them. */}
       <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>drag</kbd> to orbit the car
+        <kbd className={KBD}>drag</kbd> orbit
+      </span>
+      <span className="hidden md:inline-flex items-center gap-2">
+        <kbd className={KBD}>scroll</kbd> / <kbd className={KBD}>↑↓</kbd> sections
+      </span>
+      <span className="hidden md:inline-flex items-center gap-2">
+        <kbd className={KBD}>←→</kbd> cars
+      </span>
+      <span className="hidden md:inline-flex items-center gap-2">
+        <kbd className={KBD}>C</kbd> color
+      </span>
+      <span className="hidden md:inline-flex items-center gap-2">
+        <kbd className={KBD}>B</kbd> background
       </span>
     </div>
   );
