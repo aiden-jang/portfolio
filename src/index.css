@@ -96,7 +96,28 @@
   }
 }
 
+/* Smooth entrance: the DOM chrome fades in on load, and the 3D canvas fades in
+   when its (lazy) chunk mounts, so neither pops in abruptly. Reduced-motion
+   collapses these to instant via the media block above. */
+@keyframes app-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @layer components {
+  #root {
+    animation: app-fade-in 0.5s ease-out both;
+  }
+  /* The R3F canvas mounts after the Suspense chunk loads; fade it in so the car
+     eases in rather than snapping on after the loading bar. */
+  canvas {
+    animation: app-fade-in 0.9s ease-out both;
+  }
+
   /* Soft radial vignette overlay. Frames the canvas as a stage with the car
      as the focal point, and gives chrome at the corners (brand, nav, dots)
      a slightly darker substrate to read against. Lives between the canvas
