@@ -14,7 +14,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     ],
     stack: ['Cloudflare Workers', 'Durable Objects', 'D1', 'OIDC', 'TypeScript', 'React'],
     mark: 'auth',
-    shortName: 'The platform',
+    shortName: 'platform',
     tagline: 'One login, every app.',
     link: { label: 'Visit the sign-in hub', url: 'https://accounts.aidenjang.com' },
   },

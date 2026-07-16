@@ -44,6 +44,9 @@
        never accidentally highlights the copy. */
     -webkit-user-select: none;
     user-select: none;
+    /* Second guard against sideways scroll (html already clips x). */
+    overflow-x: clip;
+    max-width: 100vw;
   }
 
   /* Keyboard focus rings: visible only when navigating via keyboard
