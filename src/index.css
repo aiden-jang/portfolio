@@ -31,12 +31,19 @@
      matching scroll-snap-align (snap-start). */
   html {
     scroll-snap-type: y mandatory;
+    /* No elastic rubber-band past the first/last section, and no scroll
+       chaining — the page ends cleanly at the last section. */
+    overscroll-behavior-y: none;
   }
   body {
     background: var(--color-bg);
     color: var(--color-fg);
     font-family: var(--font-display);
     min-height: 100vh;
+    /* App-like: text isn't selectable/copyable, and a drag to orbit the car
+       never accidentally highlights the copy. */
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   /* Keyboard focus rings: visible only when navigating via keyboard
