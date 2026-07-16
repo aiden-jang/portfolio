@@ -23,22 +23,15 @@
   html {
     overflow-x: hidden;
   }
-  /* Mobile section paging: a touch swipe should always come to rest on a
-     section, never partway between. CSS scroll-snap does this natively and
-     feels right with a finger (unlike a mouse wheel, which is why desktop
-     stays free-scroll + the JS settle in useNavigation). snap-stop:always
-     keeps a hard flick from skipping past a section. The sections carry the
-     matching scroll-snap-align (max-md:snap-start). */
-  @media (max-width: 767px) {
-    html {
-      scroll-snap-type: y mandatory;
-    }
+  /* Section paging (desktop + mobile): scrolling always comes to rest on a
+     section, never partway. Native CSS scroll-snap does this — the browser
+     drives it, so there's no JS tween fighting the wheel/trackpad (which is
+     what made the earlier JS paging shake). scroll-snap-stop:always keeps a
+     single gesture/flick from skipping past a section. Sections carry the
+     matching scroll-snap-align (snap-start). */
+  html {
+    scroll-snap-type: y mandatory;
   }
-  /* No scroll snapping. A mouse wheel emits large discrete jumps, and the
-     browser re-snaps after each one, so the page fought every wheel tick
-     (mandatory and proximity both did this). Plain native scroll feels
-     right with a wheel; the camera rig interpolates continuously off
-     scrollY regardless, so sections still read as distinct stops. */
   body {
     background: var(--color-bg);
     color: var(--color-fg);

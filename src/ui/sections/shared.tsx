@@ -43,7 +43,7 @@ export function Section({
       id={id}
       className={`
         min-h-screen flex items-center pointer-events-none
-        max-md:snap-start max-md:snap-always
+        snap-start snap-always
         px-[6vw] md:px-[5vw]
         pt-[12vh] pb-[24vh] md:py-0
         justify-center text-center

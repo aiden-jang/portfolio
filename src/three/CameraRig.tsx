@@ -32,7 +32,9 @@ const REV_RUMBLE_FREQ_HZ = 90 / (2 * Math.PI);
 const REV_SHAKE_AMP = 0.12;
 
 const SECTION_PUNCH_DURATION = 0.55; // seconds
-const SECTION_PUNCH_FOV_DELTA = 6; // degrees added at peak
+// 0 disables the per-section FOV "punch". With desktop wheel now paging one
+// section per gesture, the punch fired on every scroll and read as a shake.
+const SECTION_PUNCH_FOV_DELTA = 0; // degrees added at peak
 
 /** Keyframe distances are framed for a wide (desktop) viewport. On a narrow /
  *  portrait screen the horizontal field of view shrinks, so the car reads as
