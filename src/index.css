@@ -135,19 +135,26 @@
   .panel::before {
     content: "";
     position: absolute;
-    inset: -26% -16%;
+    inset: -45% -28%;
     z-index: -1;
     pointer-events: none;
-    /* Long, multi-stop falloff all the way to the (oversized) box edge, so the
-       darkening feathers out with no perceptible ring/edge over the car. */
+    /* Very gradual, many-stop falloff over an oversized box, so the alpha
+       change per pixel is tiny — no perceptible line/ring where the darkening
+       ends, even over a bright part of the car. A slight blur further softens
+       any banding. */
     background: radial-gradient(
-      ellipse 82% 74% at center,
-      rgba(5, 5, 13, 0.62) 0%,
-      rgba(5, 5, 13, 0.46) 28%,
-      rgba(5, 5, 13, 0.24) 52%,
-      rgba(5, 5, 13, 0.08) 74%,
+      ellipse 62% 55% at center,
+      rgba(5, 5, 13, 0.6) 0%,
+      rgba(5, 5, 13, 0.56) 16%,
+      rgba(5, 5, 13, 0.46) 30%,
+      rgba(5, 5, 13, 0.34) 43%,
+      rgba(5, 5, 13, 0.22) 56%,
+      rgba(5, 5, 13, 0.12) 69%,
+      rgba(5, 5, 13, 0.05) 82%,
+      rgba(5, 5, 13, 0.01) 92%,
       transparent 100%
     );
+    filter: blur(6px);
   }
 
   /* Radial scrim behind the hero copy (Intro). The hero text is centered over
