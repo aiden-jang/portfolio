@@ -70,7 +70,7 @@ export function MobileThemeButton() {
       onClick={toggleTheme}
       style={{ color: isNight ? '#2bd4ff' : 'var(--color-neon)' }}
       className="
-        pointer-events-auto inline-flex items-center justify-center w-11 h-11 shrink-0 rounded-full
+        pointer-events-auto inline-flex items-center justify-center w-11 h-11 shrink-0 rounded-full cursor-pointer
         bg-white/[0.04] border border-[var(--color-line)]
         transition-colors active:border-[var(--color-neon)]
       "

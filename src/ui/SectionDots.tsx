@@ -43,7 +43,7 @@ export function SectionDots({ onJump, placement }: Props) {
                 onClick={() => onJump(id)}
                 aria-label={`Go to ${LABELS[id]}`}
                 aria-current={active ? 'true' : undefined}
-                className="flex items-center justify-center min-w-[40px] min-h-[44px]"
+                className="flex items-center justify-center min-w-[40px] min-h-[44px] cursor-pointer"
               >
                 <span
                   className={`

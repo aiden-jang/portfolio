@@ -83,7 +83,7 @@ export function WorkModal({ item, onClose }: Props) {
           onClick={onClose}
           aria-label="Close"
           className="
-            absolute top-2.5 right-2.5 w-11 h-11 md:w-9 md:h-9 rounded-full
+            absolute top-2.5 right-2.5 w-11 h-11 md:w-9 md:h-9 rounded-full cursor-pointer
             border border-[var(--color-line)] bg-transparent
             text-[var(--color-muted)] text-xl leading-none
             hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
