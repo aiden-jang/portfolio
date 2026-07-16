@@ -15,6 +15,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     stack: ['Cloudflare Workers', 'Durable Objects', 'D1', 'OIDC', 'TypeScript', 'React'],
     mark: 'auth',
     shortName: 'The platform',
+    tagline: 'One login, every app.',
     link: { label: 'Visit the sign-in hub', url: 'https://accounts.aidenjang.com' },
   },
   {
@@ -28,6 +29,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     stack: ['Cloudflare Workers', 'Durable Objects', 'WebSockets', 'Canvas', 'Vision LLM', 'React'],
     mark: 'iguess',
     shortName: 'iguess',
+    tagline: 'Pictionary vs. a robot.',
     link: { label: 'Play iguess', url: 'https://iguess.aidenjang.com' },
   },
   {
@@ -41,6 +43,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     stack: ['Cloudflare Workers', 'Hono', 'D1', 'Drizzle', 'Durable Objects', 'React'],
     mark: 'owewell',
     shortName: 'owewell',
+    tagline: 'Who owes who, no drama.',
     link: { label: 'Open owewell', url: 'https://owewell.aidenjang.com' },
   },
   {
@@ -54,6 +57,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     stack: ['Cloudflare Workers', 'Hono', 'Durable Objects', 'D1', 'Drizzle', 'PWA', 'React'],
     mark: 'wherever',
     shortName: 'wherever',
+    tagline: 'Swipe. Eat. No arguing.',
     link: { label: 'Open wherever', url: 'https://wherever.aidenjang.com' },
   },
   {
@@ -67,6 +71,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     stack: ['Cloudflare Workers', 'LLM', 'TypeScript', 'React'],
     mark: 'bloomnote',
     shortName: 'bloomnote',
+    tagline: 'A note, then a garden.',
     link: { label: 'Open bloomnote', url: 'https://bloomnote.aidenjang.com' },
   },
   {

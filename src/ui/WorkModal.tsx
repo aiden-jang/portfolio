@@ -17,6 +17,9 @@ export type WorkDetail = {
   mark?: MarkKey;
   /** Short product name for the card (the title carries the longer form). */
   shortName?: string;
+  /** Short one-liner for the card, sized to fit without an ellipsis (the
+   *  `summary` is the longer version used in the modal). */
+  tagline?: string;
   /** Optional looping preview clip (webm/mp4) played on hover in the card.
    *  Falls back to the mark when absent or on load error. */
   preview?: string;

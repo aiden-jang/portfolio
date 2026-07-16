@@ -84,15 +84,36 @@ export function useNavigation() {
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
-      cancelTween(); // a real wheel tick should hand control back instantly
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
-      // Horizontal trackpad swipe → cycle through cars. Vertical wheel/scroll
-      // is intentionally left to the browser as plain native scrolling.
+      // Horizontal trackpad swipe → cycle through cars.
       if (absX > absY && absX >= MIN_WHEEL_DELTA) {
+        cancelTween();
         if (e.deltaX > 0) cycleCarThrottled();
         else prevCarThrottled();
+        return;
       }
+      // Mobile pages sections with native CSS scroll-snap — leave its scroll alone.
+      if (snapsNatively()) return;
+      // Vertical (desktop) → page one section per gesture. Prevent native
+      // scroll and glide straight to the adjacent section, ignoring the rest of
+      // the gesture's momentum. This removes the free-scroll + settle pull-back.
+      if (absY < MIN_WHEEL_DELTA) return;
+      e.preventDefault();
+      if (performance.now() < snapLockUntil.current) return;
+      const dir = e.deltaY > 0 ? 1 : -1;
+      const next = clamp(currentSection.current + dir, 0, SECTION_IDS.length - 1);
+      if (next === currentSection.current) return;
+      const el = document.getElementById(SECTION_IDS[next]);
+      if (!el) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const targetY = clamp(el.offsetTop, 0, max);
+      currentSection.current = next;
+      setSectionIndex(next);
+      if (prefersReducedMotion()) window.scrollTo(0, targetY);
+      else tweenScrollTo(targetY);
+      // Hold through the glide + the gesture's inertia so one flick = one section.
+      snapLockUntil.current = performance.now() + SNAP_LOCK_MS;
     };
     const onKey = (e: KeyboardEvent) => {
       cancelTween(); // any keypress hands control back from an in-flight glide
@@ -232,7 +253,7 @@ export function useNavigation() {
     // mobile is an explicit control now (not a swipe), so touch only scrolls.
     const onTouchStart = () => cancelTween();
 
-    window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('wheel', onWheel, { passive: false });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });

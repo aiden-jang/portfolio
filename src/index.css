@@ -142,14 +142,18 @@
   .panel::before {
     content: "";
     position: absolute;
-    inset: -14% -8%;
+    inset: -26% -16%;
     z-index: -1;
     pointer-events: none;
+    /* Long, multi-stop falloff all the way to the (oversized) box edge, so the
+       darkening feathers out with no perceptible ring/edge over the car. */
     background: radial-gradient(
-      ellipse 80% 72% at center,
-      rgba(5, 5, 13, 0.64) 0%,
-      rgba(5, 5, 13, 0.4) 48%,
-      transparent 78%
+      ellipse 82% 74% at center,
+      rgba(5, 5, 13, 0.62) 0%,
+      rgba(5, 5, 13, 0.46) 28%,
+      rgba(5, 5, 13, 0.24) 52%,
+      rgba(5, 5, 13, 0.08) 74%,
+      transparent 100%
     );
   }
 
@@ -219,6 +223,8 @@
      display), because Tailwind's layout utilities sit in the later utilities
      layer and would win over a component-layer `display` rule. */
   body.modal-open #mobile-bar,
+  body.modal-open #desktop-dock,
+  body.modal-open #hint,
   body.modal-open header,
   body.modal-open #nav,
   body.modal-open #mobile-resume {
