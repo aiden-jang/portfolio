@@ -96,6 +96,7 @@ export function App() {
            *  discoverable while the top row stays clear. Mobile has its own
            *  copy in the bottom bar above. */}
           <div
+            id="desktop-dock"
             className="
               hidden md:flex fixed left-1/2 -translate-x-1/2 bottom-[5.5rem] z-20
               items-center gap-3 pointer-events-none
