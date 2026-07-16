@@ -7,7 +7,7 @@ export function Hint() {
     <div
       id="hint"
       className="
-        fixed left-1/2 -translate-x-1/2 bottom-[3vh] z-20
+        fixed left-1/2 -translate-x-1/2 bottom-[1vh] z-20
         hidden md:flex items-center justify-center gap-3 md:gap-[1.1rem]
         whitespace-nowrap pointer-events-none
         font-[var(--font-mono)] text-[0.5rem] md:text-[0.6rem]

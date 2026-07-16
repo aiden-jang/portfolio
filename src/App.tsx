@@ -98,7 +98,7 @@ export function App() {
           <div
             id="desktop-dock"
             className="
-              hidden md:flex fixed left-1/2 -translate-x-1/2 bottom-[5.5rem] z-20
+              hidden md:flex fixed left-1/2 -translate-x-1/2 bottom-[3.4rem] z-20
               items-center gap-3 pointer-events-none
             "
           >
