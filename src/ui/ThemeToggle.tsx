@@ -1,10 +1,63 @@
-import { useEffect, useRef } from 'react';
-import { useMagnetic } from '../hooks/useMagnetic';
+import { useEffect } from 'react';
 import { useAppStore } from '../store';
 
-/** Compact 44px background (day/night) toggle for the mobile bottom bar. Desktop
- *  keeps the `B` key + the ThemeToggle in the nav; the body[data-theme] sync
- *  lives on that always-mounted instance, so this just flips the store. */
+function SunIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+    </svg>
+  );
+}
+
+/** Day/night (background) toggle. Sun in dusk, moon at night, tinted to match.
+ *  Flat by default for the desktop control dock; owns the body[data-theme] sync
+ *  so CSS-only consumers stay in step regardless of which control flips it. */
+export function ThemeToggle() {
+  const themeName = useAppStore((s) => s.themeName);
+  const toggleTheme = useAppStore((s) => s.toggleTheme);
+  const isNight = themeName === 'night';
+
+  useEffect(() => {
+    document.body.dataset.theme = themeName;
+  }, [themeName]);
+
+  return (
+    <button
+      id="theme-toggle"
+      type="button"
+      aria-label="Toggle background (day/night)"
+      onClick={toggleTheme}
+      style={{ color: isNight ? '#2bd4ff' : 'var(--color-neon)' }}
+      className="
+        inline-grid place-items-center w-8 h-8 rounded-full cursor-pointer
+        transition-transform duration-200 hover:scale-110
+      "
+    >
+      {isNight ? <MoonIcon /> : <SunIcon />}
+    </button>
+  );
+}
+
+/** 44px background toggle for the mobile bottom bar — same sun/moon icon in a
+ *  bordered round button sized for touch. */
 export function MobileThemeButton() {
   const themeName = useAppStore((s) => s.themeName);
   const toggleTheme = useAppStore((s) => s.toggleTheme);
@@ -13,63 +66,16 @@ export function MobileThemeButton() {
   return (
     <button
       type="button"
-      aria-label="Toggle background"
-      title="Toggle background"
+      aria-label="Toggle background (day/night)"
       onClick={toggleTheme}
+      style={{ color: isNight ? '#2bd4ff' : 'var(--color-neon)' }}
       className="
         pointer-events-auto inline-flex items-center justify-center w-11 h-11 shrink-0 rounded-full
         bg-white/[0.04] border border-[var(--color-line)]
         transition-colors active:border-[var(--color-neon)]
       "
     >
-      <span
-        className="w-3.5 h-3.5 rounded-full"
-        style={{
-          background: isNight ? '#2bd4ff' : 'var(--color-neon)',
-          boxShadow: isNight ? '0 0 10px rgba(43, 212, 255, 0.7)' : '0 0 10px rgba(255, 107, 28, 0.6)',
-        }}
-      />
-    </button>
-  );
-}
-
-/** Round day/night toggle button. Updates the `data-theme` attribute on
- *  <body> so CSS-only consumers stay in sync. */
-export function ThemeToggle() {
-  const themeName = useAppStore((s) => s.themeName);
-  const toggleTheme = useAppStore((s) => s.toggleTheme);
-  const ref = useRef<HTMLButtonElement>(null);
-  useMagnetic(ref, 0.4);
-
-  useEffect(() => {
-    document.body.dataset.theme = themeName;
-  }, [themeName]);
-
-  return (
-    <button
-      ref={ref}
-      id="theme-toggle"
-      type="button"
-      aria-label="Toggle day/night"
-      onClick={toggleTheme}
-      className="
-        bg-transparent border border-[var(--color-line)] rounded-full
-        w-9 h-9 inline-grid place-items-center cursor-pointer
-        transition-[border-color,background,transform] duration-200
-        will-change-transform
-        hover:border-[var(--color-neon)]
-      "
-    >
-      <span
-        className="w-3 h-3 rounded-full transition-[background,box-shadow] duration-300"
-        style={{
-          background: themeName === 'night' ? '#2bd4ff' : 'var(--color-neon)',
-          boxShadow:
-            themeName === 'night'
-              ? '0 0 12px rgba(43, 212, 255, 0.7)'
-              : '0 0 12px rgba(255, 107, 28, 0.6)',
-        }}
-      />
+      {isNight ? <MoonIcon /> : <SunIcon />}
     </button>
   );
 }
