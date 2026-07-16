@@ -15,22 +15,10 @@ export function Hint() {
         text-[var(--color-muted)]/80
       "
     >
-      {/* Desktop hints (mobile guidance now lives in the bottom bar: named
-       *  section dots + the prev/next car control). */}
+      {/* Only the non-obvious control — the car/color/background controls are
+       *  visible in the dock, and scrolling is self-evident. */}
       <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>drag</kbd> orbit
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>scroll</kbd> / <kbd className={KBD}>↑↓</kbd> sections
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>swipe</kbd> / <kbd className={KBD}>←→</kbd> cars
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>C</kbd> color
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>B</kbd> background
+        <kbd className={KBD}>drag</kbd> to orbit the car
       </span>
     </div>
   );

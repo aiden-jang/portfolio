@@ -98,19 +98,24 @@ export function App() {
           <div
             id="desktop-dock"
             className="
-              hidden md:flex fixed left-1/2 -translate-x-1/2 bottom-[3.4rem] z-20
-              items-center gap-3 pointer-events-none
+              hidden md:flex justify-center fixed left-1/2 -translate-x-1/2 bottom-[4.5rem] z-20
+              pointer-events-none
             "
           >
-            <span className="pointer-events-auto">
+            {/* One cohesive control bar: car | color | background. */}
+            <div
+              className="
+                pointer-events-auto flex items-center gap-1
+                rounded-full border border-[var(--color-line)] bg-[rgba(12,12,20,0.55)]
+                px-2 py-1 shadow-[0_10px_34px_-14px_rgba(0,0,0,0.7)]
+              "
+            >
               <CarSwitcher />
-            </span>
-            <span className="pointer-events-auto">
+              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
               <ColorSwatches bordered={false} />
-            </span>
-            <span className="pointer-events-auto">
+              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
               <ThemeToggle />
-            </span>
+            </div>
           </div>
           <SectionDots onJump={scrollToSection} placement="rail" />
           <Sections />
