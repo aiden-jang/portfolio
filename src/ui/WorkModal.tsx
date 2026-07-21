@@ -10,8 +10,12 @@ export type WorkDetail = {
   /** Optional screenshot shown as a banner at the top of the detail card.
    *  Missing files degrade gracefully — the banner hides itself on load error. */
   image?: string;
-  /** Optional external link rendered as a "Visit" button at the bottom. */
+  /** Optional external link rendered as the primary "Visit" button at the bottom. */
   link?: { label: string; url: string };
+  /** Optional secondary links (Source, Architecture, case study, …) rendered as
+   *  outline pills next to the primary button. Each renders only when present,
+   *  so a not-yet-public repo simply omits its entry rather than dead-linking. */
+  links?: { label: string; url: string }[];
   /** Shipped-app fields, set on the live entries so they render as product
    *  cards in the Work grid (the rest render as editorial rows). */
   mark?: MarkKey;
@@ -126,22 +130,44 @@ export function WorkModal({ item, onClose }: Props) {
                 </span>
               ))}
             </div>
-            {item.link && (
-              <a
-                href={item.link.url}
-                target="_blank"
-                rel="noopener"
-                className="
-                  inline-flex items-center gap-2 mt-6 px-5 py-2.5 rounded-full
-                  border border-[var(--color-line)]
-                  font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase
-                  text-[var(--color-fg)] no-underline transition-colors
-                  hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
-                "
-              >
-                {item.link.label}
-                <span aria-hidden="true">→</span>
-              </a>
+            {(item.link || item.links?.length) && (
+              <div className="mt-6 flex flex-wrap gap-2.5">
+                {item.link && (
+                  <a
+                    href={item.link.url}
+                    target="_blank"
+                    rel="noopener"
+                    className="
+                      inline-flex items-center gap-2 px-5 py-2.5 rounded-full
+                      border border-[var(--color-line)]
+                      font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase
+                      text-[var(--color-fg)] no-underline transition-colors
+                      hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
+                    "
+                  >
+                    {item.link.label}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                )}
+                {item.links?.map((l) => (
+                  <a
+                    key={l.url}
+                    href={l.url}
+                    target="_blank"
+                    rel="noopener"
+                    className="
+                      inline-flex items-center gap-2 px-5 py-2.5 rounded-full
+                      border border-[var(--color-line)]
+                      font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase
+                      text-[var(--color-muted)] no-underline transition-colors
+                      hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
+                    "
+                  >
+                    {l.label}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </div>
             )}
           </>
         )}
