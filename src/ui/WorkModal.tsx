@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import type { MarkKey } from './marks';
 
 export type WorkDetail = {
@@ -58,7 +59,12 @@ export function WorkModal({ item, onClose }: Props) {
     };
   }, [open, onClose]);
 
-  return (
+  // Portal to <body> so the modal escapes the page's `<main class="z-10">` stacking context.
+  // Rendered inline, its z-50 was trapped below the z-30 fixed mobile bottom bar, whose (invisible
+  // but still hit-testable) section-dot buttons sat over the modal's action links and swallowed the
+  // tap — the reported "side-project links don't work on mobile". At <body> the z-50 overlay is
+  // truly above all chrome.
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
@@ -75,9 +81,8 @@ export function WorkModal({ item, onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
         style={open ? { viewTransitionName: 'work-morph' } : undefined}
         className={`
-          relative w-full max-w-[640px] max-h-[85dvh] overflow-auto
+          relative flex flex-col w-full max-w-[640px] max-h-[85dvh] overflow-hidden
           bg-[#0a0a14] border border-[var(--color-line)] rounded-xl
-          p-5 pt-5 md:p-7 md:pt-6
           transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
           ${open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
         `}
@@ -99,6 +104,9 @@ export function WorkModal({ item, onClose }: Props) {
 
         {item && (
           <>
+            {/* Scrollable body. overscroll-contain stops the scroll from chaining to the page
+                behind the modal when you hit the top or bottom. */}
+            <div className="flex-1 overflow-y-auto overscroll-contain p-5 pt-5 md:p-7 md:pt-6">
             {item.image && (
               <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
             )}
@@ -130,8 +138,13 @@ export function WorkModal({ item, onClose }: Props) {
                 </span>
               ))}
             </div>
+            </div>
             {(item.link || item.links?.length) && (
-              <div className="mt-6 flex flex-wrap gap-2.5">
+              // Footer lives OUTSIDE the scroll area (a flex sibling), so it is always flush to the
+              // panel's bottom edge, spans the full width, and never overlaps the body text — the
+              // body scrolls in its own region above it. Always visible + tappable regardless of
+              // how long the description is.
+              <div className="shrink-0 flex flex-wrap gap-2.5 px-5 md:px-7 py-4 border-t border-[var(--color-line)]">
                 {item.link && (
                   <a
                     href={item.link.url}
@@ -172,7 +185,8 @@ export function WorkModal({ item, onClose }: Props) {
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
