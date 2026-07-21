@@ -32,14 +32,31 @@ export function makeRadialGlowTexture(): THREE.CanvasTexture {
   return tex;
 }
 
-/** Recursively dispose every geometry + material under `obj`. */
+/** Recursively dispose every geometry, material AND texture under `obj`.
+ *
+ *  Disposing textures is the load-bearing part: `material.dispose()` frees the
+ *  compiled GPU program but NOT the textures the material references (`.map`,
+ *  `.normalMap`, `.roughnessMap`, …). Those textures are the bulk of a car's GPU
+ *  memory, so leaking them on every swap accumulates until a mobile tab OOMs and
+ *  crashes — which is why it only bit after cycling to the third (heavy) car.
+ *  Each GLB load creates fresh textures, so nothing here is shared with a
+ *  surviving object; disposing them on teardown is safe. */
 export function disposeModel(obj: THREE.Object3D): void {
   obj.traverse((c) => {
     const m = c as THREE.Mesh;
     if (m.geometry) m.geometry.dispose();
     if (m.material) {
       const mats = Array.isArray(m.material) ? m.material : [m.material];
-      for (const mat of mats) mat.dispose();
+      for (const mat of mats) {
+        // Dispose every texture-valued property (map, normalMap, aoMap, …)
+        // before the material itself. material.dispose() won't do this for us.
+        for (const value of Object.values(mat)) {
+          if (value && (value as THREE.Texture).isTexture) {
+            (value as THREE.Texture).dispose();
+          }
+        }
+        mat.dispose();
+      }
     }
   });
 }
