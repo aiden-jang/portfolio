@@ -5,6 +5,23 @@ import { prefersReducedMotion } from './useReducedMotion';
 import { useAppStore } from '../store';
 
 let scrollRaf = 0;
+// Set while a programmatic tween owns the scroll; restores the CSS-driven snap.
+// Exposed via cancelSmoothScroll so manual scroll input can abort the tween.
+let restoreSnap: (() => void) | null = null;
+
+/** Abort any in-flight programmatic scroll and restore scroll-snap immediately.
+ *  Called when the user takes over (touch / wheel) so the tween never fights a
+ *  manual scroll, and snap is never left disabled. */
+function cancelSmoothScroll(): void {
+  if (scrollRaf) {
+    cancelAnimationFrame(scrollRaf);
+    scrollRaf = 0;
+  }
+  if (restoreSnap) {
+    restoreSnap();
+    restoreSnap = null;
+  }
+}
 
 /** Smoothly scroll the window to an absolute Y with our own rAF tween.
  *
@@ -22,8 +39,11 @@ function smoothScrollTo(targetY: number): void {
     return;
   }
   const html = document.documentElement;
-  cancelAnimationFrame(scrollRaf);
+  cancelSmoothScroll();
   html.style.scrollSnapType = 'none';
+  restoreSnap = () => {
+    html.style.scrollSnapType = ''; // restore the CSS-driven mandatory snap
+  };
   const duration = 480;
   const start = performance.now();
   const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -33,7 +53,11 @@ function smoothScrollTo(targetY: number): void {
     if (t < 1) {
       scrollRaf = requestAnimationFrame(step);
     } else {
-      html.style.scrollSnapType = ''; // restore the CSS-driven mandatory snap
+      scrollRaf = 0;
+      if (restoreSnap) {
+        restoreSnap();
+        restoreSnap = null;
+      }
     }
   };
   scrollRaf = requestAnimationFrame(step);
@@ -93,16 +117,27 @@ export function useNavigation() {
   );
 
   useEffect(() => {
+    // The user grabbed the scroll: abort any in-flight jump so the tween doesn't
+    // fight them, and drop the snap-lock so the active-section highlight tracks
+    // their manual scroll again right away (rather than staying frozen on the
+    // jump target). This is what makes mixing scroll + dots/title feel coherent.
+    const yieldToUser = () => {
+      cancelSmoothScroll();
+      snapLockUntil.current = 0;
+    };
     const onWheel = (e: WheelEvent) => {
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
-      // Horizontal trackpad swipe → cycle cars. Vertical wheel is left entirely
-      // to the browser as plain native scrolling.
+      // Horizontal trackpad swipe → cycle cars. Vertical wheel is native scroll,
+      // but it also means the user is taking over, so yield any in-flight jump.
       if (absX > absY && absX >= MIN_WHEEL_DELTA) {
         if (e.deltaX > 0) cycleCarThrottled();
         else prevCarThrottled();
+      } else if (absY >= MIN_WHEEL_DELTA) {
+        yieldToUser();
       }
     };
+    const onTouchStart = () => yieldToUser();
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
       const inField =
@@ -161,10 +196,12 @@ export function useNavigation() {
     };
 
     window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('scroll', onScroll);
     };
