@@ -22,6 +22,9 @@ const DRAG_DECAY_FRACTION = 0.6;
 const IDLE_SPIN_RATE = 0.18;
 const SCROLL_PAUSE_DURATION = 0.2;
 const TAP_THRESHOLD_PX = 3;
+// Touch fingers jitter far more than a mouse, so a stricter 3px tap threshold
+// misreads normal taps as drags and swallows the rev. Give touch more slack.
+const TOUCH_TAP_THRESHOLD_PX = 12;
 /** Touch hold-to-orbit: press and stay within HOLD_MOVE_TOLERANCE for HOLD_MS
  *  to switch from scrolling the page to orbiting the car. A larger movement
  *  before that fires is a scroll, and cancels the hold. */
@@ -155,7 +158,8 @@ export function CameraRig({ getScrollT }: Props) {
       const dy = e.clientY - s.lastY;
       s.lastX = e.clientX;
       s.lastY = e.clientY;
-      if (Math.abs(dx) + Math.abs(dy) > TAP_THRESHOLD_PX) s.dragMoved = true;
+      const tapThreshold = s.isTouch ? TOUCH_TAP_THRESHOLD_PX : TAP_THRESHOLD_PX;
+      if (Math.abs(dx) + Math.abs(dy) > tapThreshold) s.dragMoved = true;
       // Touch scrolls the page unless hold-to-orbit has engaged; a real move
       // before the hold fires cancels it (it was a scroll, not a hold).
       if (s.isTouch && !s.orbitHold) {
@@ -183,8 +187,11 @@ export function CameraRig({ getScrollT }: Props) {
         endGesture(s);
         return;
       }
-      // A tap (no move, no hold) revs; a hold-orbit does not.
-      if (!s.dragMoved && !s.orbitHold) triggerRev();
+      // Any release where the finger never actually moved revs. We intentionally
+      // do NOT also require !orbitHold: a stationary press that crossed the 300ms
+      // hold threshold but never orbited (never moved) should still rev, rather
+      // than reading as a dead press. Only a real orbit (dragMoved) suppresses it.
+      if (!s.dragMoved) triggerRev();
       s.idleSpin += s.dragAzimuth;
       s.dragAzimuth = 0;
       s.isDown = false;
