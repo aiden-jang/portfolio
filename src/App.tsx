@@ -58,7 +58,7 @@ export function App() {
       <FilmGrain />
       {!isCleanMode && (
         <>
-          <Brand />
+          <Brand onHome={() => scrollToSection('sec-intro')} />
           <Nav onLink={scrollToSection} />
           {/* Mobile-only floating resume CTA. Desktop renders ResumeButton
            *  inside Nav so it shares the top-right chrome row. */}
