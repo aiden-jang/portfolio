@@ -47,15 +47,39 @@ export function WorkModal({ item, onClose }: Props) {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+
+    // Robust scroll lock. The scroll root here is <html> (see index.css), so
+    // `document.body { overflow: hidden }` does NOT stop the page from scrolling
+    // behind the modal — and iOS ignores overflow locks entirely. Pin the body in
+    // place at the current offset and restore the scroll position on close; this
+    // is the one technique that holds on every platform.
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+    };
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
     // Lets CSS hide fixed chrome (the mobile bottom bar) that would otherwise
     // bleed through the overlay and overlap the modal on phones.
-    document.body.classList.add('modal-open');
+    body.classList.add('modal-open');
+
     return () => {
       window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prev;
-      document.body.classList.remove('modal-open');
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.left = prev.left;
+      body.style.right = prev.right;
+      body.style.width = prev.width;
+      body.classList.remove('modal-open');
+      window.scrollTo(0, scrollY);
     };
   }, [open, onClose]);
 
