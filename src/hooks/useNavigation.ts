@@ -1,7 +1,43 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { SECTION_IDS, type SectionId } from '../config';
 import { clamp } from '../math';
+import { prefersReducedMotion } from './useReducedMotion';
 import { useAppStore } from '../store';
+
+let scrollRaf = 0;
+
+/** Smoothly scroll the window to an absolute Y with our own rAF tween.
+ *
+ *  We deliberately do NOT use native `behavior: 'smooth'`: on the mobile viewport
+ *  a smooth programmatic scroll silently does nothing here (instant scrolls work
+ *  fine), because the scroll root carries `scroll-snap-type: y mandatory`. Snap is
+ *  disabled for the duration of the tween and re-enabled at the end — we always
+ *  land exactly on a section's snap-start, so nothing shifts when it comes back. */
+function smoothScrollTo(targetY: number): void {
+  const startY = window.scrollY;
+  const dist = targetY - startY;
+  if (Math.abs(dist) < 2) return;
+  if (prefersReducedMotion()) {
+    window.scrollTo(0, targetY);
+    return;
+  }
+  const html = document.documentElement;
+  cancelAnimationFrame(scrollRaf);
+  html.style.scrollSnapType = 'none';
+  const duration = 480;
+  const start = performance.now();
+  const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+  const step = (now: number) => {
+    const t = Math.min(1, (now - start) / duration);
+    window.scrollTo(0, Math.round(startY + dist * ease(t)));
+    if (t < 1) {
+      scrollRaf = requestAnimationFrame(step);
+    } else {
+      html.style.scrollSnapType = ''; // restore the CSS-driven mandatory snap
+    }
+  };
+  scrollRaf = requestAnimationFrame(step);
+}
 
 /** After a deliberate jump (keyboard / nav / dots) this long, ignore scroll
  *  events so the smooth-scroll animation isn't overridden mid-flight. */
@@ -48,7 +84,9 @@ export function useNavigation() {
       currentSection.current = next;
       snapLockUntil.current = performance.now() + SNAP_LOCK_MS;
       const el = document.getElementById(SECTION_IDS[next]);
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (!el) return;
+      const targetY = el.getBoundingClientRect().top + window.scrollY;
+      smoothScrollTo(targetY);
       setSectionIndex(next);
     },
     [setSectionIndex],
