@@ -40,8 +40,18 @@ function smoothScrollTo(targetY: number): void {
   const coarsePointer =
     typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
   if (coarsePointer || prefersReducedMotion()) {
-    cancelSmoothScroll(); // kill any tween mid-flight; then jump instantly
+    // Touch: jump instantly with mandatory scroll-snap held OFF. On a real phone, leaving snap on
+    // lets it pin the view and revert the programmatic scroll — the "dot updates but the content
+    // doesn't move" bug. With snap off the scrollTo always takes, landing on an exact section top.
+    // Snap is re-enabled the moment the user next manually scrolls (yieldToUser on touch/wheel, see
+    // the effect below), so ordinary swiping still snaps section-to-section.
+    cancelSmoothScroll();
+    const html = document.documentElement;
+    html.style.scrollSnapType = 'none';
     window.scrollTo(0, targetY);
+    restoreSnap = () => {
+      html.style.scrollSnapType = '';
+    };
     return;
   }
 
