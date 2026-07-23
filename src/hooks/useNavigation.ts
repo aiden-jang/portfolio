@@ -23,44 +23,46 @@ function cancelSmoothScroll(): void {
   }
 }
 
-/** Scroll the window to an absolute Y for a section jump.
+/** Smoothly scroll the window to an absolute Y for a section jump.
  *
- *  Touch devices get an INSTANT jump, on purpose. Native `behavior: 'smooth'` does
- *  nothing under `scroll-snap-type: mandatory`, and a per-frame rAF tween that
- *  toggles snap off fights the browser's re-applied snapping on real phones (it
- *  looks fine in a desktop mobile-emulator but stalls / lands wrong on device).
- *  targetY is always a section's exact snap-start, so an instant `scrollTo` lands
- *  cleanly with snap left on — the most reliable thing that works on a real phone.
- *  Desktop (fine-pointer) keeps the smooth rAF tween below. */
+ *  The load-bearing trick: hold `scroll-snap-type: mandatory` OFF for the whole jump.
+ *  With snap on, a real phone re-snaps and reverts the programmatic scroll (the "dot
+ *  updates but the copy is the wrong section" bug). Snap is restored on the user's
+ *  next manual scroll (yieldToUser), so ordinary swiping still snaps section-to-section.
+ *
+ *  For the animation itself:
+ *   - Touch → NATIVE smooth scroll. It's compositor-driven, so unlike a JS rAF tween
+ *     (which stalls on a real phone) it actually animates. It only looked broken before
+ *     because mandatory snap was overriding it — which we now disable for the jump.
+ *   - Desktop → a JS rAF tween (reliable there, and gives precise control).
+ *   - Reduced motion → instant jump. */
 function smoothScrollTo(targetY: number): void {
   const startY = window.scrollY;
   const dist = targetY - startY;
   if (Math.abs(dist) < 2) return;
 
-  const coarsePointer =
-    typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
-  if (coarsePointer || prefersReducedMotion()) {
-    // Touch: jump instantly with mandatory scroll-snap held OFF. On a real phone, leaving snap on
-    // lets it pin the view and revert the programmatic scroll — the "dot updates but the content
-    // doesn't move" bug. With snap off the scrollTo always takes, landing on an exact section top.
-    // Snap is re-enabled the moment the user next manually scrolls (yieldToUser on touch/wheel, see
-    // the effect below), so ordinary swiping still snaps section-to-section.
-    cancelSmoothScroll();
-    const html = document.documentElement;
-    html.style.scrollSnapType = 'none';
+  cancelSmoothScroll();
+  const html = document.documentElement;
+  html.style.scrollSnapType = 'none';
+  // NB: restoreSnap is intentionally NOT called at the end of the animation — snap stays off until
+  // the user's next manual scroll re-enables it (via yieldToUser). Re-enabling it the instant the
+  // animation finishes is what let mobile re-snap and undo the jump.
+  restoreSnap = () => {
+    html.style.scrollSnapType = '';
+  };
+
+  if (prefersReducedMotion()) {
     window.scrollTo(0, targetY);
-    restoreSnap = () => {
-      html.style.scrollSnapType = '';
-    };
     return;
   }
 
-  const html = document.documentElement;
-  cancelSmoothScroll();
-  html.style.scrollSnapType = 'none';
-  restoreSnap = () => {
-    html.style.scrollSnapType = ''; // restore the CSS-driven mandatory snap
-  };
+  const coarsePointer =
+    typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+  if (coarsePointer) {
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
+    return;
+  }
+
   const duration = 480;
   const start = performance.now();
   const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -70,11 +72,7 @@ function smoothScrollTo(targetY: number): void {
     if (t < 1) {
       scrollRaf = requestAnimationFrame(step);
     } else {
-      scrollRaf = 0;
-      if (restoreSnap) {
-        restoreSnap();
-        restoreSnap = null;
-      }
+      scrollRaf = 0; // done — leave snap off; the next manual scroll restores it
     }
   };
   scrollRaf = requestAnimationFrame(step);
