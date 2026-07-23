@@ -23,21 +23,28 @@ function cancelSmoothScroll(): void {
   }
 }
 
-/** Smoothly scroll the window to an absolute Y with our own rAF tween.
+/** Scroll the window to an absolute Y for a section jump.
  *
- *  We deliberately do NOT use native `behavior: 'smooth'`: on the mobile viewport
- *  a smooth programmatic scroll silently does nothing here (instant scrolls work
- *  fine), because the scroll root carries `scroll-snap-type: y mandatory`. Snap is
- *  disabled for the duration of the tween and re-enabled at the end — we always
- *  land exactly on a section's snap-start, so nothing shifts when it comes back. */
+ *  Touch devices get an INSTANT jump, on purpose. Native `behavior: 'smooth'` does
+ *  nothing under `scroll-snap-type: mandatory`, and a per-frame rAF tween that
+ *  toggles snap off fights the browser's re-applied snapping on real phones (it
+ *  looks fine in a desktop mobile-emulator but stalls / lands wrong on device).
+ *  targetY is always a section's exact snap-start, so an instant `scrollTo` lands
+ *  cleanly with snap left on — the most reliable thing that works on a real phone.
+ *  Desktop (fine-pointer) keeps the smooth rAF tween below. */
 function smoothScrollTo(targetY: number): void {
   const startY = window.scrollY;
   const dist = targetY - startY;
   if (Math.abs(dist) < 2) return;
-  if (prefersReducedMotion()) {
+
+  const coarsePointer =
+    typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+  if (coarsePointer || prefersReducedMotion()) {
+    cancelSmoothScroll(); // kill any tween mid-flight; then jump instantly
     window.scrollTo(0, targetY);
     return;
   }
+
   const html = document.documentElement;
   cancelSmoothScroll();
   html.style.scrollSnapType = 'none';
