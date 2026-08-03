@@ -9,7 +9,7 @@ export function ResumeButton() {
   return (
     <a
       ref={ref}
-      href="/resume.pdf"
+      href="/Aiden_Jang_Resume.pdf"
       target="_blank"
       rel="noopener noreferrer"
       className="
