@@ -3,7 +3,7 @@ import type { JSX } from 'react';
 /** Each shipped app's real mark, inlined as SVG so the Work cards carry the
  *  actual product identity (same shapes + colors as the deployed apps) with no
  *  extra requests. Gradient ids are namespaced so several can render at once. */
-export type MarkKey = 'owewell' | 'iguess' | 'wherever' | 'bloomnote' | 'auth';
+export type MarkKey = 'owewell' | 'iguess' | 'wherever' | 'bloomnote' | 'auth' | 'mrrp';
 
 /** A representative solid accent per app, used for the card's hover glow and
  *  keyline so the grid reads as a family of distinct products. */
@@ -13,9 +13,40 @@ export const ACCENTS: Record<MarkKey, string> = {
   wherever: '#ff5e2c',
   bloomnote: '#ff8fa3',
   auth: '#22d3ee',
+  mrrp: '#e0a03f',
 };
 
 export const marks: Record<MarkKey, () => JSX.Element> = {
+  /* mrrp's cat, at 32px per pixel on a 16x16 grid, which is how the app itself draws her: one aligned
+     rect per logical pixel, no upscaling. Flat colour rather than a gradient because the whole app is
+     hand-placed pixels and a gradient behind them would read as two different pieces of software. */
+  mrrp: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" shapeRendering="crispEdges" aria-hidden="true">
+      <rect width="512" height="512" rx="120" fill="#f7ecdc" />
+      <g fill="#4a3520">
+        <rect x="96" y="128" width="32" height="32" />
+        <rect x="128" y="160" width="32" height="32" />
+        <rect x="352" y="128" width="32" height="32" />
+        <rect x="320" y="160" width="32" height="32" />
+        <rect x="96" y="160" width="32" height="128" />
+        <rect x="352" y="160" width="32" height="128" />
+        <rect x="128" y="288" width="224" height="32" />
+        <rect x="128" y="96" width="32" height="32" />
+        <rect x="320" y="96" width="32" height="32" />
+      </g>
+      <rect x="128" y="128" width="224" height="160" fill="#e0a03f" />
+      <rect x="160" y="160" width="160" height="96" fill="#fdf6e8" />
+      <g fill="#4a3520">
+        <rect x="176" y="176" width="32" height="32" />
+        <rect x="272" y="176" width="32" height="32" />
+      </g>
+      <rect x="224" y="208" width="32" height="24" fill="#e79ba3" />
+      <g fill="#f0aeb4">
+        <rect x="144" y="200" width="24" height="24" />
+        <rect x="312" y="200" width="24" height="24" />
+      </g>
+    </svg>
+  ),
   owewell: () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true">
       <defs>

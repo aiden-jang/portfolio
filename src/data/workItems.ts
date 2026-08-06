@@ -98,11 +98,28 @@ export const WORK_ITEMS: WorkDetail[] = [
     link: { label: 'Open bloomnote', url: 'https://bloomnote.aidenjang.com' },
   },
   {
+    title: 'mrrp: a cat that belongs to exactly two people',
+    context: 'Side project',
+    summary:
+      'One private link, two seats, and a hand-drawn pixel cat that becomes whoever you sent the link to. The interesting part is everything I refused to build.',
+    body: [
+      'You make a room and send the link to one person. Whoever opens it second is the one the cat is: they tap how their day is going, the cat becomes that, and from the other side you see it and can do something about it. No accounts, no database, no notifications.',
+      'Three rules did more for this than any feature. Nothing can go wrong for the cat — no hunger, no streak, no decay — because the moment a shared pet can be neglected it becomes a chore, and a chore is the opposite of a gift. The cat never mirrors a low mood, it answers one: sad brings her over and she stays, because a cat that gets sad when you are sad is a cat you protect by lying to, and then the feature is dead on the days it matters. And you only ever see what the other person did, never that they saw yours, because "they read it and did nothing" is worse to know than nothing.',
+      'One Durable Object per room is the whole backend: two seats assigned by arrival order, enforced in the object rather than the UI, because the link is the only credential the app has. The room runs on her clock, not the server\u2019s, so the light moves across the floor over her day and the cat waits by the door around the time she usually gets home. Notes arrive one a day and advance on her reading, capped once per her local day, so a day she does not visit is not a note she never sees.',
+      'The art is hand-authored pixel grids you can read in the source, one aligned rectangle per logical pixel with no upscaling, because resampling a small canvas leaves you with pixels of two different sizes and it reads as a mistake rather than a style. It installs to a home screen, opens from cache with no signal, and a third person holding the link gets no notes, no mood, and a 403 on anything that writes.',
+    ],
+    stack: ['Cloudflare Workers', 'Durable Objects', 'React', 'Canvas', 'TypeScript', 'PWA'],
+    mark: 'mrrp',
+    shortName: 'mrrp',
+    tagline: 'A cat for exactly two people.',
+    link: { label: 'Make a room', url: 'https://mrrp.aidenjang.com' },
+  },
+  {
     title: 'Monolith → Django REST + React rewrite',
     context: 'Zeta Global · 2024–present',
     summary: 'Co-led the platform’s migration off a legacy PHP monolith. Django REST + React.',
     body: [
-      'Co-led a platform-wide migration from a legacy PHP monolith to a Django REST API that now powers self-service native-ad onboarding across 2,500+ publisher newsletters reaching ~240M readers.',
+      'Co-led a platform-wide migration from a legacy PHP monolith to a Django REST API that now powers self-service native-ad onboarding across 30,000+ active publisher newsletters.',
       'Owned both ends: data modeling and Django serializers on the backend, React + TypeScript components and hooks on the frontend. Shipped continuously alongside the live system, with feature flags routing traffic onto the new stack incrementally rather than in a risky big-bang cutover.',
     ],
     stack: ['Django', 'Python', 'REST', 'PostgreSQL', 'React', 'TypeScript'],
@@ -118,11 +135,11 @@ export const WORK_ITEMS: WorkDetail[] = [
     stack: ['Playwright', 'TypeScript', 'Claude API', 'Node.js'],
   },
   {
-    title: 'Line Item Details: 120 → 1 API call',
+    title: 'Ad Slot Details: 120 → 1 API call',
     context: 'Zeta Global',
-    summary: 'Cut a key admin page from 120 API calls per load down to one.',
+    summary: 'Cut a page ad ops and clients use daily from 120 API calls per load down to one, and 60s to 2s.',
     body: [
-      'The page used a per-row component pattern that issued one API call per visible row, dozens of round-trips before the page even rendered. I consolidated them into a single batched endpoint returning exactly the joined data the page needs.',
+      'The page eagerly loaded every linked line item, one API call each, so a slot with a hundred of them made a hundred round-trips before anything rendered. I consolidated them into a single batched endpoint returning exactly the joined data the page needs.',
       'Load time went from “go get coffee” to instant. The internal ops and sales teams who used it daily said thanks in #engineering.',
     ],
     stack: ['Django', 'REST', 'React', 'TypeScript', 'PostgreSQL'],
