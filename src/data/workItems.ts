@@ -111,7 +111,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     stack: ['Cloudflare Workers', 'Durable Objects', 'React', 'Canvas', 'TypeScript', 'PWA'],
     mark: 'mrrp',
     shortName: 'mrrp',
-    tagline: 'A cat for exactly two people.',
+    tagline: 'One of you is the cat.',
     link: { label: 'Make a room', url: 'https://mrrp.aidenjang.com' },
   },
   {
