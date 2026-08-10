@@ -19,18 +19,18 @@ const SKILLS = [
 const PRINCIPLES = [
   {
     number: '01',
-    title: 'Make the state visible',
-    body: 'A room should notice someone arriving. A decision should feel decided. The interface should show the change, not announce it.',
+    title: 'Show what changed',
+    body: 'If someone joins a room, the room should react. If the group picked a place, it should feel settled. I would rather show that than throw a toast at you.',
   },
   {
     number: '02',
-    title: 'AI needs a real job',
-    body: 'The model should make a game stranger, a gift more specific, or testing less brittle—not become a glowing button with no point.',
+    title: 'Give AI a job',
+    body: 'It should make a game more fun, a gift more personal, or a test suite less painful. Otherwise it is probably just a button with a sparkle on it.',
   },
   {
     number: '03',
-    title: 'Care without obligation',
-    body: 'No shame loops, no fake urgency. The best small products make room for people instead of asking them to maintain another thing.',
+    title: 'Do not turn care into homework',
+    body: 'No streaks. No guilt. No fake urgency. The best small products leave room for people instead of becoming one more thing to keep up with.',
   },
 ];
 
@@ -71,7 +71,7 @@ export function AboutSection() {
 
         <div className="mt-7 border-t border-white/[0.1] pt-5">
           <p className="font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase text-[var(--color-muted)]">
-            Product instincts
+            A few things I care about
           </p>
           <div className="mt-3 grid gap-2">
             {PRINCIPLES.map((principle) => (
