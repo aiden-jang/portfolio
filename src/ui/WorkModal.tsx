@@ -62,6 +62,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
   const [copied, setCopied] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => setCopied(false), [item]);
 
@@ -186,6 +187,23 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       <div
         ref={dialogRef}
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={(event) => {
+          const touch = event.touches[0];
+          if (touch) touchStart.current = { x: touch.clientX, y: touch.clientY };
+        }}
+        onTouchEnd={(event) => {
+          const start = touchStart.current;
+          const touch = event.changedTouches[0];
+          touchStart.current = null;
+          if (!start || !touch) return;
+          const deltaX = touch.clientX - start.x;
+          const deltaY = touch.clientY - start.y;
+          // Keep normal vertical reading scroll untouched. A deliberate,
+          // mostly-horizontal swipe steps through the neighboring case study.
+          if (Math.abs(deltaX) < 56 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+          if (deltaX > 0) onPrevious();
+          else onNext();
+        }}
         style={open ? { viewTransitionName: 'work-morph' } : undefined}
         className={`
           relative flex flex-col w-full max-w-[640px] max-h-[85dvh] overflow-hidden
@@ -285,6 +303,9 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                   </span>
                 )}
               </div>
+              <span className="font-[var(--font-mono)] text-[0.5rem] tracking-[0.1em] uppercase text-[rgba(244,240,255,0.38)] md:hidden">
+                Swipe to browse
+              </span>
               <span className="font-[var(--font-mono)] text-[0.55rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.38)] max-md:hidden">
                 ← → browse
               </span>
