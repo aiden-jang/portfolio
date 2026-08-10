@@ -17,8 +17,13 @@ export function useReducedMotion(): boolean {
     if (!window.matchMedia) return;
     const mq = window.matchMedia(MEDIA_QUERY);
     const onChange = () => setReduced(mq.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', onChange);
+      return () => mq.removeEventListener('change', onChange);
+    }
+    // Older Safari exposes the legacy MediaQueryList listener pair.
+    mq.addListener(onChange);
+    return () => mq.removeListener(onChange);
   }, []);
   return reduced;
 }

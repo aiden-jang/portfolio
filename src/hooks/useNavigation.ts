@@ -131,6 +131,8 @@ export function useNavigation() {
   );
 
   useEffect(() => {
+    const dialogIsOpen = () =>
+      !!document.querySelector('[role="dialog"][aria-modal="true"]:not([aria-hidden="true"])');
     // The user grabbed the scroll: abort any in-flight jump so the tween doesn't
     // fight them, and drop the snap-lock so the active-section highlight tracks
     // their manual scroll again right away (rather than staying frozen on the
@@ -140,6 +142,7 @@ export function useNavigation() {
       snapLockUntil.current = 0;
     };
     const onWheel = (e: WheelEvent) => {
+      if (dialogIsOpen()) return;
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
       // Horizontal trackpad swipe → cycle cars. Vertical wheel is native scroll,
@@ -151,8 +154,11 @@ export function useNavigation() {
         yieldToUser();
       }
     };
-    const onTouchStart = () => yieldToUser();
+    const onTouchStart = () => {
+      if (!dialogIsOpen()) yieldToUser();
+    };
     const onKey = (e: KeyboardEvent) => {
+      if (dialogIsOpen()) return;
       const target = e.target as HTMLElement | null;
       const inField =
         target instanceof HTMLInputElement ||
