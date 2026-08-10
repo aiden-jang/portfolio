@@ -290,9 +290,24 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                   →
                 </button>
                 {position && (
-                  <span className="ml-2 font-[var(--font-mono)] text-[0.58rem] tracking-[0.14em] text-[var(--color-muted)]">
-                    {position.current} / {position.total}
-                  </span>
+                  <>
+                    <span className="ml-2 font-[var(--font-mono)] text-[0.58rem] tracking-[0.14em] text-[var(--color-muted)]">
+                      {position.current} / {position.total}
+                    </span>
+                    <span
+                      role="progressbar"
+                      aria-label="Case study progress"
+                      aria-valuemin={1}
+                      aria-valuemax={position.total}
+                      aria-valuenow={position.current}
+                      className="ml-1 h-px w-8 overflow-hidden bg-white/[0.14]"
+                    >
+                      <span
+                        className="block h-full origin-left bg-[var(--color-neon)] transition-transform duration-300"
+                        style={{ transform: `scaleX(${position.current / position.total})` }}
+                      />
+                    </span>
+                  </>
                 )}
               </div>
               <span className="font-[var(--font-mono)] text-[0.5rem] tracking-[0.1em] uppercase text-[rgba(244,240,255,0.38)] md:hidden">
