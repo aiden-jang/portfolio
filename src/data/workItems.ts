@@ -60,7 +60,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     tagline: 'Pictionary vs. a robot.',
     moment: 'turning a bad doodle into a tiny event',
     principle:
-      'The AI is a player with the same rules, score, and chance to be gloriously wrong—not a feature bolted beside the game.',
+      'The AI plays by the same rules, gets a score, and is allowed to be gloriously wrong. It is part of the game, not a feature bolted onto the side.',
     link: { label: 'Play iguess', url: 'https://iguess.aidenjang.com' },
   },
   {
@@ -124,7 +124,7 @@ export const WORK_ITEMS: WorkDetail[] = [
       'One private link, two seats, and a hand-drawn pixel cat that becomes whoever you sent the link to. The interesting part is everything I refused to build.',
     body: [
       'You make a room and send the link to one person. Whoever opens it second is the one the cat is: they tap how their day is going, the cat becomes that, and from the other side you see it and can do something about it. No accounts, no database, no notifications.',
-      'Three rules did more for this than any feature. Nothing can go wrong for the cat — no hunger, no streak, no decay — because the moment a shared pet can be neglected it becomes a chore, and a chore is the opposite of a gift. The cat never mirrors a low mood, it answers one: sad brings her over and she stays, because a cat that gets sad when you are sad is a cat you protect by lying to, and then the feature is dead on the days it matters. And you only ever see what the other person did, never that they saw yours, because "they read it and did nothing" is worse to know than nothing.',
+      'Three rules mattered more than any feature. Nothing bad can happen to the cat. No hunger, streaks, or decay. The second a shared pet can be neglected, it becomes a chore. The cat also does not copy a low mood. If you are sad, she comes over and stays. And you only see what the other person did, never whether they saw yours. Knowing someone saw a message and did nothing can feel worse than not knowing.',
       'One Durable Object per room is the whole backend: two seats assigned by arrival order, enforced in the object rather than the UI, because the link is the only credential the app has. The room runs on her clock, not the server\u2019s, so the light moves across the floor over her day and the cat waits by the door around the time she usually gets home. Notes arrive one a day and advance on her reading, capped once per her local day, so a day she does not visit is not a note she never sees.',
       'The art is hand-authored pixel grids you can read in the source, one aligned rectangle per logical pixel with no upscaling, because resampling a small canvas leaves you with pixels of two different sizes and it reads as a mistake rather than a style. It installs to a home screen, opens from cache with no signal, and a third person holding the link gets no notes, no mood, and a 403 on anything that writes.',
     ],
@@ -134,7 +134,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     tagline: 'One of you is the cat.',
     moment: 'being close without needing to perform closeness',
     principle:
-      'No streaks, guilt, or read receipts. The cat responds to a hard day so people never have to protect the product by lying to it.',
+      'There are no streaks, guilt, or read receipts. The cat responds to a hard day, so nobody has to pretend they are fine just to keep the app happy.',
     link: { label: 'Make a room', url: 'https://mrrp.aidenjang.com' },
   },
   {

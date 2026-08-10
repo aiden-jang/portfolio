@@ -172,7 +172,7 @@ export function WorkModal({ item, onClose }: Props) {
                 <aside className="mb-5 rounded-xl border border-white/[0.1] bg-white/[0.035] p-4">
                   {item.moment && (
                     <p className="font-[var(--font-mono)] text-[0.62rem] tracking-[0.18em] uppercase text-[var(--color-neon)]">
-                      Designed for · {item.moment}
+                      The point · {item.moment}
                     </p>
                   )}
                   {item.principle && (
@@ -256,7 +256,7 @@ export function WorkModal({ item, onClose }: Props) {
                     hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
                   "
                 >
-                  {copied ? 'Link copied' : 'Copy case study'}
+                  {copied ? 'Link copied' : 'Copy link'}
                   <span aria-hidden="true">{copied ? '✓' : '↗'}</span>
                 </button>
               </div>
