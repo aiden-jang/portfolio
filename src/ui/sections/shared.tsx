@@ -45,7 +45,7 @@ export function Section({
         min-h-screen flex items-center pointer-events-none
         snap-start snap-always
         px-[6vw] md:px-[5vw]
-        pt-[12vh] pb-[24vh] md:py-0
+        pt-[12vh] pb-[max(13rem,24vh)] md:py-0
         justify-center text-center
         ${desktopJustify} ${desktopText}
       `}
