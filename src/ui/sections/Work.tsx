@@ -149,7 +149,7 @@ function AppCard({
           rel="noopener"
           aria-label={`Open ${item.shortName ?? item.title}`}
           title={`Open ${item.shortName ?? item.title}`}
-          className="hidden md:grid absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 place-items-center rounded-full border border-white/[0.1] text-[var(--color-muted)] opacity-0 transition-all duration-200 group-hover:opacity-100 hover:border-[var(--accent)] hover:text-[var(--accent)] focus:opacity-100"
+          className="grid absolute right-1 top-1/2 -translate-y-1/2 h-11 w-11 md:right-3 md:h-8 md:w-8 place-items-center rounded-full border border-white/[0.1] text-[var(--color-muted)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)] md:opacity-0 md:group-hover:opacity-100 focus:opacity-100"
         >
           ↗
         </a>
