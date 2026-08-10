@@ -10,6 +10,7 @@ import type { ThemeName } from './types';
 // section content paint immediately, then the canvas mounts when its chunk arrives.
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 import { Brand } from './ui/Brand';
+import { CameraResetButton } from './ui/CameraResetButton';
 import { CarSwitcher, MobileCarSwitcher } from './ui/CarSwitcher';
 import { ColorSwatches, MobileColorButton } from './ui/ColorSwatches';
 import { CommandMenu } from './ui/CommandMenu';
@@ -151,6 +152,8 @@ export function App() {
               <CarSwitcher />
               <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
               <RevButton />
+              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+              <CameraResetButton />
               <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
               <ColorSwatches bordered={false} />
               <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />

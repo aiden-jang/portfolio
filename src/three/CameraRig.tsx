@@ -84,6 +84,7 @@ type Props = {
 export function CameraRig({ getScrollT }: Props) {
   const { camera } = useThree();
   const triggerRev = useAppStore((s) => s.triggerRev);
+  const cameraResetVersion = useAppStore((s) => s.cameraResetVersion);
 
   const state = useRef<RigState>({
     dragAzimuth: 0,
@@ -102,6 +103,15 @@ export function CameraRig({ getScrollT }: Props) {
   const baseFov = useRef(camera instanceof THREE.PerspectiveCamera ? camera.fov : 35);
   const sectionPunchTimer = useRef(0);
   const lastSection = useRef<number | null>(null);
+
+  useEffect(() => {
+    const s = state.current;
+    s.dragAzimuth = 0;
+    s.dragElevation = 0;
+    s.idleSpin = 0;
+    s.dragMoved = false;
+    document.body.classList.remove('orbiting');
+  }, [cameraResetVersion]);
 
   // Briefly bump FOV when the section changes to give navigation some weight.
   useEffect(() => {

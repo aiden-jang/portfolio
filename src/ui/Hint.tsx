@@ -36,6 +36,9 @@ export function Hint() {
         <kbd className={KBD}>R</kbd> rev
       </span>
       <span className="hidden md:inline-flex items-center gap-2">
+        <kbd className={KBD}>V</kbd> view
+      </span>
+      <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>?</kbd> commands
       </span>
     </div>
