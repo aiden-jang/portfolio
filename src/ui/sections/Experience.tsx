@@ -23,7 +23,7 @@ export function ExperienceSection({ onOpen }: Props) {
     <Section id="sec-experience" side="left">
       <div className="panel pointer-events-auto w-full max-w-[540px]">
         <span className={EYEBROW}>01 / EXPERIENCE</span>
-        <h2 className={H2}>Experience</h2>
+        <h2 className={H2}>Where I&apos;ve worked</h2>
         <ul className={`${UL_BASE} ${P_LI}`}>
           {ROLES.map((r) => (
             <li key={r}>{r}</li>
@@ -31,7 +31,7 @@ export function ExperienceSection({ onOpen }: Props) {
         </ul>
 
         <p className="mt-5 mb-0.5 font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase text-[var(--color-muted)]">
-          Highlights
+          Things I&apos;ve shipped
         </p>
         <div>
           {highlights.map((item) => (
