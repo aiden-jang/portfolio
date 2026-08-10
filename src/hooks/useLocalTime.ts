@@ -15,16 +15,14 @@ export function useLocalTime(): string {
     const tick = () => setTime(FORMATTER.format(new Date()));
     // Align the first update to the next minute boundary, then poll every 30s.
     const ms = 60_000 - (Date.now() % 60_000);
+    let intervalId: number | undefined;
     const firstId = window.setTimeout(() => {
       tick();
-      const intervalId = window.setInterval(tick, 30_000);
-      // Stash so cleanup can clear it.
-      (firstId as unknown as { _i?: number })._i = intervalId;
+      intervalId = window.setInterval(tick, 30_000);
     }, ms);
     return () => {
       window.clearTimeout(firstId);
-      const i = (firstId as unknown as { _i?: number })._i;
-      if (i) window.clearInterval(i);
+      if (intervalId !== undefined) window.clearInterval(intervalId);
     };
   }, []);
   return time;
