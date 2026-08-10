@@ -66,6 +66,8 @@ type RigState = {
   /** Touch only: set once a stationary press passes the hold threshold, which
    *  switches the gesture from page-scroll to car-orbit. */
   orbitHold: boolean;
+  startX: number;
+  startY: number;
   lastX: number;
   lastY: number;
   idleSpin: number;
@@ -93,6 +95,8 @@ export function CameraRig({ getScrollT }: Props) {
     isTouch: false,
     dragMoved: false,
     orbitHold: false,
+    startX: 0,
+    startY: 0,
     lastX: 0,
     lastY: 0,
     idleSpin: 0,
@@ -146,6 +150,8 @@ export function CameraRig({ getScrollT }: Props) {
       s.isTouch = e.pointerType === 'touch';
       s.dragMoved = false;
       s.orbitHold = false;
+      s.startX = e.clientX;
+      s.startY = e.clientY;
       s.lastX = e.clientX;
       s.lastY = e.clientY;
       // Touch: a stationary press-and-hold switches the gesture from scrolling
@@ -169,13 +175,16 @@ export function CameraRig({ getScrollT }: Props) {
       s.lastX = e.clientX;
       s.lastY = e.clientY;
       const tapThreshold = s.isTouch ? TOUCH_TAP_THRESHOLD_PX : TAP_THRESHOLD_PX;
-      if (Math.abs(dx) + Math.abs(dy) > tapThreshold) s.dragMoved = true;
+      const totalMovement = Math.abs(e.clientX - s.startX) + Math.abs(e.clientY - s.startY);
+      if (totalMovement > tapThreshold) s.dragMoved = true;
       // Touch scrolls the page unless hold-to-orbit has engaged; a real move
       // before the hold fires cancels it (it was a scroll, not a hold).
       if (s.isTouch && !s.orbitHold) {
-        if (Math.abs(dx) + Math.abs(dy) > HOLD_MOVE_TOLERANCE) window.clearTimeout(holdTimer);
+        if (totalMovement > HOLD_MOVE_TOLERANCE) window.clearTimeout(holdTimer);
         return;
       }
+      // Do not nudge the camera for pointer jitter that still counts as a tap.
+      if (!s.dragMoved) return;
       // Orbiting (mouse drag, or an engaged touch hold): fade the DOM text so
       // the car reads clean. Restored on pointer up/cancel. CSS transitions it.
       if (s.dragMoved) document.body.classList.add('orbiting');
