@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CARS } from '../config';
-import { copyCurrentSceneUrl } from '../sceneLink';
+import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
 
 /** Copies a small permalink to the visitor's current garage setup. The link
@@ -8,40 +8,45 @@ import { useAppStore } from '../store';
  * shareable artifact instead of a one-session interaction. */
 export function SceneShareButton() {
   const carIndex = useAppStore((state) => state.carIndex);
-  const [copied, setCopied] = useState(false);
+  const [result, setResult] = useState<'shared' | 'copied' | null>(null);
 
   const share = async () => {
-    if (await copyCurrentSceneUrl()) {
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
+    const nextResult = await shareCurrentScene();
+    if (nextResult) {
+      setResult(nextResult);
+      window.setTimeout(() => setResult(null), 1800);
     }
   };
 
   const car = CARS[carIndex];
   return (
     <div className="relative">
-      {copied && (
+      {result && (
         <span
           role="status"
           className="pointer-events-none absolute bottom-full right-0 mb-2 whitespace-nowrap rounded-full border border-[var(--color-neon)] bg-[#0b0b15] px-2.5 py-1 font-[var(--font-mono)] text-[0.58rem] tracking-[0.13em] uppercase text-[var(--color-neon)] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.85)] animate-[app-fade-in_160ms_ease-out_both]"
         >
-          Garage link copied
+          {result === 'shared' ? 'Garage shared' : 'Garage link copied'}
         </span>
       )}
       <button
         type="button"
         onClick={() => void share()}
         aria-label={
-          copied ? 'Garage link copied' : `Copy a link to this ${car?.name ?? 'car'} setup`
+          result
+            ? result === 'shared'
+              ? 'Garage shared'
+              : 'Garage link copied'
+            : `Share this ${car?.name ?? 'car'} setup`
         }
-        title="Copy this garage setup"
+        title="Share this garage setup"
         className={`group inline-grid h-8 w-8 place-items-center rounded-full transition-transform duration-200 hover:scale-110 ${
-          copied
+          result
             ? 'text-[var(--color-neon)]'
             : 'text-[var(--color-muted)] hover:text-[var(--color-neon)]'
         }`}
       >
-        {copied ? (
+        {result ? (
           <span aria-hidden="true" className="text-[0.95rem]">
             ✓
           </span>
