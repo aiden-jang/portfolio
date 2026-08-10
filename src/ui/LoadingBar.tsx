@@ -1,13 +1,15 @@
 import { useProgress } from '@react-three/drei';
-
-const MESSAGE = 'Warming up the engine';
+import { CARS } from '../config';
+import { useAppStore } from '../store';
 
 /** 2px neon progress bar pinned to the top of the viewport, plus a small
- *  status line beneath it ("Warming up the engine · 73%"). Reads from
+ *  status line beneath it ("Bringing in Ferrari F40 · 73%"). Reads from
  *  Three.js's default LoadingManager via drei's `useProgress`, so any GLB
  *  fetched by any `GLTFLoader` (including car swaps) is tracked. */
 export function LoadingBar() {
   const { progress, active } = useProgress();
+  const carIndex = useAppStore((state) => state.carIndex);
+  const car = CARS[carIndex];
   const pct = Math.round(progress);
   return (
     <div
@@ -30,7 +32,7 @@ export function LoadingBar() {
           uppercase text-[var(--color-muted)]
         "
       >
-        {MESSAGE}
+        Bringing in {car?.name ?? 'the car'}
         <span className="text-[var(--color-fg)] tabular-nums"> · {pct}%</span>
       </div>
     </div>
