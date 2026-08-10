@@ -142,7 +142,7 @@ function AppCard({
             </span>
             <LiveDot />
           </span>
-          <span className="mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] max-md:hidden">
+          <span className="mt-0.5 block truncate text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4]">
             {item.tagline ?? item.summary}
           </span>
           {item.moment && (
