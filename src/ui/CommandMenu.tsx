@@ -72,6 +72,13 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         run: () => useAppStore.getState().toggleTheme(),
       },
       {
+        id: 'surprise',
+        label: 'Surprise me',
+        hint: 'X',
+        keywords: 'randomize surprise shuffle garage car paint lighting',
+        run: () => useAppStore.getState().randomizeGarage(),
+      },
+      {
         id: 'rev',
         label: 'Rev the engine',
         hint: 'R',

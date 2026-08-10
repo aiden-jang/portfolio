@@ -210,6 +210,12 @@ export function useNavigation() {
           e.preventDefault();
           useAppStore.getState().resetCamera();
           break;
+        case 'x':
+        case 'X':
+          if (inField) return;
+          e.preventDefault();
+          useAppStore.getState().randomizeGarage();
+          break;
       }
     };
     // Track the active section for the nav dots / label as you scroll. A

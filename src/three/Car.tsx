@@ -114,6 +114,10 @@ export function Car() {
         refs.bodyMaterial = detectBodyMaterial(model);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);
+        // A shared scene can arrive with a paint choice before this GLB has
+        // finished loading. Apply it after material discovery so that choice
+        // survives the model swap instead of silently reverting to original.
+        useAppStore.getState().applyBodyColor(useAppStore.getState().activeBodyColor);
         setCarLoading(false);
 
         if (!refs.introArmed) armIntro();
