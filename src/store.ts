@@ -20,11 +20,6 @@ type Refs = {
 
 /** "original" restores the GLB's as-loaded color; any other value is a hex. */
 export type ActiveBodyColor = 'original' | string;
-type GarageSnapshot = {
-  carIndex: number;
-  themeName: ThemeName;
-  activeBodyColor: ActiveBodyColor;
-};
 
 /** Single source of truth for the body-color picker — drives both the swatch
  *  UI and the `cycleBodyColor` keyboard action. Order = swatch order. */
@@ -46,8 +41,6 @@ type AppState = {
   /** Incremented to ask CameraRig to drop any manual orbit offsets. */
   cameraResetVersion: number;
   activeBodyColor: ActiveBodyColor;
-  /** The setup immediately before a random garage mix, available for one undo. */
-  previousGarage: GarageSnapshot | null;
   /** True once a car has loaded and its body material has been detected.
    *  Used by `ColorSwatches` to fade the swatch strip in. */
   hasBodyMaterial: boolean;
@@ -62,7 +55,6 @@ type AppState = {
   cycleCar: () => void;
   prevCar: () => void;
   randomizeGarage: () => void;
-  undoGarageMix: () => void;
   setThemeName: (theme: ThemeName) => void;
   toggleTheme: () => void;
   setSectionIndex: (i: number) => void;
@@ -88,7 +80,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   sectionIndex: 0,
   cameraResetVersion: 0,
   activeBodyColor: 'original',
-  previousGarage: null,
   hasBodyMaterial: false,
   isCarLoading: true,
   refs: {
@@ -126,7 +117,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
   },
   randomizeGarage: () => {
-    const { carIndex: currentIndex, themeName, activeBodyColor } = get();
+    const { carIndex: currentIndex } = get();
     const refs = get().refs;
     refs.bodyMaterial = null;
     refs.bodyOriginalColor = null;
@@ -137,16 +128,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       themeName: Math.random() > 0.5 ? 'dusk' : 'night',
       activeBodyColor: colors[Math.floor(Math.random() * colors.length)] ?? 'original',
       hasBodyMaterial: false,
-      previousGarage: { carIndex: currentIndex, themeName, activeBodyColor },
     });
-  },
-  undoGarageMix: () => {
-    const previousGarage = get().previousGarage;
-    if (!previousGarage) return;
-    const refs = get().refs;
-    refs.bodyMaterial = null;
-    refs.bodyOriginalColor = null;
-    set({ ...previousGarage, hasBodyMaterial: false, previousGarage: null });
   },
   setThemeName: (theme) => set({ themeName: theme }),
   toggleTheme: () => set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
