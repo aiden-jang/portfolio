@@ -31,6 +31,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLElement>(null);
 
   const commands = useMemo<Command[]>(
     () => [
@@ -137,8 +138,30 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
       setNotice('');
       return;
     }
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     const id = window.setTimeout(() => inputRef.current?.focus(), 0);
-    return () => window.clearTimeout(id);
+    const trapFocus = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled])',
+      );
+      if (!focusable?.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener('keydown', trapFocus);
+    return () => {
+      window.clearTimeout(id);
+      window.removeEventListener('keydown', trapFocus);
+      if (previouslyFocused?.isConnected) previouslyFocused.focus();
+    };
   }, [open]);
 
   const select = async (command: Command) => {
@@ -159,6 +182,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
       }}
     >
       <section
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Command menu"
