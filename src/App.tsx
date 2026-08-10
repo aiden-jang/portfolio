@@ -18,6 +18,7 @@ import { Hint } from './ui/Hint';
 import { LoadingBar } from './ui/LoadingBar';
 import { Nav } from './ui/Nav';
 import { ResumeButton } from './ui/ResumeButton';
+import { RevButton } from './ui/RevButton';
 import { SceneBoundary } from './ui/SceneBoundary';
 import { SceneShareButton } from './ui/SceneShareButton';
 import { MobileThemeButton, ThemeToggle } from './ui/ThemeToggle';
@@ -148,6 +149,8 @@ export function App() {
               "
             >
               <CarSwitcher />
+              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+              <RevButton />
               <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
               <ColorSwatches bordered={false} />
               <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />

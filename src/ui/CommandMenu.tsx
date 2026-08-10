@@ -64,6 +64,13 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         keywords: 'theme background night day lighting',
         run: () => useAppStore.getState().toggleTheme(),
       },
+      {
+        id: 'rev',
+        label: 'Rev the engine',
+        hint: 'R',
+        keywords: 'engine car rumble shake',
+        run: () => useAppStore.getState().triggerRev(),
+      },
     ],
     [onSection],
   );
