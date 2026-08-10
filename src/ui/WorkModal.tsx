@@ -65,6 +65,24 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
 
   useEffect(() => setCopied(false), [item]);
 
+  // A direct case-study URL should feel specific in a browser tab as well as
+  // in the page. This is client-side metadata (social crawlers still receive
+  // the portfolio's static preview), but it makes a shared link much easier to
+  // recognize when someone has several tabs open.
+  useEffect(() => {
+    if (!item) return;
+    const previousTitle = document.title;
+    const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const previousDescription = description?.content;
+    document.title = `${item.shortName ?? item.title} | Aiden Jang`;
+    if (description) description.content = item.summary;
+    return () => {
+      document.title = previousTitle;
+      if (description && previousDescription !== undefined)
+        description.content = previousDescription;
+    };
+  }, [item]);
+
   useEffect(() => {
     if (!open) return;
     const previouslyFocused = document.activeElement as HTMLElement | null;
