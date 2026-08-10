@@ -204,6 +204,12 @@ export function useNavigation() {
           e.preventDefault();
           useAppStore.getState().triggerRev();
           break;
+        case 'v':
+        case 'V':
+          if (inField) return;
+          e.preventDefault();
+          useAppStore.getState().resetCamera();
+          break;
       }
     };
     // Track the active section for the nav dots / label as you scroll. A

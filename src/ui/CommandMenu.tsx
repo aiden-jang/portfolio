@@ -71,6 +71,13 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         keywords: 'engine car rumble shake',
         run: () => useAppStore.getState().triggerRev(),
       },
+      {
+        id: 'reset-view',
+        label: 'Reset camera view',
+        hint: 'V',
+        keywords: 'camera view orbit reset',
+        run: () => useAppStore.getState().resetCamera(),
+      },
     ],
     [onSection],
   );

@@ -38,6 +38,8 @@ type AppState = {
   carIndex: number;
   themeName: ThemeName;
   sectionIndex: number;
+  /** Incremented to ask CameraRig to drop any manual orbit offsets. */
+  cameraResetVersion: number;
   activeBodyColor: ActiveBodyColor;
   /** True once a car has loaded and its body material has been detected.
    *  Used by `ColorSwatches` to fade the swatch strip in. */
@@ -54,6 +56,7 @@ type AppState = {
   toggleTheme: () => void;
   setSectionIndex: (i: number) => void;
   triggerRev: () => void;
+  resetCamera: () => void;
   armIntro: () => void;
   setHasBodyMaterial: (v: boolean) => void;
   /** Set the body material to a palette color (or restore the original).
@@ -71,6 +74,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   carIndex: 0,
   themeName: 'dusk',
   sectionIndex: 0,
+  cameraResetVersion: 0,
   activeBodyColor: 'original',
   hasBodyMaterial: false,
   refs: {
@@ -95,6 +99,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   triggerRev: () => {
     get().refs.revT = 1;
   },
+  resetCamera: () => set((state) => ({ cameraResetVersion: state.cameraResetVersion + 1 })),
   armIntro: () => {
     get().refs.introArmed = true;
   },
