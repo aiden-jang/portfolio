@@ -33,6 +33,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
+  const activeResultRef = useRef<HTMLButtonElement>(null);
 
   const commands = useMemo<Command[]>(
     () => [
@@ -121,6 +122,10 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   useEffect(() => {
     setActiveIndex(0);
   }, [query, open]);
+
+  useEffect(() => {
+    activeResultRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [activeIndex, query]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -248,6 +253,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             results.map((command, index) => (
               <button
                 key={command.id}
+                ref={index === activeIndex ? activeResultRef : null}
                 id={`command-${command.id}`}
                 type="button"
                 role="option"
