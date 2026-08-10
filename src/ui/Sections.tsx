@@ -11,6 +11,13 @@ import { workId, WorkModal, type WorkDetail } from './WorkModal';
 
 type StartViewTransition = (cb: () => void) => { finished: Promise<void> };
 
+/** Keep project and professional case studies in their own browse lanes. A
+ * visitor opening a side project should not unexpectedly land in a job entry
+ * when they hit next. */
+function caseStudyLane(item: WorkDetail): WorkDetail[] {
+  return WORK_ITEMS.filter((candidate) => Boolean(candidate.mark) === Boolean(item.mark));
+}
+
 /** Top-level page layout: the five scroll sections, plus the WorkModal that any
  *  work card/row opens. Opening and closing morph the clicked card into the
  *  modal (and back) via the View Transitions API — the shared `work-morph`
@@ -84,9 +91,10 @@ export function Sections() {
   const moveWork = useCallback((step: 1 | -1) => {
     setActiveWork((current) => {
       if (!current) return current;
-      const currentIndex = WORK_ITEMS.indexOf(current);
-      const nextIndex = (currentIndex + step + WORK_ITEMS.length) % WORK_ITEMS.length;
-      const next = WORK_ITEMS[nextIndex];
+      const lane = caseStudyLane(current);
+      const currentIndex = lane.indexOf(current);
+      const nextIndex = (currentIndex + step + lane.length) % lane.length;
+      const next = lane[nextIndex];
       window.history.replaceState(null, '', `#work/${workId(next)}`);
       return next;
     });
@@ -109,7 +117,10 @@ export function Sections() {
         onNext={nextWork}
         position={
           activeWork
-            ? { current: WORK_ITEMS.indexOf(activeWork) + 1, total: WORK_ITEMS.length }
+            ? {
+                current: caseStudyLane(activeWork).indexOf(activeWork) + 1,
+                total: caseStudyLane(activeWork).length,
+              }
             : null
         }
       />
