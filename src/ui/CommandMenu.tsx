@@ -228,6 +228,14 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
                 event.preventDefault();
                 setActiveIndex((index) => (index - 1 + results.length) % results.length);
               }
+              if (event.key === 'Home' && results.length) {
+                event.preventDefault();
+                setActiveIndex(0);
+              }
+              if (event.key === 'End' && results.length) {
+                event.preventDefault();
+                setActiveIndex(results.length - 1);
+              }
               if (event.key === 'Enter' && results[activeIndex]) {
                 event.preventDefault();
                 void select(results[activeIndex]);
@@ -288,7 +296,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
           aria-live="polite"
           className="border-t border-white/[0.08] px-4 py-2.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.42)]"
         >
-          {notice || '↑ ↓ to browse · Enter to run'}
+          {notice || '↑ ↓ browse · Home End jump · Enter run'}
         </div>
       </section>
     </div>,
