@@ -16,6 +16,20 @@ export function Credits() {
     if (!open) return;
     const previouslyFocused = document.activeElement as HTMLElement | null;
     const timer = window.setTimeout(() => closeRef.current?.focus(), 0);
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const previousBody = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+    };
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setOpen(false);
       if (event.key !== 'Tab') return;
@@ -37,6 +51,12 @@ export function Credits() {
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener('keydown', onKey);
+      body.style.position = previousBody.position;
+      body.style.top = previousBody.top;
+      body.style.left = previousBody.left;
+      body.style.right = previousBody.right;
+      body.style.width = previousBody.width;
+      window.scrollTo(0, scrollY);
       if (previouslyFocused?.isConnected) previouslyFocused.focus();
     };
   }, [open]);
