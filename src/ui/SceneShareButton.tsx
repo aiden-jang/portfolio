@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CARS } from '../config';
+import { copyCurrentSceneUrl } from '../sceneLink';
 import { useAppStore } from '../store';
 
 /** Copies a small permalink to the visitor's current garage setup. The link
@@ -7,22 +8,12 @@ import { useAppStore } from '../store';
  * shareable artifact instead of a one-session interaction. */
 export function SceneShareButton() {
   const carIndex = useAppStore((state) => state.carIndex);
-  const activeBodyColor = useAppStore((state) => state.activeBodyColor);
-  const themeName = useAppStore((state) => state.themeName);
   const [copied, setCopied] = useState(false);
 
   const share = async () => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('car', String(carIndex));
-    url.searchParams.set('paint', activeBodyColor);
-    url.searchParams.set('light', themeName);
-    try {
-      await navigator.clipboard.writeText(url.toString());
+    if (await copyCurrentSceneUrl()) {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
-    } catch {
-      // Clipboard permission is not guaranteed in embedded/private browsers.
-      // The rest of the garage controls remain fully usable without it.
     }
   };
 

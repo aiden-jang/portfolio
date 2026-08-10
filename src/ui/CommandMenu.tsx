@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SECTION_IDS, type SectionId } from '../config';
+import { copyCurrentSceneUrl } from '../sceneLink';
 import { useAppStore } from '../store';
 
 type Command = {
@@ -8,7 +9,8 @@ type Command = {
   label: string;
   hint: string;
   keywords: string;
-  run: () => void;
+  run: () => void | Promise<void>;
+  closeOnRun?: boolean;
 };
 
 export const COMMAND_MENU_EVENT = 'portfolio:open-command-menu';
@@ -27,6 +29,7 @@ const SECTION_LABELS: Record<SectionId, string> = {
 export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [notice, setNotice] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const commands = useMemo<Command[]>(
@@ -80,6 +83,17 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         keywords: 'camera view orbit reset',
         run: () => useAppStore.getState().resetCamera(),
       },
+      {
+        id: 'share-garage',
+        label: 'Copy this garage link',
+        hint: 'link',
+        keywords: 'share copy car paint lighting garage',
+        closeOnRun: false,
+        run: async () => {
+          const copied = await copyCurrentSceneUrl();
+          setNotice(copied ? 'Garage link copied' : 'Could not copy the link');
+        },
+      },
     ],
     [onSection],
   );
@@ -120,15 +134,16 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   useEffect(() => {
     if (!open) {
       setQuery('');
+      setNotice('');
       return;
     }
     const id = window.setTimeout(() => inputRef.current?.focus(), 0);
     return () => window.clearTimeout(id);
   }, [open]);
 
-  const select = (command: Command) => {
-    command.run();
-    setOpen(false);
+  const select = async (command: Command) => {
+    await command.run();
+    if (command.closeOnRun !== false) setOpen(false);
   };
 
   // Keep the dialog out of the accessibility tree—and out of the tab order—
@@ -158,7 +173,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' && results[0]) select(results[0]);
+              if (event.key === 'Enter' && results[0]) void select(results[0]);
             }}
             placeholder="Jump somewhere, change the scene…"
             className="min-w-0 flex-1 bg-transparent font-[var(--font-display)] text-[0.96rem] text-[var(--color-fg)] outline-none placeholder:text-[rgba(244,240,255,0.36)]"
@@ -173,7 +188,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
               <button
                 key={command.id}
                 type="button"
-                onClick={() => select(command)}
+                onClick={() => void select(command)}
                 className="group flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition-colors hover:bg-white/[0.07]"
               >
                 <span className="text-[0.92rem] text-[rgba(244,240,255,0.86)] group-hover:text-[var(--color-fg)]">
@@ -190,8 +205,11 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             </p>
           )}
         </div>
-        <div className="border-t border-white/[0.08] px-4 py-2.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.42)]">
-          Press enter to run the first match
+        <div
+          aria-live="polite"
+          className="border-t border-white/[0.08] px-4 py-2.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.42)]"
+        >
+          {notice || 'Press enter to run the first match'}
         </div>
       </section>
     </div>,
