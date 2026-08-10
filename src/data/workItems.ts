@@ -145,7 +145,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Monolith → Django REST + React rewrite',
-    context: 'Zeta Global · 2024–present',
+    context: 'Zeta Global · 2024 to now',
     summary: 'Co-led the platform’s migration off a legacy PHP monolith. Django REST + React.',
     body: [
       'Co-led a platform-wide migration from a legacy PHP monolith to a Django REST API that now powers self-service native-ad onboarding across 30,000+ active publisher newsletters.',
@@ -187,7 +187,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Creative Mapping v2',
-    context: 'LiveIntent · 2023–2024',
+    context: 'LiveIntent · 2023 to 2024',
     summary: 'Owned Creative Mapping v2 end to end across MySQL, REST, and Angular.',
     body: [
       'Creative-to-placement targeting for the ad-serving XML pipeline. Designed the MySQL schema for the new mapping model, built the REST API on the legacy backend, and delivered the Angular UI publisher ops uses to configure targeting rules.',
