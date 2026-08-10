@@ -166,7 +166,7 @@ export function useNavigation() {
         if (carIndex < CARS.length) {
           e.preventDefault();
           const state = useAppStore.getState();
-          if (!state.isCarLoading) state.setCarIndex(carIndex);
+          if (!state.isCarLoading && state.carIndex !== carIndex) state.setCarIndex(carIndex);
         }
         return;
       }
