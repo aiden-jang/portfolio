@@ -106,7 +106,7 @@ function AppCard({
         group relative text-left rounded-xl overflow-hidden cursor-pointer animate-[project-card-in_360ms_cubic-bezier(0.22,1,0.36,1)_both]
         border border-transparent bg-[rgba(14,14,22,0.6)]
         transition-[transform,border-color,background-color] duration-200
-        hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-[rgba(16,16,26,0.72)]
+        hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-[rgba(16,16,26,0.72)] active:scale-[0.985]
         ${featured ? 'md:col-span-2' : ''}
       `}
     >
