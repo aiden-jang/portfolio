@@ -85,7 +85,9 @@ export function Car() {
     if (!spec) return;
     const refs = useAppStore.getState().refs;
     const setHasBodyMaterial = useAppStore.getState().setHasBodyMaterial;
+    const setCarLoading = useAppStore.getState().setCarLoading;
     setHasBodyMaterial(false);
+    setCarLoading(true);
     let cancelled = false;
 
     loader.load(
@@ -112,6 +114,7 @@ export function Car() {
         refs.bodyMaterial = detectBodyMaterial(model);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);
+        setCarLoading(false);
 
         if (!refs.introArmed) armIntro();
 
@@ -136,6 +139,7 @@ export function Car() {
       undefined,
       (err) => {
         if (cancelled) return;
+        setCarLoading(false);
         console.error(`Failed to load /models/${spec.file}`, err);
       },
     );

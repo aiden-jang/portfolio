@@ -8,6 +8,7 @@ import { useAppStore } from '../store';
 export function CarSwitcher() {
   const carIndex = useAppStore((s) => s.carIndex);
   const cycleCar = useAppStore((s) => s.cycleCar);
+  const isCarLoading = useAppStore((s) => s.isCarLoading);
   const car = CARS[carIndex];
 
   return (
@@ -16,6 +17,8 @@ export function CarSwitcher() {
       type="button"
       aria-label="Next car"
       onClick={cycleCar}
+      disabled={isCarLoading}
+      aria-busy={isCarLoading}
       className="
         group inline-flex items-center gap-2 cursor-pointer rounded-full px-3 py-1.5
         font-[var(--font-mono)] text-[0.72rem] tracking-[0.18em] uppercase
@@ -24,7 +27,9 @@ export function CarSwitcher() {
         [&.loading]:opacity-50 [&.loading]:pointer-events-none
       "
     >
-      <span className="min-w-[7rem] text-center truncate">{car?.name ?? '—'}</span>
+      <span className="min-w-[7rem] text-center truncate">
+        {isCarLoading ? 'Loading…' : (car?.name ?? '—')}
+      </span>
       <span className="text-[var(--color-muted)] text-[1.05em] leading-none group-hover:text-[var(--color-neon)]">
         ›
       </span>
@@ -39,6 +44,7 @@ export function MobileCarSwitcher() {
   const carIndex = useAppStore((s) => s.carIndex);
   const cycleCar = useAppStore((s) => s.cycleCar);
   const prevCar = useAppStore((s) => s.prevCar);
+  const isCarLoading = useAppStore((s) => s.isCarLoading);
   const car = CARS[carIndex];
 
   return (
@@ -50,11 +56,13 @@ export function MobileCarSwitcher() {
         text-[var(--color-fg)]
       "
     >
-      <ArrowButton label="Previous car" onClick={prevCar}>
+      <ArrowButton label="Previous car" onClick={prevCar} disabled={isCarLoading}>
         ‹
       </ArrowButton>
-      <span className="min-w-[6rem] px-1 text-center truncate">{car?.name ?? '—'}</span>
-      <ArrowButton label="Next car" onClick={cycleCar}>
+      <span aria-live="polite" className="min-w-[6rem] px-1 text-center truncate">
+        {isCarLoading ? 'Loading…' : (car?.name ?? '—')}
+      </span>
+      <ArrowButton label="Next car" onClick={cycleCar} disabled={isCarLoading}>
         ›
       </ArrowButton>
     </div>
@@ -64,10 +72,12 @@ export function MobileCarSwitcher() {
 function ArrowButton({
   label,
   onClick,
+  disabled = false,
   children,
 }: {
   label: string;
   onClick: () => void;
+  disabled?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -75,11 +85,12 @@ function ArrowButton({
       type="button"
       aria-label={label}
       onClick={onClick}
+      disabled={disabled}
       className="
         min-w-[44px] min-h-[44px] flex items-center justify-center
         text-[1.3em] leading-none text-[var(--color-muted)]
         rounded-full cursor-pointer transition-colors
-        active:text-[var(--color-neon)]
+        active:text-[var(--color-neon)] disabled:opacity-40 disabled:cursor-wait
       "
     >
       {children}
