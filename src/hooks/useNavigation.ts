@@ -231,11 +231,6 @@ export function useNavigation() {
           e.preventDefault();
           if (!useAppStore.getState().isCarLoading) useAppStore.getState().randomizeGarage();
           break;
-        case 'u':
-        case 'U':
-          e.preventDefault();
-          useAppStore.getState().undoGarageMix();
-          break;
       }
     };
     // Track the active section for the nav dots / label as you scroll. A
