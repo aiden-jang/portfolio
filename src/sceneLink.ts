@@ -19,3 +19,29 @@ export async function copyCurrentSceneUrl(): Promise<boolean> {
     return false;
   }
 }
+
+/** Use the platform share sheet when it exists, then fall back to a copied
+ * permalink. The scene still travels as a normal URL, so recipients can open
+ * the exact car, paint, and lighting setup without an account. */
+export async function shareCurrentScene(): Promise<'shared' | 'copied' | null> {
+  const url = currentSceneUrl();
+  if (typeof navigator.share === 'function') {
+    try {
+      await navigator.share({
+        title: 'Aiden Jang’s garage',
+        text: 'A car setup from Aiden Jang’s portfolio',
+        url,
+      });
+      return 'shared';
+    } catch (error) {
+      // Dismissing the native sheet is a normal choice, not a failed share.
+      if (error instanceof DOMException && error.name === 'AbortError') return null;
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    return 'copied';
+  } catch {
+    return null;
+  }
+}
