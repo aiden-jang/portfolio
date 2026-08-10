@@ -118,6 +118,20 @@
   }
 }
 
+/* Project filters swap a small grid of cards. A short rise gives the new set
+   a clear arrival without relying on layout animation or keeping old cards in
+   the DOM. Reduced-motion collapses this with the global media rule below. */
+@keyframes project-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @layer components {
   #root {
     animation: app-fade-in 0.5s ease-out both;
@@ -164,7 +178,7 @@
      the halo above). No backdrop-filter, so no per-frame cost over the animating
      canvas. Sits under the text (z-index -1 in the panel's own stacking context). */
   .panel::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: -45% -28%;
     z-index: -1;

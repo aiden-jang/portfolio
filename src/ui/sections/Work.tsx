@@ -57,9 +57,10 @@ export function WorkSection({ onOpen }: Props) {
         <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2.5">
           {visibleApps.map((item, i) => (
             <AppCard
-              key={item.title}
+              key={`${filter}-${item.title}`}
               item={item}
               featured={filter === 'all' && i === 0}
+              delay={i * 55}
               onOpen={(el) => onOpen(item, el)}
             />
           ))}
@@ -75,10 +76,12 @@ export function WorkSection({ onOpen }: Props) {
 function AppCard({
   item,
   featured,
+  delay,
   onOpen,
 }: {
   item: WorkDetail;
   featured: boolean;
+  delay: number;
   onOpen: (el: HTMLElement) => void;
 }) {
   const [clipFailed, setClipFailed] = useState(false);
@@ -88,9 +91,9 @@ function AppCard({
 
   return (
     <article
-      style={{ '--accent': accent } as CSSProperties}
+      style={{ '--accent': accent, animationDelay: `${delay}ms` } as CSSProperties}
       className={`
-        group relative text-left rounded-xl overflow-hidden cursor-pointer
+        group relative text-left rounded-xl overflow-hidden cursor-pointer animate-[project-card-in_360ms_cubic-bezier(0.22,1,0.36,1)_both]
         border border-transparent bg-[rgba(14,14,22,0.6)]
         transition-[transform,border-color,background-color] duration-200
         hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-[rgba(16,16,26,0.72)]
