@@ -90,6 +90,13 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         run: () => useAppStore.getState().randomizeGarage(),
       },
       {
+        id: 'undo-surprise',
+        label: 'Undo last garage mix',
+        hint: 'U',
+        keywords: 'undo restore previous random surprise mix garage',
+        run: () => useAppStore.getState().undoGarageMix(),
+      },
+      {
         id: 'rev',
         label: 'Rev the engine',
         hint: 'R',
