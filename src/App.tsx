@@ -9,6 +9,7 @@ const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene
 import { Brand } from './ui/Brand';
 import { CarSwitcher, MobileCarSwitcher } from './ui/CarSwitcher';
 import { ColorSwatches, MobileColorButton } from './ui/ColorSwatches';
+import { CommandMenu } from './ui/CommandMenu';
 import { FilmGrain } from './ui/FilmGrain';
 import { Hint } from './ui/Hint';
 import { LoadingBar } from './ui/LoadingBar';
@@ -120,6 +121,7 @@ export function App() {
           <SectionDots onJump={scrollToSection} placement="rail" />
           <Sections />
           <Hint />
+          <CommandMenu onSection={scrollToSection} />
         </>
       )}
       <Analytics />
