@@ -50,6 +50,7 @@ type AppState = {
   setCarIndex: (i: number) => void;
   cycleCar: () => void;
   prevCar: () => void;
+  setThemeName: (theme: ThemeName) => void;
   toggleTheme: () => void;
   setSectionIndex: (i: number) => void;
   triggerRev: () => void;
@@ -88,6 +89,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       carIndex: (get().carIndex - 1 + CARS.length) % CARS.length,
       activeBodyColor: 'original',
     }),
+  setThemeName: (theme) => set({ themeName: theme }),
   toggleTheme: () => set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
   setSectionIndex: (i) => set({ sectionIndex: i }),
   triggerRev: () => {
