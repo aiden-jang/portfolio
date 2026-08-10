@@ -158,6 +158,9 @@ export function useNavigation() {
         target instanceof HTMLInputElement ||
         target instanceof HTMLTextAreaElement ||
         !!target?.isContentEditable;
+      // Inputs own their navigation keys. Without this guard, pressing ↑/↓
+      // inside the command palette also scrolls the portfolio behind it.
+      if (inField) return;
       switch (e.key) {
         case 'ArrowDown':
         case 'PageDown':
@@ -188,31 +191,26 @@ export function useNavigation() {
           break;
         case 'c':
         case 'C':
-          if (inField) return;
           e.preventDefault();
           useAppStore.getState().cycleBodyColor();
           break;
         case 'b':
         case 'B':
-          if (inField) return;
           e.preventDefault();
           useAppStore.getState().toggleTheme();
           break;
         case 'r':
         case 'R':
-          if (inField) return;
           e.preventDefault();
           useAppStore.getState().triggerRev();
           break;
         case 'v':
         case 'V':
-          if (inField) return;
           e.preventDefault();
           useAppStore.getState().resetCamera();
           break;
         case 'x':
         case 'X':
-          if (inField) return;
           e.preventDefault();
           useAppStore.getState().randomizeGarage();
           break;
