@@ -141,7 +141,7 @@ export function App() {
             "
           >
             <SectionDots onJump={scrollToSection} placement="bar" />
-            {/* Car switcher + color + background on one line to keep it compact. */}
+            {/* Car switcher, color, and studio lighting on one compact line. */}
             <div className="flex items-center gap-2">
               <MobileCarSwitcher />
               <MobileColorButton />
@@ -160,7 +160,7 @@ export function App() {
               pointer-events-none
             "
           >
-            {/* One cohesive control bar: car | color | background. */}
+            {/* One cohesive control bar: car | color | studio lighting. */}
             <div
               className="
                 pointer-events-auto flex items-center gap-1

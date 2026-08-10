@@ -43,7 +43,7 @@ export function Nav({ onLink }: Props) {
           />
         ))}
       </div>
-      {/* Scene controls (car, color, background) all live in the bottom dock
+      {/* Scene controls (car, color, studio lighting) all live in the bottom dock
           (see App.tsx), not here — packing them into this right-anchored row
           made the nav wide enough to run under the brand wordmark. */}
       <ResumeButton />
