@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SECTION_IDS, type SectionId } from '../config';
-import { copyCurrentSceneUrl } from '../sceneLink';
+import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
 
 type Command = {
@@ -94,13 +94,19 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
       },
       {
         id: 'share-garage',
-        label: 'Copy this garage link',
+        label: 'Share this garage',
         hint: 'link',
         keywords: 'share copy car paint lighting garage',
         closeOnRun: false,
         run: async () => {
-          const copied = await copyCurrentSceneUrl();
-          setNotice(copied ? 'Garage link copied' : 'Could not copy the link');
+          const result = await shareCurrentScene();
+          setNotice(
+            result === 'shared'
+              ? 'Garage shared'
+              : result === 'copied'
+                ? 'Garage link copied'
+                : 'Could not share the garage',
+          );
         },
       },
     ],
