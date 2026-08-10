@@ -3,9 +3,9 @@ import type { WorkDetail } from '../WorkModal';
 import { EYEBROW, H2, P_LI, Section, UL_BASE } from './shared';
 
 const ROLES = [
-  'Software Engineer · Zeta Global · 2024–present',
-  'Software Engineer · LiveIntent · 2023–2024',
-  'Associate Software Engineer · LiveIntent · 2022–2023',
+  'Software Engineer · Zeta Global · 2024 to now',
+  'Software Engineer · LiveIntent · 2023 to 2024',
+  'Associate Software Engineer · LiveIntent · 2022 to 2023',
 ];
 
 type Props = {
