@@ -81,17 +81,19 @@ export function Sections() {
     runMorph(() => setActiveWork(null), lastCard.current, false);
   }, [runMorph]);
 
-  const moveWork = useCallback(
-    (step: 1 | -1) => {
-      if (!activeWork) return;
-      const currentIndex = WORK_ITEMS.indexOf(activeWork);
+  const moveWork = useCallback((step: 1 | -1) => {
+    setActiveWork((current) => {
+      if (!current) return current;
+      const currentIndex = WORK_ITEMS.indexOf(current);
       const nextIndex = (currentIndex + step + WORK_ITEMS.length) % WORK_ITEMS.length;
       const next = WORK_ITEMS[nextIndex];
       window.history.replaceState(null, '', `#work/${workId(next)}`);
-      setActiveWork(next);
-    },
-    [activeWork],
-  );
+      return next;
+    });
+  }, []);
+
+  const previousWork = useCallback(() => moveWork(-1), [moveWork]);
+  const nextWork = useCallback(() => moveWork(1), [moveWork]);
 
   return (
     <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
@@ -103,8 +105,8 @@ export function Sections() {
       <WorkModal
         item={activeWork}
         onClose={closeWork}
-        onPrevious={() => moveWork(-1)}
-        onNext={() => moveWork(1)}
+        onPrevious={previousWork}
+        onNext={nextWork}
         position={
           activeWork
             ? { current: WORK_ITEMS.indexOf(activeWork) + 1, total: WORK_ITEMS.length }
