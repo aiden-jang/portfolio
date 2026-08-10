@@ -119,7 +119,7 @@ export function App() {
             id="mobile-bar"
             className="
               md:hidden fixed inset-x-0 bottom-0 z-30 pointer-events-none
-              flex flex-col items-center gap-2.5 pt-6 pb-[max(3vh,env(safe-area-inset-bottom))]
+              flex flex-col items-center gap-2 pt-5 pb-[max(3vh,env(safe-area-inset-bottom))]
               bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/70 to-transparent
             "
           >
