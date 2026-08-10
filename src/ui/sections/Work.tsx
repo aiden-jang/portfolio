@@ -19,7 +19,7 @@ export function WorkSection({ onOpen }: Props) {
     <Section id="sec-work" side="right">
       <div className="panel pointer-events-auto w-full max-w-[560px]">
         <span className={EYEBROW}>02 / PROJECTS</span>
-        <h2 className={H2}>Things I&apos;ve built</h2>
+        <h2 className={H2}>A few things I&apos;ve made</h2>
 
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2.5">
           {apps.map((item, i) => (
