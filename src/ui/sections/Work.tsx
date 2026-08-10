@@ -9,24 +9,57 @@ type Props = {
   onOpen: (item: WorkDetail, el: HTMLElement) => void;
 };
 
+const FILTERS = [
+  { id: 'all', label: 'All' },
+  { id: 'realtime', label: 'Realtime' },
+  { id: 'ai', label: 'AI' },
+  { id: 'social', label: 'For people' },
+  { id: 'systems', label: 'Systems' },
+] as const;
+type FilterId = (typeof FILTERS)[number]['id'];
+
 /** Side-projects section: the shipped apps (entries with a `mark`) as a product
  *  card grid. The professional highlights live in the Experience section above;
  *  these stand on their own as what I build outside of work. */
 export function WorkSection({ onOpen }: Props) {
   const apps = WORK_ITEMS.filter((i) => i.mark);
+  const [filter, setFilter] = useState<FilterId>('all');
+  const visibleApps =
+    filter === 'all' ? apps : apps.filter((item) => item.categories?.includes(filter));
 
   return (
     <Section id="sec-work" side="right">
       <div className="panel pointer-events-auto w-full max-w-[560px]">
         <span className={EYEBROW}>02 / PROJECTS</span>
-        <h2 className={H2}>A few things I&apos;ve made</h2>
+        <h2 className={H2}>Stuff I&apos;ve made</h2>
 
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2.5">
-          {apps.map((item, i) => (
+        <div aria-label="Filter projects" className="mt-4 flex flex-wrap gap-1.5">
+          {FILTERS.map((option) => {
+            const active = option.id === filter;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => setFilter(option.id)}
+                aria-pressed={active}
+                className={`rounded-full border px-2.5 py-1.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.13em] uppercase transition-colors ${
+                  active
+                    ? 'border-[var(--color-neon)] bg-[var(--color-neon)]/10 text-[var(--color-neon)]'
+                    : 'border-white/[0.09] text-[var(--color-muted)] hover:border-white/[0.25] hover:text-[var(--color-fg)]'
+                }`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          {visibleApps.map((item, i) => (
             <AppCard
               key={item.title}
               item={item}
-              featured={i === 0}
+              featured={filter === 'all' && i === 0}
               onOpen={(el) => onOpen(item, el)}
             />
           ))}

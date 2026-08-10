@@ -33,6 +33,9 @@ export type WorkDetail = {
   moment?: string;
   /** A concise product decision worth surfacing before the technical detail. */
   principle?: string;
+  /** Browsing lenses used by the project explorer. Omitted for professional
+   * case studies because they remain in the Experience section. */
+  categories?: Array<'realtime' | 'ai' | 'social' | 'systems'>;
 };
 
 /** Stable, human-readable fragment for opening a particular case study. */
