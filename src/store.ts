@@ -44,6 +44,8 @@ type AppState = {
   /** True once a car has loaded and its body material has been detected.
    *  Used by `ColorSwatches` to fade the swatch strip in. */
   hasBodyMaterial: boolean;
+  /** True while the selected car model is being loaded into the scene. */
+  isCarLoading: boolean;
 
   // ---- Imperative refs (high-frequency, do not trigger re-renders) ----
   refs: Refs;
@@ -59,6 +61,7 @@ type AppState = {
   resetCamera: () => void;
   armIntro: () => void;
   setHasBodyMaterial: (v: boolean) => void;
+  setCarLoading: (v: boolean) => void;
   /** Set the body material to a palette color (or restore the original).
    *  Both the swatch click handler and the keyboard cycle route through here
    *  so the UI's active-swatch indicator stays in sync. */
@@ -77,6 +80,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   cameraResetVersion: 0,
   activeBodyColor: 'original',
   hasBodyMaterial: false,
+  isCarLoading: true,
   refs: {
     bodyMaterial: null,
     bodyOriginalColor: null,
@@ -104,6 +108,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().refs.introArmed = true;
   },
   setHasBodyMaterial: (v) => set({ hasBodyMaterial: v }),
+  setCarLoading: (v) => set({ isCarLoading: v }),
   applyBodyColor: (color) => {
     const refs = get().refs;
     const mat = refs.bodyMaterial;
