@@ -51,12 +51,12 @@ type Props = {
  *  panel to keep readability high. */
 export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props) {
   const open = !!item;
-  const [copied, setCopied] = useState(false);
+  const [linkResult, setLinkResult] = useState<'shared' | 'copied' | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  useEffect(() => setCopied(false), [item]);
+  useEffect(() => setLinkResult(null), [item]);
 
   // A direct case-study URL should feel specific in a browser tab as well as
   // in the page. This is client-side metadata (social crawlers still receive
@@ -147,11 +147,25 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     };
   }, [onClose, onNext, onPrevious, open]);
 
-  const copyCaseStudyLink = async () => {
+  const shareCaseStudyLink = async () => {
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: item?.shortName ?? item?.title ?? 'Aiden Jang case study',
+          text: item?.summary,
+          url: window.location.href,
+        });
+        setLinkResult('shared');
+        window.setTimeout(() => setLinkResult(null), 1800);
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+      }
+    }
     try {
       await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
+      setLinkResult('copied');
+      window.setTimeout(() => setLinkResult(null), 1800);
     } catch {
       // Clipboard access can be unavailable in a private or embedded browser.
       // The current URL is still a normal, shareable deep link in that case.
@@ -360,7 +374,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                 ))}
                 <button
                   type="button"
-                  onClick={() => void copyCaseStudyLink()}
+                  onClick={() => void shareCaseStudyLink()}
                   className="
                     inline-flex items-center gap-2 px-5 py-2.5 rounded-full cursor-pointer
                     border border-[var(--color-line)]
@@ -369,8 +383,12 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                     hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
                   "
                 >
-                  {copied ? 'Link copied' : 'Copy link'}
-                  <span aria-hidden="true">{copied ? '✓' : '↗'}</span>
+                  {linkResult === 'shared'
+                    ? 'Link shared'
+                    : linkResult === 'copied'
+                      ? 'Link copied'
+                      : 'Share link'}
+                  <span aria-hidden="true">{linkResult ? '✓' : '↗'}</span>
                 </button>
               </div>
             )}
