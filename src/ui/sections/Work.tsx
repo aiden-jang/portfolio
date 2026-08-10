@@ -26,6 +26,8 @@ export function WorkSection({ onOpen }: Props) {
   const [filter, setFilter] = useState<FilterId>('all');
   const visibleApps =
     filter === 'all' ? apps : apps.filter((item) => item.categories?.includes(filter));
+  const filterCount = (id: FilterId) =>
+    id === 'all' ? apps.length : apps.filter((item) => item.categories?.includes(id)).length;
 
   return (
     <Section id="sec-work" side="right">
@@ -42,6 +44,7 @@ export function WorkSection({ onOpen }: Props) {
                 type="button"
                 onClick={() => setFilter(option.id)}
                 aria-pressed={active}
+                aria-label={`${option.label}, ${filterCount(option.id)} projects`}
                 className={`rounded-full border px-2.5 py-1.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.13em] uppercase transition-colors ${
                   active
                     ? 'border-[var(--color-neon)] bg-[var(--color-neon)]/10 text-[var(--color-neon)]'
@@ -49,10 +52,17 @@ export function WorkSection({ onOpen }: Props) {
                 }`}
               >
                 {option.label}
+                <span aria-hidden="true" className="ml-1 opacity-55">
+                  {filterCount(option.id)}
+                </span>
               </button>
             );
           })}
         </div>
+
+        <p aria-live="polite" className="sr-only">
+          Showing {visibleApps.length} {filter === 'all' ? 'projects' : `${filter} projects`}.
+        </p>
 
         <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2.5">
           {visibleApps.map((item, i) => (
