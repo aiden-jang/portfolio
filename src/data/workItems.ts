@@ -22,7 +22,15 @@ export const WORK_ITEMS: WorkDetail[] = [
       'The auth Worker issues an httpOnly session cookie on the parent domain, and a published npm package (@aidenjang/auth-client) is the single source of truth for the session contract. Apps never touch the session secret; they forward the cookie to /auth/me from their own Worker. It supports email + password (PBKDF2), Google OIDC, and passwordless magic links, all enforced server-side.',
       'Each app is its own repo that pins the SDK as a versioned dependency, so a change to the session contract is a deliberate version bump rather than silent drift across apps. Signing in is optional everywhere: it syncs your data across apps, but nothing gates on an account.',
     ],
-    stack: ['Cloudflare Workers', 'Durable Objects', 'D1', 'OIDC', 'npm SDK', 'TypeScript', 'React'],
+    stack: [
+      'Cloudflare Workers',
+      'Durable Objects',
+      'D1',
+      'OIDC',
+      'npm SDK',
+      'TypeScript',
+      'React',
+    ],
     mark: 'auth',
     shortName: 'platform',
     tagline: 'One login, every app.',
@@ -50,6 +58,9 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'iguess',
     shortName: 'iguess',
     tagline: 'Pictionary vs. a robot.',
+    moment: 'turning a bad doodle into a tiny event',
+    principle:
+      'The AI is a player with the same rules, score, and chance to be gloriously wrong—not a feature bolted beside the game.',
     link: { label: 'Play iguess', url: 'https://iguess.aidenjang.com' },
   },
   {
@@ -65,6 +76,9 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'owewell',
     shortName: 'owewell',
     tagline: 'Who owes who, no drama.',
+    moment: 'ending the trip without spreadsheet energy',
+    principle:
+      'The product does the awkward arithmetic quietly, then leaves people with the smallest possible set of things to settle.',
     link: { label: 'Open owewell', url: 'https://owewell.aidenjang.com' },
   },
   {
@@ -80,6 +94,9 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'wherever',
     shortName: 'wherever',
     tagline: 'Swipe. Eat. No arguing.',
+    moment: 'escaping the group-chat decision spiral',
+    principle:
+      'Majority is intentional: one person can have a preference without holding dinner hostage.',
     link: { label: 'Open wherever', url: 'https://wherever.aidenjang.com' },
   },
   {
@@ -95,6 +112,9 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'bloomnote',
     shortName: 'bloomnote',
     tagline: 'A note, then a garden.',
+    moment: 'making a specific feeling feel kept',
+    principle:
+      'The note is the design brief, so the generated garden answers the person instead of producing greeting-card filler.',
     link: { label: 'Open bloomnote', url: 'https://bloomnote.aidenjang.com' },
   },
   {
@@ -112,6 +132,9 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'mrrp',
     shortName: 'mrrp',
     tagline: 'One of you is the cat.',
+    moment: 'being close without needing to perform closeness',
+    principle:
+      'No streaks, guilt, or read receipts. The cat responds to a hard day so people never have to protect the product by lying to it.',
     link: { label: 'Make a room', url: 'https://mrrp.aidenjang.com' },
   },
   {
@@ -137,7 +160,8 @@ export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'Ad Slot Details: 120 → 1 API call',
     context: 'Zeta Global',
-    summary: 'Cut a page ad ops and clients use daily from 120 API calls per load down to one, and 60s to 2s.',
+    summary:
+      'Cut a page ad ops and clients use daily from 120 API calls per load down to one, and 60s to 2s.',
     body: [
       'The page eagerly loaded every linked line item, one API call each, so a slot with a hundred of them made a hundred round-trips before anything rendered. I consolidated them into a single batched endpoint returning exactly the joined data the page needs.',
       'Load time went from “go get coffee” to instant. The internal ops and sales teams who used it daily said thanks in #engineering.',

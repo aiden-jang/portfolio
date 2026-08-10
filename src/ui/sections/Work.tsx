@@ -97,6 +97,18 @@ function AppCard({
         <span className="mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] max-md:hidden">
           {item.tagline ?? item.summary}
         </span>
+        {item.moment && (
+          <span className="mt-1 flex items-center gap-1.5 font-[var(--font-mono)] text-[0.57rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.46)] max-md:hidden">
+            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-[var(--accent)]" />
+            {item.moment}
+          </span>
+        )}
+      </span>
+      <span
+        aria-hidden="true"
+        className="hidden md:block text-[var(--color-muted)] transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-[var(--accent)]"
+      >
+        ↗
       </span>
     </button>
   );
