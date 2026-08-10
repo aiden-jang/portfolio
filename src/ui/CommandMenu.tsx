@@ -51,7 +51,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         keywords: `${car.name} ${car.code} vehicle garage`,
         run: () => {
           const state = useAppStore.getState();
-          if (!state.isCarLoading) state.setCarIndex(index);
+          if (!state.isCarLoading && state.carIndex !== index) state.setCarIndex(index);
         },
       })),
       {
