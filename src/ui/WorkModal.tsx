@@ -28,6 +28,11 @@ export type WorkDetail = {
   /** Optional looping preview clip (webm/mp4) played on hover in the card.
    *  Falls back to the mark when absent or on load error. */
   preview?: string;
+  /** The small human moment this product is designed to improve. Shown in the
+   *  card and case study so the projects scan as products, not just stacks. */
+  moment?: string;
+  /** A concise product decision worth surfacing before the technical detail. */
+  principle?: string;
 };
 
 type Props = {
@@ -131,37 +136,51 @@ export function WorkModal({ item, onClose }: Props) {
             {/* Scrollable body. overscroll-contain stops the scroll from chaining to the page
                 behind the modal when you hit the top or bottom. */}
             <div className="flex-1 overflow-y-auto overscroll-contain p-5 pt-5 md:p-7 md:pt-6">
-            {item.image && (
-              <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
-            )}
-            <Eyebrow>{item.context}</Eyebrow>
-            <h3 className="mt-3 mb-1 text-[clamp(1.6rem,3.2vw,2.2rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
-              {item.title}
-            </h3>
-            <p className="mt-2 mb-5 text-[rgba(244,240,255,0.6)] text-[0.95rem] leading-[1.5]">
-              {item.summary}
-            </p>
-            <div className="space-y-3">
-              {item.body.map((para, i) => (
-                <p key={i} className="text-[rgba(244,240,255,0.85)] text-[0.98rem] leading-[1.6]">
-                  {para}
-                </p>
-              ))}
-            </div>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {item.stack.map((tag) => (
-                <span
-                  key={tag}
-                  className="
+              {item.image && (
+                <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
+              )}
+              <Eyebrow>{item.context}</Eyebrow>
+              <h3 className="mt-3 mb-1 text-[clamp(1.6rem,3.2vw,2.2rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
+                {item.title}
+              </h3>
+              <p className="mt-2 mb-5 text-[rgba(244,240,255,0.6)] text-[0.95rem] leading-[1.5]">
+                {item.summary}
+              </p>
+              {(item.moment || item.principle) && (
+                <aside className="mb-5 rounded-xl border border-white/[0.1] bg-white/[0.035] p-4">
+                  {item.moment && (
+                    <p className="font-[var(--font-mono)] text-[0.62rem] tracking-[0.18em] uppercase text-[var(--color-neon)]">
+                      Designed for · {item.moment}
+                    </p>
+                  )}
+                  {item.principle && (
+                    <p className="mt-2 text-[0.92rem] leading-[1.45] text-[rgba(244,240,255,0.84)]">
+                      {item.principle}
+                    </p>
+                  )}
+                </aside>
+              )}
+              <div className="space-y-3">
+                {item.body.map((para, i) => (
+                  <p key={i} className="text-[rgba(244,240,255,0.85)] text-[0.98rem] leading-[1.6]">
+                    {para}
+                  </p>
+                ))}
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {item.stack.map((tag) => (
+                  <span
+                    key={tag}
+                    className="
                     px-2.5 py-1 rounded-full border border-[var(--color-line)]
                     font-[var(--font-mono)] text-[0.68rem] tracking-[0.16em] uppercase
                     text-[var(--color-muted)]
                   "
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
             {(item.link || item.links?.length) && (
               // Footer lives OUTSIDE the scroll area (a flex sibling), so it is always flush to the
