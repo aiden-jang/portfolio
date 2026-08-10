@@ -49,12 +49,15 @@ export function workId(item: WorkDetail): string {
 type Props = {
   item: WorkDetail | null;
   onClose: () => void;
+  onPrevious: () => void;
+  onNext: () => void;
+  position: { current: number; total: number } | null;
 };
 
 /** Centered detail card opened from a Work row. Backdrop click + Escape close.
  *  Locks body scroll while open. No glass — clean dimmed overlay + opaque
  *  panel to keep readability high. */
-export function WorkModal({ item, onClose }: Props) {
+export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props) {
   const open = !!item;
   const [copied, setCopied] = useState(false);
 
@@ -64,6 +67,14 @@ export function WorkModal({ item, onClose }: Props) {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        onPrevious();
+      }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        onNext();
+      }
     };
     window.addEventListener('keydown', onKey);
 
@@ -100,7 +111,7 @@ export function WorkModal({ item, onClose }: Props) {
       body.classList.remove('modal-open');
       window.scrollTo(0, scrollY);
     };
-  }, [open, onClose]);
+  }, [onClose, onNext, onPrevious, open]);
 
   const copyCaseStudyLink = async () => {
     try {
@@ -206,6 +217,34 @@ export function WorkModal({ item, onClose }: Props) {
                   </span>
                 ))}
               </div>
+            </div>
+            <div className="shrink-0 flex items-center justify-between gap-3 px-5 md:px-7 py-3 border-t border-[var(--color-line)]">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={onPrevious}
+                  aria-label="Previous case study"
+                  className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={onNext}
+                  aria-label="Next case study"
+                  className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]"
+                >
+                  →
+                </button>
+                {position && (
+                  <span className="ml-2 font-[var(--font-mono)] text-[0.58rem] tracking-[0.14em] text-[var(--color-muted)]">
+                    {position.current} / {position.total}
+                  </span>
+                )}
+              </div>
+              <span className="font-[var(--font-mono)] text-[0.55rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.38)] max-md:hidden">
+                ← → browse
+              </span>
             </div>
             {(item.link || item.links?.length || item.shortName) && (
               // Footer lives OUTSIDE the scroll area (a flex sibling), so it is always flush to the

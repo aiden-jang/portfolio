@@ -81,6 +81,18 @@ export function Sections() {
     runMorph(() => setActiveWork(null), lastCard.current, false);
   }, [runMorph]);
 
+  const moveWork = useCallback(
+    (step: 1 | -1) => {
+      if (!activeWork) return;
+      const currentIndex = WORK_ITEMS.indexOf(activeWork);
+      const nextIndex = (currentIndex + step + WORK_ITEMS.length) % WORK_ITEMS.length;
+      const next = WORK_ITEMS[nextIndex];
+      window.history.replaceState(null, '', `#work/${workId(next)}`);
+      setActiveWork(next);
+    },
+    [activeWork],
+  );
+
   return (
     <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
       <IntroSection />
@@ -88,7 +100,17 @@ export function Sections() {
       <WorkSection onOpen={openWork} />
       <AboutSection />
       <ContactSection />
-      <WorkModal item={activeWork} onClose={closeWork} />
+      <WorkModal
+        item={activeWork}
+        onClose={closeWork}
+        onPrevious={() => moveWork(-1)}
+        onNext={() => moveWork(1)}
+        position={
+          activeWork
+            ? { current: WORK_ITEMS.indexOf(activeWork) + 1, total: WORK_ITEMS.length }
+            : null
+        }
+      />
     </main>
   );
 }
