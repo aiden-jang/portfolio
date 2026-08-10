@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 
@@ -8,6 +9,7 @@ export function SceneShareButton() {
   const carIndex = useAppStore((state) => state.carIndex);
   const activeBodyColor = useAppStore((state) => state.activeBodyColor);
   const themeName = useAppStore((state) => state.themeName);
+  const [copied, setCopied] = useState(false);
 
   const share = async () => {
     const url = new URL(window.location.href);
@@ -16,6 +18,8 @@ export function SceneShareButton() {
     url.searchParams.set('light', themeName);
     try {
       await navigator.clipboard.writeText(url.toString());
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
     } catch {
       // Clipboard permission is not guaranteed in embedded/private browsers.
       // The rest of the garage controls remain fully usable without it.
@@ -24,25 +28,47 @@ export function SceneShareButton() {
 
   const car = CARS[carIndex];
   return (
-    <button
-      type="button"
-      onClick={() => void share()}
-      aria-label={`Copy a link to this ${car?.name ?? 'car'} setup`}
-      title="Copy this garage setup"
-      className="group inline-grid h-8 w-8 place-items-center rounded-full text-[var(--color-muted)] transition-transform duration-200 hover:scale-110 hover:text-[var(--color-neon)]"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        width="15"
-        height="15"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        aria-hidden="true"
+    <div className="relative">
+      {copied && (
+        <span
+          role="status"
+          className="pointer-events-none absolute bottom-full right-0 mb-2 whitespace-nowrap rounded-full border border-[var(--color-neon)] bg-[#0b0b15] px-2.5 py-1 font-[var(--font-mono)] text-[0.58rem] tracking-[0.13em] uppercase text-[var(--color-neon)] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.85)] animate-[app-fade-in_160ms_ease-out_both]"
+        >
+          Garage link copied
+        </span>
+      )}
+      <button
+        type="button"
+        onClick={() => void share()}
+        aria-label={
+          copied ? 'Garage link copied' : `Copy a link to this ${car?.name ?? 'car'} setup`
+        }
+        title="Copy this garage setup"
+        className={`group inline-grid h-8 w-8 place-items-center rounded-full transition-transform duration-200 hover:scale-110 ${
+          copied
+            ? 'text-[var(--color-neon)]'
+            : 'text-[var(--color-muted)] hover:text-[var(--color-neon)]'
+        }`}
       >
-        <path d="M8 12a4 4 0 0 1 4-4h4a4 4 0 1 1 0 8h-4a4 4 0 0 1-4-4Z" />
-        <path d="M16 12a4 4 0 0 1-4 4H8a4 4 0 1 1 0-8h4a4 4 0 0 1 4 4Z" />
-      </svg>
-    </button>
+        {copied ? (
+          <span aria-hidden="true" className="text-[0.95rem]">
+            ✓
+          </span>
+        ) : (
+          <svg
+            viewBox="0 0 24 24"
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            aria-hidden="true"
+          >
+            <path d="M8 12a4 4 0 0 1 4-4h4a4 4 0 1 1 0 8h-4a4 4 0 0 1-4-4Z" />
+            <path d="M16 12a4 4 0 0 1-4 4H8a4 4 0 1 1 0-8h4a4 4 0 0 1 4 4Z" />
+          </svg>
+        )}
+      </button>
+    </div>
   );
 }
