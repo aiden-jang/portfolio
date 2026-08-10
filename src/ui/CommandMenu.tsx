@@ -59,21 +59,30 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         label: 'Next car',
         hint: '→',
         keywords: 'car vehicle switch',
-        run: () => useAppStore.getState().cycleCar(),
+        run: () => {
+          const state = useAppStore.getState();
+          if (!state.isCarLoading) state.cycleCar();
+        },
       },
       {
         id: 'previous-car',
         label: 'Previous car',
         hint: '←',
         keywords: 'car vehicle switch',
-        run: () => useAppStore.getState().prevCar(),
+        run: () => {
+          const state = useAppStore.getState();
+          if (!state.isCarLoading) state.prevCar();
+        },
       },
       {
         id: 'repaint',
         label: 'Change paint color',
         hint: 'C',
         keywords: 'paint color body repaint',
-        run: () => useAppStore.getState().cycleBodyColor(),
+        run: () => {
+          const state = useAppStore.getState();
+          if (!state.isCarLoading) state.cycleBodyColor();
+        },
       },
       {
         id: 'theme',
@@ -87,7 +96,10 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         label: 'Surprise me',
         hint: 'X',
         keywords: 'randomize surprise shuffle garage car paint lighting',
-        run: () => useAppStore.getState().randomizeGarage(),
+        run: () => {
+          const state = useAppStore.getState();
+          if (!state.isCarLoading) state.randomizeGarage();
+        },
       },
       {
         id: 'undo-surprise',

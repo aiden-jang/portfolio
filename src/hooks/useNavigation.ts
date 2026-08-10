@@ -101,12 +101,14 @@ export function useNavigation() {
   const cycleCarThrottled = useCallback(() => {
     const now = performance.now();
     if (now < carLockUntil.current) return;
+    if (useAppStore.getState().isCarLoading) return;
     carLockUntil.current = now + CAR_LOCK_MS;
     useAppStore.getState().cycleCar();
   }, []);
   const prevCarThrottled = useCallback(() => {
     const now = performance.now();
     if (now < carLockUntil.current) return;
+    if (useAppStore.getState().isCarLoading) return;
     carLockUntil.current = now + CAR_LOCK_MS;
     useAppStore.getState().prevCar();
   }, []);
@@ -207,7 +209,7 @@ export function useNavigation() {
         case 'c':
         case 'C':
           e.preventDefault();
-          useAppStore.getState().cycleBodyColor();
+          if (!useAppStore.getState().isCarLoading) useAppStore.getState().cycleBodyColor();
           break;
         case 'b':
         case 'B':
@@ -227,7 +229,7 @@ export function useNavigation() {
         case 'x':
         case 'X':
           e.preventDefault();
-          useAppStore.getState().randomizeGarage();
+          if (!useAppStore.getState().isCarLoading) useAppStore.getState().randomizeGarage();
           break;
         case 'u':
         case 'U':
