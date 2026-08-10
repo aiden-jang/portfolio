@@ -31,6 +31,7 @@
      matching scroll-snap-align (snap-start). */
   html {
     scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
     /* No elastic rubber-band past the first/last section, and no scroll
        chaining — the page ends cleanly at the last section. */
     overscroll-behavior-y: none;
