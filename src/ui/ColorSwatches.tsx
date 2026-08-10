@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
 
 /** Compact tappable color control for the mobile bottom bar. The 7-swatch row
@@ -41,14 +42,26 @@ export function MobileColorButton() {
  *  `bordered` draws the side dividers used inside the desktop nav row; the
  *  standalone mobile instance turns it off. */
 export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
+  const carIndex = useAppStore((s) => s.carIndex);
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const applyBodyColor = useAppStore((s) => s.applyBodyColor);
   const hasBody = useAppStore((s) => s.hasBodyMaterial);
+
+  // A color button can retain keyboard focus after an arrow-key car switch.
+  // Remounting the swatch row on a new car removes that stale focus outline as
+  // well as the old car's active paint treatment.
+  useEffect(() => {
+    const focused = document.activeElement;
+    if (focused instanceof HTMLButtonElement && focused.dataset.colorSwatch === 'true') {
+      focused.blur();
+    }
+  }, [carIndex]);
 
   // Always rendered so the nav layout doesn't shift when the body material
   // finishes detecting. Visually muted + non-interactive while we wait.
   return (
     <div
+      key={carIndex}
       aria-label="Body color"
       aria-hidden={!hasBody}
       className={`
@@ -93,6 +106,7 @@ function SwatchButton({
   return (
     <button
       type="button"
+      data-color-swatch="true"
       title={title}
       onClick={onClick}
       className={`
