@@ -30,6 +30,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState('');
+  const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
 
@@ -103,6 +104,10 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
     const needle = query.trim().toLowerCase();
     return !needle || `${command.label} ${command.keywords}`.toLowerCase().includes(needle);
   });
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [query, open]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -197,25 +202,52 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' && results[0]) void select(results[0]);
+              if (event.key === 'ArrowDown' && results.length) {
+                event.preventDefault();
+                setActiveIndex((index) => (index + 1) % results.length);
+              }
+              if (event.key === 'ArrowUp' && results.length) {
+                event.preventDefault();
+                setActiveIndex((index) => (index - 1 + results.length) % results.length);
+              }
+              if (event.key === 'Enter' && results[activeIndex]) {
+                event.preventDefault();
+                void select(results[activeIndex]);
+              }
             }}
             placeholder="Jump somewhere, change the scene…"
+            aria-activedescendant={
+              results[activeIndex] ? `command-${results[activeIndex].id}` : undefined
+            }
+            aria-controls="command-results"
             className="min-w-0 flex-1 bg-transparent font-[var(--font-display)] text-[0.96rem] text-[var(--color-fg)] outline-none placeholder:text-[rgba(244,240,255,0.36)]"
           />
           <kbd className="rounded border border-white/[0.12] px-1.5 py-0.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.1em] text-[var(--color-muted)]">
             ESC
           </kbd>
         </div>
-        <div className="max-h-[52dvh] overflow-y-auto p-2">
+        <div id="command-results" role="listbox" className="max-h-[52dvh] overflow-y-auto p-2">
           {results.length ? (
-            results.map((command) => (
+            results.map((command, index) => (
               <button
                 key={command.id}
+                id={`command-${command.id}`}
                 type="button"
+                role="option"
+                aria-selected={index === activeIndex}
                 onClick={() => void select(command)}
-                className="group flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition-colors hover:bg-white/[0.07]"
+                onMouseEnter={() => setActiveIndex(index)}
+                className={`group flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition-colors ${
+                  index === activeIndex ? 'bg-white/[0.07]' : 'hover:bg-white/[0.07]'
+                }`}
               >
-                <span className="text-[0.92rem] text-[rgba(244,240,255,0.86)] group-hover:text-[var(--color-fg)]">
+                <span
+                  className={`text-[0.92rem] transition-colors ${
+                    index === activeIndex
+                      ? 'text-[var(--color-fg)]'
+                      : 'text-[rgba(244,240,255,0.86)] group-hover:text-[var(--color-fg)]'
+                  }`}
+                >
                   {command.label}
                 </span>
                 <span className="font-[var(--font-mono)] text-[0.58rem] tracking-[0.14em] uppercase text-[var(--color-muted)]">
@@ -233,7 +265,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
           aria-live="polite"
           className="border-t border-white/[0.08] px-4 py-2.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.42)]"
         >
-          {notice || 'Press enter to run the first match'}
+          {notice || '↑ ↓ to browse · Enter to run'}
         </div>
       </section>
     </div>,
