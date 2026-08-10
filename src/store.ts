@@ -54,6 +54,7 @@ type AppState = {
   setCarIndex: (i: number) => void;
   cycleCar: () => void;
   prevCar: () => void;
+  randomizeGarage: () => void;
   setThemeName: (theme: ThemeName) => void;
   toggleTheme: () => void;
   setSectionIndex: (i: number) => void;
@@ -97,6 +98,16 @@ export const useAppStore = create<AppState>((set, get) => ({
       carIndex: (get().carIndex - 1 + CARS.length) % CARS.length,
       activeBodyColor: 'original',
     }),
+  randomizeGarage: () => {
+    const currentIndex = get().carIndex;
+    const offset = 1 + Math.floor(Math.random() * (CARS.length - 1));
+    const colors: ActiveBodyColor[] = ['original', ...BODY_COLOR_PALETTE];
+    set({
+      carIndex: (currentIndex + offset) % CARS.length,
+      themeName: Math.random() > 0.5 ? 'dusk' : 'night',
+      activeBodyColor: colors[Math.floor(Math.random() * colors.length)] ?? 'original',
+    });
+  },
   setThemeName: (theme) => set({ themeName: theme }),
   toggleTheme: () => set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
   setSectionIndex: (i) => set({ sectionIndex: i }),
