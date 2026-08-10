@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import type { MarkKey } from './marks';
 
@@ -60,11 +60,14 @@ type Props = {
 export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props) {
   const open = !!item;
   const [copied, setCopied] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => setCopied(false), [item]);
 
   useEffect(() => {
     if (!open) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft') {
@@ -75,8 +78,24 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         e.preventDefault();
         onNext();
       }
+      if (e.key === 'Tab') {
+        const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled])',
+        );
+        if (!focusable?.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener('keydown', onKey);
+    const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 0);
 
     // Robust scroll lock. The scroll root here is <html> (see index.css), so
     // `document.body { overflow: hidden }` does NOT stop the page from scrolling
@@ -103,6 +122,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
 
     return () => {
       window.removeEventListener('keydown', onKey);
+      window.clearTimeout(focusTimer);
       body.style.position = prev.position;
       body.style.top = prev.top;
       body.style.left = prev.left;
@@ -110,6 +130,9 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       body.style.width = prev.width;
       body.classList.remove('modal-open');
       window.scrollTo(0, scrollY);
+      // A direct `#work/...` link has no originating card, so only restore if
+      // the former element is still connected to this document.
+      if (previouslyFocused?.isConnected) previouslyFocused.focus();
     };
   }, [onClose, onNext, onPrevious, open]);
 
@@ -143,6 +166,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       `}
     >
       <div
+        ref={dialogRef}
         onClick={(e) => e.stopPropagation()}
         style={open ? { viewTransitionName: 'work-morph' } : undefined}
         className={`
@@ -153,6 +177,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         `}
       >
         <button
+          ref={closeRef}
           type="button"
           onClick={onClose}
           aria-label="Close"

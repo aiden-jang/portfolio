@@ -87,63 +87,74 @@ function AppCard({
   const showClip = !!item.preview && !clipFailed;
 
   return (
-    <button
-      type="button"
-      onClick={(e) => onOpen(e.currentTarget)}
+    <article
       style={{ '--accent': accent } as CSSProperties}
       className={`
         group relative text-left rounded-xl overflow-hidden cursor-pointer
-        border border-transparent bg-[rgba(14,14,22,0.6)] p-3
+        border border-transparent bg-[rgba(14,14,22,0.6)]
         transition-[transform,border-color,background-color] duration-200
         hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:bg-[rgba(16,16,26,0.72)]
-        flex items-center gap-3 ${featured ? 'md:col-span-2' : ''}
+        ${featured ? 'md:col-span-2' : ''}
       `}
     >
-      <span className="relative block w-11 h-11 rounded-lg overflow-hidden shrink-0 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.7)]">
-        {Mark && <Mark />}
-        {showClip && (
-          <video
-            src={item.preview}
-            muted
-            loop
-            playsInline
-            preload="none"
-            onError={() => setClipFailed(true)}
-            onMouseEnter={(e) => void e.currentTarget.play().catch(() => {})}
-            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity"
-          />
-        )}
-        {/* accent glow ring on hover */}
-        <span
-          className="pointer-events-none absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ boxShadow: '0 0 26px -6px var(--accent)' }}
-        />
-      </span>
-
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-1.5 min-w-0">
-          <span className="truncate font-semibold text-[0.95rem] tracking-[-0.01em] text-[var(--color-fg)]">
-            {item.shortName}
-          </span>
-          <LiveDot />
-        </span>
-        <span className="mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] max-md:hidden">
-          {item.tagline ?? item.summary}
-        </span>
-        {item.moment && (
-          <span className="mt-1 flex items-center gap-1.5 font-[var(--font-mono)] text-[0.57rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.46)] max-md:hidden">
-            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-[var(--accent)]" />
-            {item.moment}
-          </span>
-        )}
-      </span>
-      <span
-        aria-hidden="true"
-        className="hidden md:block text-[var(--color-muted)] transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-[var(--accent)]"
+      <button
+        type="button"
+        onClick={(e) => onOpen(e.currentTarget)}
+        aria-label={`Read about ${item.shortName ?? item.title}`}
+        className="flex min-w-0 w-full items-center gap-3 p-3 pr-11 text-left cursor-pointer"
       >
-        ↗
-      </span>
-    </button>
+        <span className="relative block w-11 h-11 rounded-lg overflow-hidden shrink-0 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.7)]">
+          {Mark && <Mark />}
+          {showClip && (
+            <video
+              src={item.preview}
+              muted
+              loop
+              playsInline
+              preload="none"
+              onError={() => setClipFailed(true)}
+              onMouseEnter={(e) => void e.currentTarget.play().catch(() => {})}
+              className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity"
+            />
+          )}
+          {/* accent glow ring on hover */}
+          <span
+            className="pointer-events-none absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+            style={{ boxShadow: '0 0 26px -6px var(--accent)' }}
+          />
+        </span>
+
+        <span className="min-w-0 flex-1">
+          <span className="flex items-center gap-1.5 min-w-0">
+            <span className="truncate font-semibold text-[0.95rem] tracking-[-0.01em] text-[var(--color-fg)]">
+              {item.shortName}
+            </span>
+            <LiveDot />
+          </span>
+          <span className="mt-0.5 text-[rgba(244,240,255,0.6)] text-[0.8rem] leading-[1.4] max-md:hidden">
+            {item.tagline ?? item.summary}
+          </span>
+          {item.moment && (
+            <span className="mt-1 flex items-center gap-1.5 font-[var(--font-mono)] text-[0.57rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.46)] max-md:hidden">
+              <span aria-hidden="true" className="h-1 w-1 rounded-full bg-[var(--accent)]" />
+              {item.moment}
+            </span>
+          )}
+        </span>
+      </button>
+      {item.link && (
+        <a
+          href={item.link.url}
+          target="_blank"
+          rel="noopener"
+          aria-label={`Open ${item.shortName ?? item.title}`}
+          title={`Open ${item.shortName ?? item.title}`}
+          className="hidden md:grid absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 place-items-center rounded-full border border-white/[0.1] text-[var(--color-muted)] opacity-0 transition-all duration-200 group-hover:opacity-100 hover:border-[var(--accent)] hover:text-[var(--accent)] focus:opacity-100"
+        >
+          ↗
+        </a>
+      )}
+    </article>
   );
 }
 
