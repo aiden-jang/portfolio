@@ -97,13 +97,21 @@ function AppCard({
         ${featured ? 'md:col-span-2' : ''}
       `}
     >
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+        style={{
+          background:
+            'radial-gradient(circle at 82% 50%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 58%)',
+        }}
+      />
       <button
         type="button"
         onClick={(e) => onOpen(e.currentTarget)}
         aria-label={`Read about ${item.shortName ?? item.title}`}
         className="flex min-w-0 w-full items-center gap-3 p-3 pr-11 text-left cursor-pointer"
       >
-        <span className="relative block w-11 h-11 rounded-lg overflow-hidden shrink-0 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.7)]">
+        <span className="relative z-[1] block w-11 h-11 rounded-lg overflow-hidden shrink-0 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.7)]">
           {Mark && <Mark />}
           {showClip && (
             <video
@@ -124,7 +132,7 @@ function AppCard({
           />
         </span>
 
-        <span className="min-w-0 flex-1">
+        <span className="relative z-[1] min-w-0 flex-1">
           <span className="flex items-center gap-1.5 min-w-0">
             <span className="truncate font-semibold text-[0.95rem] tracking-[-0.01em] text-[var(--color-fg)]">
               {item.shortName}
