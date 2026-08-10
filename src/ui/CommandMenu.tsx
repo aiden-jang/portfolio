@@ -229,6 +229,10 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
               }
             }}
             placeholder="Jump somewhere, change the scene…"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            aria-haspopup="listbox"
             aria-activedescendant={
               results[activeIndex] ? `command-${results[activeIndex].id}` : undefined
             }
