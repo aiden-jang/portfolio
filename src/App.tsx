@@ -1,8 +1,11 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { CARS } from './config';
 import { useNavigation } from './hooks/useNavigation';
 import { useReveal } from './hooks/useReveal';
+import { BODY_COLOR_SWATCHES, useAppStore, type ActiveBodyColor } from './store';
+import type { ThemeName } from './types';
 // Lazy-loaded so the ~1 MB Three/R3F bundle isn't on the critical path — the DOM chrome and
 // section content paint immediately, then the canvas mounts when its chunk arrives.
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
@@ -16,6 +19,7 @@ import { LoadingBar } from './ui/LoadingBar';
 import { Nav } from './ui/Nav';
 import { ResumeButton } from './ui/ResumeButton';
 import { SceneBoundary } from './ui/SceneBoundary';
+import { SceneShareButton } from './ui/SceneShareButton';
 import { MobileThemeButton, ThemeToggle } from './ui/ThemeToggle';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
@@ -28,6 +32,38 @@ const isCleanMode =
 /** Composition root: 3D canvas + DOM chrome side-by-side. */
 export function App() {
   const { getScrollT, scrollToSection } = useNavigation();
+  const setCarIndex = useAppStore((state) => state.setCarIndex);
+  const setThemeName = useAppStore((state) => state.setThemeName);
+  const applyBodyColor = useAppStore((state) => state.applyBodyColor);
+  const hasBodyMaterial = useAppStore((state) => state.hasBodyMaterial);
+  const scenePaintRef = useRef<ActiveBodyColor | null>(null);
+
+  // A shared garage URL is intentionally just query params, so it also works
+  // alongside case-study hashes and the existing `?clean` screenshot mode.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const carIndex = Number(params.get('car'));
+    if (Number.isInteger(carIndex) && carIndex >= 0 && carIndex < CARS.length)
+      setCarIndex(carIndex);
+
+    const light = params.get('light');
+    if (light === 'dusk' || light === 'night') setThemeName(light as ThemeName);
+
+    const paint = params.get('paint');
+    if (paint === 'original' || BODY_COLOR_SWATCHES.some((swatch) => swatch.hex === paint)) {
+      scenePaintRef.current = paint;
+    }
+  }, [setCarIndex, setThemeName]);
+
+  // Paint cannot be applied until the selected GLB has loaded and exposed its
+  // material. Do this once for a shared link; later car changes stay in the
+  // visitor's control rather than unexpectedly reapplying the initial paint.
+  useEffect(() => {
+    if (!hasBodyMaterial || !scenePaintRef.current) return;
+    applyBodyColor(scenePaintRef.current);
+    scenePaintRef.current = null;
+  }, [applyBodyColor, hasBodyMaterial]);
+
   useReveal();
 
   return (
@@ -116,6 +152,8 @@ export function App() {
               <ColorSwatches bordered={false} />
               <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
               <ThemeToggle />
+              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+              <SceneShareButton />
             </div>
           </div>
           <SectionDots onJump={scrollToSection} placement="rail" />
