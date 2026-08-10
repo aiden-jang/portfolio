@@ -118,6 +118,14 @@ function AppCard({
             'radial-gradient(circle at 82% 50%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 58%)',
         }}
       />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-4 right-4 h-px opacity-55 transition-all duration-300 group-hover:left-0 group-hover:right-0 group-hover:opacity-100"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 86%, white), transparent)',
+        }}
+      />
       <button
         type="button"
         onClick={(e) => onOpen(e.currentTarget)}
