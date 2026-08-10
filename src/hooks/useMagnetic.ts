@@ -9,7 +9,7 @@ export function useMagnetic<T extends HTMLElement>(ref: RefObject<T | null>, str
     const el = ref.current;
     if (!el) return;
     // Bail on touch / coarse-pointer devices — no meaningful hover there.
-    if (window.matchMedia('(hover: none)').matches) return;
+    if (!window.matchMedia || window.matchMedia('(hover: none)').matches) return;
     // Bail when the user has asked for reduced motion.
     if (prefersReducedMotion()) return;
 
