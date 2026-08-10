@@ -34,6 +34,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'auth',
     shortName: 'platform',
     tagline: 'One login, every app.',
+    categories: ['systems'],
     link: { label: 'Visit the sign-in hub', url: 'https://accounts.aidenjang.com' },
   },
   {
@@ -58,6 +59,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'iguess',
     shortName: 'iguess',
     tagline: 'Pictionary vs. a robot.',
+    categories: ['realtime', 'ai', 'social'],
     moment: 'turning a bad doodle into a tiny event',
     principle:
       'The AI plays by the same rules, gets a score, and is allowed to be gloriously wrong. It is part of the game, not a feature bolted onto the side.',
@@ -76,6 +78,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'owewell',
     shortName: 'owewell',
     tagline: 'Who owes who, no drama.',
+    categories: ['realtime', 'social'],
     moment: 'ending the trip without spreadsheet energy',
     principle:
       'The product does the awkward arithmetic quietly, then leaves people with the smallest possible set of things to settle.',
@@ -94,6 +97,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'wherever',
     shortName: 'wherever',
     tagline: 'Swipe. Eat. No arguing.',
+    categories: ['realtime', 'social'],
     moment: 'escaping the group-chat decision spiral',
     principle:
       'Majority is intentional: one person can have a preference without holding dinner hostage.',
@@ -112,6 +116,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'bloomnote',
     shortName: 'bloomnote',
     tagline: 'A note, then a garden.',
+    categories: ['ai', 'social'],
     moment: 'making a specific feeling feel kept',
     principle:
       'The note is the design brief, so the generated garden answers the person instead of producing greeting-card filler.',
@@ -132,6 +137,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     mark: 'mrrp',
     shortName: 'mrrp',
     tagline: 'One of you is the cat.',
+    categories: ['realtime', 'social'],
     moment: 'being close without needing to perform closeness',
     principle:
       'There are no streaks, guilt, or read receipts. The cat responds to a hard day, so nobody has to pretend they are fine just to keep the app happy.',
