@@ -7,7 +7,7 @@ import { ContactSection } from './sections/Contact';
 import { ExperienceSection } from './sections/Experience';
 import { IntroSection } from './sections/Intro';
 import { WorkSection } from './sections/Work';
-import { workId, WorkModal, type WorkDetail } from './WorkModal';
+import { WorkModal, type WorkDetail } from './WorkModal';
 
 type StartViewTransition = (cb: () => void) => { finished: Promise<void> };
 
@@ -16,6 +16,14 @@ type StartViewTransition = (cb: () => void) => { finished: Promise<void> };
  * when they hit next. */
 function caseStudyLane(item: WorkDetail): WorkDetail[] {
   return WORK_ITEMS.filter((candidate) => Boolean(candidate.mark) === Boolean(item.mark));
+}
+
+/** Stable, human-readable fragment for opening a particular case study. */
+function workId(item: WorkDetail): string {
+  return (item.shortName ?? item.title)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }
 
 /** Top-level page layout: the five scroll sections, plus the WorkModal that any

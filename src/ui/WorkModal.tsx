@@ -38,14 +38,6 @@ export type WorkDetail = {
   categories?: Array<'realtime' | 'ai' | 'social' | 'systems'>;
 };
 
-/** Stable, human-readable fragment for opening a particular case study. */
-export function workId(item: WorkDetail): string {
-  return (item.shortName ?? item.title)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-}
-
 type Props = {
   item: WorkDetail | null;
   onClose: () => void;
