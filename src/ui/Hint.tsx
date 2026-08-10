@@ -1,3 +1,5 @@
+import { CARS } from '../config';
+
 const KBD =
   'inline-block px-1.5 py-[0.1rem] bg-white/[0.05] border border-[var(--color-line)] rounded text-[var(--color-fg)]/90 text-[0.9em] tracking-[0.12em]';
 
@@ -27,7 +29,7 @@ export function Hint() {
         <kbd className={KBD}>←→</kbd> cars
       </span>
       <span className="hidden lg:inline-flex items-center gap-2">
-        <kbd className={KBD}>1–7</kbd> pick car
+        <kbd className={KBD}>1–{CARS.length}</kbd> pick car
       </span>
       <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>C</kbd> color
