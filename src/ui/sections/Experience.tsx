@@ -3,9 +3,9 @@ import type { WorkDetail } from '../WorkModal';
 import { EYEBROW, H2, P_LI, Section, UL_BASE } from './shared';
 
 const ROLES = [
-  'Software Engineer · Zeta Global · 2024 to now',
-  'Software Engineer · LiveIntent · 2023 to 2024',
-  'Associate Software Engineer · LiveIntent · 2022 to 2023',
+  { title: 'Software Engineer', company: 'Zeta Global', period: '2024 to now' },
+  { title: 'Software Engineer', company: 'LiveIntent', period: '2023 to 2024' },
+  { title: 'Associate Software Engineer', company: 'LiveIntent', period: '2022 to 2023' },
 ];
 
 type Props = {
@@ -26,7 +26,18 @@ export function ExperienceSection({ onOpen }: Props) {
         <h2 className={H2}>Where I&apos;ve worked</h2>
         <ul className={`${UL_BASE} ${P_LI}`}>
           {ROLES.map((r) => (
-            <li key={r}>{r}</li>
+            <li
+              key={`${r.company}-${r.period}`}
+              className="flex items-baseline justify-between gap-4"
+            >
+              <span>
+                <span className="text-[var(--color-fg)]">{r.title}</span>
+                <span className="text-[var(--color-muted)]"> · {r.company}</span>
+              </span>
+              <span className="shrink-0 font-[var(--font-mono)] text-[0.62rem] tracking-[0.08em] text-[var(--color-muted)]">
+                {r.period}
+              </span>
+            </li>
           ))}
         </ul>
 

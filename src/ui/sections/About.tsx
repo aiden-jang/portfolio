@@ -3,23 +3,20 @@ import { EYEBROW, H2, P_LI, Section } from './shared';
 // Grouped so the toolbox reads as a quick scan, not a wall. Roles live in the
 // Experience section and the side platform in Projects, so About stays focused
 // on how I work + what I reach for (a different shape from Experience's list).
-const SKILLS = ['TypeScript', 'Python', 'React', 'Django', 'PostgreSQL', 'Cloudflare'];
+const SKILLS = ['TypeScript', 'Python', 'React', 'Django', 'Cloudflare'];
 
 const PRINCIPLES = [
   {
     number: '01',
     title: 'Show what changed',
-    body: 'If someone joins a room, the room should react. If the group picked a place, it should feel settled. I would rather show that than throw a toast at you.',
   },
   {
     number: '02',
     title: 'Give AI a job',
-    body: 'It should make a game more fun, a gift more personal, or a test suite less painful. Otherwise it is probably just a button with a sparkle on it.',
   },
   {
     number: '03',
     title: 'Do not turn care into homework',
-    body: 'No streaks. No guilt. No fake urgency. The best small products leave room for people instead of becoming one more thing to keep up with.',
   },
 ];
 
@@ -50,28 +47,21 @@ export function AboutSection() {
           ))}
         </div>
 
-        <div className="mt-6 border-t border-white/[0.1] pt-4">
-          <p className="font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase text-[var(--color-muted)]">
-            A few things I care about
+        <div className="mt-5 border-t border-white/[0.1] pt-4">
+          <p className="font-[var(--font-mono)] text-[0.58rem] tracking-[0.2em] uppercase text-[var(--color-muted)]">
+            Principles
           </p>
-          <div className="mt-2">
+          <div className="mt-2 flex flex-wrap gap-1.5">
             {PRINCIPLES.map((principle) => (
-              <article
+              <span
                 key={principle.number}
-                className="border-b border-white/[0.08] py-3 last:border-b-0"
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] px-2.5 py-1.5 text-[0.72rem] text-[rgba(244,240,255,0.72)]"
               >
-                <div className="flex items-baseline gap-2.5">
-                  <span className="font-[var(--font-mono)] text-[0.6rem] tracking-[0.14em] text-[var(--color-neon)]">
-                    {principle.number}
-                  </span>
-                  <h3 className="text-[0.92rem] font-semibold tracking-[-0.015em] text-[var(--color-fg)]">
-                    {principle.title}
-                  </h3>
-                </div>
-                <p className="mt-1 pl-[1.85rem] text-[0.78rem] leading-[1.45] text-[rgba(244,240,255,0.62)]">
-                  {principle.body}
-                </p>
-              </article>
+                <span className="font-[var(--font-mono)] text-[0.54rem] tracking-[0.1em] text-[var(--color-neon)]">
+                  {principle.number}
+                </span>
+                {principle.title}
+              </span>
             ))}
           </div>
         </div>
