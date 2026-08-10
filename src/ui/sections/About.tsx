@@ -36,7 +36,7 @@ const PRINCIPLES = [
 
 export function AboutSection() {
   return (
-    <Section id="sec-about" side="left">
+    <Section id="sec-about" side="left" desktopVertical="top">
       <div className="panel pointer-events-auto w-full max-w-[520px]">
         <span className={EYEBROW}>03 / ABOUT</span>
         <h2 className={H2}>How I work</h2>

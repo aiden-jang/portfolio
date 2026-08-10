@@ -35,7 +35,7 @@ export function Hint() {
         <kbd className={KBD}>C</kbd> color
       </span>
       <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>B</kbd> background
+        <kbd className={KBD}>B</kbd> lighting
       </span>
       <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>R</kbd> rev

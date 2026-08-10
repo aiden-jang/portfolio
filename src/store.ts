@@ -99,29 +99,54 @@ export const useAppStore = create<AppState>((set, get) => ({
     revT: 0,
     introArmed: false,
   },
-  setCarIndex: (i) => set({ carIndex: i, activeBodyColor: 'original' }),
-  cycleCar: () =>
-    set({ carIndex: (get().carIndex + 1) % CARS.length, activeBodyColor: 'original' }),
-  prevCar: () =>
+  setCarIndex: (i) => {
+    const refs = get().refs;
+    refs.bodyMaterial = null;
+    refs.bodyOriginalColor = null;
+    set({ carIndex: i, activeBodyColor: 'original', hasBodyMaterial: false });
+  },
+  cycleCar: () => {
+    const refs = get().refs;
+    refs.bodyMaterial = null;
+    refs.bodyOriginalColor = null;
+    set({
+      carIndex: (get().carIndex + 1) % CARS.length,
+      activeBodyColor: 'original',
+      hasBodyMaterial: false,
+    });
+  },
+  prevCar: () => {
+    const refs = get().refs;
+    refs.bodyMaterial = null;
+    refs.bodyOriginalColor = null;
     set({
       carIndex: (get().carIndex - 1 + CARS.length) % CARS.length,
       activeBodyColor: 'original',
-    }),
+      hasBodyMaterial: false,
+    });
+  },
   randomizeGarage: () => {
     const { carIndex: currentIndex, themeName, activeBodyColor } = get();
+    const refs = get().refs;
+    refs.bodyMaterial = null;
+    refs.bodyOriginalColor = null;
     const offset = 1 + Math.floor(Math.random() * (CARS.length - 1));
     const colors: ActiveBodyColor[] = ['original', ...BODY_COLOR_PALETTE];
     set({
       carIndex: (currentIndex + offset) % CARS.length,
       themeName: Math.random() > 0.5 ? 'dusk' : 'night',
       activeBodyColor: colors[Math.floor(Math.random() * colors.length)] ?? 'original',
+      hasBodyMaterial: false,
       previousGarage: { carIndex: currentIndex, themeName, activeBodyColor },
     });
   },
   undoGarageMix: () => {
     const previousGarage = get().previousGarage;
     if (!previousGarage) return;
-    set({ ...previousGarage, previousGarage: null });
+    const refs = get().refs;
+    refs.bodyMaterial = null;
+    refs.bodyOriginalColor = null;
+    set({ ...previousGarage, hasBodyMaterial: false, previousGarage: null });
   },
   setThemeName: (theme) => set({ themeName: theme }),
   toggleTheme: () => set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),

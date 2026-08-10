@@ -27,7 +27,7 @@ function MoonIcon() {
   );
 }
 
-/** Day/night (background) toggle. Sun in dusk, moon at night, tinted to match.
+/** Day/night studio-lighting toggle. Sun in dusk, moon at night, tinted to match.
  *  Flat by default for the desktop control dock; owns the body[data-theme] sync
  *  so CSS-only consumers stay in step regardless of which control flips it. */
 export function ThemeToggle() {
@@ -43,7 +43,8 @@ export function ThemeToggle() {
     <button
       id="theme-toggle"
       type="button"
-      aria-label="Toggle background (day/night)"
+      aria-label="Toggle studio lighting (dusk/night)"
+      title="Toggle studio lighting"
       onClick={toggleTheme}
       style={{ color: isNight ? '#2bd4ff' : 'var(--color-neon)' }}
       className="
@@ -56,7 +57,7 @@ export function ThemeToggle() {
   );
 }
 
-/** 44px background toggle for the mobile bottom bar — same sun/moon icon in a
+/** 44px studio-lighting toggle for the mobile bottom bar — same sun/moon icon in a
  *  bordered round button sized for touch. */
 export function MobileThemeButton() {
   const themeName = useAppStore((s) => s.themeName);
@@ -66,7 +67,8 @@ export function MobileThemeButton() {
   return (
     <button
       type="button"
-      aria-label="Toggle background (day/night)"
+      aria-label="Toggle studio lighting (dusk/night)"
+      title="Toggle studio lighting"
       onClick={toggleTheme}
       style={{ color: isNight ? '#2bd4ff' : 'var(--color-neon)' }}
       className="
