@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { SECTION_IDS, type SectionId } from '../config';
+import { CARS, SECTION_IDS, type SectionId } from '../config';
 import { clamp } from '../math';
 import { prefersReducedMotion } from './useReducedMotion';
 import { useAppStore } from '../store';
@@ -161,6 +161,15 @@ export function useNavigation() {
       // Inputs own their navigation keys. Without this guard, pressing ↑/↓
       // inside the command palette also scrolls the portfolio behind it.
       if (inField) return;
+      if (/^[1-9]$/.test(e.key)) {
+        const carIndex = Number(e.key) - 1;
+        if (carIndex < CARS.length) {
+          e.preventDefault();
+          const state = useAppStore.getState();
+          if (!state.isCarLoading) state.setCarIndex(carIndex);
+        }
+        return;
+      }
       switch (e.key) {
         case 'ArrowDown':
         case 'PageDown':
