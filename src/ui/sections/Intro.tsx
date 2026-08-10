@@ -26,14 +26,14 @@ export function IntroSection() {
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2.5">
           <a
-            href="#sec-work"
+            href="#sec-experience"
             onClick={(event) => {
               event.preventDefault();
-              scrollTo('sec-work');
+              scrollTo('sec-experience');
             }}
             className="inline-flex items-center gap-2 rounded-full border border-[var(--color-neon)] bg-[var(--color-neon)]/10 px-4 py-2.5 font-[var(--font-mono)] text-[0.62rem] tracking-[0.16em] uppercase text-[var(--color-fg)] no-underline transition-colors hover:bg-[var(--color-neon)]/20"
           >
-            See projects <span aria-hidden="true">↓</span>
+            See experience <span aria-hidden="true">↓</span>
           </a>
           <a
             href="#sec-contact"
