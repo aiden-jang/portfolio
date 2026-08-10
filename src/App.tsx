@@ -23,6 +23,7 @@ import { RevButton } from './ui/RevButton';
 import { SceneBoundary } from './ui/SceneBoundary';
 import { SceneShareButton } from './ui/SceneShareButton';
 import { MobileThemeButton, ThemeToggle } from './ui/ThemeToggle';
+import { MobileCommandButton } from './ui/MobileCommandButton';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 
@@ -103,8 +104,9 @@ export function App() {
            *  inside Nav so it shares the top-right chrome row. */}
           <div
             id="mobile-resume"
-            className="md:hidden fixed top-[max(4vh,env(safe-area-inset-top))] right-[5vw] z-20"
+            className="md:hidden fixed top-[max(4vh,env(safe-area-inset-top))] right-[5vw] z-20 flex items-center gap-2"
           >
+            <MobileCommandButton />
             <ResumeButton />
           </div>
           {/* Mobile bottom bar: section progress + car + color in one

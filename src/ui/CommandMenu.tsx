@@ -11,6 +11,8 @@ type Command = {
   run: () => void;
 };
 
+export const COMMAND_MENU_EVENT = 'portfolio:open-command-menu';
+
 const SECTION_LABELS: Record<SectionId, string> = {
   'sec-intro': 'Intro',
   'sec-experience': 'Experience',
@@ -107,6 +109,12 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  useEffect(() => {
+    const openFromControl = () => setOpen(true);
+    window.addEventListener(COMMAND_MENU_EVENT, openFromControl);
+    return () => window.removeEventListener(COMMAND_MENU_EVENT, openFromControl);
   }, []);
 
   useEffect(() => {
