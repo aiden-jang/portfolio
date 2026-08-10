@@ -24,6 +24,12 @@ const SOCIAL_LINKS: { label: string; url: string; icon: () => ReactNode }[] = [
   { label: 'LinkedIn', url: 'https://linkedin.com/in/aidenjang', icon: LinkedInIcon },
 ];
 
+const EMAIL_STARTERS = [
+  { label: 'a product idea', subject: 'A product idea' },
+  { label: 'a project', subject: 'A project' },
+  { label: 'your work', subject: 'Your work' },
+];
+
 export function ContactSection() {
   return (
     <Section id="sec-contact" side="center">
@@ -37,6 +43,22 @@ export function ContactSection() {
         <ul className={`list-none p-0 mt-4 ${P_LI}`}>
           <EmailRow />
         </ul>
+        <div className="mt-3 pointer-events-auto">
+          <p className="font-[var(--font-mono)] text-[0.58rem] tracking-[0.16em] uppercase text-[var(--color-muted)]">
+            Want a head start?
+          </p>
+          <div className="mt-2 flex flex-wrap justify-center gap-1.5">
+            {EMAIL_STARTERS.map(({ label, subject }) => (
+              <a
+                key={subject}
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`}
+                className="rounded-full border border-white/[0.1] px-2.5 py-1.5 font-[var(--font-mono)] text-[0.57rem] tracking-[0.1em] text-[var(--color-muted)] no-underline transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
         <div className="mt-4 flex items-center justify-center gap-2 pointer-events-auto">
           {SOCIAL_LINKS.map(({ label, url, icon: Icon }) => (
             <a
