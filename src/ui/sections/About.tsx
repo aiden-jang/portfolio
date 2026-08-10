@@ -12,7 +12,7 @@ const PRINCIPLES = [
   },
   {
     number: '02',
-    title: 'Give AI a job',
+    title: 'Use AI on purpose',
   },
   {
     number: '03',
