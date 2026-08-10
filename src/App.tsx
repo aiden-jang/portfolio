@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { CARS } from './config';
@@ -39,7 +39,11 @@ export function App() {
   const setThemeName = useAppStore((state) => state.setThemeName);
   const applyBodyColor = useAppStore((state) => state.applyBodyColor);
   const hasBodyMaterial = useAppStore((state) => state.hasBodyMaterial);
+  const carIndex = useAppStore((state) => state.carIndex);
+  const activeBodyColor = useAppStore((state) => state.activeBodyColor);
+  const themeName = useAppStore((state) => state.themeName);
   const scenePaintRef = useRef<ActiveBodyColor | null>(null);
+  const [sceneReady, setSceneReady] = useState(false);
 
   // A shared garage URL is intentionally just query params, so it also works
   // alongside case-study hashes and the existing `?clean` screenshot mode.
@@ -56,7 +60,20 @@ export function App() {
     if (paint === 'original' || BODY_COLOR_SWATCHES.some((swatch) => swatch.hex === paint)) {
       scenePaintRef.current = paint;
     }
+    setSceneReady(true);
   }, [setCarIndex, setThemeName]);
+
+  // Keep the address bar in step with the visible garage. This makes a manual
+  // copy from the browser shareable too, while retaining `?clean` and any
+  // `#work/...` case-study deep link already in place.
+  useEffect(() => {
+    if (!sceneReady) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set('car', String(carIndex));
+    url.searchParams.set('paint', activeBodyColor);
+    url.searchParams.set('light', themeName);
+    window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+  }, [activeBodyColor, carIndex, sceneReady, themeName]);
 
   // Paint cannot be applied until the selected GLB has loaded and exposed its
   // material. Do this once for a shared link; later car changes stay in the
