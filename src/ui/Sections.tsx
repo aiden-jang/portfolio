@@ -1,12 +1,13 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
+import { WORK_ITEMS } from '../data/workItems';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import { AboutSection } from './sections/About';
 import { ContactSection } from './sections/Contact';
 import { ExperienceSection } from './sections/Experience';
 import { IntroSection } from './sections/Intro';
 import { WorkSection } from './sections/Work';
-import { WorkModal, type WorkDetail } from './WorkModal';
+import { workId, WorkModal, type WorkDetail } from './WorkModal';
 
 type StartViewTransition = (cb: () => void) => { finished: Promise<void> };
 
@@ -23,6 +24,27 @@ export function Sections() {
   // back into the same card.
   const lastCard = useRef<HTMLElement | null>(null);
 
+  // A case study gets a real URL (`#work/iguess`), so it is useful in a
+  // recruiter handoff or a message—not just discoverable from the home page.
+  // Hash changes also make browser back/forward dismiss or restore the modal.
+  useEffect(() => {
+    const syncFromHash = () => {
+      const match = /^#work\/(.+)$/.exec(window.location.hash);
+      if (!match) {
+        setActiveWork(null);
+        return;
+      }
+      const item = WORK_ITEMS.find((candidate) => workId(candidate) === match[1]);
+      if (!item) return;
+      const workSection = document.getElementById('sec-work');
+      if (workSection) window.scrollTo(0, workSection.offsetTop);
+      setActiveWork(item);
+    };
+    syncFromHash();
+    window.addEventListener('hashchange', syncFromHash);
+    return () => window.removeEventListener('hashchange', syncFromHash);
+  }, []);
+
   const runMorph = useCallback((update: () => void, el: HTMLElement | null, opening: boolean) => {
     const start = (document as Document & { startViewTransition?: StartViewTransition })
       .startViewTransition;
@@ -38,20 +60,24 @@ export function Sections() {
       // only for the closing direction so the morph target is the card.
       if (el) el.style.viewTransitionName = opening ? '' : 'work-morph';
     });
-    vt.finished.catch(() => {}).finally(() => {
-      if (el) el.style.viewTransitionName = '';
-    });
+    vt.finished
+      .catch(() => {})
+      .finally(() => {
+        if (el) el.style.viewTransitionName = '';
+      });
   }, []);
 
   const openWork = useCallback(
     (item: WorkDetail, el: HTMLElement) => {
       lastCard.current = el;
+      window.history.replaceState(null, '', `#work/${workId(item)}`);
       runMorph(() => setActiveWork(item), el, true);
     },
     [runMorph],
   );
 
   const closeWork = useCallback(() => {
+    window.history.replaceState(null, '', '#sec-work');
     runMorph(() => setActiveWork(null), lastCard.current, false);
   }, [runMorph]);
 

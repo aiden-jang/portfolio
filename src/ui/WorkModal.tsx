@@ -35,6 +35,14 @@ export type WorkDetail = {
   principle?: string;
 };
 
+/** Stable, human-readable fragment for opening a particular case study. */
+export function workId(item: WorkDetail): string {
+  return (item.shortName ?? item.title)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
 type Props = {
   item: WorkDetail | null;
   onClose: () => void;
@@ -45,6 +53,9 @@ type Props = {
  *  panel to keep readability high. */
 export function WorkModal({ item, onClose }: Props) {
   const open = !!item;
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => setCopied(false), [item]);
 
   useEffect(() => {
     if (!open) return;
@@ -87,6 +98,17 @@ export function WorkModal({ item, onClose }: Props) {
       window.scrollTo(0, scrollY);
     };
   }, [open, onClose]);
+
+  const copyCaseStudyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard access can be unavailable in a private or embedded browser.
+      // The current URL is still a normal, shareable deep link in that case.
+    }
+  };
 
   // Portal to <body> so the modal escapes the page's `<main class="z-10">` stacking context.
   // Rendered inline, its z-50 was trapped below the z-30 fixed mobile bottom bar, whose (invisible
@@ -182,7 +204,7 @@ export function WorkModal({ item, onClose }: Props) {
                 ))}
               </div>
             </div>
-            {(item.link || item.links?.length) && (
+            {(item.link || item.links?.length || item.shortName) && (
               // Footer lives OUTSIDE the scroll area (a flex sibling), so it is always flush to the
               // panel's bottom edge, spans the full width, and never overlaps the body text — the
               // body scrolls in its own region above it. Always visible + tappable regardless of
@@ -223,6 +245,20 @@ export function WorkModal({ item, onClose }: Props) {
                     <span aria-hidden="true">↗</span>
                   </a>
                 ))}
+                <button
+                  type="button"
+                  onClick={() => void copyCaseStudyLink()}
+                  className="
+                    inline-flex items-center gap-2 px-5 py-2.5 rounded-full cursor-pointer
+                    border border-[var(--color-line)]
+                    font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase
+                    text-[var(--color-muted)] transition-colors
+                    hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
+                  "
+                >
+                  {copied ? 'Link copied' : 'Copy case study'}
+                  <span aria-hidden="true">{copied ? '✓' : '↗'}</span>
+                </button>
               </div>
             )}
           </>
