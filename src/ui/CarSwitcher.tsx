@@ -15,7 +15,8 @@ export function CarSwitcher() {
     <button
       id="car-switcher"
       type="button"
-      aria-label="Next car"
+      aria-label={`${car?.name ?? 'Current car'}, ${carIndex + 1} of ${CARS.length}. Next car`}
+      title={`${car?.name ?? 'Current car'} · ${carIndex + 1} of ${CARS.length}`}
       onClick={cycleCar}
       disabled={isCarLoading}
       aria-busy={isCarLoading}
@@ -49,6 +50,8 @@ export function MobileCarSwitcher() {
 
   return (
     <div
+      role="group"
+      aria-label={`${car?.name ?? 'Current car'}, ${carIndex + 1} of ${CARS.length}`}
       className="
         pointer-events-auto inline-flex items-center
         bg-white/[0.04] border border-[var(--color-line)] rounded-full
@@ -56,13 +59,21 @@ export function MobileCarSwitcher() {
         text-[var(--color-fg)]
       "
     >
-      <ArrowButton label="Previous car" onClick={prevCar} disabled={isCarLoading}>
+      <ArrowButton
+        label={`Previous car. ${car?.name ?? 'Current car'}, ${carIndex + 1} of ${CARS.length}`}
+        onClick={prevCar}
+        disabled={isCarLoading}
+      >
         ‹
       </ArrowButton>
       <span aria-live="polite" className="min-w-[6rem] px-1 text-center truncate">
         {isCarLoading ? 'Loading…' : (car?.name ?? '—')}
       </span>
-      <ArrowButton label="Next car" onClick={cycleCar} disabled={isCarLoading}>
+      <ArrowButton
+        label={`Next car. ${car?.name ?? 'Current car'}, ${carIndex + 1} of ${CARS.length}`}
+        onClick={cycleCar}
+        disabled={isCarLoading}
+      >
         ›
       </ArrowButton>
     </div>
