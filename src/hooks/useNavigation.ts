@@ -56,8 +56,7 @@ function smoothScrollTo(targetY: number): void {
     return;
   }
 
-  const coarsePointer =
-    typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+  const coarsePointer = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
   if (coarsePointer) {
     window.scrollTo({ top: targetY, behavior: 'smooth' });
     return;
@@ -198,6 +197,12 @@ export function useNavigation() {
           if (inField) return;
           e.preventDefault();
           useAppStore.getState().toggleTheme();
+          break;
+        case 'r':
+        case 'R':
+          if (inField) return;
+          e.preventDefault();
+          useAppStore.getState().triggerRev();
           break;
       }
     };
