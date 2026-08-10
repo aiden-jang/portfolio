@@ -26,6 +26,9 @@ export function Hint() {
       <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>←→</kbd> cars
       </span>
+      <span className="hidden lg:inline-flex items-center gap-2">
+        <kbd className={KBD}>1–7</kbd> pick car
+      </span>
       <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>C</kbd> color
       </span>

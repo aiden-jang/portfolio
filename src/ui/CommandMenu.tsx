@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { SECTION_IDS, type SectionId } from '../config';
+import { CARS, SECTION_IDS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
 
@@ -43,6 +43,16 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         hint: 'section',
         keywords: `${SECTION_LABELS[id]} navigate`,
         run: () => onSection(id),
+      })),
+      ...CARS.map((car, index) => ({
+        id: `car-${index}`,
+        label: `Show ${car.name}`,
+        hint: String(index + 1),
+        keywords: `${car.name} ${car.code} vehicle garage`,
+        run: () => {
+          const state = useAppStore.getState();
+          if (!state.isCarLoading) state.setCarIndex(index);
+        },
       })),
       {
         id: 'next-car',
