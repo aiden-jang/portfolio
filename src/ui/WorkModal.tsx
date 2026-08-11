@@ -181,6 +181,10 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     <div
       role="dialog"
       aria-modal="true"
+      /* Named by the case study's own heading. A modal with no accessible name is announced as just
+         "dialog", which tells somebody a thing opened and nothing about what: with six case studies
+         behind the same overlay, the title is the only part that distinguishes them. */
+      aria-labelledby="work-modal-title"
       aria-hidden={!open}
       onClick={onClose}
       className={`
@@ -243,7 +247,10 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                 <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
               )}
               <Eyebrow>{item.context}</Eyebrow>
-              <h3 className="mt-3 mb-1 text-[clamp(1.6rem,3.2vw,2.2rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
+              <h3
+                id="work-modal-title"
+                className="mt-3 mb-1 text-[clamp(1.6rem,3.2vw,2.2rem)] leading-[1.05] font-semibold tracking-[-0.03em]"
+              >
                 {item.title}
               </h3>
               <p className="mt-2 mb-5 text-[rgba(244,240,255,0.6)] text-[0.95rem] leading-[1.5]">
