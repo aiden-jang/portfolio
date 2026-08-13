@@ -160,7 +160,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     summary: 'A Playwright framework where LLM agents write and self-heal E2E tests.',
     body: [
       'A three-stage pipeline: a Planner reads a feature spec and decomposes it into test scenarios, a Generator turns each scenario into a runnable Playwright spec, and a Healer watches for flakes and rewrites selectors and waits when a DOM change shifts the page out from under existing tests.',
-      'Stood up baseline frontend E2E coverage across the platform without burning weeks hand-rolling fixtures.',
+      'The platform lived in its own repo with no testing tooling of any kind. I built this as a research project, unprompted, and it became the first automated coverage the platform had. It later merged into a monorepo alongside the other front ends, being migrated from Angular to React a piece at a time, and it still runs in one of those packages: coverage that keeps up with a UI being rewritten underneath it, without hand-rolling fixtures for every change.',
     ],
     stack: ['Playwright', 'TypeScript', 'Claude API', 'Node.js'],
   },
@@ -179,9 +179,9 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'Sponsorships, Audience Extension, Blackout Periods',
     context: 'Zeta Global',
     summary:
-      'Three publisher-config products at Zeta. Data models, APIs, UIs, owned end to end. Sponsorships v1.0 runs hundreds of millions of impressions a week, including The Washington Post.',
+      'Three publisher-config products at Zeta. Data models, APIs, UIs, owned end to end. Sponsorships runs hundreds of millions of impressions a week, including The Washington Post.',
     body: [
-      'Sponsorships v1.0: I chose a many-to-many data model, multiple line items and multiple newsletters per sponsorship plus creative scheduling, over the simpler one-to-one. The argument was the cost of being wrong: one-to-one is not a feature you add later, it is a migration of live sponsorship data. Built the UI with a UI/UX designer and defended the model with product and ops. It is live on hundreds of millions of impressions a week, and The Washington Post is one of the publishers running on it.',
+      'Sponsorships: I chose a many-to-many data model, multiple line items and multiple newsletters per sponsorship plus creative scheduling, over the simpler one-to-one. The argument was the cost of being wrong: one-to-one is not a feature you add later, it is a migration of live sponsorship data. Built the UI with a UI/UX designer and defended the model with product and ops. It is live on hundreds of millions of impressions a week, and The Washington Post is one of the publishers running on it.',
       'That work also covered creatives and demand controls for publisher monetization across media groups, sensitive categories, and RTB exchange settings.',
       'Audience Extension: campaign scheduling with bulk DMA / zip-code audience targeting.',
       'Blackout Periods: time-window controls that suppress specific creatives or exchanges. Owned the data models, Django REST APIs, and React/TypeScript UIs for all three.',
