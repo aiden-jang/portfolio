@@ -146,9 +146,10 @@ export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'Monolith → Django REST + React rewrite',
     context: 'Zeta Global · 2024 to now',
-    summary: 'Co-led the platform’s migration off a legacy PHP monolith. Django REST + React.',
+    summary:
+      'Moved the entire backend off a legacy PHP monolith with one other engineer, in six months. Django REST + React.',
     body: [
-      'Co-led a platform-wide migration from a legacy PHP monolith to a Django REST API that now powers self-service native-ad onboarding across 30,000+ active publisher newsletters.',
+      'A platform-wide migration from a legacy PHP monolith to a Django REST API, done by two engineers in six months. It now powers self-service native-ad onboarding across 30,000+ active publisher newsletters serving billions of ad impressions a week.',
       'Owned both ends: data modeling and Django serializers on the backend, React + TypeScript components and hooks on the frontend. Shipped continuously alongside the live system, with feature flags routing traffic onto the new stack incrementally rather than in a risky big-bang cutover.',
     ],
     stack: ['Django', 'Python', 'REST', 'PostgreSQL', 'React', 'TypeScript'],
@@ -177,9 +178,11 @@ export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'Sponsorships, Audience Extension, Blackout Periods',
     context: 'Zeta Global',
-    summary: 'Three publisher-config products at Zeta. Data models, APIs, UIs, owned end to end.',
+    summary:
+      'Three publisher-config products at Zeta. Data models, APIs, UIs, owned end to end. Sponsorships v1.0 runs hundreds of millions of impressions a week, including The Washington Post.',
     body: [
-      'Sponsorships v1.0: creatives + demand controls for publisher monetization across media groups, sensitive categories, and RTB exchange settings.',
+      'Sponsorships v1.0: I chose a many-to-many data model, multiple line items and multiple newsletters per sponsorship plus creative scheduling, over the simpler one-to-one. The argument was the cost of being wrong: one-to-one is not a feature you add later, it is a migration of live sponsorship data. Built the UI with a UI/UX designer and defended the model with product and ops. It is live on hundreds of millions of impressions a week, and The Washington Post is one of the publishers running on it.',
+      'That work also covered creatives and demand controls for publisher monetization across media groups, sensitive categories, and RTB exchange settings.',
       'Audience Extension: campaign scheduling with bulk DMA / zip-code audience targeting.',
       'Blackout Periods: time-window controls that suppress specific creatives or exchanges. Owned the data models, Django REST APIs, and React/TypeScript UIs for all three.',
     ],
@@ -191,7 +194,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     summary: 'Owned Creative Mapping v2 end to end across MySQL, REST, and Angular.',
     body: [
       'Creative-to-placement targeting for the ad-serving XML pipeline. Designed the MySQL schema for the new mapping model, built the REST API on the legacy backend, and delivered the Angular UI publisher ops uses to configure targeting rules.',
-      'Shipped alongside a stack of related work: third-party demand controls for RTB native + hybrid slots, five publisher data migrations, and the fix for a critical search-endpoint performance regression.',
+      'Shipped alongside a stack of related work: third-party demand controls for RTB native + hybrid slots, 13 publisher data migrations, and the fix for a critical search-endpoint performance regression.',
     ],
     stack: ['MySQL', 'PHP', 'REST', 'Angular', 'TypeScript', 'XML'],
   },
