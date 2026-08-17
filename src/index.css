@@ -39,7 +39,11 @@
     background: var(--color-bg);
     color: var(--color-fg);
     font-family: var(--font-display);
+    /* 100vh first as the fallback, then 100dvh, which is the one that matters on a phone: mobile
+       Safari counts the URL bar inside 100vh, so a "full height" page is taller than the screen and
+       the layout jumps as the bar hides. Browsers that do not know dvh keep the line above. */
     min-height: 100vh;
+    min-height: 100dvh;
     /* App-like: text isn't selectable/copyable, and a drag to orbit the car
        never accidentally highlights the copy. */
     -webkit-user-select: none;
