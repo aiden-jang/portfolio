@@ -3,7 +3,14 @@ import type { JSX } from 'react';
 /** Each shipped app's real mark, inlined as SVG so the Work cards carry the
  *  actual product identity (same shapes + colors as the deployed apps) with no
  *  extra requests. Gradient ids are namespaced so several can render at once. */
-export type MarkKey = 'owewell' | 'iguess' | 'wherever' | 'bloomnote' | 'auth' | 'mrrp';
+export type MarkKey =
+  | 'owewell'
+  | 'iguess'
+  | 'wherever'
+  | 'bloomnote'
+  | 'auth'
+  | 'mrrp'
+  | 'everythingisfine';
 
 /** A representative solid accent per app, used for the card's hover glow and
  *  keyline so the grid reads as a family of distinct products. */
@@ -14,6 +21,10 @@ export const ACCENTS: Record<MarkKey, string> = {
   bloomnote: '#ff8fa3',
   auth: '#22d3ee',
   mrrp: '#e0a03f',
+  /* Muted steel, deliberately the least saturated accent in the set. The app forbids hue in its
+     chrome so colour never stops meaning magnitude, and an accent that shouted would contradict
+     the product it stands for. */
+  everythingisfine: '#5b8fb0',
 };
 
 export const marks: Record<MarkKey, () => JSX.Element> = {
@@ -116,6 +127,30 @@ export const marks: Record<MarkKey, () => JSX.Element> = {
         <circle cx="16" cy="16" r="5" fill="#FFD700" />
         <circle cx="16" cy="16" r="2.5" fill="#FFA500" opacity="0.4" />
       </g>
+    </svg>
+  ),
+  /* A globe under two expanding wavefronts. The ground and the sphere are achromatic and only the
+     wavefront carries the accent, which is the app's own rule: hue belongs to magnitude, not to
+     decoration. Graticules are one equator and one meridian because denser lines turn to mud at
+     card size. */
+  everythingisfine: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true">
+      <defs>
+        <clipPath id="mk-eif-disc">
+          <circle cx="256" cy="256" r="150" />
+        </clipPath>
+      </defs>
+      <rect width="512" height="512" rx="120" fill="#0a0e13" />
+      {/* Wavefronts, clipped to the disc so they read as travelling across the planet rather than
+          floating beside it. They are the loudest thing in the mark on purpose: a bare globe with a
+          small marker on it reads as a generic "internet" icon at card size. */}
+      <g clipPath="url(#mk-eif-disc)" fill="none" stroke="#5b8fb0" strokeWidth="22">
+        <circle cx="196" cy="316" r="58" opacity="0.95" />
+        <circle cx="196" cy="316" r="116" opacity="0.55" />
+        <circle cx="196" cy="316" r="174" opacity="0.25" />
+      </g>
+      <circle cx="196" cy="316" r="24" fill="#5b8fb0" />
+      <circle cx="256" cy="256" r="150" fill="none" stroke="#c8d4dc" strokeWidth="30" />
     </svg>
   ),
   auth: () => (

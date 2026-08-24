@@ -38,6 +38,26 @@ export const WORK_ITEMS: WorkDetail[] = [
     link: { label: 'Visit the sign-in hub', url: 'https://accounts.aidenjang.com' },
   },
   {
+    title: 'everythingisfine: the planet, live',
+    context: 'Side project',
+    summary:
+      'A globe showing what the planet is doing right now, built on two free feeds that report the same earthquakes and disagree about them.',
+    body: [
+      'Earthquakes, storms, volcanoes, wildfires, floods and the aurora on one WebGL globe that only moves when the data does. Hover an event for a summary, click to pin it, click a region to fly there. Every filter answers as it moves, and a permalink carries the camera, the filters and the pinned event.',
+      'The budget was $0, and not in the sense of cheap: no key at all, including free ones behind a signup, because a project that cannot render its first frame for someone who just cloned it has no first thirty seconds. That ruled out the obvious second source and left two agencies that both report earthquakes globally, which means they report the same earthquakes. The same rupture arrives twice, seconds apart, under different identifiers, on different magnitude scales, from epicentres kilometres apart. Two unrelated feeds would have proved the adapter interface; two overlapping ones force identity resolution and a reconciliation policy, and an interface that can show the disagreement instead of hiding it. USGS is polled over HTTPS, EMSC pushes over a WebSocket, and there is no backend between them and the browser.',
+      'The harder discipline was making nothing on screen claim more than it knows. The 24-hour window states its own left edge and reads "since 19:40" until a real day has passed. Magnitudes always carry their scale, never a bare number, because a bare number implies a precision two disagreeing agencies do not have. Deduplication is named rather than silent: the rail shows both raw counts, the distinct total, and how many events both agencies saw. The wavefront plays at x20 and says so, because at true P-wave velocity the front advances a sixth of a pixel per second and reads as a still image.',
+    ],
+    stack: ['Three.js', 'WebGL', 'TypeScript', 'React', 'WebSockets', 'Cloudflare'],
+    mark: 'everythingisfine',
+    shortName: 'everythingisfine',
+    tagline: 'The planet, live.',
+    categories: ['realtime', 'systems'],
+    moment: 'wanting to know what the planet is up to without a news cycle attached',
+    principle:
+      'Colour is spent entirely on magnitude, so the chrome carries no hue at all. Where the two agencies disagree the interface shows both accounts rather than quietly picking one.',
+    link: { label: 'Open everythingisfine', url: 'https://everythingisfine.aidenjang.com' },
+  },
+  {
     title: 'iguess: realtime draw-and-guess vs an AI',
     context: 'Side project',
     summary:
