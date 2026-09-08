@@ -9,7 +9,7 @@ export function IntroSection() {
   };
 
   return (
-    <Section id="sec-intro" side="center">
+    <Section id="sec-intro" side="center" mobileVertical="top">
       <div className="panel pointer-events-auto max-w-[640px] px-4 text-center">
         <h2 className="mb-3 text-[clamp(2.4rem,5vw,3.6rem)] leading-[0.95] font-semibold tracking-[-0.035em]">
           I build web apps people want to use.

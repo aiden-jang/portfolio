@@ -19,12 +19,15 @@ export function Section({
   id,
   side,
   desktopVertical = 'center',
+  mobileVertical = 'center',
   children,
 }: {
   id: string;
   side: SectionSide;
   // Top-aligns the taller desktop panels, which would otherwise run under the brand block.
   desktopVertical?: 'center' | 'top';
+  // Top-aligns on phones, where a centred panel lands on top of the car it is describing.
+  mobileVertical?: 'center' | 'top';
   children: ReactNode;
 }) {
   const desktopJustify =
@@ -38,11 +41,12 @@ export function Section({
     <section
       id={id}
       className={`
-        min-h-screen flex items-center pointer-events-none
+        min-h-[100dvh] flex pointer-events-none
         snap-start snap-always
         px-[6vw] md:px-[5vw]
-        pt-[12vh] pb-[max(13rem,24vh)]
-        ${desktopVertical === 'top' ? 'md:items-start md:pt-[11rem] md:pb-12' : 'md:py-0'}
+        ${mobileVertical === 'top' ? 'items-start pt-[11vh]' : 'items-center pt-[12vh]'}
+        pb-[max(13rem,24vh)]
+        ${desktopVertical === 'top' ? 'md:items-start md:pt-[11rem] md:pb-12' : 'md:items-center md:py-0'}
         justify-center text-center
         ${desktopJustify} ${desktopText}
       `}
