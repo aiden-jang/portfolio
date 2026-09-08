@@ -1,8 +1,5 @@
 import { useAppStore } from '../store';
 
-/** Returns the view to the section's composed camera angle after a visitor has
- * explored the car manually. Kept next to the garage controls so the escape
- * hatch is visible right where orbiting is introduced. */
 export function CameraResetButton() {
   const resetCamera = useAppStore((state) => state.resetCamera);
 

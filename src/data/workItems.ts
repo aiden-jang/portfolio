@@ -1,16 +1,14 @@
-import type { WorkDetail } from '../ui/WorkModal';
+import type { WorkDetail } from '../types';
 
-/** Editorial entries shown in the Work section. The first row gets a "Live"
- *  badge automatically because it has a `link`. Add new entries here.
- *
- *  Source / Architecture links: repos are private for now. When one goes public,
- *  add a `links` array to that entry and it renders as outline pills next to the
- *  primary button, e.g.:
- *      links: [
- *        { label: 'Source', url: 'https://github.com/aiden-jang/iguess' },
- *        { label: 'Architecture', url: 'https://github.com/aiden-jang/iguess/blob/main/ARCHITECTURE.md' },
- *      ],
- *  Only entries with a URL render, so leaving them off never dead-links. */
+/** The `#work/...` fragment for an entry. Two entries sharing one would share a URL. */
+export function workId(item: WorkDetail): string {
+  return (item.shortName ?? item.title)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+// An entry's "Live" badge comes from it having a `link`, not from a flag of its own.
 export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'A platform of shipped side projects',

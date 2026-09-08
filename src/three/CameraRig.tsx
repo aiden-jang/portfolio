@@ -3,89 +3,47 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { KEYFRAMES } from '../config';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
-import { clamp, lerp, lerpAngle } from '../math';
+import { clamp } from '../math';
+import { useOrbitGesture, type RigState } from './useOrbitGesture';
+import {
+  blendIntro,
+  easeOutCubic,
+  floorElevation,
+  framingDistanceMultiplier,
+  FRAME_BASE_ASPECT,
+  interpolateKeyframe,
+  MAX_ELEVATION,
+  orbitPosition,
+} from './cameraPose';
 import { useAppStore } from '../store';
 import type { Keyframe } from '../types';
 
 const INTRO_DURATION = 2.0;
-const INTRO_WIDE_DIST_MUL = 2.6;
-const INTRO_WIDE_ELEVATION = 0.65;
 
-const MIN_CAM_Y = 0.25;
-const MAX_ELEVATION = 1.2;
-const MIN_ELEVATION_FREE = -0.4;
-const MAX_ELEVATION_FREE = 0.9;
-const DRAG_YAW_SENSITIVITY = 0.01;
-const DRAG_PITCH_SENSITIVITY = 0.006;
 const DRAG_DECAY_RATE = 1.5;
 const DRAG_DECAY_FRACTION = 0.6;
 const IDLE_SPIN_RATE = 0.18;
-const SCROLL_PAUSE_DURATION = 0.2;
-const TAP_THRESHOLD_PX = 3;
-// Touch fingers jitter far more than a mouse, so a stricter 3px tap threshold
-// misreads normal taps as drags and swallows the rev. Give touch more slack.
-const TOUCH_TAP_THRESHOLD_PX = 12;
-/** Touch hold-to-orbit: press and stay within HOLD_MOVE_TOLERANCE for HOLD_MS
- *  to switch from scrolling the page to orbiting the car. A larger movement
- *  before that fires is a scroll, and cancels the hold. */
-const HOLD_MS = 300;
-const HOLD_MOVE_TOLERANCE = 10;
 const REV_DECAY_RATE = 1.8;
 const REV_RUMBLE_FREQ_HZ = 90 / (2 * Math.PI);
 const REV_SHAKE_AMP = 0.12;
 
 const SECTION_PUNCH_DURATION = 0.55; // seconds
-// 0 disables the per-section FOV "punch". With desktop wheel now paging one
-// section per gesture, the punch fired on every scroll and read as a shake.
+// Left at 0 on purpose. Section changes fire continuously as you scroll, so the punch read as a
+// shake rather than a reaction.
 const SECTION_PUNCH_FOV_DELTA = 0; // degrees added at peak
 
-/** Keyframe distances are framed for a wide (desktop) viewport. On a narrow /
- *  portrait screen the horizontal field of view shrinks, so the car reads as
- *  over-zoomed and crops. Pull the camera back as the viewport gets narrower.
- *  Softened with a sqrt and capped so phones get a sensible step-back without
- *  the car shrinking into the distance. */
-const FRAME_BASE_ASPECT = 1.5;
-const FRAME_MAX_DIST_MUL = 1.85;
-
-const NON_DRAGGABLE_SELECTOR = 'a, button, .panel, #nav, #theme-toggle';
-
-/** `?clean` URL param freezes the camera in a true 3/4 front pose and skips
- *  intro tween + idle spin — used to grab a consistent OG screenshot. The live
- *  site's KEYFRAMES[0] sits closer to the nose (~14°); the OG shot wants more
- *  flank visible (~37°), hence the override. */
+// `?clean` freezes the camera for OG screenshots. It needs its own azimuth because KEYFRAMES[0]
+// sits near the nose, and the shot wants more flank.
 const isCleanMode =
   typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('clean');
 const CLEAN_AZIMUTH = 0.65;
-
-type RigState = {
-  dragAzimuth: number;
-  dragElevation: number;
-  isDown: boolean;
-  isTouch: boolean;
-  dragMoved: boolean;
-  /** Touch only: set once a stationary press passes the hold threshold, which
-   *  switches the gesture from page-scroll to car-orbit. */
-  orbitHold: boolean;
-  startX: number;
-  startY: number;
-  lastX: number;
-  lastY: number;
-  idleSpin: number;
-  scrollActiveTimer: number;
-  introT: number;
-};
 
 type Props = {
   getScrollT: () => number;
 };
 
-/** Composes scroll-driven keyframe interpolation, pointer drag, idle auto-spin,
- *  the cinematic intro tween, the floor clamp, and the rev shake into a single
- *  per-frame camera update. Pointer events route through `window` so overlay
- *  stacking doesn't matter; clicks on UI elements are ignored. */
 export function CameraRig({ getScrollT }: Props) {
   const { camera } = useThree();
-  const triggerRev = useAppStore((s) => s.triggerRev);
   const cameraResetVersion = useAppStore((s) => s.cameraResetVersion);
 
   const state = useRef<RigState>({
@@ -108,6 +66,8 @@ export function CameraRig({ getScrollT }: Props) {
   const sectionPunchTimer = useRef(0);
   const lastSection = useRef<number | null>(null);
 
+  useOrbitGesture(state);
+
   useEffect(() => {
     const s = state.current;
     s.dragAzimuth = 0;
@@ -117,7 +77,6 @@ export function CameraRig({ getScrollT }: Props) {
     document.body.classList.remove('orbiting');
   }, [cameraResetVersion]);
 
-  // Briefly bump FOV when the section changes to give navigation some weight.
   useEffect(() => {
     const unsub = useAppStore.subscribe((s) => {
       if (lastSection.current === null) {
@@ -132,124 +91,11 @@ export function CameraRig({ getScrollT }: Props) {
     return unsub;
   }, []);
 
-  useEffect(() => {
-    const isNonDraggable = (target: EventTarget | null) =>
-      !!(target as HTMLElement | null)?.closest?.(NON_DRAGGABLE_SELECTOR);
-
-    let holdTimer = 0;
-    const endGesture = (s: RigState) => {
-      window.clearTimeout(holdTimer);
-      s.orbitHold = false;
-      document.body.classList.remove('orbiting');
-    };
-
-    const onPointerDown = (e: PointerEvent) => {
-      if (isNonDraggable(e.target)) return;
-      const s = state.current;
-      s.isDown = true;
-      s.isTouch = e.pointerType === 'touch';
-      s.dragMoved = false;
-      s.orbitHold = false;
-      s.startX = e.clientX;
-      s.startY = e.clientY;
-      s.lastX = e.clientX;
-      s.lastY = e.clientY;
-      // Touch: a stationary press-and-hold switches the gesture from scrolling
-      // the page to orbiting the car, so a normal swipe still scrolls.
-      if (s.isTouch) {
-        window.clearTimeout(holdTimer);
-        holdTimer = window.setTimeout(() => {
-          if (s.isDown && !s.dragMoved) {
-            s.orbitHold = true;
-            document.body.classList.add('orbiting');
-            navigator.vibrate?.(12);
-          }
-        }, HOLD_MS);
-      }
-    };
-    const onPointerMove = (e: PointerEvent) => {
-      const s = state.current;
-      if (!s.isDown) return;
-      const dx = e.clientX - s.lastX;
-      const dy = e.clientY - s.lastY;
-      s.lastX = e.clientX;
-      s.lastY = e.clientY;
-      const tapThreshold = s.isTouch ? TOUCH_TAP_THRESHOLD_PX : TAP_THRESHOLD_PX;
-      const totalMovement = Math.abs(e.clientX - s.startX) + Math.abs(e.clientY - s.startY);
-      if (totalMovement > tapThreshold) s.dragMoved = true;
-      // Touch scrolls the page unless hold-to-orbit has engaged; a real move
-      // before the hold fires cancels it (it was a scroll, not a hold).
-      if (s.isTouch && !s.orbitHold) {
-        if (totalMovement > HOLD_MOVE_TOLERANCE) window.clearTimeout(holdTimer);
-        return;
-      }
-      // Do not nudge the camera for pointer jitter that still counts as a tap.
-      if (!s.dragMoved) return;
-      // Orbiting (mouse drag, or an engaged touch hold): fade the DOM text so
-      // the car reads clean. Restored on pointer up/cancel. CSS transitions it.
-      if (s.dragMoved) document.body.classList.add('orbiting');
-      s.dragAzimuth += dx * DRAG_YAW_SENSITIVITY;
-      s.dragElevation = clamp(
-        s.dragElevation - dy * DRAG_PITCH_SENSITIVITY,
-        MIN_ELEVATION_FREE,
-        MAX_ELEVATION_FREE,
-      );
-    };
-    // Non-passive so a hold-orbit on touch can suppress the page scroll while
-    // the finger drags the car. Only preventDefaults once the hold engaged.
-    const onTouchMove = (e: TouchEvent) => {
-      if (state.current.orbitHold) e.preventDefault();
-    };
-    const onPointerUp = () => {
-      const s = state.current;
-      if (!s.isDown) {
-        endGesture(s);
-        return;
-      }
-      // Any release where the finger never actually moved revs. We intentionally
-      // do NOT also require !orbitHold: a stationary press that crossed the 300ms
-      // hold threshold but never orbited (never moved) should still rev, rather
-      // than reading as a dead press. Only a real orbit (dragMoved) suppresses it.
-      if (!s.dragMoved) triggerRev();
-      s.idleSpin += s.dragAzimuth;
-      s.dragAzimuth = 0;
-      s.isDown = false;
-      endGesture(s);
-    };
-    const onPointerCancel = () => {
-      state.current.isDown = false;
-      endGesture(state.current);
-    };
-    const onScroll = () => {
-      state.current.scrollActiveTimer = SCROLL_PAUSE_DURATION;
-    };
-
-    window.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('touchmove', onTouchMove, { passive: false });
-    window.addEventListener('pointerup', onPointerUp);
-    window.addEventListener('pointercancel', onPointerCancel);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => {
-      window.clearTimeout(holdTimer);
-      window.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('pointerup', onPointerUp);
-      window.removeEventListener('pointercancel', onPointerCancel);
-      window.removeEventListener('scroll', onScroll);
-      document.body.classList.remove('orbiting');
-    };
-  }, [triggerRev]);
-
   useFrame((three, dt) => {
     const s = state.current;
     const refs = useAppStore.getState().refs;
     const reduced = prefersReducedMotion();
 
-    // Idle spin advances only when scroll has settled AND not dragging.
-    // Clean mode freezes the camera at the intro keyframe for OG screenshots.
-    // Reduced motion: skip the ambient drift entirely.
     s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
     if (s.scrollActiveTimer === 0 && !s.isDown && !isCleanMode && !reduced) {
       s.idleSpin += dt * IDLE_SPIN_RATE;
@@ -260,56 +106,27 @@ export function CameraRig({ getScrollT }: Props) {
       s.dragElevation *= 1 - k * DRAG_DECAY_FRACTION;
     }
 
-    // Base keyframe interpolation by scroll position.
-    const tScroll = getScrollT() * (KEYFRAMES.length - 1);
-    const i = Math.floor(tScroll);
-    const f = tScroll - i;
-    const a = KEYFRAMES[i];
-    const b = KEYFRAMES[Math.min(i + 1, KEYFRAMES.length - 1)];
     const kf = baseKf.current;
-    kf.azimuth = lerpAngle(a.azimuth, b.azimuth, f);
-    kf.elevation = lerp(a.elevation, b.elevation, f);
-    kf.distance = lerp(a.distance, b.distance, f);
-    kf.targetY = lerp(a.targetY, b.targetY, f);
+    interpolateKeyframe(KEYFRAMES, getScrollT(), kf);
 
     const az = isCleanMode ? CLEAN_AZIMUTH : kf.azimuth + s.dragAzimuth + s.idleSpin;
-    // Pull back on narrow / portrait viewports so the car isn't over-zoomed.
     const aspect = three.size.height > 0 ? three.size.width / three.size.height : FRAME_BASE_ASPECT;
-    const distMul = clamp(Math.sqrt(FRAME_BASE_ASPECT / aspect), 1, FRAME_MAX_DIST_MUL);
-    const dist = kf.distance * distMul;
+    const dist = kf.distance * framingDistanceMultiplier(aspect);
     const tgtY = kf.targetY;
 
-    // Floor clamp: ensure camera y stays above MIN_CAM_Y.
-    const minSinEl = clamp((MIN_CAM_Y - tgtY) / dist, -1, 1);
-    const minEl = Math.asin(minSinEl);
-    const el = clamp(kf.elevation + s.dragElevation, minEl, MAX_ELEVATION);
+    const el = clamp(kf.elevation + s.dragElevation, floorElevation(dist, tgtY), MAX_ELEVATION);
     if (s.isDown) s.dragElevation = el - kf.elevation;
 
-    let x = Math.sin(az) * Math.cos(el) * dist;
-    let y = Math.sin(el) * dist + tgtY;
-    let z = Math.cos(az) * Math.cos(el) * dist;
+    let pose = orbitPosition(az, el, dist, tgtY);
 
-    // Cinematic intro tween (skipped in clean mode for static OG framing,
-    // and skipped under reduced motion).
     if (refs.introArmed && s.introT < 1 && !isCleanMode && !reduced) {
       s.introT = Math.min(1, s.introT + dt / INTRO_DURATION);
-      const t = 1 - Math.pow(1 - s.introT, 3);
-      const wideDist = dist * INTRO_WIDE_DIST_MUL;
-      const cosWE = Math.cos(INTRO_WIDE_ELEVATION);
-      const wx = Math.sin(az) * cosWE * wideDist;
-      const wy = Math.sin(INTRO_WIDE_ELEVATION) * wideDist + tgtY;
-      const wz = Math.cos(az) * cosWE * wideDist;
-      x = wx + (x - wx) * t;
-      y = wy + (y - wy) * t;
-      z = wz + (z - wz) * t;
+      pose = blendIntro(pose, az, dist, tgtY, easeOutCubic(s.introT));
     }
 
-    camera.position.set(x, y, z);
+    camera.position.set(pose.x, pose.y, pose.z);
     camera.lookAt(0, tgtY, 0);
 
-    // Section punch: brief FOV bell-curve pulse on nav changes for a cinematic
-    // "reaction" to the section change. Returns FOV to baseline at the end.
-    // Suppressed under reduced motion (FOV held at baseline).
     if (camera instanceof THREE.PerspectiveCamera) {
       if (sectionPunchTimer.current > 0) {
         sectionPunchTimer.current = Math.max(0, sectionPunchTimer.current - dt);
@@ -325,8 +142,7 @@ export function CameraRig({ getScrollT }: Props) {
       }
     }
 
-    // Rev envelope: shake the camera + bleed rev intensity. The rev counter
-    // still decays so taps register a "click", but no visual shake is applied.
+    // Two blocks: the counter has to decay under reduced motion too, it just skips the shake.
     if (refs.revT > 0) {
       refs.revT = Math.max(0, refs.revT - dt * REV_DECAY_RATE);
     }

@@ -19,20 +19,18 @@ export default tseslint.config(
       'react-refresh': reactRefresh,
     },
     rules: {
-      // The two classic, high-signal hooks rules. We intentionally do NOT
-      // spread `reactHooks.configs.recommended` because v7 folds in the React
-      // Compiler ruleset (react-hooks/refs, immutability), which false-positives
-      // all over react-three-fiber: mutating the camera / scene graph inside
-      // useFrame and seeding props from init values is the correct r3f pattern,
-      // not a render-purity bug.
+      // Don't spread reactHooks.configs.recommended. v7 folds in the React Compiler ruleset,
+      // which flags the correct react-three-fiber patterns as purity bugs: mutating the scene
+      // graph inside useFrame, and seeding props from init values.
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
-  // Node-context config files (Vite, ESLint, Tailwind).
+  // Node-context files: the config files and the gate scripts.
   {
-    files: ['*.config.{js,ts}'],
+    files: ['*.config.{js,ts}', 'scripts/**/*.mjs'],
+    extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
   },
   // Disable stylistic rules that would fight Prettier. Keep last.

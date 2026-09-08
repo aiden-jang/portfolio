@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
 import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
 
-/** Compact tappable color control for the mobile bottom bar. The 7-swatch row
- *  is too dense on a phone, so this is a single 44px round button that cycles
- *  the car's body color on tap and shows the current one as a dot — small
- *  enough to sit on one line beside the car switcher, even on a 320px screen. */
+// The full swatch row does not fit beside the car switcher at 320px, so the phone gets one
+// cycling button instead.
 export function MobileColorButton() {
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const cycleBodyColor = useAppStore((s) => s.cycleBodyColor);
@@ -35,21 +33,14 @@ export function MobileColorButton() {
   );
 }
 
-/** Body-color swatches. Applies to the detected body material on the current
- *  car. The "active" indicator reads from the store, so the same indicator
- *  also reflects keyboard-triggered color changes (e.g. pressing `C`).
- *
- *  `bordered` draws the side dividers used inside the desktop nav row; the
- *  standalone mobile instance turns it off. */
 export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
   const carIndex = useAppStore((s) => s.carIndex);
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const applyBodyColor = useAppStore((s) => s.applyBodyColor);
   const hasBody = useAppStore((s) => s.hasBodyMaterial);
 
-  // A color button can retain keyboard focus after an arrow-key car switch.
-  // Remounting the swatch row on a new car removes that stale focus outline as
-  // well as the old car's active paint treatment.
+  // Switching cars by arrow key leaves focus on a swatch belonging to the car that just left,
+  // outline and all.
   useEffect(() => {
     const focused = document.activeElement;
     if (focused instanceof HTMLButtonElement && focused.dataset.colorSwatch === 'true') {
@@ -57,8 +48,7 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
     }
   }, [carIndex]);
 
-  // Always rendered so the nav layout doesn't shift when the body material
-  // finishes detecting. Visually muted + non-interactive while we wait.
+  // Always rendered, muted, so the nav does not shift when material detection finishes.
   return (
     <div
       key={carIndex}

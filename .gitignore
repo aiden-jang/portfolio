@@ -22,6 +22,5 @@ npm-debug.log*
 .env.*
 !.env.example
 
-# Claude Code (local, machine-specific)
+# Claude Code: launch.json is committed, local settings are not
 .claude/settings.local.json
-.claude/launch.json

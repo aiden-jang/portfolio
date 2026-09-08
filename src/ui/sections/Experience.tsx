@@ -1,5 +1,5 @@
 import { WORK_ITEMS } from '../../data/workItems';
-import type { WorkDetail } from '../WorkModal';
+import type { WorkDetail } from '../../types';
 import { EYEBROW, H2, P_LI, Section, UL_BASE } from './shared';
 
 const ROLES = [
@@ -12,10 +12,6 @@ type Props = {
   onOpen: (item: WorkDetail, el: HTMLElement) => void;
 };
 
-/** Professional experience: the roles timeline plus the highlight case studies
- *  (the non-app WORK_ITEMS). Clicking a highlight opens its full write-up. This
- *  leads the page — it's the strongest signal for hiring — with the side
- *  projects following in their own section. */
 export function ExperienceSection({ onOpen }: Props) {
   const highlights = WORK_ITEMS.filter((i) => !i.mark);
 
@@ -54,7 +50,6 @@ export function ExperienceSection({ onOpen }: Props) {
   );
 }
 
-/** Clickable one-line highlight that opens the full case-study modal. */
 function HighlightRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLElement) => void }) {
   return (
     <button

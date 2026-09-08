@@ -1,16 +1,12 @@
 import { useEffect, type RefObject } from 'react';
 import { prefersReducedMotion } from './useReducedMotion';
 
-/** Magnetic pull effect: translate an element toward the cursor while it's
- *  hovered, snap back on leave. `strength` is the fraction of the cursor's
- *  distance-from-center to apply (0.3 = subtle pull, 0.6 = strong). */
+/** `strength` is the fraction of the cursor's distance from centre to follow: 0.3 is subtle. */
 export function useMagnetic<T extends HTMLElement>(ref: RefObject<T | null>, strength = 0.3): void {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // Bail on touch / coarse-pointer devices — no meaningful hover there.
     if (!window.matchMedia || window.matchMedia('(hover: none)').matches) return;
-    // Bail when the user has asked for reduced motion.
     if (prefersReducedMotion()) return;
 
     const onMove = (e: MouseEvent) => {

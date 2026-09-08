@@ -1,7 +1,5 @@
 import { useLocalTime } from '../hooks/useLocalTime';
 
-/** Top-left brand block — fixed-position chrome over the canvas. `onHome` jumps
- *  back to the first section (the name acts as a home link). */
 export function Brand({ onHome }: { onHome: () => void }) {
   const time = useLocalTime();
   return (
@@ -18,7 +16,6 @@ export function Brand({ onHome }: { onHome: () => void }) {
       </button>
       <span className="font-[var(--font-mono)] text-[0.58rem] md:text-[0.66rem] tracking-[0.24em] md:tracking-[0.32em] uppercase text-[var(--color-muted)] inline-flex items-center gap-2">
         <span>Software Engineer · New York</span>
-        {/* Time chip: desktop only. */}
         <span className="hidden md:inline text-[var(--color-line)]">·</span>
         <span className="hidden md:inline-flex items-center gap-1.5">
           <span className="inline-block w-1 h-1 rounded-full bg-[var(--color-neon)] animate-pulse" />

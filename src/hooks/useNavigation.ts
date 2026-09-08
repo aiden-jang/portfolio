@@ -5,13 +5,9 @@ import { prefersReducedMotion } from './useReducedMotion';
 import { useAppStore } from '../store';
 
 let scrollRaf = 0;
-// Set while a programmatic tween owns the scroll; restores the CSS-driven snap.
-// Exposed via cancelSmoothScroll so manual scroll input can abort the tween.
+// Module-level so manual scroll input can abort a tween started from anywhere.
 let restoreSnap: (() => void) | null = null;
 
-/** Abort any in-flight programmatic scroll and restore scroll-snap immediately.
- *  Called when the user takes over (touch / wheel) so the tween never fights a
- *  manual scroll, and snap is never left disabled. */
 function cancelSmoothScroll(): void {
   if (scrollRaf) {
     cancelAnimationFrame(scrollRaf);
@@ -23,19 +19,9 @@ function cancelSmoothScroll(): void {
   }
 }
 
-/** Smoothly scroll the window to an absolute Y for a section jump.
- *
- *  The load-bearing trick: hold `scroll-snap-type: mandatory` OFF for the whole jump.
- *  With snap on, a real phone re-snaps and reverts the programmatic scroll (the "dot
- *  updates but the copy is the wrong section" bug). Snap is restored on the user's
- *  next manual scroll (yieldToUser), so ordinary swiping still snaps section-to-section.
- *
- *  For the animation itself:
- *   - Touch → NATIVE smooth scroll. It's compositor-driven, so unlike a JS rAF tween
- *     (which stalls on a real phone) it actually animates. It only looked broken before
- *     because mandatory snap was overriding it — which we now disable for the jump.
- *   - Desktop → a JS rAF tween (reliable there, and gives precise control).
- *   - Reduced motion → instant jump. */
+// Snap has to stay off for the whole jump and past the end of it. A phone with snap on re-snaps
+// mid-tween and reverts the jump, leaving the dot on one section and the copy on another. Coarse
+// pointers also need the native scroll, because a rAF tween stalls on a real phone.
 function smoothScrollTo(targetY: number): void {
   const startY = window.scrollY;
   const dist = targetY - startY;
@@ -44,9 +30,6 @@ function smoothScrollTo(targetY: number): void {
   cancelSmoothScroll();
   const html = document.documentElement;
   html.style.scrollSnapType = 'none';
-  // NB: restoreSnap is intentionally NOT called at the end of the animation — snap stays off until
-  // the user's next manual scroll re-enables it (via yieldToUser). Re-enabling it the instant the
-  // animation finishes is what let mobile re-snap and undo the jump.
   restoreSnap = () => {
     html.style.scrollSnapType = '';
   };
@@ -71,27 +54,19 @@ function smoothScrollTo(targetY: number): void {
     if (t < 1) {
       scrollRaf = requestAnimationFrame(step);
     } else {
-      scrollRaf = 0; // done — leave snap off; the next manual scroll restores it
+      scrollRaf = 0;
     }
   };
   scrollRaf = requestAnimationFrame(step);
 }
 
-/** After a deliberate jump (keyboard / nav / dots) this long, ignore scroll
- *  events so the smooth-scroll animation isn't overridden mid-flight. */
+// How long a deliberate jump ignores scroll events, so it isn't overridden mid-flight.
 const SNAP_LOCK_MS = 900;
-/** Cooldown between car cycles (the GLB swap is async + self-throttling). */
+// The GLB swap is async, so cycling faster than this queues loads nobody sees.
 const CAR_LOCK_MS = 600;
-/** Horizontal wheel events below this magnitude are ignored — small jitter
- *  from a mouse should not cycle the car. */
+// Below this, a mouse's horizontal jitter would cycle the car on its own.
 const MIN_WHEEL_DELTA = 10;
 
-/** Section navigation. Vertical scrolling is left FULLY native — no JS tween,
- *  no paging — which is the smoothest with a wheel/trackpad (the camera rig
- *  interpolates continuously off scrollY, so sections still read as distinct
- *  stops). Mobile adds native CSS scroll-snap in index.css. Keyboard, nav, and
- *  the dots jump with native smooth-scroll. Horizontal trackpad wheel cycles
- *  cars on desktop. Exposes `getScrollT` for the camera rig. */
 export function useNavigation() {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
   const snapLockUntil = useRef(0);
@@ -135,10 +110,8 @@ export function useNavigation() {
   useEffect(() => {
     const dialogIsOpen = () =>
       !!document.querySelector('[role="dialog"][aria-modal="true"]:not([aria-hidden="true"])');
-    // The user grabbed the scroll: abort any in-flight jump so the tween doesn't
-    // fight them, and drop the snap-lock so the active-section highlight tracks
-    // their manual scroll again right away (rather than staying frozen on the
-    // jump target). This is what makes mixing scroll + dots/title feel coherent.
+    // Clearing the lock as well as the tween is what stops the section highlight from staying
+    // frozen on the jump target once the user scrolls away from it.
     const yieldToUser = () => {
       cancelSmoothScroll();
       snapLockUntil.current = 0;
@@ -147,8 +120,7 @@ export function useNavigation() {
       if (dialogIsOpen()) return;
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
-      // Horizontal trackpad swipe → cycle cars. Vertical wheel is native scroll,
-      // but it also means the user is taking over, so yield any in-flight jump.
+      // Vertical wheel stays native scroll, but it still means the user is taking over.
       if (absX > absY && absX >= MIN_WHEEL_DELTA) {
         if (e.deltaX > 0) cycleCarThrottled();
         else prevCarThrottled();
@@ -166,8 +138,7 @@ export function useNavigation() {
         target instanceof HTMLInputElement ||
         target instanceof HTMLTextAreaElement ||
         !!target?.isContentEditable;
-      // Inputs own their navigation keys. Without this guard, pressing ↑/↓
-      // inside the command palette also scrolls the portfolio behind it.
+      // Without this, arrow keys in the command palette also scroll the page behind it.
       if (inField) return;
       if (/^[1-9]$/.test(e.key)) {
         const carIndex = Number(e.key) - 1;
@@ -233,8 +204,7 @@ export function useNavigation() {
           break;
       }
     };
-    // Track the active section for the nav dots / label as you scroll. A
-    // deliberate jump holds the lock so this doesn't fight its animation.
+    // The lock is what keeps a deliberate jump from fighting its own animation.
     const onScroll = () => {
       if (performance.now() < snapLockUntil.current) return;
       const idx = Math.round(getScrollT() * (SECTION_IDS.length - 1));

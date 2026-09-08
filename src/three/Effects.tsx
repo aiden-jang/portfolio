@@ -9,8 +9,6 @@ import { useAppStore } from '../store';
 const TRANSITION_RATE = 2.5;
 const BLOOM_RADIUS = 0.6;
 
-/** UnrealBloom via @react-three/postprocessing. Strength and threshold are
- *  eased toward the active theme each frame. */
 export function Effects() {
   const bloomRef = useRef<BloomEffect>(null);
   const currentStrength = useRef(THEMES.dusk.bloomStrength);
@@ -30,9 +28,7 @@ export function Effects() {
   return (
     <EffectComposer>
       <Bloom
-        // @react-three/postprocessing types this ref as the BloomEffect class
-        // rather than the instance it actually assigns, so the instance-typed
-        // ref needs a cast at this one boundary.
+        // The library types this ref as the BloomEffect class, not the instance it assigns.
         ref={bloomRef as unknown as ComponentProps<typeof Bloom>['ref']}
         intensity={THEMES.dusk.bloomStrength}
         luminanceThreshold={THEMES.dusk.bloomThreshold}

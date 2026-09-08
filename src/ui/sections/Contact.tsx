@@ -84,8 +84,7 @@ export function ContactSection() {
   );
 }
 
-/** Mailto link plus a copy-to-clipboard pill. Most visitors won't have Mail.app
- *  configured; the copy button is the one-click path, mailto is the fallback. */
+// Copy is the primary path, not mailto: most visitors have no mail client configured.
 function EmailRow() {
   const [copied, setCopied] = useState(false);
 
@@ -95,18 +94,14 @@ function EmailRow() {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
-      /* clipboard blocked (insecure context, permissions); mailto still works */
+      /* Clipboard blocked by context or permissions. The mailto link still works. */
     }
   };
 
   return (
     <li className="py-1.5 text-center">
-      {/* inline-block sizes to the email alone, so text-center centers the
-       *  address itself — matching the links below. On desktop the copy pill
-       *  is taken out of flow (absolute, to the right) so it can't pull the
-       *  email off-center. On mobile that absolute pill would shoot past the
-       *  viewport edge and create a sideways scroll, so there it sits centered
-       *  on its own line below the address instead. */}
+      {/* The pill is absolute on desktop so it cannot pull the address off-centre, but in flow on
+          mobile, where absolute would push past the viewport and add a sideways scroll. */}
       <span className="relative inline-block">
         <a href={`mailto:${EMAIL}`} className={LINK_CLASS}>
           {EMAIL}

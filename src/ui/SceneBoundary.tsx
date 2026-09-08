@@ -3,11 +3,8 @@ import { Component, type ReactNode } from 'react';
 type Props = { children: ReactNode };
 type State = { failed: boolean };
 
-/** Catches runtime errors from the 3D scene — no WebGL context (locked-down
- *  machines, GPU blocklists, old devices), a failed GLB, a lost context — so a
- *  broken canvas silently disappears instead of throwing past Suspense and
- *  blanking the whole page. The 3D is decorative; the DOM portfolio is fully
- *  usable without it. */
+// The 3D is decorative and the DOM portfolio works without it, so a missing WebGL context or a
+// failed GLB should drop the canvas rather than throw past Suspense and blank the page.
 export class SceneBoundary extends Component<Props, State> {
   state: State = { failed: false };
 
@@ -16,7 +13,6 @@ export class SceneBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: unknown): void {
-    // Non-fatal: log for diagnostics, then render nothing in the canvas slot.
     console.warn('3D scene disabled:', error);
   }
 

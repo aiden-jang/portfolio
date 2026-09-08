@@ -2,9 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CARS } from '../../config';
 
-/** Model credits stay out of the Contact layout until requested. A compact
- * sheet keeps attribution easy to inspect without stretching the final section
- * into an awkward extra page. */
 export function Credits() {
   const credited = CARS.filter((car) => !!car.credit);
   const licenses = [...new Set(credited.map((car) => car.credit!.license))];

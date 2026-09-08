@@ -1,5 +1,14 @@
 import type * as THREE from 'three';
 
+export type MarkKey =
+  | 'owewell'
+  | 'iguess'
+  | 'wherever'
+  | 'bloomnote'
+  | 'auth'
+  | 'mrrp'
+  | 'everythingisfine';
+
 export type ThemeName = 'dusk' | 'night';
 
 export type Theme = {
@@ -29,19 +38,17 @@ export type CarSpec = {
   name: string;
   code: string;
   file: string;
-  /** Per-car tone-mapping multiplier applied on top of the theme exposure. */
   exposure: number;
   credit?: Credit;
 };
 
-/** Spherical-coords camera target, interpolated between page sections. */
 export type Keyframe = {
-  /** Yaw around the car (radians, 0 = front). */
+  // Radians, 0 = front.
   azimuth: number;
-  /** Pitch above the horizon (radians, 0 = level). */
+  // Radians, 0 = level with the horizon.
   elevation: number;
   distance: number;
-  /** World-space Y the camera looks at. */
+  // World space, not relative to the car.
   targetY: number;
 };
 
@@ -51,5 +58,24 @@ export type Lamp = {
   isHeadlight: boolean;
 };
 
-/** Any Three.js material that exposes a `color` property. */
 export type ColorMaterial = THREE.Material & { color?: THREE.Color };
+
+export type WorkDetail = {
+  title: string;
+  summary: string;
+  context: string;
+  body: string[];
+  stack: string[];
+  image?: string;
+  link?: { label: string; url: string };
+  links?: { label: string; url: string }[];
+  // Giving an entry a mark switches the Work grid from an editorial row to a product card,
+  // which is what reads shortName, tagline and preview.
+  mark?: MarkKey;
+  shortName?: string;
+  tagline?: string;
+  preview?: string;
+  moment?: string;
+  principle?: string;
+  categories?: Array<'realtime' | 'ai' | 'social' | 'systems'>;
+};

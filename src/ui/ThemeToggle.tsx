@@ -27,9 +27,7 @@ function MoonIcon() {
   );
 }
 
-/** Day/night studio-lighting toggle. Sun in dusk, moon at night, tinted to match.
- *  Flat by default for the desktop control dock; owns the body[data-theme] sync
- *  so CSS-only consumers stay in step regardless of which control flips it. */
+// Owns the body[data-theme] sync, so CSS-only consumers stay in step whichever control flips it.
 export function ThemeToggle() {
   const themeName = useAppStore((s) => s.themeName);
   const toggleTheme = useAppStore((s) => s.toggleTheme);
@@ -57,8 +55,6 @@ export function ThemeToggle() {
   );
 }
 
-/** 44px studio-lighting toggle for the mobile bottom bar — same sun/moon icon in a
- *  bordered round button sized for touch. */
 export function MobileThemeButton() {
   const themeName = useAppStore((s) => s.themeName);
   const toggleTheme = useAppStore((s) => s.toggleTheme);

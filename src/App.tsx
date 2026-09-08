@@ -6,8 +6,7 @@ import { useNavigation } from './hooks/useNavigation';
 import { useReveal } from './hooks/useReveal';
 import { BODY_COLOR_SWATCHES, useAppStore, type ActiveBodyColor } from './store';
 import type { ThemeName } from './types';
-// Lazy-loaded so the ~1 MB Three/R3F bundle isn't on the critical path — the DOM chrome and
-// section content paint immediately, then the canvas mounts when its chunk arrives.
+// Lazy so the ~1 MB Three/R3F chunk stays off the critical path and the copy paints first.
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 import { Brand } from './ui/Brand';
 import { CameraResetButton } from './ui/CameraResetButton';
@@ -27,12 +26,10 @@ import { MobileCommandButton } from './ui/MobileCommandButton';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 
-/** `?clean` URL param strips all DOM chrome — used to grab a clean canvas
- *  screenshot for the OG image, and handy for demos / press shots. */
+// `?clean` strips the DOM chrome, for capturing the OG image against a bare canvas.
 const isCleanMode =
   typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('clean');
 
-/** Composition root: 3D canvas + DOM chrome side-by-side. */
 export function App() {
   const { getScrollT, scrollToSection } = useNavigation();
   const setCarIndex = useAppStore((state) => state.setCarIndex);
@@ -45,8 +42,7 @@ export function App() {
   const scenePaintRef = useRef<ActiveBodyColor | null>(null);
   const [sceneReady, setSceneReady] = useState(false);
 
-  // A shared garage URL is intentionally just query params, so it also works
-  // alongside case-study hashes and the existing `?clean` screenshot mode.
+  // Query params rather than a hash, so a shared garage survives alongside a `#work/...` link.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const carIndex = Number(params.get('car'));
@@ -63,9 +59,7 @@ export function App() {
     setSceneReady(true);
   }, [setCarIndex, setThemeName]);
 
-  // Keep the address bar in step with the visible garage. This makes a manual
-  // copy from the browser shareable too, while retaining `?clean` and any
-  // `#work/...` case-study deep link already in place.
+  // Rebuilt from the current URL, not replaced, so `?clean` and any case-study hash survive.
   useEffect(() => {
     if (!sceneReady) return;
     const url = new URL(window.location.href);
@@ -75,9 +69,8 @@ export function App() {
     window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
   }, [activeBodyColor, carIndex, sceneReady, themeName]);
 
-  // Paint cannot be applied until the selected GLB has loaded and exposed its
-  // material. Do this once for a shared link; later car changes stay in the
-  // visitor's control rather than unexpectedly reapplying the initial paint.
+  // Paint has to wait for the GLB to expose its material. Clearing the ref after the first apply
+  // keeps a later car change from silently reverting to the shared link's color.
   useEffect(() => {
     if (!hasBodyMaterial || !scenePaintRef.current) return;
     applyBodyColor(scenePaintRef.current);
@@ -88,8 +81,6 @@ export function App() {
 
   return (
     <>
-      {/* First focusable element: lets keyboard users jump past the chrome
-       *  straight into the page content. Hidden until focused. */}
       <a
         href="#scroll"
         className="
@@ -107,8 +98,7 @@ export function App() {
         <Suspense fallback={null}>
           <Scene getScrollT={getScrollT} />
         </Suspense>
-        {/* Inside the boundary so a WebGL failure also clears the loading bar,
-            which would otherwise sit stuck at 0% with the scene never arriving. */}
+        {/* Inside the boundary, or a WebGL failure leaves the bar stuck at 0% forever. */}
         <LoadingBar />
       </SceneBoundary>
       <div className="vignette" aria-hidden="true" />
@@ -117,8 +107,6 @@ export function App() {
         <>
           <Brand onHome={() => scrollToSection('sec-intro')} />
           <Nav onLink={scrollToSection} />
-          {/* Mobile-only floating resume CTA. Desktop renders ResumeButton
-           *  inside Nav so it shares the top-right chrome row. */}
           <div
             id="mobile-resume"
             className="md:hidden fixed top-[max(4vh,env(safe-area-inset-top))] right-[5vw] z-20 flex items-center gap-2"
@@ -126,12 +114,7 @@ export function App() {
             <MobileCommandButton />
             <ResumeButton />
           </div>
-          {/* Mobile bottom bar: section progress + car + color in one
-           *  bottom-anchored stack, so the pieces never overlap each other
-           *  across phone sizes (sections reserve this zone with their bottom
-           *  padding). The soft gradient lets content fade under the controls
-           *  instead of colliding with them. Desktop renders these inside Nav
-           *  and the dot rail on the right edge. */}
+          {/* Sections reserve this strip with their own bottom padding, so keep the two in step. */}
           <div
             id="mobile-bar"
             className="
@@ -141,18 +124,12 @@ export function App() {
             "
           >
             <SectionDots onJump={scrollToSection} placement="bar" />
-            {/* Car switcher, color, and studio lighting on one compact line. */}
             <div className="flex items-center gap-2">
               <MobileCarSwitcher />
               <MobileColorButton />
               <MobileThemeButton />
             </div>
           </div>
-          {/* Desktop car + color dock. These used to sit in the top-right Nav
-           *  row, but that made the nav wide enough to overlap the brand on
-           *  most laptop widths. Bottom-center, just above the Hint, keeps them
-           *  discoverable while the top row stays clear. Mobile has its own
-           *  copy in the bottom bar above. */}
           <div
             id="desktop-dock"
             className="
@@ -160,7 +137,6 @@ export function App() {
               pointer-events-none
             "
           >
-            {/* One cohesive control bar: car | color | studio lighting. */}
             <div
               className="
                 pointer-events-auto flex items-center gap-1
