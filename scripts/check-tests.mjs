@@ -11,7 +11,10 @@ const run = spawnSync('npx', ['vitest', 'run'], {
   encoding: 'utf8',
   maxBuffer: 32 * 1024 * 1024,
 });
-const output = `${run.stdout ?? ''}${run.stderr ?? ''}`;
+// CI turns vitest's colours on, which puts escape codes between "Tests" and the count and makes
+// the summary unmatchable. Strip them rather than trusting an env var the child may ignore.
+const ansi = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, 'g');
+const output = `${run.stdout ?? ''}${run.stderr ?? ''}`.replace(ansi, '');
 const summary = output.match(/Tests\s+(?:(\d+) failed \| )?(\d+) passed/);
 
 const problems = [];
