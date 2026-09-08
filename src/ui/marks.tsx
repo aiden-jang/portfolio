@@ -7,7 +7,7 @@ import type { JSX } from 'react';
 export const ACCENTS: Record<MarkKey, string> = {
   owewell: '#a78bfa',
   iguess: '#a855f7',
-  wherever: '#ff5e2c',
+  wherever: '#d7ff3e',
   bloomnote: '#ff8fa3',
   auth: '#22d3ee',
   mrrp: '#e0a03f',
