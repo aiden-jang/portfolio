@@ -24,12 +24,15 @@ npm run dev        # dev server, usually http://localhost:5173
 ```
 
 ```bash
+npm run verify     # the whole gate, and exactly what CI runs
+npm test           # unit suite only
 npm run build      # tsc --noEmit, then vite build, output in dist/
 npm run preview    # serve the production build
-npm run typecheck  # types only
 ```
 
-`build` typechecks before bundling, so a type error fails the build.
+`verify` runs types, lint, formatting, the size ceilings, the comment rules and the test floor
+before it builds, so CI is never the first place a check runs. `build` typechecks before
+bundling, so a type error fails the build on its own too.
 
 ## How it works
 
@@ -58,13 +61,20 @@ imperatively, so 60fps updates never cascade into React renders.
 
 ### Scrolling and navigation
 
-Vertical scroll is left fully native. CSS scroll-snap was dropped because it
-re-snapped after every discrete mouse-wheel tick and fought the wheel. Instead,
-once scrolling stops a debounced settle eases the page to the nearest section with
-a custom requestAnimationFrame tween, and any input (wheel, key, touch) cancels the
-glide so it never fights you mid-gesture. Keyboard (arrows, PageUp/Down, Home, End),
-nav links, and the side dots jump via a locked smooth scroll. Horizontal wheel and
-horizontal touch flicks cycle cars; `c` repaints, `b` toggles the theme.
+Paging between sections is native CSS scroll-snap: `scroll-snap-type: y mandatory`
+on `<html>`, and `snap-start snap-always` on each section so a single flick cannot
+skip one. An earlier version paged in JS with its own tween and shook against the
+wheel, which is why the browser drives it now.
+
+Deliberate jumps still need JS, and they switch snap off for the duration. With it
+on, a phone re-snaps mid-jump and reverts it, which leaves the dot on one section
+and the copy on another. Coarse pointers then get native smooth scroll, since a
+requestAnimationFrame tween stalls on a real phone; desktop gets the tween. Any
+wheel or touch cancels a jump still in flight.
+
+Keyboard covers arrows, PageUp/Down, Space, Home and End for sections, and
+Left/Right for cars. Horizontal wheel cycles cars as well; `c` repaints, `b`
+toggles the theme.
 
 ### Models and loading
 

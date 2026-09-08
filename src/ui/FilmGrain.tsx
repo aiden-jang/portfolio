@@ -1,13 +1,10 @@
-// Inline SVG noise as a data URL. fractalNoise + stitchTiles makes it tile
-// seamlessly so the animated translate doesn't expose edges.
+// stitchTiles is what makes the noise tile seamlessly, so the animated translate never exposes
+// an edge.
 const NOISE_SVG =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>" +
   "<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' stitchTiles='stitch'/></filter>" +
   "<rect width='100%' height='100%' filter='url(%23n)'/></svg>";
 
-/** Full-viewport subtle noise overlay. Gives the flat dark background a
- *  "filmic" texture instead of pure void. Animated with discrete `steps()`
- *  so it jitters frame-to-frame the way real film grain does. */
 export function FilmGrain() {
   return (
     <div

@@ -1,8 +1,5 @@
 import { useAppStore } from '../store';
 
-/** A deliberately small delight control. The scene already supports a tap-to-
- * rev gesture; this makes that moment discoverable on desktop and pairs it
- * with the `R` shortcut in the control hint. */
 export function RevButton() {
   const triggerRev = useAppStore((state) => state.triggerRev);
 

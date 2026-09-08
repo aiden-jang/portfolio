@@ -1,42 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import type { MarkKey } from './marks';
-
-export type WorkDetail = {
-  title: string;
-  summary: string;
-  context: string;
-  body: string[];
-  stack: string[];
-  /** Optional screenshot shown as a banner at the top of the detail card.
-   *  Missing files degrade gracefully — the banner hides itself on load error. */
-  image?: string;
-  /** Optional external link rendered as the primary "Visit" button at the bottom. */
-  link?: { label: string; url: string };
-  /** Optional secondary links (Source, Architecture, case study, …) rendered as
-   *  outline pills next to the primary button. Each renders only when present,
-   *  so a not-yet-public repo simply omits its entry rather than dead-linking. */
-  links?: { label: string; url: string }[];
-  /** Shipped-app fields, set on the live entries so they render as product
-   *  cards in the Work grid (the rest render as editorial rows). */
-  mark?: MarkKey;
-  /** Short product name for the card (the title carries the longer form). */
-  shortName?: string;
-  /** Short one-liner for the card, sized to fit without an ellipsis (the
-   *  `summary` is the longer version used in the modal). */
-  tagline?: string;
-  /** Optional looping preview clip (webm/mp4) played on hover in the card.
-   *  Falls back to the mark when absent or on load error. */
-  preview?: string;
-  /** The small human moment this product is designed to improve. Shown in the
-   *  card and case study so the projects scan as products, not just stacks. */
-  moment?: string;
-  /** A concise product decision worth surfacing before the technical detail. */
-  principle?: string;
-  /** Browsing lenses used by the project explorer. Omitted for professional
-   * case studies because they remain in the Experience section. */
-  categories?: Array<'realtime' | 'ai' | 'social' | 'systems'>;
-};
+import type { WorkDetail } from '../types';
+import { WorkModalLinks } from './WorkModalLinks';
+import { WorkModalNav } from './WorkModalNav';
 
 type Props = {
   item: WorkDetail | null;
@@ -46,22 +12,14 @@ type Props = {
   position: { current: number; total: number } | null;
 };
 
-/** Centered detail card opened from a Work row. Backdrop click + Escape close.
- *  Locks body scroll while open. No glass — clean dimmed overlay + opaque
- *  panel to keep readability high. */
 export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props) {
   const open = !!item;
-  const [linkResult, setLinkResult] = useState<'shared' | 'copied' | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  useEffect(() => setLinkResult(null), [item]);
-
-  // A direct case-study URL should feel specific in a browser tab as well as
-  // in the page. This is client-side metadata (social crawlers still receive
-  // the portfolio's static preview), but it makes a shared link much easier to
-  // recognize when someone has several tabs open.
+  // Social crawlers only ever get the static preview, so this is for the person with ten tabs
+  // open trying to find the case study again.
   useEffect(() => {
     if (!item) return;
     const previousTitle = document.title;
@@ -108,11 +66,8 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     window.addEventListener('keydown', onKey);
     const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 0);
 
-    // Robust scroll lock. The scroll root here is <html> (see index.css), so
-    // `document.body { overflow: hidden }` does NOT stop the page from scrolling
-    // behind the modal — and iOS ignores overflow locks entirely. Pin the body in
-    // place at the current offset and restore the scroll position on close; this
-    // is the one technique that holds on every platform.
+    // <html> is the scroll root (see index.css), so `overflow: hidden` on the body does not stop
+    // the page behind the modal, and iOS ignores overflow locks anyway. Pin the body instead.
     const scrollY = window.scrollY;
     const body = document.body;
     const prev = {
@@ -127,8 +82,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     body.style.left = '0';
     body.style.right = '0';
     body.style.width = '100%';
-    // Lets CSS hide fixed chrome (the mobile bottom bar) that would otherwise
-    // bleed through the overlay and overlap the modal on phones.
+    // The class is what lets CSS hide the mobile bottom bar, which otherwise overlaps the modal.
     body.classList.add('modal-open');
 
     return () => {
@@ -141,49 +95,17 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       body.style.width = prev.width;
       body.classList.remove('modal-open');
       window.scrollTo(0, scrollY);
-      // A direct `#work/...` link has no originating card, so only restore if
-      // the former element is still connected to this document.
+      // A direct `#work/...` link has no originating card, so the old element may be gone.
       if (previouslyFocused?.isConnected) previouslyFocused.focus();
     };
   }, [onClose, onNext, onPrevious, open]);
 
-  const shareCaseStudyLink = async () => {
-    if (typeof navigator.share === 'function') {
-      try {
-        await navigator.share({
-          title: item?.shortName ?? item?.title ?? 'Aiden Jang case study',
-          text: item?.summary,
-          url: window.location.href,
-        });
-        setLinkResult('shared');
-        window.setTimeout(() => setLinkResult(null), 1800);
-        return;
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return;
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setLinkResult('copied');
-      window.setTimeout(() => setLinkResult(null), 1800);
-    } catch {
-      // Clipboard access can be unavailable in a private or embedded browser.
-      // The current URL is still a normal, shareable deep link in that case.
-    }
-  };
-
-  // Portal to <body> so the modal escapes the page's `<main class="z-10">` stacking context.
-  // Rendered inline, its z-50 was trapped below the z-30 fixed mobile bottom bar, whose (invisible
-  // but still hit-testable) section-dot buttons sat over the modal's action links and swallowed the
-  // tap — the reported "side-project links don't work on mobile". At <body> the z-50 overlay is
-  // truly above all chrome.
+  // Portal to <body>. Inline, the overlay's z-50 is scoped inside `<main class="z-10">`, which
+  // leaves it under the z-30 mobile bottom bar, whose invisible buttons then swallow link taps.
   return createPortal(
     <div
       role="dialog"
       aria-modal="true"
-      /* Named by the case study's own heading. A modal with no accessible name is announced as just
-         "dialog", which tells somebody a thing opened and nothing about what: with six case studies
-         behind the same overlay, the title is the only part that distinguishes them. */
       aria-labelledby="work-modal-title"
       aria-hidden={!open}
       onClick={onClose}
@@ -208,8 +130,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
           if (!start || !touch) return;
           const deltaX = touch.clientX - start.x;
           const deltaY = touch.clientY - start.y;
-          // Keep normal vertical reading scroll untouched. A deliberate,
-          // mostly-horizontal swipe steps through the neighboring case study.
           if (Math.abs(deltaX) < 56 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
           if (deltaX > 0) onPrevious();
           else onNext();
@@ -240,8 +160,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
 
         {item && (
           <>
-            {/* Scrollable body. overscroll-contain stops the scroll from chaining to the page
-                behind the modal when you hit the top or bottom. */}
+            {/* overscroll-contain stops the scroll chaining to the page behind at either end. */}
             <div className="flex-1 overflow-y-auto overscroll-contain p-5 pt-5 md:p-7 md:pt-6">
               {item.image && (
                 <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
@@ -292,113 +211,8 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                 ))}
               </div>
             </div>
-            <div className="shrink-0 flex items-center justify-between gap-3 px-5 md:px-7 py-3 border-t border-[var(--color-line)]">
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={onPrevious}
-                  aria-label="Previous case study"
-                  className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]"
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  onClick={onNext}
-                  aria-label="Next case study"
-                  className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]"
-                >
-                  →
-                </button>
-                {position && (
-                  <>
-                    <span className="ml-2 font-[var(--font-mono)] text-[0.58rem] tracking-[0.14em] text-[var(--color-muted)]">
-                      {position.current} / {position.total}
-                    </span>
-                    <span
-                      role="progressbar"
-                      aria-label="Case study progress"
-                      aria-valuemin={1}
-                      aria-valuemax={position.total}
-                      aria-valuenow={position.current}
-                      className="ml-1 h-px w-8 overflow-hidden bg-white/[0.14]"
-                    >
-                      <span
-                        className="block h-full origin-left bg-[var(--color-neon)] transition-transform duration-300"
-                        style={{ transform: `scaleX(${position.current / position.total})` }}
-                      />
-                    </span>
-                  </>
-                )}
-              </div>
-              <span className="font-[var(--font-mono)] text-[0.5rem] tracking-[0.1em] uppercase text-[rgba(244,240,255,0.38)] md:hidden">
-                Swipe to browse
-              </span>
-              <span className="font-[var(--font-mono)] text-[0.55rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.38)] max-md:hidden">
-                ← → browse
-              </span>
-            </div>
-            {(item.link || item.links?.length || item.shortName) && (
-              // Footer lives OUTSIDE the scroll area (a flex sibling), so it is always flush to the
-              // panel's bottom edge, spans the full width, and never overlaps the body text — the
-              // body scrolls in its own region above it. Always visible + tappable regardless of
-              // how long the description is.
-              <div className="shrink-0 flex flex-wrap gap-2.5 px-5 md:px-7 py-4 border-t border-[var(--color-line)]">
-                {item.link && (
-                  <a
-                    href={item.link.url}
-                    target="_blank"
-                    rel="noopener"
-                    className="
-                      inline-flex items-center gap-2 px-5 py-2.5 rounded-full
-                      border border-[var(--color-line)]
-                      font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase
-                      text-[var(--color-fg)] no-underline transition-colors
-                      hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
-                    "
-                  >
-                    {item.link.label}
-                    <span aria-hidden="true">→</span>
-                  </a>
-                )}
-                {item.links?.map((l) => (
-                  <a
-                    key={l.url}
-                    href={l.url}
-                    target="_blank"
-                    rel="noopener"
-                    className="
-                      inline-flex items-center gap-2 px-5 py-2.5 rounded-full
-                      border border-[var(--color-line)]
-                      font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase
-                      text-[var(--color-muted)] no-underline transition-colors
-                      hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
-                    "
-                  >
-                    {l.label}
-                    <span aria-hidden="true">↗</span>
-                  </a>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => void shareCaseStudyLink()}
-                  className="
-                    inline-flex items-center gap-2 px-5 py-2.5 rounded-full cursor-pointer
-                    border border-[var(--color-line)]
-                    font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase
-                    text-[var(--color-muted)] transition-colors
-                    hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
-                  "
-                >
-                  {linkResult === 'shared'
-                    ? 'Link shared'
-                    : linkResult === 'copied'
-                      ? 'Link copied'
-                      : 'Share link'}
-                  <span aria-hidden="true">{linkResult ? '✓' : '↗'}</span>
-                </button>
-              </div>
-            )}
+            <WorkModalNav onPrevious={onPrevious} onNext={onNext} position={position} />
+            <WorkModalLinks item={item} />
           </>
         )}
       </div>
@@ -415,9 +229,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-/** Full-bleed screenshot banner at the top of the card. Bleeds past the card
- *  padding (negative margins match the `p-7 pt-6` panel). Hides itself if the
- *  image fails to load so a missing file never leaves a broken-image icon. */
+/** The negative margins have to match the panel's own `p-5` / `p-7` padding to bleed cleanly. */
 function WorkBanner({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;

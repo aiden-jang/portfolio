@@ -2,9 +2,7 @@ import { type ReactNode } from 'react';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 
-/** Flat car cycler for the desktop control dock (the dock bar provides the
- *  pill/backdrop). Click cycles to the next car; the name has a fixed min-width
- *  so the bar doesn't jump as names change. */
+// The name needs its fixed min-width, or the dock bar jumps width as you cycle cars.
 export function CarSwitcher() {
   const carIndex = useAppStore((s) => s.carIndex);
   const cycleCar = useAppStore((s) => s.cycleCar);
@@ -38,9 +36,8 @@ export function CarSwitcher() {
   );
 }
 
-/** Mobile car control: explicit prev/next arrows flanking the current car
- *  name. Replaces the horizontal swipe gesture (which fought vertical scroll
- *  and the camera-orbit drag) with a discoverable, tappable affordance. */
+// Arrows rather than a swipe: on touch a horizontal swipe competes with both the page scroll
+// and the camera-orbit drag.
 export function MobileCarSwitcher() {
   const carIndex = useAppStore((s) => s.carIndex);
   const cycleCar = useAppStore((s) => s.cycleCar);

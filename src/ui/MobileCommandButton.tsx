@@ -1,8 +1,5 @@
 import { COMMAND_MENU_EVENT } from './CommandMenu';
 
-/** Touch entry point for the command menu. Desktop has the `?` and Cmd/Ctrl-K
- * shortcuts; mobile needs a visible way to reach scene actions without adding
- * more buttons to the already compact bottom garage bar. */
 export function MobileCommandButton() {
   return (
     <button

@@ -10,6 +10,11 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check-size": "node scripts/check-size.mjs",
+    "check-comments": "node scripts/check-comments.mjs",
+    "check-tests": "node scripts/check-tests.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm run check-size && npm run check-comments && npm run check-tests && npm run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -28,11 +33,13 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.6.0",
+    "jsdom": "^30.0.1",
     "prettier": "^3.8.4",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.61.1",
-    "vite": "^6.0.7"
+    "vite": "^6.0.7",
+    "vitest": "^3.2.7"
   },
   "dependencies": {
     "@react-three/drei": "^9.121.0",

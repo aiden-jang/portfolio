@@ -3,7 +3,6 @@ import { CARS } from '../config';
 const KBD =
   'inline-block px-1.5 py-[0.1rem] bg-white/[0.05] border border-[var(--color-line)] rounded text-[var(--color-fg)]/90 text-[0.9em] tracking-[0.12em]';
 
-/** Bottom-center hint strip showing primary controls. */
 export function Hint() {
   return (
     <div
@@ -17,8 +16,6 @@ export function Hint() {
         text-[var(--color-muted)]/80
       "
     >
-      {/* Keyboard + gesture reference. The click controls live in the dock;
-       *  this lists the shortcut for each, kept uniform across all of them. */}
       <span className="hidden md:inline-flex items-center gap-2">
         <kbd className={KBD}>drag</kbd> orbit
       </span>

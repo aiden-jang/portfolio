@@ -16,7 +16,6 @@ type Props = {
   onLink: (id: SectionId) => void;
 };
 
-/** Fixed top-right nav: section links + car switcher + color swatches + theme. */
 export function Nav({ onLink }: Props) {
   const sectionIndex = useAppStore((s) => s.sectionIndex);
   const activeId = SECTION_IDS[sectionIndex];
@@ -30,9 +29,7 @@ export function Nav({ onLink }: Props) {
         font-[var(--font-mono)] text-[0.74rem] tracking-[0.18em] uppercase
       "
     >
-      {/* Section links only appear at lg+, where they fit beside the brand.
-          Below that (tablet), five links + the brand can't share the row
-          without overlapping, so navigation falls to the section-dots rail. */}
+      {/* lg+ only: below that, five links and the brand overlap, and the dots rail takes over. */}
       <div className="hidden lg:flex items-center gap-[1.4rem]">
         {ITEMS.map((item) => (
           <NavLink
@@ -43,9 +40,8 @@ export function Nav({ onLink }: Props) {
           />
         ))}
       </div>
-      {/* Scene controls (car, color, studio lighting) all live in the bottom dock
-          (see App.tsx), not here — packing them into this right-anchored row
-          made the nav wide enough to run under the brand wordmark. */}
+      {/* Don't add the scene controls here. They widen this row until it runs under the brand,
+          which is why they live in the bottom dock in App.tsx. */}
       <ResumeButton />
     </nav>
   );

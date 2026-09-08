@@ -1,13 +1,9 @@
 import type { ReactNode } from 'react';
 
-/** Tailwind class strings reused across every section. Centralized so a tweak
- *  applies everywhere (eyebrow scale, heading hierarchy, body line-height). */
 export const PANEL_BASE = 'panel pointer-events-auto max-w-[420px]';
-// `inline-block` + a negative inline-end margin equal to the tracking cancels
-// the trailing letter-space that wide tracking adds after the last glyph —
-// otherwise centered eyebrows (mobile, Intro) read shifted left. Tighter +
-// smaller on mobile so the longest eyebrow ("Software · Interfaces · Motion")
-// fits one line on a 320px phone.
+// Wide tracking adds a letter-space after the final glyph, which makes a centered eyebrow read
+// as shifted left. The negative inline-end margin cancels exactly that space, and needs
+// `inline-block` to apply. jsdom does no layout, so nothing can test this.
 export const EYEBROW =
   'inline-block font-[var(--font-mono)] text-[0.6rem] md:text-[0.66rem] tracking-[0.28em] md:tracking-[0.4em] -me-[0.28em] md:-me-[0.4em] text-[var(--color-muted)] uppercase';
 export const H2 =
@@ -19,9 +15,6 @@ export const UL_BASE =
 
 export type SectionSide = 'left' | 'right' | 'center';
 
-/** Full-screen scroll-section wrapper. On desktop the content aligns per the
- *  `side` prop; on mobile every section centers + adds vertical padding so
- *  the panel sits clear of the brand block and the bottom dots/hint. */
 export function Section({
   id,
   side,
@@ -30,7 +23,7 @@ export function Section({
 }: {
   id: string;
   side: SectionSide;
-  /** Top-aligns taller desktop panels below the fixed brand chrome. */
+  // Top-aligns the taller desktop panels, which would otherwise run under the brand block.
   desktopVertical?: 'center' | 'top';
   children: ReactNode;
 }) {

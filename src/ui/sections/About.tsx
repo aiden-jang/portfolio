@@ -1,8 +1,5 @@
 import { EYEBROW, H2, P_LI, Section } from './shared';
 
-// Grouped so the toolbox reads as a quick scan, not a wall. Roles live in the
-// Experience section and the side platform in Projects, so About stays focused
-// on how I work + what I reach for (a different shape from Experience's list).
 const SKILLS = ['TypeScript', 'Python', 'React', 'Django', 'Cloudflare'];
 
 const PRINCIPLES = [

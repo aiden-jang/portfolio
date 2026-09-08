@@ -12,7 +12,6 @@ const FLOOR_RADIUS = 14;
 const REFLECTOR_RESOLUTION = 1024;
 const TRANSITION_RATE = 2.5;
 
-/** Reflective floor + scene-level theme transitions (bg, fog, exposure). */
 export function Floor() {
   const { gl, scene } = useThree();
   const reflectorRef = useRef<Reflector | null>(null);
@@ -23,8 +22,8 @@ export function Floor() {
   const currentReflectorColor = useRef(THEMES.dusk.reflectorColor);
   const currentExposure = useRef(THEMES.dusk.exposure);
 
-  // Build the reflector once (R3F's <reflector> intrinsic wraps the example
-  // helper which has a non-standard constructor signature).
+  // Built by hand because R3F's <reflector> intrinsic wraps a helper with a non-standard
+  // constructor signature.
   const reflector = useMemo(() => {
     const r = new Reflector(new THREE.CircleGeometry(FLOOR_RADIUS, 96), {
       textureWidth: REFLECTOR_RESOLUTION,
@@ -36,7 +35,6 @@ export function Floor() {
   }, []);
   reflectorRef.current = reflector;
 
-  // Manage fog at the scene level.
   useEffect(() => {
     scene.fog = new THREE.Fog(THEMES.dusk.fogColor, THEMES.dusk.fogNear, THEMES.dusk.fogFar);
     return () => {

@@ -1,8 +1,6 @@
 import { useRef } from 'react';
 import { useMagnetic } from '../hooks/useMagnetic';
 
-/** Top-right pill that opens the resume PDF in a new tab. Inside the Nav row
- *  on desktop, standalone-fixed on mobile where the Nav is hidden. */
 export function ResumeButton() {
   const ref = useRef<HTMLAnchorElement>(null);
   useMagnetic(ref, 0.35);

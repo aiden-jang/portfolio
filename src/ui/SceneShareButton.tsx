@@ -3,9 +3,6 @@ import { CARS } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
 
-/** Copies a small permalink to the visitor's current garage setup. The link
- * restores car, paint, and lighting on load, so the 3D scene becomes a tiny
- * shareable artifact instead of a one-session interaction. */
 export function SceneShareButton() {
   const carIndex = useAppStore((state) => state.carIndex);
   const [result, setResult] = useState<'shared' | 'copied' | null>(null);

@@ -1,31 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CARS, SECTION_IDS, type SectionId } from '../config';
-import { shareCurrentScene } from '../sceneLink';
-import { useAppStore } from '../store';
-
-type Command = {
-  id: string;
-  label: string;
-  hint: string;
-  keywords: string;
-  run: () => void | Promise<void>;
-  closeOnRun?: boolean;
-};
+import { type SectionId } from '../config';
+import { buildCommands, matchCommands, type Command } from './commands';
 
 export const COMMAND_MENU_EVENT = 'portfolio:open-command-menu';
 
-const SECTION_LABELS: Record<SectionId, string> = {
-  'sec-intro': 'Intro',
-  'sec-experience': 'Experience',
-  'sec-work': 'Projects',
-  'sec-about': 'About',
-  'sec-contact': 'Contact',
-};
-
-/** A small keyboard-first control surface. It exposes the site’s existing
- * navigation and scene controls without asking visitors to discover a long
- * shortcut list or leave the 3D experience. */
 export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -35,111 +14,9 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const dialogRef = useRef<HTMLElement>(null);
   const activeResultRef = useRef<HTMLButtonElement>(null);
 
-  const commands = useMemo<Command[]>(
-    () => [
-      ...SECTION_IDS.map((id) => ({
-        id,
-        label: `Go to ${SECTION_LABELS[id]}`,
-        hint: 'section',
-        keywords: `${SECTION_LABELS[id]} navigate`,
-        run: () => onSection(id),
-      })),
-      ...CARS.map((car, index) => ({
-        id: `car-${index}`,
-        label: `Show ${car.name}`,
-        hint: String(index + 1),
-        keywords: `${car.name} ${car.code} vehicle garage`,
-        run: () => {
-          const state = useAppStore.getState();
-          if (!state.isCarLoading && state.carIndex !== index) state.setCarIndex(index);
-        },
-      })),
-      {
-        id: 'next-car',
-        label: 'Next car',
-        hint: '→',
-        keywords: 'car vehicle switch',
-        run: () => {
-          const state = useAppStore.getState();
-          if (!state.isCarLoading) state.cycleCar();
-        },
-      },
-      {
-        id: 'previous-car',
-        label: 'Previous car',
-        hint: '←',
-        keywords: 'car vehicle switch',
-        run: () => {
-          const state = useAppStore.getState();
-          if (!state.isCarLoading) state.prevCar();
-        },
-      },
-      {
-        id: 'repaint',
-        label: 'Change paint color',
-        hint: 'C',
-        keywords: 'paint color body repaint',
-        run: () => {
-          const state = useAppStore.getState();
-          if (!state.isCarLoading) state.cycleBodyColor();
-        },
-      },
-      {
-        id: 'theme',
-        label: 'Toggle studio lighting',
-        hint: 'B',
-        keywords: 'theme background night day lighting',
-        run: () => useAppStore.getState().toggleTheme(),
-      },
-      {
-        id: 'surprise',
-        label: 'Surprise me',
-        hint: 'X',
-        keywords: 'randomize surprise shuffle garage car paint lighting',
-        run: () => {
-          const state = useAppStore.getState();
-          if (!state.isCarLoading) state.randomizeGarage();
-        },
-      },
-      {
-        id: 'rev',
-        label: 'Rev the engine',
-        hint: 'R',
-        keywords: 'engine car rumble shake',
-        run: () => useAppStore.getState().triggerRev(),
-      },
-      {
-        id: 'reset-view',
-        label: 'Reset camera view',
-        hint: 'V',
-        keywords: 'camera view orbit reset',
-        run: () => useAppStore.getState().resetCamera(),
-      },
-      {
-        id: 'share-garage',
-        label: 'Share this garage',
-        hint: 'link',
-        keywords: 'share copy car paint lighting garage',
-        closeOnRun: false,
-        run: async () => {
-          const result = await shareCurrentScene();
-          setNotice(
-            result === 'shared'
-              ? 'Garage shared'
-              : result === 'copied'
-                ? 'Garage link copied'
-                : 'Could not share the garage',
-          );
-        },
-      },
-    ],
-    [onSection],
-  );
+  const commands = useMemo(() => buildCommands({ onSection, setNotice }), [onSection]);
 
-  const results = commands.filter((command) => {
-    const needle = query.trim().toLowerCase();
-    return !needle || `${command.label} ${command.keywords}`.toLowerCase().includes(needle);
-  });
+  const results = matchCommands(commands, query);
 
   useEffect(() => {
     setActiveIndex(0);
@@ -214,9 +91,8 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
     if (command.closeOnRun !== false) setOpen(false);
   };
 
-  // Keep the dialog out of the accessibility tree—and out of the tab order—
-  // until it is actually open. `aria-hidden` alone does not prevent an input
-  // from receiving keyboard focus in every browser.
+  // `aria-hidden` alone does not keep an input out of the tab order in every browser, so the
+  // dialog has to leave the tree entirely while closed.
   if (!open) return null;
 
   return createPortal(

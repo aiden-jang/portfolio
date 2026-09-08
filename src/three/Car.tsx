@@ -19,10 +19,8 @@ import {
 const TRANSITION_RATE = 2.5;
 const EXPOSURE_RATE = 2.5;
 
-/** Whether it's polite to prefetch neighbor car models. Skips on Save-Data or a
- *  2g-class connection, where quietly pulling models the visitor may never look
- *  at isn't worth the bytes. When the Network Information API is unavailable
- *  (Safari, Firefox), assume prefetch is fine. */
+// Safari and Firefox have no Network Information API, so an unknown connection counts as
+// allowed. Only an explicit Save-Data or 2g-class answer opts out.
 function prefetchAllowed(): boolean {
   const conn = (
     navigator as Navigator & {
@@ -34,8 +32,6 @@ function prefetchAllowed(): boolean {
   return conn.effectiveType !== '2g' && conn.effectiveType !== 'slow-2g';
 }
 
-/** Loads the currently-selected GLB into a group, auto-fits it, attaches
- *  lamps + underglow, and animates the breathing pulse + rev surge. */
 export function Car() {
   const { scene } = useThree();
   const carIndex = useAppStore((s) => s.carIndex);
@@ -45,12 +41,11 @@ export function Car() {
   const modelRef = useRef<THREE.Object3D | null>(null);
   const loader = useMemo(() => {
     const l = new GLTFLoader();
-    // Compressed GLBs use EXT_meshopt_compression. Hook up the decoder once.
+    // Every GLB is meshopt-compressed, so the decoder has to be attached before any load.
     l.setMeshoptDecoder(MeshoptDecoder);
     return l;
   }, []);
 
-  // Underglow disc (color animates via theme, opacity via breathing + rev).
   const underglowMat = useMemo(() => {
     return new THREE.MeshBasicMaterial({
       map: makeRadialGlowTexture(),
@@ -114,18 +109,14 @@ export function Car() {
         refs.bodyMaterial = detectBodyMaterial(model);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);
-        // A shared scene can arrive with a paint choice before this GLB has
-        // finished loading. Apply it after material discovery so that choice
-        // survives the model swap instead of silently reverting to original.
+        // Has to run after material discovery, or a shared link's paint reverts on the swap.
         useAppStore.getState().applyBodyColor(useAppStore.getState().activeBodyColor);
         setCarLoading(false);
 
         if (!refs.introArmed) armIntro();
 
-        // Prefetch the adjacent cars so a ←/→ swipe feels instant. Uses
-        // `fetch` (not GLTFLoader) so it only warms the HTTP cache without
-        // parsing or running the meshopt decoder. Fired after the current
-        // load completes to keep the active swap unblocked.
+        // Plain `fetch`, not GLTFLoader: this only needs to warm the HTTP cache, and parsing
+        // plus meshopt-decoding two spare cars would compete with the one on screen.
         if (prefetchAllowed()) {
           const adjacent = [
             (carIndex + 1) % CARS.length,
@@ -134,7 +125,6 @@ export function Car() {
           for (const i of adjacent) {
             const a = CARS[i];
             if (a && a.file !== spec.file) {
-              // Browser cache is enough; we don't need the result.
               fetch(`/models/${a.file}`, { priority: 'low' } as RequestInit).catch(() => {});
             }
           }
@@ -153,7 +143,6 @@ export function Car() {
     };
   }, [carIndex, loader, group, armIntro]);
 
-  // Mount the group into the scene.
   useEffect(() => {
     scene.add(group);
     return () => {
@@ -167,11 +156,10 @@ export function Car() {
     const target = THEMES[useAppStore.getState().themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
 
-    // Underglow tint follows the theme.
     currentUnderglow.current = smoothColorHex(currentUnderglow.current, target.underglow, k);
     underglowMat.color.setHex(currentUnderglow.current);
 
-    // Per-car exposure easing (read by Floor for final tone-mapping).
+    // Floor reads this for its final tone-mapping.
     const targetExposure = CARS[useAppStore.getState().carIndex]?.exposure ?? 1;
     refs.exposureCurrent = smoothTowards(
       refs.exposureCurrent,
@@ -179,16 +167,13 @@ export function Car() {
       Math.min(1, dt * EXPOSURE_RATE),
     );
 
-    // Breathing pulse + rev-driven surge on underglow opacity. Both are
-    // continuous/decorative motion, so hold them at a steady state for visitors
-    // who ask for reduced motion (the camera + section glides already do).
+    // Purely decorative motion, so reduced motion pins both to a steady state.
     const reduced = prefersReducedMotion();
     const time = state.clock.elapsedTime;
     const breath = reduced ? 0.5 : 0.5 + Math.sin(time * 0.7) * 0.5;
     const rev = reduced ? 0 : refs.revT;
     underglowMat.opacity = 0.42 + breath * 0.16 + rev * 0.7;
 
-    // Rev surges rear lamps.
     for (const l of refs.lamps) {
       const boost = !l.isHeadlight ? 1 + rev * 6 : 1;
       l.light.intensity = l.baseIntensity * boost;

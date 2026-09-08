@@ -1,7 +1,7 @@
 import type { CarSpec, Keyframe, Theme, ThemeName } from './types';
 
 export const THEMES: Record<ThemeName, Theme> = {
-  // Warm, mostly-neutral studio lighting — warm key, cool fill, soft warm rim.
+  // Warm studio lighting: warm key, cool fill, soft warm rim.
   dusk: {
     bg: 0x12121a,
     fogColor: 0x12121a,
@@ -18,7 +18,7 @@ export const THEMES: Record<ThemeName, Theme> = {
     bloomThreshold: 0.85,
     exposure: 1.0,
   },
-  // Cool moonlight with a subtle violet rim.
+  // Cool moonlight with a violet rim.
   night: {
     bg: 0x080a14,
     fogColor: 0x080a14,
@@ -37,13 +37,9 @@ export const THEMES: Record<ThemeName, Theme> = {
   },
 };
 
-// Order matters for load cost. The first car is the default that loads on
-// arrival, and Car.tsx prefetches the two cars adjacent to the current one so a
-// ←/→ swipe feels instant. So index 0 and its two neighbors (index 1 and the
-// last entry) are deliberately the three lightest models — Ferrari 1.3MB,
-// Mercedes 0.4MB, BMW M4 1.3MB — keeping the initial prefetch under ~2MB instead
-// of the ~19MB it was when the 13.7MB Porsche RWB sat next to the default. The
-// heavier models live in the middle, reached only once a visitor starts cycling.
+// Don't reorder these casually. Car.tsx prefetches both neighbours of the current car, so index
+// 0, index 1 and the last entry all download on arrival. Keeping the three lightest models in
+// those slots holds that first burst near 2MB; the 13.7MB Porsche next to the default made it 19.
 export const CARS: CarSpec[] = [
   {
     name: 'Ferrari F40',
@@ -96,14 +92,13 @@ export const CARS: CarSpec[] = [
   },
 ];
 
-// Camera keyframes, one per page section. Linearly interpolated by scroll
-// position so the camera tours the car as the user moves through content.
+// One per page section, in section order. CameraRig interpolates between neighbours.
 export const KEYFRAMES: Keyframe[] = [
-  { azimuth: 0.25, elevation: 0.22, distance: 9.5, targetY: 0.7 }, // intro:   front 3/4
-  { azimuth: 1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // work:    side (right)
-  { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // about:   rear
-  { azimuth: -1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // experience: side (left)
-  { azimuth: 0.0, elevation: 0.55, distance: 6.2, targetY: 0.4 }, // contact: high front
+  { azimuth: 0.25, elevation: 0.22, distance: 9.5, targetY: 0.7 }, // intro:      front 3/4
+  { azimuth: 1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // experience: side (right)
+  { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // work:       rear
+  { azimuth: -1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // about:      side (left)
+  { azimuth: 0.0, elevation: 0.55, distance: 6.2, targetY: 0.4 }, // contact:    high front
 ];
 
 export const SECTION_IDS = [

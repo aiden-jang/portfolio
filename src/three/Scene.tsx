@@ -11,9 +11,6 @@ type Props = {
   getScrollT: () => number;
 };
 
-/** R3F canvas hosting the entire 3D scene. The DOM overlay is rendered as a
- *  sibling in `App`. The 3D is purely decorative, so it's hidden from the
- *  accessibility tree — screen readers jump straight to the text content. */
 export function Scene({ getScrollT }: Props) {
   return (
     <Canvas

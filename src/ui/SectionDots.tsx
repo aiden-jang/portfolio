@@ -11,15 +11,11 @@ const LABELS: Record<SectionId, string> = {
 
 type Props = {
   onJump: (id: SectionId) => void;
-  /** `rail`: vertical dot strip fixed to the right edge (desktop), labels
-   *  revealed on hover/focus. `bar`: horizontal dots with the active section
-   *  named above, rendered in-flow so a parent can place it inside the mobile
-   *  bottom bar. */
+  // `bar` renders in flow, so a parent can place it inside the mobile bottom bar. `rail` fixes
+  // itself to the right edge.
   placement: 'rail' | 'bar';
 };
 
-/** Section progress + jump control. Two presentations share the dot/jump
- *  logic; the parent picks one per breakpoint. */
 export function SectionDots({ onJump, placement }: Props) {
   const activeIndex = useAppStore((s) => s.sectionIndex);
 
@@ -63,7 +59,6 @@ export function SectionDots({ onJump, placement }: Props) {
     );
   }
 
-  // rail (desktop)
   return (
     <nav
       aria-label="Section progress"
@@ -83,7 +78,6 @@ export function SectionDots({ onJump, placement }: Props) {
             aria-current={active ? 'true' : undefined}
             className="group relative cursor-pointer flex items-center justify-center w-3 h-3"
           >
-            {/* Floating label to the left, revealed on hover or focus. */}
             <span
               className="
                 absolute right-6 font-[var(--font-mono)] text-[0.62rem]

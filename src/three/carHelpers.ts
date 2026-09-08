@@ -14,7 +14,6 @@ const HEADLIGHT_COLOR = 0xfff2cc;
 const TAILLIGHT_COLOR = 0xff1f3a;
 const LAMP_Y = 0.75;
 
-/** Soft radial alpha texture used for the underglow disc. */
 export function makeRadialGlowTexture(): THREE.CanvasTexture {
   const size = 256;
   const c = document.createElement('canvas');
@@ -32,15 +31,9 @@ export function makeRadialGlowTexture(): THREE.CanvasTexture {
   return tex;
 }
 
-/** Recursively dispose every geometry, material AND texture under `obj`.
- *
- *  Disposing textures is the load-bearing part: `material.dispose()` frees the
- *  compiled GPU program but NOT the textures the material references (`.map`,
- *  `.normalMap`, `.roughnessMap`, …). Those textures are the bulk of a car's GPU
- *  memory, so leaking them on every swap accumulates until a mobile tab OOMs and
- *  crashes — which is why it only bit after cycling to the third (heavy) car.
- *  Each GLB load creates fresh textures, so nothing here is shared with a
- *  surviving object; disposing them on teardown is safe. */
+// The textures are the point. `material.dispose()` frees the compiled program but not the
+// textures the material points at, and those are most of a car's GPU memory, so leaking them
+// on every swap eventually OOMs a mobile tab.
 export function disposeModel(obj: THREE.Object3D): void {
   obj.traverse((c) => {
     const m = c as THREE.Mesh;
@@ -48,8 +41,6 @@ export function disposeModel(obj: THREE.Object3D): void {
     if (m.material) {
       const mats = Array.isArray(m.material) ? m.material : [m.material];
       for (const mat of mats) {
-        // Dispose every texture-valued property (map, normalMap, aoMap, …)
-        // before the material itself. material.dispose() won't do this for us.
         for (const value of Object.values(mat)) {
           if (value && (value as THREE.Texture).isTexture) {
             (value as THREE.Texture).dispose();
@@ -61,9 +52,7 @@ export function disposeModel(obj: THREE.Object3D): void {
   });
 }
 
-/** Rotate (if length is along X), scale to TARGET_LENGTH along Z, then
- *  center on X/Z and pin the base to y=0. Returns the applied uniform scale
- *  and the pre-scale oriented size. */
+/** The returned `orientedSize` is measured before the scale is applied, not after. */
 export function autoFitToLength(model: THREE.Object3D) {
   const rawSize = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
   if (rawSize.x > rawSize.z) model.rotation.y = Math.PI / 2;
@@ -78,18 +67,14 @@ export function autoFitToLength(model: THREE.Object3D) {
   return { scale, orientedSize };
 }
 
-/** Compute a mesh's bounding box in WORLD space. We can't trust the geometry's
- *  local boundingBox after `EXT_meshopt_compression` — positions there are
- *  normalized int16 (values in [-1, 1]) that only reach real-world units after
- *  the world-matrix dequantization applied per-frame. `Box3.setFromObject`
- *  handles this for us. */
+// Don't reach for `geometry.boundingBox` here. Under EXT_meshopt_compression the local positions
+// are int16 normalized to [-1, 1], and only the world matrix puts them back in real units.
 const _bbox = new THREE.Box3();
 function worldBox(mesh: THREE.Mesh): THREE.Box3 | null {
   _bbox.setFromObject(mesh);
   return _bbox.isEmpty() ? null : _bbox;
 }
 
-/** Hide flat ground/shadow/decal planes baked into the GLB. */
 export function hideBakedPlanes(model: THREE.Object3D): void {
   model.updateMatrixWorld(true);
   model.traverse((obj) => {
@@ -118,13 +103,10 @@ function isPaintName(name: string | undefined): boolean {
   return /(^|[_. -])body([_. -]|$)/.test(l);
 }
 
-/** Fraction of the top weighted score a name-matched candidate must reach
- *  to be trusted. Below this it's likely a tiny "Body_Paint" trim material on
- *  a non-body mesh, and we should fall back to the geometry winner instead. */
+// Below this, a name match is more likely a small "Body_Paint" trim than the body itself.
 const NAME_MATCH_MIN_FRACTION = 0.25;
-/** Multiplier applied to textured (baseColorMap) materials. Cars usually use
- *  textures for interior leather / dashboards / decals, while body paint is
- *  a solid color. Penalising textured materials skews detection toward paint. */
+// Body paint is a solid color, while leather, dashboards and decals are textured, so penalising
+// textured materials skews detection toward the paint.
 const TEXTURED_PENALTY = 0.15;
 
 type Mat = ColorMaterial & {
@@ -133,11 +115,6 @@ type Mat = ColorMaterial & {
   map?: THREE.Texture | null;
 };
 
-/** Two-pass body-material detection. For each candidate material:
- *    score = tris × bbox-volume   (raw "size" of the mesh it sits on)
- *    weight = (1 + saturation × 2) × (textured ? 0.15 : 1)
- *  Materials named "paint" / "body" win iff their weighted score is at least
- *  25% of the top weighted score (so a tiny "Body_Paint" trim doesn't fool us). */
 export function detectBodyMaterial(model: THREE.Object3D): ColorMaterial | null {
   model.updateMatrixWorld(true);
   const rawByMat = new Map<Mat, number>();
@@ -195,8 +172,6 @@ export function detectBodyMaterial(model: THREE.Object3D): ColorMaterial | null 
   return geometryBest;
 }
 
-/** Attach front headlights + rear taillights as PointLights at the car's
- *  bumper extents. Returns the new Lamp[] for the caller to track. */
 export function buildLamps(
   parent: THREE.Object3D,
   orientedSize: THREE.Vector3,

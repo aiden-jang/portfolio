@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useState } from 'react';
 import { WORK_ITEMS } from '../../data/workItems';
-import type { WorkDetail } from '../WorkModal';
+import type { WorkDetail } from '../../types';
 import { ACCENTS, marks } from '../marks';
 import { EYEBROW, H2, Section } from './shared';
 
@@ -18,9 +18,6 @@ const FILTERS = [
 ] as const;
 type FilterId = (typeof FILTERS)[number]['id'];
 
-/** Side-projects section: the shipped apps (entries with a `mark`) as a product
- *  card grid. The professional highlights live in the Experience section above;
- *  these stand on their own as what I build outside of work. */
 export function WorkSection({ onOpen }: Props) {
   const apps = WORK_ITEMS.filter((i) => i.mark);
   const [filter, setFilter] = useState<FilterId>('all');
@@ -80,9 +77,6 @@ export function WorkSection({ onOpen }: Props) {
   );
 }
 
-/** Product card for a shipped app: its real mark, name, one-line summary, and a
- *  live dot. Clicking opens the full case-study modal. When `item.preview` is
- *  set it plays a looping clip on hover; otherwise the mark carries the card. */
 function AppCard({
   item,
   featured,
@@ -146,7 +140,6 @@ function AppCard({
               className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity"
             />
           )}
-          {/* accent glow ring on hover */}
           <span
             className="pointer-events-none absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
             style={{ boxShadow: '0 0 26px -6px var(--accent)' }}
@@ -187,7 +180,6 @@ function AppCard({
   );
 }
 
-/** Small pulsing dot signalling a live, reachable app. */
 function LiveDot() {
   return (
     <span

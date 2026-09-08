@@ -1,7 +1,5 @@
 import { useEffect } from 'react';
 
-/** Toggle `.visible` on each `.panel` as it scrolls in/out. CSS owns the
- *  fade/slide transitions. */
 export function useReveal(threshold = 0.35): void {
   useEffect(() => {
     const panels = Array.from(document.querySelectorAll('.panel'));

@@ -1,7 +1,6 @@
 import { useAppStore } from './store';
 
-/** Build a permalink to the current 3D garage state. Kept outside the UI so
- * desktop and mobile share actions always produce the exact same URL. */
+// Outside the UI so the desktop and mobile share actions cannot drift apart.
 export function currentSceneUrl(): string {
   const { carIndex, activeBodyColor, themeName } = useAppStore.getState();
   const url = new URL(window.location.href);
@@ -20,9 +19,6 @@ export async function copyCurrentSceneUrl(): Promise<boolean> {
   }
 }
 
-/** Use the platform share sheet when it exists, then fall back to a copied
- * permalink. The scene still travels as a normal URL, so recipients can open
- * the exact car, paint, and lighting setup without an account. */
 export async function shareCurrentScene(): Promise<'shared' | 'copied' | null> {
   const url = currentSceneUrl();
   if (typeof navigator.share === 'function') {
@@ -34,7 +30,7 @@ export async function shareCurrentScene(): Promise<'shared' | 'copied' | null> {
       });
       return 'shared';
     } catch (error) {
-      // Dismissing the native sheet is a normal choice, not a failed share.
+      // Dismissing the share sheet is a choice, not a failure.
       if (error instanceof DOMException && error.name === 'AbortError') return null;
     }
   }
