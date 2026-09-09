@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@react-three/drei": "^9.121.0",
-    "@react-three/fiber": "^8.17.10",
+    "@react-three/fiber": "^9.7.0",
     "@react-three/postprocessing": "^2.16.5",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
