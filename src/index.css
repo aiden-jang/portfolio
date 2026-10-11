@@ -565,3 +565,8 @@ header > span {
     gap: 14px;
   }
 }
+
+.garage-globe-preview img {
+  object-fit: contain;
+  object-position: center;
+}

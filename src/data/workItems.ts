@@ -56,6 +56,26 @@ export const WORK_ITEMS: WorkDetail[] = [
     link: { label: 'Open everythingisfine', url: 'https://everythingisfine.aidenjang.com' },
   },
   {
+    title: 'Worth: keep your own taste',
+    context: 'Side project',
+    summary:
+      'A personal archive for things you try and do, with ranked collections, revisit logs, and three honest calls: Favorite, Meh, or Not again.',
+    body: [
+      'Collections keep drinks, films, restaurants, and other repeatable things together. Activities hold dated records such as gym sessions and upkeep. Ranking, notes, photos, and revisit history help you remember what earned another go.',
+      'One Cloudflare Worker serves the React app and API, with D1 storing records and small photos. Private routes verify the shared accounts session. Public share links expose a fixed ranked-list snapshot, expire after seven days, and can be revoked; notes, dates, history, and photos stay private.',
+      'The archive starts empty. Search, exports, photo-inclusive backups, and validated restore keep the records useful and portable without asking someone to maintain a feed.',
+    ],
+    stack: ['React', 'TypeScript', 'Cloudflare Workers', 'D1', 'Hono'],
+    mark: 'worth',
+    shortName: 'Worth',
+    tagline: 'Keep the good stuff. Meh is also a valid answer.',
+    categories: ['social', 'systems'],
+    moment: 'remembering whether something deserves another go',
+    principle:
+      'A personal opinion can stay small: Favorite, Meh, or Not again. Ranking and revisits add context without turning taste into a public score.',
+    link: { label: 'Open Worth', url: 'https://worth.aidenjang.com' },
+  },
+  {
     title: 'iguess: realtime draw-and-guess vs an AI',
     context: 'Side project',
     summary:

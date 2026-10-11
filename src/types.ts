@@ -1,6 +1,7 @@
 import type * as THREE from 'three';
 
 export type MarkKey =
+  | 'worth'
   | 'owewell'
   | 'iguess'
   | 'wherever'

@@ -17,7 +17,7 @@ const PREVIEWS: Record<string, { image: string; description: string; caption: st
     image: '/projects/everythingisfine.png',
     description:
       'A live earthquake globe. Two agencies’ readings stay visible, including where they disagree.',
-    caption: 'Selected earthquake / both agencies’ readings.',
+    caption: 'Live globe / earthquakes across the Pacific.',
   },
   owewell: {
     image: '/projects/owewell.png',
@@ -95,7 +95,7 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
         </div>
       </div>
       {preview && (
-        <figure>
+        <figure className={item.mark === 'everythingisfine' ? 'garage-globe-preview' : undefined}>
           <img src={preview.image} alt={`${item.shortName} product interface`} loading="lazy" />
           <figcaption>{preview.caption}</figcaption>
         </figure>

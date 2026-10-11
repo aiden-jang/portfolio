@@ -5,6 +5,7 @@ import type { JSX } from 'react';
 // are namespaced because several marks share a page.
 
 export const ACCENTS: Record<MarkKey, string> = {
+  worth: '#d4dac3',
   owewell: '#a78bfa',
   iguess: '#a855f7',
   wherever: '#d7ff3e',
@@ -17,6 +18,19 @@ export const ACCENTS: Record<MarkKey, string> = {
 };
 
 export const marks: Record<MarkKey, () => JSX.Element> = {
+  worth: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <rect width="64" height="64" rx="15" fill="#181915" />
+      <path
+        d="M9 37C7 25 16 15 27 17c7 1 9-3 18-1 11 2 18 12 17 23-1 11-10 14-27 14S11 48 9 37Z"
+        transform="translate(-3 -2)"
+        fill="#d4dac3"
+      />
+      <g stroke="#292a23" strokeWidth="2.5" strokeLinecap="round">
+        <path d="m20 29 8 1m8 0 8-1M25 32v2m14-2v2M28 42h8" />
+      </g>
+    </svg>
+  ),
   /* One rect per pixel on a 16x16 grid at 32px each, matching how the app draws her. Flat colour
      on purpose: a gradient behind hand-placed pixels reads as two different products. */
   mrrp: () => (
