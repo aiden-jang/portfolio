@@ -46,8 +46,7 @@ The camera never holds a fixed pose. `CameraRig` stores one keyframe per section
 (azimuth, elevation, distance, look-at target) and interpolates between them by
 scroll progress, so moving down the page orbits the car. A single `useFrame`
 composes every source of camera motion in a fixed order: scroll keyframe
-interpolation, pointer-drag orbit with inertial decay, idle auto-spin when nothing
-else is happening, the intro pull-in, a floor clamp so the camera never dips below
+interpolation, pointer-drag orbit with inertial decay, a stable pose between interactions, the intro pull-in, a floor clamp so the camera never dips below
 the ground, a brief FOV punch on section change, and a rev shake on tap. Keeping it
 in one place means these never fight each other over the transform.
 
@@ -137,3 +136,20 @@ texture compression, and recolored at runtime).
 Source code is [MIT](LICENSE) © Aiden Jang. The MIT license covers the code only;
 the CC BY 4.0 car models under `public/models/` are third-party and keep their own
 license and attribution (see Credits).
+
+## Garage interface
+
+The intro leads with Aiden's name and the interactive car. Neutral chrome uses
+self-hosted Geist and Geist Mono; their font licenses are in public/fonts. Projects
+use real captures of Everything Is Fine and owewell, with filters, live links and
+existing case studies preserved. The project list scrolls within its section to
+keep the five camera/navigation stops aligned. Arrow keys scroll that list while
+it has focus instead of paging the whole site.
+
+This deliberately adapts the garage mock's long editorial work section into a
+scrollable viewport panel; the existing scroll-driven camera retains its section
+semantics. Model attribution, motion preferences, garage sharing and mobile controls
+remain available.
+
+The intro opens at a front three-quarter pose and holds still until interaction;
+orbit dragging, car switching, scroll camera movement and reset remain available.

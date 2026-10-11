@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Aiden Jang — Garage study</title>
     <style>
+      @font-face {
+        font-family: 'Geist';
+        src: url('/fonts/geist.woff2') format('woff2');
+        font-weight: 100 900;
+        font-display: swap;
+      }
+
       * {
         box-sizing: border-box;
       }
@@ -12,7 +19,7 @@
         margin: 0;
         background: #101014;
         color: #e8e8e6;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: 'Geist', Arial, Helvetica, sans-serif;
       }
       a {
         color: inherit;
@@ -341,6 +348,24 @@
             </div>
           </div>
         </article>
+        <article class="project">
+          <div class="project-info">
+            <small>02 / SHARED EXPENSES</small>
+            <h3>owewell</h3>
+            <p>Itemized splits, live balances, and fewer payments to settle up.</p>
+            <p>Cloudflare Workers · Durable Objects · React</p>
+            <a href="https://owewell.aidenjang.com">Open the app ↗</a>
+          </div>
+          <div>
+            <div class="screen">
+              <img
+                src="/projects/owewell.png"
+                alt="Actual owewell public bill-splitting interface"
+              />
+            </div>
+            <div class="caption">Public bill-splitting interface / no account required.</div>
+          </div>
+        </article>
         <div class="shelf">
           <span>MORE PROJECTS</span>
           <div>
@@ -356,7 +381,7 @@
       </section>
       <footer class="footer">
         <a href="mailto:me@aidenjang.com">me@aidenjang.com ↗</a
-        ><span>There’s actual engineering behind the car.</span>
+        ><span>New York / independently built</span>
       </footer>
     </main>
     <div class="study">

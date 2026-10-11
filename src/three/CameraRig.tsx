@@ -22,7 +22,7 @@ const INTRO_DURATION = 2.0;
 
 const DRAG_DECAY_RATE = 1.5;
 const DRAG_DECAY_FRACTION = 0.6;
-const IDLE_SPIN_RATE = 0.18;
+const IDLE_SPIN_RATE = 0;
 const REV_DECAY_RATE = 1.8;
 const REV_RUMBLE_FREQ_HZ = 90 / (2 * Math.PI);
 const REV_SHAKE_AMP = 0.12;

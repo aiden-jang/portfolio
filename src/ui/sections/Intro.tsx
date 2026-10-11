@@ -1,51 +1,49 @@
 import { prefersReducedMotion } from '../../hooks/useReducedMotion';
-import { P_LI, Section } from './shared';
+import { CARS } from '../../config';
+import { useAppStore } from '../../store';
+import { Section } from './shared';
 
 export function IntroSection() {
-  const scrollTo = (id: string) => {
-    document
-      .getElementById(id)
-      ?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  const carIndex = useAppStore((state) => state.carIndex);
+  const scrollToWork = () => {
+    document.getElementById('sec-work')?.scrollIntoView({
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      block: 'start',
+    });
   };
-
   return (
-    <Section id="sec-intro" side="center" mobileVertical="top">
-      <div className="panel pointer-events-auto max-w-[640px] px-4 text-center">
-        <h2 className="mb-3 text-[clamp(2.4rem,5vw,3.6rem)] leading-[0.95] font-semibold tracking-[-0.035em]">
-          I build web apps people want to use.
-        </h2>
-        <p className={`${P_LI} max-w-[46ch] mx-auto`}>
-          I&apos;m a full-stack engineer who likes real-time products, thoughtful interactions, and
-          making useful things with a little personality.
+    <Section id="sec-intro" side="left" desktopVertical="top" mobileVertical="top">
+      <div className="panel garage-intro pointer-events-auto">
+        <h1>Aiden Jang</h1>
+        <p>
+          Full-stack engineer.
+          <br />
+          Real-time products, web applications,
+          <br />
+          and the details between them.
         </p>
-        <p className={`${P_LI} mt-3 max-w-[40ch] mx-auto opacity-70`}>
-          <span className="md:hidden">Swipe to explore.</span>
-          <span className="hidden md:inline">
-            Scroll to look around. Click and drag to orbit the car.
-          </span>
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-          <a
-            href="#sec-experience"
-            onClick={(event) => {
-              event.preventDefault();
-              scrollTo('sec-experience');
-            }}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--color-neon)] bg-[var(--color-neon)]/10 px-4 py-2.5 font-[var(--font-mono)] text-[0.62rem] tracking-[0.16em] uppercase text-[var(--color-fg)] no-underline transition-colors hover:bg-[var(--color-neon)]/20"
-          >
-            See experience <span aria-hidden="true">↓</span>
-          </a>
-          <a
-            href="#sec-contact"
-            onClick={(event) => {
-              event.preventDefault();
-              scrollTo('sec-contact');
-            }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/[0.14] px-4 py-2.5 font-[var(--font-mono)] text-[0.62rem] tracking-[0.16em] uppercase text-[var(--color-muted)] no-underline transition-colors hover:border-white/[0.35] hover:text-[var(--color-fg)]"
-          >
-            Say hello <span aria-hidden="true">↗</span>
-          </a>
-        </div>
+      </div>
+      <div className="garage-index pointer-events-auto">
+        <span>Look around</span>
+        <a
+          href="#sec-work"
+          onClick={(event) => {
+            event.preventDefault();
+            scrollToWork();
+          }}
+        >
+          Selected work <span>↓</span>
+        </a>
+        <a href="/Aiden_Jang_Resume.pdf" target="_blank" rel="noopener">
+          Résumé <span>↗</span>
+        </a>
+      </div>
+      <div className="garage-caption">
+        <span>
+          {String(carIndex + 1).padStart(2, '0')} / {CARS[carIndex].name}
+        </span>
+        <br />
+        Not my daily driver.
       </div>
     </Section>
   );

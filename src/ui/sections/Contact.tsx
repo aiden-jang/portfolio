@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { EYEBROW, H2, P_LI, PANEL_BASE, Section } from './shared';
 import { Credits } from './Credits';
 
-const EMAIL = 'aidenwsj@gmail.com';
+const EMAIL = 'me@aidenjang.com';
 
 const LINK_CLASS =
   'inline-block py-1 text-[var(--color-fg)] no-underline border-b border-[var(--color-neon)] hover:text-[var(--color-neon)]';

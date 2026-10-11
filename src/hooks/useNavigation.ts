@@ -139,7 +139,10 @@ export function useNavigation() {
         target instanceof HTMLTextAreaElement ||
         !!target?.isContentEditable;
       // Without this, arrow keys in the command palette also scroll the page behind it.
-      if (inField) return;
+      const readingProjects =
+        target?.closest('.garage-project-list') &&
+        ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(e.key);
+      if (inField || readingProjects) return;
       if (/^[1-9]$/.test(e.key)) {
         const carIndex = Number(e.key) - 1;
         if (carIndex < CARS.length) {

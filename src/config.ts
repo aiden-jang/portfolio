@@ -94,7 +94,7 @@ export const CARS: CarSpec[] = [
 
 // One per page section, in section order. CameraRig interpolates between neighbours.
 export const KEYFRAMES: Keyframe[] = [
-  { azimuth: 0.25, elevation: 0.22, distance: 9.5, targetY: 0.7 }, // intro:      front 3/4
+  { azimuth: 0.65, elevation: 0.22, distance: 9.5, targetY: 0.7 }, // intro:      front 3/4
   { azimuth: 1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // experience: side (right)
   { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // work:       rear
   { azimuth: -1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // about:      side (left)
