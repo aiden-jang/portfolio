@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aidenjang.com/sitemap.xml
+Sitemap: https://www.aidenjang.com/sitemap.xml

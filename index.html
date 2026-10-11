@@ -6,7 +6,7 @@
     <title>Aiden Jang · Software Engineer</title>
     <meta
       name="description"
-      content="Seven live web apps, and a 3D garage you can orbit and repaint. Built in New York."
+      content="Aiden Jang is a software engineer in New York building full-stack web apps with React, TypeScript, Python, Django, and Cloudflare. Explore his work and experience."
     />
     <link rel="canonical" href="https://www.aidenjang.com/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -20,9 +20,9 @@
     <meta property="og:title" content="Aiden Jang · Software Engineer" />
     <meta
       property="og:description"
-      content="Seven live web apps, and a 3D garage you can orbit and repaint. Built in New York."
+      content="Aiden Jang is a software engineer in New York building full-stack web apps with React, TypeScript, Python, Django, and Cloudflare. Explore his work and experience."
     />
-    <meta property="og:url" content="https://www.aidenjang.com" />
+    <meta property="og:url" content="https://www.aidenjang.com/" />
     <meta property="og:image" content="https://www.aidenjang.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -34,42 +34,89 @@
     <meta name="twitter:title" content="Aiden Jang · Software Engineer" />
     <meta
       name="twitter:description"
-      content="Seven live web apps, and a 3D garage you can orbit and repaint. Built in New York."
+      content="Aiden Jang is a software engineer in New York building full-stack web apps with React, TypeScript, Python, Django, and Cloudflare. Explore his work and experience."
     />
     <meta name="twitter:image" content="https://www.aidenjang.com/og-image.png" />
 
-    <!-- Structured data: helps search + AI crawlers identify the person behind
-         the site. Add more profiles (LinkedIn, etc.) to sameAs as desired. -->
+    <!-- Public profile and its author share stable identifiers. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Aiden Jang",
-        "jobTitle": "Software Engineer",
-        "url": "https://www.aidenjang.com",
-        "image": "https://www.aidenjang.com/og-image.png",
-        "sameAs": ["https://github.com/aiden-jang"],
-        "worksFor": { "@type": "Organization", "name": "Zeta Global" },
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "New York",
-          "addressRegion": "NY",
-          "addressCountry": "US"
-        },
-        "knowsAbout": [
-          "Django",
-          "React",
-          "TypeScript",
-          "Python",
-          "Cloudflare Workers",
-          "Durable Objects",
-          "PostgreSQL"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://www.aidenjang.com/#website",
+            "url": "https://www.aidenjang.com/",
+            "name": "Aiden Jang",
+            "publisher": { "@id": "https://www.aidenjang.com/#person" }
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://www.aidenjang.com/#profile",
+            "url": "https://www.aidenjang.com/",
+            "name": "Aiden Jang · Software Engineer",
+            "isPartOf": { "@id": "https://www.aidenjang.com/#website" },
+            "mainEntity": { "@id": "https://www.aidenjang.com/#person" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://www.aidenjang.com/#person",
+            "name": "Aiden Jang",
+            "jobTitle": "Software Engineer",
+            "url": "https://www.aidenjang.com/",
+            "image": "https://www.aidenjang.com/og-image.png",
+            "sameAs": ["https://github.com/aiden-jang", "https://www.linkedin.com/in/aidenjang/"],
+            "worksFor": { "@type": "Organization", "name": "Zeta Global" },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "New York",
+              "addressRegion": "NY",
+              "addressCountry": "US"
+            },
+            "knowsAbout": [
+              "Django",
+              "React",
+              "TypeScript",
+              "Python",
+              "Cloudflare Workers",
+              "Durable Objects",
+              "PostgreSQL"
+            ]
+          }
         ]
       }
     </script>
   </head>
   <body data-theme="dusk">
-    <div id="root"></div>
+    <div id="root">
+      <main class="mx-auto max-w-2xl px-6 py-16 text-[var(--color-fg)]">
+        <h1 class="text-4xl font-semibold">Aiden Jang</h1>
+        <p class="mt-4">Software Engineer · New York</p>
+        <h2 class="mt-8 text-2xl">I build web apps people want to use.</h2>
+        <p class="mt-4">
+          I'm a full-stack engineer who likes real-time products, thoughtful interactions, and
+          making useful things with a little personality. I work with TypeScript, Python, React,
+          Django, and Cloudflare.
+        </p>
+        <h2 class="mt-8 text-2xl">Experience</h2>
+        <ul class="mt-4 list-disc pl-6">
+          <li>Software Engineer at Zeta Global, 2024 to now</li>
+          <li>Software Engineer at LiveIntent, 2023 to 2024</li>
+          <li>Associate Software Engineer at LiveIntent, 2022 to 2023</li>
+        </ul>
+        <h2 class="mt-8 text-2xl">Contact Aiden Jang</h2>
+        <p class="mt-4">
+          <a href="mailto:aidenwsj@gmail.com">Email</a> ·
+          <a href="https://github.com/aiden-jang">GitHub</a> ·
+          <a href="https://www.linkedin.com/in/aidenjang/">LinkedIn</a>
+        </p>
+        <noscript
+          ><p class="mt-4">
+            Enable JavaScript to explore the interactive portfolio and projects.
+          </p></noscript
+        >
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
