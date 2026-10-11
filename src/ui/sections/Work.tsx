@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../project-gallery.css';
 import { WORK_ITEMS, workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
@@ -69,6 +70,8 @@ export function WorkSection({ onOpen }: Props) {
   );
   const visible =
     filter === 'all' ? apps : apps.filter((item) => item.categories?.includes(filter));
+  const featured = filter === 'all' ? visible.slice(0, 3) : [];
+  const gallery = filter === 'all' ? visible.slice(3) : visible;
   return (
     <Section id="sec-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="garage-work pointer-events-auto">
@@ -120,21 +123,45 @@ export function WorkSection({ onOpen }: Props) {
           </div>
         </div>
         <div className="garage-project-list" aria-label="Project previews">
-          {visible.map((item) => (
-            <Project key={item.title} item={item} onOpen={onOpen} />
-          ))}
+          {featured.length > 0 && (
+            <div className="project-featured-group" aria-label="Featured projects">
+              <p className="project-group-label">Featured / 03</p>
+              {featured.map((item) => (
+                <Project key={item.title} item={item} onOpen={onOpen} featured />
+              ))}
+            </div>
+          )}
+          {gallery.length > 0 && (
+            <section className="project-gallery-group" aria-labelledby="gallery-heading">
+              <div className="project-gallery-heading">
+                <h3 id="gallery-heading">
+                  {filter === 'all' ? 'More things I’ve shipped' : 'Matching projects'}
+                </h3>
+                {filter === 'all' && <span>Small apps. Whole products.</span>}
+              </div>
+              <div className="project-gallery">
+                {gallery.map((item) => (
+                  <Project key={item.title} item={item} onOpen={onOpen} />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </Section>
   );
 }
 
-function Project({ item, onOpen }: { item: WorkDetail } & Props) {
+function Project({
+  item,
+  onOpen,
+  featured = false,
+}: { item: WorkDetail; featured?: boolean } & Props) {
   const preview = PREVIEWS[item.mark ?? ''];
   return (
     <article
       id={`project-${workId(item)}`}
-      className={`garage-project ${preview ? 'garage-project-featured' : ''}`}
+      className={`garage-project ${featured ? 'garage-project-featured' : 'garage-project-compact'}`}
     >
       <div className="garage-project-copy">
         <h3>{item.mark === 'everythingisfine' ? 'Everything is fine.' : item.shortName}</h3>
