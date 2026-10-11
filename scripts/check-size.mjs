@@ -8,7 +8,7 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const SLACK = 40;
 
 const CEILINGS = {
-  'src/ui/WorkModal.tsx': 247,
+  'src/ui/WorkModal.tsx': 228,
   'src/ui/CommandMenu.tsx': 203,
   'src/three/CameraRig.tsx': 161,
   'scripts/check-size.mjs': 75,

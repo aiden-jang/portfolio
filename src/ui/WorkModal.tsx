@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import type { WorkDetail } from '../types';
 import { WorkModalLinks } from './WorkModalLinks';
 import { WorkModalNav } from './WorkModalNav';
+import { WorkStory } from './WorkStory';
 
 type Props = {
   item: WorkDetail | null;
@@ -175,27 +176,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
               <p className="mt-2 mb-5 text-[rgba(244,240,255,0.6)] text-[0.95rem] leading-[1.5]">
                 {item.summary}
               </p>
-              {(item.moment || item.principle) && (
-                <aside className="mb-5 rounded-xl border border-white/[0.1] bg-white/[0.035] p-4">
-                  {item.moment && (
-                    <p className="font-[var(--font-mono)] text-[0.62rem] tracking-[0.18em] uppercase text-[var(--color-neon)]">
-                      The point · {item.moment}
-                    </p>
-                  )}
-                  {item.principle && (
-                    <p className="mt-2 text-[0.92rem] leading-[1.45] text-[rgba(244,240,255,0.84)]">
-                      {item.principle}
-                    </p>
-                  )}
-                </aside>
-              )}
-              <div className="space-y-3">
-                {item.body.map((para, i) => (
-                  <p key={i} className="text-[rgba(244,240,255,0.85)] text-[0.98rem] leading-[1.6]">
-                    {para}
-                  </p>
-                ))}
-              </div>
+              <WorkStory item={item} />
               <div className="mt-6 flex flex-wrap gap-2">
                 {item.stack.map((tag) => (
                   <span

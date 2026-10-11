@@ -23,14 +23,9 @@
   html {
     overflow-x: hidden;
   }
-  /* Section paging (desktop + mobile): scrolling always comes to rest on a
-     section, never partway. Native CSS scroll-snap does this — the browser
-     drives it, so there's no JS tween fighting the wheel/trackpad (which is
-     what made the earlier JS paging shake). scroll-snap-stop:always keeps a
-     single gesture/flick from skipping past a section. Sections carry the
-     matching scroll-snap-align (snap-start). */
+  /* Proximity snapping leaves long project sections free to scroll naturally. */
   html {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     /* No elastic rubber-band past the first/last section, and no scroll
        chaining — the page ends cleanly at the last section. */
     overscroll-behavior-y: none;
@@ -570,4 +565,148 @@ header > span {
   max-height: none;
   object-fit: contain;
   object-position: center;
+}
+
+#sec-work {
+  scroll-snap-stop: normal;
+}
+.garage-project-list {
+  max-height: none;
+  overflow: visible;
+  padding-right: 0;
+}
+.garage-project-featured {
+  display: block;
+}
+.garage-project-featured .garage-project-copy {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr auto;
+  gap: 16px 32px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+.garage-project-featured h3,
+.garage-project-featured .garage-project-links {
+  margin: 0;
+}
+.garage-project-featured .garage-stack {
+  grid-column: 2;
+  margin: 0;
+}
+.garage-project-featured .garage-project-links {
+  grid-column: 3;
+  grid-row: 1 / 3;
+}
+.garage-project img {
+  max-height: none;
+  display: block;
+}
+.project-preview {
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: zoom-in;
+  position: relative;
+}
+.project-preview > span {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: #101014;
+  border: 1px solid var(--color-line);
+  padding: 10px 14px;
+  font-size: 12px;
+}
+.preview-dialog {
+  background: #101014;
+  color: var(--color-fg);
+  border: 1px solid var(--color-line);
+  padding: 20px;
+  width: min(1400px, 96vw);
+  max-height: 94dvh;
+  margin: auto;
+  overflow: auto;
+}
+.preview-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.88);
+}
+.preview-dialog-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.preview-dialog button {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-line);
+}
+.preview-dialog img {
+  width: 100%;
+  height: auto;
+}
+.preview-dialog p {
+  margin-top: 12px;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+.work-story {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #c9c9ce;
+}
+.work-story h4 {
+  font-size: 12px;
+  color: #aaaab2;
+  margin-bottom: 8px;
+}
+.work-story section {
+  margin-bottom: 24px;
+}
+.work-story summary {
+  cursor: pointer;
+  padding: 14px 0;
+  border-top: 1px solid var(--color-line);
+}
+.work-story details p {
+  margin-top: 16px;
+}
+@media (max-width: 767px) {
+  .garage-project-featured .garage-project-copy {
+    display: block;
+  }
+  .garage-project-featured h3 {
+    margin-bottom: 12px;
+  }
+  .garage-project-featured .garage-stack {
+    margin-top: 16px;
+  }
+  .garage-project-featured .garage-project-links {
+    margin-top: 16px;
+  }
+  .project-preview > span {
+    position: static;
+    display: block;
+    padding: 10px 0;
+    border: 0;
+  }
+  #sec-work {
+    padding-bottom: 100px;
+  }
+}
+
+.preview-dialog-heading {
+  gap: 8px;
+}
+.preview-dialog-heading > span {
+  margin-right: auto;
+}
+.preview-image {
+  max-height: 72dvh;
+  overflow: auto;
+}
+.preview-image.is-zoomed img {
+  width: max(100%, 1000px);
+  max-width: none;
 }

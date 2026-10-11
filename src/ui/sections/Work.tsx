@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { WORK_ITEMS } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
+import { ProjectPreview } from '../ProjectPreview';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const FILTERS = [
@@ -18,6 +19,12 @@ const PREVIEWS: Record<string, { image: string; description: string; caption: st
     description:
       'A live earthquake globe. Two agencies’ readings stay visible, including where they disagree.',
     caption: 'Live globe / earthquakes across the Pacific.',
+  },
+  worth: {
+    image: '/projects/worth.png',
+    description:
+      'Rank the things you try, keep revisit logs, and remember what deserves another go.',
+    caption: 'Public landing / a place for your taste.',
   },
   owewell: {
     image: '/projects/owewell.png',
@@ -36,7 +43,7 @@ export function WorkSection({ onOpen }: Props) {
     filter === 'all' ? apps : apps.filter((item) => item.categories?.includes(filter));
   return (
     <Section id="sec-work" side="center" desktopVertical="top" mobileVertical="top">
-      <div className="panel garage-work pointer-events-auto">
+      <div className="garage-work pointer-events-auto">
         <div className="garage-work-heading">
           <h2>Selected work</h2>
           <span>Built independently</span>
@@ -56,7 +63,7 @@ export function WorkSection({ onOpen }: Props) {
         <p aria-live="polite" className="sr-only">
           Showing {visible.length} projects.
         </p>
-        <div className="garage-project-list" tabIndex={0} aria-label="Project previews">
+        <div className="garage-project-list" aria-label="Project previews">
           {visible.map((item) => (
             <Project key={item.title} item={item} onOpen={onOpen} />
           ))}
@@ -95,10 +102,11 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
         </div>
       </div>
       {preview && (
-        <figure className={item.mark === 'everythingisfine' ? 'garage-globe-preview' : undefined}>
-          <img src={preview.image} alt={`${item.shortName} product interface`} loading="lazy" />
-          <figcaption>{preview.caption}</figcaption>
-        </figure>
+        <ProjectPreview
+          image={preview.image}
+          name={item.shortName ?? item.title}
+          caption={preview.caption}
+        />
       )}
     </article>
   );

@@ -37,7 +37,7 @@ bundling, so a type error fails the build on its own too.
 ## How it works
 
 The whole scene is driven by one number: scroll progress, computed as
-`scrollY / maxScroll` clamped to `0..1` (`getScrollT`). The camera, the section
+the page position between each section’s start, mapped to `0..1` (`getScrollT`). The camera, the section
 state, and the content reveals all read off it.
 
 ### One scroll value drives the camera
@@ -60,7 +60,7 @@ imperatively, so 60fps updates never cascade into React renders.
 
 ### Scrolling and navigation
 
-Paging between sections is native CSS scroll-snap: `scroll-snap-type: y mandatory`
+Paging between sections is native CSS scroll-snap: `scroll-snap-type: y proximity`
 on `<html>`, and `snap-start snap-always` on each section so a single flick cannot
 skip one. An earlier version paged in JS with its own tween and shook against the
 wheel, which is why the browser drives it now.
@@ -142,12 +142,12 @@ license and attribution (see Credits).
 The intro leads with Aiden's name and the interactive car. Neutral chrome uses
 self-hosted Geist and Geist Mono; their font licenses are in public/fonts. Projects
 use real captures of Everything Is Fine and owewell, with filters, live links and
-existing case studies preserved. The project list scrolls within its section to
-keep the five camera/navigation stops aligned. Arrow keys scroll that list while
-it has focus instead of paging the whole site.
+existing case studies preserved. The project list flows with the page, and camera
+stops follow section positions. Vertical keyboard navigation scrolls naturally
+while reading Projects.
 
 This deliberately adapts the garage mock's long editorial work section into a
-scrollable viewport panel; the existing scroll-driven camera retains its section
+continuous page section; the scroll-driven camera follows its section
 semantics. Model attribution, motion preferences, garage sharing and mobile controls
 remain available.
 
@@ -157,3 +157,5 @@ orbit dragging, car switching, scroll camera movement and reset remain available
 Everything Is Fine’s portfolio preview uses the live globe view with the whole frame contained. Worth is listed with its own case study, product mark, and live link.
 
 The Projects section hides car controls and keyboard hints while the car is covered. Globe previews keep their natural aspect ratio without a padded image frame, and the project list uses the recovered vertical space.
+
+Projects now scroll with the page. Featured previews sit beneath a compact introduction and open in a native screenshot dialog. Worth uses a real public landing capture. Case studies lead with the product and design decision, with engineering details expandable. Camera progression follows section positions so the long project section preserves the other scene stops.

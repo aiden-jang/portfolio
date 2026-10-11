@@ -119,6 +119,7 @@ export function App() {
           {/* Sections reserve this strip with their own bottom padding, so keep the two in step. */}
           <div
             id="mobile-bar"
+            style={showCarControls ? undefined : { display: 'none' }}
             className="
               md:hidden fixed inset-x-0 bottom-0 z-30 pointer-events-none
               flex flex-col items-center gap-2 pt-5 pb-[max(3vh,env(safe-area-inset-bottom))]

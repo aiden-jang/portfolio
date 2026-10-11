@@ -3,6 +3,7 @@ import { CARS, SECTION_IDS, type SectionId } from '../config';
 import { clamp } from '../math';
 import { prefersReducedMotion } from './useReducedMotion';
 import { useAppStore } from '../store';
+import { sectionProgress } from './sectionProgress';
 
 let scrollRaf = 0;
 // Module-level so manual scroll input can abort a tween started from anywhere.
@@ -89,8 +90,10 @@ export function useNavigation() {
   }, []);
 
   const getScrollT = useCallback((): number => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    return max <= 0 ? 0 : clamp(window.scrollY / max, 0, 1);
+    return sectionProgress(
+      window.scrollY,
+      SECTION_IDS.map((id) => document.getElementById(id)?.offsetTop ?? 0),
+    );
   }, []);
 
   const goToSection = useCallback(
@@ -109,7 +112,9 @@ export function useNavigation() {
 
   useEffect(() => {
     const dialogIsOpen = () =>
-      !!document.querySelector('[role="dialog"][aria-modal="true"]:not([aria-hidden="true"])');
+      !!document.querySelector(
+        'dialog[open], [role="dialog"][aria-modal="true"]:not([aria-hidden="true"])',
+      );
     // Clearing the lock as well as the tween is what stops the section highlight from staying
     // frozen on the jump target once the user scrolls away from it.
     const yieldToUser = () => {
@@ -140,7 +145,7 @@ export function useNavigation() {
         !!target?.isContentEditable;
       // Without this, arrow keys in the command palette also scroll the page behind it.
       const readingProjects =
-        target?.closest('.garage-project-list') &&
+        (currentSection.current === 2 || target?.closest('.garage-project-list')) &&
         ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(e.key);
       if (inField || readingProjects) return;
       if (/^[1-9]$/.test(e.key)) {
@@ -210,7 +215,12 @@ export function useNavigation() {
     // The lock is what keeps a deliberate jump from fighting its own animation.
     const onScroll = () => {
       if (performance.now() < snapLockUntil.current) return;
-      const idx = Math.round(getScrollT() * (SECTION_IDS.length - 1));
+      const idx = SECTION_IDS.reduce((active, id, index) => {
+        const section = document.getElementById(id);
+        return section && section.getBoundingClientRect().top <= window.innerHeight * 0.15
+          ? index
+          : active;
+      }, 0);
       currentSection.current = idx;
       setSectionIndex(idx);
     };
