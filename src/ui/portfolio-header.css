@@ -1,0 +1,170 @@
+.portfolio-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88px;
+  padding: 0 5vw;
+  pointer-events: none;
+}
+.portfolio-header > header,
+.portfolio-header #nav {
+  position: static;
+}
+.portfolio-header > * {
+  pointer-events: auto;
+}
+.portfolio-header-reading {
+  background: #101014;
+  border-bottom: 1px solid var(--color-line);
+}
+.portfolio-mobile-header {
+  display: none;
+}
+.portfolio-header #nav {
+  gap: 24px;
+}
+.project-toolbar {
+  position: sticky;
+  top: 87px;
+  z-index: 15;
+  background: #101014;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--color-line);
+  margin-bottom: 8px;
+}
+.project-browse {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: #aaaab2;
+  font-size: 12px;
+}
+.project-browse p {
+  white-space: nowrap;
+}
+.project-browse select {
+  background: #101014;
+  border: 1px solid var(--color-line);
+  color: var(--color-fg);
+  min-height: 44px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.garage-project {
+  scroll-margin-top: 180px;
+}
+.project-preview img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top;
+}
+.garage-project:not(.garage-project-featured) .garage-project-copy {
+  grid-template-columns: 200px 1fr auto;
+}
+body.modal-open .portfolio-header {
+  visibility: hidden;
+}
+.project-toolbar select:focus-visible,
+.portfolio-menu summary:focus-visible {
+  outline: 2px solid #e8e8e6;
+  outline-offset: 4px;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .portfolio-header #nav,
+  .portfolio-header #nav > div {
+    gap: 14px;
+  }
+}
+@media (max-width: 767px) {
+  .portfolio-header {
+    height: 84px;
+    padding: 0 6vw;
+  }
+  .portfolio-mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .portfolio-mobile-header > a {
+    padding: 8px 12px;
+    letter-spacing: 0;
+    font-family: var(--font-display);
+    font-size: 12px;
+    border-radius: 5px;
+    text-transform: none;
+  }
+  .portfolio-menu summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 5px;
+    list-style: none;
+  }
+  .portfolio-menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .portfolio-menu[open] summary > span {
+    transform: rotate(45deg);
+  }
+  .portfolio-menu nav {
+    position: absolute;
+    top: 76px;
+    left: 6vw;
+    right: 6vw;
+    padding: 8px 20px;
+    background: #101014;
+    border: 1px solid var(--color-line);
+    box-shadow: 0 20px 40px #0008;
+  }
+  .portfolio-menu nav a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-line);
+    color: #aaaab2;
+    font-size: 16px;
+  }
+  .portfolio-menu nav a:last-child {
+    border: 0;
+  }
+  .portfolio-menu nav a[aria-current] {
+    color: var(--color-fg);
+  }
+  .project-toolbar {
+    top: 83px;
+    flex-wrap: wrap;
+    gap: 0;
+    padding-bottom: 12px;
+  }
+  .garage-filters {
+    padding: 8px 0;
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .project-browse {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .project-browse select {
+    min-height: 40px;
+  }
+  .garage-project {
+    scroll-margin-top: 220px;
+  }
+  .garage-project:not(.garage-project-featured) .garage-project-copy {
+    grid-template-columns: 1fr;
+  }
+}

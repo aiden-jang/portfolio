@@ -33,7 +33,7 @@ export function ProjectPreview({ image, name, caption }: Props) {
           aria-label={`Enlarge ${name} screenshot`}
         >
           <img src={image} alt={`${name} product interface`} loading="lazy" />
-          <span>View full screenshot ↗</span>
+          <span>Inspect screenshot ↗</span>
         </button>
         <figcaption>{caption}</figcaption>
       </figure>

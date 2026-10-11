@@ -142,7 +142,8 @@ export function useNavigation() {
       const inField =
         target instanceof HTMLInputElement ||
         target instanceof HTMLTextAreaElement ||
-        !!target?.isContentEditable;
+        !!target?.isContentEditable ||
+        !!target?.closest('button, a, summary, select');
       // Without this, arrow keys in the command palette also scroll the page behind it.
       const readingProjects =
         (currentSection.current === 2 || target?.closest('.garage-project-list')) &&

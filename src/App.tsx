@@ -8,7 +8,7 @@ import { BODY_COLOR_SWATCHES, useAppStore, type ActiveBodyColor } from './store'
 import type { ThemeName } from './types';
 // Lazy so the ~1 MB Three/R3F chunk stays off the critical path and the copy paints first.
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
-import { Brand } from './ui/Brand';
+import { PortfolioHeader } from './ui/PortfolioHeader';
 import { CameraResetButton } from './ui/CameraResetButton';
 import { CarSwitcher, MobileCarSwitcher } from './ui/CarSwitcher';
 import { ColorSwatches, MobileColorButton } from './ui/ColorSwatches';
@@ -16,13 +16,10 @@ import { CommandMenu } from './ui/CommandMenu';
 import { FilmGrain } from './ui/FilmGrain';
 import { Hint } from './ui/Hint';
 import { LoadingBar } from './ui/LoadingBar';
-import { Nav } from './ui/Nav';
-import { ResumeButton } from './ui/ResumeButton';
 import { RevButton } from './ui/RevButton';
 import { SceneBoundary } from './ui/SceneBoundary';
 import { SceneShareButton } from './ui/SceneShareButton';
 import { MobileThemeButton, ThemeToggle } from './ui/ThemeToggle';
-import { MobileCommandButton } from './ui/MobileCommandButton';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 
@@ -107,15 +104,7 @@ export function App() {
       <FilmGrain />
       {!isCleanMode && (
         <>
-          <Brand onHome={() => scrollToSection('sec-intro')} />
-          <Nav onLink={scrollToSection} />
-          <div
-            id="mobile-resume"
-            className="md:hidden fixed top-[max(4vh,env(safe-area-inset-top))] right-[5vw] z-20 flex items-center gap-2"
-          >
-            {showCarControls && <MobileCommandButton />}
-            <ResumeButton />
-          </div>
+          <PortfolioHeader onLink={scrollToSection} />
           {/* Sections reserve this strip with their own bottom padding, so keep the two in step. */}
           <div
             id="mobile-bar"

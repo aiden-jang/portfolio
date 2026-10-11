@@ -159,3 +159,5 @@ Everything Is Fine’s portfolio preview uses the live globe view with the whole
 The Projects section hides car controls and keyboard hints while the car is covered. Globe previews keep their natural aspect ratio without a padded image frame, and the project list uses the recovered vertical space.
 
 Projects now scroll with the page. Featured previews sit beneath a compact introduction and open in a native screenshot dialog. Worth uses a real public landing capture. Case studies lead with the product and design decision, with engineering details expandable. Camera progression follows section positions so the long project section preserves the other scene stops.
+
+A named mobile menu provides direct access to each section. The reading header stays opaque over Projects, where a sticky filter bar includes the visible project count and a jump selector. Preview thumbnails share one aspect ratio; the screenshot viewer retains the original capture and zoom controls.

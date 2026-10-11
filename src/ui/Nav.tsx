@@ -29,8 +29,7 @@ export function Nav({ onLink }: Props) {
         font-[var(--font-mono)] text-[0.74rem] tracking-[0.18em] uppercase
       "
     >
-      {/* lg+ only: below that, five links and the brand overlap, and the dots rail takes over. */}
-      <div className="hidden lg:flex items-center gap-[1.4rem]">
+      <div className="hidden md:flex items-center gap-[1.4rem]">
         {ITEMS.map((item) => (
           <NavLink
             key={item.id}
@@ -62,6 +61,7 @@ function NavLink({
     <a
       ref={ref}
       href={`#${item.id}`}
+      aria-current={active ? 'page' : undefined}
       data-section={item.key}
       onClick={(e) => {
         e.preventDefault();

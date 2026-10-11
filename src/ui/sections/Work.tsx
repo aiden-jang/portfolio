@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { WORK_ITEMS } from '../../data/workItems';
+import { WORK_ITEMS, workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
+import { prefersReducedMotion } from '../../hooks/useReducedMotion';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const FILTERS = [
@@ -48,21 +49,49 @@ export function WorkSection({ onOpen }: Props) {
           <h2>Selected work</h2>
           <span>Built independently</span>
         </div>
-        <div className="garage-filters" aria-label="Filter projects">
-          {FILTERS.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              aria-pressed={filter === option.id}
-              onClick={() => setFilter(option.id)}
+        <div className="project-toolbar">
+          <div className="garage-filters" aria-label="Filter projects">
+            {FILTERS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                aria-pressed={filter === option.id}
+                onClick={() => {
+                  setFilter(option.id);
+                  requestAnimationFrame(() =>
+                    document
+                      .getElementById('sec-work')
+                      ?.scrollIntoView({ block: 'start', behavior: 'instant' }),
+                  );
+                }}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <div className="project-browse">
+            <p aria-live="polite">{visible.length} projects</p>
+            <select
+              aria-label="Jump to a project"
+              value=""
+              onChange={(event) => {
+                document.getElementById(`project-${event.target.value}`)?.scrollIntoView({
+                  block: 'start',
+                  behavior: prefersReducedMotion() ? 'instant' : 'smooth',
+                });
+              }}
             >
-              {option.label}
-            </button>
-          ))}
+              <option value="" disabled>
+                Jump to a project
+              </option>
+              {visible.map((item) => (
+                <option key={item.title} value={workId(item)}>
+                  {item.shortName}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <p aria-live="polite" className="sr-only">
-          Showing {visible.length} projects.
-        </p>
         <div className="garage-project-list" aria-label="Project previews">
           {visible.map((item) => (
             <Project key={item.title} item={item} onOpen={onOpen} />
@@ -76,7 +105,10 @@ export function WorkSection({ onOpen }: Props) {
 function Project({ item, onOpen }: { item: WorkDetail } & Props) {
   const preview = PREVIEWS[item.mark ?? ''];
   return (
-    <article className={`garage-project ${preview ? 'garage-project-featured' : ''}`}>
+    <article
+      id={`project-${workId(item)}`}
+      className={`garage-project ${preview ? 'garage-project-featured' : ''}`}
+    >
       <div className="garage-project-copy">
         <h3>{item.mark === 'everythingisfine' ? 'Everything is fine.' : item.shortName}</h3>
         <p>{preview?.description ?? item.tagline}</p>
@@ -87,7 +119,7 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
             onClick={(event) => onOpen(item, event.currentTarget)}
             aria-label={`Read about ${item.shortName}`}
           >
-            Read project ↗
+            Case study ↗
           </button>
           {item.link && (
             <a
@@ -96,7 +128,7 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
               rel="noopener"
               aria-label={`Open ${item.shortName}`}
             >
-              Live app ↗
+              Open app ↗
             </a>
           )}
         </div>
