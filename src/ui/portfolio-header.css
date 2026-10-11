@@ -168,3 +168,13 @@ body.modal-open .portfolio-header {
     grid-template-columns: 1fr;
   }
 }
+
+#sec-about {
+  background: linear-gradient(90deg, rgba(23, 19, 27, 0.9), transparent 75%);
+}
+
+@media (max-width: 767px) {
+  #sec-about {
+    background: rgba(23, 19, 27, 0.86);
+  }
+}
