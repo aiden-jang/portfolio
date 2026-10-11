@@ -19,17 +19,14 @@ import { useAppStore } from '../store';
 import type { Keyframe } from '../types';
 
 const INTRO_DURATION = 2.0;
-
 const DRAG_DECAY_RATE = 1.5;
 const DRAG_DECAY_FRACTION = 0.6;
-const IDLE_SPIN_RATE = 0;
+const IDLE_SPIN_RATE = 0.12;
 const REV_DECAY_RATE = 1.8;
 const REV_RUMBLE_FREQ_HZ = 90 / (2 * Math.PI);
 const REV_SHAKE_AMP = 0.12;
 
 const SECTION_PUNCH_DURATION = 0.55; // seconds
-// Left at 0 on purpose. Section changes fire continuously as you scroll, so the punch read as a
-// shake rather than a reaction.
 const SECTION_PUNCH_FOV_DELTA = 0; // degrees added at peak
 
 // `?clean` freezes the camera for OG screenshots. It needs its own azimuth because KEYFRAMES[0]
@@ -94,10 +91,11 @@ export function CameraRig({ getScrollT }: Props) {
   useFrame((three, dt) => {
     const s = state.current;
     const refs = useAppStore.getState().refs;
-    const reduced = prefersReducedMotion();
+    const reduced = prefersReducedMotion(),
+      scrollT = getScrollT();
 
     s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
-    if (s.scrollActiveTimer === 0 && !s.isDown && !isCleanMode && !reduced) {
+    if (s.scrollActiveTimer === 0 && !s.isDown && !isCleanMode && !reduced && scrollT === 0) {
       s.idleSpin += dt * IDLE_SPIN_RATE;
     }
     if (!s.isDown) {
@@ -107,9 +105,11 @@ export function CameraRig({ getScrollT }: Props) {
     }
 
     const kf = baseKf.current;
-    interpolateKeyframe(KEYFRAMES, getScrollT(), kf);
+    interpolateKeyframe(KEYFRAMES, scrollT, kf);
 
-    const az = isCleanMode ? CLEAN_AZIMUTH : kf.azimuth + s.dragAzimuth + s.idleSpin;
+    const az = isCleanMode
+      ? CLEAN_AZIMUTH
+      : kf.azimuth + s.dragAzimuth + s.idleSpin * (1 - clamp(scrollT, 0, 1));
     const aspect = three.size.height > 0 ? three.size.width / three.size.height : FRAME_BASE_ASPECT;
     const dist = kf.distance * framingDistanceMultiplier(aspect);
     const tgtY = kf.targetY;

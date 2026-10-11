@@ -40,7 +40,7 @@ export function IntroSection() {
       </div>
       <div className="garage-caption">
         <span>
-          {String(carIndex + 1).padStart(2, '0')} / {CARS[carIndex].name}
+          {String(carIndex + 1).padStart(2, '0')} / {CARS[carIndex].name} / {CARS[carIndex].code}
         </span>
         <br />
         Not my daily driver.

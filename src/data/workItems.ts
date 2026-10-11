@@ -56,7 +56,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     link: { label: 'Open everythingisfine', url: 'https://everythingisfine.aidenjang.com' },
   },
   {
-    title: 'Worth: keep your own taste',
+    title: 'worth: keep your own taste',
     context: 'Side project',
     summary:
       'A personal archive for things you try and do, with ranked collections, revisit logs, and three honest calls: Favorite, Meh, or Not again.',
@@ -67,13 +67,13 @@ export const WORK_ITEMS: WorkDetail[] = [
     ],
     stack: ['React', 'TypeScript', 'Cloudflare Workers', 'D1', 'Hono'],
     mark: 'worth',
-    shortName: 'Worth',
+    shortName: 'worth',
     tagline: 'Keep the good stuff. Meh is also a valid answer.',
     categories: ['social', 'systems'],
     moment: 'remembering whether something deserves another go',
     principle:
       'A personal opinion can stay small: Favorite, Meh, or Not again. Ranking and revisits add context without turning taste into a public score.',
-    link: { label: 'Open Worth', url: 'https://worth.aidenjang.com' },
+    link: { label: 'Open worth', url: 'https://worth.aidenjang.com' },
   },
   {
     title: 'iguess: realtime draw-and-guess vs an AI',
