@@ -403,7 +403,7 @@ header > span {
 #sec-work {
   background: #101014;
   padding-top: 13vh;
-  padding-bottom: 120px;
+  padding-bottom: 48px;
 }
 .garage-work {
   width: 100%;
@@ -445,7 +445,7 @@ header > span {
   border-color: #e8e8e6;
 }
 .garage-project-list {
-  max-height: 59dvh;
+  max-height: calc(100dvh - 290px);
   overflow-y: auto;
   overscroll-behavior: contain;
   padding-right: 16px;
@@ -528,7 +528,7 @@ header > span {
     display: none;
   }
   .garage-project-list {
-    max-height: calc(100dvh - 400px);
+    max-height: calc(100dvh - 290px);
     padding-right: 8px;
   }
   .garage-project-featured {
@@ -567,6 +567,7 @@ header > span {
 }
 
 .garage-globe-preview img {
+  max-height: none;
   object-fit: contain;
   object-position: center;
 }

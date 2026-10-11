@@ -155,3 +155,5 @@ The intro opens at a front three-quarter pose and holds still until interaction;
 orbit dragging, car switching, scroll camera movement and reset remain available.
 
 Everything Is Fine’s portfolio preview uses the live globe view with the whole frame contained. Worth is listed with its own case study, product mark, and live link.
+
+The Projects section hides car controls and keyboard hints while the car is covered. Globe previews keep their natural aspect ratio without a padded image frame, and the project list uses the recovered vertical space.

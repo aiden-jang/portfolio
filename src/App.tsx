@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
-import { CARS } from './config';
+import { CARS, SECTION_IDS } from './config';
 import { useNavigation } from './hooks/useNavigation';
 import { useReveal } from './hooks/useReveal';
 import { BODY_COLOR_SWATCHES, useAppStore, type ActiveBodyColor } from './store';
@@ -39,6 +39,8 @@ export function App() {
   const carIndex = useAppStore((state) => state.carIndex);
   const activeBodyColor = useAppStore((state) => state.activeBodyColor);
   const themeName = useAppStore((state) => state.themeName);
+  const sectionIndex = useAppStore((state) => state.sectionIndex);
+  const showCarControls = SECTION_IDS[sectionIndex] !== 'sec-work';
   const scenePaintRef = useRef<ActiveBodyColor | null>(null);
   const [sceneReady, setSceneReady] = useState(false);
 
@@ -111,7 +113,7 @@ export function App() {
             id="mobile-resume"
             className="md:hidden fixed top-[max(4vh,env(safe-area-inset-top))] right-[5vw] z-20 flex items-center gap-2"
           >
-            <MobileCommandButton />
+            {showCarControls && <MobileCommandButton />}
             <ResumeButton />
           </div>
           {/* Sections reserve this strip with their own bottom padding, so keep the two in step. */}
@@ -124,42 +126,46 @@ export function App() {
             "
           >
             <SectionDots onJump={scrollToSection} placement="bar" />
-            <div className="flex items-center gap-2">
-              <MobileCarSwitcher />
-              <MobileColorButton />
-              <MobileThemeButton />
-            </div>
+            {showCarControls && (
+              <div className="flex items-center gap-2">
+                <MobileCarSwitcher />
+                <MobileColorButton />
+                <MobileThemeButton />
+              </div>
+            )}
           </div>
-          <div
-            id="desktop-dock"
-            className="
+          {showCarControls && (
+            <div
+              id="desktop-dock"
+              className="
               hidden md:flex justify-center fixed left-1/2 -translate-x-1/2 bottom-[4.5rem] z-20
               pointer-events-none
             "
-          >
-            <div
-              className="
+            >
+              <div
+                className="
                 pointer-events-auto flex items-center gap-1
                 rounded-full border border-[var(--color-line)] bg-[rgba(12,12,20,0.55)]
                 px-2 py-1 shadow-[0_10px_34px_-14px_rgba(0,0,0,0.7)]
               "
-            >
-              <CarSwitcher />
-              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-              <RevButton />
-              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-              <CameraResetButton />
-              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-              <ColorSwatches bordered={false} />
-              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-              <ThemeToggle />
-              <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-              <SceneShareButton />
+              >
+                <CarSwitcher />
+                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+                <RevButton />
+                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+                <CameraResetButton />
+                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+                <ColorSwatches bordered={false} />
+                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+                <ThemeToggle />
+                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+                <SceneShareButton />
+              </div>
             </div>
-          </div>
+          )}
           <SectionDots onJump={scrollToSection} placement="rail" />
           <Sections />
-          <Hint />
+          {showCarControls && <Hint />}
           <CommandMenu onSection={scrollToSection} />
         </>
       )}
