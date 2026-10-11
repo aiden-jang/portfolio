@@ -1,419 +1,367 @@
 <!doctype html>
 <html lang="en">
-  <meta charset="utf-8" /><meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  /><title>Aiden — Showroom study</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      margin: 0;
-      background: #121311;
-      color: #eeeee7;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    button {
-      font: inherit;
-    }
-    header {
-      height: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 0 6%;
-      border-bottom: 1px solid #ffffff20;
-    }
-    .wordmark {
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: -1px;
-    }
-    nav {
-      display: flex;
-      gap: 30px;
-      font-size: 13px;
-      color: #bdbfb4;
-    }
-    nav a:last-child {
-      color: #eeeee7;
-    }
-    .hero {
-      position: relative;
-      min-height: 720px;
-      margin: 0 6%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      overflow: hidden;
-    }
-    .hero-copy {
-      z-index: 1;
-      padding: 45px 0 100px;
-      max-width: 580px;
-    }
-    .eyebrow {
-      font: 11px monospace;
-      letter-spacing: 1.4px;
-      color: #b6bcaa;
-      text-transform: uppercase;
-    }
-    h1 {
-      font-size: clamp(60px, 7.5vw, 106px);
-      line-height: 0.96;
-      letter-spacing: -6px;
-      font-weight: 500;
-      margin: 28px 0;
-    }
-    h1 em {
-      font-style: normal;
-      color: #c7e5a0;
-    }
-    p {
-      line-height: 1.7;
-      color: #b2b7a8;
-      font-size: 15px;
-    }
-    .intro {
-      max-width: 350px;
-    }
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      margin-top: 32px;
-      font-size: 13px;
-    }
-    .primary {
-      display: inline-flex;
-      padding: 16px 21px;
-      border-radius: 6px;
-      background: #c7e5a0;
-      color: #172010;
-      font-weight: 600;
-    }
-    .car {
-      position: absolute;
-      width: 76%;
-      right: -13%;
-      top: 80px;
-      mix-blend-mode: lighten;
-      pointer-events: none;
-    }
-    .car img {
-      width: 100%;
-      transform: scale(1.22);
-    }
-    .caption {
-      position: absolute;
-      right: 0;
-      bottom: 116px;
-      font: 11px monospace;
-      color: #a9aea0;
-    }
-    .dock {
-      position: absolute;
-      bottom: 38px;
-      right: 0;
-      display: flex;
-      align-items: center;
-      border: 1px solid #ffffff24;
-      border-radius: 8px;
-      padding: 14px 18px;
-      gap: 24px;
-      font-size: 12px;
-    }
-    .dock span:last-child {
-      color: #c7e5a0;
-    }
-    .aside {
-      position: absolute;
-      bottom: 48px;
-      left: 0;
-      font: 11px monospace;
-      color: #a8ad9e;
-    }
-    .work {
-      padding: 76px 6% 90px;
-      background: #e9e8df;
-      color: #22251c;
-      min-height: 850px;
-    }
-    .work-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 25px;
-      margin-bottom: 34px;
-    }
-    .work .eyebrow {
-      color: #676d5e;
-    }
-    h2 {
-      font-weight: 500;
-      font-size: 56px;
-      letter-spacing: -2.7px;
-      margin: 16px 0 0;
-    }
-    .work-top p {
-      color: #696e60;
-      max-width: 260px;
-      font-size: 14px;
-      margin: 0;
-    }
-    .cards {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 24px;
-    }
-    .preview {
-      border-radius: 10px;
-      overflow: hidden;
-      height: 340px;
-      background: #101521;
-      position: relative;
-    }
-    .preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-    .preview-cat {
-      background: #dbc9ec;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .cat {
-      width: 180px;
-      height: 150px;
-      border-radius: 55% 55% 40% 40%;
-      background: #49375c;
-      position: relative;
-      transform: rotate(-8deg);
-    }
-    .cat:before,
-    .cat:after {
-      content: '';
-      position: absolute;
-      top: -28px;
-      width: 66px;
-      height: 72px;
-      background: #49375c;
-      border-radius: 8px;
-    }
-    .cat:before {
-      left: 8px;
-      transform: rotate(-25deg);
-    }
-    .cat:after {
-      right: 8px;
-      transform: rotate(25deg);
-    }
-    .face {
-      position: absolute;
-      z-index: 1;
-      top: 52px;
-      left: 40px;
-      font: 40px monospace;
-      color: #f5e6fd;
-      letter-spacing: 12px;
-    }
-    .tiny-note {
-      position: absolute;
-      bottom: 22px;
-      left: 24px;
-      font: 11px monospace;
-      color: #49375c;
-    }
-    .meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-    }
-    .meta h3 {
-      font-size: 22px;
-      letter-spacing: -0.6px;
-      font-weight: 500;
-      margin: 0;
-    }
-    .meta span {
-      font: 11px monospace;
-      color: #6b7163;
-    }
-    .card p {
-      font-size: 14px;
-      color: #626957;
-      margin: 9px 0;
-    }
-    .more {
-      margin-top: 45px;
-      padding-top: 24px;
-      border-top: 1px solid #22251c30;
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-    }
-    .mock-note {
-      padding: 18px 6%;
-      font: 11px monospace;
-      color: #afb3a5;
-    }
-    .primary:hover {
-      background: #dbefc4;
-    }
-    a:focus-visible {
-      outline: 2px solid #c7e5a0;
-      outline-offset: 5px;
-    }
-    @media (max-width: 700px) {
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Aiden Jang — Garage study</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #101014;
+        color: #e8e8e6;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
       header {
-        height: 76px;
+        margin: 0 5%;
+        height: 84px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #ffffff24;
+        font-size: 13px;
       }
       nav {
-        gap: 18px;
+        display: flex;
+        gap: 30px;
       }
-      nav .optional {
-        display: none;
+      header span {
+        font-family: monospace;
+        color: #939399;
+      }
+      main {
+        margin: 0 5%;
       }
       .hero {
-        display: block;
-        min-height: 830px;
-      }
-      .hero-copy {
-        padding: 58px 0 0;
+        position: relative;
+        min-height: 730px;
+        padding-top: 55px;
+        overflow: hidden;
       }
       h1 {
-        font-size: 64px;
-        letter-spacing: -3px;
+        font-weight: 500;
+        font-size: clamp(72px, 12vw, 164px);
+        letter-spacing: -0.075em;
+        line-height: 1;
+        margin: 0;
+        position: relative;
+        z-index: 1;
       }
-      .intro {
-        max-width: 290px;
+      .role {
+        position: relative;
+        z-index: 1;
+        margin: 22px 0;
+        color: #a9a9af;
+        font-size: 16px;
+        line-height: 1.6;
+        max-width: 340px;
       }
       .car {
-        width: 125%;
-        right: -18%;
-        top: 440px;
+        position: absolute;
+        width: 85%;
+        right: -6%;
+        top: 130px;
+        mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 85%, transparent);
       }
-      .caption {
-        bottom: 104px;
-        font-size: 10px;
+      .car img {
+        width: 100%;
       }
-      .dock {
-        bottom: 38px;
+      .index {
+        position: absolute;
+        bottom: 49px;
         left: 0;
-        right: auto;
-        gap: 20px;
+        font-size: 13px;
+        line-height: 1.9;
       }
-      .aside {
-        display: none;
+      .index small {
+        display: block;
+        font: 10px monospace;
+        letter-spacing: 1.3px;
+        color: #94949d;
+        margin-bottom: 12px;
+      }
+      .index a {
+        display: block;
+        width: 180px;
+        border-bottom: 1px solid #ffffff24;
+        padding: 8px 0;
+      }
+      .index a span {
+        float: right;
+      }
+      .car-label {
+        position: absolute;
+        right: 0;
+        bottom: 55px;
+        text-align: right;
+        font: 11px monospace;
+        line-height: 1.8;
+        color: #a9a9b0;
+      }
+      .car-label b {
+        color: #e8e8e6;
+        font-weight: 400;
       }
       .work {
-        padding-top: 54px;
+        border-top: 1px solid #ffffff28;
+        padding: 60px 0 75px;
       }
-      .work-top {
+      .work-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 45px;
+      }
+      .work-head h2 {
+        font-weight: 500;
+        font-size: 32px;
+        letter-spacing: -1px;
+        margin: 0;
+      }
+      .work-head span {
+        font: 11px monospace;
+        color: #9c9ca5;
+      }
+      .project {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 45px;
+        border-top: 1px solid #ffffff22;
+        padding: 30px 0 45px;
+      }
+      .project-info small {
+        font: 11px monospace;
+        color: #9a9aa3;
+      }
+      .project-info h3 {
+        font-size: 25px;
+        font-weight: 500;
+        letter-spacing: -0.7px;
+        margin: 22px 0 15px;
+      }
+      .project-info p {
+        color: #a9a9b1;
+        font-size: 14px;
+        line-height: 1.7;
+        margin: 0 0 24px;
+      }
+      .project-info a {
+        font-size: 12px;
+        border-bottom: 1px solid #777780;
+        padding-bottom: 6px;
+      }
+      .screen {
+        background: #17171c;
+        padding: 14px;
+        border: 1px solid #ffffff20;
+      }
+      .screen img {
         display: block;
+        width: 100%;
+        height: auto;
       }
-      .work-top p {
-        margin-top: 18px;
-      }
-      h2 {
-        font-size: 42px;
-        letter-spacing: -1.7px;
-      }
-      .cards {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-      .preview {
-        height: 270px;
-      }
-      .more {
-        gap: 30px;
+      .caption {
+        font: 10px monospace;
         line-height: 1.6;
+        color: #9999a3;
+        margin-top: 12px;
       }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
+      .shelf {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 45px;
+        border-top: 1px solid #ffffff22;
+        padding: 28px 0;
       }
-    }
-  </style>
-  <header>
-    <a class="wordmark" href="#">aiden jang.</a>
-    <nav>
-      <a href="#work">Projects</a><a class="optional" href="#work">Experience</a
-      ><a href="mailto:me@aidenjang.com">Say hello ↗</a>
-    </nav>
-  </header>
-  <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="eyebrow">Full-stack engineer · Aiden Jang</div>
-        <h1>Useful things.<br />A little<br /><em>personality.</em></h1>
-        <p class="intro">
-          I build web apps, real-time experiences, and the occasional very unnecessary car showroom.
+      .shelf > span {
+        font: 11px monospace;
+        color: #9a9aa3;
+      }
+      .shelf a {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #ffffff20;
+        padding: 17px 0;
+        font-size: 16px;
+      }
+      .shelf a small {
+        font-size: 12px;
+        color: #a9a9b1;
+      }
+      .footer {
+        border-top: 1px solid #ffffff28;
+        padding: 30px 0 50px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+      }
+      .footer span {
+        color: #9a9aa3;
+        font-size: 11px;
+      }
+      .study {
+        font: 10px monospace;
+        color: #9c9ca4;
+        margin: 0 5% 25px;
+      }
+      a:hover {
+        color: #fff;
+      }
+      a:focus-visible {
+        outline: 2px solid #e8e8e6;
+        outline-offset: 6px;
+      }
+      @media (max-width: 700px) {
+        header {
+          height: 70px;
+        }
+        header span {
+          display: none;
+        }
+        nav {
+          gap: 22px;
+        }
+        .hero {
+          min-height: 720px;
+          padding-top: 46px;
+        }
+        h1 {
+          font-size: 82px;
+        }
+        .role {
+          font-size: 14px;
+          max-width: 265px;
+        }
+        .car {
+          width: 135%;
+          right: -18%;
+          top: 210px;
+        }
+        .index {
+          bottom: 38px;
+        }
+        .car-label {
+          bottom: 52px;
+          font-size: 9px;
+        }
+        .work {
+          padding-top: 40px;
+        }
+        .work-head {
+          display: block;
+          margin-bottom: 28px;
+        }
+        .work-head span {
+          display: block;
+          margin-top: 12px;
+        }
+        .project,
+        .shelf {
+          grid-template-columns: 1fr;
+          gap: 25px;
+        }
+        .project-info h3 {
+          margin-top: 14px;
+        }
+        .project-info p {
+          max-width: 330px;
+        }
+        .screen {
+          padding: 6px;
+        }
+        .shelf a small {
+          max-width: 150px;
+          text-align: right;
+          line-height: 1.5;
+        }
+        .footer {
+          gap: 30px;
+        }
+        .footer span {
+          max-width: 130px;
+          line-height: 1.6;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="#">AJ / portfolio</a><span>Software, systems, side projects.</span>
+      <nav><a href="#work">Work</a><a href="mailto:me@aidenjang.com">Contact ↗</a></nav>
+    </header>
+    <main>
+      <section class="hero">
+        <h1>Aiden Jang</h1>
+        <p class="role">
+          Full-stack engineer.<br />Real-time products, web applications,<br />and the details
+          between them.
         </p>
-        <div class="actions">
-          <a class="primary" href="#work">View projects ↗</a
-          ><a href="mailto:me@aidenjang.com">Let’s talk</a>
+        <div class="car">
+          <img src="car.png" alt="Ferrari F40 from the existing interactive showroom" />
         </div>
-      </div>
-      <div class="car">
-        <img src="car.png" alt="Red Ferrari F40 in Aiden’s existing 3D showroom" />
-      </div>
-      <div class="caption">Ferrari F40 / excellent parking job.</div>
-      <div class="aside">Scroll for the things I actually built ↓</div>
-      <div class="dock"><span>←</span><span>Ferrari F40</span><span>→</span><span>●</span></div>
-    </section>
-    <section class="work" id="work">
-      <div class="work-top">
-        <div>
-          <div class="eyebrow">Selected projects / independently built</div>
-          <h2>Made. Shipped.<br />Still tinkering.</h2>
+        <div class="index">
+          <small>LOOK AROUND</small><a href="#work">Selected work <span>↓</span></a
+          ><a href="/Aiden_Jang_Resume.pdf">Résumé <span>↗</span></a>
         </div>
-        <p>Small apps with real problems to solve. And a cat with other plans.</p>
-      </div>
-      <div class="cards">
-        <a class="card" href="https://everythingisfine.aidenjang.com"
-          ><div class="preview">
-            <img src="everythingisfine.png" alt="Actual Everything Is Fine earthquake interface" />
-          </div>
-          <div class="meta">
+        <div class="car-label">
+          <b>01 / Ferrari F40</b><br />Not my daily driver.<br />← &nbsp; Garage &nbsp; →
+        </div>
+      </section>
+      <section class="work" id="work">
+        <div class="work-head">
+          <h2>Selected work</h2>
+          <span>Built independently / running in production</span>
+        </div>
+        <article class="project">
+          <div class="project-info">
+            <small>01 / REAL-TIME VISUALIZATION</small>
             <h3>Everything is fine.</h3>
-            <span>REALTIME / WEBGL ↗</span>
+            <p>
+              A live earthquake globe. Two agencies’ readings stay visible, including where they
+              disagree.
+            </p>
+            <p>Three.js · TypeScript<br />Public feeds · WebSockets</p>
+            <a href="https://everythingisfine.aidenjang.com">Open the app ↗</a>
           </div>
-          <p>A live view of a planet that refuses to sit still.</p></a
-        ><a class="card" href="https://mrrp.aidenjang.com"
-          ><div class="preview preview-cat">
-            <div class="cat"><div class="face">− −</div></div>
-            <div class="tiny-note">Brand illustration study / mrrp</div>
+          <div>
+            <div class="screen">
+              <img
+                src="everythingisfine.png"
+                alt="Actual earthquake app showing a selected event and both agency readings"
+              />
+            </div>
+            <div class="caption">
+              Live interface capture / selected earthquake and agency comparison.
+            </div>
           </div>
-          <div class="meta">
-            <h3>mrrp</h3>
-            <span>MULTIPLAYER ↗</span>
+        </article>
+        <div class="shelf">
+          <span>MORE PROJECTS</span>
+          <div>
+            <a href="https://mrrp.aidenjang.com">mrrp <small>Multiplayer rooms ↗</small></a
+            ><a href="https://owewell.aidenjang.com">owewell <small>Shared expenses ↗</small></a
+            ><a href="https://bloomnote.aidenjang.com"
+              >bloomnote <small>Notes and a growing garden ↗</small></a
+            ><a href="https://wherever.aidenjang.com"
+              >wherever <small>Finding somewhere to eat ↗</small></a
+            >
           </div>
-          <p>One of you is the cat. Act normal.</p></a
-        >
-      </div>
-      <div class="more">
-        <span>Also on the shelf: owewell, bloomnote, wherever, iguess.</span
-        ><a href="mailto:me@aidenjang.com">Have something in mind? ↗</a>
-      </div>
-    </section>
-  </main>
-  <div class="mock-note">
-    DESIGN STUDY · static car and dock; production retains the interactive 3D scene. Experience
-    navigation is a composition placeholder.
-  </div>
+        </div>
+      </section>
+      <footer class="footer">
+        <a href="mailto:me@aidenjang.com">me@aidenjang.com ↗</a
+        ><span>There’s actual engineering behind the car.</span>
+      </footer>
+    </main>
+    <div class="study">
+      GARAGE COMPOSITION STUDY · static car; production retains interactive controls and model
+      credits.
+    </div>
+  </body>
 </html>
