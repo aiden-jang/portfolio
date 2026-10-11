@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  /><title>Aiden — Showroom study</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      background: #121311;
+      color: #eeeee7;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    button {
+      font: inherit;
+    }
+    header {
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 6%;
+      border-bottom: 1px solid #ffffff20;
+    }
+    .wordmark {
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: -1px;
+    }
+    nav {
+      display: flex;
+      gap: 30px;
+      font-size: 13px;
+      color: #bdbfb4;
+    }
+    nav a:last-child {
+      color: #eeeee7;
+    }
+    .hero {
+      position: relative;
+      min-height: 720px;
+      margin: 0 6%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-copy {
+      z-index: 1;
+      padding: 45px 0 100px;
+      max-width: 580px;
+    }
+    .eyebrow {
+      font: 11px monospace;
+      letter-spacing: 1.4px;
+      color: #b6bcaa;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-size: clamp(60px, 7.5vw, 106px);
+      line-height: 0.96;
+      letter-spacing: -6px;
+      font-weight: 500;
+      margin: 28px 0;
+    }
+    h1 em {
+      font-style: normal;
+      color: #c7e5a0;
+    }
+    p {
+      line-height: 1.7;
+      color: #b2b7a8;
+      font-size: 15px;
+    }
+    .intro {
+      max-width: 350px;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-top: 32px;
+      font-size: 13px;
+    }
+    .primary {
+      display: inline-flex;
+      padding: 16px 21px;
+      border-radius: 6px;
+      background: #c7e5a0;
+      color: #172010;
+      font-weight: 600;
+    }
+    .car {
+      position: absolute;
+      width: 76%;
+      right: -13%;
+      top: 80px;
+      mix-blend-mode: lighten;
+      pointer-events: none;
+    }
+    .car img {
+      width: 100%;
+      transform: scale(1.22);
+    }
+    .caption {
+      position: absolute;
+      right: 0;
+      bottom: 116px;
+      font: 11px monospace;
+      color: #a9aea0;
+    }
+    .dock {
+      position: absolute;
+      bottom: 38px;
+      right: 0;
+      display: flex;
+      align-items: center;
+      border: 1px solid #ffffff24;
+      border-radius: 8px;
+      padding: 14px 18px;
+      gap: 24px;
+      font-size: 12px;
+    }
+    .dock span:last-child {
+      color: #c7e5a0;
+    }
+    .aside {
+      position: absolute;
+      bottom: 48px;
+      left: 0;
+      font: 11px monospace;
+      color: #a8ad9e;
+    }
+    .work {
+      padding: 76px 6% 90px;
+      background: #e9e8df;
+      color: #22251c;
+      min-height: 850px;
+    }
+    .work-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 25px;
+      margin-bottom: 34px;
+    }
+    .work .eyebrow {
+      color: #676d5e;
+    }
+    h2 {
+      font-weight: 500;
+      font-size: 56px;
+      letter-spacing: -2.7px;
+      margin: 16px 0 0;
+    }
+    .work-top p {
+      color: #696e60;
+      max-width: 260px;
+      font-size: 14px;
+      margin: 0;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 24px;
+    }
+    .preview {
+      border-radius: 10px;
+      overflow: hidden;
+      height: 340px;
+      background: #101521;
+      position: relative;
+    }
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .preview-cat {
+      background: #dbc9ec;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cat {
+      width: 180px;
+      height: 150px;
+      border-radius: 55% 55% 40% 40%;
+      background: #49375c;
+      position: relative;
+      transform: rotate(-8deg);
+    }
+    .cat:before,
+    .cat:after {
+      content: '';
+      position: absolute;
+      top: -28px;
+      width: 66px;
+      height: 72px;
+      background: #49375c;
+      border-radius: 8px;
+    }
+    .cat:before {
+      left: 8px;
+      transform: rotate(-25deg);
+    }
+    .cat:after {
+      right: 8px;
+      transform: rotate(25deg);
+    }
+    .face {
+      position: absolute;
+      z-index: 1;
+      top: 52px;
+      left: 40px;
+      font: 40px monospace;
+      color: #f5e6fd;
+      letter-spacing: 12px;
+    }
+    .tiny-note {
+      position: absolute;
+      bottom: 22px;
+      left: 24px;
+      font: 11px monospace;
+      color: #49375c;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .meta h3 {
+      font-size: 22px;
+      letter-spacing: -0.6px;
+      font-weight: 500;
+      margin: 0;
+    }
+    .meta span {
+      font: 11px monospace;
+      color: #6b7163;
+    }
+    .card p {
+      font-size: 14px;
+      color: #626957;
+      margin: 9px 0;
+    }
+    .more {
+      margin-top: 45px;
+      padding-top: 24px;
+      border-top: 1px solid #22251c30;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    .mock-note {
+      padding: 18px 6%;
+      font: 11px monospace;
+      color: #afb3a5;
+    }
+    .primary:hover {
+      background: #dbefc4;
+    }
+    a:focus-visible {
+      outline: 2px solid #c7e5a0;
+      outline-offset: 5px;
+    }
+    @media (max-width: 700px) {
+      header {
+        height: 76px;
+      }
+      nav {
+        gap: 18px;
+      }
+      nav .optional {
+        display: none;
+      }
+      .hero {
+        display: block;
+        min-height: 830px;
+      }
+      .hero-copy {
+        padding: 58px 0 0;
+      }
+      h1 {
+        font-size: 64px;
+        letter-spacing: -3px;
+      }
+      .intro {
+        max-width: 290px;
+      }
+      .car {
+        width: 125%;
+        right: -18%;
+        top: 440px;
+      }
+      .caption {
+        bottom: 104px;
+        font-size: 10px;
+      }
+      .dock {
+        bottom: 38px;
+        left: 0;
+        right: auto;
+        gap: 20px;
+      }
+      .aside {
+        display: none;
+      }
+      .work {
+        padding-top: 54px;
+      }
+      .work-top {
+        display: block;
+      }
+      .work-top p {
+        margin-top: 18px;
+      }
+      h2 {
+        font-size: 42px;
+        letter-spacing: -1.7px;
+      }
+      .cards {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .preview {
+        height: 270px;
+      }
+      .more {
+        gap: 30px;
+        line-height: 1.6;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+  <header>
+    <a class="wordmark" href="#">aiden jang.</a>
+    <nav>
+      <a href="#work">Projects</a><a class="optional" href="#work">Experience</a
+      ><a href="mailto:me@aidenjang.com">Say hello ↗</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Full-stack engineer · Aiden Jang</div>
+        <h1>Useful things.<br />A little<br /><em>personality.</em></h1>
+        <p class="intro">
+          I build web apps, real-time experiences, and the occasional very unnecessary car showroom.
+        </p>
+        <div class="actions">
+          <a class="primary" href="#work">View projects ↗</a
+          ><a href="mailto:me@aidenjang.com">Let’s talk</a>
+        </div>
+      </div>
+      <div class="car">
+        <img src="car.png" alt="Red Ferrari F40 in Aiden’s existing 3D showroom" />
+      </div>
+      <div class="caption">Ferrari F40 / excellent parking job.</div>
+      <div class="aside">Scroll for the things I actually built ↓</div>
+      <div class="dock"><span>←</span><span>Ferrari F40</span><span>→</span><span>●</span></div>
+    </section>
+    <section class="work" id="work">
+      <div class="work-top">
+        <div>
+          <div class="eyebrow">Selected projects / independently built</div>
+          <h2>Made. Shipped.<br />Still tinkering.</h2>
+        </div>
+        <p>Small apps with real problems to solve. And a cat with other plans.</p>
+      </div>
+      <div class="cards">
+        <a class="card" href="https://everythingisfine.aidenjang.com"
+          ><div class="preview">
+            <img src="everythingisfine.png" alt="Actual Everything Is Fine earthquake interface" />
+          </div>
+          <div class="meta">
+            <h3>Everything is fine.</h3>
+            <span>REALTIME / WEBGL ↗</span>
+          </div>
+          <p>A live view of a planet that refuses to sit still.</p></a
+        ><a class="card" href="https://mrrp.aidenjang.com"
+          ><div class="preview preview-cat">
+            <div class="cat"><div class="face">− −</div></div>
+            <div class="tiny-note">Brand illustration study / mrrp</div>
+          </div>
+          <div class="meta">
+            <h3>mrrp</h3>
+            <span>MULTIPLAYER ↗</span>
+          </div>
+          <p>One of you is the cat. Act normal.</p></a
+        >
+      </div>
+      <div class="more">
+        <span>Also on the shelf: owewell, bloomnote, wherever, iguess.</span
+        ><a href="mailto:me@aidenjang.com">Have something in mind? ↗</a>
+      </div>
+    </section>
+  </main>
+  <div class="mock-note">
+    DESIGN STUDY · static car and dock; production retains the interactive 3D scene. Experience
+    navigation is a composition placeholder.
+  </div>
+</html>
