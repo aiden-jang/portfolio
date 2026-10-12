@@ -1,6 +1,40 @@
-import { WORK_ITEMS } from '../../data/workItems';
+import { workId, WORK_ITEMS } from '../../data/workItems';
+import './experience.css';
 import type { WorkDetail } from '../../types';
 import { EYEBROW, H2, P_LI, Section, UL_BASE } from './shared';
+
+const OUTCOMES: Record<string, { figure: string; label: string; title: string; detail: string }> = {
+  'monolith-django-rest-react-rewrite': {
+    figure: '6 months',
+    label: 'two engineers',
+    title: 'Replaced a live PHP backend',
+    detail: 'Django REST + React, migrated incrementally behind feature flags.',
+  },
+  'agentic-ai-playwright-framework': {
+    figure: 'First',
+    label: 'automated coverage',
+    title: 'Tests that keep up with a rewrite',
+    detail: 'A Playwright pipeline that plans, generates, and repairs tests.',
+  },
+  'ad-slot-details-120-1-api-call': {
+    figure: '60s → 2s',
+    label: 'page load',
+    title: '120 API calls became one',
+    detail: 'One batched endpoint for the joined data ad ops needs.',
+  },
+  'sponsorships-audience-extension-blackout-periods': {
+    figure: '3 products',
+    label: 'end to end',
+    title: 'Publisher controls at scale',
+    detail: 'Data models, APIs, and interfaces; Sponsorships includes The Washington Post.',
+  },
+  'creative-mapping-v2': {
+    figure: 'Schema → UI',
+    label: 'full ownership',
+    title: 'Creative Mapping v2',
+    detail: 'MySQL, REST, and Angular targeting controls for publisher ops.',
+  },
+};
 
 const ROLES = [
   { title: 'Software Engineer', company: 'Zeta Global', period: '2024 to now' },
@@ -16,8 +50,8 @@ export function ExperienceSection({ onOpen }: Props) {
   const highlights = WORK_ITEMS.filter((i) => !i.mark);
 
   return (
-    <Section id="sec-experience" side="left">
-      <div className="panel pointer-events-auto w-full max-w-[540px]">
+    <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">
+      <div className="panel pointer-events-auto w-full max-w-[650px]">
         <span className={EYEBROW}>01 / EXPERIENCE</span>
         <h2 className={H2}>Where I&apos;ve worked</h2>
         <ul className={`${UL_BASE} ${P_LI}`}>
@@ -38,7 +72,7 @@ export function ExperienceSection({ onOpen }: Props) {
         </ul>
 
         <p className="mt-5 mb-0.5 font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase text-[var(--color-muted)]">
-          Things I&apos;ve shipped
+          Selected outcomes
         </p>
         <div>
           {highlights.map((item) => (
@@ -51,20 +85,26 @@ export function ExperienceSection({ onOpen }: Props) {
 }
 
 function HighlightRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLElement) => void }) {
+  const outcome = OUTCOMES[workId(item)];
   return (
-    <button
-      type="button"
-      onClick={(e) => onOpen(e.currentTarget)}
-      className="
-        group w-full text-left block py-2.5 md:py-[0.4rem] cursor-pointer
-        border-y border-transparent rounded-md -mx-2 px-2
-        transition-colors duration-200
-        hover:border-[var(--color-line)] hover:bg-white/[0.02]
-      "
-    >
-      <p className="text-[rgba(244,240,255,0.8)] text-[0.85rem] leading-[1.45] m-0 line-clamp-1 transition-colors group-hover:text-[var(--color-fg)]">
-        {item.summary}
-      </p>
+    <button type="button" onClick={(e) => onOpen(e.currentTarget)} className="experience-outcome">
+      {outcome ? (
+        <>
+          <span className="experience-figure">
+            <strong>{outcome.figure}</strong>
+            <span>{outcome.label}</span>
+          </span>
+          <span className="experience-story">
+            <strong>{outcome.title}</strong>
+            <span>{outcome.detail}</span>
+          </span>
+        </>
+      ) : (
+        <span>{item.summary}</span>
+      )}
+      <span className="experience-arrow" aria-hidden="true">
+        ↗
+      </span>
     </button>
   );
 }

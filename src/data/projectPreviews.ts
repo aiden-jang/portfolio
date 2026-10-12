@@ -15,7 +15,7 @@ export const PREVIEWS: Record<string, { image: string; description: string; capt
     image: '/projects/owewell.png',
     description:
       'Shared expenses, itemized splits, and the smallest set of payments needed to settle up.',
-    caption: 'Public bill-splitting interface / no account required.',
+    caption: 'Interactive receipt / a labeled $48 example, split three ways.',
   },
   auth: {
     image: '/projects/platform.png',
@@ -37,7 +37,7 @@ export const PREVIEWS: Record<string, { image: string; description: string; capt
   bloomnote: {
     image: '/projects/bloomnote.png',
     description: 'Write someone a note and turn its details into a garden they can open.',
-    caption: 'Public composer / an example garden beside your note.',
+    caption: 'Writing desk / your note first, with a labeled example garden alongside.',
   },
   mrrp: {
     image: '/projects/mrrp.png',
