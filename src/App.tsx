@@ -22,6 +22,7 @@ import { SceneShareButton } from './ui/SceneShareButton';
 import { MobileThemeButton, ThemeToggle } from './ui/ThemeToggle';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
+import './ui/reading-flow.css';
 
 // `?clean` strips the DOM chrome, for capturing the OG image against a bare canvas.
 const isCleanMode =
@@ -37,7 +38,7 @@ export function App() {
   const activeBodyColor = useAppStore((state) => state.activeBodyColor);
   const themeName = useAppStore((state) => state.themeName);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
-  const showCarControls = SECTION_IDS[sectionIndex] === 'sec-intro';
+  const showCarControls = sectionIndex === 0 || SECTION_IDS[sectionIndex] === 'sec-contact';
   const scenePaintRef = useRef<ActiveBodyColor | null>(null);
   const [sceneReady, setSceneReady] = useState(false);
 

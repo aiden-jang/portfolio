@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { caseStudyLane, type ProjectFilter } from '../data/workBrowsing';
+import { caseStudyLane, isPortfolioProject, type ProjectFilter } from '../data/workBrowsing';
 import { WORK_ITEMS, workId } from '../data/workItems';
 import { runMorph } from './morph';
 import { AboutSection } from './sections/About';
@@ -37,10 +37,10 @@ export function Sections() {
 
   const openWork = useCallback((item: WorkDetail, el: HTMLElement) => {
     originHash.current = window.location.hash.startsWith('#work/')
-      ? item.mark
+      ? isPortfolioProject(item)
         ? '#sec-work'
         : '#sec-experience'
-      : window.location.hash || (item.mark ? '#sec-work' : '#sec-experience');
+      : window.location.hash || (isPortfolioProject(item) ? '#sec-work' : '#sec-experience');
     lastCard.current = el;
     window.history.replaceState(null, '', `#work/${workId(item)}`);
     runMorph(() => setActiveWork(item), el, true);

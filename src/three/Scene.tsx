@@ -7,17 +7,20 @@ import { CameraRig } from './CameraRig';
 import { Effects } from './Effects';
 import { Floor } from './Floor';
 import { Lights } from './Lights';
+import { useAppStore } from '../store';
 
 type Props = {
   getScrollT: () => number;
 };
 
 export function Scene({ getScrollT }: Props) {
+  const sectionIndex = useAppStore((state) => state.sectionIndex);
   return (
     <>
       <Canvas
         aria-hidden="true"
-        className="!fixed inset-0 z-0"
+        frameloop={sectionIndex > 0 && sectionIndex < 4 ? 'demand' : 'always'}
+        className="portfolio-scene !fixed inset-0 z-0"
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         camera={{ fov: 35, near: 0.1, far: 200, position: [0, 2, 10] }}
         onCreated={({ gl }) => {

@@ -1,6 +1,7 @@
 import { useEffect, type MutableRefObject } from 'react';
 import { clamp } from '../math';
 import { useAppStore } from '../store';
+import { canOrbitAt, pageSectionBounds } from './orbitRegion';
 
 const TAP_THRESHOLD_PX = 3;
 // Fingers jitter far more than a mouse, so the 3px threshold reads a normal tap as a drag.
@@ -55,7 +56,13 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
         endGesture(state.current);
         return;
       }
-      if (e.button !== 0 || !e.isPrimary || isNonDraggable(e.target)) return;
+      if (
+        e.button !== 0 ||
+        !e.isPrimary ||
+        isNonDraggable(e.target) ||
+        !canOrbitAt(e.clientY, pageSectionBounds())
+      )
+        return;
       activePointer = e.pointerId;
       const s = state.current;
       s.isDown = true;
@@ -80,6 +87,12 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
     const onPointerMove = (e: PointerEvent) => {
       const s = state.current;
       if (!s.isDown || activePointer !== e.pointerId) return;
+      if (!canOrbitAt(e.clientY, pageSectionBounds())) {
+        s.isDown = false;
+        activePointer = null;
+        endGesture(s);
+        return;
+      }
       const dx = e.clientX - s.lastX;
       const dy = e.clientY - s.lastY;
       s.lastX = e.clientX;
@@ -128,6 +141,7 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
     };
     const onScroll = () => {
       state.current.scrollActiveTimer = SCROLL_PAUSE_DURATION;
+      onPointerCancel();
     };
 
     window.addEventListener('pointerdown', onPointerDown);

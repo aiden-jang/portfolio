@@ -1,10 +1,11 @@
 import '../project-gallery.css';
 import { PREVIEWS } from '../../data/projectPreviews';
-import { visibleProjects, type ProjectFilter } from '../../data/workBrowsing';
+import { FEATURED_PROJECTS, visibleProjects, type ProjectFilter } from '../../data/workBrowsing';
 import { workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
+import { IodineContributions } from '../IodineContributions';
 import { prefersReducedMotion } from '../../hooks/useReducedMotion';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
@@ -21,17 +22,22 @@ const FILTERS = [
 ] as const;
 export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
   const visible = visibleProjects(filter);
-  const featured = filter === 'all' ? visible.slice(0, 3) : [];
-  const gallery = filter === 'all' ? visible.slice(3) : visible;
+  const featured =
+    filter === 'all' ? visible.filter((item) => FEATURED_PROJECTS.includes(item.shortName!)) : [];
+  const gallery =
+    filter === 'all'
+      ? visible.filter((item) => !FEATURED_PROJECTS.includes(item.shortName!))
+      : visible;
   return (
     <Section id="sec-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="garage-work pointer-events-auto">
         <div className="garage-work-heading">
           <h2>Selected work</h2>
-          <span>Built independently</span>
+          <span>Personal products & open source</span>
         </div>
         <div className="project-toolbar">
           <div className="garage-filters" aria-label="Filter projects">
+            <span className="filter-label">Show</span>
             {FILTERS.map((option) => (
               <button
                 key={option.id}
@@ -47,6 +53,7 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
                 }}
               >
                 {option.label}
+                <span className="filter-count">{visibleProjects(option.id).length}</span>
               </button>
             ))}
           </div>
@@ -76,7 +83,9 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
         <div className="garage-project-list" aria-label="Project previews">
           {featured.length > 0 && (
             <div className="project-featured-group" aria-label="Featured projects">
-              <p className="project-group-label">Featured / 03</p>
+              <p className="project-group-label">
+                Featured / {String(featured.length).padStart(2, '0')}
+              </p>
               {featured.map((item) => (
                 <Project key={item.title} item={item} onOpen={onOpen} featured />
               ))}
@@ -86,9 +95,9 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
             <section className="project-gallery-group" aria-labelledby="gallery-heading">
               <div className="project-gallery-heading">
                 <h3 id="gallery-heading">
-                  {filter === 'all' ? 'More things I’ve shipped' : 'Matching projects'}
+                  {filter === 'all' ? 'More projects' : 'Matching projects'}
                 </h3>
-                {filter === 'all' && <span>Small apps. Whole products.</span>}
+                {filter === 'all' && <span>Still worth a look.</span>}
               </div>
               <div className="project-gallery">
                 {gallery.map((item) => (
@@ -116,8 +125,8 @@ function Project({
     >
       <div className="garage-project-copy">
         <h3>{item.shortName}</h3>
-        <p>{preview?.description ?? item.tagline}</p>
-        {preview && <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>}
+        <p>{preview?.description ?? item.summary}</p>
+        <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>
         <div className="garage-project-links">
           <button
             type="button"
@@ -133,7 +142,7 @@ function Project({
               rel="noopener"
               aria-label={`Open ${item.shortName}`}
             >
-              Open app ↗
+              {item.contribution ? 'Contributions ↗' : 'Open app ↗'}
             </a>
           )}
         </div>
@@ -145,6 +154,7 @@ function Project({
           caption={preview.caption}
         />
       )}
+      {item.contribution && <IodineContributions />}
     </article>
   );
 }

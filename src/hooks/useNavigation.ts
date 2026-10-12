@@ -4,6 +4,7 @@ import { clamp } from '../math';
 import { prefersReducedMotion } from './useReducedMotion';
 import { useAppStore } from '../store';
 import { sectionProgress } from './sectionProgress';
+import { canOrbitAt, pageSectionBounds } from '../three/orbitRegion';
 
 let scrollRaf = 0;
 // Module-level so manual scroll input can abort a tween started from anywhere.
@@ -215,6 +216,9 @@ export function useNavigation() {
     };
     // The lock is what keeps a deliberate jump from fighting its own animation.
     const onScroll = () => {
+      document.body.dataset.carView = canOrbitAt(window.innerHeight * 0.15, pageSectionBounds())
+        ? 'visible'
+        : 'reading';
       if (performance.now() < snapLockUntil.current) return;
       const idx = SECTION_IDS.reduce((active, id, index) => {
         const section = document.getElementById(id);
@@ -237,11 +241,13 @@ export function useNavigation() {
       setSectionIndex(index);
     };
     const linkFrame = requestAnimationFrame(restoreSectionLink);
+    onScroll();
     window.addEventListener('hashchange', restoreSectionLink);
     window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
     return () => {
       cancelAnimationFrame(linkFrame);
       window.removeEventListener('hashchange', restoreSectionLink);
@@ -249,6 +255,7 @@ export function useNavigation() {
       window.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, [getScrollT, goToSection, setSectionIndex, cycleCarThrottled, prevCarThrottled]);
 

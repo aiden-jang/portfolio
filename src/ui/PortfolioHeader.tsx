@@ -20,7 +20,9 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
     return () => document.removeEventListener('pointerdown', dismiss);
   }, []);
   return (
-    <div className={`portfolio-header ${active === 2 ? 'portfolio-header-reading' : ''}`}>
+    <div
+      className={`portfolio-header ${active > 0 && active < 4 ? 'portfolio-header-reading' : ''}`}
+    >
       <Brand onHome={() => onLink('sec-intro')} />
       <Nav onLink={onLink} />
       <div className="portfolio-mobile-header">

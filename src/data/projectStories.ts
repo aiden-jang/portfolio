@@ -2,6 +2,14 @@ export const PROJECT_STORIES: Record<
   string,
   { problem: string; result: string; decision?: string }
 > = {
+  iodine: {
+    problem:
+      'An IDE agent needs a useful way to reuse command approvals and undo edits without granting blanket permission.',
+    decision:
+      'Normalize commands into scoped rules, keep similarity suggestions local and snapshot files before agent edits.',
+    result:
+      'Contributed command-approval rules, local embedding suggestions, revocable approvals and an edit-revert flow that tells the agent when a change is undone.',
+  },
   auth: {
     decision:
       'Put identity in one service and publish the session contract as a versioned SDK. Apps can change independently without silently changing what a session means.',

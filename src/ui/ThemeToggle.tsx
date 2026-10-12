@@ -40,16 +40,17 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      aria-label="Toggle studio lighting (dusk/night)"
-      title="Toggle studio lighting"
+      aria-label={`Lighting: ${isNight ? 'Night' : 'Dusk'}. Switch to ${isNight ? 'Dusk' : 'Night'}`}
+      aria-pressed={isNight}
+      title={`Lighting: ${isNight ? 'Night' : 'Dusk'}`}
       onClick={toggleTheme}
-      style={{ color: isNight ? '#2bd4ff' : 'var(--color-neon)' }}
       className="
-        inline-grid place-items-center w-8 h-8 rounded-full cursor-pointer
+        inline-flex items-center justify-center gap-2 px-2 h-8 rounded-full cursor-pointer
         transition-transform duration-200 hover:scale-110
       "
     >
       {isNight ? <MoonIcon /> : <SunIcon />}
+      <span className="control-group-label">{isNight ? 'Night' : 'Dusk'}</span>
     </button>
   );
 }
@@ -62,10 +63,10 @@ export function MobileThemeButton() {
   return (
     <button
       type="button"
-      aria-label="Toggle studio lighting (dusk/night)"
-      title="Toggle studio lighting"
+      aria-label={`Lighting: ${isNight ? 'Night' : 'Dusk'}. Switch to ${isNight ? 'Dusk' : 'Night'}`}
+      aria-pressed={isNight}
+      title={`Lighting: ${isNight ? 'Night' : 'Dusk'}`}
       onClick={toggleTheme}
-      style={{ color: isNight ? '#2bd4ff' : 'var(--color-neon)' }}
       className="
         pointer-events-auto inline-flex items-center justify-center w-11 h-11 shrink-0 rounded-full cursor-pointer
         bg-white/[0.04] border border-[var(--color-line)]

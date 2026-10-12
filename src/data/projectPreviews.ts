@@ -3,45 +3,45 @@ export const PREVIEWS: Record<string, { image: string; description: string; capt
     image: '/projects/everythingisfine.png',
     description:
       'Earthquakes, storms, volcanoes, wildfires, floods and aurora on a live globe. Earthquake sources keep their disagreements visible.',
-    caption: 'Live planet / globe view with natural-event layers.',
+    caption: 'Globe view: live events across the Pacific, with natural-event layers on one planet.',
   },
   worth: {
     image: '/projects/worth.png',
     description:
       'Rank the things you try, keep revisit logs, and remember what deserves another go.',
-    caption: 'Public landing / a place for your taste.',
+    caption: 'An example collection: three drinks, three very different opinions.',
   },
   owewell: {
     image: '/projects/owewell.png',
     description:
       'Shared expenses, itemized splits, and the smallest set of payments needed to settle up.',
-    caption: 'Interactive receipt / a labeled $48 example, split three ways.',
+    caption: 'A labeled $48 example, split three ways. Adjust the bill and the payments update.',
   },
   auth: {
     image: '/projects/platform.png',
     description:
       'One account across the apps, with shared sign-in, recovery, and account settings.',
-    caption: 'Public sign-in / the shared accounts service.',
+    caption: 'One sign-in for the apps, with email, Google and account recovery.',
   },
   iguess: {
     image: '/projects/iguess.png',
     description:
       'Draw with friends while an AI races to guess. Five game modes share one room engine.',
-    caption: 'Public lobby / choose a mode and an extremely qualified avatar.',
+    caption: 'Choose a game mode and an extremely qualified avatar.',
   },
   wherever: {
     image: '/projects/wherever.png',
     description: 'Swipe on nearby restaurants together and let the group pick dinner.',
-    caption: 'Public landing / the restaurant vote is a labeled example.',
+    caption: 'Dinner decisions: the restaurant vote shown here is a labeled example.',
   },
   bloomnote: {
     image: '/projects/bloomnote.png',
     description: 'Write someone a note and turn its details into a garden they can open.',
-    caption: 'Writing desk / your note first, with a labeled example garden alongside.',
+    caption: 'The writing desk: choose the flowers, write the note, send someone a small garden.',
   },
   mrrp: {
     image: '/projects/mrrp.png',
     description: 'A private room for two, a pixel cat, and small ways to keep each other company.',
-    caption: 'Public landing / the room preview, before making a room.',
+    caption: 'A room for two, before you make your own. The cat is already comfortable.',
   },
 };

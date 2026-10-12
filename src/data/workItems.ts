@@ -257,6 +257,10 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'iodine',
+    shortName: 'iodine',
+    contribution: true,
+    tagline: 'Keep the human in control of the agent.',
+    categories: ['ai', 'systems'],
     context: 'Open source · Contributor',
     summary: 'Command approvals and reversible agent edits for an open-source TypeScript IDE.',
     body: [

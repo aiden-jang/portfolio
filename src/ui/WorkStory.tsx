@@ -5,7 +5,7 @@ import { CAREER_STORIES, PROJECT_STORIES } from '../data/projectStories';
 import './work-story.css';
 
 export function WorkStory({ item }: { item: WorkDetail }) {
-  const story = PROJECT_STORIES[item.mark ?? ''] ?? CAREER_STORIES[workId(item)];
+  const story = PROJECT_STORIES[item.mark ?? item.shortName ?? ''] ?? CAREER_STORIES[workId(item)];
   const decision = story?.decision ?? item.principle;
   const preview = PREVIEWS[item.mark ?? ''];
   return (

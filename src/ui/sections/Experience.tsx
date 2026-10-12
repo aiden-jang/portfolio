@@ -1,4 +1,5 @@
 import { workId, WORK_ITEMS } from '../../data/workItems';
+import { isPortfolioProject } from '../../data/workBrowsing';
 import './experience.css';
 import type { WorkDetail } from '../../types';
 import { EYEBROW, H2, P_LI, Section, UL_BASE } from './shared';
@@ -72,7 +73,7 @@ export function ExperienceSection({ onOpen }: Props) {
     'sponsorships-audience-extension-blackout-periods',
     'agentic-ai-playwright-framework',
   ];
-  const highlights = WORK_ITEMS.filter((i) => !i.mark).sort(
+  const highlights = WORK_ITEMS.filter((i) => !isPortfolioProject(i)).sort(
     (a, b) =>
       (priority.indexOf(workId(a)) < 0 ? priority.length : priority.indexOf(workId(a))) -
       (priority.indexOf(workId(b)) < 0 ? priority.length : priority.indexOf(workId(b))),
@@ -104,10 +105,29 @@ export function ExperienceSection({ onOpen }: Props) {
           Selected outcomes
         </p>
         <div>
-          {highlights.map((item) => (
+          {highlights.slice(0, 4).map((item) => (
             <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
           ))}
         </div>
+        <details className="experience-more">
+          <summary>
+            More engineering work <span aria-hidden="true">+</span>
+          </summary>
+          {highlights.slice(4).map((item) => (
+            <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
+          ))}
+        </details>
+        <button
+          type="button"
+          className="experience-open-source"
+          onClick={(event) =>
+            onOpen(WORK_ITEMS.find((item) => item.contribution)!, event.currentTarget)
+          }
+        >
+          <span>Open source</span>
+          <strong>iodine</strong>
+          <span>Agent approvals, local embeddings and undo ↗</span>
+        </button>
       </div>
     </Section>
   );

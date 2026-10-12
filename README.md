@@ -64,8 +64,8 @@ imperatively, so 60fps updates never cascade into React renders.
 Scrolling is native and unsnapped. Reading sections size to their content, and
 revealed copy stays visible when two sections share the viewport. Deliberate
 navigation jumps use smooth scrolling; wheel or touch input cancels a jump.
-The car controls and compact keyboard legend appear in the intro, leaving the
-reading sections clear. The legend opens the complete command menu.
+The car controls and compact keyboard legend appear in the intro and Contact,
+leaving the reading sections clear. Hidden car rendering pauses while reading. The legend opens the complete command menu.
 
 Keyboard covers arrows, PageUp/Down, Space, Home and End for sections, and
 Left/Right for cars. Horizontal wheel cycles cars as well; `c` repaints, `b`

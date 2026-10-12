@@ -247,15 +247,13 @@
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* Orbit fade: while the visitor drags to orbit the car (body.orbiting, set in
-     CameraRig), fade only the big section text out of the way so the car reads
-     clean, then fade it back on release. The brand, top nav, and the bottom
-     control hint all stay put — small edge chrome that keeps the visitor
-     oriented and reminds them what they can do while they play with the car. */
-  #scroll {
+  /* Dragging the car fades only its copy; reading backgrounds stay opaque. */
+  #sec-intro .panel,
+  #sec-contact .panel {
     transition: opacity 0.3s ease;
   }
-  body.orbiting #scroll {
+  body.orbiting #sec-intro .panel,
+  body.orbiting #sec-contact .panel {
     opacity: 0;
     pointer-events: none;
   }
@@ -286,7 +284,7 @@
     *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: 0s !important;
       scroll-behavior: auto !important;
     }
   }

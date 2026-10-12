@@ -8,12 +8,15 @@ export function MobileColorButton() {
   const cycleBodyColor = useAppStore((s) => s.cycleBodyColor);
   const hasBody = useAppStore((s) => s.hasBodyMaterial);
   const isOriginal = activeBodyColor === 'original';
+  const colorName = isOriginal
+    ? 'Original'
+    : BODY_COLOR_SWATCHES.find((swatch) => swatch.hex === activeBodyColor)?.name;
 
   return (
     <button
       type="button"
-      aria-label="Change car color"
-      title="Change car color"
+      aria-label={`Paint: ${colorName}. Change color`}
+      title={`Paint: ${colorName}`}
       onClick={cycleBodyColor}
       disabled={!hasBody}
       className="
@@ -52,7 +55,8 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
   return (
     <div
       key={carIndex}
-      aria-label="Body color"
+      role="group"
+      aria-label="Paint"
       aria-hidden={!hasBody}
       className={`
         inline-flex items-center gap-1.5 px-1.5 h-9
@@ -61,10 +65,14 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
         ${hasBody ? 'opacity-100' : 'opacity-30 pointer-events-none'}
       `}
     >
+      <span className="control-group-label" aria-hidden="true">
+        Paint
+      </span>
       <SwatchButton
         original
         title="Original"
         active={activeBodyColor === 'original'}
+        disabled={!hasBody}
         onClick={() => applyBodyColor('original')}
       />
       {BODY_COLOR_SWATCHES.map(({ hex, name }) => (
@@ -73,6 +81,7 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
           color={hex}
           title={name}
           active={activeBodyColor === hex}
+          disabled={!hasBody}
           onClick={() => applyBodyColor(hex)}
         />
       ))}
@@ -85,19 +94,25 @@ function SwatchButton({
   original,
   active,
   title,
+  disabled,
   onClick,
 }: {
   color?: string;
   original?: boolean;
   active: boolean;
   title: string;
+  disabled?: boolean;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
       data-color-swatch="true"
+      data-paint-name={title}
       title={title}
+      aria-label={`Paint: ${title}`}
+      aria-pressed={active}
+      disabled={disabled}
       onClick={onClick}
       className={`
         swatch w-7 h-7 md:w-[22px] md:h-[22px] rounded-full p-0 cursor-pointer

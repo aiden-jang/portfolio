@@ -32,7 +32,7 @@ const EMAIL_STARTERS = [
 
 export function ContactSection() {
   return (
-    <Section id="sec-contact" side="center">
+    <Section id="sec-contact" side="left" desktopVertical="top" mobileVertical="top">
       <div className={PANEL_BASE}>
         <span className={EYEBROW}>04 / CONTACT</span>
         <h2 className={H2}>Got an idea?</h2>

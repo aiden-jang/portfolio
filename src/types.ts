@@ -70,9 +70,9 @@ export type WorkDetail = {
   image?: string;
   link?: { label: string; url: string };
   links?: { label: string; url: string }[];
-  // Giving an entry a mark switches the Work grid from an editorial row to a product card,
-  // which is what reads shortName, tagline and preview.
+  // Product identity supplies its icon. Contributions can appear in Projects without an icon.
   mark?: MarkKey;
+  contribution?: boolean;
   shortName?: string;
   tagline?: string;
   preview?: string;
