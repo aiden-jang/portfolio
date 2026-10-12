@@ -26,13 +26,16 @@ export function ProjectPreview({ image, name, caption }: Props) {
           ref={trigger}
           type="button"
           className="project-preview"
+          data-project={name}
           onClick={() => {
             setZoomed(false);
             setOpen(true);
           }}
           aria-label={`Enlarge ${name} screenshot`}
         >
-          <img src={image} alt={`${name} product interface`} loading="lazy" />
+          <div className="preview-thumbnail">
+            <img src={image} alt={`${name} product interface`} loading="lazy" />
+          </div>
           <span>Inspect screenshot ↗</span>
         </button>
         <figcaption>{caption}</figcaption>
