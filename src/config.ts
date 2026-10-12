@@ -98,7 +98,7 @@ export const KEYFRAMES: Keyframe[] = [
   { azimuth: 1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // experience: side (right)
   { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // work:       rear
   { azimuth: -1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // about:      side (left)
-  { azimuth: -0.65, elevation: 0.24, distance: 10, targetY: 1.4 }, // contact:    low in frame
+  { azimuth: 0, elevation: 0.62, distance: 9.8, targetY: 0.7 }, // contact:    elevated front
 ];
 
 export const SECTION_IDS = [

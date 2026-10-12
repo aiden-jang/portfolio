@@ -176,9 +176,10 @@ body[data-car-view='reading'] .portfolio-header {
   padding-bottom: 56px;
 }
 #sec-contact {
-  padding-top: 72px;
-  padding-bottom: 220px;
-  background: linear-gradient(90deg, #101014e8, #101014a6 35%, #10101400 75%);
+  align-items: center;
+  padding-top: 96px;
+  padding-bottom: 96px;
+  background: radial-gradient(ellipse at center, #101014c9 0, #10101480 35%, #10101400 75%);
 }
 #sec-contact .panel {
   width: 100%;
@@ -244,9 +245,8 @@ body[data-car-view='reading'] .portfolio-header {
     padding-bottom: 40px;
   }
   #sec-contact {
-    padding-top: 64px;
-    padding-bottom: 360px;
-    background: linear-gradient(#101014 0, #101014d9 48%, #10101400 78%);
+    padding-top: 96px;
+    padding-bottom: 96px;
   }
 }
 

@@ -16,6 +16,7 @@ import {
   orbitPosition,
 } from './cameraPose';
 import { useAppStore } from '../store';
+import { useContactArrival } from './useContactArrival';
 import type { Keyframe } from '../types';
 
 const INTRO_DURATION = 2.0;
@@ -41,6 +42,7 @@ type Props = {
 
 export function CameraRig({ getScrollT }: Props) {
   const { camera } = useThree();
+  const contactArrival = useContactArrival();
   const cameraResetVersion = useAppStore((s) => s.cameraResetVersion);
 
   const state = useRef<RigState>({
@@ -106,6 +108,7 @@ export function CameraRig({ getScrollT }: Props) {
 
     const kf = baseKf.current;
     interpolateKeyframe(KEYFRAMES, scrollT, kf);
+    contactArrival(kf, dt, reduced);
 
     const az = isCleanMode
       ? CLEAN_AZIMUTH
@@ -116,14 +119,12 @@ export function CameraRig({ getScrollT }: Props) {
 
     const el = clamp(kf.elevation + s.dragElevation, floorElevation(dist, tgtY), MAX_ELEVATION);
     if (s.isDown) s.dragElevation = el - kf.elevation;
-
     let pose = orbitPosition(az, el, dist, tgtY);
 
     if (refs.introArmed && s.introT < 1 && !isCleanMode && !reduced) {
       s.introT = Math.min(1, s.introT + dt / INTRO_DURATION);
       pose = blendIntro(pose, az, dist, tgtY, easeOutCubic(s.introT));
     }
-
     camera.position.set(pose.x, pose.y, pose.z);
     camera.lookAt(0, tgtY, 0);
 
@@ -156,6 +157,5 @@ export function CameraRig({ getScrollT }: Props) {
       camera.position.y += Math.abs(rumble) * 0.4;
     }
   });
-
   return null;
 }
