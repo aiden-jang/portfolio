@@ -39,7 +39,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'everythingisfine: the planet, live',
     context: 'Side project',
     summary:
-      'A globe showing what the planet is doing right now, built on two free feeds that report the same earthquakes and disagree about them.',
+      'A live globe for earthquakes, storms, volcanoes, wildfires, floods and aurora, with source-aware earthquake reconciliation.',
     body: [
       'Earthquakes, storms, volcanoes, wildfires, floods and the aurora on one WebGL globe that only moves when the data does. Hover an event for a summary, click to pin it, click a region to fly there. Every filter answers as it moves, and a permalink carries the camera, the filters and the pinned event.',
       'The budget was $0, and not in the sense of cheap: no key at all, including free ones behind a signup, because a project that cannot render its first frame for someone who just cloned it has no first thirty seconds. That ruled out the obvious second source and left two agencies that both report earthquakes globally, which means they report the same earthquakes. The same rupture arrives twice, seconds apart, under different identifiers, on different magnitude scales, from epicentres kilometres apart. Two unrelated feeds would have proved the adapter interface; two overlapping ones force identity resolution and a reconciliation policy, and an interface that can show the disagreement instead of hiding it. USGS is polled over HTTPS, EMSC pushes over a WebSocket, and there is no backend between them and the browser.',
@@ -188,7 +188,7 @@ export const WORK_ITEMS: WorkDetail[] = [
       'Moved the entire backend off a legacy PHP monolith with one other engineer, in six months. Django REST + React.',
     body: [
       'A platform-wide migration from a legacy PHP monolith to a Django REST API, done by two engineers in six months. It now powers self-service native-ad onboarding across 30,000+ active publisher newsletters serving billions of ad impressions a week.',
-      'Owned both ends: data modeling and Django serializers on the backend, React + TypeScript components and hooks on the frontend. Shipped continuously alongside the live system, with feature flags routing traffic onto the new stack incrementally rather than in a risky big-bang cutover.',
+      'Owned both ends: PostgreSQL data modeling and Django serializers on the backend, React + TypeScript components and hooks on the frontend. Two engineers migrated the entire backend in six months while rebuilding the interface.',
     ],
     stack: ['Django', 'Python', 'REST', 'PostgreSQL', 'React', 'TypeScript'],
   },
@@ -235,5 +235,38 @@ export const WORK_ITEMS: WorkDetail[] = [
       'Shipped alongside a stack of related work: third-party demand controls for RTB native + hybrid slots, 13 publisher data migrations, and the fix for a critical search-endpoint performance regression.',
     ],
     stack: ['MySQL', 'PHP', 'REST', 'Angular', 'TypeScript', 'XML'],
+  },
+  {
+    title: 'Google Ad Manager native integration',
+    context: 'LiveIntent · 2022 to 2023',
+    summary: 'Built the Google Ad Manager integration for Native Ad Slots from scratch.',
+    body: [
+      'Built the endpoints, geo-targeting and Native support in the XML pipeline for the Google Ad Manager integration.',
+      'The work connected publisher configuration to the ad-serving pipeline, spanning API implementation and the generated XML.',
+    ],
+    stack: ['REST', 'XML', 'PHP', 'Google Ad Manager'],
+  },
+  {
+    title: 'Publisher account migrations',
+    context: 'LiveIntent · 2023 to 2024',
+    summary: 'Ran 13 publisher migrations, including BuzzFeed and Dotdash Meredith.',
+    body: [
+      'Wrote ACID-safe scripts to move inventory, campaigns and permissions between publisher accounts. Ran 13 migrations, including BuzzFeed and Dotdash Meredith.',
+    ],
+    stack: ['SQL', 'MySQL', 'Data migrations'],
+  },
+  {
+    title: 'iodine',
+    context: 'Open source · Contributor',
+    summary: 'Command approvals and reversible agent edits for an open-source TypeScript IDE.',
+    body: [
+      'Built scoped terminal-command approvals, including command normalization, approval rules and local embedding suggestions for similar commands. Tightened matching to prevent approval bypasses and broad rules from covering hidden paths.',
+      'Added file snapshots and a revert flow for agent edits, with feedback to the agent when a change is undone. Also improved file-path navigation and fixed configuration and file-creation bugs.',
+    ],
+    stack: ['TypeScript', 'React', 'Node.js', 'Local embeddings', 'Open source'],
+    link: {
+      label: 'See iodine contributions',
+      url: 'https://github.com/hyunwookshin/iodine/commits/main/?author=aiden-jang',
+    },
   },
 ];

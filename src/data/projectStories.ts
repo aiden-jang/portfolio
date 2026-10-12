@@ -12,9 +12,9 @@ export const PROJECT_STORIES: Record<
   },
   everythingisfine: {
     problem:
-      'Earthquake feeds report the same event differently. Hiding the differences would imply certainty the data doesn’t have.',
+      'Natural events arrive through different feeds, at different speeds. The globe needs to show earthquakes, storms, volcanoes, fires, floods and aurora without making every source look equally certain.',
     result:
-      'One event can show both agencies’ readings. Source counts and magnitude scales stay visible, and a link restores the camera, filters, and pinned event.',
+      'One globe brings the layers together. Earthquakes retain both agencies’ readings and magnitude scales; a link restores the camera, filters and pinned event.',
   },
   worth: {
     problem: 'It’s easy to forget which things you liked, and why you wanted to try them again.',
@@ -54,7 +54,7 @@ export const CAREER_STORIES: Record<string, { problem: string; decision: string;
       problem:
         'A legacy PHP monolith was carrying a live publisher platform while its replacement was being built.',
       decision:
-        'Move traffic incrementally with feature flags, and own the API and React interface together so each migration could ship as a working slice.',
+        'Own the PostgreSQL models, Django REST API and React interface together, with two engineers delivering the backend migration in six months.',
       result:
         'Two engineers completed the backend migration in six months. The platform serves more than 30,000 active publisher newsletters.',
     },

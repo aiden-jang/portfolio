@@ -170,12 +170,12 @@ body.modal-open .portfolio-header {
 }
 
 #sec-about {
-  background: linear-gradient(90deg, rgba(23, 19, 27, 0.9), transparent 75%);
+  background: var(--color-bg);
 }
 
 @media (max-width: 767px) {
   #sec-about {
-    background: rgba(23, 19, 27, 0.86);
+    background: var(--color-bg);
   }
 }
 

@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAppStore } from '../store';
-import { CARS } from '../config';
-
-const KBD =
-  'inline-block px-1.5 py-[0.1rem] bg-white/[0.05] border border-[var(--color-line)] rounded text-[var(--color-fg)]/90 text-[0.9em] tracking-[0.12em]';
+import { COMMAND_MENU_EVENT } from './CommandMenu';
+import './keyboard-legend.css';
 
 export function Hint() {
   const [triedOrbit, setTriedOrbit] = useState(false);
@@ -24,47 +22,21 @@ export function Hint() {
         </p>
       )}
       <p className="orbit-status">Drag to orbit · release to scroll</p>
-      <div
-        id="hint"
-        className="
-        fixed left-1/2 -translate-x-1/2 bottom-[1vh] z-20
-        hidden md:flex items-center justify-center gap-3 md:gap-[1.1rem]
-        whitespace-nowrap pointer-events-none
-        font-[var(--font-mono)] text-[0.5rem] md:text-[0.6rem]
-        tracking-[0.16em] md:tracking-[0.2em] uppercase
-        text-[var(--color-muted)]/80
-      "
-      >
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>drag</kbd> orbit
+      <div id="hint" className="keyboard-legend" aria-label="Car controls and keyboard shortcuts">
+        <span className="legend-gesture">Drag to orbit</span>
+        <span>
+          <kbd>←</kbd>
+          <kbd>→</kbd> Car
         </span>
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>scroll</kbd> / <kbd className={KBD}>↑↓</kbd> sections
+        <span>
+          <kbd>C</kbd> Paint
         </span>
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>←→</kbd> cars
+        <span>
+          <kbd>B</kbd> Lighting
         </span>
-        <span className="hidden lg:inline-flex items-center gap-2">
-          <kbd className={KBD}>1–{CARS.length}</kbd> pick car
-        </span>
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>C</kbd> color
-        </span>
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>B</kbd> lighting
-        </span>
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>R</kbd> rev
-        </span>
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>V</kbd> view
-        </span>
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>X</kbd> mix
-        </span>
-        <span className="hidden md:inline-flex items-center gap-2">
-          <kbd className={KBD}>?</kbd> commands
-        </span>
+        <button type="button" onClick={() => window.dispatchEvent(new Event(COMMAND_MENU_EVENT))}>
+          <kbd>?</kbd> All controls
+        </button>
       </div>
     </>
   );

@@ -2,7 +2,8 @@
 
 Personal portfolio built around an interactive 3D car scene. Seven models you can
 orbit, repaint, and cycle through, with the camera touring each car as you scroll.
-About / Work / Experience / Contact sit as overlay panels on top of the canvas.
+Experience, projects, About and Contact follow in a continuous reading flow.
+The interactive car and its controls lead the intro.
 
 Live at [aidenjang.com](https://aidenjang.com).
 
@@ -60,16 +61,11 @@ imperatively, so 60fps updates never cascade into React renders.
 
 ### Scrolling and navigation
 
-Paging between sections is native CSS scroll-snap: `scroll-snap-type: y proximity`
-on `<html>`, and `snap-start snap-always` on each section so a single flick cannot
-skip one. An earlier version paged in JS with its own tween and shook against the
-wheel, which is why the browser drives it now.
-
-Deliberate jumps still need JS, and they switch snap off for the duration. With it
-on, a phone re-snaps mid-jump and reverts it, which leaves the dot on one section
-and the copy on another. Coarse pointers then get native smooth scroll, since a
-requestAnimationFrame tween stalls on a real phone; desktop gets the tween. Any
-wheel or touch cancels a jump still in flight.
+Scrolling is native and unsnapped. Reading sections size to their content, and
+revealed copy stays visible when two sections share the viewport. Deliberate
+navigation jumps use smooth scrolling; wheel or touch input cancels a jump.
+The car controls and compact keyboard legend appear in the intro, leaving the
+reading sections clear. The legend opens the complete command menu.
 
 Keyboard covers arrows, PageUp/Down, Space, Home and End for sections, and
 Left/Right for cars. Horizontal wheel cycles cars as well; `c` repaints, `b`

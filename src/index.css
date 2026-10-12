@@ -23,9 +23,9 @@
   html {
     overflow-x: hidden;
   }
-  /* Proximity snapping leaves long project sections free to scroll naturally. */
+  /* Sections remain in native document flow, including long project lists. */
   html {
-    scroll-snap-type: y proximity;
+    scroll-snap-type: none;
     /* No elastic rubber-band past the first/last section, and no scroll
        chaining — the page ends cleanly at the last section. */
     overscroll-behavior-y: none;
@@ -773,4 +773,62 @@ header > span {
   .mobile-car-label {
     width: 64px;
   }
+}
+
+/* Reading sections follow their content rather than leaving a full screen of empty space. */
+#sec-experience,
+#sec-about,
+#sec-contact {
+  min-height: auto;
+  background: var(--color-bg);
+  padding-top: 120px;
+  padding-bottom: 120px;
+  align-items: flex-start;
+}
+#sec-about {
+  border-top: 1px solid var(--color-line);
+}
+.about-details {
+  margin-top: 32px;
+  border-top: 1px solid var(--color-line);
+}
+.about-details > div {
+  padding: 14px 0;
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 20px;
+  border-bottom: 1px solid var(--color-line);
+}
+.about-details dt {
+  color: var(--color-muted);
+  font: 11px/1.7 var(--font-mono);
+}
+.about-details dd {
+  font-size: 14px;
+  line-height: 1.7;
+}
+@media (max-width: 767px) {
+  #sec-experience,
+  #sec-about,
+  #sec-contact {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+  .about-details > div {
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+
+/* Reading copy stays available even before a reveal observer catches up with scrolling. */
+#sec-experience .panel > *,
+#sec-about .panel > *,
+#sec-contact .panel > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* The final section needs enough height for its navigation target to reach the header. */
+#sec-contact {
+  min-height: 100dvh;
 }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export function useReveal(threshold = 0.35): void {
+export function useReveal(threshold = 0.15): void {
   useEffect(() => {
     const panels = Array.from(document.querySelectorAll('.panel'));
     if (!('IntersectionObserver' in window)) {
@@ -10,7 +10,9 @@ export function useReveal(threshold = 0.35): void {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          entry.target.classList.toggle('visible', entry.isIntersecting);
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
         }
       },
       { threshold },

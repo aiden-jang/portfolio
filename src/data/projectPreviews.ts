@@ -2,8 +2,8 @@ export const PREVIEWS: Record<string, { image: string; description: string; capt
   everythingisfine: {
     image: '/projects/everythingisfine.png',
     description:
-      'A live earthquake globe. Two agencies’ readings stay visible, including where they disagree.',
-    caption: 'Live globe / earthquakes across the Pacific.',
+      'Earthquakes, storms, volcanoes, wildfires, floods and aurora on a live globe. Earthquake sources keep their disagreements visible.',
+    caption: 'Live planet / globe view with natural-event layers.',
   },
   worth: {
     image: '/projects/worth.png',

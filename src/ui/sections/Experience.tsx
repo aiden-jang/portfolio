@@ -8,7 +8,7 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
     figure: '6 months',
     label: 'two engineers',
     title: 'Replaced a live PHP backend',
-    detail: 'Django REST + React, migrated incrementally behind feature flags.',
+    detail: 'PostgreSQL, Django REST and React. A platform serving 30,000+ active newsletters.',
   },
   'agentic-ai-playwright-framework': {
     figure: 'First',
@@ -23,8 +23,8 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
     detail: 'One batched endpoint for the joined data ad ops needs.',
   },
   'sponsorships-audience-extension-blackout-periods': {
-    figure: '3 products',
-    label: 'end to end',
+    figure: '100M+',
+    label: 'weekly impressions',
     title: 'Publisher controls at scale',
     detail: 'Data models, APIs, and interfaces; Sponsorships includes The Washington Post.',
   },
@@ -33,6 +33,25 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
     label: 'full ownership',
     title: 'Creative Mapping v2',
     detail: 'MySQL, REST, and Angular targeting controls for publisher ops.',
+  },
+  'google-ad-manager-native-integration': {
+    figure: 'From scratch',
+    label: 'integration',
+    title: 'Google Ad Manager native ads',
+    detail: 'Endpoints, geo-targeting and Native support in the XML delivery pipeline.',
+  },
+  'publisher-account-migrations': {
+    figure: '13',
+    label: 'publisher migrations',
+    title: 'Moved live publisher data safely',
+    detail:
+      'ACID-safe inventory, campaign and permission migrations, including BuzzFeed and Dotdash Meredith.',
+  },
+  iodine: {
+    figure: 'Open source',
+    label: 'contributor',
+    title: 'iodine',
+    detail: 'Scoped command approvals, local embedding suggestions and reversible agent edits.',
   },
 };
 
@@ -47,7 +66,17 @@ type Props = {
 };
 
 export function ExperienceSection({ onOpen }: Props) {
-  const highlights = WORK_ITEMS.filter((i) => !i.mark);
+  const priority = [
+    'monolith-django-rest-react-rewrite',
+    'ad-slot-details-120-1-api-call',
+    'sponsorships-audience-extension-blackout-periods',
+    'agentic-ai-playwright-framework',
+  ];
+  const highlights = WORK_ITEMS.filter((i) => !i.mark).sort(
+    (a, b) =>
+      (priority.indexOf(workId(a)) < 0 ? priority.length : priority.indexOf(workId(a))) -
+      (priority.indexOf(workId(b)) < 0 ? priority.length : priority.indexOf(workId(b))),
+  );
 
   return (
     <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">

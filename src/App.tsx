@@ -37,7 +37,7 @@ export function App() {
   const activeBodyColor = useAppStore((state) => state.activeBodyColor);
   const themeName = useAppStore((state) => state.themeName);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
-  const showCarControls = SECTION_IDS[sectionIndex] !== 'sec-work';
+  const showCarControls = SECTION_IDS[sectionIndex] === 'sec-intro';
   const scenePaintRef = useRef<ActiveBodyColor | null>(null);
   const [sceneReady, setSceneReady] = useState(false);
 

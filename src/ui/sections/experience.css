@@ -72,21 +72,5 @@
   }
 }
 #sec-experience {
-  background: linear-gradient(
-    90deg,
-    rgba(12, 12, 20, 0.94),
-    rgba(12, 12, 20, 0.75) 58%,
-    rgba(12, 12, 20, 0.22)
-  );
-}
-@media (min-width: 768px) {
-  #sec-experience {
-    padding-top: 110px;
-    padding-bottom: 160px;
-  }
-}
-@media (max-width: 767px) {
-  #sec-experience {
-    background: rgba(12, 12, 20, 0.91);
-  }
+  background: var(--color-bg);
 }

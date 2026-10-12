@@ -42,7 +42,6 @@ export function Section({
       id={id}
       className={`
         min-h-[100dvh] flex pointer-events-none
-        snap-start snap-always
         px-[6vw] md:px-[5vw]
         ${mobileVertical === 'top' ? 'items-start pt-[11vh]' : 'items-center pt-[12vh]'}
         pb-[max(13rem,24vh)]
