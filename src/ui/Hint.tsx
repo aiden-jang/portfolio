@@ -1,13 +1,31 @@
+import { useEffect, useState } from 'react';
+import { useAppStore } from '../store';
 import { CARS } from '../config';
 
 const KBD =
   'inline-block px-1.5 py-[0.1rem] bg-white/[0.05] border border-[var(--color-line)] rounded text-[var(--color-fg)]/90 text-[0.9em] tracking-[0.12em]';
 
 export function Hint() {
+  const [triedOrbit, setTriedOrbit] = useState(false);
+  const sectionIndex = useAppStore((state) => state.sectionIndex);
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      if (document.body.classList.contains('orbiting')) setTriedOrbit(true);
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
   return (
-    <div
-      id="hint"
-      className="
+    <>
+      {sectionIndex === 0 && (
+        <p className={`orbit-invitation ${triedOrbit ? 'orbit-invitation-used' : ''}`}>
+          <span className="hidden md:inline">Drag to look around.</span>
+          <span className="md:hidden">Hold the car, then drag to look around.</span>
+        </p>
+      )}
+      <div
+        id="hint"
+        className="
         fixed left-1/2 -translate-x-1/2 bottom-[1vh] z-20
         hidden md:flex items-center justify-center gap-3 md:gap-[1.1rem]
         whitespace-nowrap pointer-events-none
@@ -15,37 +33,38 @@ export function Hint() {
         tracking-[0.16em] md:tracking-[0.2em] uppercase
         text-[var(--color-muted)]/80
       "
-    >
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>drag</kbd> orbit
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>scroll</kbd> / <kbd className={KBD}>↑↓</kbd> sections
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>←→</kbd> cars
-      </span>
-      <span className="hidden lg:inline-flex items-center gap-2">
-        <kbd className={KBD}>1–{CARS.length}</kbd> pick car
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>C</kbd> color
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>B</kbd> lighting
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>R</kbd> rev
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>V</kbd> view
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>X</kbd> mix
-      </span>
-      <span className="hidden md:inline-flex items-center gap-2">
-        <kbd className={KBD}>?</kbd> commands
-      </span>
-    </div>
+      >
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>drag</kbd> orbit
+        </span>
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>scroll</kbd> / <kbd className={KBD}>↑↓</kbd> sections
+        </span>
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>←→</kbd> cars
+        </span>
+        <span className="hidden lg:inline-flex items-center gap-2">
+          <kbd className={KBD}>1–{CARS.length}</kbd> pick car
+        </span>
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>C</kbd> color
+        </span>
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>B</kbd> lighting
+        </span>
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>R</kbd> rev
+        </span>
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>V</kbd> view
+        </span>
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>X</kbd> mix
+        </span>
+        <span className="hidden md:inline-flex items-center gap-2">
+          <kbd className={KBD}>?</kbd> commands
+        </span>
+      </div>
+    </>
   );
 }
