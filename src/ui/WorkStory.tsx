@@ -24,8 +24,8 @@ export function WorkStory({ item }: { item: WorkDetail }) {
       <div className="work-story-overview">
         <div>
           <section>
-            <h4>{item.contribution ? 'My contribution' : 'What I built'}</h4>
-            <p>{projectStory?.built ?? item.summary}</p>
+            <h4>{item.contribution ? 'My contribution' : 'The brief'}</h4>
+            <p>{item.contribution ? projectStory?.built : (story?.problem ?? item.summary)}</p>
           </section>
           {decision && (
             <section>
@@ -51,7 +51,6 @@ export function WorkStory({ item }: { item: WorkDetail }) {
         <details>
           <summary>Engineering details</summary>
           <div>
-            {story && <p>{story.problem}</p>}
             {(story ? item.body : item.body.slice(1)).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}

@@ -7,9 +7,9 @@ export const PROJECT_STORIES: Record<
     problem:
       'An IDE agent needs a useful way to reuse command approvals and undo edits without granting blanket permission.',
     decision:
-      'Normalize commands into scoped rules, keep similarity suggestions local and snapshot files before agent edits.',
+      'Limit similarity matching to approved command signatures and paths, keep embeddings local and snapshot files before agent edits.',
     result:
-      'Contributed command-approval rules, local embedding suggestions, revocable approvals and an edit-revert flow that tells the agent when a change is undone.',
+      'Approvals can be reviewed and revoked. Reverting a file also tells the agent its edit was undone, so the conversation stays in sync with the code.',
   },
   auth: {
     decision:
@@ -26,7 +26,7 @@ export const PROJECT_STORIES: Record<
     problem:
       'Natural events arrive through different feeds, at different speeds. The globe needs to show earthquakes, storms, volcanoes, fires, floods and aurora without making every source look equally certain.',
     result:
-      'One globe brings the layers together. Earthquakes retain both agencies’ readings and magnitude scales; a link restores the camera, filters and pinned event.',
+      'Earthquakes retain both agencies’ readings and magnitude scales. A shared link restores the camera, filters and pinned event.',
   },
   worth: {
     built: 'Ranked collections with revisit logs and shareable lists.',

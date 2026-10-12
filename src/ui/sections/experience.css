@@ -9,6 +9,14 @@
   cursor: pointer;
   transition: background 160ms;
 }
+.experience-outcome-lead .experience-figure strong {
+  font-size: 28px;
+  color: var(--color-fg);
+}
+.experience-outcome:focus-visible {
+  outline: 1px solid var(--color-fg);
+  outline-offset: 4px;
+}
 .experience-outcome:last-child {
   border-bottom: 1px solid var(--color-line);
 }
@@ -57,6 +65,9 @@
   }
   .experience-figure strong {
     font-size: 18px;
+  }
+  .experience-outcome-lead .experience-figure strong {
+    font-size: 22px;
   }
   .experience-story strong {
     font-size: 13px;

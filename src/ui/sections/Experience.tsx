@@ -9,25 +9,25 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
     figure: '6 months',
     label: 'two engineers',
     title: 'Replaced a live PHP backend',
-    detail: 'PostgreSQL, Django REST and React. A platform serving 30,000+ active newsletters.',
+    detail: 'PostgreSQL + Django REST, with a React interface. Serving 30,000+ newsletters.',
   },
   'agentic-ai-playwright-framework': {
     figure: 'First',
     label: 'automated coverage',
     title: 'Tests that keep up with a rewrite',
-    detail: 'A Playwright pipeline that plans, generates, and repairs tests.',
+    detail: 'Playwright agents plan, generate and repair tests during the UI rewrite.',
   },
   'ad-slot-details-120-1-api-call': {
     figure: '60s → 2s',
     label: 'page load',
     title: '120 API calls became one',
-    detail: 'One batched endpoint for the joined data ad ops needs.',
+    detail: 'Batched the joined data instead of fetching each line item separately.',
   },
   'sponsorships-audience-extension-blackout-periods': {
     figure: '100M+',
     label: 'weekly impressions',
     title: 'Publisher controls at scale',
-    detail: 'Data models, APIs, and interfaces; Sponsorships includes The Washington Post.',
+    detail: 'Scheduling and demand controls used by publishers including The Washington Post.',
   },
   'creative-mapping-v2': {
     figure: 'Schema → UI',
@@ -136,7 +136,11 @@ export function ExperienceSection({ onOpen }: Props) {
 function HighlightRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLElement) => void }) {
   const outcome = OUTCOMES[workId(item)];
   return (
-    <button type="button" onClick={(e) => onOpen(e.currentTarget)} className="experience-outcome">
+    <button
+      type="button"
+      onClick={(e) => onOpen(e.currentTarget)}
+      className={`experience-outcome${workId(item) === 'ad-slot-details-120-1-api-call' ? ' experience-outcome-lead' : ''}`}
+    >
       {outcome ? (
         <>
           <span className="experience-figure">
