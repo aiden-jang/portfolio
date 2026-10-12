@@ -38,6 +38,7 @@ export function Car() {
   const armIntro = useAppStore((s) => s.armIntro);
 
   const group = useMemo(() => new THREE.Group(), []);
+  const displayedIndex = useRef(carIndex);
   const modelRef = useRef<THREE.Object3D | null>(null);
   const loader = useMemo(() => {
     const l = new GLTFLoader();
@@ -88,7 +89,10 @@ export function Car() {
     loader.load(
       `/models/${spec.file}`,
       (gltf) => {
-        if (cancelled) return;
+        if (cancelled) {
+          disposeModel(gltf.scene);
+          return;
+        }
 
         // Tear down previous car.
         if (modelRef.current) {
@@ -104,6 +108,7 @@ export function Car() {
         hideBakedPlanes(model);
         group.add(model);
         modelRef.current = model;
+        displayedIndex.current = carIndex;
 
         refs.lamps = buildLamps(group, orientedSize, scale);
         refs.bodyMaterial = detectBodyMaterial(model);
@@ -134,6 +139,7 @@ export function Car() {
       (err) => {
         if (cancelled) return;
         setCarLoading(false);
+        setHasBodyMaterial(!!refs.bodyMaterial);
         console.error(`Failed to load /models/${spec.file}`, err);
       },
     );
@@ -160,7 +166,7 @@ export function Car() {
     underglowMat.color.setHex(currentUnderglow.current);
 
     // Floor reads this for its final tone-mapping.
-    const targetExposure = CARS[useAppStore.getState().carIndex]?.exposure ?? 1;
+    const targetExposure = CARS[displayedIndex.current]?.exposure ?? 1;
     refs.exposureCurrent = smoothTowards(
       refs.exposureCurrent,
       targetExposure,

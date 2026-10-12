@@ -16,7 +16,8 @@ export function LoadingBar() {
         transition-opacity duration-300
         ${active ? 'opacity-100' : 'opacity-0'}
       `}
-      aria-hidden="true"
+      role="status"
+      aria-label={active ? `Loading ${car?.name ?? 'car'}` : undefined}
     >
       <div className="h-[2px]">
         <div
