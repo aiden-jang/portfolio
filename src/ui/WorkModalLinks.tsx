@@ -1,16 +1,27 @@
 import { useEffect, useState } from 'react';
 import type { WorkDetail } from '../types';
+import { PREVIEWS } from '../data/projectPreviews';
+import { usePreviewSelection } from './usePreviewSelection';
+import { previewLink } from './previewLinks';
 
 const pill =
   'inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--color-line)] font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase no-underline transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]';
 
 export function WorkModalLinks({ item }: { item: WorkDetail }) {
+  const preview = PREVIEWS[item.mark ?? ''];
+  const [selected] = usePreviewSelection(item.shortName ?? '', preview?.states?.length ?? 1);
   const [result, setResult] = useState<'shared' | 'copied' | null>(null);
 
   useEffect(() => setResult(null), [item]);
 
   const share = async () => {
-    const url = window.location.href;
+    const shared = new URL(
+      preview?.states
+        ? previewLink(window.location.href, item.shortName ?? '', selected)
+        : window.location.href,
+    );
+    shared.hash = window.location.hash;
+    const url = shared.href;
     if (typeof navigator.share === 'function') {
       try {
         await navigator.share({ title: item.shortName ?? item.title, text: item.summary, url });

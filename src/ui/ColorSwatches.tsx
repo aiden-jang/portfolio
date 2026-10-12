@@ -26,6 +26,7 @@ export function MobileColorButton() {
         disabled:opacity-30 disabled:pointer-events-none
       "
     >
+      <span className="mobile-paint-name">{colorName}</span>
       <span
         className={`swatch w-5 h-5 rounded-full border border-[var(--color-line)] ${
           isOriginal ? 'swatch-original' : ''

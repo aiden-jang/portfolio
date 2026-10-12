@@ -4,6 +4,7 @@ import type { WorkDetail } from '../types';
 import { WorkModalLinks } from './WorkModalLinks';
 import { WorkModalNav } from './WorkModalNav';
 import { WorkStory } from './WorkStory';
+import { ScrollBody } from './ScrollBody';
 type Props = {
   item: WorkDetail | null;
   onClose: () => void;
@@ -163,8 +164,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         </button>
         {item && (
           <>
-            {/* overscroll-contain stops the scroll chaining to the page behind at either end. */}
-            <div className="flex-1 overflow-y-auto overscroll-contain p-5 pt-5 md:p-7 md:pt-6">
+            <ScrollBody key={item.title}>
               {item.image && (
                 <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
               )}
@@ -193,7 +193,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                   </span>
                 ))}
               </div>
-            </div>
+            </ScrollBody>
             <WorkModalNav onPrevious={onPrevious} onNext={onNext} position={position} />
             <WorkModalLinks item={item} />
           </>

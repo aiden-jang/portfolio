@@ -3,12 +3,15 @@ import type { WorkDetail } from '../types';
 import { PREVIEWS } from '../data/projectPreviews';
 import { CAREER_STORIES, PROJECT_STORIES } from '../data/projectStories';
 import './work-story.css';
+import { usePreviewSelection } from './usePreviewSelection';
 
 export function WorkStory({ item }: { item: WorkDetail }) {
   const projectStory = PROJECT_STORIES[item.mark ?? item.shortName ?? ''];
   const story = projectStory ?? CAREER_STORIES[workId(item)];
   const decision = story?.decision ?? item.principle;
   const preview = PREVIEWS[item.mark ?? ''];
+  const [selected] = usePreviewSelection(item.shortName ?? '', preview?.states?.length ?? 1);
+  const view = preview?.states?.[selected] ?? preview;
   return (
     <div className="work-story">
       <p className="project-role">
@@ -39,8 +42,8 @@ export function WorkStory({ item }: { item: WorkDetail }) {
         </div>
         {preview && (
           <figure>
-            <img src={preview.image} alt={`${item.shortName} product interface`} />
-            <figcaption>{preview.caption}</figcaption>
+            <img src={view?.image} alt={`${item.shortName} product interface`} />
+            <figcaption>{view?.caption}</figcaption>
           </figure>
         )}
       </div>
