@@ -4,7 +4,6 @@ import type { WorkDetail } from '../types';
 import { WorkModalLinks } from './WorkModalLinks';
 import { WorkModalNav } from './WorkModalNav';
 import { WorkStory } from './WorkStory';
-
 type Props = {
   item: WorkDetail | null;
   onClose: () => void;
@@ -12,13 +11,11 @@ type Props = {
   onNext: () => void;
   position: { current: number; total: number } | null;
 };
-
 export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props) {
   const open = !!item;
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
-
   // Social crawlers only ever get the static preview, so this is for the person with ten tabs
   // open trying to find the case study again.
   useEffect(() => {
@@ -34,7 +31,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         description.content = previousDescription;
     };
   }, [item]);
-
   useEffect(() => {
     if (!open) return;
     const previouslyFocused = document.activeElement as HTMLElement | null;
@@ -66,10 +62,12 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     };
     window.addEventListener('keydown', onKey);
     const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 0);
-
     // <html> is the scroll root (see index.css), so `overflow: hidden` on the body does not stop
     // the page behind the modal, and iOS ignores overflow locks anyway. Pin the body instead.
     const scrollY = window.scrollY;
+    const html = document.documentElement;
+    const snap = html.style.scrollSnapType;
+    html.style.scrollSnapType = 'none';
     const body = document.body;
     const prev = {
       position: body.style.position,
@@ -85,7 +83,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     body.style.width = '100%';
     // The class is what lets CSS hide the mobile bottom bar, which otherwise overlaps the modal.
     body.classList.add('modal-open');
-
     return () => {
       window.removeEventListener('keydown', onKey);
       window.clearTimeout(focusTimer);
@@ -95,12 +92,15 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       body.style.right = prev.right;
       body.style.width = prev.width;
       body.classList.remove('modal-open');
-      window.scrollTo(0, scrollY);
+      window.scrollTo({ top: scrollY, behavior: 'instant' });
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: scrollY, behavior: 'instant' });
+        html.style.scrollSnapType = snap;
+      });
       // A direct `#work/...` link has no originating card, so the old element may be gone.
-      if (previouslyFocused?.isConnected) previouslyFocused.focus();
+      if (previouslyFocused?.isConnected) previouslyFocused.focus({ preventScroll: true });
     };
   }, [onClose, onNext, onPrevious, open]);
-
   // Portal to <body>. Inline, the overlay's z-50 is scoped inside `<main class="z-10">`, which
   // leaves it under the z-30 mobile bottom bar, whose invisible buttons then swallow link taps.
   return createPortal(
@@ -137,7 +137,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         }}
         style={open ? { viewTransitionName: 'work-morph' } : undefined}
         className={`
-          relative flex flex-col w-full max-w-[640px] max-h-[85dvh] overflow-hidden
+          relative flex flex-col w-full max-w-[960px] max-h-[85dvh] overflow-hidden
           bg-[#0a0a14] border border-[var(--color-line)] rounded-xl
           transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
           ${open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}

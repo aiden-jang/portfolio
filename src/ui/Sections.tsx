@@ -17,6 +17,7 @@ function caseStudyLane(item: WorkDetail): WorkDetail[] {
 
 export function Sections() {
   const [activeWork, setActiveWork] = useState<WorkDetail | null>(null);
+  const originHash = useRef('#sec-work');
   const lastCard = useRef<HTMLElement | null>(null);
 
   // Driving the modal off the hash is what makes browser back and forward dismiss and restore it.
@@ -39,13 +40,18 @@ export function Sections() {
   }, []);
 
   const openWork = useCallback((item: WorkDetail, el: HTMLElement) => {
+    originHash.current = window.location.hash.startsWith('#work/')
+      ? item.mark
+        ? '#sec-work'
+        : '#sec-experience'
+      : window.location.hash || (item.mark ? '#sec-work' : '#sec-experience');
     lastCard.current = el;
     window.history.replaceState(null, '', `#work/${workId(item)}`);
     runMorph(() => setActiveWork(item), el, true);
   }, []);
 
   const closeWork = useCallback(() => {
-    window.history.replaceState(null, '', '#sec-work');
+    window.history.replaceState(null, '', originHash.current);
     runMorph(() => setActiveWork(null), lastCard.current, false);
   }, []);
 
