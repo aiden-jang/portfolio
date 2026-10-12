@@ -17,6 +17,6 @@ export function useContactArrival() {
     const t = easeOutCubic(state.progress);
     pose.azimuth = 0;
     pose.elevation = 0.12 + (pose.elevation - 0.12) * t;
-    pose.distance = 10.8 + (pose.distance - 10.8) * t;
+    pose.distance = 10 + (pose.distance - 10) * t;
   };
 }
