@@ -1,5 +1,6 @@
+import { smoothColorHex } from './three/colorMath';
 import { describe, expect, it } from 'vitest';
-import { clamp, lerp, lerpAngle, smoothColorHex, smoothTowards } from './math';
+import { clamp, lerp, lerpAngle, smoothTowards } from './math';
 
 const TAU = Math.PI * 2;
 

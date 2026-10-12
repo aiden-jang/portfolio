@@ -226,11 +226,25 @@ export function useNavigation() {
       setSectionIndex(idx);
     };
 
+    const restoreSectionLink = () => {
+      const index = SECTION_IDS.indexOf(window.location.hash.slice(1) as SectionId);
+      if (index < 0) return;
+      const section = document.getElementById(SECTION_IDS[index]);
+      if (!section) return;
+      cancelSmoothScroll();
+      window.scrollTo({ top: section.offsetTop, behavior: 'instant' });
+      currentSection.current = index;
+      setSectionIndex(index);
+    };
+    const linkFrame = requestAnimationFrame(restoreSectionLink);
+    window.addEventListener('hashchange', restoreSectionLink);
     window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
+      cancelAnimationFrame(linkFrame);
+      window.removeEventListener('hashchange', restoreSectionLink);
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('keydown', onKey);

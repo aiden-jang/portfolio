@@ -1,13 +1,17 @@
-import { useState } from 'react';
 import '../project-gallery.css';
 import { PREVIEWS } from '../../data/projectPreviews';
-import { WORK_ITEMS, workId } from '../../data/workItems';
+import { visibleProjects, type ProjectFilter } from '../../data/workBrowsing';
+import { workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
 import { prefersReducedMotion } from '../../hooks/useReducedMotion';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
+type BrowseProps = Props & {
+  filter: ProjectFilter;
+  onFilterChange: (filter: ProjectFilter) => void;
+};
 const FILTERS = [
   { id: 'all', label: 'All' },
   { id: 'realtime', label: 'Realtime' },
@@ -15,15 +19,8 @@ const FILTERS = [
   { id: 'social', label: 'For people' },
   { id: 'systems', label: 'Systems' },
 ] as const;
-type FilterId = (typeof FILTERS)[number]['id'];
-
-export function WorkSection({ onOpen }: Props) {
-  const [filter, setFilter] = useState<FilterId>('all');
-  const apps = WORK_ITEMS.filter((item) => item.mark).sort(
-    (a, b) => Object.keys(PREVIEWS).indexOf(a.mark!) - Object.keys(PREVIEWS).indexOf(b.mark!),
-  );
-  const visible =
-    filter === 'all' ? apps : apps.filter((item) => item.categories?.includes(filter));
+export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
+  const visible = visibleProjects(filter);
   const featured = filter === 'all' ? visible.slice(0, 3) : [];
   const gallery = filter === 'all' ? visible.slice(3) : visible;
   return (
@@ -41,7 +38,7 @@ export function WorkSection({ onOpen }: Props) {
                 type="button"
                 aria-pressed={filter === option.id}
                 onClick={() => {
-                  setFilter(option.id);
+                  onFilterChange(option.id);
                   requestAnimationFrame(() =>
                     document
                       .getElementById('sec-work')

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { caseStudyLane, type ProjectFilter } from '../data/workBrowsing';
 import { WORK_ITEMS, workId } from '../data/workItems';
 import { runMorph } from './morph';
 import { AboutSection } from './sections/About';
@@ -9,13 +10,8 @@ import { WorkSection } from './sections/Work';
 import { WorkModal } from './WorkModal';
 import type { WorkDetail } from '../types';
 
-// Projects and job entries browse in separate lanes, so hitting next inside a side project
-// never lands you in an employer's case study.
-function caseStudyLane(item: WorkDetail): WorkDetail[] {
-  return WORK_ITEMS.filter((candidate) => Boolean(candidate.mark) === Boolean(item.mark));
-}
-
 export function Sections() {
+  const [filter, setFilter] = useState<ProjectFilter>('all');
   const [activeWork, setActiveWork] = useState<WorkDetail | null>(null);
   const originHash = useRef('#sec-work');
   const lastCard = useRef<HTMLElement | null>(null);
@@ -55,17 +51,20 @@ export function Sections() {
     runMorph(() => setActiveWork(null), lastCard.current, false);
   }, []);
 
-  const moveWork = useCallback((step: 1 | -1) => {
-    setActiveWork((current) => {
-      if (!current) return current;
-      const lane = caseStudyLane(current);
-      const currentIndex = lane.indexOf(current);
-      const nextIndex = (currentIndex + step + lane.length) % lane.length;
-      const next = lane[nextIndex];
-      window.history.replaceState(null, '', `#work/${workId(next)}`);
-      return next;
-    });
-  }, []);
+  const moveWork = useCallback(
+    (step: 1 | -1) => {
+      setActiveWork((current) => {
+        if (!current) return current;
+        const lane = caseStudyLane(current, filter);
+        const currentIndex = lane.indexOf(current);
+        const nextIndex = (currentIndex + step + lane.length) % lane.length;
+        const next = lane[nextIndex];
+        window.history.replaceState(null, '', `#work/${workId(next)}`);
+        return next;
+      });
+    },
+    [filter],
+  );
 
   const previousWork = useCallback(() => moveWork(-1), [moveWork]);
   const nextWork = useCallback(() => moveWork(1), [moveWork]);
@@ -74,7 +73,7 @@ export function Sections() {
     <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
       <IntroSection />
       <ExperienceSection onOpen={openWork} />
-      <WorkSection onOpen={openWork} />
+      <WorkSection onOpen={openWork} filter={filter} onFilterChange={setFilter} />
       <AboutSection />
       <ContactSection />
       <WorkModal
@@ -85,8 +84,8 @@ export function Sections() {
         position={
           activeWork
             ? {
-                current: caseStudyLane(activeWork).indexOf(activeWork) + 1,
-                total: caseStudyLane(activeWork).length,
+                current: caseStudyLane(activeWork, filter).indexOf(activeWork) + 1,
+                total: caseStudyLane(activeWork, filter).length,
               }
             : null
         }

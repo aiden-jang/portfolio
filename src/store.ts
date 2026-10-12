@@ -36,6 +36,8 @@ type AppState = {
   activeBodyColor: ActiveBodyColor;
   hasBodyMaterial: boolean;
   isCarLoading: boolean;
+  carLoadError: string | null;
+  carRetryVersion: number;
 
   // ---- Imperative refs (high-frequency, do not trigger re-renders) ----
   refs: Refs;
@@ -53,6 +55,8 @@ type AppState = {
   armIntro: () => void;
   setHasBodyMaterial: (v: boolean) => void;
   setCarLoading: (v: boolean) => void;
+  setCarLoadError: (error: string | null) => void;
+  retryCar: () => void;
   applyBodyColor: (color: ActiveBodyColor) => void;
   cycleBodyColor: () => void;
 };
@@ -65,6 +69,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   activeBodyColor: 'original',
   hasBodyMaterial: false,
   isCarLoading: true,
+  carLoadError: null,
+  carRetryVersion: 0,
   refs: {
     bodyMaterial: null,
     bodyOriginalColor: null,
@@ -125,6 +131,13 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
   setHasBodyMaterial: (v) => set({ hasBodyMaterial: v }),
   setCarLoading: (v) => set({ isCarLoading: v }),
+  setCarLoadError: (carLoadError) => set({ carLoadError }),
+  retryCar: () =>
+    set((state) => ({
+      carLoadError: null,
+      isCarLoading: true,
+      carRetryVersion: state.carRetryVersion + 1,
+    })),
   applyBodyColor: (color) => {
     const refs = get().refs;
     const mat = refs.bodyMaterial;

@@ -15,7 +15,7 @@ import { ColorSwatches, MobileColorButton } from './ui/ColorSwatches';
 import { CommandMenu } from './ui/CommandMenu';
 import { FilmGrain } from './ui/FilmGrain';
 import { Hint } from './ui/Hint';
-import { LoadingBar } from './ui/LoadingBar';
+import { CarLoadNotice } from './ui/CarLoadNotice';
 import { RevButton } from './ui/RevButton';
 import { SceneBoundary } from './ui/SceneBoundary';
 import { SceneShareButton } from './ui/SceneShareButton';
@@ -94,11 +94,15 @@ export function App() {
         Skip to content
       </a>
       <SceneBoundary>
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <p className="scene-loading-note" role="status">
+              Bringing in the car. Everything else is ready.
+            </p>
+          }
+        >
           <Scene getScrollT={getScrollT} />
         </Suspense>
-        {/* Inside the boundary, or a WebGL failure leaves the bar stuck at 0% forever. */}
-        <LoadingBar />
       </SceneBoundary>
       <div className="vignette" aria-hidden="true" />
       <FilmGrain />
@@ -157,6 +161,7 @@ export function App() {
           <SectionDots onJump={scrollToSection} placement="rail" />
           <Sections />
           {showCarControls && <Hint />}
+          <CarLoadNotice />
           <CommandMenu onSection={scrollToSection} />
         </>
       )}

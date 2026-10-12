@@ -16,8 +16,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
-  // Social crawlers only ever get the static preview, so this is for the person with ten tabs
-  // open trying to find the case study again.
   useEffect(() => {
     if (!item) return;
     const previousTitle = document.title;
@@ -36,6 +34,11 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     const previouslyFocused = document.activeElement as HTMLElement | null;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      if (
+        e.key.startsWith('Arrow') &&
+        (e.target as HTMLElement)?.closest('summary, input, textarea, select')
+      )
+        return;
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
         onPrevious();
@@ -45,9 +48,11 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         onNext();
       }
       if (e.key === 'Tab') {
-        const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled])',
-        );
+        const focusable = Array.from(
+          dialogRef.current?.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), summary',
+          ) ?? [],
+        ).filter((element) => element.getClientRects().length > 0);
         if (!focusable?.length) return;
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
@@ -101,8 +106,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       if (previouslyFocused?.isConnected) previouslyFocused.focus({ preventScroll: true });
     };
   }, [onClose, onNext, onPrevious, open]);
-  // Portal to <body>. Inline, the overlay's z-50 is scoped inside `<main class="z-10">`, which
-  // leaves it under the z-30 mobile bottom bar, whose invisible buttons then swallow link taps.
   return createPortal(
     <div
       role="dialog"
@@ -158,7 +161,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         >
           ×
         </button>
-
         {item && (
           <>
             {/* overscroll-contain stops the scroll chaining to the page behind at either end. */}
@@ -201,7 +203,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     document.body,
   );
 }
-
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <span className="font-[var(--font-mono)] text-[0.66rem] tracking-[0.36em] uppercase text-[var(--color-muted)]">
@@ -209,7 +210,6 @@ function Eyebrow({ children }: { children: ReactNode }) {
     </span>
   );
 }
-
 /** The negative margins have to match the panel's own `p-5` / `p-7` padding to bleed cleanly. */
 function WorkBanner({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = useState(false);

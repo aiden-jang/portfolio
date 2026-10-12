@@ -12,15 +12,6 @@ export default defineConfig({
   build: {
     target: 'es2022',
     sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ['three'],
-          r3f: ['@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
-          react: ['react', 'react-dom'],
-        },
-      },
-    },
   },
   server: { port: 5173, open: true },
 });

@@ -2,7 +2,8 @@ import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
 import { THEMES } from '../config';
-import { smoothColorHex, smoothTowards } from '../math';
+import { smoothTowards } from '../math';
+import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 
 const TRANSITION_RATE = 2.5;

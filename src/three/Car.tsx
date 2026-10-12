@@ -5,7 +5,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { CARS, THEMES } from '../config';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
-import { smoothColorHex, smoothTowards } from '../math';
+import { smoothTowards } from '../math';
+import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import {
   autoFitToLength,
@@ -35,6 +36,7 @@ function prefetchAllowed(): boolean {
 export function Car() {
   const { scene } = useThree();
   const carIndex = useAppStore((s) => s.carIndex);
+  const retryVersion = useAppStore((s) => s.carRetryVersion);
   const armIntro = useAppStore((s) => s.armIntro);
 
   const group = useMemo(() => new THREE.Group(), []);
@@ -84,6 +86,7 @@ export function Car() {
     const setCarLoading = useAppStore.getState().setCarLoading;
     setHasBodyMaterial(false);
     setCarLoading(true);
+    useAppStore.getState().setCarLoadError(null);
     let cancelled = false;
 
     loader.load(
@@ -140,6 +143,9 @@ export function Car() {
         if (cancelled) return;
         setCarLoading(false);
         setHasBodyMaterial(!!refs.bodyMaterial);
+        useAppStore
+          .getState()
+          .setCarLoadError(`Couldn’t load ${spec.name}. You can keep browsing or try again.`);
         console.error(`Failed to load /models/${spec.file}`, err);
       },
     );
@@ -147,7 +153,7 @@ export function Car() {
     return () => {
       cancelled = true;
     };
-  }, [carIndex, loader, group, armIntro]);
+  }, [carIndex, retryVersion, loader, group, armIntro]);
 
   useEffect(() => {
     scene.add(group);

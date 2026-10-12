@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { THEMES } from '../config';
-import { smoothColorHex, smoothTowards } from '../math';
+import { smoothTowards } from '../math';
+import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 
 extend({ Reflector });
