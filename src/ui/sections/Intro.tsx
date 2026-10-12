@@ -16,11 +16,11 @@ export function IntroSection() {
       <div className="panel garage-intro pointer-events-auto">
         <h1>Aiden Jang</h1>
         <p>
-          Full-stack engineer.
+          I build products people can use together.
           <br />
-          Real-time products, web applications,
+          From live multiplayer rooms
           <br />
-          and the details between them.
+          to the less glamorous API that makes them work.
         </p>
       </div>
       <div className="garage-index pointer-events-auto">

@@ -1,10 +1,12 @@
+import { workId } from '../data/workItems';
 import type { WorkDetail } from '../types';
 import { PREVIEWS } from '../data/projectPreviews';
-import { PROJECT_STORIES } from '../data/projectStories';
+import { CAREER_STORIES, PROJECT_STORIES } from '../data/projectStories';
 import './work-story.css';
 
 export function WorkStory({ item }: { item: WorkDetail }) {
-  const story = PROJECT_STORIES[item.mark ?? ''];
+  const story = PROJECT_STORIES[item.mark ?? ''] ?? CAREER_STORIES[workId(item)];
+  const decision = story?.decision ?? item.principle;
   const preview = PREVIEWS[item.mark ?? ''];
   return (
     <div className="work-story">
@@ -14,10 +16,10 @@ export function WorkStory({ item }: { item: WorkDetail }) {
             <h4>{story ? 'The problem' : 'The work'}</h4>
             <p>{story?.problem ?? item.body[0]}</p>
           </section>
-          {item.principle && (
+          {decision && (
             <section>
               <h4>The decision</h4>
-              <p>{item.principle}</p>
+              <p>{decision}</p>
             </section>
           )}
           {story && (

@@ -1,39 +1,93 @@
-export const PROJECT_STORIES: Record<string, { problem: string; result: string }> = {
+export const PROJECT_STORIES: Record<
+  string,
+  { problem: string; result: string; decision?: string }
+> = {
   auth: {
-    problem: 'Separate apps shouldn’t mean maintaining separate accounts.',
+    decision:
+      'Put identity in one service and publish the session contract as a versioned SDK. Apps can change independently without silently changing what a session means.',
+    problem:
+      'Every new app needed sign-in, recovery, and sessions. Rebuilding those each time meant more places for the same contract to drift.',
     result:
-      'A shared sign-in service and versioned SDK connect the apps without sharing their session secret.',
+      'One account works across the apps. Each app pins a published SDK version and verifies sessions without holding the signing secret.',
   },
   everythingisfine: {
     problem:
       'Earthquake feeds report the same event differently. Hiding the differences would imply certainty the data doesn’t have.',
-    result: 'A live globe keeps both sources visible, with filters and shareable views.',
+    result:
+      'One event can show both agencies’ readings. Source counts and magnitude scales stay visible, and a link restores the camera, filters, and pinned event.',
   },
   worth: {
     problem: 'It’s easy to forget which things you liked, and why you wanted to try them again.',
-    result: 'Collections, rankings, and revisit logs keep your own taste useful over time.',
+    result:
+      'A drink can move up your ranking after a second visit. Its original note and revisit history stay together; sharing a list keeps those private details out.',
   },
   owewell: {
     problem: 'A shared bill gets complicated when everyone ordered something different.',
     result:
-      'Itemized splits and settlement suggestions turn the group’s balances into fewer payments.',
+      'People can split evenly, by shares, or by exact amounts. Balances stay in integer cents, and settlement suggestions reduce the payments needed to close the group.',
   },
   iguess: {
     problem: 'An AI drawing game still needs fair turns, scoring, and reliable multiplayer rooms.',
     result:
-      'Five modes run on one room engine. The AI takes part in the game, including getting things wrong.',
+      'Five modes share the same turn and scoring engine. A reconnecting player keeps their identity and score; a failed model request has a fallback.',
   },
   wherever: {
     problem: '“Anywhere is fine” rarely gets a group any closer to dinner.',
-    result: 'Shared restaurant decks and live voting give the group a place to go.',
+    result:
+      'The first restaurant to clear a majority wins. Votes are resolved by the server, and another person takes over if the host leaves.',
   },
   bloomnote: {
     problem: 'A personal note deserves something more specific than a generic greeting card.',
-    result: 'The message becomes a unique garden, delivered through a link.',
+    result:
+      'The recipient opens a garden shaped by the message. A timeout and fallback keep a slow model from turning the gift into a blank page.',
   },
   mrrp: {
     problem: 'Keeping someone company from a distance shouldn’t become another obligation.',
     result:
-      'A room for two offers notes and a responsive cat without streaks, decay, or read receipts.',
+      'Two people share a room through one link. Notes wait until they’re read, and a hard day brings the cat closer. Missing a day doesn’t cost anything.',
   },
 };
+
+export const CAREER_STORIES: Record<string, { problem: string; decision: string; result: string }> =
+  {
+    'monolith-django-rest-react-rewrite': {
+      problem:
+        'A legacy PHP monolith was carrying a live publisher platform while its replacement was being built.',
+      decision:
+        'Move traffic incrementally with feature flags, and own the API and React interface together so each migration could ship as a working slice.',
+      result:
+        'Two engineers completed the backend migration in six months. The platform serves more than 30,000 active publisher newsletters.',
+    },
+    'agentic-ai-playwright-framework': {
+      problem:
+        'The platform had no automated coverage, and its interface was being migrated from Angular to React.',
+      decision:
+        'Separate planning, test generation, and repair into three stages so changing selectors didn’t require rebuilding every test by hand.',
+      result:
+        'The framework became the platform’s first automated coverage and continues to run in a frontend package after the monorepo migration.',
+    },
+    'ad-slot-details-120-1-api-call': {
+      problem:
+        'Opening a slot fetched each linked line item separately. Large slots made around 120 API calls before the page was ready.',
+      decision:
+        'Return the joined data the interface needs through one batched endpoint instead of asking the browser to assemble it.',
+      result:
+        'API calls dropped from 120 to one, and page load time fell from about 60 seconds to two.',
+    },
+    'sponsorships-audience-extension-blackout-periods': {
+      problem:
+        'Publisher teams needed scheduling and demand controls that could handle more than one line item or newsletter per sponsorship.',
+      decision:
+        'Choose a many-to-many model before launch. A simpler one-to-one model would require migrating live sponsorship data later.',
+      result:
+        'Shipped the data models, APIs, and interfaces for three products. Sponsorships serves hundreds of millions of impressions a week, including The Washington Post.',
+    },
+    'creative-mapping-v2': {
+      problem:
+        'Publisher ops needed to configure which creatives could target which placements in the ad-serving pipeline.',
+      decision:
+        'Own the MySQL model, REST contract, and Angular editor together so targeting rules stayed consistent from configuration to delivery.',
+      result:
+        'Delivered Creative Mapping v2 end to end, alongside publisher migrations and demand controls.',
+    },
+  };
