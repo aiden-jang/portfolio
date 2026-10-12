@@ -9,17 +9,13 @@ import type { ThemeName } from './types';
 // Lazy so the ~1 MB Three/R3F chunk stays off the critical path and the copy paints first.
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 import { PortfolioHeader } from './ui/PortfolioHeader';
-import { CameraResetButton } from './ui/CameraResetButton';
 import { CarSwitcher, MobileCarSwitcher } from './ui/CarSwitcher';
-import { ColorSwatches, MobileColorButton } from './ui/ColorSwatches';
+import { GarageMenu } from './ui/GarageMenu';
 import { CommandMenu } from './ui/CommandMenu';
 import { FilmGrain } from './ui/FilmGrain';
 import { Hint } from './ui/Hint';
 import { LoadingBar } from './ui/LoadingBar';
-import { RevButton } from './ui/RevButton';
 import { SceneBoundary } from './ui/SceneBoundary';
-import { SceneShareButton } from './ui/SceneShareButton';
-import { MobileThemeButton, ThemeToggle } from './ui/ThemeToggle';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 
@@ -119,8 +115,7 @@ export function App() {
             {showCarControls && (
               <div className="flex items-center gap-2">
                 <MobileCarSwitcher />
-                <MobileColorButton />
-                <MobileThemeButton />
+                <GarageMenu />
               </div>
             )}
           </div>
@@ -140,16 +135,7 @@ export function App() {
               "
               >
                 <CarSwitcher />
-                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-                <RevButton />
-                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-                <CameraResetButton />
-                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-                <ColorSwatches bordered={false} />
-                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-                <ThemeToggle />
-                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-                <SceneShareButton />
+                <GarageMenu />
               </div>
             </div>
           )}

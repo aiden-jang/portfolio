@@ -39,7 +39,6 @@ export function ThemeToggle() {
 
   return (
     <button
-      id="theme-toggle"
       type="button"
       aria-label="Toggle studio lighting (dusk/night)"
       title="Toggle studio lighting"
