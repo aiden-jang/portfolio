@@ -124,7 +124,12 @@ function Project({
       className={`garage-project ${featured ? 'garage-project-featured' : 'garage-project-compact'}`}
     >
       <div className="garage-project-copy">
-        <h3>{item.shortName}</h3>
+        <div className="project-title">
+          <p className="project-role">
+            {item.contribution ? 'Open-source contributor' : 'Designed & built'}
+          </p>
+          <h3>{item.shortName}</h3>
+        </div>
         <p>{preview?.description ?? item.summary}</p>
         <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>
         <div className="garage-project-links">
@@ -152,6 +157,7 @@ function Project({
           image={preview.image}
           name={item.shortName ?? item.title}
           caption={preview.caption}
+          states={featured ? preview.states : undefined}
         />
       )}
       {item.contribution && <IodineContributions />}

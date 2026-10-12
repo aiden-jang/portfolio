@@ -1,8 +1,9 @@
 export const PROJECT_STORIES: Record<
   string,
-  { problem: string; result: string; decision?: string }
+  { problem: string; result: string; decision?: string; built?: string }
 > = {
   iodine: {
+    built: 'Scoped command approvals, local similarity matching and reversible agent edits.',
     problem:
       'An IDE agent needs a useful way to reuse command approvals and undo edits without granting blanket permission.',
     decision:
@@ -19,12 +20,18 @@ export const PROJECT_STORIES: Record<
       'One account works across the apps. Each app pins a published SDK version and verifies sessions without holding the signing secret.',
   },
   everythingisfine: {
+    built: 'An interactive globe that brings natural-event feeds into one explorable view.',
+    decision:
+      'Keep each source’s readings and uncertainty intact, then share the camera and filter state in the URL.',
     problem:
       'Natural events arrive through different feeds, at different speeds. The globe needs to show earthquakes, storms, volcanoes, fires, floods and aurora without making every source look equally certain.',
     result:
       'One globe brings the layers together. Earthquakes retain both agencies’ readings and magnitude scales; a link restores the camera, filters and pinned event.',
   },
   worth: {
+    built: 'Ranked collections with revisit logs and shareable lists.',
+    decision:
+      'Keep rankings separate from calls and preserve revisit history, so a new opinion does not erase the old one.',
     problem: 'It’s easy to forget which things you liked, and why you wanted to try them again.',
     result:
       'A drink can move up your ranking after a second visit. Its original note and revisit history stay together; sharing a list keeps those private details out.',
@@ -45,11 +52,17 @@ export const PROJECT_STORIES: Record<
       'The first restaurant to clear a majority wins. Votes are resolved by the server, and another person takes over if the host leaves.',
   },
   bloomnote: {
+    built: 'A note composer and an illustrated garden the recipient can open through a link.',
+    decision:
+      'Generate the garden from the note, with a timed fallback so the recipient always has something to open.',
     problem: 'A personal note deserves something more specific than a generic greeting card.',
     result:
       'The recipient opens a garden shaped by the message. A timeout and fallback keep a slow model from turning the gift into a blank page.',
   },
   mrrp: {
+    built: 'A shared room with a pixel cat, mood check-ins and notes for two people.',
+    decision:
+      'Use a shared room with persistent identity and unread notes, without streaks or penalties for staying away.',
     problem: 'Keeping someone company from a distance shouldn’t become another obligation.',
     result:
       'Two people share a room through one link. Notes wait until they’re read, and a hard day brings the cat closer. Missing a day doesn’t cost anything.',

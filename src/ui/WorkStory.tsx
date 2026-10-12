@@ -5,20 +5,28 @@ import { CAREER_STORIES, PROJECT_STORIES } from '../data/projectStories';
 import './work-story.css';
 
 export function WorkStory({ item }: { item: WorkDetail }) {
-  const story = PROJECT_STORIES[item.mark ?? item.shortName ?? ''] ?? CAREER_STORIES[workId(item)];
+  const projectStory = PROJECT_STORIES[item.mark ?? item.shortName ?? ''];
+  const story = projectStory ?? CAREER_STORIES[workId(item)];
   const decision = story?.decision ?? item.principle;
   const preview = PREVIEWS[item.mark ?? ''];
   return (
     <div className="work-story">
+      <p className="project-role">
+        {item.contribution
+          ? 'Open-source contributor'
+          : item.mark
+            ? 'Designed & built'
+            : item.context}
+      </p>
       <div className="work-story-overview">
         <div>
           <section>
-            <h4>{story ? 'The problem' : 'The work'}</h4>
-            <p>{story?.problem ?? item.body[0]}</p>
+            <h4>{item.contribution ? 'My contribution' : 'What I built'}</h4>
+            <p>{projectStory?.built ?? item.summary}</p>
           </section>
           {decision && (
             <section>
-              <h4>The decision</h4>
+              <h4>The key decision</h4>
               <p>{decision}</p>
             </section>
           )}
@@ -40,6 +48,7 @@ export function WorkStory({ item }: { item: WorkDetail }) {
         <details>
           <summary>Engineering details</summary>
           <div>
+            {story && <p>{story.problem}</p>}
             {(story ? item.body : item.body.slice(1)).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}

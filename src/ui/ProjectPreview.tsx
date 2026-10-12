@@ -1,9 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import type { PreviewState } from '../data/projectPreviews';
+import './preview-states.css';
 
-type Props = { image: string; name: string; caption: string };
+type Props = { image: string; name: string; caption: string; states?: PreviewState[] };
 
-export function ProjectPreview({ image, name, caption }: Props) {
+export function ProjectPreview({
+  image: initialImage,
+  name,
+  caption: initialCaption,
+  states,
+}: Props) {
+  const [selected, setSelected] = useState(0);
+  const image = states?.[selected]?.image ?? initialImage;
+  const caption = states?.[selected]?.caption ?? initialCaption;
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -38,7 +48,21 @@ export function ProjectPreview({ image, name, caption }: Props) {
           </div>
           <span>Inspect screenshot ↗</span>
         </button>
-        <figcaption>{caption}</figcaption>
+        {states && (
+          <div className="preview-states" role="group" aria-label={`${name} product views`}>
+            {states.map((state, index) => (
+              <button
+                key={state.label}
+                type="button"
+                aria-pressed={selected === index}
+                onClick={() => setSelected(index)}
+              >
+                {state.label}
+              </button>
+            ))}
+          </div>
+        )}
+        <figcaption aria-live="polite">{caption}</figcaption>
       </figure>
       {open &&
         createPortal(

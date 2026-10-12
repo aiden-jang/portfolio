@@ -45,6 +45,24 @@ export function IodineContributions() {
           </a>
         ))}
       </div>
+      <details className="contribution-flow">
+        <summary>Follow an agent edit and its undo</summary>
+        <ol>
+          <li>
+            <strong>Before the edit</strong>
+            <span>The file is snapshotted before the agent changes it.</span>
+          </li>
+          <li>
+            <strong>Review the change</strong>
+            <span>A revert action lives with the file-edit tool result.</span>
+          </li>
+          <li>
+            <strong>Change your mind</strong>
+            <span>Restore the snapshot and tell the agent its edit was undone.</span>
+          </li>
+        </ol>
+        <p>Implementation walkthrough · linked contributions above show the actual code.</p>
+      </details>
     </div>
   );
 }
