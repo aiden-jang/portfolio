@@ -23,6 +23,7 @@ export function Hint() {
           <span className="md:hidden">Hold the car, then drag to look around.</span>
         </p>
       )}
+      <p className="orbit-status">Drag to orbit · release to scroll</p>
       <div
         id="hint"
         className="

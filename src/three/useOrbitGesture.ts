@@ -41,6 +41,7 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
       !!(target as HTMLElement | null)?.closest?.(NON_DRAGGABLE_SELECTOR);
 
     let holdTimer = 0;
+    let activePointer: number | null = null;
     const endGesture = (s: RigState) => {
       window.clearTimeout(holdTimer);
       s.orbitHold = false;
@@ -48,7 +49,14 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
     };
 
     const onPointerDown = (e: PointerEvent) => {
-      if (isNonDraggable(e.target)) return;
+      if (activePointer !== null && activePointer !== e.pointerId) {
+        state.current.isDown = false;
+        activePointer = null;
+        endGesture(state.current);
+        return;
+      }
+      if (e.button !== 0 || !e.isPrimary || isNonDraggable(e.target)) return;
+      activePointer = e.pointerId;
       const s = state.current;
       s.isDown = true;
       s.isTouch = e.pointerType === 'touch';
@@ -71,7 +79,7 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
     };
     const onPointerMove = (e: PointerEvent) => {
       const s = state.current;
-      if (!s.isDown) return;
+      if (!s.isDown || activePointer !== e.pointerId) return;
       const dx = e.clientX - s.lastX;
       const dy = e.clientY - s.lastY;
       s.lastX = e.clientX;
@@ -97,7 +105,9 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
     const onTouchMove = (e: TouchEvent) => {
       if (state.current.orbitHold) e.preventDefault();
     };
-    const onPointerUp = () => {
+    const onPointerUp = (e: PointerEvent) => {
+      if (activePointer !== e.pointerId) return;
+      activePointer = null;
       const s = state.current;
       if (!s.isDown) {
         endGesture(s);
@@ -112,6 +122,7 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
       endGesture(s);
     };
     const onPointerCancel = () => {
+      activePointer = null;
       state.current.isDown = false;
       endGesture(state.current);
     };
@@ -125,6 +136,7 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
     window.addEventListener('pointerup', onPointerUp);
     window.addEventListener('pointercancel', onPointerCancel);
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('blur', onPointerCancel);
     return () => {
       window.clearTimeout(holdTimer);
       window.removeEventListener('pointerdown', onPointerDown);
@@ -133,6 +145,7 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('pointercancel', onPointerCancel);
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('blur', onPointerCancel);
       document.body.classList.remove('orbiting');
     };
   }, [state, triggerRev]);

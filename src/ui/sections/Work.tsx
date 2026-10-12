@@ -115,7 +115,7 @@ function Project({
       className={`garage-project ${featured ? 'garage-project-featured' : 'garage-project-compact'}`}
     >
       <div className="garage-project-copy">
-        <h3>{item.mark === 'everythingisfine' ? 'Everything is fine.' : item.shortName}</h3>
+        <h3>{item.shortName}</h3>
         <p>{preview?.description ?? item.tagline}</p>
         {preview && <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>}
         <div className="garage-project-links">

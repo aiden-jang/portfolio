@@ -206,3 +206,21 @@ body.modal-open .portfolio-header {
   border: 1px solid var(--color-line);
   cursor: pointer;
 }
+
+.orbit-status {
+  display: none;
+  pointer-events: none;
+  position: fixed;
+  z-index: 35;
+  left: 0;
+  right: 0;
+  bottom: 150px;
+  text-align: center;
+  font: 11px/1.5 var(--font-mono);
+  color: var(--color-fg);
+}
+@media (pointer: coarse) {
+  body.orbiting .orbit-status {
+    display: block;
+  }
+}

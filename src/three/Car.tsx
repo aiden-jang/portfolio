@@ -6,6 +6,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { CARS, THEMES } from '../config';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import { smoothTowards } from '../math';
+import { canPrefetchModels } from './modelPrefetch';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import {
@@ -19,19 +20,6 @@ import {
 
 const TRANSITION_RATE = 2.5;
 const EXPOSURE_RATE = 2.5;
-
-// Safari and Firefox have no Network Information API, so an unknown connection counts as
-// allowed. Only an explicit Save-Data or 2g-class answer opts out.
-function prefetchAllowed(): boolean {
-  const conn = (
-    navigator as Navigator & {
-      connection?: { saveData?: boolean; effectiveType?: string };
-    }
-  ).connection;
-  if (!conn) return true;
-  if (conn.saveData) return false;
-  return conn.effectiveType !== '2g' && conn.effectiveType !== 'slow-2g';
-}
 
 export function Car() {
   const { scene } = useThree();
@@ -88,6 +76,7 @@ export function Car() {
     setCarLoading(true);
     useAppStore.getState().setCarLoadError(null);
     let cancelled = false;
+    let prefetchTimer = 0;
 
     loader.load(
       `/models/${spec.file}`,
@@ -125,17 +114,27 @@ export function Car() {
 
         // Plain `fetch`, not GLTFLoader: this only needs to warm the HTTP cache, and parsing
         // plus meshopt-decoding two spare cars would compete with the one on screen.
-        if (prefetchAllowed()) {
-          const adjacent = [
-            (carIndex + 1) % CARS.length,
-            (carIndex - 1 + CARS.length) % CARS.length,
-          ];
-          for (const i of adjacent) {
-            const a = CARS[i];
-            if (a && a.file !== spec.file) {
-              fetch(`/models/${a.file}`, { priority: 'low' } as RequestInit).catch(() => {});
+        if (
+          canPrefetchModels(
+            (
+              navigator as Navigator & {
+                connection?: { saveData?: boolean; effectiveType?: string };
+              }
+            ).connection,
+          )
+        ) {
+          prefetchTimer = window.setTimeout(() => {
+            const adjacent = [
+              (carIndex + 1) % CARS.length,
+              (carIndex - 1 + CARS.length) % CARS.length,
+            ];
+            for (const i of adjacent) {
+              const a = CARS[i];
+              if (a && a.file !== spec.file) {
+                fetch(`/models/${a.file}`, { priority: 'low' } as RequestInit).catch(() => {});
+              }
             }
-          }
+          }, 1500);
         }
       },
       undefined,
@@ -152,6 +151,7 @@ export function Car() {
 
     return () => {
       cancelled = true;
+      window.clearTimeout(prefetchTimer);
     };
   }, [carIndex, retryVersion, loader, group, armIntro]);
 

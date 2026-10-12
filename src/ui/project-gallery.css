@@ -135,7 +135,7 @@
   }
   .project-gallery [data-project='bloomnote'] img {
     object-position: right center;
-    transform-origin: left bottom;
+    transform-origin: right center;
   }
   .project-gallery [data-project='mrrp'] img {
     object-position: right;
