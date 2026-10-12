@@ -710,3 +710,67 @@ header > span {
   width: max(100%, 1000px);
   max-width: none;
 }
+
+.orbit-invitation {
+  position: fixed;
+  bottom: 8.7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  pointer-events: none;
+  color: var(--color-muted);
+  font-size: 12px;
+  white-space: nowrap;
+  transition: opacity 400ms;
+}
+.orbit-invitation-used {
+  opacity: 0;
+}
+@media (max-width: 767px) {
+  .orbit-invitation {
+    bottom: 10rem;
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-invitation {
+    transition: none;
+  }
+}
+
+.mobile-car-label {
+  width: 80px;
+  min-width: 0;
+  text-align: center;
+  letter-spacing: 0;
+  font-size: 10px;
+}
+.mobile-car-label > span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mobile-car-label small {
+  display: block;
+  font-size: 9px;
+  color: var(--color-muted);
+}
+#mobile-bar > .flex {
+  gap: 4px;
+}
+#mobile-bar button[aria-label='Rev engine'] {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  justify-content: center;
+  border: 1px solid var(--color-line);
+}
+#mobile-bar button[aria-label='Rev engine'] > span:last-child {
+  display: none;
+}
+@media (max-width: 359px) {
+  .mobile-car-label {
+    width: 64px;
+  }
+}

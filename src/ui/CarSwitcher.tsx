@@ -27,7 +27,12 @@ export function CarSwitcher() {
       "
     >
       <span className="min-w-[7rem] text-center truncate">
-        {isCarLoading ? 'Loading…' : `${car?.name ?? '—'} · ${car?.code ?? '—'}`}
+        {`${car?.name ?? '—'} · ${car?.code ?? '—'}`}
+        {isCarLoading && (
+          <span aria-label="Loading car" className="ml-2">
+            ···
+          </span>
+        )}
       </span>
       <span className="text-[var(--color-muted)] text-[1.05em] leading-none group-hover:text-[var(--color-neon)]">
         ›
@@ -63,8 +68,12 @@ export function MobileCarSwitcher() {
       >
         ‹
       </ArrowButton>
-      <span aria-live="polite" className="min-w-[6rem] px-1 text-center truncate">
-        {isCarLoading ? 'Loading…' : `${car?.name ?? '—'} · ${car?.code ?? '—'}`}
+      <span aria-live="polite" className="mobile-car-label">
+        <span>{car?.name ?? '—'}</span>
+        <small>
+          {car?.code ?? '—'}
+          {isCarLoading ? ' ···' : ''}
+        </small>
       </span>
       <ArrowButton
         label={`Next car. ${car?.name ?? 'Current car'}, ${carIndex + 1} of ${CARS.length}`}
