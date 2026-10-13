@@ -88,11 +88,11 @@ export function ExperienceSection({ onOpen }: Props) {
           {ROLES.map((r) => (
             <li
               key={`${r.company}-${r.period}`}
-              className="flex items-baseline justify-between gap-4"
+              className="experience-role flex items-baseline justify-between gap-4"
             >
               <span>
                 <span className="text-[var(--color-fg)]">{r.title}</span>
-                <span className="text-[var(--color-muted)]"> · {r.company}</span>
+                <span className="experience-company text-[var(--color-muted)]">{r.company}</span>
               </span>
               <span className="shrink-0 font-[var(--font-mono)] text-[0.62rem] tracking-[0.08em] text-[var(--color-muted)]">
                 {r.period}

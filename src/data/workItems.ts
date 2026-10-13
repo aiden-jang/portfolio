@@ -18,7 +18,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     body: [
       'Everything runs on Cloudflare’s free tier (Workers, D1, Durable Objects) under a hard $0-hosting budget with no cold starts. The connective tissue is a federated identity service: one sign-in that every app on *.aidenjang.com trusts.',
       'The auth Worker issues an httpOnly session cookie on the parent domain, and a published npm package (@aidenjang/auth-client) is the single source of truth for the session contract. Apps never touch the session secret; they forward the cookie to /auth/me from their own Worker. It supports email + password (PBKDF2), Google OIDC, and passwordless magic links, all enforced server-side.',
-      'Each app is its own repo that pins the SDK as a versioned dependency, so a change to the session contract is a deliberate version bump rather than silent drift across apps. Signing in is optional everywhere: it syncs your data across apps, but nothing gates on an account.',
+      'Each app is its own repo that pins the SDK as a versioned dependency, so a change to the session contract is a deliberate version bump rather than silent drift across apps. The identity service verifies the account; each app decides which actions require a session.',
     ],
     stack: [
       'Cloudflare Workers',
@@ -166,7 +166,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     summary:
       'I designed and built a room for two, with a hand-drawn pixel cat, mood check-ins and notes that wait until they’re read.',
     body: [
-      'You make a room and send the link to one person. Whoever opens it second is the one the cat is: they tap how their day is going, the cat becomes that, and from the other side you see it and can do something about it. No accounts, no database, no notifications.',
+      'You make a room and send the link to one person. Whoever opens it second is the one the cat is: they tap how their day is going, the cat becomes that, and from the other side you see it and can do something about it. No account is needed to join; a Durable Object holds the room state.',
       'Three rules mattered more than any feature. Nothing bad can happen to the cat. No hunger, streaks, or decay. The second a shared pet can be neglected, it becomes a chore. The cat also does not copy a low mood. If you are sad, she comes over and stays. And you only see what the other person did, never whether they saw yours. Knowing someone saw a message and did nothing can feel worse than not knowing.',
       'One Durable Object per room is the whole backend: two seats assigned by arrival order, enforced in the object rather than the UI, because the link is the only credential the app has. The room runs on her clock, not the server\u2019s, so the light moves across the floor over her day and the cat waits by the door around the time she usually gets home. Notes arrive one a day and advance on her reading, capped once per her local day, so a day she does not visit is not a note she never sees.',
       'The art is hand-authored pixel grids you can read in the source, one aligned rectangle per logical pixel with no upscaling, because resampling a small canvas leaves you with pixels of two different sizes and it reads as a mistake rather than a style. It installs to a home screen, opens from cache with no signal, and a third person holding the link gets no notes, no mood, and a 403 on anything that writes.',

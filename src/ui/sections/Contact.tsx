@@ -62,7 +62,6 @@ export function ContactSection() {
   );
 }
 
-// Copy is the primary path, not mailto: most visitors have no mail client configured.
 function EmailRow() {
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
   const copied = copyState === 'copied';
@@ -79,20 +78,19 @@ function EmailRow() {
 
   return (
     <li className="py-1.5 text-center">
-      {/* The pill is absolute on desktop so it cannot pull the address off-centre, but in flow on
-          mobile, where absolute would push past the viewport and add a sideways scroll. */}
-      <span className="relative inline-block">
-        <a href={`mailto:${EMAIL}`} className={LINK_CLASS}>
-          {EMAIL}
-        </a>
-        <button
-          type="button"
-          onClick={handleCopy}
-          aria-label={copied ? 'Email address copied' : 'Copy email address'}
-          className={`
+      <span className="inline-block">
+        <span className="select-text text-[var(--color-fg)]">{EMAIL}</span>
+        <span className="contact-email-actions">
+          <a href={`mailto:${EMAIL}`} className={LINK_CLASS}>
+            Open email ↗
+          </a>
+          <button
+            type="button"
+            onClick={handleCopy}
+            aria-label={copied ? 'Email address copied' : 'Copy email address'}
+            className={`
             pointer-events-auto whitespace-nowrap cursor-pointer
-            mt-2 flex w-fit mx-auto items-center justify-center min-h-[40px]
-            md:mt-0 md:min-h-0 md:w-auto md:block md:absolute md:left-full md:ml-3 md:top-1/2 md:-translate-y-1/2
+            inline-flex items-center justify-center min-h-[44px]
             font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase
             px-3.5 py-2 md:px-2.5 md:py-1 rounded-full border transition-colors
             ${
@@ -101,9 +99,10 @@ function EmailRow() {
                 : 'border-[var(--color-line)] text-[var(--color-muted)] hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]'
             }
           `}
-        >
-          {copied ? 'Copied ✓' : copyState === 'failed' ? 'Copy unavailable' : 'Copy'}
-        </button>
+          >
+            {copied ? 'Copied ✓' : copyState === 'failed' ? 'Copy unavailable' : 'Copy address'}
+          </button>
+        </span>
       </span>
       <p className="contact-copy-status" role="status">
         {copyState === 'failed'

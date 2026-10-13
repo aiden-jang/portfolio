@@ -62,7 +62,7 @@ export const PROJECT_STORIES: Record<
   mrrp: {
     built: 'A shared room with a pixel cat, mood check-ins and notes for two people.',
     decision:
-      'Use a shared room with persistent identity and unread notes, without streaks or penalties for staying away.',
+      'Enforce the two seats on the server. Let notes wait for the recipient, and leave out streaks and penalties for staying away.',
     problem: 'Keeping someone company from a distance shouldn’t become another obligation.',
     result:
       'Two people share a room through one link. Notes wait until they’re read, and a hard day brings the cat closer. Missing a day doesn’t cost anything.',

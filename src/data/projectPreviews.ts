@@ -12,7 +12,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       {
         image: '/projects/everythingisfine.png',
         label: 'Explore the globe',
-        caption: 'Live natural-event layers across the Pacific.',
+        caption: 'The event rail and globe stay in sync as you explore the public feeds.',
       },
       {
         image: '/projects/everythingisfine-event.png',
@@ -30,7 +30,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       {
         image: '/projects/worth-ranked.png',
         label: 'See the ranking',
-        caption: 'Example ranked list: five drinks, in a very particular order.',
+        caption: 'Example: drag to rank the drinks; Favorite, Meh and Not again stay separate.',
       },
       {
         image: '/projects/worth.png',
@@ -69,12 +69,12 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       {
         image: '/projects/bloomnote-garden.png',
         label: 'Open the garden',
-        caption: 'Example recipient view: each flower carries a meaning from the note.',
+        caption: 'Example recipient view: tap a flower to read its meaning from the note.',
       },
       {
         image: '/projects/bloomnote.png',
         label: 'Write the note',
-        caption: 'The writing desk, before the garden grows.',
+        caption: 'Write the note on the left; the example garden shows what the recipient opens.',
       },
     ],
     description: 'Send someone a personal note as a garden, with flowers shaped by what you wrote.',
@@ -86,7 +86,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       {
         image: '/projects/mrrp-room.jpg',
         label: 'Together in the room',
-        caption: 'Example shared room: a tired mood becomes an invitation to sit together.',
+        caption: 'Example room: a tired check-in makes sitting together the suggested action.',
       },
       {
         image: '/projects/mrrp.png',

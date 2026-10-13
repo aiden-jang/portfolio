@@ -23,6 +23,7 @@ import { MobileThemeButton, ThemeToggle } from './ui/ThemeToggle';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 import './ui/reading-flow.css';
+import './ui/final-review.css';
 
 // `?clean` strips the DOM chrome, for capturing the OG image against a bare canvas.
 const isCleanMode =

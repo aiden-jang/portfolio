@@ -7,14 +7,15 @@ export function AboutSection() {
         <span className={EYEBROW}>03 / ABOUT</span>
         <h2 className={H2}>Big systems. Small comforts.</h2>
         <p className={`${P_LI} max-w-[48ch]`}>
-          I’m Aiden, a software engineer in New York. My work runs from database models to the
-          interface someone uses every day. At Zeta Global, that means publisher tools; before that,
-          it was LiveIntent.
+          I’m Aiden, a software engineer in New York. At Zeta Global, I build the tools publishers
+          use to schedule ads, manage demand, and run their newsletters. Before that, I worked at
+          LiveIntent.
         </p>
         <p className={`${P_LI} mt-4 max-w-[48ch]`}>
           Outside work, I build things for the smaller parts of a day: choosing dinner, remembering
-          a good drink, leaving someone a note. I like making the complicated parts work quietly so
-          the app can feel simple. The cat does not appreciate the infrastructure.
+          a good drink, leaving someone a note. Those became wherever, worth, and bloomnote. Then I
+          made a room for two people and a pixel cat. The cat does not appreciate the
+          infrastructure.
         </p>
         <dl className="about-details">
           <div>

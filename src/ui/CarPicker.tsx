@@ -12,10 +12,11 @@ export function CarPicker({ mobile = false }: { mobile?: boolean }) {
       <span aria-hidden="true">{car.name}</span>
       <small aria-hidden="true">
         {car.code}
-        {loading ? ' ···' : ' ▾'}
+        {loading ? ' ···' : mobile ? ' ▾' : ' · Change ▾'}
       </small>
       <select
         aria-label="Choose a car"
+        title="Choose a car model"
         value={index}
         disabled={loading}
         onChange={(event) => {

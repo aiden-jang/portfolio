@@ -1,5 +1,5 @@
 export const SCREENSHOT_SIZES: Record<string, [number, number]> = {
-  '/projects/bloomnote.png': [1440, 1326],
+  '/projects/bloomnote.png': [1440, 1541],
   '/projects/bloomnote-garden.png': [1440, 1485],
   '/projects/mrrp-room.jpg': [1440, 1769],
   '/projects/everythingisfine.png': [1440, 960],
