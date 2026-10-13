@@ -1,3 +1,10 @@
+body:not([data-car-controls='visible']) #desktop-dock,
+body:not([data-car-controls='visible']) #mobile-bar,
+body:not([data-car-controls='visible']) #hint {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* Reading surfaces stay opaque while the interactive car is hidden. */
 body[data-car-view='reading'] .portfolio-scene,
 body[data-car-view='reading'] #desktop-dock,

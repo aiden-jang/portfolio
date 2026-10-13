@@ -4,7 +4,7 @@ import { clamp } from '../math';
 import { prefersReducedMotion } from './useReducedMotion';
 import { useAppStore } from '../store';
 import { sectionProgress } from './sectionProgress';
-import { canOrbitAt, pageSectionBounds } from '../three/orbitRegion';
+import { canOrbitAt, hasFullCarView, pageSectionBounds } from '../three/orbitRegion';
 
 let scrollRaf = 0;
 // Module-level so manual scroll input can abort a tween started from anywhere.
@@ -216,7 +216,11 @@ export function useNavigation() {
     };
     // The lock is what keeps a deliberate jump from fighting its own animation.
     const onScroll = () => {
-      document.body.dataset.carView = canOrbitAt(window.innerHeight * 0.15, pageSectionBounds())
+      const bounds = pageSectionBounds();
+      document.body.dataset.carControls = hasFullCarView(window.innerHeight, bounds)
+        ? 'visible'
+        : 'hidden';
+      document.body.dataset.carView = canOrbitAt(window.innerHeight * 0.15, bounds)
         ? 'visible'
         : 'reading';
       if (performance.now() < snapLockUntil.current) return;

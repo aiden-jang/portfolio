@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { canOrbitAt } from './orbitRegion';
+import { canOrbitAt, hasFullCarView } from './orbitRegion';
 
 describe('car gesture regions', () => {
   it('does not activate over reading content when the car is visible below it', () => {
@@ -16,5 +16,17 @@ describe('car gesture regions', () => {
     expect(canOrbitAt(300, [{ id: 'sec-work', top: -4000, bottom: 1600 }])).toBe(false);
     expect(canOrbitAt(300, [])).toBe(false);
     expect(canOrbitAt(300, [{ id: 'sec-intro', top: -900, bottom: 0 }])).toBe(false);
+  });
+});
+
+describe('full car controls region', () => {
+  it('shows controls only when a car section covers the entire viewport', () => {
+    expect(hasFullCarView(800, [{ id: 'sec-intro', top: 0, bottom: 800 }])).toBe(true);
+    expect(hasFullCarView(800, [{ id: 'sec-contact', top: 0, bottom: 900 }])).toBe(true);
+    expect(hasFullCarView(800, [{ id: 'sec-intro', top: -1, bottom: 799 }])).toBe(false);
+    expect(hasFullCarView(800, [{ id: 'sec-contact', top: 1, bottom: 901 }])).toBe(false);
+    expect(hasFullCarView(800, [{ id: 'sec-work', top: -10, bottom: 900 }])).toBe(false);
+    expect(hasFullCarView(800, [{ id: 'sec-contact', top: 0.12, bottom: 800.12 }])).toBe(true);
+    expect(hasFullCarView(800, [])).toBe(false);
   });
 });
