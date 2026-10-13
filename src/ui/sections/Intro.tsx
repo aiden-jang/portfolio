@@ -16,11 +16,11 @@ export function IntroSection() {
       <div className="panel garage-intro pointer-events-auto">
         <h1>Aiden Jang</h1>
         <p>
-          I build products people can use together.
+          Software engineer in New York.
           <br />
-          From live multiplayer rooms
+          I build publisher tools and playful apps,
           <br />
-          to the less glamorous API that makes them work.
+          from the interface to the API doing the actual work.
         </p>
       </div>
       <div className="garage-index pointer-events-auto">
@@ -32,7 +32,7 @@ export function IntroSection() {
             scrollToWork();
           }}
         >
-          Selected work <span>↓</span>
+          View work <span aria-hidden="true">↓</span>
         </a>
         <a href="/Aiden_Jang_Resume.pdf" target="_blank" rel="noopener">
           Résumé <span>↗</span>
