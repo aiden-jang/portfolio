@@ -13,8 +13,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'A platform of shipped side projects',
     context: 'Personal platform',
-    summary:
-      'I built a shared sign-in service and published its session contract as an npm SDK for my apps.',
+    summary: 'I built one sign-in service for my apps and a shared library for checking sessions.',
     body: [
       'The accounts service handles identity for the apps on aidenjang.com. It runs on Cloudflare Workers, with D1 and Durable Objects supporting storage and rate limits.',
       'Apps forward the shared session cookie to /auth/me through @aidenjang/auth-client, without receiving the signing secret. The service supports email and password, Google sign-in and magic links.',
@@ -39,7 +38,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'everythingisfine: the planet, live',
     context: 'Side project',
     summary:
-      'I built a WebGL globe for natural events, including reconciliation between USGS and EMSC earthquake reports.',
+      'I built a live globe for natural events, matching differing earthquake reports while keeping their source details visible.',
     body: [
       'The globe brings earthquakes, storms, volcanoes, wildfires, floods and aurora into one view. Hover for a summary, pin an event, or share a link that restores the camera and filters.',
       'USGS polling and EMSC WebSockets report the same earthquakes with different identifiers, times, locations and magnitude scales. I built reconciliation that groups those reports while keeping their source readings visible.',
@@ -106,7 +105,8 @@ export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'owewell: split bills, settle up',
     context: 'Side project',
-    summary: 'I built live expense sharing with integer-cent balances and settlement suggestions.',
+    summary:
+      'I built shared expense editing and settlement suggestions, storing money as whole cents in both the app and API.',
     body: [
       'Groups can split expenses evenly, by shares or by exact amounts. A Durable Object syncs changes, while integer cents keep the arithmetic consistent between the API and interface.',
       'Settlement suggestions match debtors with creditors to produce a short payment list. Payment links carry the amount into supported payment apps.',
@@ -125,7 +125,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'wherever: group restaurant picking',
     context: 'Side project',
     summary:
-      'I built live restaurant voting with server-owned results and host handover when someone leaves.',
+      'I built restaurant voting that updates for everyone in the room and keeps going when the host leaves.',
     body: [
       'People join a room and swipe on nearby restaurants from Google Places. In the default majority mode, a restaurant wins once enough people vote for it. The app can be installed on a phone.',
       'One Durable Object owns the votes and WebSocket session. It replaces a departed host after a grace period, and scheduled cleanup removes stale sessions.',
@@ -144,7 +144,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'bloomnote: write a note, grow a garden',
     context: 'Side project',
     summary:
-      'I built the note-to-garden flow: model-generated flower choices, validated data and an illustrated recipient view.',
+      'I built the note composer, the service that chooses flowers and the illustrated garden the recipient opens.',
     body: [
       'The model chooses real flower species and gives each a meaning drawn from the note. Those choices become the garden’s colors and shapes; a link opens the recipient view.',
       'Generation uses structured function calling and streams progress over server-sent events. Requests have a timeout and retry handling, and flower data is validated before use. Generation failures are reported to the sender.',
@@ -182,6 +182,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Monolith → Django REST + React rewrite',
+    displayTitle: 'Replacing a live publisher backend',
     context: 'Zeta Global · 2024–present',
     summary:
       'With one other engineer, I migrated the backend from PHP to Django REST in six months and rebuilt the interface in React.',
@@ -193,6 +194,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Agentic AI Playwright framework',
+    displayTitle: 'Tests that adapt to a changing UI',
     context: 'Zeta Global',
     summary:
       'I built the platform’s first automated tests: Playwright agents that plan, write and repair test specs.',
@@ -260,7 +262,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     categories: ['ai', 'systems'],
     context: 'Open source · Contributor',
     summary:
-      'I contributed command approvals, local similarity matching and agent-edit undo to an open-source TypeScript IDE.',
+      'I contributed reusable command approvals and a way to undo agent edits to an open-source TypeScript IDE.',
     body: [
       'I built scoped command approvals, normalization and local embedding suggestions for similar commands. I also tightened rule matching around command signatures and hidden paths.',
       'I added file snapshots and an undo flow that tells the agent when an edit is reverted. Other contributions covered file-path navigation, configuration and file-creation fixes.',

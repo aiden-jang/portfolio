@@ -16,7 +16,7 @@ type BrowseProps = Props & {
 };
 const FILTERS = [
   { id: 'all', label: 'All' },
-  { id: 'realtime', label: 'Live' },
+  { id: 'realtime', label: 'Real-time' },
   { id: 'ai', label: 'AI' },
   { id: 'social', label: 'For people' },
   { id: 'systems', label: 'Systems' },
@@ -136,9 +136,13 @@ function Project({
           <button
             type="button"
             onClick={(event) => onOpen(item, event.currentTarget)}
-            aria-label={`Read about ${item.shortName}`}
+            aria-label={
+              item.contribution
+                ? `My contributions to ${item.shortName}`
+                : `How I built it: ${item.shortName}`
+            }
           >
-            Case study ↗
+            {item.contribution ? 'My contributions ↗' : 'How I built it ↗'}
           </button>
           {item.link && (
             <a

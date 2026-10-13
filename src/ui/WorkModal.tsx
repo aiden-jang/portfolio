@@ -22,7 +22,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
     const previousTitle = document.title;
     const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     const previousDescription = description?.content;
-    document.title = `${item.shortName ?? item.title} | Aiden Jang`;
+    document.title = `${item.shortName ?? item.displayTitle ?? item.title} | Aiden Jang`;
     if (description) description.content = item.summary;
     return () => {
       document.title = previousTitle;
@@ -173,7 +173,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                 id="work-modal-title"
                 className="mt-3 mb-1 text-[clamp(1.6rem,3.2vw,2.2rem)] leading-[1.05] font-semibold tracking-[-0.03em]"
               >
-                {item.title}
+                {item.displayTitle ?? item.title}
               </h3>
               <p className="mt-2 mb-5 text-[rgba(244,240,255,0.6)] text-[0.95rem] leading-[1.5]">
                 {item.summary}

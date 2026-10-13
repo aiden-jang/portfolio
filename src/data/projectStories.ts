@@ -14,7 +14,7 @@ export const PROJECT_STORIES: Record<
   },
   auth: {
     decision:
-      'I put identity in one service and published the session contract as a versioned SDK, so each app can update it deliberately.',
+      'I put sign-in in one service and published a shared library for checking sessions. Each app chooses when to adopt a new version.',
     problem:
       'Every new app needed sign-in, recovery, and sessions. Rebuilding those each time meant more places for the same contract to drift.',
     result:

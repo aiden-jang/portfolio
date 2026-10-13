@@ -29,7 +29,7 @@ export function ContactSection() {
     <Section id="sec-contact" side="center">
       <div className={PANEL_BASE}>
         <span className={EYEBROW}>04 / CONTACT</span>
-        <h2 className={H2}>Got an idea?</h2>
+        <h2 className={H2}>Let’s talk.</h2>
         <p className={`${P_LI} mx-auto mt-3 max-w-[39ch]`}>
           For a role, a project, or a question about something I built, email is the best way to
           reach me.

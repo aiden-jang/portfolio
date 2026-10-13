@@ -62,6 +62,7 @@ export type Lamp = {
 export type ColorMaterial = THREE.Material & { color?: THREE.Color };
 
 export type WorkDetail = {
+  displayTitle?: string;
   title: string;
   summary: string;
   context: string;
