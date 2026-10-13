@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a broken interaction, layout or loading problem.
+title: ''
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include the expected behavior. Do not include private information.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include the page or shared URL if relevant.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and device
+      placeholder: Safari on iPhone, Chrome on Windows, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshot or additional context

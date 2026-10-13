@@ -1,159 +1,61 @@
-# aidenjang.com
+# Aiden Jang’s portfolio
 
-Personal portfolio built around an interactive 3D car scene. Seven models you can
-orbit, repaint, and cycle through, with the camera touring each car as you scroll.
-Experience, projects, About and Contact follow in a continuous reading flow.
-The interactive car and its controls lead the intro.
+Software engineering experience, personal products and open-source contributions,
+with an interactive 3D garage. Built with React, TypeScript and Three.js.
 
-Live at [aidenjang.com](https://aidenjang.com).
+**[Visit aidenjang.com](https://aidenjang.com)**
 
-## Stack
+![Portfolio preview](public/og-image.png)
 
-- React 18 + TypeScript, bundled with Vite 6
-- React Three Fiber + drei + postprocessing on top of Three.js
-- Tailwind CSS v4
-- Zustand for shared state
-- Deployed on Vercel (Analytics + Speed Insights)
+## Explore
 
-## Running it
+- Orbit the car, browse models, change paint and lighting, and share a setup.
+- Read experience and project case studies in a continuous page.
+- Filter projects and inspect original screenshots without leaving the portfolio.
+- Reach Contact with the car’s front-to-overhead camera arrival.
 
-Requires Node 20+.
+Car controls appear only when Intro or Contact fills the viewport. The Contact
+car appears earlier, holding its opening angle until the section is almost in
+place. Keyboard controls, reduced motion, loading errors and model attribution
+are supported. The portfolio content remains available if the 3D scene fails.
 
-```bash
-npm install
-npm run dev        # dev server, usually http://localhost:5173
+## Run locally
+
+Use Node.js 22, matching CI.
+
+```sh
+npm ci
+npm run dev
 ```
 
-```bash
-npm run verify     # the whole gate, and exactly what CI runs
-npm test           # unit suite only
-npm run build      # tsc --noEmit, then vite build, output in dist/
-npm run preview    # serve the production build
+Vite prints the local URL. No environment variables are required for local development.
+
+```sh
+npm run verify   # types, lint, formatting, repository checks, tests and build
+npm run test     # tests only
+npm run preview  # serve dist/ after building
 ```
 
-`verify` runs types, lint, formatting, the size ceilings, the comment rules and the test floor
-before it builds, so CI is never the first place a check runs. `build` typechecks before
-bundling, so a type error fails the build on its own too.
+CI runs verification on pull requests and pushes to `main`. Vercel handles
+production builds and deployment separately; GitHub Actions does not deploy.
 
-## How it works
+## Development
 
-The whole scene is driven by one number: scroll progress, computed as
-the page position between each section’s start, mapped to `0..1` (`getScrollT`). The camera, the section
-state, and the content reveals all read off it.
+- [Architecture](docs/architecture.md): module responsibilities and runtime behavior.
+- [Contributing](CONTRIBUTING.md): setup, changes, validation and commit conventions.
+- [Repository conventions](CONVENTIONS.md): code and verification requirements.
 
-### One scroll value drives the camera
+The stack includes Vite, React Three Fiber, drei, postprocessing, Tailwind CSS,
+Zustand, and Vercel Analytics and Speed Insights. Exact versions are in
+[package.json](package.json) and [package-lock.json](package-lock.json).
 
-The camera never holds a fixed pose. `CameraRig` stores one keyframe per section
-(azimuth, elevation, distance, look-at target) and interpolates between them by
-scroll progress, so moving down the page orbits the car. A single `useFrame`
-composes every source of camera motion in a fixed order: scroll keyframe
-interpolation, pointer-drag orbit with inertial decay, a stable pose between interactions, the intro pull-in, a floor clamp so the camera never dips below
-the ground, a brief FOV punch on section change, and a rev shake on tap. Keeping it
-in one place means these never fight each other over the transform.
+## Licenses and credits
 
-### State is split by update frequency
+The source code is [MIT licensed](LICENSE). Third-party assets retain their own licenses:
 
-The Zustand store holds two kinds of state. Things that change on a user action
-(selected car, theme, section index) are React state and trigger re-renders.
-Things that change every frame (rev intensity, the active paint material, lamp
-references, eased exposure) live on a plain `refs` object and are mutated
-imperatively, so 60fps updates never cascade into React renders.
+- Car models: CC BY 4.0, with authors and source links in [src/config.ts](src/config.ts)
+  and the site’s Contact credits. Models are compressed and can be recolored at runtime.
+- Geist: [font license](public/fonts/Geist-LICENSE.txt).
+- Geist Mono: [font license](public/fonts/Geist-Mono-LICENSE.txt).
 
-### Scrolling and navigation
-
-Scrolling is native and unsnapped. Reading sections size to their content, and
-revealed copy stays visible when two sections share the viewport. Deliberate
-navigation jumps use smooth scrolling; wheel or touch input cancels a jump.
-The car controls and compact keyboard legend appear in the intro and Contact,
-leaving the reading sections clear. Hidden car rendering pauses while reading. The legend opens the complete command menu.
-
-Keyboard covers arrows, PageUp/Down, Space, Home and End for sections, and
-Left/Right for cars. Horizontal wheel cycles cars as well; `c` repaints, `b`
-toggles the theme.
-
-### Models and loading
-
-Car GLBs are compressed with EXT_meshopt_compression and WebP textures, and the
-meshopt decoder is wired into the loader once. On each swap the previous model and
-its lamps are disposed to keep GPU memory flat, the new model is auto-fit to a
-target length, and its paint material is detected so the color swatches can drive
-it. After a load finishes, the two adjacent cars are prefetched (low-priority
-`fetch`, cache only) so left/right cycling feels instant.
-
-### Accessibility and motion
-
-`prefers-reduced-motion` is honored in two layers: a CSS media query collapses
-every transition and animation, and `prefersReducedMotion()` gates the JS-driven
-motion so camera tweens, idle spin, rev shake, and the settle glide fall back to
-instant jumps. There is a skip-to-content link, focus-visible rings, and the
-decorative canvas is hidden from the accessibility tree.
-
-## Project layout
-
-```
-src/
-  main.tsx              React root
-  App.tsx               Composition root (canvas + DOM chrome)
-  store.ts              Zustand store (React state + imperative refs)
-  config.ts             Themes, car specs + credits, camera keyframes, section IDs
-  math.ts, types.ts     Lerp/clamp/angle helpers, shared types
-  index.css             Tailwind theme + animation and reduced-motion rules
-  three/
-    Scene.tsx           Canvas and scene composition
-    CameraRig.tsx       Per-frame camera (scroll keyframes, drag, intro, rev)
-    Car.tsx             GLB load/swap, lamps, underglow, prefetch
-    Floor, Lights, Effects, carHelpers
-  hooks/
-    useNavigation.ts    Scroll settle, keyboard nav, car cycling
-    useReveal.ts        IntersectionObserver panel reveals
-    useMagnetic, useReducedMotion, useLocalTime
-  ui/                   Nav, Sections, SectionDots, CarSwitcher, ColorSwatches,
-                        ThemeToggle, ResumeButton, WorkModal, Brand, LoadingBar
-public/
-  models/               Compressed GLBs (meshopt + WebP)
-  og-image.png          Social preview (capture via the ?clean canvas mode)
-```
-
-## Adding a car
-
-Drop a meshopt-compressed GLB into `public/models/`, then add an entry to `CARS`
-in `src/config.ts`: file name, display name, a per-car exposure multiplier, and the
-CC BY credit. The loader, prefetch, switcher UI, and credits all read from that
-array.
-
-## Credits
-
-All car models are CC BY 4.0. Authors and Sketchfab links live in `src/config.ts`
-and on the live site's Contact section. The models have been modified (mesh +
-texture compression, and recolored at runtime).
-
-## License
-
-Source code is [MIT](LICENSE) © Aiden Jang. The MIT license covers the code only;
-the CC BY 4.0 car models under `public/models/` are third-party and keep their own
-license and attribution (see Credits).
-
-## Garage interface
-
-The intro leads with Aiden's name and the interactive car. Neutral chrome uses
-self-hosted Geist and Geist Mono; their font licenses are in public/fonts. Projects
-use real captures of Everything Is Fine and owewell, with filters, live links and
-existing case studies preserved. The project list flows with the page, and camera
-stops follow section positions. Vertical keyboard navigation scrolls naturally
-while reading Projects.
-
-This deliberately adapts the garage mock's long editorial work section into a
-continuous page section; the scroll-driven camera follows its section
-semantics. Model attribution, motion preferences, garage sharing and mobile controls
-remain available.
-
-The intro opens at a front three-quarter pose and holds still until interaction;
-orbit dragging, car switching, scroll camera movement and reset remain available.
-
-Everything Is Fine’s portfolio preview uses the live globe view with the whole frame contained. Worth is listed with its own case study, product mark, and live link.
-
-The Projects section hides car controls and keyboard hints while the car is covered. Globe previews keep their natural aspect ratio without a padded image frame, and the project list uses the recovered vertical space.
-
-Projects now scroll with the page. Featured previews sit beneath a compact introduction and open in a native screenshot dialog. Worth uses a real public landing capture. Case studies lead with the product and design decision, with engineering details expandable. Camera progression follows section positions so the long project section preserves the other scene stops.
-
-A named mobile menu provides direct access to each section. The reading header stays opaque over Projects, where a sticky filter bar includes the visible project count and a jump selector. Preview thumbnails share one aspect ratio; the screenshot viewer retains the original capture and zoom controls.
+The source license does not relicense third-party assets.

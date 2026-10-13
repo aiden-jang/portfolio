@@ -1,79 +1,51 @@
-# Working in portfolio
+# Repository conventions
 
-How this repo expects to be worked in. Personal working style (commits, planning,
-how to explain things) lives in the global `~/.claude/CLAUDE.md`.
+`AGENTS.md` and `CLAUDE.md` link to this file so repository guidance has one source.
+Development setup and commit conventions are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-The sections below are engineering standards that apply to any codebase, plus the checks this
-repo actually runs.
+## Verification
 
-## The checks this repo has
+Run `npm run verify` before reporting a change complete. CI runs the same gate:
+typechecking, lint, formatting, repository checks, tests and a production build.
+Vercel handles deployment separately.
 
-`npm run verify` is the whole gate, and CI runs exactly that. Vercel builds and deploys on its
-own, so CI never deploys. Beyond typecheck, lint, format and build:
+- `check-size` pins ceilings for files that need size control and rejects oversized
+  unlisted source files. Ceilings may decrease, never increase. After shrinking a
+  tracked file, lower its ceiling in the same commit. Do not split files solely to
+  satisfy a limit; give each module a coherent responsibility.
+- `check-comments` checks source comments for oversized blocks and ticket IDs.
+- `check-tests` requires the suite to meet its floor. Floors may increase, never
+  decrease. A successful test process alone does not prove the complete suite ran.
 
-- **check-size** pins a line ceiling per sprawl-prone file and rejects any unlisted file over
-  300 lines. Ceilings only move down: shrink a file, lower its number in the same commit. It
-  also fails when a ceiling sits well above the real count, so one cannot drift into meaning
-  nothing.
-- **check-comments** enforces the two comment rules below that a script can judge: no block over
-  four lines, and no ticket ids. Test files are out of scope, since a test comment explains why
-  the test exists.
-- **check-tests** runs the suite and holds it to a floor. A green run is not a full run: one
-  `describe.skip` leaves vitest exiting 0 having quietly run fewer tests than yesterday. Floors
-  only move up.
+Use `npm run <name>` for repository scripts. Confirm newly named scripts execute
+the intended command rather than an npm builtin. Source checks must cover their
+own implementation. Do not exclude files or weaken checks to make a change pass.
 
-They scan `.ts`, `.tsx`, `.mjs` and `.js`, so they cover the config files and their own source.
-`format:check` is in the gate because it was already a script that nothing ran, and
-`src/ui/marks.tsx` had drifted out of format unnoticed.
+## Tests and evidence
 
-The one script sharing a name with an npm builtin is `test`. `npm run test` was confirmed to
-execute the suite rather than being shadowed, which is the only reason it keeps that name.
+Test behavior and invariants rather than restating implementation. For new checks,
+introduce the failure they should detect, observe the check fail, restore the
+source, then verify it passes. Confirm temporary mutations leave the tree clean.
 
-## What the tests are for
+Validate search results, file inventories and measurements before drawing
+conclusions. An empty scan or implausibly clean result may indicate a bad glob,
+wrong working directory or unavailable instrumentation.
 
-The suite is unit-only and covers the pure logic: angle interpolation, the auto-fit and
-body-material detection in `carHelpers`, permalink building, and the data invariants in
-`config.ts` and `workItems.ts`. Three of those exist because a comment claimed something no
-check enforced. The `CARS` arrival budget is the clearest: index 0 and its two neighbours all
-download on a first visit, and the test fails if a heavy model lands in one of those slots.
+Unit and DOM tests do not verify visual fidelity. Use browser checks for changed
+layout, focus, history and interaction behavior, including desktop and mobile
+widths where applicable. Report unavailable browsers or physical-device checks
+as verification limits.
 
-Whether a comment earns its place is not automated, and "never explain what the code used to do"
-is not either: "used to" is ambiguous in English. `// Only used to size the draining bar` is
-present-tense and fine, `// Each game used to start with a clean slate` is a changelog. A check
-cannot tell them apart, and one that cries wolf gets ignored. Read them instead.
+## Comments and documentation
 
-## Do not trust your own measurements
+Keep comments that explain a non-obvious constraint or decision. Remove comments
+that narrate obvious code, record successive revisions or explain what an older
+implementation did. Re-read nearby comments after moving code.
 
-Most false statements come from scans that measured nothing, not from misreading code. Real cases:
-a glob with `{src,test}` braces matched zero files, so a coverage sweep compared against an empty
-string and called every module untested; a `cd` inside a backgrounded command did not apply, so
-three "stability runs" ran nothing; a coverage tool reported 0% because it could not instrument the
-runtime; a script name silently resolved to an npm builtin, so a check reported green for a day
-without ever executing.
+Do not use comment blocks longer than four lines or ticket IDs in source comments.
+If a longer block is necessary, ask before adding it. Test comments may explain
+the scenario they exercise; the source comment scanner excludes test files.
 
-So: an impossibly clean result means suspect the scan first. And **green is not proof unless you
-have seen that check fail**: break the thing it guards, watch it go red, then believe it.
-
-## Writing a new check
-
-- It has to cover its own source, or the checks stop being checked.
-- It has to cover every place the failure can appear, not just where you first saw it.
-- Exclude test files from source scans: tests mount throwaway routes and declare throwaway types.
-- Prove it fails before trusting it, and prove a failure leaves the tree clean.
-- Always `npm run <name>`, and check a new script name is not an npm builtin. A script called
-  `docs` is shadowed by npm's own `docs`, which exits 0 without running anything.
-
-## Numbers in prose
-
-Do not write live counts into docs: test totals, check totals, file lengths. Nothing verifies them
-and they go stale silently. Say what a thing is and let the check print the number. Describing a
-past change is different, and fine.
-
-## Comments
-
-- No comment block over four lines. If one seems necessary, ask.
-- Never explain a refactor, or what the code used to do. A reader never saw that version.
-- A comment that logs successive changes is a changelog. Git has it, and the log drifts out of step
-  with the value it describes.
-- After moving code, re-read every comment near the seam. A move strands them on the wrong function.
-- Never raise a comment budget to fit prose. Trim instead; no script can enforce that about itself.
+Do not put live test totals, file lengths or check totals in prose documentation.
+Let the verification tools report them. Documentation should describe the current
+system; Git history records previous implementations.
