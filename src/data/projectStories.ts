@@ -57,7 +57,7 @@ export const PROJECT_STORIES: Record<
       'Generate the garden from the note, with a timed fallback so the recipient always has something to open.',
     problem: 'A personal note deserves something more specific than a generic greeting card.',
     result:
-      'The recipient opens a garden shaped by the message. A timeout and fallback keep a slow model from turning the gift into a blank page.',
+      'The link opens straight into the recipient’s garden. Each flower carries a meaning from the note.',
   },
   mrrp: {
     built: 'A shared room with a pixel cat, mood check-ins and notes for two people.',
@@ -75,7 +75,7 @@ export const CAREER_STORIES: Record<string, { problem: string; decision: string;
       problem:
         'A legacy PHP monolith was carrying a live publisher platform while its replacement was being built.',
       decision:
-        'Own the PostgreSQL models, Django REST API and React interface together, with two engineers delivering the backend migration in six months.',
+        'Own the PostgreSQL models, Django REST API and React interface together so the data contract stays consistent across the replacement.',
       result:
         'Two engineers completed the backend migration in six months. The platform serves more than 30,000 active publisher newsletters.',
     },

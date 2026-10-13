@@ -64,15 +64,16 @@ export function ContactSection() {
 
 // Copy is the primary path, not mailto: most visitors have no mail client configured.
 function EmailRow() {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const copied = copyState === 'copied';
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(EMAIL);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      setCopyState('copied');
+      setTimeout(() => setCopyState('idle'), 1800);
     } catch {
-      /* Clipboard blocked by context or permissions. The mailto link still works. */
+      setCopyState('failed');
     }
   };
 
@@ -101,9 +102,16 @@ function EmailRow() {
             }
           `}
         >
-          {copied ? 'Copied ✓' : 'Copy'}
+          {copied ? 'Copied ✓' : copyState === 'failed' ? 'Copy unavailable' : 'Copy'}
         </button>
       </span>
+      <p className="contact-copy-status" role="status">
+        {copyState === 'failed'
+          ? 'You can select the address or open it in your email app.'
+          : copied
+            ? 'Email address copied.'
+            : ''}
+      </p>
     </li>
   );
 }

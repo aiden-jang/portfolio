@@ -29,6 +29,10 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
         <details
           ref={menu}
           className="portfolio-menu"
+          onBlur={(event) => {
+            if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget))
+              event.currentTarget.open = false;
+          }}
           onKeyDown={(event) => {
             if (event.key === 'Escape' && menu.current) {
               menu.current.open = false;

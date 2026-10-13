@@ -26,7 +26,7 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
   'sponsorships-audience-extension-blackout-periods': {
     figure: '100M+',
     label: 'weekly impressions',
-    title: 'Publisher controls at scale',
+    title: 'Owned publisher controls end to end',
     detail: 'Scheduling and demand controls used by publishers including The Washington Post.',
   },
   'creative-mapping-v2': {

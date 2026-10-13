@@ -1,4 +1,5 @@
 import '../project-gallery.css';
+import '../reading-refinements.css';
 import { PREVIEWS } from '../../data/projectPreviews';
 import { FEATURED_PROJECTS, visibleProjects, type ProjectFilter } from '../../data/workBrowsing';
 import { workId } from '../../data/workItems';
@@ -15,7 +16,7 @@ type BrowseProps = Props & {
 };
 const FILTERS = [
   { id: 'all', label: 'All' },
-  { id: 'realtime', label: 'Realtime' },
+  { id: 'realtime', label: 'Live' },
   { id: 'ai', label: 'AI' },
   { id: 'social', label: 'For people' },
   { id: 'systems', label: 'Systems' },
@@ -53,7 +54,6 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
                 }}
               >
                 {option.label}
-                <span className="filter-count">{visibleProjects(option.id).length}</span>
               </button>
             ))}
           </div>

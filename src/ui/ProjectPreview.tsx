@@ -101,25 +101,13 @@ export function ProjectPreview({
             ))}
           </div>
         )}
-        {states && (
-          <div className="preview-view-links">
-            <button type="button" onClick={() => void shareView()}>
-              {copyStatus === 'copied'
-                ? 'View link copied ✓'
-                : copyStatus === 'failed'
-                  ? 'Copy unavailable'
-                  : 'Copy view link ↗'}
-            </button>
-            {copyStatus === 'failed' && (
-              <a href={previewLink(location.href, name, selected)}>Open view link ↗</a>
-            )}
-            {previewIndex(
-              new URLSearchParams(location.search).get('preview'),
-              name,
-              states.length,
-            ) !== null && <a href="#sec-intro">Back to portfolio ↑</a>}
-          </div>
-        )}
+        {states &&
+          previewIndex(new URLSearchParams(location.search).get('preview'), name, states.length) !==
+            null && (
+            <div className="preview-view-links">
+              <a href="#sec-intro">Back to portfolio ↑</a>
+            </div>
+          )}
         <figcaption aria-live="polite">{caption}</figcaption>
       </figure>
       {open &&
@@ -135,6 +123,18 @@ export function ProjectPreview({
           >
             <div className="preview-dialog-heading">
               <span>{name}</span>
+              {states && (
+                <button type="button" onClick={() => void shareView()}>
+                  {copyStatus === 'copied'
+                    ? 'Link copied ✓'
+                    : copyStatus === 'failed'
+                      ? 'Copy unavailable'
+                      : 'Copy view link'}
+                </button>
+              )}
+              {copyStatus === 'failed' && (
+                <a href={previewLink(location.href, name, selected)}>Open view link ↗</a>
+              )}
               <button type="button" aria-pressed={zoomed} onClick={() => setZoomed(!zoomed)}>
                 {zoomed ? 'Fit image' : 'Zoom in'}
               </button>
