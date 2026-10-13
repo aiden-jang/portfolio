@@ -54,7 +54,7 @@ export const PROJECT_STORIES: Record<
   bloomnote: {
     built: 'A note composer and an illustrated garden the recipient can open through a link.',
     decision:
-      'Generate the garden from the note, with a timed fallback so the recipient always has something to open.',
+      'Use details from the note to choose real flower species and their meanings. Validate the model response before turning it into a garden.',
     problem: 'A personal note deserves something more specific than a generic greeting card.',
     result:
       'The link opens straight into the recipient’s garden. Each flower carries a meaning from the note.',

@@ -145,10 +145,10 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'bloomnote: write a note, grow a garden',
     context: 'Side project',
     summary:
-      'Leave someone a note and a language model grows them a one-of-a-kind generative garden from it.',
+      'I built a note composer and a shareable illustrated garden, with real flowers and personal meanings drawn from the message.',
     body: [
       'A small, gift-like app: you write a message, and a language model interprets it into a unique garden that blooms for whoever opens it. The charm is that no two notes ever grow the same thing.',
-      'Runs on the same $0 Cloudflare stack as the rest. The model call is wrapped for reliability with a request timeout and a retry, so a slow or flaky LLM degrades to a graceful fallback instead of leaving a blank page.',
+      'Runs on Cloudflare Workers. Model requests have a timeout and retry handling; generated flower data is validated before rendering. Generation failures return an error instead of publishing an invalid garden.',
     ],
     stack: ['Cloudflare Workers', 'LLM', 'TypeScript', 'React'],
     mark: 'bloomnote',
@@ -164,7 +164,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'mrrp: a cat that belongs to exactly two people',
     context: 'Side project',
     summary:
-      'One private link, two seats, and a hand-drawn pixel cat that becomes whoever you sent the link to. The interesting part is everything I refused to build.',
+      'I designed and built a room for two, with a hand-drawn pixel cat, mood check-ins and notes that wait until they’re read.',
     body: [
       'You make a room and send the link to one person. Whoever opens it second is the one the cat is: they tap how their day is going, the cat becomes that, and from the other side you see it and can do something about it. No accounts, no database, no notifications.',
       'Three rules mattered more than any feature. Nothing bad can happen to the cat. No hunger, streaks, or decay. The second a shared pet can be neglected, it becomes a chore. The cat also does not copy a low mood. If you are sad, she comes over and stays. And you only see what the other person did, never whether they saw yours. Knowing someone saw a message and did nothing can feel worse than not knowing.',
