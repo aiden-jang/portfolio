@@ -1,6 +1,8 @@
 body:not([data-car-controls='visible']) #desktop-dock,
 body:not([data-car-controls='visible']) #mobile-bar,
-body:not([data-car-controls='visible']) #hint {
+body:not([data-car-controls='visible']) #hint,
+body:not([data-car-controls='visible']) .orbit-invitation,
+body:not([data-car-controls='visible']) .orbit-status {
   visibility: hidden;
   pointer-events: none;
 }
