@@ -1,3 +1,4 @@
+import { useDialogFocus } from './useDialogFocus';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal, flushSync } from 'react-dom';
 import { type SectionId } from '../config';
@@ -13,6 +14,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
+  useDialogFocus(open, dialogRef, inputRef);
   const activeResultRef = useRef<HTMLButtonElement>(null);
   const commands = useMemo(() => buildCommands({ onSection, setNotice }), [onSection]);
 
@@ -60,30 +62,6 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
       setNotice('');
       return;
     }
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    const id = window.setTimeout(() => inputRef.current?.focus(), 0);
-    const trapFocus = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
-      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled])',
-      );
-      if (!focusable?.length) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-    window.addEventListener('keydown', trapFocus);
-    return () => {
-      window.clearTimeout(id);
-      window.removeEventListener('keydown', trapFocus);
-      if (previouslyFocused?.isConnected) previouslyFocused.focus();
-    };
   }, [open]);
 
   const select = async (command: Command) => {

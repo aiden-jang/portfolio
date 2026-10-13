@@ -13,10 +13,7 @@ import { SceneBoundary } from './ui/SceneBoundary';
 import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 import './ui/reading-flow.css';
-import './ui/final-review.css';
-import './ui/visual-review.css';
-import './ui/completion-review.css';
-import './ui/surface-refinements.css';
+import './ui/portfolio-surfaces.css';
 
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 

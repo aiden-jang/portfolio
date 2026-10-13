@@ -1,3 +1,5 @@
+import { useDialogFocus } from './useDialogFocus';
+import { usePageScrollLock } from './usePageScrollLock';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import type { WorkDetail } from '../types';
@@ -16,6 +18,8 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
   const open = !!item;
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  useDialogFocus(open, dialogRef, closeRef);
+  usePageScrollLock(open);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   useEffect(() => {
     if (!item) return;
@@ -32,7 +36,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
   }, [item]);
   useEffect(() => {
     if (!open) return;
-    const previouslyFocused = document.activeElement as HTMLElement | null;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
       if (
@@ -48,63 +51,13 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         e.preventDefault();
         onNext();
       }
-      if (e.key === 'Tab') {
-        const focusable = Array.from(
-          dialogRef.current?.querySelectorAll<HTMLElement>(
-            'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), summary',
-          ) ?? [],
-        ).filter((element) => element.getClientRects().length > 0);
-        if (!focusable?.length) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
     };
     window.addEventListener('keydown', onKey);
-    const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 0);
-    // <html> is the scroll root (see index.css), so `overflow: hidden` on the body does not stop
-    // the page behind the modal, and iOS ignores overflow locks anyway. Pin the body instead.
-    const scrollY = window.scrollY;
-    const html = document.documentElement;
-    const snap = html.style.scrollSnapType;
-    html.style.scrollSnapType = 'none';
     const body = document.body;
-    const prev = {
-      position: body.style.position,
-      top: body.style.top,
-      left: body.style.left,
-      right: body.style.right,
-      width: body.style.width,
-    };
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollY}px`;
-    body.style.left = '0';
-    body.style.right = '0';
-    body.style.width = '100%';
-    // The class is what lets CSS hide the mobile bottom bar, which otherwise overlaps the modal.
     body.classList.add('modal-open');
     return () => {
       window.removeEventListener('keydown', onKey);
-      window.clearTimeout(focusTimer);
-      body.style.position = prev.position;
-      body.style.top = prev.top;
-      body.style.left = prev.left;
-      body.style.right = prev.right;
-      body.style.width = prev.width;
       body.classList.remove('modal-open');
-      window.scrollTo({ top: scrollY, behavior: 'instant' });
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: scrollY, behavior: 'instant' });
-        html.style.scrollSnapType = snap;
-      });
-      // A direct `#work/...` link has no originating card, so the old element may be gone.
-      if (previouslyFocused?.isConnected) previouslyFocused.focus({ preventScroll: true });
     };
   }, [onClose, onNext, onPrevious, open]);
   if (!open) return null;

@@ -1,5 +1,6 @@
+import { handleNavigationKey } from './navigationKeyboard';
 import { useCallback, useEffect, useRef } from 'react';
-import { CARS, SECTION_IDS, type SectionId } from '../config';
+import { SECTION_IDS, type SectionId } from '../config';
 import { clamp } from '../math';
 import { cancelSmoothScroll, smoothScrollTo } from './scrollNavigation';
 import { useAppStore } from '../store';
@@ -81,80 +82,11 @@ export function useNavigation() {
     };
     const onKey = (e: KeyboardEvent) => {
       if (dialogIsOpen()) return;
-      const target = e.target as HTMLElement | null;
-      const inField =
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        !!target?.isContentEditable ||
-        !!target?.closest('button, a, summary, select');
-      // Without this, arrow keys in the command palette also scroll the page behind it.
-      const readingProjects =
-        (currentSection.current === 2 || target?.closest('.garage-project-list')) &&
-        ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(e.key);
-      if (inField || readingProjects) return;
-      if (/^[1-9]$/.test(e.key)) {
-        const carIndex = Number(e.key) - 1;
-        if (carIndex < CARS.length) {
-          e.preventDefault();
-          const state = useAppStore.getState();
-          if (!state.isCarLoading && state.carIndex !== carIndex) state.setCarIndex(carIndex);
-        }
-        return;
-      }
-      switch (e.key) {
-        case 'ArrowDown':
-        case 'PageDown':
-        case ' ':
-          e.preventDefault();
-          goToSection(currentSection.current + 1);
-          break;
-        case 'ArrowUp':
-        case 'PageUp':
-          e.preventDefault();
-          goToSection(currentSection.current - 1);
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          cycleCarThrottled();
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          prevCarThrottled();
-          break;
-        case 'Home':
-          e.preventDefault();
-          goToSection(0);
-          break;
-        case 'End':
-          e.preventDefault();
-          goToSection(SECTION_IDS.length - 1);
-          break;
-        case 'c':
-        case 'C':
-          e.preventDefault();
-          if (!useAppStore.getState().isCarLoading) useAppStore.getState().cycleBodyColor();
-          break;
-        case 'b':
-        case 'B':
-          e.preventDefault();
-          useAppStore.getState().toggleTheme();
-          break;
-        case 'r':
-        case 'R':
-          e.preventDefault();
-          useAppStore.getState().triggerRev();
-          break;
-        case 'v':
-        case 'V':
-          e.preventDefault();
-          useAppStore.getState().resetCamera();
-          break;
-        case 'x':
-        case 'X':
-          e.preventDefault();
-          if (!useAppStore.getState().isCarLoading) useAppStore.getState().randomizeGarage();
-          break;
-      }
+      handleNavigationKey(e, currentSection.current, {
+        goToSection,
+        nextCar: cycleCarThrottled,
+        previousCar: prevCarThrottled,
+      });
     };
     const onScroll = () => {
       const bounds = pageSectionBounds();

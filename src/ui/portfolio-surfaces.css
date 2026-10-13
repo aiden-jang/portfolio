@@ -1,0 +1,557 @@
+.contact-email-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+  font: 11px/1.5 var(--font-mono);
+}
+.contact-email-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.experience-company {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+}
+.experience-role {
+  padding: 8px 0;
+}
+@media (min-width: 768px) {
+  .garage-project-featured .project-preview[data-project='bloomnote'][data-view='0'] img {
+    aspect-ratio: 2 / 1;
+    max-height: 560px;
+  }
+  .garage-project-featured .project-preview[data-project='mrrp'][data-view='0'] img {
+    aspect-ratio: 3 / 2;
+    max-height: 640px;
+  }
+}
+
+.work-modal-panel {
+  max-height: min(90dvh, 960px);
+  border-radius: 8px;
+  background: var(--color-bg);
+}
+.work-story > .project-role {
+  display: none;
+}
+.work-story-overview section + section {
+  border: 0;
+  padding-top: 0;
+  margin-top: 24px;
+}
+.work-story-overview h4 {
+  color: var(--color-fg);
+  letter-spacing: 0.06em;
+}
+.work-technologies {
+  margin-top: 24px;
+  color: var(--color-muted);
+  font: 11px/1.8 var(--font-mono);
+  letter-spacing: 0;
+}
+.work-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  padding: 8px 28px;
+  border-top: 1px solid var(--color-line);
+  flex-shrink: 0;
+}
+.work-modal-nav,
+.work-modal-links {
+  border: 0;
+  padding: 0;
+}
+.work-modal-nav > span {
+  display: none;
+}
+.work-modal-nav button {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+}
+.work-modal-links {
+  gap: 20px;
+}
+.work-modal-links :is(a, button) {
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  padding: 0;
+  min-height: 44px;
+  font: 11px/1.5 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.garage-project-featured figcaption {
+  max-width: 72ch;
+  margin: 12px 0 0;
+  font: 12px/1.7 var(--font-display);
+  color: var(--color-muted);
+}
+.garage-project .preview-states {
+  margin-bottom: 0;
+}
+.experience-outcome:nth-child(-n + 2) .experience-figure strong {
+  font-size: 28px;
+  font-weight: 600;
+}
+#desktop-dock :is(button:not(.swatch), a) {
+  min-height: 44px;
+}
+#desktop-dock svg {
+  width: 16px;
+  height: 16px;
+}
+:is(#desktop-dock, #mobile-bar) :is(button, select):focus-visible,
+.work-modal-footer :is(a, button):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}
+#sec-contact .panel {
+  position: relative;
+  isolation: isolate;
+}
+#sec-contact .panel::before {
+  content: '';
+  position: absolute;
+  inset: -32px -48px;
+  z-index: -1;
+  pointer-events: none;
+}
+:is(.garage-project-links, .preview-states, .work-modal-footer, #desktop-dock, #mobile-bar)
+  :is(a, button),
+.portfolio-menu summary {
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (min-width: 1024px) {
+  #sec-about .about-copy {
+    max-width: 1040px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(240px, 1fr);
+    column-gap: 72px;
+  }
+  .about-copy > :not(dl) {
+    grid-column: 1;
+  }
+  .about-copy .about-details {
+    grid-column: 2;
+    grid-row: 2 / span 3;
+    align-self: start;
+    margin-top: 4px;
+  }
+}
+@media (max-width: 767px) {
+  .work-modal-footer {
+    padding: 8px 20px;
+    gap: 4px 16px;
+  }
+  .work-modal-links {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px 16px;
+  }
+  .experience-outcome:nth-child(-n + 2) .experience-figure strong {
+    font-size: 22px;
+  }
+  .garage-project-featured figcaption {
+    font-size: 11px;
+  }
+  .garage-project-featured {
+    padding-block: 28px;
+  }
+  .work-story-overview section {
+    margin-bottom: 16px;
+  }
+  #sec-contact .panel::before {
+    inset-inline: -12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.garage-project-links, .preview-states, .work-modal-footer, #desktop-dock, #mobile-bar)
+    :is(a, button),
+  .portfolio-menu summary {
+    transition: none;
+  }
+}
+
+.story-image-trigger {
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.story-image-crop {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+}
+.work-story-overview .story-image-crop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border: 0;
+}
+.story-screenshot:has(img[src*='mrrp-room']) .story-image-crop {
+  aspect-ratio: 4 / 3;
+}
+.story-screenshot:has(img[src*='bloomnote-garden']) .story-image-crop {
+  aspect-ratio: 3 / 2;
+}
+.story-image-crop img[src*='bloomnote-garden'] {
+  transform: scale(1.75);
+  transform-origin: center 15%;
+}
+.story-image-crop img[src*='mrrp-room'] {
+  transform: scale(1.6);
+  transform-origin: center 40%;
+}
+.story-image-crop:has(.screenshot-unavailable) {
+  aspect-ratio: auto;
+  overflow: visible;
+}
+.story-image-action {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-line);
+  font: 11px/1.5 var(--font-display);
+  color: var(--color-muted);
+}
+.story-image-trigger:hover .story-image-action {
+  color: var(--color-fg);
+}
+.story-image-trigger:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 4px;
+}
+.story-screenshot figcaption {
+  font: 11px/1.7 var(--font-display);
+  margin-top: 10px;
+}
+:root,
+.story-scroll-area,
+.preview-image,
+.preview-dialog,
+.portfolio-menu nav {
+  scrollbar-width: thin;
+  scrollbar-color: #55545a #101014;
+}
+#hint.keyboard-legend {
+  border: 0;
+  border-radius: 0;
+  gap: 16px;
+  padding: 4px 0;
+}
+#hint kbd {
+  border: 0;
+  border-radius: 0;
+  min-width: 18px;
+  height: 20px;
+  font-size: 10px;
+}
+#hint > button:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 4px;
+}
+#sec-about {
+  min-height: 100svh;
+  align-items: center;
+  padding-block: 144px;
+}
+@media (min-width: 1024px) {
+  #sec-experience {
+    min-height: 100svh;
+  }
+  #sec-experience .panel {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.6fr);
+    column-gap: 64px;
+  }
+  #sec-experience .panel > :is(span, h2, ul) {
+    grid-column: 1;
+  }
+  #sec-experience h2 {
+    font-size: clamp(28px, 3vw, 38px);
+  }
+  #sec-experience .panel > p {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    margin: 0;
+  }
+  #sec-experience .panel > div {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  #sec-experience .experience-more {
+    grid-column: 2;
+    grid-row: 4;
+  }
+  #sec-experience .experience-open-source {
+    grid-column: 1;
+    grid-row: 4;
+    align-self: start;
+  }
+}
+@media (max-width: 767px) {
+  #sec-about {
+    padding-block: 96px;
+  }
+}
+.story-share-status:empty {
+  display: none;
+}
+.story-share-status,
+.story-share-fallback {
+  flex-basis: 100%;
+  min-width: 0;
+  font-size: 12px;
+}
+.story-share-status {
+  color: var(--color-fg);
+}
+.story-share-fallback {
+  padding: 12px;
+  background: #101014;
+  color: var(--color-fg);
+  border: 1px solid var(--color-muted);
+  border-radius: 4px;
+}
+.story-share-fallback:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 2px;
+}
+
+#desktop-dock button:not(.swatch) {
+  color: #b9b9c0;
+}
+#hint.keyboard-legend {
+  background: linear-gradient(90deg, transparent, #101014f2 12%, #101014f2 88%, transparent);
+  text-shadow: 0 1px 4px #101014;
+}
+.garage-intro p {
+  position: relative;
+  max-width: 45ch;
+  text-wrap: pretty;
+  color: #d0d0d3;
+  text-shadow:
+    0 1px 12px #0a0a14,
+    0 1px 4px #0a0a14;
+}
+.project-toolbar {
+  top: 88px;
+  padding-block: 8px;
+  box-shadow: 0 12px 16px -12px #000;
+}
+.garage-project {
+  scroll-margin-top: 190px;
+}
+.garage-project-featured .project-preview[data-project='bloomnote'][data-view='0'] img {
+  transform: scale(1.6);
+  transform-origin: center 15%;
+}
+.garage-project-featured .project-preview[data-project='mrrp'][data-view='0'] img {
+  transform: scale(1.4);
+  transform-origin: center 40%;
+}
+#sec-contact .panel::before {
+  background: radial-gradient(ellipse, #101014d9 20%, #10101499 48%, transparent 76%);
+}
+#sec-contact .panel {
+  text-shadow: 0 1px 6px #101014;
+}
+#sec-contact .panel > button[aria-haspopup='dialog'],
+#sec-contact .panel a:is([aria-label='GitHub'], [aria-label='LinkedIn']) {
+  background: #101014d9;
+  color: #b9b9c0;
+}
+#sec-contact .panel > button[aria-haspopup='dialog'] {
+  min-height: 44px;
+  padding-inline: 12px;
+  border-radius: 24px;
+}
+@media (max-width: 767px) {
+  .project-toolbar {
+    top: 80px;
+  }
+  .garage-project {
+  }
+  .garage-project-featured .project-preview[data-project='bloomnote'][data-view='0'] img {
+    object-position: center top;
+    transform-origin: center 8%;
+  }
+}
+@media (min-width: 768px) and (max-height: 800px) {
+  #sec-intro {
+    padding-top: 110px;
+  }
+  .garage-intro h1 {
+    font-size: clamp(72px, 10vw, 136px);
+  }
+  .garage-intro p {
+    margin-top: 18px;
+    max-width: 32ch;
+  }
+}
+dialog.preview-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.preview-dialog-heading {
+  flex-shrink: 0;
+}
+.preview-dialog .preview-image {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 68dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+.preview-dialog > p {
+  flex-shrink: 0;
+}
+.mobile-project-filter {
+  display: none;
+}
+#desktop-dock button:is([aria-label='Rev engine'], [aria-label='Reset camera view']) {
+  color: #a3a3ad;
+}
+#desktop-dock button[title='Share this garage setup'] {
+  min-width: 44px;
+  min-height: 44px;
+}
+#sec-contact .contact-email-actions button,
+#sec-contact .panel > button[aria-haspopup='dialog'] {
+  font: 12px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 8px 14px;
+}
+#sec-contact :is(a, button):hover {
+  color: var(--color-fg);
+  border-color: var(--color-muted);
+}
+#sec-contact :is(a, button):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}
+@media (max-width: 767px) {
+  .project-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 0.46fr) minmax(0, 0.54fr);
+    gap: 10px;
+    padding-block: 8px;
+  }
+  .project-toolbar .garage-filters {
+    display: none;
+  }
+  .mobile-project-filter {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px;
+    border: 1px solid var(--color-line);
+    background: #101014;
+    color: var(--color-fg);
+    font-size: 12px;
+  }
+  .project-browse {
+    min-width: 0;
+    gap: 0;
+  }
+  .project-browse select {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px;
+    font-size: 12px;
+  }
+  .project-browse p {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .garage-project {
+    scroll-margin-top: 160px;
+  }
+}
+button[aria-label='Close model credits'],
+.work-modal-panel > button[aria-label='Close'] {
+  min-width: 44px;
+  min-height: 44px;
+}
+.garage-project .garage-stack {
+  font-size: 11px;
+  line-height: 1.6;
+}
+.portfolio-header a[aria-label^='Résumé'] {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font: 12px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+#desktop-dock [role='status'] {
+  max-width: 240px;
+  white-space: normal;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font: 12px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+button[aria-label='Close model credits'] + p + p {
+  font: 11px/1.5 var(--font-display);
+  letter-spacing: 0;
+  color: #b9b9c0;
+}
+section[aria-label='Command menu'] > div[aria-live='polite'] {
+  font: 11px/1.5 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+  color: #b9b9c0;
+}
+#sec-work {
+  padding-top: max(120px, 13vh);
+}
+button[aria-label='Close model credits'] ~ ul a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+.garage-project-compact .project-preview[data-project='bloomnote'] img {
+  transform: scale(1.5);
+  transform-origin: center 15%;
+}
+.garage-project-compact .project-preview[data-project='mrrp'] img {
+  transform: scale(1.4);
+  transform-origin: center 40%;
+}
+@media (max-width: 767px) {
+  button[aria-label='Close model credits'] ~ ul a {
+    min-height: 44px;
+  }
+}
