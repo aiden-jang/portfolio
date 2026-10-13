@@ -97,12 +97,12 @@ body[data-car-view='reading'] .portfolio-header {
 .garage-project-featured .preview-thumbnail {
   border: 1px solid var(--color-line);
   background: #17171b;
-  padding: 16px;
+  padding: 0;
 }
 .garage-project-featured .project-preview img {
   aspect-ratio: 16 / 10;
-  object-fit: contain;
-  object-position: center;
+  object-fit: cover;
+  object-position: center top;
   background: #101014;
   border: 0;
 }
