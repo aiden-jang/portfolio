@@ -1,48 +1,62 @@
+import { useRef, useState } from 'react';
 import { CARS } from '../config';
-import { useEffect, useRef } from 'react';
 import { useAppStore } from '../store';
+import { CarBrowser } from './CarBrowser';
 import './car-picker.css';
 
 export function CarPicker({ mobile = false }: { mobile?: boolean }) {
   const index = useAppStore((state) => state.carIndex);
-  const choose = useAppStore((state) => state.setCarIndex);
   const loading = useAppStore((state) => state.isCarLoading);
+  const previous = useAppStore((state) => state.prevCar);
+  const next = useAppStore((state) => state.cycleCar);
+  const [open, setOpen] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
   const car = CARS[index];
-  const picker = useRef<HTMLSelectElement>(null);
-  const restoreFocus = useRef(false);
-  useEffect(() => {
-    if (loading || !restoreFocus.current) return;
-    restoreFocus.current = false;
-    if (document.activeElement === document.body && document.body.dataset.carView === 'visible')
-      picker.current?.focus({ preventScroll: true });
-  }, [loading]);
+  const step = (direction: -1 | 1) => {
+    if (!loading) (direction === -1 ? previous : next)();
+  };
   return (
-    <div className={`car-picker ${mobile ? 'mobile-car-label' : 'car-picker-desktop'}`}>
-      <span aria-hidden="true">{car.name}</span>
-      <small aria-hidden="true">
-        {car.code}
-        {loading ? ' ···' : ' · Change car ▾'}
-      </small>
-      <select
-        ref={picker}
-        aria-label="Choose a car"
-        title="Choose a car model"
-        value={index}
-        disabled={loading}
-        onChange={(event) => {
-          const next = Number(event.target.value);
-          if (next !== index) {
-            restoreFocus.current = document.activeElement === event.currentTarget;
-            choose(next);
-          }
-        }}
+    <div
+      className={`car-choice ${mobile ? 'car-choice-mobile' : 'car-choice-desktop'}`}
+      role="group"
+      aria-label="Car selection"
+    >
+      <button
+        type="button"
+        className="car-step"
+        aria-label="Previous car"
+        aria-disabled={loading}
+        onClick={() => step(-1)}
       >
-        {CARS.map((item, i) => (
-          <option key={item.code} value={i}>
-            {item.name} · {item.code}
-          </option>
-        ))}
-      </select>
+        ‹
+      </button>
+      <button
+        ref={trigger}
+        type="button"
+        className="car-browse-trigger"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-label={`Browse cars. ${car.name}, ${car.code}`}
+        onClick={() => setOpen(true)}
+      >
+        <span>{car.name}</span>
+        <small>
+          {car.code} · {loading ? 'Loading…' : 'Browse cars'}
+        </small>
+      </button>
+      <button
+        type="button"
+        className="car-step"
+        aria-label="Next car"
+        aria-disabled={loading}
+        onClick={() => step(1)}
+      >
+        ›
+      </button>
+      <span className="car-choice-status" role="status">
+        {loading ? `Loading ${car.name}…` : ''}
+      </span>
+      {open && <CarBrowser onClose={() => setOpen(false)} returnFocus={trigger.current} />}
     </div>
   );
 }

@@ -8,10 +8,30 @@ import { SceneBoundary } from './SceneBoundary';
 import { WorkModal } from './WorkModal';
 import { ContactSection } from './sections/Contact';
 import { CommandMenu } from './CommandMenu';
+import { CarPicker } from './CarPicker';
+import { useAppStore } from '../store';
 import type { WorkDetail } from '../types';
 
 let host: HTMLDivElement;
 let root: Root;
+it('keeps arrow focus and blocks another selection while a car is loading', async () => {
+  const previous = useAppStore.getState();
+  try {
+    useAppStore.setState({ carIndex: 0, isCarLoading: false });
+    await act(() => root.render(createElement(CarPicker)));
+    const next = host.querySelector<HTMLButtonElement>('[aria-label="Next car"]')!;
+    next.focus();
+    await act(() => next.click());
+    expect(useAppStore.getState().carIndex).toBe(1);
+    await act(() => useAppStore.setState({ isCarLoading: true }));
+    await act(() => next.click());
+    expect(useAppStore.getState().carIndex).toBe(1);
+    expect(document.activeElement).toBe(next);
+    expect(host.querySelector('select')).toBeNull();
+  } finally {
+    await act(() => useAppStore.setState(previous));
+  }
+});
 it('does not open command controls over another dialog', async () => {
   const blocker = document.createElement('div');
   blocker.setAttribute('role', 'dialog');
