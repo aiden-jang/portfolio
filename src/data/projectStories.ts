@@ -3,17 +3,18 @@ export const PROJECT_STORIES: Record<
   { problem: string; result: string; decision?: string; built?: string }
 > = {
   iodine: {
-    built: 'Scoped command approvals, local similarity matching and reversible agent edits.',
+    built:
+      'My changes covered command approval rules and the feedback loop between file edits and the agent.',
     problem:
       'An IDE agent needs a useful way to reuse command approvals and undo edits without granting blanket permission.',
     decision:
-      'Limit similarity matching to approved command signatures and paths, keep embeddings local and snapshot files before agent edits.',
+      'I scoped similarity matching to approved commands and paths, kept embeddings local and added snapshots before agent edits.',
     result:
       'Approvals can be reviewed and revoked. Reverting a file also tells the agent its edit was undone, so the conversation stays in sync with the code.',
   },
   auth: {
     decision:
-      'Put identity in one service and publish the session contract as a versioned SDK. Apps can change independently without silently changing what a session means.',
+      'I put identity in one service and published the session contract as a versioned SDK, so each app can update it deliberately.',
     problem:
       'Every new app needed sign-in, recovery, and sessions. Rebuilding those each time meant more places for the same contract to drift.',
     result:
@@ -22,7 +23,7 @@ export const PROJECT_STORIES: Record<
   everythingisfine: {
     built: 'An interactive globe that brings natural-event feeds into one explorable view.',
     decision:
-      'Keep each source’s readings and uncertainty intact, then share the camera and filter state in the URL.',
+      'I kept each source’s readings visible when matching reports, and put the camera and filters in the URL.',
     problem:
       'Natural events arrive through different feeds, at different speeds. The globe needs to show earthquakes, storms, volcanoes, fires, floods and aurora without making every source look equally certain.',
     result:
@@ -31,7 +32,7 @@ export const PROJECT_STORIES: Record<
   worth: {
     built: 'Ranked collections with revisit logs and shareable lists.',
     decision:
-      'Keep rankings separate from calls and preserve revisit history, so a new opinion does not erase the old one.',
+      'I kept rankings separate from calls and revisits, so changing your mind does not erase what happened last time.',
     problem: 'It’s easy to forget which things you liked, and why you wanted to try them again.',
     result:
       'A drink can move up your ranking after a second visit. Its original note and revisit history stay together; sharing a list keeps those private details out.',
@@ -44,17 +45,17 @@ export const PROJECT_STORIES: Record<
   iguess: {
     problem: 'An AI drawing game still needs fair turns, scoring, and reliable multiplayer rooms.',
     result:
-      'Five modes share the same turn and scoring engine. A reconnecting player keeps their identity and score; a failed model request has a fallback.',
+      'Five modes share one engine. Players can recover their identity and score after a brief disconnect, and model requests can try another provider when one fails.',
   },
   wherever: {
     problem: '“Anywhere is fine” rarely gets a group any closer to dinner.',
     result:
-      'The first restaurant to clear a majority wins. Votes are resolved by the server, and another person takes over if the host leaves.',
+      'In majority mode, the first restaurant to clear the threshold wins. The server resolves votes and replaces a departed host after a grace period.',
   },
   bloomnote: {
     built: 'A note composer and an illustrated garden the recipient can open through a link.',
     decision:
-      'Use details from the note to choose real flower species and their meanings. Validate the model response before turning it into a garden.',
+      'I used structured model output for real flower species and personal meanings, then validated it before rendering the garden.',
     problem: 'A personal note deserves something more specific than a generic greeting card.',
     result:
       'The link opens straight into the recipient’s garden. Each flower carries a meaning from the note.',
@@ -62,7 +63,7 @@ export const PROJECT_STORIES: Record<
   mrrp: {
     built: 'A shared room with a pixel cat, mood check-ins and notes for two people.',
     decision:
-      'Enforce the two seats on the server. Let notes wait for the recipient, and leave out streaks and penalties for staying away.',
+      'I enforced the two seats on the server and let notes wait for the recipient. Streaks and penalties stayed out.',
     problem: 'Keeping someone company from a distance shouldn’t become another obligation.',
     result:
       'Two people share a room through one link. Notes wait until they’re read, and a hard day brings the cat closer. Missing a day doesn’t cost anything.',
@@ -75,7 +76,7 @@ export const CAREER_STORIES: Record<string, { problem: string; decision: string;
       problem:
         'A legacy PHP monolith was carrying a live publisher platform while its replacement was being built.',
       decision:
-        'Own the PostgreSQL models, Django REST API and React interface together so the data contract stays consistent across the replacement.',
+        'I worked across PostgreSQL models, Django REST and React, keeping the API and interface aligned with the other engineer during the migration.',
       result:
         'Two engineers completed the backend migration in six months. The platform serves more than 30,000 active publisher newsletters.',
     },
@@ -83,7 +84,7 @@ export const CAREER_STORIES: Record<string, { problem: string; decision: string;
       problem:
         'The platform had no automated coverage, and its interface was being migrated from Angular to React.',
       decision:
-        'Separate planning, test generation, and repair into three stages so changing selectors didn’t require rebuilding every test by hand.',
+        'I separated planning, test generation and repair, so interface changes could be handled without rewriting every spec by hand.',
       result:
         'The framework became the platform’s first automated coverage and continues to run in a frontend package after the monorepo migration.',
     },
@@ -91,7 +92,7 @@ export const CAREER_STORIES: Record<string, { problem: string; decision: string;
       problem:
         'Opening a slot fetched each linked line item separately. Large slots made around 120 API calls before the page was ready.',
       decision:
-        'Return the joined data the interface needs through one batched endpoint instead of asking the browser to assemble it.',
+        'I returned the joined data through one batched endpoint instead of asking the browser to fetch every line item separately.',
       result:
         'API calls dropped from 120 to one, and page load time fell from about 60 seconds to two.',
     },
@@ -99,7 +100,7 @@ export const CAREER_STORIES: Record<string, { problem: string; decision: string;
       problem:
         'Publisher teams needed scheduling and demand controls that could handle more than one line item or newsletter per sponsorship.',
       decision:
-        'Choose a many-to-many model before launch. A simpler one-to-one model would require migrating live sponsorship data later.',
+        'I chose a many-to-many model before launch, then worked with a designer on the interface. A one-to-one model would limit live sponsorships later.',
       result:
         'Shipped the data models, APIs, and interfaces for three products. Sponsorships serves hundreds of millions of impressions a week, including The Washington Post.',
     },
@@ -107,8 +108,22 @@ export const CAREER_STORIES: Record<string, { problem: string; decision: string;
       problem:
         'Publisher ops needed to configure which creatives could target which placements in the ad-serving pipeline.',
       decision:
-        'Own the MySQL model, REST contract, and Angular editor together so targeting rules stayed consistent from configuration to delivery.',
+        'I owned the MySQL model, REST API and Angular editor together, keeping targeting rules consistent from configuration to delivery.',
       result:
         'Delivered Creative Mapping v2 end to end, alongside publisher migrations and demand controls.',
+    },
+    'google-ad-manager-native-integration': {
+      problem: 'Publisher configuration needed to reach the native-ad delivery pipeline.',
+      decision:
+        'I built the endpoints, geo-targeting and Native Ad Slot support in the generated XML.',
+      result:
+        'The integration connected publisher settings to Google Ad Manager native ad serving.',
+    },
+    'publisher-account-migrations': {
+      problem:
+        'Inventory, campaigns and permissions needed to move between publisher accounts together.',
+      decision:
+        'I wrote transactional scripts so a failed step would not leave a partial migration.',
+      result: 'I ran 13 migrations, including BuzzFeed and Dotdash Meredith.',
     },
   };

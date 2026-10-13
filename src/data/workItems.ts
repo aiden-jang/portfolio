@@ -14,11 +14,11 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'A platform of shipped side projects',
     context: 'Personal platform',
     summary:
-      'Several of my own apps on one $0 Cloudflare stack, tied together by federated sign-in I built and shipped as an npm SDK.',
+      'I built a shared sign-in service and published its session contract as an npm SDK for my apps.',
     body: [
-      'Everything runs on Cloudflare’s free tier (Workers, D1, Durable Objects) under a hard $0-hosting budget with no cold starts. The connective tissue is a federated identity service: one sign-in that every app on *.aidenjang.com trusts.',
-      'The auth Worker issues an httpOnly session cookie on the parent domain, and a published npm package (@aidenjang/auth-client) is the single source of truth for the session contract. Apps never touch the session secret; they forward the cookie to /auth/me from their own Worker. It supports email + password (PBKDF2), Google OIDC, and passwordless magic links, all enforced server-side.',
-      'Each app is its own repo that pins the SDK as a versioned dependency, so a change to the session contract is a deliberate version bump rather than silent drift across apps. The identity service verifies the account; each app decides which actions require a session.',
+      'The accounts service handles identity for the apps on aidenjang.com. It runs on Cloudflare Workers, with D1 and Durable Objects supporting storage and rate limits.',
+      'Apps forward the shared session cookie to /auth/me through @aidenjang/auth-client, without receiving the signing secret. The service supports email and password, Google sign-in and magic links.',
+      'Each app pins an SDK version and decides which actions require a session. A contract change gets a version bump rather than silently changing every app.',
     ],
     stack: [
       'Cloudflare Workers',
@@ -39,11 +39,11 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'everythingisfine: the planet, live',
     context: 'Side project',
     summary:
-      'A live globe for earthquakes, storms, volcanoes, wildfires, floods and aurora, with source-aware earthquake reconciliation.',
+      'I built a WebGL globe for natural events, including reconciliation between USGS and EMSC earthquake reports.',
     body: [
-      'Earthquakes, storms, volcanoes, wildfires, floods and the aurora on one WebGL globe that only moves when the data does. Hover an event for a summary, click to pin it, click a region to fly there. Every filter answers as it moves, and a permalink carries the camera, the filters and the pinned event.',
-      'The browser connects directly to public feeds: USGS over HTTPS and EMSC over WebSocket. Both report the same earthquakes under different identifiers, timestamps, epicentres and magnitude scales. Reconciliation keeps those differences visible instead of treating two reports as two events or silently choosing an agency.',
-      'The interface states the limits of its data. A partial day reads "since" the collection started; magnitudes retain their scale. The event rail shows raw source counts, distinct events and overlap. Wavefront playback is labeled x20 so its animation does not imply real-time propagation.',
+      'The globe brings earthquakes, storms, volcanoes, wildfires, floods and aurora into one view. Hover for a summary, pin an event, or share a link that restores the camera and filters.',
+      'USGS polling and EMSC WebSockets report the same earthquakes with different identifiers, times, locations and magnitude scales. I built reconciliation that groups those reports while keeping their source readings visible.',
+      'The interface distinguishes source counts from matched events and labels incomplete time windows and accelerated wavefront playback. A moving globe should not imply more certainty than the feeds provide.',
     ],
     stack: ['Three.js', 'WebGL', 'TypeScript', 'React', 'WebSockets', 'Cloudflare'],
     mark: 'everythingisfine',
@@ -52,18 +52,18 @@ export const WORK_ITEMS: WorkDetail[] = [
     categories: ['realtime', 'systems'],
     moment: 'wanting to know what the planet is up to without a news cycle attached',
     principle:
-      'Colour is spent entirely on magnitude, so the chrome carries no hue at all. Where the two agencies disagree the interface shows both accounts rather than quietly picking one.',
+      'Keep source readings visible when agencies disagree. The globe is a way to explore the data, not smooth over its differences.',
     link: { label: 'Open everythingisfine', url: 'https://everythingisfine.aidenjang.com' },
   },
   {
     title: 'worth: keep your own taste',
     context: 'Side project',
     summary:
-      'A personal archive for things you try and do, with ranked collections, revisit logs, and three honest calls: Favorite, Meh, or Not again.',
+      'I built a personal archive with ranked collections, revisit history and workout logs. The calls are Favorite, Meh and Not again.',
     body: [
-      'Collections keep drinks, films, restaurants, and other repeatable things together. Activities hold dated records such as gym sessions and upkeep. Ranking, notes, photos, and revisit history help you remember what earned another go.',
-      'One Cloudflare Worker serves the React app and API, with D1 storing records and small photos. Private routes verify the shared accounts session. Public share links expose a fixed ranked-list snapshot, expire after seven days, and can be revoked; notes, dates, history, and photos stay private.',
-      'The archive starts empty. Search, exports, photo-inclusive backups, and validated restore keep the records useful and portable without asking someone to maintain a feed.',
+      'Collections hold things you try; activities hold dated records such as gym sessions. Rankings, calls, notes and photos answer different questions, so I kept them separate.',
+      'A Cloudflare Worker serves the React app and API, with D1 storing records and small photos. Private routes verify the accounts session. Shared rankings are fixed snapshots: they expire after seven days and can be revoked, with notes, dates, history and photos excluded.',
+      'The archive starts empty. Search, exports, photo-inclusive backups and validated restore make records easier to find and take elsewhere.',
     ],
     stack: ['React', 'TypeScript', 'Cloudflare Workers', 'D1', 'Hono'],
     mark: 'worth',
@@ -76,14 +76,14 @@ export const WORK_ITEMS: WorkDetail[] = [
     link: { label: 'Open worth', url: 'https://worth.aidenjang.com' },
   },
   {
-    title: 'iguess: realtime draw-and-guess vs an AI',
+    title: 'iguess: real-time draw-and-guess vs an AI',
     context: 'Side project',
     summary:
-      'A realtime multiplayer draw-and-guess game where an AI vision model races you to name the drawing. Five modes on one engine that has no idea AI exists.',
+      'I built five drawing-game modes on one turn and scoring engine, with live rooms and AI players.',
     body: [
-      'skribbl.io-style realtime rooms, with a twist: an AI that actually looks at the canvas. The core bet is that the game timeline and the game rules are different things. The engine owns turns, scoring, and phases and contains zero game rules; each mode is a strategy plugged in through a fixed set of hooks. Five modes (classic, AI guesser, AI drawer, humans-vs-AI team battle, and a you-vs-AI duel) ride on that one unchanged engine.',
-      'One Cloudflare Durable Object per room is the single writer for that room’s WebSocket and game state, so the roster and stroke log live in memory with no external store and no cross-instance race. A separate Worker rasterizes the live strokes to a PNG and calls a vision model behind a provider fallback chain (a paid key, then free Workers AI, then a mock), so a guess never hard-fails. The whole system ported from a Node/ws/Redis process onto Cloudflare with the engine and modes unchanged.',
-      'Built to run in production, not just to demo: abuse limits enforced server-side at three layers (a per-IP edge rate limit, a per-room player cap, a per-connection flood bucket) plus a per-room AI-spend budget, reconnect that preserves identity and score with a grace window, a committed test suite, and CI that gates every deploy.',
+      'The engine handles turns, scoring and phases; mode-specific rules plug into a shared interface. Classic play, AI guessing, AI drawing, team battles and duels use the same engine.',
+      'One Durable Object owns each room’s WebSocket state and stroke log. An AI Worker rasterizes strokes and tries available vision providers, with a mock provider as a fallback. The Worker reports an error if no provider succeeds.',
+      'Server-side rate limits, room and connection caps, and an AI-spend budget bound the workload. Reconnecting players can recover their identity and score within a grace window.',
     ],
     stack: [
       'Cloudflare Workers',
@@ -106,30 +106,29 @@ export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'owewell: split bills, settle up',
     context: 'Side project',
-    summary:
-      'A live bill-splitting app that untangles who owes whom and computes the fewest payments to settle up.',
+    summary: 'I built live expense sharing with integer-cent balances and settlement suggestions.',
     body: [
-      'Groups, itemized expenses, and three split methods (evenly, by shares, or exact amounts), all synced live over a Durable Object session. Money is stored as integer cents from end to end, so floating-point drift never creeps into a balance.',
-      'The settle-up step reduces the debt graph to a minimal set of transactions, so a group of eight settles in a handful of payments instead of dozens. Built on Hono + D1/Drizzle with React/Vite/Tailwind on top, and pay links deep-link straight into the right payment app with the amount prefilled.',
+      'Groups can split expenses evenly, by shares or by exact amounts. A Durable Object syncs changes, while integer cents keep the arithmetic consistent between the API and interface.',
+      'Settlement suggestions match debtors with creditors to produce a short payment list. Payment links carry the amount into supported payment apps.',
     ],
     stack: ['Cloudflare Workers', 'Hono', 'D1', 'Drizzle', 'Durable Objects', 'React'],
     mark: 'owewell',
     shortName: 'owewell',
-    tagline: 'Who owes who, no drama.',
+    tagline: 'Who owes whom, no drama.',
     categories: ['realtime', 'social'],
     moment: 'ending the trip without spreadsheet energy',
     principle:
-      'The product does the awkward arithmetic quietly, then leaves people with the smallest possible set of things to settle.',
+      'Handle the arithmetic first, then show people a short list of payments to settle the group.',
     link: { label: 'Open owewell', url: 'https://owewell.aidenjang.com' },
   },
   {
     title: 'wherever: group restaurant picking',
     context: 'Side project',
     summary:
-      'A group picks where to eat by swiping; majority wins the room, so nobody has to be the one who decides.',
+      'I built live restaurant voting with server-owned results and host handover when someone leaves.',
     body: [
-      'Everyone joins a session and swipes through nearby spots pulled from Google Places; the first option to clear a majority wins the room. Built as an installable PWA so it feels native on a phone.',
-      'One Cloudflare Durable Object per session holds the live vote state over WebSockets, backed by D1/Drizzle. It handles the realtime edge cases that make or break a group app: a host who leaves is auto-promoted so a session never stalls, votes are reconciled authoritatively on the server, and stale sessions are pruned on a cron so the free tier stays clean.',
+      'People join a room and swipe on nearby restaurants from Google Places. In the default majority mode, a restaurant wins once enough people vote for it. The app can be installed on a phone.',
+      'One Durable Object owns the votes and WebSocket session. It replaces a departed host after a grace period, and scheduled cleanup removes stale sessions.',
     ],
     stack: ['Cloudflare Workers', 'Hono', 'Durable Objects', 'D1', 'Drizzle', 'PWA', 'React'],
     mark: 'wherever',
@@ -145,10 +144,10 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'bloomnote: write a note, grow a garden',
     context: 'Side project',
     summary:
-      'I built a note composer and a shareable illustrated garden, with real flowers and personal meanings drawn from the message.',
+      'I built the note-to-garden flow: model-generated flower choices, validated data and an illustrated recipient view.',
     body: [
-      'A small, gift-like app: you write a message, and a language model interprets it into a unique garden that blooms for whoever opens it. The charm is that no two notes ever grow the same thing.',
-      'Runs on Cloudflare Workers. Model requests have a timeout and retry handling; generated flower data is validated before rendering. Generation failures return an error instead of publishing an invalid garden.',
+      'The model chooses real flower species and gives each a meaning drawn from the note. Those choices become the garden’s colors and shapes; a link opens the recipient view.',
+      'Generation uses structured function calling and streams progress over server-sent events. Requests have a timeout and retry handling, and flower data is validated before use. Generation failures are reported to the sender.',
     ],
     stack: ['Cloudflare Workers', 'LLM', 'TypeScript', 'React'],
     mark: 'bloomnote',
@@ -164,12 +163,12 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'mrrp: a cat that belongs to exactly two people',
     context: 'Side project',
     summary:
-      'I designed and built a room for two, with a hand-drawn pixel cat, mood check-ins and notes that wait until they’re read.',
+      'I designed and built a two-person room with a pixel cat, mood check-ins and notes that wait for the recipient.',
     body: [
-      'You make a room and send the link to one person. Whoever opens it second is the one the cat is: they tap how their day is going, the cat becomes that, and from the other side you see it and can do something about it. No account is needed to join; a Durable Object holds the room state.',
-      'Three rules mattered more than any feature. Nothing bad can happen to the cat. No hunger, streaks, or decay. The second a shared pet can be neglected, it becomes a chore. The cat also does not copy a low mood. If you are sad, she comes over and stays. And you only see what the other person did, never whether they saw yours. Knowing someone saw a message and did nothing can feel worse than not knowing.',
-      'One Durable Object per room is the whole backend: two seats assigned by arrival order, enforced in the object rather than the UI, because the link is the only credential the app has. The room runs on her clock, not the server\u2019s, so the light moves across the floor over her day and the cat waits by the door around the time she usually gets home. Notes arrive one a day and advance on her reading, capped once per her local day, so a day she does not visit is not a note she never sees.',
-      'The art is hand-authored pixel grids you can read in the source, one aligned rectangle per logical pixel with no upscaling, because resampling a small canvas leaves you with pixels of two different sizes and it reads as a mistake rather than a style. It installs to a home screen, opens from cache with no signal, and a third person holding the link gets no notes, no mood, and a 403 on anything that writes.',
+      'A room has two seats, enforced by its Durable Object. One person’s check-ins shape the cat’s behavior; the other can leave something for her or sit with her. Joining does not require an account.',
+      'I left out hunger, streaks, decay and read receipts. A low mood brings the cat closer instead of making her another thing to look after. Missing a day does not create a debt to the app.',
+      'Notes advance when the recipient reads them, with a daily limit based on their local time. The room also uses their clock for its light and daily routines.',
+      'The cat and room are hand-authored pixel art rendered on canvas. The app installs to a home screen and caches its shell for offline opening; live room updates still need a connection.',
     ],
     stack: ['Cloudflare Workers', 'Durable Objects', 'React', 'Canvas', 'TypeScript', 'PWA'],
     mark: 'mrrp',
@@ -183,22 +182,23 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Monolith → Django REST + React rewrite',
-    context: 'Zeta Global · 2024 to now',
+    context: 'Zeta Global · 2024–present',
     summary:
-      'Moved the entire backend off a legacy PHP monolith with one other engineer, in six months. Django REST + React.',
+      'With one other engineer, I migrated the backend from PHP to Django REST in six months and rebuilt the interface in React.',
     body: [
-      'A platform-wide migration from a legacy PHP monolith to a Django REST API, done by two engineers in six months. It now powers self-service native-ad onboarding across 30,000+ active publisher newsletters serving billions of ad impressions a week.',
-      'Owned both ends: PostgreSQL data modeling and Django serializers on the backend, React + TypeScript components and hooks on the frontend. Two engineers migrated the entire backend in six months while rebuilding the interface.',
+      'The replacement supports publisher onboarding on a platform serving more than 30,000 active newsletters. It moved a live system from a PHP monolith to Django REST and PostgreSQL.',
+      'I owned PostgreSQL models and Django serializers alongside React and TypeScript components and hooks. Working across the API and interface kept the data contract consistent during the migration.',
     ],
     stack: ['Django', 'Python', 'REST', 'PostgreSQL', 'React', 'TypeScript'],
   },
   {
     title: 'Agentic AI Playwright framework',
     context: 'Zeta Global',
-    summary: 'A Playwright framework where LLM agents write and self-heal E2E tests.',
+    summary:
+      'I built the platform’s first automated tests: Playwright agents that plan, write and repair test specs.',
     body: [
-      'A three-stage pipeline: a Planner reads a feature spec and decomposes it into test scenarios, a Generator turns each scenario into a runnable Playwright spec, and a Healer watches for flakes and rewrites selectors and waits when a DOM change shifts the page out from under existing tests.',
-      'The platform lived in its own repo with no testing tooling of any kind. I built this as a research project, unprompted, and it became the first automated coverage the platform had. It later merged into a monorepo alongside the other front ends, being migrated from Angular to React a piece at a time, and it still runs in one of those packages: coverage that keeps up with a UI being rewritten underneath it, without hand-rolling fixtures for every change.',
+      'A planner turns a feature specification into scenarios. A generator writes runnable Playwright specs, and a repair stage updates selectors and waits when the interface changes.',
+      'I started it as a research project for a platform without automated tests. It became the first automated coverage and continued running after the frontend moved into a monorepo during the Angular-to-React migration.',
     ],
     stack: ['Playwright', 'TypeScript', 'Claude API', 'Node.js'],
   },
@@ -206,10 +206,10 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'Ad Slot Details: 120 → 1 API call',
     context: 'Zeta Global',
     summary:
-      'Cut a page ad ops and clients use daily from 120 API calls per load down to one, and 60s to 2s.',
+      'I reduced Ad Slot Details from 120 API calls to one, taking page load time from 60 seconds to two.',
     body: [
-      'The page eagerly loaded every linked line item, one API call each, so a slot with a hundred of them made a hundred round-trips before anything rendered. I consolidated them into a single batched endpoint returning exactly the joined data the page needs.',
-      'Load time went from “go get coffee” to instant. The internal ops and sales teams who used it daily said thanks in #engineering.',
+      'The page fetched each linked line item separately. I replaced those requests with one batched endpoint returning the joined data the interface needs.',
+      'The change removed repeated round-trips on a page used daily by ad operations and clients.',
     ],
     stack: ['Django', 'REST', 'React', 'TypeScript', 'PostgreSQL'],
   },
@@ -217,41 +217,38 @@ export const WORK_ITEMS: WorkDetail[] = [
     title: 'Sponsorships, Audience Extension, Blackout Periods',
     context: 'Zeta Global',
     summary:
-      'Three publisher-config products at Zeta. Data models, APIs, UIs, owned end to end. Sponsorships runs hundreds of millions of impressions a week, including The Washington Post.',
+      'I owned the data models, APIs and interfaces for three publisher tools. Sponsorships serves hundreds of millions of impressions a week.',
     body: [
-      'Sponsorships: I chose a many-to-many data model, multiple line items and multiple newsletters per sponsorship plus creative scheduling, over the simpler one-to-one. The argument was the cost of being wrong: one-to-one is not a feature you add later, it is a migration of live sponsorship data. Built the UI with a UI/UX designer and defended the model with product and ops. It is live on hundreds of millions of impressions a week, and The Washington Post is one of the publishers running on it.',
-      'That work also covered creatives and demand controls for publisher monetization across media groups, sensitive categories, and RTB exchange settings.',
-      'Audience Extension: campaign scheduling with bulk DMA / zip-code audience targeting.',
-      'Blackout Periods: time-window controls that suppress specific creatives or exchanges. Owned the data models, Django REST APIs, and React/TypeScript UIs for all three.',
+      'For Sponsorships, I chose a many-to-many model for line items and newsletters, plus creative scheduling. I worked with a designer on the interface and with product and operations on the model. The product is used by publishers including The Washington Post.',
+      'Audience Extension adds campaign scheduling and bulk DMA and ZIP-code targeting. Blackout Periods suppress selected creatives or exchanges within a time window. I built the Django REST APIs and React interfaces for both.',
     ],
     stack: ['Django', 'REST', 'PostgreSQL', 'React', 'TypeScript'],
   },
   {
     title: 'Creative Mapping v2',
-    context: 'LiveIntent · 2023 to 2024',
+    context: 'LiveIntent · 2023–2024',
     summary: 'Owned Creative Mapping v2 end to end across MySQL, REST, and Angular.',
     body: [
-      'Creative-to-placement targeting for the ad-serving XML pipeline. Designed the MySQL schema for the new mapping model, built the REST API on the legacy backend, and delivered the Angular UI publisher ops uses to configure targeting rules.',
-      'Shipped alongside a stack of related work: third-party demand controls for RTB native + hybrid slots, 13 publisher data migrations, and the fix for a critical search-endpoint performance regression.',
+      'I designed the MySQL schema, built the REST API and delivered the Angular editor that publisher operations uses to map creatives to ad placements. Those rules feed the XML ad-serving pipeline.',
+      'Related work included third-party demand controls, publisher migrations and a search-endpoint performance fix.',
     ],
     stack: ['MySQL', 'PHP', 'REST', 'Angular', 'TypeScript', 'XML'],
   },
   {
     title: 'Google Ad Manager native integration',
-    context: 'LiveIntent · 2022 to 2023',
+    context: 'LiveIntent · 2022–2023',
     summary: 'Built the Google Ad Manager integration for Native Ad Slots from scratch.',
     body: [
-      'Built the endpoints, geo-targeting and Native support in the XML pipeline for the Google Ad Manager integration.',
-      'The work connected publisher configuration to the ad-serving pipeline, spanning API implementation and the generated XML.',
+      'I built the endpoints, geo-targeting and Native Ad Slot support connecting Google Ad Manager to the XML ad-serving pipeline.',
     ],
     stack: ['REST', 'XML', 'PHP', 'Google Ad Manager'],
   },
   {
     title: 'Publisher account migrations',
-    context: 'LiveIntent · 2023 to 2024',
+    context: 'LiveIntent · 2023–2024',
     summary: 'Ran 13 publisher migrations, including BuzzFeed and Dotdash Meredith.',
     body: [
-      'Wrote ACID-safe scripts to move inventory, campaigns and permissions between publisher accounts. Ran 13 migrations, including BuzzFeed and Dotdash Meredith.',
+      'I wrote transactional scripts to move inventory, campaigns and permissions between publisher accounts. The migrations included BuzzFeed and Dotdash Meredith.',
     ],
     stack: ['SQL', 'MySQL', 'Data migrations'],
   },
@@ -262,10 +259,11 @@ export const WORK_ITEMS: WorkDetail[] = [
     tagline: 'Keep the human in control of the agent.',
     categories: ['ai', 'systems'],
     context: 'Open source · Contributor',
-    summary: 'Command approvals and reversible agent edits for an open-source TypeScript IDE.',
+    summary:
+      'I contributed command approvals, local similarity matching and agent-edit undo to an open-source TypeScript IDE.',
     body: [
-      'Built scoped terminal-command approvals, including command normalization, approval rules and local embedding suggestions for similar commands. Tightened matching to prevent approval bypasses and broad rules from covering hidden paths.',
-      'Added file snapshots and a revert flow for agent edits, with feedback to the agent when a change is undone. Also improved file-path navigation and fixed configuration and file-creation bugs.',
+      'I built scoped command approvals, normalization and local embedding suggestions for similar commands. I also tightened rule matching around command signatures and hidden paths.',
+      'I added file snapshots and an undo flow that tells the agent when an edit is reverted. Other contributions covered file-path navigation, configuration and file-creation fixes.',
     ],
     stack: ['TypeScript', 'React', 'Node.js', 'Local embeddings', 'Open source'],
     link: {

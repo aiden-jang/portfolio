@@ -11,9 +11,9 @@ export function IntroSection() {
         <p>
           Software engineer in New York.
           <br />
-          I build publisher tools and playful apps,
+          I build tools for publishers,
           <br />
-          from the interface to the API doing the actual work.
+          and apps for notes, games and everyday decisions.
         </p>
       </div>
       <div className="garage-caption">

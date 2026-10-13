@@ -57,9 +57,9 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
 };
 
 const ROLES = [
-  { title: 'Software Engineer', company: 'Zeta Global', period: '2024 to now' },
-  { title: 'Software Engineer', company: 'LiveIntent', period: '2023 to 2024' },
-  { title: 'Associate Software Engineer', company: 'LiveIntent', period: '2022 to 2023' },
+  { title: 'Software Engineer', company: 'Zeta Global', period: '2024–present' },
+  { title: 'Software Engineer', company: 'LiveIntent', period: '2023–2024' },
+  { title: 'Associate Software Engineer', company: 'LiveIntent', period: '2022–2023' },
 ];
 
 type Props = {
