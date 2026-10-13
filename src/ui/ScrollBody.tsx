@@ -9,6 +9,7 @@ export function ScrollBody({ children, storyId }: { children: ReactNode; storyId
   const content = useRef<HTMLDivElement>(null);
   const [more, setMore] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [scrollable, setScrollable] = useState(false);
   useLayoutEffect(() => {
     const element = area.current!;
     const saved = readingPositions.get(storyId);
@@ -32,6 +33,7 @@ export function ScrollBody({ children, storyId }: { children: ReactNode; storyId
     const element = area.current!;
     const update = () => {
       const remaining = element.scrollHeight - element.clientHeight;
+      setScrollable(remaining > 1);
       setMore(remaining - element.scrollTop > 16);
       setProgress(remaining > 0 ? Math.min(1, element.scrollTop / remaining) : 1);
     };
@@ -49,6 +51,7 @@ export function ScrollBody({ children, storyId }: { children: ReactNode; storyId
     <div className="story-scroll-shell">
       <div
         className="story-reading-progress"
+        hidden={!scrollable}
         role="progressbar"
         aria-label="Case study reading progress"
         aria-valuemin={0}

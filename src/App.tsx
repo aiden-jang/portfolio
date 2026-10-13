@@ -25,6 +25,7 @@ import { SectionDots } from './ui/SectionDots';
 import './ui/reading-flow.css';
 import './ui/final-review.css';
 import './ui/visual-review.css';
+import './ui/completion-review.css';
 
 // `?clean` strips the DOM chrome, for capturing the OG image against a bare canvas.
 const isCleanMode =

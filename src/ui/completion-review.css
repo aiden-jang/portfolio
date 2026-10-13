@@ -1,0 +1,128 @@
+.story-image-trigger {
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.story-image-crop {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+}
+.work-story-overview .story-image-crop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border: 0;
+}
+.story-screenshot:has(img[src*='mrrp-room']) .story-image-crop {
+  aspect-ratio: 4 / 3;
+}
+.story-screenshot:has(img[src*='bloomnote-garden']) .story-image-crop {
+  aspect-ratio: 3 / 2;
+}
+.story-image-crop img[src*='bloomnote-garden'] {
+  transform: scale(1.75);
+  transform-origin: center 15%;
+}
+.story-image-crop img[src*='mrrp-room'] {
+  transform: scale(1.6);
+  transform-origin: center 40%;
+}
+.story-image-crop:has(.screenshot-unavailable) {
+  aspect-ratio: auto;
+  overflow: visible;
+}
+.story-image-action {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-line);
+  font: 11px/1.5 var(--font-display);
+  color: var(--color-muted);
+}
+.story-image-trigger:hover .story-image-action {
+  color: var(--color-fg);
+}
+.story-image-trigger:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 4px;
+}
+.story-screenshot figcaption {
+  font: 11px/1.7 var(--font-display);
+  margin-top: 10px;
+}
+:root,
+.story-scroll-area,
+.preview-image,
+.preview-dialog,
+.portfolio-menu nav {
+  scrollbar-width: thin;
+  scrollbar-color: #55545a #101014;
+}
+#hint.keyboard-legend {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  gap: 16px;
+  padding: 4px 0;
+}
+#hint kbd {
+  border: 0;
+  border-radius: 0;
+  min-width: 18px;
+  height: 20px;
+  font-size: 10px;
+}
+#hint > button:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 4px;
+}
+#sec-about {
+  min-height: 100svh;
+  align-items: center;
+  padding-block: 144px;
+}
+@media (min-width: 1024px) {
+  #sec-experience {
+    min-height: 100svh;
+  }
+  #sec-experience .panel {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.6fr);
+    column-gap: 64px;
+  }
+  #sec-experience .panel > :is(span, h2, ul) {
+    grid-column: 1;
+  }
+  #sec-experience h2 {
+    font-size: clamp(28px, 3vw, 38px);
+  }
+  #sec-experience .panel > p {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    margin: 0;
+  }
+  #sec-experience .panel > div {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  #sec-experience .experience-more {
+    grid-column: 2;
+    grid-row: 4;
+  }
+  #sec-experience .experience-open-source {
+    grid-column: 1;
+    grid-row: 4;
+    align-self: start;
+  }
+}
+@media (max-width: 767px) {
+  #sec-about {
+    padding-block: 96px;
+  }
+}

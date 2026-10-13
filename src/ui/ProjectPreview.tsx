@@ -1,6 +1,6 @@
 import { ScreenshotImage } from './ScreenshotImage';
 import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { ScreenshotViewer } from './ScreenshotViewer';
 import type { PreviewState } from '../data/projectPreviews';
 import './preview-states.css';
 import { usePreviewSelection } from './usePreviewSelection';
@@ -20,26 +20,7 @@ export function ProjectPreview({
   const image = states?.[selected]?.image ?? initialImage;
   const caption = states?.[selected]?.caption ?? initialCaption;
   const [open, setOpen] = useState(false);
-  const [zoomed, setZoomed] = useState(false);
-  const viewport = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const area = viewport.current;
-    if (area)
-      area.scrollTo({ left: zoomed ? (area.scrollWidth - area.clientWidth) / 2 : 0, top: 0 });
-  }, [zoomed]);
-  const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    if (!open) return;
-    dialog.current?.showModal();
-    const focusTarget = trigger.current;
-    const overflow = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
-    return () => {
-      document.documentElement.style.overflow = overflow;
-      focusTarget?.focus({ preventScroll: true });
-    };
-  }, [open]);
   useEffect(() => {
     const linked = previewIndex(
       new URLSearchParams(location.search).get('preview'),
@@ -78,10 +59,9 @@ export function ProjectPreview({
           data-project={name}
           data-view={selected}
           onClick={() => {
-            setZoomed(false);
             setOpen(true);
           }}
-          aria-label={`Enlarge ${name} screenshot`}
+          aria-label={`Inspect screenshot: ${name}`}
         >
           <div className="preview-thumbnail">
             <ScreenshotImage key={image} src={image} alt={`${name} product interface`} lazy />
@@ -111,65 +91,18 @@ export function ProjectPreview({
           )}
         <figcaption aria-live="polite">{caption}</figcaption>
       </figure>
-      {open &&
-        createPortal(
-          <dialog
-            ref={dialog}
-            className="preview-dialog"
-            aria-label={`${name} screenshot`}
-            onCancel={() => setOpen(false)}
-            onClick={(event) => {
-              if (event.target === event.currentTarget) setOpen(false);
-            }}
-          >
-            <div className="preview-dialog-heading">
-              <span>{name}</span>
-              {states && (
-                <button type="button" onClick={() => void shareView()}>
-                  {copyStatus === 'copied'
-                    ? 'Link copied ✓'
-                    : copyStatus === 'failed'
-                      ? 'Copy unavailable'
-                      : 'Copy view link'}
-                </button>
-              )}
-              {copyStatus === 'failed' && (
-                <a href={previewLink(location.href, name, selected)}>Open view link ↗</a>
-              )}
-              <button type="button" aria-pressed={zoomed} onClick={() => setZoomed(!zoomed)}>
-                {zoomed ? 'Fit image' : 'Zoom in'}
-              </button>
-              <button
-                type="button"
-                autoFocus
-                onClick={() => setOpen(false)}
-                aria-label="Close screenshot"
-              >
-                Close ×
-              </button>
-            </div>
-            <div
-              ref={viewport}
-              className={`preview-image ${zoomed ? 'is-zoomed' : ''}`}
-              tabIndex={zoomed ? 0 : -1}
-              role="region"
-              aria-label="Screenshot. Scroll to explore the enlarged image."
-            >
-              <ScreenshotImage
-                key={image}
-                src={image}
-                alt={`${name} product interface, full screenshot`}
-              />
-            </div>
-            <p>
-              {zoomed && (
-                <span className="preview-zoom-help">Scroll to explore · Fit image to return</span>
-              )}
-              {caption}
-            </p>
-          </dialog>,
-          document.body,
-        )}
+      {open && (
+        <ScreenshotViewer
+          image={image}
+          name={name}
+          caption={caption}
+          returnFocus={trigger.current}
+          onClose={() => setOpen(false)}
+          onShare={states ? shareView : undefined}
+          shareStatus={copyStatus}
+          viewLink={previewLink(location.href, name, selected)}
+        />
+      )}
     </>
   );
 }

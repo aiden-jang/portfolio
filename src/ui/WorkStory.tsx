@@ -1,4 +1,4 @@
-import { ScreenshotImage } from './ScreenshotImage';
+import { StoryScreenshot } from './StoryScreenshot';
 import { workId } from '../data/workItems';
 import type { WorkDetail } from '../types';
 import { PREVIEWS } from '../data/projectPreviews';
@@ -42,14 +42,11 @@ export function WorkStory({ item }: { item: WorkDetail }) {
           )}
         </div>
         {preview && (
-          <figure>
-            <ScreenshotImage
-              key={view?.image}
-              src={view?.image ?? preview.image}
-              alt={`${item.shortName} product interface`}
-            />
-            <figcaption>{view?.caption}</figcaption>
-          </figure>
+          <StoryScreenshot
+            image={view?.image ?? preview.image}
+            name={item.shortName ?? item.title}
+            caption={view?.caption ?? preview.caption}
+          />
         )}
       </div>
       {item.body.length > 1 && (

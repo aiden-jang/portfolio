@@ -42,7 +42,7 @@ export function Car() {
       map: makeRadialGlowTexture(),
       color: 0xffffff,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.35,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
@@ -184,7 +184,7 @@ export function Car() {
     const time = state.clock.elapsedTime;
     const breath = reduced ? 0.5 : 0.5 + Math.sin(time * 0.7) * 0.5;
     const rev = reduced ? 0 : refs.revT;
-    underglowMat.opacity = 0.42 + breath * 0.16 + rev * 0.7;
+    underglowMat.opacity = 0.22 + breath * 0.1 + rev * 0.45;
 
     for (const l of refs.lamps) {
       const boost = !l.isHeadlight ? 1 + rev * 6 : 1;
