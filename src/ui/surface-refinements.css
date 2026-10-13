@@ -1,0 +1,84 @@
+.car-picker-desktop {
+  width: 160px;
+  font-size: 12px;
+}
+.car-picker small {
+  font-size: 10px;
+  color: #b9b9c0;
+}
+#desktop-dock button:not(.swatch) {
+  color: #b9b9c0;
+}
+#hint.keyboard-legend {
+  background: linear-gradient(90deg, transparent, #101014f2 12%, #101014f2 88%, transparent);
+  text-shadow: 0 1px 4px #101014;
+}
+.garage-intro p {
+  position: relative;
+  max-width: 45ch;
+  text-wrap: pretty;
+  color: #d0d0d3;
+  text-shadow:
+    0 1px 12px #0a0a14,
+    0 1px 4px #0a0a14;
+}
+.project-toolbar {
+  top: 88px;
+  padding-block: 8px;
+  box-shadow: 0 12px 16px -12px #000;
+}
+.garage-project {
+  scroll-margin-top: 190px;
+}
+.garage-project-featured .project-preview[data-project='bloomnote'][data-view='0'] img {
+  transform: scale(1.6);
+  transform-origin: center 15%;
+}
+.garage-project-featured .project-preview[data-project='mrrp'][data-view='0'] img {
+  transform: scale(1.4);
+  transform-origin: center 40%;
+}
+#sec-contact .panel::before {
+  background: radial-gradient(ellipse, #101014d9 20%, #10101499 48%, transparent 76%);
+}
+#sec-contact .panel {
+  text-shadow: 0 1px 6px #101014;
+}
+#sec-contact .panel > button[aria-haspopup='dialog'],
+#sec-contact .panel a:is([aria-label='GitHub'], [aria-label='LinkedIn']) {
+  background: #101014d9;
+  color: #b9b9c0;
+}
+#sec-contact .panel > button[aria-haspopup='dialog'] {
+  min-height: 44px;
+  padding-inline: 12px;
+  border-radius: 24px;
+}
+@media (max-width: 767px) {
+  .project-toolbar {
+    top: 80px;
+    padding-block: 6px 12px;
+  }
+  .garage-project {
+    scroll-margin-top: 240px;
+  }
+  .mobile-car-label {
+    min-width: 124px;
+  }
+  .garage-project-featured .project-preview[data-project='bloomnote'][data-view='0'] img {
+    object-position: center top;
+    transform-origin: center 8%;
+  }
+}
+@media (min-width: 768px) and (max-height: 800px) {
+  #sec-intro {
+    padding-top: 110px;
+  }
+  .garage-intro h1 {
+    font-size: clamp(72px, 10vw, 136px);
+  }
+  .garage-intro p {
+    margin-top: 18px;
+    max-width: 32ch;
+  }
+}

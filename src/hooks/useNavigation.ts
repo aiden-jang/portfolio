@@ -10,7 +10,7 @@ let scrollRaf = 0;
 // Module-level so manual scroll input can abort a tween started from anywhere.
 let restoreSnap: (() => void) | null = null;
 
-function cancelSmoothScroll(): void {
+export function cancelSmoothScroll(): void {
   if (scrollRaf) {
     cancelAnimationFrame(scrollRaf);
     scrollRaf = 0;

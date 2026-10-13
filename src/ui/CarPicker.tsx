@@ -21,7 +21,7 @@ export function CarPicker({ mobile = false }: { mobile?: boolean }) {
       <span aria-hidden="true">{car.name}</span>
       <small aria-hidden="true">
         {car.code}
-        {loading ? ' ···' : mobile ? ' ▾' : ' · Change ▾'}
+        {loading ? ' ···' : ' · Change car ▾'}
       </small>
       <select
         ref={picker}

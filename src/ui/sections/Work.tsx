@@ -8,6 +8,7 @@ import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
 import { IodineContributions } from '../IodineContributions';
 import { prefersReducedMotion } from '../../hooks/useReducedMotion';
+import { cancelSmoothScroll } from '../../hooks/useNavigation';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 type BrowseProps = Props & {
@@ -45,6 +46,7 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
                 type="button"
                 aria-pressed={filter === option.id}
                 onClick={() => {
+                  cancelSmoothScroll();
                   onFilterChange(option.id);
                   requestAnimationFrame(() =>
                     document
@@ -63,6 +65,7 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
               aria-label="Jump to a project"
               value=""
               onChange={(event) => {
+                cancelSmoothScroll();
                 document.getElementById(`project-${event.target.value}`)?.scrollIntoView({
                   block: 'start',
                   behavior: prefersReducedMotion() ? 'instant' : 'smooth',

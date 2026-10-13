@@ -42,14 +42,14 @@ export function Car() {
       map: makeRadialGlowTexture(),
       color: 0xffffff,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.14,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
   }, []);
   const underglow = useMemo(() => {
     const g = new THREE.CircleGeometry(1, 96);
-    g.scale(3.5, 4.5, 1);
+    g.scale(2.3, 3.1, 1);
     g.rotateX(-Math.PI / 2);
     const m = new THREE.Mesh(g, underglowMat);
     m.position.y = 0.015;
@@ -184,7 +184,7 @@ export function Car() {
     const time = state.clock.elapsedTime;
     const breath = reduced ? 0.5 : 0.5 + Math.sin(time * 0.7) * 0.5;
     const rev = reduced ? 0 : refs.revT;
-    underglowMat.opacity = 0.22 + breath * 0.1 + rev * 0.45;
+    underglowMat.opacity = 0.1 + breath * 0.04 + rev * 0.22;
 
     for (const l of refs.lamps) {
       const boost = !l.isHeadlight ? 1 + rev * 6 : 1;
