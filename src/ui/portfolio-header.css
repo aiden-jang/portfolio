@@ -224,3 +224,40 @@ body.modal-open .portfolio-header {
     display: block;
   }
 }
+
+@media (max-width: 767px) and (max-height: 740px) {
+  #sec-intro {
+    min-height: 820px;
+    padding-top: 104px;
+  }
+  #sec-intro .garage-intro h1 {
+    font-size: 48px;
+  }
+  #sec-intro .garage-intro p {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+  #sec-intro .garage-index {
+    top: 236px;
+    bottom: auto;
+    right: 6vw;
+    width: auto;
+    display: flex;
+    gap: 24px;
+  }
+  #sec-intro .garage-index > span,
+  #sec-intro .garage-caption {
+    display: none;
+  }
+  #sec-intro .garage-index a {
+    flex: 1;
+    min-height: 44px;
+  }
+  .scene-loading-note,
+  .car-load-notice {
+    bottom: 140px;
+    background: var(--color-bg);
+    padding: 10px;
+  }
+}

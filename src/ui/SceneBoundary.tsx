@@ -17,6 +17,12 @@ export class SceneBoundary extends Component<Props, State> {
   }
 
   render(): ReactNode {
-    return this.state.failed ? null : this.props.children;
+    return this.state.failed ? (
+      <p className="scene-loading-note" role="status">
+        The car is sitting this one out. Your browser couldn’t start the 3D view.
+      </p>
+    ) : (
+      this.props.children
+    );
   }
 }
