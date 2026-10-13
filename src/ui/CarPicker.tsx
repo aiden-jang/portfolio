@@ -18,7 +18,10 @@ export function CarPicker({ mobile = false }: { mobile?: boolean }) {
         aria-label="Choose a car"
         value={index}
         disabled={loading}
-        onChange={(event) => choose(Number(event.target.value))}
+        onChange={(event) => {
+          const next = Number(event.target.value);
+          if (next !== index) choose(next);
+        }}
       >
         {CARS.map((item, i) => (
           <option key={item.code} value={i}>

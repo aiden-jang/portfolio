@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 're
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import './browsing-polish.css';
 
-const readingPositions = new Map<string, { top: number; expanded: number[] }>();
+const readingPositions = new Map<string, { fraction: number; expanded: number[] }>();
 
 export function ScrollBody({ children, storyId }: { children: ReactNode; storyId: string }) {
   const area = useRef<HTMLDivElement>(null);
@@ -17,11 +17,11 @@ export function ScrollBody({ children, storyId }: { children: ReactNode; storyId
       saved.expanded.forEach((index) => {
         if (details[index]) details[index].open = true;
       });
-      element.scrollTop = saved.top;
+      element.scrollTop = saved.fraction * Math.max(0, element.scrollHeight - element.clientHeight);
     }
     return () => {
       readingPositions.set(storyId, {
-        top: element.scrollTop,
+        fraction: element.scrollTop / Math.max(1, element.scrollHeight - element.clientHeight),
         expanded: Array.from(element.querySelectorAll('details')).flatMap((detail, index) =>
           detail.open ? [index] : [],
         ),
