@@ -66,7 +66,11 @@ export function App() {
     url.searchParams.set('car', String(carIndex));
     url.searchParams.set('paint', activeBodyColor);
     url.searchParams.set('light', themeName);
-    window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${url.pathname}${url.search}${url.hash}`,
+    );
   }, [activeBodyColor, carIndex, sceneReady, themeName]);
 
   // Paint has to wait for the GLB to expose its material. Clearing the ref after the first apply

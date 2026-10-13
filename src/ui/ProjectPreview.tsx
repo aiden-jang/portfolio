@@ -1,3 +1,4 @@
+import { ScreenshotImage } from './ScreenshotImage';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { PreviewState } from '../data/projectPreviews';
@@ -83,7 +84,7 @@ export function ProjectPreview({
           aria-label={`Enlarge ${name} screenshot`}
         >
           <div className="preview-thumbnail">
-            <img src={image} alt={`${name} product interface`} loading="lazy" />
+            <ScreenshotImage key={image} src={image} alt={`${name} product interface`} lazy />
           </div>
           <span>Inspect screenshot ↗</span>
         </button>
@@ -154,7 +155,11 @@ export function ProjectPreview({
               role="region"
               aria-label="Screenshot. Scroll to explore the enlarged image."
             >
-              <img src={image} alt={`${name} product interface, full screenshot`} />
+              <ScreenshotImage
+                key={image}
+                src={image}
+                alt={`${name} product interface, full screenshot`}
+              />
             </div>
             <p>
               {zoomed && (

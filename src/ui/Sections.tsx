@@ -18,21 +18,28 @@ export function Sections() {
 
   // Driving the modal off the hash is what makes browser back and forward dismiss and restore it.
   useEffect(() => {
+    let initial = true;
     const syncFromHash = () => {
       const match = /^#work\/(.+)$/.exec(window.location.hash);
       if (!match) {
+        initial = false;
         setActiveWork(null);
         return;
       }
       const item = WORK_ITEMS.find((candidate) => workId(candidate) === match[1]);
       if (!item) return;
       const workSection = document.getElementById('sec-work');
-      if (workSection) window.scrollTo(0, workSection.offsetTop);
+      if (initial && workSection) window.scrollTo(0, workSection.offsetTop);
+      initial = false;
       setActiveWork(item);
     };
     syncFromHash();
     window.addEventListener('hashchange', syncFromHash);
-    return () => window.removeEventListener('hashchange', syncFromHash);
+    window.addEventListener('popstate', syncFromHash);
+    return () => {
+      window.removeEventListener('hashchange', syncFromHash);
+      window.removeEventListener('popstate', syncFromHash);
+    };
   }, []);
 
   const openWork = useCallback((item: WorkDetail, el: HTMLElement) => {
@@ -42,11 +49,15 @@ export function Sections() {
         : '#sec-experience'
       : window.location.hash || (isPortfolioProject(item) ? '#sec-work' : '#sec-experience');
     lastCard.current = el;
-    window.history.replaceState(null, '', `#work/${workId(item)}`);
+    window.history.pushState({ portfolioWork: true }, '', `#work/${workId(item)}`);
     runMorph(() => setActiveWork(item), el, true);
   }, []);
 
   const closeWork = useCallback(() => {
+    if (window.history.state?.portfolioWork) {
+      window.history.back();
+      return;
+    }
     window.history.replaceState(null, '', originHash.current);
     runMorph(() => setActiveWork(null), lastCard.current, false);
   }, []);
@@ -59,7 +70,7 @@ export function Sections() {
         const currentIndex = lane.indexOf(current);
         const nextIndex = (currentIndex + step + lane.length) % lane.length;
         const next = lane[nextIndex];
-        window.history.replaceState(null, '', `#work/${workId(next)}`);
+        window.history.replaceState(window.history.state, '', `#work/${workId(next)}`);
         return next;
       });
     },

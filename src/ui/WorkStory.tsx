@@ -1,3 +1,4 @@
+import { ScreenshotImage } from './ScreenshotImage';
 import { workId } from '../data/workItems';
 import type { WorkDetail } from '../types';
 import { PREVIEWS } from '../data/projectPreviews';
@@ -42,7 +43,11 @@ export function WorkStory({ item }: { item: WorkDetail }) {
         </div>
         {preview && (
           <figure>
-            <img src={view?.image} alt={`${item.shortName} product interface`} />
+            <ScreenshotImage
+              key={view?.image}
+              src={view?.image ?? preview.image}
+              alt={`${item.shortName} product interface`}
+            />
             <figcaption>{view?.caption}</figcaption>
           </figure>
         )}
