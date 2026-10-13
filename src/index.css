@@ -352,29 +352,7 @@ header > span {
   font-size: 16px;
   line-height: 1.6;
 }
-.garage-index {
-  position: absolute;
-  bottom: 130px;
-  left: 5vw;
-  font-size: 13px;
-  width: 180px;
-}
-.garage-index > span {
-  display: block;
-  margin-bottom: 14px;
-  font: 10px var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #aaaab2;
-}
-.garage-index a {
-  display: block;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--color-line);
-}
-.garage-index a span {
-  float: right;
-}
+
 .garage-caption {
   position: absolute;
   right: 5vw;
@@ -503,11 +481,7 @@ header > span {
     font-size: 14px;
     margin-top: 20px;
   }
-  .garage-index {
-    bottom: 180px;
-    left: 6vw;
-    width: 150px;
-  }
+
   .garage-caption {
     bottom: 195px;
     font-size: 9px;

@@ -238,35 +238,15 @@ body.modal-open .portfolio-header {
     line-height: 1.5;
     margin-top: 12px;
   }
-  #sec-intro .garage-index {
-    top: 236px;
-    bottom: auto;
-    right: auto;
-    width: 150px;
-  }
-  #sec-intro .garage-index > span,
+
   #sec-intro .garage-caption {
     display: none;
   }
-  #sec-intro .garage-index a {
-    min-height: 44px;
-  }
+
   .scene-loading-note,
   .car-load-notice {
     bottom: 140px;
     background: var(--color-bg);
     padding: 10px;
   }
-}
-
-.garage-index a {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  color: var(--color-fg);
-}
-.garage-index a:hover {
-  border-color: var(--color-fg);
 }

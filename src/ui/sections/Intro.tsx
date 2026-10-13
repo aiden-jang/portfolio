@@ -1,16 +1,9 @@
-import { prefersReducedMotion } from '../../hooks/useReducedMotion';
 import { CARS } from '../../config';
 import { useAppStore } from '../../store';
 import { Section } from './shared';
 
 export function IntroSection() {
   const carIndex = useAppStore((state) => state.carIndex);
-  const scrollToWork = () => {
-    document.getElementById('sec-work')?.scrollIntoView({
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      block: 'start',
-    });
-  };
   return (
     <Section id="sec-intro" side="left" desktopVertical="top" mobileVertical="top">
       <div className="panel garage-intro pointer-events-auto">
@@ -22,17 +15,6 @@ export function IntroSection() {
           <br />
           from the interface to the API doing the actual work.
         </p>
-      </div>
-      <div className="garage-index pointer-events-auto">
-        <a
-          href="#sec-work"
-          onClick={(event) => {
-            event.preventDefault();
-            scrollToWork();
-          }}
-        >
-          View work <span aria-hidden="true">↓</span>
-        </a>
       </div>
       <div className="garage-caption">
         <span>
