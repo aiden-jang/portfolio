@@ -23,7 +23,6 @@ export function Hint() {
       )}
       <p className="orbit-status">Drag to orbit · release to scroll</p>
       <div id="hint" className="keyboard-legend" aria-label="Car controls and keyboard shortcuts">
-        <span className="legend-gesture">Drag to orbit</span>
         <span>
           <kbd>←</kbd>
           <kbd>→</kbd> Car

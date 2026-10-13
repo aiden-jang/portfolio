@@ -18,7 +18,7 @@ export function CameraResetButton() {
         ↺
       </span>
       <span className="font-[var(--font-mono)] text-[0.58rem] tracking-[0.13em] uppercase">
-        View
+        Reset view
       </span>
     </button>
   );

@@ -24,7 +24,6 @@ export function IntroSection() {
         </p>
       </div>
       <div className="garage-index pointer-events-auto">
-        <span>Look around</span>
         <a
           href="#sec-work"
           onClick={(event) => {
@@ -33,9 +32,6 @@ export function IntroSection() {
           }}
         >
           View work <span aria-hidden="true">↓</span>
-        </a>
-        <a href="/Aiden_Jang_Resume.pdf" target="_blank" rel="noopener">
-          Résumé <span>↗</span>
         </a>
       </div>
       <div className="garage-caption">

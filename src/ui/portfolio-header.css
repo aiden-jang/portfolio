@@ -241,17 +241,14 @@ body.modal-open .portfolio-header {
   #sec-intro .garage-index {
     top: 236px;
     bottom: auto;
-    right: 6vw;
-    width: auto;
-    display: flex;
-    gap: 24px;
+    right: auto;
+    width: 150px;
   }
   #sec-intro .garage-index > span,
   #sec-intro .garage-caption {
     display: none;
   }
   #sec-intro .garage-index a {
-    flex: 1;
     min-height: 44px;
   }
   .scene-loading-note,
@@ -260,4 +257,16 @@ body.modal-open .portfolio-header {
     background: var(--color-bg);
     padding: 10px;
   }
+}
+
+.garage-index a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  color: var(--color-fg);
+}
+.garage-index a:hover {
+  border-color: var(--color-fg);
 }

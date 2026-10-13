@@ -8,6 +8,7 @@ export function ResumeButton() {
     <a
       ref={ref}
       href="/Aiden_Jang_Resume.pdf"
+      aria-label="Résumé (PDF, opens in a new tab)"
       target="_blank"
       rel="noopener noreferrer"
       className="
@@ -21,7 +22,7 @@ export function ResumeButton() {
         hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
       "
     >
-      <span>Resume</span>
+      <span>Résumé</span>
       <span
         aria-hidden
         className="text-[var(--color-muted)] transition-colors group-hover:text-[var(--color-neon)]"
