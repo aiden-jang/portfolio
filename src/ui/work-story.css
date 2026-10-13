@@ -28,6 +28,34 @@
   }
   .work-story-overview figure {
     position: static;
-    grid-row: 1;
+    grid-row: 2;
+  }
+}
+
+.work-story-overview section + section {
+  border-top: 1px solid var(--color-line);
+  padding-top: 16px;
+}
+.work-story-overview section p {
+  margin-top: 6px;
+  max-width: 58ch;
+  line-height: 1.65;
+}
+.work-story-overview h4 {
+  color: var(--color-muted);
+  font: 10px/1.5 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+@media (max-width: 767px) {
+  .work-story-overview {
+    gap: 28px;
+  }
+  .work-story-overview section {
+    margin-bottom: 20px;
+  }
+  .work-story details p {
+    line-height: 1.7;
+    margin: 16px 0;
   }
 }

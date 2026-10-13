@@ -21,7 +21,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       },
     ],
     description:
-      'Earthquakes, storms, volcanoes, wildfires, floods and aurora on a live globe. Earthquake sources keep their disagreements visible.',
+      'Explore earthquakes, storms, volcanoes, wildfires, floods and aurora on one globe, with the source details intact.',
     caption: 'Globe view: live events across the Pacific, with natural-event layers on one planet.',
   },
   worth: {
@@ -39,13 +39,12 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       },
     ],
     description:
-      'Rank the things you try, keep revisit logs, and remember what deserves another go.',
+      'For keeping track of your own taste: rank what you try and remember what deserves another go.',
     caption: 'Example ranked list: five drinks, in a very particular order.',
   },
   owewell: {
     image: '/projects/owewell.png',
-    description:
-      'Shared expenses, itemized splits, and the smallest set of payments needed to settle up.',
+    description: 'Split a group’s expenses and see who pays whom to settle up.',
     caption: 'A labeled $48 example, split three ways. Adjust the bill and the payments update.',
   },
   auth: {
@@ -56,8 +55,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
   },
   iguess: {
     image: '/projects/iguess.png',
-    description:
-      'Draw with friends while an AI races to guess. Five game modes share one room engine.',
+    description: 'Draw with friends while an AI races to guess. Bad drawings are welcome.',
     caption: 'Choose a game mode and an extremely qualified avatar.',
   },
   wherever: {
@@ -79,7 +77,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
         caption: 'The writing desk, before the garden grows.',
       },
     ],
-    description: 'Write someone a note and turn its details into a garden they can open.',
+    description: 'Send someone a personal note as a garden, with flowers shaped by what you wrote.',
     caption: 'Example recipient view: each flower carries a meaning from the note.',
   },
   mrrp: {

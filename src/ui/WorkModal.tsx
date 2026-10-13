@@ -194,7 +194,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                 ))}
               </div>
             </ScrollBody>
-            <WorkModalNav onPrevious={onPrevious} onNext={onNext} position={position} />
+            <WorkModalNav {...{ item, onPrevious, onNext, position }} />
             <WorkModalLinks item={item} />
           </>
         )}
