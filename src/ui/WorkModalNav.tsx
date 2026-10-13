@@ -12,7 +12,7 @@ const stepButton =
 export function WorkModalNav({ item, onPrevious, onNext, position }: Props) {
   const lane = item.mark || item.contribution ? 'Projects' : 'Employer work';
   return (
-    <div className="shrink-0 flex items-center justify-between gap-3 px-5 md:px-7 py-3 border-t border-[var(--color-line)]">
+    <div className="work-modal-nav shrink-0 flex items-center justify-between gap-3 px-5 md:px-7 py-3 border-t border-[var(--color-line)]">
       <div className="flex items-center gap-1">
         <button
           type="button"

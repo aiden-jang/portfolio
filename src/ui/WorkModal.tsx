@@ -141,7 +141,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         }}
         style={open ? { viewTransitionName: 'work-morph' } : undefined}
         className={`
-          relative flex flex-col w-full max-w-[960px] max-h-[85dvh] overflow-hidden
+          work-modal-panel relative flex flex-col w-full max-w-[960px] max-h-[85dvh] overflow-hidden
           bg-[#0a0a14] border border-[var(--color-line)] rounded-xl
           transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
           ${open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
@@ -179,23 +179,12 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
                 {item.summary}
               </p>
               <WorkStory item={item} />
-              <div className="mt-6 flex flex-wrap gap-2">
-                {item.stack.map((tag) => (
-                  <span
-                    key={tag}
-                    className="
-                    px-2.5 py-1 rounded-full border border-[var(--color-line)]
-                    font-[var(--font-mono)] text-[0.68rem] tracking-[0.16em] uppercase
-                    text-[var(--color-muted)]
-                  "
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              <p className="work-technologies">{item.stack.join(' · ')}</p>
             </ScrollBody>
-            <WorkModalNav {...{ item, onPrevious, onNext, position }} />
-            <WorkModalLinks item={item} />
+            <div className="work-modal-footer">
+              <WorkModalNav {...{ item, onPrevious, onNext, position }} />
+              <WorkModalLinks item={item} />
+            </div>
           </>
         )}
       </div>

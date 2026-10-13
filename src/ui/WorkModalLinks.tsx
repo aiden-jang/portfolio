@@ -46,7 +46,7 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
   return (
     // A flex sibling of the scroll area, so it stays flush to the panel edge no matter
     // how long the body is.
-    <div className="shrink-0 flex flex-wrap gap-2.5 px-5 md:px-7 py-4 border-t border-[var(--color-line)]">
+    <div className="work-modal-links shrink-0 flex flex-wrap gap-2.5 px-5 md:px-7 py-4 border-t border-[var(--color-line)]">
       {item.link && (
         <a
           href={item.link.url}
