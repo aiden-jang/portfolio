@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { canOrbitAt, hasFullCarView } from './orbitRegion';
+import { canOrbitAt, contactIsVisible, hasFullCarView } from './orbitRegion';
 
 describe('car gesture regions', () => {
   it('does not activate over reading content when the car is visible below it', () => {
@@ -29,4 +29,11 @@ describe('full car controls region', () => {
     expect(hasFullCarView(800, [{ id: 'sec-contact', top: 0.12, bottom: 800.12 }])).toBe(true);
     expect(hasFullCarView(800, [])).toBe(false);
   });
+});
+
+it('reveals the contact car while controls still wait for the full section', () => {
+  const sections = [{ id: 'sec-contact', top: 600, bottom: 1400 }];
+  expect(contactIsVisible(800, sections)).toBe(true);
+  expect(hasFullCarView(800, sections)).toBe(false);
+  expect(contactIsVisible(800, [{ id: 'sec-contact', top: 800, bottom: 1600 }])).toBe(false);
 });

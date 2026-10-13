@@ -25,3 +25,7 @@ export function pageSectionBounds(): SectionBounds[] {
     return [{ id, top, bottom }];
   });
 }
+
+export function contactIsVisible(height: number, sections: SectionBounds[]): boolean {
+  return sections.some(({ id, top, bottom }) => id === 'sec-contact' && top < height && bottom > 0);
+}

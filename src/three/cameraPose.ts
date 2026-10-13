@@ -66,3 +66,14 @@ export function blendIntro(
 }
 
 export const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+
+export function contactArrivalProgress(
+  top: number,
+  height: number,
+  progress: number,
+  dt: number,
+  reduced: boolean,
+): number {
+  if (top > height * 0.15) return 0;
+  return reduced ? 1 : Math.min(1, progress + dt / 2.2);
+}

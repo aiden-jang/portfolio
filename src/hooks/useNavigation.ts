@@ -5,7 +5,12 @@ import { clamp } from '../math';
 import { cancelSmoothScroll, smoothScrollTo } from './scrollNavigation';
 import { useAppStore } from '../store';
 import { sectionProgress } from './sectionProgress';
-import { canOrbitAt, hasFullCarView, pageSectionBounds } from '../three/orbitRegion';
+import {
+  canOrbitAt,
+  contactIsVisible,
+  hasFullCarView,
+  pageSectionBounds,
+} from '../three/orbitRegion';
 
 const SNAP_LOCK_MS = 900;
 // The GLB swap is async, so cycling faster than this queues loads nobody sees.
@@ -90,6 +95,10 @@ export function useNavigation() {
     };
     const onScroll = () => {
       const bounds = pageSectionBounds();
+      const contactVisible = contactIsVisible(window.innerHeight, bounds);
+      document.body.dataset.contactView = contactVisible ? 'visible' : 'hidden';
+      if (useAppStore.getState().isContactVisible !== contactVisible)
+        useAppStore.getState().setContactVisible(contactVisible);
       document.body.dataset.carControls = hasFullCarView(window.innerHeight, bounds)
         ? 'visible'
         : 'hidden';

@@ -30,6 +30,7 @@ type AppState = {
   carIndex: number;
   themeName: ThemeName;
   sectionIndex: number;
+  isContactVisible: boolean;
   // Incremented to ask CameraRig to drop any manual orbit offsets.
   cameraResetVersion: number;
   activeBodyColor: ActiveBodyColor;
@@ -47,6 +48,7 @@ type AppState = {
   setThemeName: (theme: ThemeName) => void;
   toggleTheme: () => void;
   setSectionIndex: (i: number) => void;
+  setContactVisible: (visible: boolean) => void;
   triggerRev: () => void;
   resetCamera: () => void;
   armIntro: () => void;
@@ -62,6 +64,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   carIndex: 0,
   themeName: 'dusk',
   sectionIndex: 0,
+  isContactVisible: false,
   cameraResetVersion: 0,
   activeBodyColor: 'original',
   hasBodyMaterial: false,
@@ -101,6 +104,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   setThemeName: (theme) => set({ themeName: theme }),
   toggleTheme: () => set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
   setSectionIndex: (i) => set({ sectionIndex: i }),
+  setContactVisible: (isContactVisible) => set({ isContactVisible }),
   triggerRev: () => {
     get().refs.revT = 1;
   },

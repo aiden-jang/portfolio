@@ -8,7 +8,7 @@ body:not([data-car-controls='visible']) .orbit-status {
 }
 
 /* Reading surfaces stay opaque while the interactive car is hidden. */
-body[data-car-view='reading'] .portfolio-scene,
+body[data-car-view='reading']:not([data-contact-view='visible']) .portfolio-scene,
 body[data-car-view='reading'] #desktop-dock,
 body[data-car-view='reading'] #mobile-bar,
 body[data-car-view='reading'] #hint,

@@ -4,7 +4,7 @@
 import { spawnSync } from 'node:child_process';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-const FLOOR = 109;
+const FLOOR = 111;
 
 const run = spawnSync('npx', ['vitest', 'run'], {
   cwd: ROOT,

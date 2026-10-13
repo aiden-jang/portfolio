@@ -1,19 +1,25 @@
 import { useRef } from 'react';
-import { useAppStore } from '../store';
+import { KEYFRAMES } from '../config';
 import type { Keyframe } from '../types';
-import { easeOutCubic } from './cameraPose';
+import { contactArrivalProgress, easeOutCubic } from './cameraPose';
 
 export function useContactArrival() {
-  const arrival = useRef({ active: false, progress: 0 });
+  const arrival = useRef({ progress: 0 });
   return (pose: Keyframe, dt: number, reduced: boolean) => {
     const state = arrival.current;
-    if (useAppStore.getState().sectionIndex !== 4) {
-      state.active = false;
+    const contact = document.getElementById('sec-contact')?.getBoundingClientRect();
+    if (!contact || contact.top >= window.innerHeight || contact.bottom <= 0) {
       state.progress = 0;
       return;
     }
-    if (!state.active) state.active = true;
-    state.progress = reduced ? 1 : Math.min(1, state.progress + dt / 2.2);
+    state.progress = contactArrivalProgress(
+      contact.top,
+      window.innerHeight,
+      state.progress,
+      dt,
+      reduced,
+    );
+    Object.assign(pose, KEYFRAMES[4]);
     const t = easeOutCubic(state.progress);
     pose.azimuth = 0;
     pose.elevation = 0.12 + (pose.elevation - 0.12) * t;

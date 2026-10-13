@@ -3,6 +3,7 @@ import { KEYFRAMES } from '../config';
 import type { Keyframe } from '../types';
 import {
   blendIntro,
+  contactArrivalProgress,
   easeOutCubic,
   floorElevation,
   framingDistanceMultiplier,
@@ -148,4 +149,11 @@ describe('easeOutCubic', () => {
   it('decelerates, rather than easing in', () => {
     expect(easeOutCubic(0.5)).toBeGreaterThan(0.5);
   });
+});
+
+it('holds the contact opening camera until the last part of the scroll', () => {
+  expect(contactArrivalProgress(400, 800, 0.6, 0.1, false)).toBe(0);
+  expect(contactArrivalProgress(120, 800, 0, 0.1, false)).toBeCloseTo(0.1 / 2.2);
+  expect(contactArrivalProgress(0, 800, 0.9, 1, false)).toBe(1);
+  expect(contactArrivalProgress(0, 800, 0, 0.1, true)).toBe(1);
 });
