@@ -107,12 +107,12 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       if (previouslyFocused?.isConnected) previouslyFocused.focus({ preventScroll: true });
     };
   }, [onClose, onNext, onPrevious, open]);
+  if (!open) return null;
   return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="work-modal-title"
-      aria-hidden={!open}
       onClick={onClose}
       className={`
         fixed inset-0 z-50 flex items-center justify-center px-4 py-4

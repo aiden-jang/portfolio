@@ -126,3 +126,26 @@
     padding-block: 96px;
   }
 }
+.story-share-status:empty {
+  display: none;
+}
+.story-share-status,
+.story-share-fallback {
+  flex-basis: 100%;
+  min-width: 0;
+  font-size: 12px;
+}
+.story-share-status {
+  color: var(--color-fg);
+}
+.story-share-fallback {
+  padding: 12px;
+  background: #101014;
+  color: var(--color-fg);
+  border: 1px solid var(--color-muted);
+  border-radius: 4px;
+}
+.story-share-fallback:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 2px;
+}

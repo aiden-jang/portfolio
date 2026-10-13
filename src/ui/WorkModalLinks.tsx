@@ -10,7 +10,8 @@ const pill =
 export function WorkModalLinks({ item }: { item: WorkDetail }) {
   const preview = PREVIEWS[item.mark ?? ''];
   const [selected] = usePreviewSelection(item.shortName ?? '', preview?.states?.length ?? 1);
-  const [result, setResult] = useState<'shared' | 'copied' | null>(null);
+  const [result, setResult] = useState<'shared' | 'copied' | 'failed' | null>(null);
+  const [fallbackUrl, setFallbackUrl] = useState('');
 
   useEffect(() => setResult(null), [item]);
 
@@ -37,7 +38,8 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
       setResult('copied');
       window.setTimeout(() => setResult(null), 1800);
     } catch {
-      // No clipboard in a private or embedded browser. The URL in the bar is still shareable.
+      setFallbackUrl(url);
+      setResult('failed');
     }
   };
 
@@ -76,8 +78,26 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
         className={`${pill} cursor-pointer text-[var(--color-muted)]`}
       >
         {result === 'shared' ? 'Link shared' : result === 'copied' ? 'Link copied' : 'Share link'}
-        <span aria-hidden="true">{result ? '✓' : '↗'}</span>
+        <span aria-hidden="true">{result === 'shared' || result === 'copied' ? '✓' : '↗'}</span>
       </button>
+      <span className="story-share-status" role="status">
+        {result === 'failed'
+          ? 'Copy unavailable. Select the link below to share it.'
+          : result === 'shared'
+            ? 'Link shared.'
+            : result === 'copied'
+              ? 'Link copied.'
+              : ''}
+      </span>
+      {result === 'failed' && (
+        <input
+          className="story-share-fallback"
+          aria-label="Case study link"
+          readOnly
+          value={fallbackUrl}
+          onFocus={(event) => event.currentTarget.select()}
+        />
+      )}
     </div>
   );
 }
