@@ -20,6 +20,12 @@ export function ProjectPreview({
   const caption = states?.[selected]?.caption ?? initialCaption;
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
+  const viewport = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const area = viewport.current;
+    if (area)
+      area.scrollTo({ left: zoomed ? (area.scrollWidth - area.clientWidth) / 2 : 0, top: 0 });
+  }, [zoomed]);
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -141,10 +147,21 @@ export function ProjectPreview({
                 Close ×
               </button>
             </div>
-            <div className={`preview-image ${zoomed ? 'is-zoomed' : ''}`}>
+            <div
+              ref={viewport}
+              className={`preview-image ${zoomed ? 'is-zoomed' : ''}`}
+              tabIndex={zoomed ? 0 : -1}
+              role="region"
+              aria-label="Screenshot. Scroll to explore the enlarged image."
+            >
               <img src={image} alt={`${name} product interface, full screenshot`} />
             </div>
-            <p>{caption}</p>
+            <p>
+              {zoomed && (
+                <span className="preview-zoom-help">Scroll to explore · Fit image to return</span>
+              )}
+              {caption}
+            </p>
           </dialog>,
           document.body,
         )}

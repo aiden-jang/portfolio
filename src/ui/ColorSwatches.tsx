@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
 
 // The full swatch row does not fit beside the car switcher at 320px, so the phone gets one
@@ -38,24 +37,13 @@ export function MobileColorButton() {
 }
 
 export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
-  const carIndex = useAppStore((s) => s.carIndex);
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const applyBodyColor = useAppStore((s) => s.applyBodyColor);
   const hasBody = useAppStore((s) => s.hasBodyMaterial);
 
-  // Switching cars by arrow key leaves focus on a swatch belonging to the car that just left,
-  // outline and all.
-  useEffect(() => {
-    const focused = document.activeElement;
-    if (focused instanceof HTMLButtonElement && focused.dataset.colorSwatch === 'true') {
-      focused.blur();
-    }
-  }, [carIndex]);
-
   // Always rendered, muted, so the nav does not shift when material detection finishes.
   return (
     <div
-      key={carIndex}
       role="group"
       aria-label="Paint"
       aria-hidden={!hasBody}

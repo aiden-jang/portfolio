@@ -73,6 +73,7 @@ export function MobileThemeButton() {
         transition-colors active:border-[var(--color-neon)]
       "
     >
+      <span className="mobile-light-name">{isNight ? 'Night' : 'Dusk'}</span>
       {isNight ? <MoonIcon /> : <SunIcon />}
     </button>
   );

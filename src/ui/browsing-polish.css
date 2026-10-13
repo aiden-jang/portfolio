@@ -93,3 +93,48 @@
     min-height: 44px;
   }
 }
+
+.mobile-light-name {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  padding: 4px 6px;
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font: 9px/1.2 var(--font-mono);
+}
+#mobile-bar button[aria-label^='Lighting:'] {
+  position: relative;
+}
+.preview-dialog-heading {
+  position: sticky;
+  top: -20px;
+  z-index: 1;
+  background: var(--color-bg);
+  padding: 8px 0;
+}
+.preview-dialog-heading > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.preview-zoom-help {
+  display: block;
+  margin-bottom: 8px;
+  font: 10px/1.5 var(--font-mono);
+}
+.preview-image:focus-visible {
+  outline: 1px solid var(--color-fg);
+  outline-offset: -2px;
+}
+@media (max-width: 767px) {
+  .preview-dialog-heading {
+    flex-wrap: wrap;
+  }
+  .preview-dialog-heading > span {
+    flex-basis: 100%;
+  }
+  .preview-dialog-heading button {
+    flex: 1;
+  }
+}
