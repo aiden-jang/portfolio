@@ -62,6 +62,10 @@ describe('copyCurrentSceneUrl', () => {
 });
 
 describe('shareCurrentScene', () => {
+  it('reports unavailable sharing without treating cancellation as failure', async () => {
+    vi.stubGlobal('navigator', {});
+    await expect(shareCurrentScene()).resolves.toBe('failed');
+  });
   it('uses the share sheet when the platform has one', async () => {
     const share = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal('navigator', { share, clipboard: { writeText: vi.fn() } });

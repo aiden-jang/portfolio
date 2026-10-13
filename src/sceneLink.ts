@@ -19,7 +19,7 @@ export async function copyCurrentSceneUrl(): Promise<boolean> {
   }
 }
 
-export async function shareCurrentScene(): Promise<'shared' | 'copied' | null> {
+export async function shareCurrentScene(): Promise<'shared' | 'copied' | 'failed' | null> {
   const url = currentSceneUrl();
   if (typeof navigator.share === 'function') {
     try {
@@ -38,6 +38,6 @@ export async function shareCurrentScene(): Promise<'shared' | 'copied' | null> {
     await navigator.clipboard.writeText(url);
     return 'copied';
   } catch {
-    return null;
+    return 'failed';
   }
 }

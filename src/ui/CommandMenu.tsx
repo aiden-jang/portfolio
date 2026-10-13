@@ -1,23 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { createPortal, flushSync } from 'react-dom';
 import { type SectionId } from '../config';
 import { buildCommands, matchCommands, type Command } from './commands';
-
+import { usePageScrollLock } from './usePageScrollLock';
 export const COMMAND_MENU_EVENT = 'portfolio:open-command-menu';
 
 export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void }) {
   const [open, setOpen] = useState(false);
+  usePageScrollLock(open);
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const activeResultRef = useRef<HTMLButtonElement>(null);
-
   const commands = useMemo(() => buildCommands({ onSection, setNotice }), [onSection]);
 
   const results = matchCommands(commands, query);
-
   useEffect(() => {
     setActiveIndex(0);
   }, [query, open]);
@@ -28,6 +27,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
+      if (document.querySelector('[role="dialog"], dialog[open]') && !dialogRef.current) return;
       const target = event.target as HTMLElement | null;
       const inField =
         target instanceof HTMLInputElement ||
@@ -87,8 +87,8 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   }, [open]);
 
   const select = async (command: Command) => {
+    if (command.closeOnRun !== false) flushSync(() => setOpen(false));
     await command.run();
-    if (command.closeOnRun !== false) setOpen(false);
   };
 
   // `aria-hidden` alone does not keep an input out of the tab order in every browser, so the

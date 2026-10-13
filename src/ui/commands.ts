@@ -117,7 +117,9 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
             ? 'Garage shared'
             : result === 'copied'
               ? 'Garage link copied'
-              : 'Could not share the garage',
+              : result === 'failed'
+                ? 'Copy unavailable. Use the address bar link.'
+                : '',
         );
       },
     },

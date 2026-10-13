@@ -1,17 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CARS } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
 
 export function SceneShareButton() {
   const carIndex = useAppStore((state) => state.carIndex);
-  const [result, setResult] = useState<'shared' | 'copied' | null>(null);
+  const [result, setResult] = useState<'shared' | 'copied' | 'failed' | null>(null);
+  const version = useRef(0);
+  const resetTimer = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(
+    () => () => {
+      version.current++;
+      clearTimeout(resetTimer.current);
+    },
+    [],
+  );
 
   const share = async () => {
+    const request = ++version.current;
+    clearTimeout(resetTimer.current);
+    setResult(null);
     const nextResult = await shareCurrentScene();
+    if (request !== version.current) return;
     if (nextResult) {
       setResult(nextResult);
-      window.setTimeout(() => setResult(null), 1800);
+      resetTimer.current = setTimeout(() => setResult(null), nextResult === 'failed' ? 6000 : 1800);
     }
   };
 
@@ -23,7 +36,11 @@ export function SceneShareButton() {
           role="status"
           className="pointer-events-none absolute bottom-full right-0 mb-2 whitespace-nowrap rounded-full border border-[var(--color-neon)] bg-[#0b0b15] px-2.5 py-1 font-[var(--font-mono)] text-[0.58rem] tracking-[0.13em] uppercase text-[var(--color-neon)] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.85)] animate-[app-fade-in_160ms_ease-out_both]"
         >
-          {result === 'shared' ? 'Garage shared' : 'Garage link copied'}
+          {result === 'shared'
+            ? 'Garage shared'
+            : result === 'copied'
+              ? 'Garage link copied'
+              : 'Copy unavailable. Use the address bar link.'}
         </span>
       )}
       <button
@@ -33,7 +50,9 @@ export function SceneShareButton() {
           result
             ? result === 'shared'
               ? 'Garage shared'
-              : 'Garage link copied'
+              : result === 'copied'
+                ? 'Garage link copied'
+                : 'Sharing unavailable'
             : `Share this ${car?.name ?? 'car'} setup`
         }
         title="Share this garage setup"
@@ -45,7 +64,7 @@ export function SceneShareButton() {
       >
         {result ? (
           <span aria-hidden="true" className="text-[0.95rem]">
-            ✓
+            {result === 'failed' ? '!' : '✓'}
           </span>
         ) : (
           <svg

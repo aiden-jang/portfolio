@@ -7,10 +7,25 @@ import { ScreenshotImage } from './ScreenshotImage';
 import { SceneBoundary } from './SceneBoundary';
 import { WorkModal } from './WorkModal';
 import { ContactSection } from './sections/Contact';
+import { CommandMenu } from './CommandMenu';
 import type { WorkDetail } from '../types';
 
 let host: HTMLDivElement;
 let root: Root;
+it('does not open command controls over another dialog', async () => {
+  const blocker = document.createElement('div');
+  blocker.setAttribute('role', 'dialog');
+  document.body.append(blocker);
+  try {
+    await act(() => root.render(createElement(CommandMenu, { onSection: () => {} })));
+    await act(() =>
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true })),
+    );
+    expect(document.querySelector('[aria-label="Command menu"]')).toBeNull();
+  } finally {
+    blocker.remove();
+  }
+});
 it('marks a pending screenshot busy until the image loads', async () => {
   await act(() => root.render(createElement(ScreenshotImage, { src: '/pending.png', alt: 'App' })));
   const image = host.querySelector('img')!;

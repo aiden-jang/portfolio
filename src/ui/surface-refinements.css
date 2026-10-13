@@ -101,3 +101,137 @@ dialog.preview-dialog[open] {
 .preview-dialog > p {
   flex-shrink: 0;
 }
+.mobile-project-filter {
+  display: none;
+}
+.car-picker-desktop {
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  background: #24242a;
+  margin-right: 4px;
+}
+#desktop-dock button:is([aria-label='Rev engine'], [aria-label='Reset camera view']) {
+  color: #a3a3ad;
+}
+#desktop-dock button[title='Share this garage setup'] {
+  min-width: 44px;
+  min-height: 44px;
+}
+#sec-contact .contact-email-actions button,
+#sec-contact .panel > button[aria-haspopup='dialog'] {
+  font: 12px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 8px 14px;
+}
+#sec-contact :is(a, button):hover {
+  color: var(--color-fg);
+  border-color: var(--color-muted);
+}
+#sec-contact :is(a, button):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}
+@media (max-width: 767px) {
+  .project-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 0.46fr) minmax(0, 0.54fr);
+    gap: 10px;
+    padding-block: 8px;
+  }
+  .project-toolbar .garage-filters {
+    display: none;
+  }
+  .mobile-project-filter {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px;
+    border: 1px solid var(--color-line);
+    background: #101014;
+    color: var(--color-fg);
+    font-size: 12px;
+  }
+  .project-browse {
+    min-width: 0;
+    gap: 0;
+  }
+  .project-browse select {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px;
+    font-size: 12px;
+  }
+  .project-browse p {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .garage-project {
+    scroll-margin-top: 160px;
+  }
+}
+button[aria-label='Close model credits'],
+.work-modal-panel > button[aria-label='Close'] {
+  min-width: 44px;
+  min-height: 44px;
+}
+.garage-project .garage-stack {
+  font-size: 11px;
+  line-height: 1.6;
+}
+.portfolio-header a[aria-label^='Résumé'] {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font: 12px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+#desktop-dock [role='status'] {
+  max-width: 240px;
+  white-space: normal;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font: 12px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+button[aria-label='Close model credits'] + p + p {
+  font: 11px/1.5 var(--font-display);
+  letter-spacing: 0;
+  color: #b9b9c0;
+}
+section[aria-label='Command menu'] > div[aria-live='polite'] {
+  font: 11px/1.5 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+  color: #b9b9c0;
+}
+#sec-work {
+  padding-top: max(120px, 13vh);
+}
+button[aria-label='Close model credits'] ~ ul a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+.garage-project-compact .project-preview[data-project='bloomnote'] img {
+  transform: scale(1.5);
+  transform-origin: center 15%;
+}
+.garage-project-compact .project-preview[data-project='mrrp'] img {
+  transform: scale(1.4);
+  transform-origin: center 40%;
+}
+@media (max-width: 767px) {
+  button[aria-label='Close model credits'] ~ ul a {
+    min-height: 44px;
+  }
+}

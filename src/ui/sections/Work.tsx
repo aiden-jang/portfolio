@@ -26,6 +26,13 @@ const FILTERS = [
 export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
   const visible = visibleProjects(filter);
   const activeProject = useActiveProject(visible.map(workId));
+  const changeFilter = (next: ProjectFilter) => {
+    cancelSmoothScroll();
+    onFilterChange(next);
+    requestAnimationFrame(() =>
+      document.getElementById('sec-work')?.scrollIntoView({ block: 'start', behavior: 'instant' }),
+    );
+  };
   const featured =
     filter === 'all' ? visible.filter((item) => FEATURED_PROJECTS.includes(item.shortName!)) : [];
   const gallery =
@@ -40,6 +47,19 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
           <span>Personal products & open source</span>
         </div>
         <div className="project-toolbar">
+          <select
+            className="mobile-project-filter"
+            aria-label="Filter projects"
+            aria-describedby="project-count"
+            value={filter}
+            onChange={(event) => changeFilter(event.target.value as ProjectFilter)}
+          >
+            {FILTERS.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label === 'All' ? 'All projects' : option.label}
+              </option>
+            ))}
+          </select>
           <div className="garage-filters" aria-label="Filter projects">
             <span className="filter-label">Show</span>
             {FILTERS.map((option) => (
@@ -47,22 +67,16 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
                 key={option.id}
                 type="button"
                 aria-pressed={filter === option.id}
-                onClick={() => {
-                  cancelSmoothScroll();
-                  onFilterChange(option.id);
-                  requestAnimationFrame(() =>
-                    document
-                      .getElementById('sec-work')
-                      ?.scrollIntoView({ block: 'start', behavior: 'instant' }),
-                  );
-                }}
+                onClick={() => changeFilter(option.id)}
               >
                 {option.label}
               </button>
             ))}
           </div>
           <div className="project-browse">
-            <p aria-live="polite">{visible.length} projects</p>
+            <p id="project-count" aria-live="polite">
+              {visible.length} projects
+            </p>
             <select
               aria-label="Jump to a project"
               value={activeProject}
