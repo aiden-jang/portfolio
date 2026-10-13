@@ -12,11 +12,13 @@ export function LoadingBar() {
   return (
     <div
       className={`
+        car-loading-progress
         fixed top-0 left-0 right-0 z-50 pointer-events-none
         transition-opacity duration-300
         ${active ? 'opacity-100' : 'opacity-0'}
       `}
       role="status"
+      aria-hidden={!active}
       aria-label={active ? `Loading ${car?.name ?? 'car'}` : undefined}
     >
       <div className="h-[2px]">

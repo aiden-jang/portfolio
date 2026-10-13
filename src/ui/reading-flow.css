@@ -4,6 +4,7 @@ body[data-car-view='reading'] #desktop-dock,
 body[data-car-view='reading'] #mobile-bar,
 body[data-car-view='reading'] #hint,
 body[data-car-view='reading'] .car-load-notice,
+body[data-car-view='reading'] .car-loading-progress,
 body[data-car-view='reading'] .scene-loading-note {
   visibility: hidden;
 }

@@ -6,6 +6,8 @@ import './keyboard-legend.css';
 export function Hint() {
   const [triedOrbit, setTriedOrbit] = useState(false);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
+  const loading = useAppStore((state) => state.isCarLoading);
+  const error = useAppStore((state) => state.carLoadError);
   useEffect(() => {
     const observer = new MutationObserver(() => {
       if (document.body.classList.contains('orbiting')) setTriedOrbit(true);
@@ -15,7 +17,7 @@ export function Hint() {
   }, []);
   return (
     <>
-      {sectionIndex === 0 && (
+      {sectionIndex === 0 && !loading && !error && (
         <p className={`orbit-invitation ${triedOrbit ? 'orbit-invitation-used' : ''}`}>
           <span className="hidden md:inline">Drag to look around.</span>
           <span className="md:hidden">Hold the car, then drag to look around.</span>
