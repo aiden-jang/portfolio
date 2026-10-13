@@ -82,3 +82,22 @@
     max-width: 32ch;
   }
 }
+dialog.preview-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.preview-dialog-heading {
+  flex-shrink: 0;
+}
+.preview-dialog .preview-image {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 68dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+.preview-dialog > p {
+  flex-shrink: 0;
+}

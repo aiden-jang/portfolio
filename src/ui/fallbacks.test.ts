@@ -6,10 +6,34 @@ import { WorkModalLinks } from './WorkModalLinks';
 import { ScreenshotImage } from './ScreenshotImage';
 import { SceneBoundary } from './SceneBoundary';
 import { WorkModal } from './WorkModal';
+import { ContactSection } from './sections/Contact';
 import type { WorkDetail } from '../types';
 
 let host: HTMLDivElement;
 let root: Root;
+it('marks a pending screenshot busy until the image loads', async () => {
+  await act(() => root.render(createElement(ScreenshotImage, { src: '/pending.png', alt: 'App' })));
+  const image = host.querySelector('img')!;
+  expect(image.getAttribute('aria-busy')).toBe('true');
+  await act(() => image.dispatchEvent(new Event('load')));
+  expect(image.getAttribute('aria-busy')).toBe('false');
+});
+
+it('keeps the latest copy feedback when an earlier request finishes afterward', async () => {
+  let resolveFirst!: () => void;
+  const first = new Promise<void>((resolve) => {
+    resolveFirst = resolve;
+  });
+  const writeText = vi.fn().mockReturnValueOnce(first).mockRejectedValueOnce(new Error('Denied'));
+  Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+  await act(() => root.render(createElement(ContactSection)));
+  const copy = host.querySelector<HTMLButtonElement>('[aria-label="Copy email address"]')!;
+  await act(() => copy.click());
+  await act(async () => copy.click());
+  await act(async () => resolveFirst());
+  expect(host.querySelector('.contact-copy-status')?.textContent).toContain('select the address');
+  expect(copy.textContent).toBe('Copy unavailable');
+});
 it('removes closed story controls from keyboard navigation', async () => {
   const noop = () => {};
   await act(() =>

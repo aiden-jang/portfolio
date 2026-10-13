@@ -9,6 +9,7 @@ import { ProjectPreview } from '../ProjectPreview';
 import { IodineContributions } from '../IodineContributions';
 import { prefersReducedMotion } from '../../hooks/useReducedMotion';
 import { cancelSmoothScroll } from '../../hooks/useNavigation';
+import { useActiveProject } from '../useActiveProject';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 type BrowseProps = Props & {
@@ -24,6 +25,7 @@ const FILTERS = [
 ] as const;
 export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
   const visible = visibleProjects(filter);
+  const activeProject = useActiveProject(visible.map(workId));
   const featured =
     filter === 'all' ? visible.filter((item) => FEATURED_PROJECTS.includes(item.shortName!)) : [];
   const gallery =
@@ -63,7 +65,7 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
             <p aria-live="polite">{visible.length} projects</p>
             <select
               aria-label="Jump to a project"
-              value=""
+              value={activeProject}
               onChange={(event) => {
                 cancelSmoothScroll();
                 document.getElementById(`project-${event.target.value}`)?.scrollIntoView({

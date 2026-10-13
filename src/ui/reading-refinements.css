@@ -41,7 +41,7 @@
   object-position: center 18%;
 }
 .contact-copy-status {
-  min-height: 20px;
+  min-height: 3em;
   margin-top: 12px;
   font: 11px/1.5 var(--font-display);
   color: var(--color-muted);

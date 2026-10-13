@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SCREENSHOT_SIZES } from '../data/screenshotSizes';
 import './screenshot-image.css';
 
@@ -12,6 +12,12 @@ export function ScreenshotImage({
   lazy?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const image = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    setFailed(false);
+    setLoaded(!!image.current?.complete && image.current.naturalWidth > 0);
+  }, [src]);
   const [width, height] = SCREENSHOT_SIZES[src] ?? [1600, 1000];
   return failed ? (
     <span className="screenshot-unavailable" role="status">
@@ -19,11 +25,15 @@ export function ScreenshotImage({
     </span>
   ) : (
     <img
+      ref={image}
+      className={`screenshot-image ${loaded ? '' : 'is-loading'}`}
+      aria-busy={!loaded}
       src={src}
       alt={alt}
       width={width}
       height={height}
       loading={lazy ? 'lazy' : 'eager'}
+      onLoad={() => setLoaded(true)}
       onError={() => setFailed(true)}
     />
   );

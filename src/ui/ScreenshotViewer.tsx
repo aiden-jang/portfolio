@@ -90,7 +90,7 @@ export function ScreenshotViewer({
       </div>
       <p>
         {zoomed && (
-          <span className="preview-zoom-help">Scroll to explore · Fit image to return</span>
+          <span className="preview-zoom-help">Drag or scroll to explore · Fit image to return</span>
         )}
         {caption}
       </p>
