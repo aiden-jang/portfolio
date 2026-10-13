@@ -164,7 +164,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         </button>
         {item && (
           <>
-            <ScrollBody key={item.title}>
+            <ScrollBody key={item.title} storyId={item.title}>
               {item.image && (
                 <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
               )}

@@ -1,12 +1,33 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import './browsing-polish.css';
 
-export function ScrollBody({ children }: { children: ReactNode }) {
+const readingPositions = new Map<string, { top: number; expanded: number[] }>();
+
+export function ScrollBody({ children, storyId }: { children: ReactNode; storyId: string }) {
   const area = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [more, setMore] = useState(false);
   const [progress, setProgress] = useState(0);
+  useLayoutEffect(() => {
+    const element = area.current!;
+    const saved = readingPositions.get(storyId);
+    if (saved) {
+      const details = element.querySelectorAll('details');
+      saved.expanded.forEach((index) => {
+        if (details[index]) details[index].open = true;
+      });
+      element.scrollTop = saved.top;
+    }
+    return () => {
+      readingPositions.set(storyId, {
+        top: element.scrollTop,
+        expanded: Array.from(element.querySelectorAll('details')).flatMap((detail, index) =>
+          detail.open ? [index] : [],
+        ),
+      });
+    };
+  }, [storyId]);
   useEffect(() => {
     const element = area.current!;
     const update = () => {

@@ -1,44 +1,10 @@
+import { CarPicker } from './CarPicker';
 import { type ReactNode } from 'react';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 
-// The name needs its fixed min-width, or the dock bar jumps width as you cycle cars.
 export function CarSwitcher() {
-  const carIndex = useAppStore((s) => s.carIndex);
-  const cycleCar = useAppStore((s) => s.cycleCar);
-  const isCarLoading = useAppStore((s) => s.isCarLoading);
-  const car = CARS[carIndex];
-
-  return (
-    <button
-      id="car-switcher"
-      type="button"
-      aria-label={`${car?.name ?? 'Current car'}, ${carIndex + 1} of ${CARS.length}. Next car`}
-      title={`${car?.name ?? 'Current car'} · ${carIndex + 1} of ${CARS.length}`}
-      onClick={cycleCar}
-      disabled={isCarLoading}
-      aria-busy={isCarLoading}
-      className="
-        group inline-flex items-center gap-2 cursor-pointer rounded-full px-3 py-1.5
-        font-[var(--font-mono)] text-[0.72rem] tracking-[0.18em] uppercase
-        text-[var(--color-fg)] transition-colors
-        hover:text-[var(--color-neon)]
-        [&.loading]:opacity-50 [&.loading]:pointer-events-none
-      "
-    >
-      <span className="min-w-[7rem] text-center truncate">
-        {`${car?.name ?? '—'} · ${car?.code ?? '—'}`}
-        {isCarLoading && (
-          <span aria-label="Loading car" className="ml-2">
-            ···
-          </span>
-        )}
-      </span>
-      <span className="text-[var(--color-muted)] text-[1.05em] leading-none group-hover:text-[var(--color-neon)]">
-        ›
-      </span>
-    </button>
-  );
+  return <CarPicker />;
 }
 
 // Arrows rather than a swipe: on touch a horizontal swipe competes with both the page scroll
@@ -68,13 +34,7 @@ export function MobileCarSwitcher() {
       >
         ‹
       </ArrowButton>
-      <span aria-live="polite" className="mobile-car-label">
-        <span>{car?.name ?? '—'}</span>
-        <small>
-          {car?.code ?? '—'}
-          {isCarLoading ? ' ···' : ''}
-        </small>
-      </span>
+      <CarPicker mobile />
       <ArrowButton
         label={`Next car. ${car?.name ?? 'Current car'}, ${carIndex + 1} of ${CARS.length}`}
         onClick={cycleCar}
