@@ -39,8 +39,6 @@ export function Nav({ onLink }: Props) {
           />
         ))}
       </div>
-      {/* Don't add the scene controls here. They widen this row until it runs under the brand,
-          which is why they live in the bottom dock in App.tsx. */}
       <ResumeButton />
     </nav>
   );

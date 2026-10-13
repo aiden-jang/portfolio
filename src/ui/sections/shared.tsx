@@ -24,9 +24,7 @@ export function Section({
 }: {
   id: string;
   side: SectionSide;
-  // Top-aligns the taller desktop panels, which would otherwise run under the brand block.
   desktopVertical?: 'center' | 'top';
-  // Top-aligns on phones, where a centred panel lands on top of the car it is describing.
   mobileVertical?: 'center' | 'top';
   children: ReactNode;
 }) {

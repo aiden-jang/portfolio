@@ -1,7 +1,5 @@
 import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
 
-// The full swatch row does not fit beside the car switcher at 320px, so the phone gets one
-// cycling button instead.
 export function MobileColorButton() {
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const cycleBodyColor = useAppStore((s) => s.cycleBodyColor);
@@ -41,7 +39,6 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
   const applyBodyColor = useAppStore((s) => s.applyBodyColor);
   const hasBody = useAppStore((s) => s.hasBodyMaterial);
 
-  // Always rendered, muted, so the nav does not shift when material detection finishes.
   return (
     <div
       role="group"

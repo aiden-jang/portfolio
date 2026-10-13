@@ -62,10 +62,8 @@ export function Car() {
     };
   }, [group, underglow]);
 
-  // Theme-driven underglow color (smooth).
   const currentUnderglow = useRef(THEMES.dusk.underglow);
 
-  // (Re)load whenever carIndex changes.
   useEffect(() => {
     const spec = CARS[carIndex];
     if (!spec) return;
@@ -86,7 +84,6 @@ export function Car() {
           return;
         }
 
-        // Tear down previous car.
         if (modelRef.current) {
           group.remove(modelRef.current);
           disposeModel(modelRef.current);
@@ -171,7 +168,6 @@ export function Car() {
     currentUnderglow.current = smoothColorHex(currentUnderglow.current, target.underglow, k);
     underglowMat.color.setHex(currentUnderglow.current);
 
-    // Floor reads this for its final tone-mapping.
     const targetExposure = CARS[displayedIndex.current]?.exposure ?? 1;
     refs.exposureCurrent = smoothTowards(
       refs.exposureCurrent,

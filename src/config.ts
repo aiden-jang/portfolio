@@ -1,7 +1,6 @@
 import type { CarSpec, Keyframe, Theme, ThemeName } from './types';
 
 export const THEMES: Record<ThemeName, Theme> = {
-  // Warm studio lighting: warm key, cool fill, soft warm rim.
   dusk: {
     bg: 0x12121a,
     fogColor: 0x12121a,
@@ -18,7 +17,6 @@ export const THEMES: Record<ThemeName, Theme> = {
     bloomThreshold: 0.95,
     exposure: 1.0,
   },
-  // Cool moonlight with a violet rim.
   night: {
     bg: 0x080a14,
     fogColor: 0x080a14,
@@ -37,9 +35,7 @@ export const THEMES: Record<ThemeName, Theme> = {
   },
 };
 
-// Don't reorder these casually. Car.tsx prefetches both neighbours of the current car, so index
-// 0, index 1 and the last entry all download on arrival. Keeping the three lightest models in
-// those slots holds that first burst near 2MB; the 13.7MB Porsche next to the default made it 19.
+// The default car and both neighbours are prefetched; keep lightweight models in those slots.
 export const CARS: CarSpec[] = [
   {
     name: 'Ferrari F40',
@@ -92,7 +88,6 @@ export const CARS: CarSpec[] = [
   },
 ];
 
-// One per page section, in section order. CameraRig interpolates between neighbours.
 export const KEYFRAMES: Keyframe[] = [
   { azimuth: 0.65, elevation: 0.22, distance: 9.5, targetY: 0.7 }, // intro:      front 3/4
   { azimuth: 1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // experience: side (right)

@@ -1,6 +1,5 @@
 import { useAppStore } from './store';
 
-// Outside the UI so the desktop and mobile share actions cannot drift apart.
 export function currentSceneUrl(): string {
   const { carIndex, activeBodyColor, themeName } = useAppStore.getState();
   const url = new URL(window.location.href);

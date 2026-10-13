@@ -11,8 +11,6 @@ const LABELS: Record<SectionId, string> = {
 
 type Props = {
   onJump: (id: SectionId) => void;
-  // `bar` renders in flow, so a parent can place it inside the mobile bottom bar. `rail` fixes
-  // itself to the right edge.
   placement: 'rail' | 'bar';
 };
 

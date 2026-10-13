@@ -1,5 +1,3 @@
-// stitchTiles is what makes the noise tile seamlessly, so the animated translate never exposes
-// an edge.
 const NOISE_SVG =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>" +
   "<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' stitchTiles='stitch'/></filter>" +

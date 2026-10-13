@@ -2,8 +2,6 @@ import { useProgress } from '@react-three/drei';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 
-// `useProgress` reads Three's default LoadingManager, so this tracks car swaps too, not just
-// the first load.
 export function LoadingBar() {
   const { progress, active } = useProgress();
   const carIndex = useAppStore((state) => state.carIndex);

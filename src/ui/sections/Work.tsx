@@ -8,7 +8,7 @@ import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
 import { IodineContributions } from '../IodineContributions';
 import { prefersReducedMotion } from '../../hooks/useReducedMotion';
-import { cancelSmoothScroll } from '../../hooks/useNavigation';
+import { cancelSmoothScroll } from '../../hooks/scrollNavigation';
 import { useActiveProject } from '../useActiveProject';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };

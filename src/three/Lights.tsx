@@ -24,7 +24,6 @@ function computeSunPosition(date: Date) {
   return { x, y, z: SUN_Z, daylight };
 }
 
-// Eased toward the active theme every frame, so a toggle fades instead of snapping.
 export function Lights() {
   const ambient = useRef<THREE.AmbientLight>(null!);
   const hemi = useRef<THREE.HemisphereLight>(null!);

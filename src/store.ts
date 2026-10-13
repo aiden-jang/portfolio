@@ -27,7 +27,6 @@ export const BODY_COLOR_SWATCHES: { hex: string; name: string }[] = [
 const BODY_COLOR_PALETTE = BODY_COLOR_SWATCHES.map((s) => s.hex);
 
 type AppState = {
-  // ---- React state (rare changes, triggers re-renders) ----
   carIndex: number;
   themeName: ThemeName;
   sectionIndex: number;
@@ -39,10 +38,8 @@ type AppState = {
   carLoadError: string | null;
   carRetryVersion: number;
 
-  // ---- Imperative refs (high-frequency, do not trigger re-renders) ----
   refs: Refs;
 
-  // ---- Actions ----
   setCarIndex: (i: number) => void;
   cycleCar: () => void;
   prevCar: () => void;
@@ -85,26 +82,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     refs.bodyOriginalColor = null;
     set({ carIndex: i, activeBodyColor: 'original', hasBodyMaterial: false });
   },
-  cycleCar: () => {
-    const refs = get().refs;
-    refs.bodyMaterial = null;
-    refs.bodyOriginalColor = null;
-    set({
-      carIndex: (get().carIndex + 1) % CARS.length,
-      activeBodyColor: 'original',
-      hasBodyMaterial: false,
-    });
-  },
-  prevCar: () => {
-    const refs = get().refs;
-    refs.bodyMaterial = null;
-    refs.bodyOriginalColor = null;
-    set({
-      carIndex: (get().carIndex - 1 + CARS.length) % CARS.length,
-      activeBodyColor: 'original',
-      hasBodyMaterial: false,
-    });
-  },
+  cycleCar: () => get().setCarIndex((get().carIndex + 1) % CARS.length),
+  prevCar: () => get().setCarIndex((get().carIndex - 1 + CARS.length) % CARS.length),
   randomizeGarage: () => {
     const { carIndex: currentIndex } = get();
     const refs = get().refs;
@@ -150,7 +129,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ activeBodyColor: color });
   },
   cycleBodyColor: () => {
-    // "original" is prepended so the cycle matches the order the swatches are shown in.
     const order: ActiveBodyColor[] = ['original', ...BODY_COLOR_PALETTE];
     const idx = order.indexOf(get().activeBodyColor);
     const next = order[(idx + 1) % order.length];

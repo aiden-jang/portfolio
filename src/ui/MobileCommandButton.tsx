@@ -8,7 +8,6 @@ export function MobileCommandButton() {
       aria-label="Open portfolio controls"
       className="pointer-events-auto inline-grid h-11 w-11 place-items-center rounded-full border border-[var(--color-line)] bg-white/[0.04] text-[var(--color-muted)] transition-colors active:border-[var(--color-neon)] active:text-[var(--color-neon)]"
     >
-      {/* Sliders, not a ⌘: a phone has no command key, so the glyph named a shortcut nobody has. */}
       <svg
         aria-hidden="true"
         viewBox="0 0 20 20"

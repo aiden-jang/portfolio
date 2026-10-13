@@ -12,8 +12,6 @@ export const ACCENTS: Record<MarkKey, string> = {
   bloomnote: '#ff8fa3',
   auth: '#22d3ee',
   mrrp: '#e0a03f',
-  /* Deliberately the dullest accent here. That app reserves hue for magnitude, so a loud mark
-     would contradict it. */
   everythingisfine: '#5b8fb0',
 };
 
@@ -31,8 +29,6 @@ export const marks: Record<MarkKey, () => JSX.Element> = {
       </g>
     </svg>
   ),
-  /* One rect per pixel on a 16x16 grid at 32px each, matching how the app draws her. Flat colour
-     on purpose: a gradient behind hand-placed pixels reads as two different products. */
   mrrp: () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -136,8 +132,6 @@ export const marks: Record<MarkKey, () => JSX.Element> = {
       </g>
     </svg>
   ),
-  /* Only the wavefront carries hue, following that app's own rule. One equator and one meridian,
-     because denser graticules turn to mud at card size. */
   everythingisfine: () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true">
       <defs>
@@ -146,7 +140,6 @@ export const marks: Record<MarkKey, () => JSX.Element> = {
         </clipPath>
       </defs>
       <rect width="512" height="512" rx="120" fill="#0a0e13" />
-      {/* Clipped to the disc, or they read as floating beside the planet instead of crossing it. */}
       <g clipPath="url(#mk-eif-disc)" fill="none" stroke="#5b8fb0" strokeWidth="22">
         <circle cx="196" cy="316" r="58" opacity="0.95" />
         <circle cx="196" cy="316" r="116" opacity="0.55" />
