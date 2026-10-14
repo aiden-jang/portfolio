@@ -54,6 +54,25 @@ visibility, and `portfolio-surfaces.css` contains cross-section layouts and
 surface refinements. Its rule order preserves the existing responsive cascade.
 Avoid adding new files named after polish passes; change the relevant owner.
 
+## Initial HTML and search metadata
+
+`index.html` includes an HTML introduction, experience and contact links inside
+`#root`. This is readable before JavaScript loads and when JavaScript is disabled.
+`src/main.tsx` mounts the React app with `createRoot`, replacing that introduction;
+the page is not server-rendered or hydrated.
+
+The HTML head owns canonical, social and structured profile metadata. Employer
+information is omitted from the structured profile and excluded from snippets with
+`data-nosnippet` in initial and rendered content. `WorkModal` temporarily changes
+the page title and description while a story is open and restores them on cleanup.
+Case studies use URL fragments rather than separate server routes; the sitemap
+lists the canonical homepage.
+
+`public/` assets are copied to `dist/` by Vite. Vercel serves the built static site;
+GitHub Actions runs verification and does not deploy. `vercel.json` sets immutable
+caching for fingerprinted `/assets/` files. Analytics and Speed Insights mount in
+`App`; the app has no portfolio backend.
+
 ## Validation
 
 `npm run verify` is the local and CI gate. Repository checks enforce file ceilings,

@@ -3,7 +3,7 @@
 Software engineering experience, personal products and open-source contributions,
 with an interactive 3D garage. Built with React, TypeScript and Three.js.
 
-**[Visit aidenjang.com](https://aidenjang.com)**
+**[Visit aidenjang.com](https://www.aidenjang.com/)**
 
 ![Portfolio preview](public/og-image.png)
 
@@ -38,6 +38,8 @@ npm run preview  # serve dist/ after building
 
 CI runs verification on pull requests and pushes to `main`. Vercel handles
 production builds and deployment separately; GitHub Actions does not deploy.
+See [Contributing](CONTRIBUTING.md#deployment-and-search-updates) for release and
+search-update checks.
 
 ## Development
 
