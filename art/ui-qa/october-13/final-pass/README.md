@@ -38,3 +38,29 @@ landed at the section start. Captures record the reviewed surfaces.
 Physical phone interaction, Safari and screen-reader audio remain unverified because
 those surfaces are unavailable through the connected tools. They are validation
 limits, not additional proposed styling changes. These changes are local until pushed.
+
+## Loading and maintenance follow-up
+
+The scene effects load behind their own Suspense boundary. A browser check held the
+effects response while confirming that the default model request started and the
+portfolio heading remained visible. The effects still download for the final scene.
+The initial compressed scene bundle measured about six percent smaller in this build.
+
+WebKit reproduced a blank scene with the existing floating-point multisampling
+settings, including in a comparison build without the loading split. Removing
+postprocessing made the car visible; disabling compositor multisampling restored it,
+and disabling reflection-target multisampling restored the mirrored floor. The final
+scene uses FXAA for edge smoothing. Desktop and phone captures were inspected in
+Chromium and WebKit with the car and reflection visible.
+
+Browser checks covered navigation, horizontal overflow, car-browser dismissal and
+focus restoration, story scroll locking, screenshot zoom and focus restoration, and
+reopening a shared case-study URL in a fresh page. Repository verification passed.
+These WebKit engine checks do not establish physical Safari or iPhone compatibility;
+physical-device interaction and screen-reader audio remain unverified.
+
+Unused interface modules and their stylesheet were removed after tracing app and
+test imports. Pixel-identical phone review captures were consolidated, with a retained
+capture documented for both states. The production asset scan found no unused models
+or images. GitHub's repository description, canonical website link and topics were
+updated and checked on the repository page.

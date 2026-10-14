@@ -4,10 +4,12 @@ import * as THREE from 'three';
 import { THEMES } from '../config';
 import { Car } from './Car';
 import { CameraRig } from './CameraRig';
-import { Effects } from './Effects';
+import { lazy, Suspense } from 'react';
 import { Floor } from './Floor';
 import { Lights } from './Lights';
 import { useAppStore } from '../store';
+
+const Effects = lazy(() => import('./Effects').then((module) => ({ default: module.Effects })));
 
 type Props = {
   getScrollT: () => number;
@@ -36,7 +38,9 @@ export function Scene({ getScrollT }: Props) {
         <Floor />
         <Car />
         <CameraRig getScrollT={getScrollT} />
-        <Effects />
+        <Suspense fallback={null}>
+          <Effects />
+        </Suspense>
       </Canvas>
       <LoadingBar />
     </>

@@ -19,10 +19,15 @@ updates on scroll without waiting for the active navigation section to change.
 ## Scene and state
 
 `three/Scene.tsx` composes the canvas, models, lighting, floor and effects.
-Rendering pauses in reading sections and resumes for the visible Contact car.
+Effects have their own lazy-loading boundary inside the canvas, so their download
+does not block mounting the scene or starting the model request. Rendering pauses
+in reading sections and resumes for the visible Contact car.
 `CameraRig` combines section poses, pointer offsets, intro motion and rev motion.
 `useContactArrival` holds the front-facing opening pose, then advances the arrival
 near the end of the Contact scroll. Reduced motion bypasses the arrival animation.
+The composer and reflection target disable floating-point multisampling because it
+produces blank targets in the tested WebKit engine. FXAA smooths the final scene
+instead, including the reflection; DOM text is unaffected.
 
 The Zustand store separates infrequently updated UI state from mutable scene
 references. Frame updates mutate references rather than rerendering the page.

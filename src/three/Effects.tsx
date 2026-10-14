@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { Bloom, EffectComposer, FXAA } from '@react-three/postprocessing';
 import type { BloomEffect } from 'postprocessing';
 import { useRef, type ComponentProps } from 'react';
 import { THEMES } from '../config';
@@ -26,7 +26,8 @@ export function Effects() {
   });
 
   return (
-    <EffectComposer>
+    // Floating-point multisample targets blank the scene in WebKit. Smooth edges in the final pass.
+    <EffectComposer multisampling={0}>
       <Bloom
         // The library types this ref as the BloomEffect class, not the instance it assigns.
         ref={bloomRef as unknown as ComponentProps<typeof Bloom>['ref']}
@@ -35,6 +36,7 @@ export function Effects() {
         luminanceSmoothing={BLOOM_RADIUS}
         mipmapBlur
       />
+      <FXAA />
     </EffectComposer>
   );
 }

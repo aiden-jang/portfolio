@@ -29,6 +29,7 @@ export function Floor() {
     const r = new Reflector(new THREE.CircleGeometry(FLOOR_RADIUS, 96), {
       textureWidth: REFLECTOR_RESOLUTION,
       textureHeight: REFLECTOR_RESOLUTION,
+      multisample: 0,
       color: new THREE.Color(THEMES.dusk.reflectorColor),
     });
     r.rotation.x = -Math.PI / 2;
