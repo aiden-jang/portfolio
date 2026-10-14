@@ -148,7 +148,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <span className="font-[var(--font-mono)] text-[0.66rem] tracking-[0.36em] uppercase text-[var(--color-muted)]">
-      {children}
+      <span data-nosnippet>{children}</span>
     </span>
   );
 }

@@ -81,7 +81,7 @@ export function ExperienceSection({ onOpen }: Props) {
 
   return (
     <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">
-      <div className="panel pointer-events-auto w-full max-w-[650px]">
+      <div data-nosnippet className="panel pointer-events-auto w-full max-w-[650px]">
         <span className={EYEBROW}>01 / EXPERIENCE</span>
         <h2 className={H2}>Where I&apos;ve worked</h2>
         <ul className={`${UL_BASE} ${P_LI}`}>

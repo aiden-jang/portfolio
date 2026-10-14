@@ -6,11 +6,13 @@ export function AboutSection() {
       <div className="about-copy panel pointer-events-auto w-full max-w-[560px] text-left">
         <span className={EYEBROW}>03 / ABOUT</span>
         <h2 className={H2}>A bit about me.</h2>
-        <p className={`${P_LI} max-w-[48ch]`}>
-          At Zeta Global, I work on publisher tools: scheduling ads, managing demand and onboarding
-          newsletters. Before that, I worked at LiveIntent. I work across the database, API and
-          interface, and help other engineers build on those systems.
-        </p>
+        <div data-nosnippet>
+          <p className={`${P_LI} max-w-[48ch]`}>
+            At Zeta Global, I work on publisher tools: scheduling ads, managing demand and
+            onboarding newsletters. Before that, I worked at LiveIntent. I work across the database,
+            API and interface, and help other engineers build on those systems.
+          </p>
+        </div>
         <p className={`${P_LI} mt-4 max-w-[48ch]`}>
           Outside work, the projects tend to start with something ordinary: where to eat, whether a
           drink was worth another go, what to write to someone. Those became wherever, worth and
