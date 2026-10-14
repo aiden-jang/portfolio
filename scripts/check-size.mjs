@@ -1,35 +1,26 @@
 // Line ceilings for the files with a history of sprawling. A ceiling is a promise the file will
 // not grow, so entries only move down: shrink a file, lower its number in the same commit.
 // SLACK keeps ordinary edits from failing the check; it is not room for a ceiling to drift into.
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { repositoryFiles } from './repository-files.mjs';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SLACK = 40;
 
 const CEILINGS = {
   'src/ui/WorkModal.tsx': 170,
   'src/ui/CommandMenu.tsx': 181,
-  'src/three/CameraRig.tsx': 161,
-  'scripts/check-size.mjs': 75,
-  'scripts/check-comments.mjs': 70,
-  'scripts/check-tests.mjs': 55,
+  'src/three/CameraRig.tsx': 125,
+  'scripts/check-size.mjs': 65,
+  'scripts/check-comments.mjs': 47,
+  'scripts/check-tests.mjs': 40,
 };
 
 // Anything this long should be under a ceiling, so a new god file cannot appear unnoticed.
 const UNLISTED_LIMIT = 300;
-const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'public']);
 const SOURCE = /\.(ts|tsx|mjs|js)$/;
-
-function sources(dir, out = []) {
-  for (const entry of readdirSync(dir)) {
-    if (SKIP_DIRS.has(entry)) continue;
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) sources(full, out);
-    else if (SOURCE.test(entry) && !entry.includes('.test.')) out.push(relative(ROOT, full));
-  }
-  return out;
-}
 
 // Counted the way `wc -l` does, so these numbers match whatever anyone checks them against.
 const lines = (file) => {
@@ -55,7 +46,9 @@ for (const [file, ceiling] of Object.entries(CEILINGS)) {
     );
 }
 
-for (const file of sources(ROOT)) {
+for (const file of repositoryFiles(ROOT).filter(
+  (file) => SOURCE.test(file) && !/\.(test|spec)\./.test(file),
+)) {
   if (file in CEILINGS) continue;
   const actual = lines(file);
   if (actual > UNLISTED_LIMIT)

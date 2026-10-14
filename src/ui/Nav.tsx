@@ -1,16 +1,10 @@
 import { useRef } from 'react';
 import { useMagnetic } from '../hooks/useMagnetic';
-import { SECTION_IDS, type SectionId } from '../config';
+import { SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { ResumeButton } from './ResumeButton';
 
-const ITEMS: { id: SectionId; label: string; key: string }[] = [
-  { id: 'sec-intro', label: 'Intro', key: 'intro' },
-  { id: 'sec-experience', label: 'Experience', key: 'experience' },
-  { id: 'sec-work', label: 'Projects', key: 'work' },
-  { id: 'sec-about', label: 'About', key: 'about' },
-  { id: 'sec-contact', label: 'Contact', key: 'contact' },
-];
+const ITEMS = SECTION_IDS.map((id) => ({ id, label: SECTION_LABELS[id], key: id.slice(4) }));
 
 type Props = {
   onLink: (id: SectionId) => void;

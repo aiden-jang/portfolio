@@ -1,17 +1,17 @@
-import { useEffect, type RefObject } from 'react';
+import { useLayoutEffect, type RefObject } from 'react';
 
 const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), summary';
+  'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), summary, [tabindex]:not([tabindex="-1"]):not([disabled])';
 
 export function useDialogFocus(
   open: boolean,
   dialog: RefObject<HTMLElement>,
   initialFocus: RefObject<HTMLElement>,
 ): void {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!open) return;
     const previous = document.activeElement as HTMLElement | null;
-    const timer = window.setTimeout(() => initialFocus.current?.focus(), 0);
+    initialFocus.current?.focus({ preventScroll: true });
     const trap = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
       const elements = Array.from(
@@ -20,17 +20,17 @@ export function useDialogFocus(
       const first = elements[0];
       const last = elements.at(-1);
       if (!first || !last) return;
-      if (event.shiftKey && document.activeElement === first) {
+      const outside = !dialog.current?.contains(document.activeElement);
+      if (event.shiftKey && (document.activeElement === first || outside)) {
         event.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
+      } else if (!event.shiftKey && (document.activeElement === last || outside)) {
         event.preventDefault();
         first.focus();
       }
     };
     window.addEventListener('keydown', trap);
     return () => {
-      window.clearTimeout(timer);
       window.removeEventListener('keydown', trap);
       if (previous?.isConnected) previous.focus({ preventScroll: true });
     };

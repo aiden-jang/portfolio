@@ -76,6 +76,7 @@ export function useNavigation() {
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
       if (absX > absY && absX >= MIN_WHEEL_DELTA) {
+        if (!hasFullCarView(window.innerHeight, pageSectionBounds())) return;
         if (e.deltaX > 0) cycleCarThrottled();
         else prevCarThrottled();
       } else if (absY >= MIN_WHEEL_DELTA) {

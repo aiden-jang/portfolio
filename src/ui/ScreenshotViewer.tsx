@@ -77,10 +77,10 @@ export function ScreenshotViewer({
       </div>
       <div
         ref={viewport}
-        className={`preview-image ${zoomed ? 'is-zoomed' : ''}`}
-        tabIndex={zoomed ? 0 : -1}
+        tabIndex={0}
         role="region"
-        aria-label="Screenshot. Scroll to explore the enlarged image."
+        aria-label={`${name} screenshot image`}
+        className={`preview-image ${zoomed ? 'is-zoomed' : ''}`}
       >
         <ScreenshotImage
           key={image}

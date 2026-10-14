@@ -132,3 +132,62 @@ it('keeps the portfolio readable when the scene fails', async () => {
   expect(host.textContent).toContain('Selected work');
   expect(host.querySelector('[role="status"]')?.textContent).toContain('couldn’t start');
 });
+
+it('keeps the latest story sharing feedback when an earlier copy finishes later', async () => {
+  let resolveFirst!: () => void;
+  const first = new Promise<void>((resolve) => {
+    resolveFirst = resolve;
+  });
+  const writeText = vi.fn().mockReturnValueOnce(first).mockRejectedValueOnce(new Error('Denied'));
+  Object.defineProperty(navigator, 'share', { configurable: true, value: undefined });
+  Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+  const item = { title: 'Story', shortName: 'example', summary: 'A story' } as WorkDetail;
+  await act(() => root.render(createElement(WorkModalLinks, { item })));
+  await act(() => host.querySelector('button')!.click());
+  await act(async () => host.querySelector('button')!.click());
+  await act(async () => resolveFirst());
+  expect(host.querySelector('[role="status"]')?.textContent).toContain('Copy unavailable');
+});
+
+it('discards sharing results after moving to another story', async () => {
+  let rejectCopy!: (error: Error) => void;
+  const pending = new Promise<void>((_, reject) => {
+    rejectCopy = reject;
+  });
+  Object.defineProperty(navigator, 'share', { configurable: true, value: undefined });
+  Object.defineProperty(navigator, 'clipboard', {
+    configurable: true,
+    value: { writeText: () => pending },
+  });
+  const item = { title: 'First', shortName: 'first', summary: 'A story' } as WorkDetail;
+  await act(() => root.render(createElement(WorkModalLinks, { item })));
+  await act(() => host.querySelector('button')!.click());
+  await act(() =>
+    root.render(createElement(WorkModalLinks, { item: { ...item, title: 'Second' } })),
+  );
+  await act(async () => rejectCopy(new Error('Denied')));
+  expect(host.querySelector('[role="status"]')?.textContent).toBe('');
+  expect(host.querySelector('input')).toBeNull();
+});
+
+it('keeps new copy feedback until its own timeout expires', async () => {
+  vi.useFakeTimers();
+  try {
+    Object.defineProperty(navigator, 'share', { configurable: true, value: undefined });
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText: vi.fn().mockResolvedValue(undefined) },
+    });
+    const item = { title: 'Story', shortName: 'example', summary: 'A story' } as WorkDetail;
+    await act(() => root.render(createElement(WorkModalLinks, { item })));
+    await act(async () => host.querySelector('button')!.click());
+    await act(() => vi.advanceTimersByTime(1000));
+    await act(async () => host.querySelector('button')!.click());
+    await act(() => vi.advanceTimersByTime(800));
+    expect(host.querySelector('[role="status"]')?.textContent).toBe('Link copied.');
+    await act(() => vi.advanceTimersByTime(1000));
+    expect(host.querySelector('[role="status"]')?.textContent).toBe('');
+  } finally {
+    vi.useRealTimers();
+  }
+});

@@ -1,3 +1,5 @@
+import { useDialogFocus } from '../useDialogFocus';
+import { usePageScrollLock } from '../usePageScrollLock';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CARS } from '../../config';
@@ -9,53 +11,15 @@ export function Credits() {
   const closeRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLElement>(null);
 
+  useDialogFocus(open, sheetRef, closeRef);
+  usePageScrollLock(open);
   useEffect(() => {
     if (!open) return;
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    const timer = window.setTimeout(() => closeRef.current?.focus(), 0);
-    const scrollY = window.scrollY;
-    const body = document.body;
-    const previousBody = {
-      position: body.style.position,
-      top: body.style.top,
-      left: body.style.left,
-      right: body.style.right,
-      width: body.style.width,
-    };
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollY}px`;
-    body.style.left = '0';
-    body.style.right = '0';
-    body.style.width = '100%';
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setOpen(false);
-      if (event.key !== 'Tab') return;
-      const focusable = sheetRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled])',
-      );
-      if (!focusable?.length) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
     };
     window.addEventListener('keydown', onKey);
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener('keydown', onKey);
-      body.style.position = previousBody.position;
-      body.style.top = previousBody.top;
-      body.style.left = previousBody.left;
-      body.style.right = previousBody.right;
-      body.style.width = previousBody.width;
-      window.scrollTo(0, scrollY);
-      if (previouslyFocused?.isConnected) previouslyFocused.focus();
-    };
+    return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
   if (credited.length === 0) return null;
@@ -65,7 +29,10 @@ export function Credits() {
         type="button"
         aria-expanded={open}
         aria-haspopup="dialog"
-        onClick={() => setOpen(true)}
+        onClick={(event) => {
+          event.currentTarget.focus({ preventScroll: true });
+          setOpen(true);
+        }}
         className="group pointer-events-auto mt-5 inline-flex items-center gap-2 border-t border-[var(--color-line)] pt-3 font-[var(--font-mono)] text-[0.6rem] tracking-[0.18em] uppercase text-[var(--color-muted)] transition-colors hover:text-[var(--color-fg)]"
       >
         <span>3D model credits ({credited.length})</span>

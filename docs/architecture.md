@@ -9,7 +9,8 @@ scene behind a lazy-loading boundary so portfolio content can load independently
 `useNavigation` owns scroll tracking, section jumps and event registration.
 `scrollNavigation` owns the cancellable scroll animation. `navigationKeyboard`
 routes keyboard actions and preserves native input and reading behavior.
-`sectionProgress` maps actual section positions to camera progress.
+`sectionProgress` maps actual section positions to camera progress. Section IDs
+and labels share one definition in `config.ts`, used by navigation, dots and commands.
 
 Scene visibility, section selection and control visibility have different rules.
 The Contact car becomes visible when its section enters the viewport. Controls
@@ -33,12 +34,16 @@ The Zustand store separates infrequently updated UI state from mutable scene
 references. Frame updates mutate references rather than rerendering the page.
 Car selection resets paint/material references through a shared store action.
 `useSceneUrl` restores and synchronizes the selected car, paint and lighting;
-`sceneLink` handles copy and native sharing. Case-study fragments are preserved.
+`sceneLink` builds garage links; `browserSharing` handles native sharing, cancellation
+and clipboard fallback. `useShareFeedback` owns request ordering, feedback timers
+and invalidation when the active story or preview changes. Garage links preserve
+case-study fragments.
 
 `Car` owns asynchronous GLB loading and disposal. Models use meshopt compression,
 auto-fit framing and paint-material detection. Adjacent models are prefetched
 into the HTTP cache when network conditions permit. `carHelpers` owns geometry,
-material detection and GPU-resource disposal.
+material detection and GPU-resource disposal. Scene cleanup releases model resources,
+underglow geometry and textures, and the reflection target and material.
 
 ## Projects and dialogs
 
@@ -46,8 +51,8 @@ Project content lives in `src/data/`. Section components render that data rather
 than owning product descriptions. `Sections` connects case-study selection to
 browser history; `ScrollBody` maintains each story’s reading position.
 
-Custom dialogs share `useDialogFocus` for focus trapping and restoration, and
-`usePageScrollLock` for background scroll locking. Screenshot and car browsers
+Case studies, commands and credits share `useDialogFocus` for focus trapping and
+restoration, and `usePageScrollLock` for background scroll locking. Screenshot and car browsers
 use native dialogs for native modal focus behavior. A nested screenshot retains
 its parent’s lock and returns focus to its trigger when closed.
 
@@ -55,7 +60,9 @@ its parent’s lock and returns focus to its trigger when closed.
 
 `index.css` defines the theme, shared foundations and global motion rules.
 Component stylesheets own their interface rules. `reading-flow.css` owns reading
-visibility, and `portfolio-surfaces.css` contains cross-section layouts and
+visibility. `reading-layout.css` owns responsive reading adjustments, and
+`browsing-controls.css` owns preview and story scrolling controls.
+`portfolio-surfaces.css` contains cross-section layouts and
 surface refinements. Its rule order preserves the existing responsive cascade.
 Avoid adding new files named after polish passes; change the relevant owner.
 
@@ -80,7 +87,10 @@ caching for fingerprinted `/assets/` files. Analytics and Speed Insights mount i
 
 ## Validation
 
-`npm run verify` is the local and CI gate. Repository checks enforce file ceilings,
+`npm run verify` covers source, content, unit tests and the production build.
+`npm run test:browser` adds Chromium/WebKit interaction, rendering and accessibility
+regressions against a fresh production preview. CI runs both;
+[Quality checks](quality.md) describes setup and coverage. Repository checks enforce file ceilings,
 comment constraints and a test floor. Tests cover math, state transitions, data
 invariants and selected DOM behaviors. Layout, focus, browser history and scene
 behavior also need browser checks; a green unit suite does not establish visual

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { CARS, SECTION_IDS } from '../config';
-import { buildCommands, matchCommands, SECTION_LABELS } from './commands';
+import { CARS, SECTION_IDS, SECTION_LABELS } from '../config';
+import { buildCommands, matchCommands } from './commands';
 
 const build = () => buildCommands({ onSection: vi.fn(), setNotice: vi.fn() });
 

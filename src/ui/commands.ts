@@ -1,4 +1,4 @@
-import { CARS, SECTION_IDS, type SectionId } from '../config';
+import { CARS, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
 
@@ -9,14 +9,6 @@ export type Command = {
   keywords: string;
   run: () => void | Promise<void>;
   closeOnRun?: boolean;
-};
-
-export const SECTION_LABELS: Record<SectionId, string> = {
-  'sec-intro': 'Intro',
-  'sec-experience': 'Experience',
-  'sec-work': 'Projects',
-  'sec-about': 'About',
-  'sec-contact': 'Contact',
 };
 
 type Deps = {

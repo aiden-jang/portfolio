@@ -4,6 +4,7 @@ import { handleNavigationKey } from './navigationKeyboard';
 import { useAppStore } from '../store';
 
 afterEach(() => {
+  vi.restoreAllMocks();
   useAppStore.setState(useAppStore.getInitialState(), true);
   document.body.replaceChildren();
 });
@@ -35,4 +36,25 @@ it('routes section and car keys independently and blocks numbered selection whil
   useAppStore.setState({ isCarLoading: false });
   handleNavigationKey(new KeyboardEvent('keydown', { key: '2' }), 0, navigation);
   expect(useAppStore.getState().carIndex).toBe(1);
+});
+
+it('preserves browser shortcuts and keys another control already handled', () => {
+  const navigation = actions();
+  const cycle = vi.spyOn(useAppStore.getState(), 'cycleBodyColor');
+  for (const options of [
+    { key: 'c', ctrlKey: true },
+    { key: 'c', metaKey: true },
+    { key: 'ArrowLeft', altKey: true },
+    { key: 'Home', ctrlKey: true },
+  ]) {
+    const event = new KeyboardEvent('keydown', { ...options, cancelable: true });
+    handleNavigationKey(event, 0, navigation);
+    expect(event.defaultPrevented).toBe(false);
+  }
+  const handled = new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true });
+  handled.preventDefault();
+  handleNavigationKey(handled, 0, navigation);
+  expect(cycle).not.toHaveBeenCalled();
+  expect(navigation.goToSection).not.toHaveBeenCalled();
+  expect(navigation.previousCar).not.toHaveBeenCalled();
 });

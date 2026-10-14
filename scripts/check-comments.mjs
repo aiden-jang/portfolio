@@ -1,32 +1,23 @@
 // The two comment rules from CONVENTIONS.md a script can judge without guessing: no block over
 // four lines, and no ticket ids. Whether a comment earns its place needs a reader, and a check
 // that cries wolf gets ignored.
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { repositoryFiles } from './repository-files.mjs';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const MAX_BLOCK = 4;
-const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'public']);
 const SOURCE = /\.(ts|tsx|mjs|js)$/;
 // Tests explain why they exist, so they get a different bar. Everything else is in scope,
 // this file included.
-const EXCLUDE = /\.test\./;
+const EXCLUDE = /\.(test|spec)\./;
 const COMMENT = /^\s*(\/\/|\/\*|\*(?!\/)|\{\/\*)/;
 const TICKET = /\b[A-Z]{2,}-\d+\b/;
 
-function sources(dir, out = []) {
-  for (const entry of readdirSync(dir)) {
-    if (SKIP_DIRS.has(entry)) continue;
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) sources(full, out);
-    else if (SOURCE.test(entry)) out.push(relative(ROOT, full));
-  }
-  return out;
-}
-
 const problems = [];
 
-for (const file of sources(ROOT)) {
+for (const file of repositoryFiles(ROOT).filter((file) => SOURCE.test(file))) {
   if (EXCLUDE.test(file)) continue;
   const lines = readFileSync(join(ROOT, file), 'utf8').split('\n');
   let run = 0;

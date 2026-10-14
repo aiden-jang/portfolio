@@ -1,6 +1,5 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { KEYFRAMES } from '../config';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
 import { clamp } from '../math';
@@ -26,9 +25,6 @@ const IDLE_SPIN_RATE = 0.12;
 const REV_DECAY_RATE = 1.8;
 const REV_RUMBLE_FREQ_HZ = 90 / (2 * Math.PI);
 const REV_SHAKE_AMP = 0.12;
-
-const SECTION_PUNCH_DURATION = 0.55; // seconds
-const SECTION_PUNCH_FOV_DELTA = 0; // degrees added at peak
 
 // `?clean` freezes the camera for OG screenshots. It needs its own azimuth because KEYFRAMES[0]
 // sits near the nose, and the shot wants more flank.
@@ -61,9 +57,6 @@ export function CameraRig({ getScrollT }: Props) {
     introT: 0,
   });
   const baseKf = useRef<Keyframe>({ ...KEYFRAMES[0] });
-  const baseFov = useRef(camera instanceof THREE.PerspectiveCamera ? camera.fov : 35);
-  const sectionPunchTimer = useRef(0);
-  const lastSection = useRef<number | null>(null);
 
   useOrbitGesture(state);
 
@@ -75,20 +68,6 @@ export function CameraRig({ getScrollT }: Props) {
     s.dragMoved = false;
     document.body.classList.remove('orbiting');
   }, [cameraResetVersion]);
-
-  useEffect(() => {
-    const unsub = useAppStore.subscribe((s) => {
-      if (lastSection.current === null) {
-        lastSection.current = s.sectionIndex;
-        return;
-      }
-      if (s.sectionIndex !== lastSection.current) {
-        lastSection.current = s.sectionIndex;
-        sectionPunchTimer.current = SECTION_PUNCH_DURATION;
-      }
-    });
-    return unsub;
-  }, []);
 
   useFrame((three, dt) => {
     const s = state.current;
@@ -127,21 +106,6 @@ export function CameraRig({ getScrollT }: Props) {
     }
     camera.position.set(pose.x, pose.y, pose.z);
     camera.lookAt(0, tgtY, 0);
-
-    if (camera instanceof THREE.PerspectiveCamera) {
-      if (sectionPunchTimer.current > 0) {
-        sectionPunchTimer.current = Math.max(0, sectionPunchTimer.current - dt);
-      }
-      if (sectionPunchTimer.current > 0 && !reduced) {
-        const elapsed = 1 - sectionPunchTimer.current / SECTION_PUNCH_DURATION;
-        const punch = Math.sin(elapsed * Math.PI); // 0 → 1 → 0
-        camera.fov = baseFov.current + punch * SECTION_PUNCH_FOV_DELTA;
-        camera.updateProjectionMatrix();
-      } else if (camera.fov !== baseFov.current) {
-        camera.fov = baseFov.current;
-        camera.updateProjectionMatrix();
-      }
-    }
 
     // Two blocks: the counter has to decay under reduced motion too, it just skips the shake.
     if (refs.revT > 0) {

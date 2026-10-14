@@ -4,7 +4,7 @@ Describe the problem and resulting behavior.
 
 ## Validation
 
-Record verification and relevant browser checks. State any checks you could not complete.
+Record `npm run verify`, `npm run test:browser` and relevant visual/device checks. State any checks you could not complete.
 
 ## Visuals
 

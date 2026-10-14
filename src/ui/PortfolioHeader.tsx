@@ -1,12 +1,10 @@
 import { useEffect, useRef } from 'react';
 import './portfolio-header.css';
-import { SECTION_IDS, type SectionId } from '../config';
+import { SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { Brand } from './Brand';
 import { Nav } from './Nav';
 import { ResumeButton } from './ResumeButton';
-
-const LABELS = ['Intro', 'Experience', 'Projects', 'About', 'Contact'];
 
 export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void }) {
   const active = useAppStore((state) => state.sectionIndex);
@@ -55,7 +53,7 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
                   onLink(id);
                 }}
               >
-                <span>{LABELS[index]}</span>
+                <span>{SECTION_LABELS[id]}</span>
                 <span aria-hidden="true">↗</span>
               </a>
             ))}

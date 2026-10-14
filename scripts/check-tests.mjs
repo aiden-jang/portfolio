@@ -1,10 +1,11 @@
 // A green run is not a full run. One `describe.skip` leaves vitest exiting 0 while quietly
 // running fewer tests than it did yesterday, and so does deleting a file. The floor is what
 // notices; it only ever moves up.
+import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-const ROOT = new URL('..', import.meta.url).pathname;
-const FLOOR = 111;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
+const FLOOR = 117;
 
 const run = spawnSync('npx', ['vitest', 'run'], {
   cwd: ROOT,
@@ -17,7 +18,7 @@ const ansi = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, 'g');
 const output = `${run.stdout ?? ''}${run.stderr ?? ''}`.replace(ansi, '');
 const summary = output.match(/Tests\s+(?:(\d+) failed \| )?(\d+) passed/);
 
-const problems = [];
+const problems = run.status === 0 ? [] : ['vitest exited unsuccessfully.'];
 let passed = NaN;
 
 if (!summary) {

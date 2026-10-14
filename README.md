@@ -21,7 +21,7 @@ are supported. The portfolio content remains available if the 3D scene fails.
 
 ## Run locally
 
-Use Node.js 22, matching CI.
+Use Node.js 22.22.2 or newer in the Node 22 line, matching CI.
 
 ```sh
 npm ci
@@ -31,18 +31,20 @@ npm run dev
 Vite prints the local URL. No environment variables are required for local development.
 
 ```sh
-npm run verify   # types, lint, formatting, repository checks, tests and build
+npm run verify   # types, lint, formatting, content checks, tests and build
 npm run test     # tests only
 npm run preview  # serve dist/ after building
 ```
 
 CI runs verification on pull requests and pushes to `main`. Vercel handles
 production builds and deployment separately; GitHub Actions does not deploy.
+CI also runs Chromium and WebKit interaction and accessibility regressions.
 See [Contributing](CONTRIBUTING.md#deployment-and-search-updates) for release and
 search-update checks.
 
 ## Development
 
+- [Quality checks](docs/quality.md): browser setup, regression coverage and visual review.
 - [Architecture](docs/architecture.md): module responsibilities and runtime behavior.
 - [Contributing](CONTRIBUTING.md): setup, changes, validation and commit conventions.
 - [Repository conventions](CONVENTIONS.md): code and verification requirements.

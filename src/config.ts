@@ -35,7 +35,7 @@ export const THEMES: Record<ThemeName, Theme> = {
   },
 };
 
-// The default car and both neighbours are prefetched; keep lightweight models in those slots.
+// Keep the default model and both prefetched neighbours lightweight.
 export const CARS: CarSpec[] = [
   {
     name: 'Ferrari F40',
@@ -104,3 +104,11 @@ export const SECTION_IDS = [
   'sec-contact',
 ] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
+
+export const SECTION_LABELS: Record<SectionId, string> = {
+  'sec-intro': 'Intro',
+  'sec-experience': 'Experience',
+  'sec-work': 'Projects',
+  'sec-about': 'About',
+  'sec-contact': 'Contact',
+};

@@ -1,3 +1,4 @@
+import { copyText, shareLink, type ShareResult } from './browserSharing';
 import { useAppStore } from './store';
 
 export function currentSceneUrl(): string {
@@ -10,33 +11,13 @@ export function currentSceneUrl(): string {
 }
 
 export async function copyCurrentSceneUrl(): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(currentSceneUrl());
-    return true;
-  } catch {
-    return false;
-  }
+  return (await copyText(currentSceneUrl())) === 'copied';
 }
 
-export async function shareCurrentScene(): Promise<'shared' | 'copied' | 'failed' | null> {
-  const url = currentSceneUrl();
-  if (typeof navigator.share === 'function') {
-    try {
-      await navigator.share({
-        title: 'Aiden Jang’s garage',
-        text: 'A car setup from Aiden Jang’s portfolio',
-        url,
-      });
-      return 'shared';
-    } catch (error) {
-      // Dismissing the share sheet is a choice, not a failure.
-      if (error instanceof DOMException && error.name === 'AbortError') return null;
-    }
-  }
-  try {
-    await navigator.clipboard.writeText(url);
-    return 'copied';
-  } catch {
-    return 'failed';
-  }
+export async function shareCurrentScene(): Promise<ShareResult> {
+  return shareLink({
+    title: 'Aiden Jang’s garage',
+    text: 'A car setup from Aiden Jang’s portfolio',
+    url: currentSceneUrl(),
+  });
 }

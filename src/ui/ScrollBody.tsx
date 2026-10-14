@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { prefersReducedMotion } from '../hooks/useReducedMotion';
-import './browsing-polish.css';
+import './browsing-controls.css';
 
 const readingPositions = new Map<string, { fraction: number; expanded: number[] }>();
 
@@ -62,6 +62,9 @@ export function ScrollBody({ children, storyId }: { children: ReactNode; storyId
       </div>
       <div
         ref={area}
+        tabIndex={0}
+        role="region"
+        aria-label="Case study content"
         className="story-scroll-area overflow-y-auto overscroll-contain p-5 pt-5 md:p-7 md:pt-6"
       >
         <div ref={content}>{children}</div>

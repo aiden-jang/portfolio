@@ -1,32 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useShareFeedback } from './useShareFeedback';
 import { CARS } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
 
 export function SceneShareButton() {
   const carIndex = useAppStore((state) => state.carIndex);
-  const [result, setResult] = useState<'shared' | 'copied' | 'failed' | null>(null);
-  const version = useRef(0);
-  const resetTimer = useRef<ReturnType<typeof setTimeout>>();
-  useEffect(
-    () => () => {
-      version.current++;
-      clearTimeout(resetTimer.current);
-    },
-    [],
-  );
-
-  const share = async () => {
-    const request = ++version.current;
-    clearTimeout(resetTimer.current);
-    setResult(null);
-    const nextResult = await shareCurrentScene();
-    if (request !== version.current) return;
-    if (nextResult) {
-      setResult(nextResult);
-      resetTimer.current = setTimeout(() => setResult(null), nextResult === 'failed' ? 6000 : 1800);
-    }
-  };
+  const { result, run } = useShareFeedback(String(carIndex), 6000);
+  const share = () => run(shareCurrentScene);
 
   const car = CARS[carIndex];
   return (

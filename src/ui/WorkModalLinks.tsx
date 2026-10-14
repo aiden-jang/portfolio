@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { shareLink } from '../browserSharing';
+import { useShareFeedback } from './useShareFeedback';
+import { useState } from 'react';
 import type { WorkDetail } from '../types';
 import { PREVIEWS } from '../data/projectPreviews';
 import { usePreviewSelection } from './usePreviewSelection';
@@ -10,10 +12,8 @@ const pill =
 export function WorkModalLinks({ item }: { item: WorkDetail }) {
   const preview = PREVIEWS[item.mark ?? ''];
   const [selected] = usePreviewSelection(item.shortName ?? '', preview?.states?.length ?? 1);
-  const [result, setResult] = useState<'shared' | 'copied' | 'failed' | null>(null);
+  const { result, run } = useShareFeedback(item.title);
   const [fallbackUrl, setFallbackUrl] = useState('');
-
-  useEffect(() => setResult(null), [item]);
 
   const share = async () => {
     const shared = new URL(
@@ -23,24 +23,10 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
     );
     shared.hash = window.location.hash;
     const url = shared.href;
-    if (typeof navigator.share === 'function') {
-      try {
-        await navigator.share({ title: item.shortName ?? item.title, text: item.summary, url });
-        setResult('shared');
-        window.setTimeout(() => setResult(null), 1800);
-        return;
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return;
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      setResult('copied');
-      window.setTimeout(() => setResult(null), 1800);
-    } catch {
-      setFallbackUrl(url);
-      setResult('failed');
-    }
+    const next = await run(() =>
+      shareLink({ title: item.shortName ?? item.title, text: item.summary, url }),
+    );
+    if (next === 'failed') setFallbackUrl(url);
   };
 
   if (!item.link && !item.links?.length && !item.shortName) return null;

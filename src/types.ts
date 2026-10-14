@@ -71,7 +71,7 @@ export type WorkDetail = {
   image?: string;
   link?: { label: string; url: string };
   links?: { label: string; url: string }[];
-  // Product identity supplies its icon. Contributions can appear in Projects without an icon.
+  // Stable product identity connects a project to its previews and story.
   mark?: MarkKey;
   contribution?: boolean;
   shortName?: string;

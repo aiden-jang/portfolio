@@ -12,6 +12,7 @@ export function handleNavigationKey(
   sectionIndex: number,
   actions: NavigationActions,
 ): void {
+  if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
   const target = e.target as HTMLElement | null;
   const inField =
     target instanceof HTMLInputElement ||

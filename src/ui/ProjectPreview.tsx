@@ -1,3 +1,5 @@
+import { copyText } from '../browserSharing';
+import { useShareFeedback } from './useShareFeedback';
 import { ScreenshotImage } from './ScreenshotImage';
 import { useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from './ScreenshotViewer';
@@ -5,7 +7,7 @@ import type { PreviewState } from '../data/projectPreviews';
 import './preview-states.css';
 import { usePreviewSelection } from './usePreviewSelection';
 import { previewIndex, previewLink } from './previewLinks';
-import './browsing-polish.css';
+import './browsing-controls.css';
 
 type Props = { image: string; name: string; caption: string; states?: PreviewState[] };
 
@@ -16,7 +18,8 @@ export function ProjectPreview({
   states,
 }: Props) {
   const [selected, setSelected] = usePreviewSelection(name, states?.length ?? 1);
-  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const { result, run } = useShareFeedback(`${name}:${selected}`);
+  const copyStatus = result === 'copied' || result === 'failed' ? result : 'idle';
   const image = states?.[selected]?.image ?? initialImage;
   const caption = states?.[selected]?.caption ?? initialCaption;
   const [open, setOpen] = useState(false);
@@ -41,13 +44,7 @@ export function ProjectPreview({
     };
   }, [name, states]);
   const shareView = async () => {
-    try {
-      await navigator.clipboard.writeText(previewLink(location.href, name, selected));
-      setCopyStatus('copied');
-      window.setTimeout(() => setCopyStatus('idle'), 1800);
-    } catch {
-      setCopyStatus('failed');
-    }
+    await run(() => copyText(previewLink(location.href, name, selected)));
   };
   return (
     <>

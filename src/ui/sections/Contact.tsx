@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { copyText } from '../../browserSharing';
+import { useShareFeedback } from '../useShareFeedback';
+import { type ReactNode } from 'react';
 import { EYEBROW, H2, P_LI, PANEL_BASE, Section } from './shared';
 import { Credits } from './Credits';
 
@@ -63,31 +65,9 @@ export function ContactSection() {
 }
 
 function EmailRow() {
-  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const { result: copyState, run } = useShareFeedback(EMAIL);
   const copied = copyState === 'copied';
-  const copyVersion = useRef(0);
-  const resetTimer = useRef<ReturnType<typeof setTimeout>>();
-  useEffect(
-    () => () => {
-      copyVersion.current++;
-      clearTimeout(resetTimer.current);
-    },
-    [],
-  );
-
-  const handleCopy = async () => {
-    const version = ++copyVersion.current;
-    clearTimeout(resetTimer.current);
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-      if (version !== copyVersion.current) return;
-      setCopyState('copied');
-      resetTimer.current = setTimeout(() => setCopyState('idle'), 1800);
-    } catch {
-      if (version !== copyVersion.current) return;
-      setCopyState('failed');
-    }
-  };
+  const handleCopy = () => run(() => copyText(EMAIL));
 
   return (
     <li className="py-1.5 text-center">

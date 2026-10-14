@@ -55,11 +55,6 @@
   padding: 7px 14px;
   font: 10px/1.4 var(--font-mono);
 }
-.mobile-car-label > span {
-  white-space: normal;
-  overflow: visible;
-  line-height: 1.25;
-}
 .mobile-paint-name {
   position: absolute;
   bottom: calc(100% + 8px);
@@ -123,10 +118,6 @@
   margin-bottom: 8px;
   font: 10px/1.5 var(--font-mono);
 }
-.preview-image:focus-visible {
-  outline: 1px solid var(--color-fg);
-  outline-offset: -2px;
-}
 @media (max-width: 767px) {
   .preview-dialog-heading {
     flex-wrap: wrap;
@@ -137,4 +128,10 @@
   .preview-dialog-heading button {
     flex: 1;
   }
+}
+
+.preview-image:focus-visible,
+.story-scroll-area:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: -3px;
 }

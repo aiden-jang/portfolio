@@ -43,6 +43,8 @@ export function Sections() {
   }, []);
 
   const openWork = useCallback((item: WorkDetail, el: HTMLElement) => {
+    // WebKit does not focus clicked buttons; capture the trigger before opening the dialog.
+    el.focus({ preventScroll: true });
     originHash.current = window.location.hash.startsWith('#work/')
       ? isPortfolioProject(item)
         ? '#sec-work'

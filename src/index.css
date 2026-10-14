@@ -39,8 +39,7 @@
        the layout jumps as the bar hides. Browsers that do not know dvh keep the line above. */
     min-height: 100vh;
     min-height: 100dvh;
-    /* App-like: text isn't selectable/copyable, and a drag to orbit the car
-       never accidentally highlights the copy. */
+    /* Orbit gestures should not select intro copy; reading sections enable selection. */
     -webkit-user-select: none;
     user-select: none;
     /* Second guard against sideways scroll (html already clips x). */
@@ -201,10 +200,6 @@
     filter: blur(6px);
   }
 
-  /* Radial scrim behind the hero copy (Intro). The hero text is centered over
-     the car, which is often bright; this darkens directly behind the copy and
-     fades to transparent before the car's edges, so the value-prop line stays
-     readable without hiding the focal point. Sits under the panel (z-[1]). */
   /* Reveal animations on scroll-in. */
   .panel > * {
     opacity: 0;
@@ -318,9 +313,6 @@
 .garage-brand {
   font-size: 13px;
   font-weight: 500;
-}
-header > span {
-  display: none;
 }
 #nav {
   text-transform: none;
@@ -533,12 +525,6 @@ header > span {
   }
 }
 
-.garage-globe-preview img {
-  max-height: none;
-  object-fit: contain;
-  object-position: center;
-}
-
 #sec-work {
   scroll-snap-stop: normal;
 }
@@ -710,24 +696,6 @@ header > span {
   }
 }
 
-.mobile-car-label {
-  width: 80px;
-  min-width: 0;
-  text-align: center;
-  letter-spacing: 0;
-  font-size: 10px;
-}
-.mobile-car-label > span {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.mobile-car-label small {
-  display: block;
-  font-size: 9px;
-  color: var(--color-muted);
-}
 #mobile-bar > .flex {
   gap: 4px;
 }
@@ -741,12 +709,6 @@ header > span {
 #mobile-bar button[aria-label='Rev engine'] > span:last-child {
   display: none;
 }
-@media (max-width: 359px) {
-  .mobile-car-label {
-    width: 64px;
-  }
-}
-
 /* Reading sections follow their content rather than leaving a full screen of empty space. */
 #sec-experience,
 #sec-about,

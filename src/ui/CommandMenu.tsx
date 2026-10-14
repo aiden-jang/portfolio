@@ -60,7 +60,6 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
     if (!open) {
       setQuery('');
       setNotice('');
-      return;
     }
   }, [open]);
 
@@ -119,6 +118,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             }}
             placeholder="Jump somewhere, change the scene…"
             role="combobox"
+            aria-label="Search portfolio controls"
             aria-autocomplete="list"
             aria-expanded="true"
             aria-haspopup="listbox"

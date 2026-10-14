@@ -18,3 +18,5 @@ jobs:
       # Types, lint, formatting, the size ceilings, the comment rules, the test floor, then the
       # build. The same command locally, so CI is never the first place a check runs.
       - run: npm run verify
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:browser

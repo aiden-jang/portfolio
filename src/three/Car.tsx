@@ -157,8 +157,11 @@ export function Car() {
     return () => {
       scene.remove(group);
       if (modelRef.current) disposeModel(modelRef.current);
+      underglow.geometry.dispose();
+      underglowMat.map?.dispose();
+      underglowMat.dispose();
     };
-  }, [scene, group]);
+  }, [scene, group, underglow, underglowMat]);
 
   useFrame((state, dt) => {
     const refs = useAppStore.getState().refs;

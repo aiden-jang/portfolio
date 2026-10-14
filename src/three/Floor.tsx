@@ -1,4 +1,4 @@
-import { useFrame, useThree, extend } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
@@ -7,15 +7,12 @@ import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 
-extend({ Reflector });
-
 const FLOOR_RADIUS = 14;
 const REFLECTOR_RESOLUTION = 1024;
 const TRANSITION_RATE = 2.5;
 
 export function Floor() {
   const { gl, scene } = useThree();
-  const reflectorRef = useRef<Reflector | null>(null);
   const currentBg = useRef(THEMES.dusk.bg);
   const currentFogColor = useRef(THEMES.dusk.fogColor);
   const currentFogNear = useRef(THEMES.dusk.fogNear);
@@ -35,14 +32,15 @@ export function Floor() {
     r.rotation.x = -Math.PI / 2;
     return r;
   }, []);
-  reflectorRef.current = reflector;
 
   useEffect(() => {
     scene.fog = new THREE.Fog(THEMES.dusk.fogColor, THEMES.dusk.fogNear, THEMES.dusk.fogFar);
     return () => {
       scene.fog = null;
+      reflector.dispose();
+      reflector.geometry.dispose();
     };
-  }, [scene]);
+  }, [scene, reflector]);
 
   useFrame((_state, dt) => {
     const target = THEMES[useAppStore.getState().themeName];
@@ -70,11 +68,8 @@ export function Floor() {
       target.reflectorColor,
       k,
     );
-    const refl = reflectorRef.current;
-    if (refl) {
-      const uniforms = (refl.material as THREE.ShaderMaterial).uniforms;
-      (uniforms.color.value as THREE.Color).setHex(currentReflectorColor.current);
-    }
+    const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
+    (uniforms.color.value as THREE.Color).setHex(currentReflectorColor.current);
   });
 
   return <primitive object={reflector} />;

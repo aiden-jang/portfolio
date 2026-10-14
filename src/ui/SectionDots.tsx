@@ -1,13 +1,5 @@
-import { SECTION_IDS, type SectionId } from '../config';
+import { SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { useAppStore } from '../store';
-
-const LABELS: Record<SectionId, string> = {
-  'sec-intro': 'Intro',
-  'sec-work': 'Projects',
-  'sec-about': 'About',
-  'sec-experience': 'Experience',
-  'sec-contact': 'Contact',
-};
 
 type Props = {
   onJump: (id: SectionId) => void;
@@ -25,7 +17,7 @@ export function SectionDots({ onJump, placement }: Props) {
         className="pointer-events-auto flex flex-col items-center gap-1.5"
       >
         <span className="font-[var(--font-mono)] text-[0.55rem] tracking-[0.26em] uppercase text-[var(--color-neon)]">
-          {LABELS[activeId]}
+          {SECTION_LABELS[activeId]}
         </span>
         <div className="flex flex-row items-center gap-1">
           {SECTION_IDS.map((id, i) => {
@@ -35,7 +27,7 @@ export function SectionDots({ onJump, placement }: Props) {
                 key={id}
                 type="button"
                 onClick={() => onJump(id)}
-                aria-label={`Go to ${LABELS[id]}`}
+                aria-label={`Go to ${SECTION_LABELS[id]}`}
                 aria-current={active ? 'true' : undefined}
                 className="flex items-center justify-center min-w-[40px] min-h-[44px] cursor-pointer"
               >
@@ -72,7 +64,7 @@ export function SectionDots({ onJump, placement }: Props) {
             key={id}
             type="button"
             onClick={() => onJump(id)}
-            aria-label={`Go to ${LABELS[id]}`}
+            aria-label={`Go to ${SECTION_LABELS[id]}`}
             aria-current={active ? 'true' : undefined}
             className="group relative cursor-pointer flex items-center justify-center w-3 h-3"
           >
@@ -86,7 +78,7 @@ export function SectionDots({ onJump, placement }: Props) {
                 pointer-events-none
               "
             >
-              {LABELS[id]}
+              {SECTION_LABELS[id]}
             </span>
             <span
               className={`

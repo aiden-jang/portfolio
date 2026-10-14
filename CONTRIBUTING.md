@@ -1,15 +1,16 @@
 # Contributing
 
-Use Node.js 22 and install dependencies with `npm ci`. Run `npm run dev` for the
-local site. Read [the architecture](docs/architecture.md) and
+Use Node.js 22.22.2 or newer in the Node 22 line and install dependencies with
+`npm ci`. Run `npm run dev` for the local site. Read [the architecture](docs/architecture.md) and
 [repository conventions](CONVENTIONS.md) before changing behavior.
 
 Keep changes focused. Preserve keyboard access, reduced motion, model credits,
 shared URLs and browser history. UI changes should include desktop and mobile
 browser checks; explain any verification limits in the pull request.
+[Quality checks](docs/quality.md) covers automated browser setup and coverage.
 
-Run `npm run verify` before opening a pull request. Add regression coverage for
-behavior changes where tests can meaningfully detect the failure. Do not update
+Run `npm run verify` and `npm run test:browser` before opening a pull request.
+Add regression coverage for behavior changes where tests can meaningfully detect the failure. Do not update
 screenshots, generated artifacts or the résumé unless the change calls for it.
 
 Use Conventional Commits without an app name or scope, for example:

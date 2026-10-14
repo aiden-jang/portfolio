@@ -5,7 +5,8 @@ Development setup and commit conventions are in [CONTRIBUTING.md](CONTRIBUTING.m
 
 ## Verification
 
-Run `npm run verify` before reporting a change complete. CI runs the same gate:
+Run `npm run verify` and `npm run test:browser` before reporting a change complete.
+CI runs both. The verification gate covers:
 typechecking, lint, formatting, repository checks, tests and a production build.
 Vercel handles deployment separately.
 
@@ -14,6 +15,8 @@ Vercel handles deployment separately.
   tracked file, lower its ceiling in the same commit. Do not split files solely to
   satisfy a limit; give each module a coherent responsibility.
 - `check-comments` checks source comments for oversized blocks and ticket IDs.
+- `check-content` checks local documentation links, headings, public asset references
+  and search metadata.
 - `check-tests` requires the suite to meet its floor. Floors may increase, never
   decrease. A successful test process alone does not prove the complete suite ran.
 
@@ -34,7 +37,8 @@ wrong working directory or unavailable instrumentation.
 Unit and DOM tests do not verify visual fidelity. Use browser checks for changed
 layout, focus, history and interaction behavior, including desktop and mobile
 widths where applicable. Report unavailable browsers or physical-device checks
-as verification limits.
+as verification limits. Browser setup and regression coverage are documented in
+[Quality checks](docs/quality.md).
 
 ## Comments and documentation
 

@@ -24,3 +24,7 @@ npm-debug.log*
 
 # Claude Code: launch.json is committed, local settings are not
 .claude/settings.local.json
+
+# Browser test output
+playwright-report/
+test-results/
