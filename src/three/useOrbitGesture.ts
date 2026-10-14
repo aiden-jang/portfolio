@@ -15,8 +15,7 @@ const DRAG_PITCH_SENSITIVITY = 0.006;
 const MIN_ELEVATION_FREE = -0.4;
 const MAX_ELEVATION_FREE = 0.9;
 const SCROLL_PAUSE_DURATION = 0.2;
-const NON_DRAGGABLE_SELECTOR =
-  'a, button, input, select, textarea, summary, dialog, .garage-menu, .panel, #nav';
+const NON_DRAGGABLE_SELECTOR = 'a, button, input, select, textarea, summary, dialog, .panel, #nav';
 
 export type RigState = {
   dragAzimuth: number;
