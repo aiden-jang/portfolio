@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { CARS, SECTION_IDS, SECTION_LABELS } from '../config';
-import { buildCommands, matchCommands } from './commands';
+import { buildCommands, matchCommands, modifierKey } from './commands';
 
 const build = () => buildCommands({ onSection: vi.fn(), setNotice: vi.fn() });
 
@@ -70,4 +70,12 @@ describe('matchCommands', () => {
   it('finds nothing for a query that matches nothing', () => {
     expect(matchCommands(build(), 'zzzznope')).toEqual([]);
   });
+});
+
+it('labels the shortcut for the current keyboard platform', () => {
+  vi.stubGlobal('navigator', { platform: 'MacIntel' });
+  expect(modifierKey()).toBe('⌘');
+  vi.stubGlobal('navigator', { platform: 'Linux x86_64' });
+  expect(modifierKey()).toBe('Ctrl');
+  vi.unstubAllGlobals();
 });

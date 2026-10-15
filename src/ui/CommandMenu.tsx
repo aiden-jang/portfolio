@@ -2,7 +2,7 @@ import { useDialogFocus } from './useDialogFocus';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal, flushSync } from 'react-dom';
 import { type SectionId } from '../config';
-import { buildCommands, matchCommands, type Command } from './commands';
+import { buildCommands, matchCommands, modifierKey, type Command } from './commands';
 import { usePageScrollLock } from './usePageScrollLock';
 export const COMMAND_MENU_EVENT = 'portfolio:open-command-menu';
 
@@ -88,7 +88,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
       >
         <div className="flex items-center gap-3 border-b border-white/[0.1] px-4 py-3">
           <span aria-hidden="true" className="text-[var(--color-neon)]">
-            ⌘
+            {modifierKey()}
           </span>
           <input
             ref={inputRef}
