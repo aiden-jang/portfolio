@@ -766,3 +766,20 @@
 #sec-contact {
   min-height: 100dvh;
 }
+
+input:is(:autofill, :-webkit-autofill),
+textarea:is(:autofill, :-webkit-autofill) {
+  -webkit-text-fill-color: var(--color-fg);
+  caret-color: var(--color-fg);
+  box-shadow: 0 0 0 1000px var(--color-bg) inset;
+}
+
+::selection {
+  background: var(--color-fg);
+  color: var(--color-bg);
+}
+
+input::selection,
+textarea::selection {
+  -webkit-text-fill-color: var(--color-bg);
+}

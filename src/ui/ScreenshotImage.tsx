@@ -30,6 +30,7 @@ export function ScreenshotImage({
       aria-busy={!loaded}
       src={src}
       alt={alt}
+      decoding="async"
       width={width}
       height={height}
       loading={lazy ? 'lazy' : 'eager'}

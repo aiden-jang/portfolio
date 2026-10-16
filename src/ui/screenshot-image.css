@@ -27,3 +27,21 @@
   background: repeating-linear-gradient(135deg, #202025 0 12px, #242429 12px 24px);
   color: var(--color-muted);
 }
+
+:is(.preview-thumbnail, .story-image-crop) {
+  background: var(--color-bg);
+  border-radius: 8px;
+  isolation: isolate;
+}
+:is(.preview-thumbnail, .story-image-crop) .screenshot-image {
+  display: block;
+  width: 100%;
+  image-rendering: auto;
+}
+:is(.project-preview, .story-image-trigger) + figcaption,
+.story-screenshot figcaption {
+  color: var(--color-muted);
+  font: 12px/1.6 var(--font-display);
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
