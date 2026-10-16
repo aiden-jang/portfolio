@@ -37,6 +37,7 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
         <a
           href={item.link.url}
           target="_blank"
+          aria-describedby="external-link-hint"
           rel="noopener"
           className={`${pill} text-[var(--color-fg)]`}
         >
@@ -49,6 +50,7 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
           key={link.url}
           href={link.url}
           target="_blank"
+          aria-describedby="external-link-hint"
           rel="noopener"
           className={`${pill} text-[var(--color-muted)]`}
         >

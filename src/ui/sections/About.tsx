@@ -34,6 +34,7 @@ export function AboutSection() {
               <a
                 href="https://github.com/aiden-jang/iodine"
                 target="_blank"
+                aria-describedby="external-link-hint"
                 rel="noopener noreferrer"
               >
                 iodine · agent approvals and undo ↗

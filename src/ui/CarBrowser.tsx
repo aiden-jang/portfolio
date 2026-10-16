@@ -113,7 +113,12 @@ export function CarBrowser({ onClose, returnFocus }: Props) {
               </span>
             </button>
             {car.credit && (
-              <a href={car.credit.url} target="_blank" rel="noopener noreferrer">
+              <a
+                href={car.credit.url}
+                target="_blank"
+                aria-describedby="external-link-hint"
+                rel="noopener noreferrer"
+              >
                 Model by {car.credit.author} ↗
               </a>
             )}

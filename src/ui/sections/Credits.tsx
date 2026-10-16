@@ -86,6 +86,7 @@ export function Credits() {
                       <a
                         href={credit.url}
                         target="_blank"
+                        aria-describedby="external-link-hint"
                         rel="noopener"
                         className="text-[0.68rem] text-[var(--color-muted)] no-underline border-b border-transparent hover:text-[var(--color-fg)] hover:border-[var(--color-neon)]"
                       >

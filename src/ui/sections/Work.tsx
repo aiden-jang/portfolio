@@ -167,6 +167,7 @@ function Project({
             <a
               href={item.link.url}
               target="_blank"
+              aria-describedby="external-link-hint"
               rel="noopener"
               aria-label={`Open ${item.shortName}`}
             >

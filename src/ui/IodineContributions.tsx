@@ -25,7 +25,12 @@ export function IodineContributions() {
     <div className="contribution-panel">
       <div className="contribution-heading">
         <span>Open source · Contributor</span>
-        <a href="https://github.com/hyunwookshin/iodine" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://github.com/hyunwookshin/iodine"
+          target="_blank"
+          aria-describedby="external-link-hint"
+          rel="noopener noreferrer"
+        >
           Upstream repository ↗
         </a>
       </div>
@@ -35,6 +40,7 @@ export function IodineContributions() {
             key={item.commit}
             href={`https://github.com/hyunwookshin/iodine/commit/${item.commit}`}
             target="_blank"
+            aria-describedby="external-link-hint"
             rel="noopener noreferrer"
             aria-label={`See ${item.label.toLowerCase()} contribution`}
           >

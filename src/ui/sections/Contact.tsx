@@ -45,6 +45,7 @@ export function ContactSection() {
               key={url}
               href={url}
               target="_blank"
+              aria-describedby="external-link-hint"
               rel="noopener"
               aria-label={label}
               title={label}
