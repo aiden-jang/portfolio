@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { previewIndex } from './previewLinks';
 
 const selections = new Map<string, number>();
@@ -11,6 +11,16 @@ const subscribe = (listener: () => void) => {
 };
 
 export function usePreviewSelection(name: string, count: number) {
+  useEffect(() => {
+    const restore = () => {
+      const linked = previewIndex(new URLSearchParams(location.search).get('preview'), name, count);
+      if (linked === null) return;
+      selections.set(name, linked);
+      listeners.forEach((listener) => listener());
+    };
+    window.addEventListener('popstate', restore);
+    return () => window.removeEventListener('popstate', restore);
+  }, [name, count]);
   const read = () => {
     const remembered = selections.get(name);
     if (remembered !== undefined) return remembered < count ? remembered : 0;
