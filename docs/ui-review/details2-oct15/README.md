@@ -20,3 +20,6 @@ screen-reader output remain device checks.
 Current section markers also keep their selected system color. The focused
 [desktop marker check](current-section-1440-active.png) uses the real page with
 WebGL unavailable, so it exercises the fallback without a competing 3D renderer.
+
+High-contrast selections use a heavier bottom rule while labels retain native
+system text colors. This avoids text backplates obscuring a filled selection.
