@@ -11,6 +11,7 @@ type Props = {
   onShare?: () => void;
   shareStatus?: 'idle' | 'copied' | 'failed';
   viewLink?: string;
+  navigation?: { index: number; count: number; label: string; onSelect: (index: number) => void };
 };
 
 export function ScreenshotViewer({
@@ -22,6 +23,7 @@ export function ScreenshotViewer({
   onShare,
   shareStatus,
   viewLink,
+  navigation,
 }: Props) {
   const [zoomed, setZoomed] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -41,13 +43,20 @@ export function ScreenshotViewer({
     const area = viewport.current;
     if (area)
       area.scrollTo({ left: zoomed ? (area.scrollWidth - area.clientWidth) / 2 : 0, top: 0 });
-  }, [zoomed]);
+  }, [zoomed, image]);
   return createPortal(
     <dialog
       ref={dialog}
       className="preview-dialog"
       aria-label={`${name} screenshot`}
-      onKeyDown={(event) => event.stopPropagation()}
+      onKeyDown={(event) => {
+        event.stopPropagation();
+        if (!navigation || zoomed || event.altKey || event.ctrlKey || event.metaKey) return;
+        const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+        if (!step) return;
+        event.preventDefault();
+        navigation.onSelect((navigation.index + step + navigation.count) % navigation.count);
+      }}
       onCancel={(event) => {
         event.preventDefault();
         onClose();
@@ -75,6 +84,27 @@ export function ScreenshotViewer({
           Close ×
         </button>
       </div>
+      {navigation && (
+        <div className="preview-view-navigation" role="group" aria-label="Screenshot views">
+          <button
+            type="button"
+            onClick={() =>
+              navigation.onSelect((navigation.index - 1 + navigation.count) % navigation.count)
+            }
+          >
+            ← Previous
+          </button>
+          <span aria-live="polite">
+            {navigation.index + 1} / {navigation.count} · {navigation.label}
+          </span>
+          <button
+            type="button"
+            onClick={() => navigation.onSelect((navigation.index + 1) % navigation.count)}
+          >
+            Next →
+          </button>
+        </div>
+      )}
       <div
         ref={viewport}
         tabIndex={0}

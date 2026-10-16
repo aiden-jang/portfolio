@@ -117,9 +117,37 @@ for (const width of [1440, 390]) {
       });
       await screenshot.click();
       await expect(page.getByRole('dialog', { name: 'bloomnote screenshot' })).toBeVisible();
+      const viewer = page.getByRole('dialog', { name: 'bloomnote screenshot' });
+      const image = viewer.getByRole('img');
+      const firstView = await image.getAttribute('src');
+      await viewer.getByRole('button', { name: 'Next →', exact: true }).click();
+      await expect(image).not.toHaveAttribute('src', firstView!);
+      await expect(viewer.getByRole('group', { name: 'Screenshot views' })).toContainText('2 / 2');
+      await page.keyboard.press('ArrowLeft');
+      await expect(image).toHaveAttribute('src', firstView!);
+      await page.keyboard.press('ArrowLeft');
+      await expect(image).not.toHaveAttribute('src', firstView!);
+      await viewer.getByRole('button', { name: 'Previous', exact: false }).click();
+      await expect(image).toHaveAttribute('src', firstView!);
+      await page.keyboard.press('ArrowRight');
+      await expect(image).not.toHaveAttribute('src', firstView!);
+      await page.keyboard.press('ArrowRight');
+      await expect(image).toHaveAttribute('src', firstView!);
+      for (const forcedColors of ['none', 'active'] as const) {
+        await page.emulateMedia({ forcedColors });
+        await viewer.getByRole('button', { name: 'Next →', exact: true }).focus();
+        await page.screenshot({
+          path: test.info().outputPath(`details2-viewer-${width}-${forcedColors}.png`),
+          animations: 'disabled',
+        });
+      }
+      await page.emulateMedia({ forcedColors: 'none' });
+
       await accessible(page);
       await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
       await expect(page.getByRole('button', { name: 'Fit image', exact: true })).toBeVisible();
+      await page.keyboard.press('ArrowRight');
+      await expect(image).toHaveAttribute('src', firstView!);
       await page.keyboard.press('Escape');
       await expect(screenshot).toBeFocused();
 

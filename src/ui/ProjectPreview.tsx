@@ -98,6 +98,16 @@ export function ProjectPreview({
           onShare={states ? shareView : undefined}
           shareStatus={copyStatus}
           viewLink={previewLink(location.href, name, selected)}
+          navigation={
+            states && states.length > 1
+              ? {
+                  index: selected,
+                  count: states.length,
+                  label: states[selected]!.label,
+                  onSelect: setSelected,
+                }
+              : undefined
+          }
         />
       )}
     </>
