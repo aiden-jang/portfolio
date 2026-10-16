@@ -16,3 +16,7 @@ accessibility in Chromium and WebKit. The arrow-key assertion was checked agains
 a deliberately disabled handler, then restored and passed. These captures use
 Chromium with emulated high contrast. Physical-device navigation and spoken
 screen-reader output remain device checks.
+
+Current section markers also keep their selected system color. The focused
+[desktop marker check](current-section-1440-active.png) uses the real page with
+WebGL unavailable, so it exercises the fallback without a competing 3D renderer.
