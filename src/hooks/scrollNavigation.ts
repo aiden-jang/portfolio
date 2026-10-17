@@ -1,4 +1,4 @@
-import { prefersReducedMotion } from './useReducedMotion';
+import { prefersReducedMotion } from './reducedMotion';
 
 let scrollRaf = 0;
 // Module-level so manual scroll input can abort a tween started from anywhere.

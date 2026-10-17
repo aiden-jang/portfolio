@@ -7,7 +7,7 @@ import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
 import { IodineContributions } from '../IodineContributions';
-import { prefersReducedMotion } from '../../hooks/useReducedMotion';
+import { prefersReducedMotion } from '../../hooks/reducedMotion';
 import { cancelSmoothScroll } from '../../hooks/scrollNavigation';
 import { useActiveProject } from '../useActiveProject';
 

@@ -5,8 +5,8 @@ export const MIN_CAM_Y = 0.25;
 export const MAX_ELEVATION = 1.2;
 export const FRAME_BASE_ASPECT = 1.5;
 export const FRAME_MAX_DIST_MUL = 1.85;
-export const INTRO_WIDE_DIST_MUL = 2.6;
-export const INTRO_WIDE_ELEVATION = 0.65;
+const INTRO_WIDE_DIST_MUL = 2.6;
+const INTRO_WIDE_ELEVATION = 0.65;
 
 export function interpolateKeyframe(keyframes: Keyframe[], scrollT: number, out: Keyframe): void {
   const t = clamp(scrollT, 0, 1) * (keyframes.length - 1);

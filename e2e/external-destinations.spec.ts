@@ -2,10 +2,11 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 
 async function expectDestinations(scope: Page | Locator) {
   const links = scope.locator('a[target="_blank"]:not([aria-label*="opens in a new tab"])');
-  expect(await links.count()).toBeGreaterThan(0);
-  for (const link of await links.all()) {
-    await expect(link).toHaveAccessibleDescription('Opens in a new tab');
-  }
+  const destinations = await links.all();
+  expect(destinations.length).toBeGreaterThan(0);
+  await Promise.all(
+    destinations.map((link) => expect(link).toHaveAccessibleDescription('Opens in a new tab')),
+  );
 }
 
 test('external destinations describe the new tab on the page and in dialogs', async ({ page }) => {

@@ -1,7 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { KEYFRAMES } from '../config';
-import { prefersReducedMotion } from '../hooks/useReducedMotion';
+import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { clamp } from '../math';
 import { useOrbitGesture, type RigState } from './useOrbitGesture';
 import {

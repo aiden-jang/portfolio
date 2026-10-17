@@ -16,10 +16,7 @@
     margin: 0;
     padding: 0;
   }
-  /* Belt-and-suspenders against sideways scroll on mobile: clip horizontal
-     overflow at the scroll root. Applied to <html> only (the document
-     scroller) so vertical scrolling — which the camera rig reads off
-     window.scrollY / scrollHeight — is untouched. */
+  /* Clip horizontal overflow at the document scroller; camera motion still reads window.scrollY. */
   html {
     overflow-x: hidden;
   }
@@ -34,9 +31,7 @@
     background: var(--color-bg);
     color: var(--color-fg);
     font-family: var(--font-display);
-    /* 100vh first as the fallback, then 100dvh, which is the one that matters on a phone: mobile
-       Safari counts the URL bar inside 100vh, so a "full height" page is taller than the screen and
-       the layout jumps as the bar hides. Browsers that do not know dvh keep the line above. */
+    /* Dynamic viewport height tracks Safari's collapsing browser chrome; vh is the fallback. */
     min-height: 100vh;
     min-height: 100dvh;
     /* Orbit gestures should not select intro copy; reading sections enable selection. */
@@ -47,9 +42,6 @@
     max-width: 100vw;
   }
 
-  /* Keyboard focus rings: visible only when navigating via keyboard
-     (`:focus-visible`), so mouse clicks don't leave a ring behind. Inherits
-     border-radius from the focused element, so round elements get round rings. */
   :focus {
     outline: none;
   }
@@ -65,11 +57,7 @@
   }
 }
 
-/* Film grain jitter — small discrete shifts so the noise feels alive. Shifts
-   the tiling noise via background-position (not transform), so the overlay can
-   stay exactly viewport-sized (inset-0) and never overflow — a translated,
-   oversized fixed element caused sideways scroll on mobile. The noise tiles
-   seamlessly, so moving the position never exposes an edge. */
+/* Animate the tiled grain position so the fixed overlay never creates horizontal overflow. */
 @keyframes filmgrain {
   0%,
   100% {
@@ -140,10 +128,6 @@
     animation: app-fade-in 0.9s ease-out both;
   }
 
-  /* Soft radial vignette overlay. Frames the canvas as a stage with the car
-     as the focal point, and gives chrome at the corners (brand, nav, dots)
-     a slightly darker substrate to read against. Lives between the canvas
-     (z-0) and the DOM content (z-10). */
   .vignette {
     position: fixed;
     inset: 0;
@@ -170,21 +154,14 @@
       0 2px 24px rgba(0, 0, 0, 0.45);
   }
 
-  /* Soft, edgeless dark scrim behind every panel's text. A radial that darkens
-     directly behind the copy and fades to nothing before its edges — no card,
-     no box, so the car stays visible while the text stays legible (helped by
-     the halo above). No backdrop-filter, so no per-frame cost over the animating
-     canvas. Sits under the text (z-index -1 in the panel's own stacking context). */
+  /* A text scrim preserves contrast over the car without a per-frame backdrop filter. */
   .panel::before {
     content: '';
     position: absolute;
     inset: -45% -28%;
     z-index: -1;
     pointer-events: none;
-    /* Very gradual, many-stop falloff over an oversized box, so the alpha
-       change per pixel is tiny — no perceptible line/ring where the darkening
-       ends, even over a bright part of the car. A slight blur further softens
-       any banding. */
+
     background: radial-gradient(
       ellipse 62% 55% at center,
       rgba(5, 5, 13, 0.6) 0%,
@@ -229,10 +206,7 @@
     transform: translateY(0);
   }
 
-  /* View Transitions: opening/closing a work card morphs it into the modal via
-     the shared `work-morph` name (see Sections.tsx). Keep the fixed 3D backdrop
-     static — animating the root would cross-fade the whole WebGL canvas, which
-     is expensive and flickers — so only the morph itself animates. */
+  /* Limit view transitions to the work preview; cross-fading the WebGL backdrop is expensive and flickers. */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
@@ -253,12 +227,7 @@
     pointer-events: none;
   }
 
-  /* When a work/case-study modal is open, hide the fixed chrome — the bottom
-     bar, brand, nav, and mobile resume would otherwise show through the
-     translucent overlay (it's not a z-index bug; the modal is above them, but
-     the overlay lets the layers below peek through). Hidden via opacity (not
-     display), because Tailwind's layout utilities sit in the later utilities
-     layer and would win over a component-layer `display` rule. */
+  /* Hide fixed chrome through modal overlays. Opacity avoids conflicts with later layout utilities. */
   body.modal-open #mobile-bar,
   body.modal-open #desktop-dock,
   body.modal-open #hint,
@@ -269,10 +238,7 @@
     pointer-events: none;
   }
 
-  /* Reduced-motion: collapse every CSS animation and transition to ~instant.
-     Catches the film-grain jitter, brand-clock pulse, panel reveal, hover
-     transitions, etc. JS-driven motion (camera tweens, magnetic hover) is
-     gated separately via prefersReducedMotion() / useReducedMotion(). */
+  /* JS camera and hover motion also respect the reduced-motion preference. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

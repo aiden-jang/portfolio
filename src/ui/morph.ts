@@ -1,5 +1,5 @@
 import { flushSync } from 'react-dom';
-import { prefersReducedMotion } from '../hooks/useReducedMotion';
+import { prefersReducedMotion } from '../hooks/reducedMotion';
 
 type ViewTransition = {
   ready: Promise<void>;

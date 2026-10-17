@@ -1,6 +1,6 @@
 import type * as THREE from 'three';
 
-export type MarkKey =
+type MarkKey =
   | 'worth'
   | 'owewell'
   | 'iguess'
@@ -29,7 +29,7 @@ export type Theme = {
   exposure: number;
 };
 
-export type Credit = {
+type Credit = {
   author: string;
   license: string;
   url: string;

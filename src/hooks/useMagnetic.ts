@@ -1,5 +1,5 @@
 import { useEffect, type RefObject } from 'react';
-import { prefersReducedMotion } from './useReducedMotion';
+import { prefersReducedMotion } from './reducedMotion';
 
 /** `strength` is the fraction of the cursor's distance from centre to follow: 0.3 is subtle. */
 export function useMagnetic<T extends HTMLElement>(ref: RefObject<T | null>, strength = 0.3): void {

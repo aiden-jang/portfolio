@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { CARS, THEMES } from '../config';
-import { prefersReducedMotion } from '../hooks/useReducedMotion';
+import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { smoothTowards } from '../math';
 import { canPrefetchModels } from './modelPrefetch';
 import { smoothColorHex } from './colorMath';
