@@ -1,3 +1,4 @@
+import { publicAnalyticsUrl } from './analytics';
 import { lazy, Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -64,8 +65,8 @@ export function App() {
           <CommandMenu onSection={scrollToSection} />
         </>
       )}
-      <Analytics />
-      <SpeedInsights />
+      <Analytics beforeSend={publicAnalyticsUrl} />
+      <SpeedInsights beforeSend={publicAnalyticsUrl} route="/" />
     </>
   );
 }

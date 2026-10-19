@@ -63,3 +63,5 @@ The source code is [MIT licensed](LICENSE). Third-party assets retain their own 
 - Geist Mono: [font license](public/fonts/Geist-Mono-LICENSE.txt).
 
 The source license does not relicense third-party assets.
+
+[Analytics and URL privacy](docs/analytics.md) describes traffic and performance reporting.
