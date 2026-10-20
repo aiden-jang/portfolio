@@ -126,8 +126,8 @@
     transform-origin: right center;
   }
   .project-gallery [data-project='iguess'] img {
-    object-position: 50% 18%;
-    transform-origin: center top;
+    object-position: left top;
+    transform-origin: left top;
   }
   .project-gallery [data-project='wherever'] img {
     object-position: right;

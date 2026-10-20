@@ -29,8 +29,9 @@ export const PREVIEWS: Record<string, ProductPreview> = {
     states: [
       {
         image: '/projects/worth-ranked.png',
-        label: 'See the ranking',
-        caption: 'Example: drag to rank the drinks; Favorite, Meh and Not again stay separate.',
+        label: 'Explore the collection',
+        caption:
+          'Example collection: a ranked index beside a record with Favorite, Meh and Not again.',
       },
       {
         image: '/projects/worth.png',
@@ -40,7 +41,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
     ],
     description:
       'For keeping track of your own taste: rank what you try and remember what deserves another go.',
-    caption: 'Example ranked list: five drinks, in a very particular order.',
+    caption: 'Example collection: three drinks, a ranked index and a very particular opinion.',
   },
   owewell: {
     image: '/projects/owewell.png',
@@ -56,7 +57,8 @@ export const PREVIEWS: Record<string, ProductPreview> = {
   iguess: {
     image: '/projects/iguess.png',
     description: 'Draw with friends while an AI races to guess. Bad drawings are welcome.',
-    caption: 'Choose a game mode and an extremely qualified avatar.',
+    caption:
+      'The current join screen: choose your company beside a very confidently misidentified cat.',
   },
   wherever: {
     image: '/projects/wherever.png',
@@ -86,7 +88,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       {
         image: '/projects/mrrp-room.jpg',
         label: 'Together in the room',
-        caption: 'Example room: a tired check-in makes sitting together the suggested action.',
+        caption: 'Example room: a tired check-in beside the shared room and its care actions.',
       },
       {
         image: '/projects/mrrp.png',
@@ -95,6 +97,6 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       },
     ],
     description: 'A private room for two, a pixel cat, and small ways to keep each other company.',
-    caption: 'Example shared room: a tired mood becomes an invitation to sit together.',
+    caption: 'Example shared room: a tired check-in and small ways to keep each other company.',
   },
 };
