@@ -117,22 +117,16 @@ export const CARS: CarSpec[] = [
     },
   },
   {
-    name: 'BMW M4 ADRO',
-    code: 'G82',
-    file: 'bmw-g82-m4-adro.glb',
+    name: 'Polestar 1',
+    code: 'Hybrid GT',
+    file: 'polestar-1.glb',
     exposure: 1.0,
     credit: {
-      title: 'BMW G82 M4 with Adro Kit 2022 | www.vecarz.com',
-      author: 'vecarz',
+      title: '[FREE] Polestar 1',
+      author: 'Martin Trafas',
       license: 'CC BY 4.0',
       licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
-      url: 'https://sketchfab.com/3d-models/bdea1df6c22e4efd9b01a52034789fd7',
-      upstream: {
-        author: 'Ddiaz Design',
-        url: 'https://sketchfab.com/3d-models/54f2273c00e94ebdba0f0db1a7945bf2',
-        license: 'CC BY-NC-SA 4.0',
-        licenseUrl: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-      },
+      url: 'https://sketchfab.com/3d-models/4a368c71047c4eb0829525d933752828',
     },
   },
 ];

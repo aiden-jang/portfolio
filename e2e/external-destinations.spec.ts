@@ -43,10 +43,9 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expect(licenses).toHaveCount(7);
   for (const license of await licenses.all())
     await expect(license).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
-  await expect(credits.getByRole('link', { name: 'CC BY-NC-SA 4.0' })).toHaveAttribute(
-    'href',
-    'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-  );
-  await expect(credits).toContainText('Upstream permission unconfirmed.');
+  await expect(
+    credits.getByRole('link', { name: '[FREE] Polestar 1', exact: true }),
+  ).toHaveAttribute('href', 'https://sketchfab.com/3d-models/4a368c71047c4eb0829525d933752828');
+  await expect(credits).toContainText('Polestar 1');
   await expect(credits).toContainText('The RWB mesh is simplified.');
 });

@@ -106,29 +106,6 @@ export function Credits() {
                           {credit.copyright}
                         </span>
                       )}
-                      {credit.upstream && (
-                        <p className="mt-2 text-[0.68rem] text-[var(--color-muted)]">
-                          Credited source:{' '}
-                          <a
-                            href={credit.upstream.url}
-                            target="_blank"
-                            aria-describedby="external-link-hint"
-                            rel="noopener"
-                          >
-                            {credit.upstream.author}
-                          </a>
-                          {' · '}
-                          <a
-                            href={credit.upstream.licenseUrl}
-                            target="_blank"
-                            aria-describedby="external-link-hint"
-                            rel="noopener"
-                          >
-                            {credit.upstream.license}
-                          </a>
-                          . Upstream permission unconfirmed.
-                        </p>
-                      )}
                     </li>
                   );
                 })}

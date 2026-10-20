@@ -59,7 +59,7 @@ The source code is [MIT licensed](LICENSE). Third-party assets retain their own 
 
 - Car models: publisher licenses, authors, original titles, source links and adaptations
   appear in the site’s Contact credits. [The model license review](docs/model-licenses.md)
-  records the verified sources and the M4’s unresolved upstream permission.
+  records the verified sources, attribution requirements and web adaptations.
 - Geist: [font license](public/fonts/Geist-LICENSE.txt).
 - Geist Mono: [font license](public/fonts/Geist-Mono-LICENSE.txt).
 
