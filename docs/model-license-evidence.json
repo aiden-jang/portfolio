@@ -1,0 +1,99 @@
+{
+  "checkedOn": "2026-10-20",
+  "models": [
+    {
+      "file": "ferrari-f120-f40.glb",
+      "title": "Ferrari F40 | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95",
+      "evidence": "https://api.sketchfab.com/v3/models/ee082e412b0a4b2090e8492117841e95",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-20",
+      "review": "source-license-verified"
+    },
+    {
+      "file": "mercedes-benz-w198-300-sl.glb",
+      "title": "Mercedes-Benz 300 SL Gullwing",
+      "author": "Lexyc16",
+      "creatorId": "493c518a107848cc91ffe4d6771947b4",
+      "source": "https://sketchfab.com/3d-models/505241c829c540a4921533000736904e",
+      "evidence": "https://api.sketchfab.com/v3/models/505241c829c540a4921533000736904e",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-20",
+      "review": "source-license-verified"
+    },
+    {
+      "file": "porsche-930-911.glb",
+      "title": "FREE 1975 Porsche 911 (930) Turbo",
+      "author": "Lionsharp Studios",
+      "creatorId": "081e40be008f4dbd9821af8c8ed278eb",
+      "source": "https://sketchfab.com/3d-models/8568d9d14a994b9cae59499f0dbed21e",
+      "evidence": "https://api.sketchfab.com/v3/models/8568d9d14a994b9cae59499f0dbed21e",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-20",
+      "review": "source-license-verified"
+    },
+    {
+      "file": "porsche-930-911-rwb.glb",
+      "title": "Porsche 911 Turbo - RWB",
+      "author": "SWIZ",
+      "creatorId": "e78f5b0fb9c64d80960744b50ad467bf",
+      "source": "https://sketchfab.com/3d-models/9b13e93711db460b99749ae95aea9764",
+      "evidence": "https://api.sketchfab.com/v3/models/9b13e93711db460b99749ae95aea9764",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-20",
+      "review": "source-license-verified"
+    },
+    {
+      "file": "bmw-e30-m3.glb",
+      "title": "[FREE] BMW M3 E30",
+      "author": "Martin Trafas",
+      "creatorId": "924b167e7bef485b9b8d929a56efd066",
+      "source": "https://sketchfab.com/3d-models/ac3c7013434e403e8faff87948caf422",
+      "evidence": "https://api.sketchfab.com/v3/models/ac3c7013434e403e8faff87948caf422",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-20",
+      "review": "source-license-verified"
+    },
+    {
+      "file": "datsun-s30-280z.glb",
+      "title": "[FREE] Datsun 280Z",
+      "author": "Martin Trafas",
+      "creatorId": "924b167e7bef485b9b8d929a56efd066",
+      "source": "https://sketchfab.com/3d-models/0789ab2ece9442de94b3c41595e0ecbd",
+      "evidence": "https://api.sketchfab.com/v3/models/0789ab2ece9442de94b3c41595e0ecbd",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-20",
+      "review": "source-license-verified"
+    },
+    {
+      "file": "bmw-g82-m4-adro.glb",
+      "title": "BMW G82 M4 with Adro Kit 2022 | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/bdea1df6c22e4efd9b01a52034789fd7",
+      "evidence": "https://api.sketchfab.com/v3/models/bdea1df6c22e4efd9b01a52034789fd7",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-20",
+      "review": "upstream-permission-unconfirmed"
+    }
+  ],
+  "additionalSources": [
+    {
+      "author": "Ddiaz Design",
+      "source": "https://sketchfab.com/3d-models/54f2273c00e94ebdba0f0db1a7945bf2",
+      "evidence": "https://api.sketchfab.com/v3/models/54f2273c00e94ebdba0f0db1a7945bf2",
+      "license": "CC BY-NC-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "review": "Upstream description identifies a CSR2 game model; rights to that source have not been established."
+    }
+  ]
+}

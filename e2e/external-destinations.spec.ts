@@ -39,4 +39,14 @@ test('external destinations describe the new tab on the page and in dialogs', as
   const credits = page.getByRole('dialog', { name: '3D model credits' });
   await expect(credits).toBeVisible();
   await expectDestinations(credits);
+  const licenses = credits.getByRole('link', { name: 'CC BY 4.0', exact: true });
+  await expect(licenses).toHaveCount(7);
+  for (const license of await licenses.all())
+    await expect(license).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
+  await expect(credits.getByRole('link', { name: 'CC BY-NC-SA 4.0' })).toHaveAttribute(
+    'href',
+    'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  );
+  await expect(credits).toContainText('Upstream permission unconfirmed.');
+  await expect(credits).toContainText('The RWB mesh is simplified.');
 });

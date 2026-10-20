@@ -102,4 +102,8 @@ Add the compressed model to `public/models/`, a matching JPEG preview to
 `public/cars/`, and a specification with source attribution to `CARS` in
 `src/config.ts`. Keep the default and adjacent models lightweight: those entries
 are candidates for initial prefetch. Check framing, paint detection, disposal,
-loading failure and attribution before committing.
+loading failure and attribution before committing. Verify both the publisher license
+and any credited upstream sources using [the model license review](model-licenses.md).
+Preserve embedded attribution, original material names and paint detection when
+optimizing. Compare rendered desktop and phone views before accepting simplified
+geometry; compressed file size alone does not establish visual fidelity.

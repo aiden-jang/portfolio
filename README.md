@@ -57,8 +57,9 @@ Zustand, and Vercel Analytics and Speed Insights. Exact versions are in
 
 The source code is [MIT licensed](LICENSE). Third-party assets retain their own licenses:
 
-- Car models: CC BY 4.0, with authors and source links in [src/config.ts](src/config.ts)
-  and the site’s Contact credits. Models are compressed and can be recolored at runtime.
+- Car models: publisher licenses, authors, original titles, source links and adaptations
+  appear in the site’s Contact credits. [The model license review](docs/model-licenses.md)
+  records the verified sources and the M4’s unresolved upstream permission.
 - Geist: [font license](public/fonts/Geist-LICENSE.txt).
 - Geist Mono: [font license](public/fonts/Geist-Mono-LICENSE.txt).
 

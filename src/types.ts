@@ -23,9 +23,13 @@ export type Theme = {
 };
 
 type Credit = {
+  title: string;
   author: string;
   license: string;
+  licenseUrl: string;
   url: string;
+  copyright?: string;
+  upstream?: { author: string; url: string; license: string; licenseUrl: string };
 };
 
 export type CarSpec = {

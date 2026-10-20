@@ -6,7 +6,6 @@ import { CARS } from '../../config';
 
 export function Credits() {
   const credited = CARS.filter((car) => !!car.credit);
-  const licenses = [...new Set(credited.map((car) => car.credit!.license))];
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLElement>(null);
@@ -71,9 +70,8 @@ export function Credits() {
                 3D model credits
               </p>
               <p className="mt-2 font-[var(--font-mono)] text-[0.54rem] tracking-[0.09em] text-[rgba(244,240,255,0.48)]">
-                {licenses.length === 1
-                  ? `All models are ${licenses[0]}.`
-                  : `Licenses: ${licenses.join(', ')}.`}
+                Models adapted for web display, with compressed textures and geometry. The RWB mesh
+                is simplified. Interactive paint and lighting added.
               </p>
               <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 list-none p-0 m-0">
                 {credited.map((car) => {
@@ -90,12 +88,55 @@ export function Credits() {
                         rel="noopener"
                         className="text-[0.68rem] text-[var(--color-muted)] no-underline border-b border-transparent hover:text-[var(--color-fg)] hover:border-[var(--color-neon)]"
                       >
-                        by {credit.author}
+                        {credit.title}
                       </a>
+                      <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
+                        by {credit.author} ·{' '}
+                        <a
+                          href={credit.licenseUrl}
+                          target="_blank"
+                          aria-describedby="external-link-hint"
+                          rel="noopener"
+                        >
+                          {credit.license}
+                        </a>
+                      </span>
+                      {credit.copyright && (
+                        <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
+                          {credit.copyright}
+                        </span>
+                      )}
+                      {credit.upstream && (
+                        <p className="mt-2 text-[0.68rem] text-[var(--color-muted)]">
+                          Credited source:{' '}
+                          <a
+                            href={credit.upstream.url}
+                            target="_blank"
+                            aria-describedby="external-link-hint"
+                            rel="noopener"
+                          >
+                            {credit.upstream.author}
+                          </a>
+                          {' · '}
+                          <a
+                            href={credit.upstream.licenseUrl}
+                            target="_blank"
+                            aria-describedby="external-link-hint"
+                            rel="noopener"
+                          >
+                            {credit.upstream.license}
+                          </a>
+                          . Upstream permission unconfirmed.
+                        </p>
+                      )}
                     </li>
                   );
                 })}
               </ul>
+              <p className="mt-4 text-[0.68rem] leading-relaxed text-[var(--color-muted)]">
+                Vehicle designs and trademarks belong to their owners, including Porsche AG. No
+                manufacturer affiliation or endorsement is implied.
+              </p>
             </section>
           </div>,
           document.body,
