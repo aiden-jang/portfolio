@@ -1,11 +1,11 @@
 import { statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { CARS, KEYFRAMES, SECTION_IDS, THEMES } from './config';
+import { CARS, KEYFRAMES, PREFETCH_MODEL_INDICES, SECTION_IDS, THEMES } from './config';
 
 const modelPath = (file: string) => new URL(`../public/models/${file}`, import.meta.url);
 
-// The three cars a first-time visitor downloads: the default plus the two Car.tsx prefetches.
-const arrivalCars = [CARS[0], CARS[1], CARS[CARS.length - 1]];
+// The default and the complete cache-warming pool used by Car.tsx.
+const arrivalCars = [...new Set([0, ...PREFETCH_MODEL_INDICES])].map((index) => CARS[index]);
 const ARRIVAL_BUDGET_BYTES = 3.2 * 1024 * 1024;
 
 describe('camera keyframes', () => {
@@ -33,7 +33,7 @@ describe('CARS', () => {
     expect(total).toBeLessThan(ARRIVAL_BUDGET_BYTES);
   });
 
-  it('keeps the heavy models out of the three arrival slots', () => {
+  it('keeps the heavy models out of automatic downloads', () => {
     const bySize = [...CARS].sort(
       (a, b) => statSync(modelPath(a.file)).size - statSync(modelPath(b.file)).size,
     );

@@ -8,6 +8,8 @@ import { lazy, Suspense } from 'react';
 import { Floor } from './Floor';
 import { Lights } from './Lights';
 import { useAppStore } from '../store';
+import { useScenePaused } from './useScenePaused';
+import { useSceneActivity } from './useSceneActivity';
 
 const Effects = lazy(() => import('./Effects').then((module) => ({ default: module.Effects })));
 
@@ -16,13 +18,19 @@ type Props = {
 };
 
 export function Scene({ getScrollT }: Props) {
+  const paused = useScenePaused();
+  const active = useSceneActivity();
   const contactVisible = useAppStore((state) => state.isContactVisible);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   return (
     <>
       <Canvas
         aria-hidden="true"
-        frameloop={sectionIndex > 0 && sectionIndex < 4 && !contactVisible ? 'demand' : 'always'}
+        frameloop={
+          paused || !active || (sectionIndex > 0 && sectionIndex < 4 && !contactVisible)
+            ? 'demand'
+            : 'always'
+        }
         className="portfolio-scene !fixed inset-0 z-0"
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         camera={{ fov: 35, near: 0.1, far: 200, position: [0, 2, 10] }}

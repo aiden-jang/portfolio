@@ -1,6 +1,7 @@
-import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { THEMES } from '../config';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
@@ -25,6 +26,23 @@ function computeSunPosition(date: Date) {
 }
 
 export function Lights() {
+  const { gl, scene } = useThree();
+  useEffect(() => {
+    const room = new RoomEnvironment();
+    const generator = new THREE.PMREMGenerator(gl);
+    const environment = generator.fromScene(room, 0.04);
+    const previous = scene.environment;
+    const previousIntensity = scene.environmentIntensity;
+    scene.environment = environment.texture;
+    scene.environmentIntensity = 0.22;
+    room.dispose();
+    generator.dispose();
+    return () => {
+      scene.environment = previous;
+      scene.environmentIntensity = previousIntensity;
+      environment.dispose();
+    };
+  }, [gl, scene]);
   const ambient = useRef<THREE.AmbientLight>(null!);
   const hemi = useRef<THREE.HemisphereLight>(null!);
   const key = useRef<THREE.DirectionalLight>(null!);

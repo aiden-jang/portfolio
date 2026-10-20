@@ -34,7 +34,8 @@ navigation, screenshot inspection, case studies, credits, keyboard focus and
 scroll restoration, cold shared links, and a delayed effects download. Phone
 checks enable touch input. A screenshot pixel check verifies that the default car
 actually renders; it excludes the paint controls so those cannot disguise a blank
-canvas. The clock is fixed for consistent studio lighting.
+canvas. A reflection check guards against dark halos cutting into the floor glow
+beside bright headlights. The clock is fixed for consistent studio lighting.
 
 Axe checks WCAG A and AA rules on the page and open dialogs. The tests use the real
 models, images and interface. Local telemetry endpoints are stubbed because they

@@ -35,7 +35,7 @@ export const THEMES: Record<ThemeName, Theme> = {
   },
 };
 
-// Keep the default model and both prefetched neighbours lightweight.
+// Keep model indices stable: shared garage links store the selected index.
 export const CARS: CarSpec[] = [
   {
     name: 'Ferrari F40',
@@ -130,6 +130,9 @@ export const CARS: CarSpec[] = [
     },
   },
 ];
+
+// Full-detail cars load on selection; only the two smallest models warm the cache.
+export const PREFETCH_MODEL_INDICES = [0, 1] as const;
 
 export const KEYFRAMES: Keyframe[] = [
   { azimuth: 0.65, elevation: 0.22, distance: 9.5, targetY: 0.7 }, // intro:      front 3/4

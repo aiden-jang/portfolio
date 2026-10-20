@@ -52,6 +52,23 @@ export function disposeModel(obj: THREE.Object3D): void {
   });
 }
 
+// Thin glass needs transparency, not multisampled refraction buffers for every reflected view.
+export function prepareModelGlass(model: THREE.Object3D): void {
+  model.traverse((object) => {
+    const mesh = object as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
+      const glass = material as THREE.MeshPhysicalMaterial;
+      if (!(glass.transmission > 0)) continue;
+      if (glass.opacity === 1) glass.opacity = Math.max(0.15, 1 - glass.transmission);
+      glass.transmission = 0;
+      glass.transparent = true;
+      glass.depthWrite = false;
+      glass.needsUpdate = true;
+    }
+  });
+}
+
 /** The returned `orientedSize` is measured before the scale is applied, not after. */
 export function autoFitToLength(model: THREE.Object3D) {
   // Rotated local bounding boxes can include empty space beneath the wheels.

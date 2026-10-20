@@ -1,15 +1,20 @@
 import { useFrame } from '@react-three/fiber';
-import { Bloom, EffectComposer, FXAA } from '@react-three/postprocessing';
-import type { BloomEffect } from 'postprocessing';
-import { useRef, type ComponentProps } from 'react';
+import { Bloom, EffectComposer, ToneMapping, SMAA } from '@react-three/postprocessing';
+import { ToneMappingMode, type BloomEffect } from 'postprocessing';
+import { memo, useEffect, useRef, type ComponentProps } from 'react';
 import { THEMES } from '../config';
+import { SCENE_ACTIVITY_EVENT } from './useSceneActivity';
 import { smoothTowards } from '../math';
 import { useAppStore } from '../store';
 
 const TRANSITION_RATE = 2.5;
 const BLOOM_RADIUS = 0.6;
 
-export function Effects() {
+// Keep the pass graph stable across car and paint changes; theme uniforms update per frame.
+export const Effects = memo(function Effects() {
+  useEffect(() => {
+    window.dispatchEvent(new Event(SCENE_ACTIVITY_EVENT));
+  }, []);
   const bloomRef = useRef<BloomEffect>(null);
   const currentStrength = useRef(THEMES.dusk.bloomStrength);
   const currentThreshold = useRef(THEMES.dusk.bloomThreshold);
@@ -26,7 +31,7 @@ export function Effects() {
   });
 
   return (
-    // Floating-point multisample targets blank the scene in WebKit. Smooth edges in the final pass.
+    // WebKit needs single-sample targets. Tone-map highlights before smoothing their edges.
     <EffectComposer multisampling={0}>
       <Bloom
         // The library types this ref as the BloomEffect class, not the instance it assigns.
@@ -36,7 +41,8 @@ export function Effects() {
         luminanceSmoothing={BLOOM_RADIUS}
         mipmapBlur
       />
-      <FXAA />
+      <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
+      <SMAA />
     </EffectComposer>
   );
-}
+});

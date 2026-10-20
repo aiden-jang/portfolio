@@ -41,10 +41,22 @@ case-study fragments.
 
 `Car` owns asynchronous GLB loading and disposal. Models use meshopt compression,
 auto-fit framing and paint-material detection. Framing measures actual world-space
-vertices once on load so rotated mesh bounds do not lift cars off the floor. Adjacent models are prefetched
-into the HTTP cache when network conditions permit. `carHelpers` owns geometry,
+vertices once on load so rotated mesh bounds do not lift cars off the floor. Only
+the two smallest models warm the HTTP cache when network conditions permit;
+heavier full-detail cars load on selection. `carHelpers` owns geometry,
 material detection and GPU-resource disposal. Scene cleanup releases model resources,
 underglow geometry and textures, and the reflection target and material.
+
+Lighting combines the themed key/fill/rim lights with a locally generated, low-intensity
+studio environment for readable metallic surfaces. Effects bloom in HDR, then apply
+ACES tone mapping and SMAA. Keep tone mapping before edge smoothing. Thin glazing uses alpha
+transparency with its authored tint and opacity instead of multisampled refraction
+targets for the main view and its reflection. Multisampling
+stays off for WebKit compatibility. The scene stops drawing continuously behind
+open dialogs and in hidden tabs, resuming when the car becomes available again.
+Reduced-motion scenes render around input, model loading and layout changes, then
+rest instead of drawing identical frames continuously. Model readiness is reported
+after its first rendered frame.
 
 ## Projects and dialogs
 
@@ -101,10 +113,10 @@ fidelity or physical-device compatibility.
 
 Add the compressed model to `public/models/`, a matching JPEG preview to
 `public/cars/`, and a specification with source attribution to `CARS` in
-`src/config.ts`. Keep the default and adjacent models lightweight: those entries
-are candidates for initial prefetch. Check framing, paint detection, disposal,
+`src/config.ts`. Keep the default and the explicit prefetch pool lightweight;
+full-detail models load only when selected. Check framing, paint detection, disposal,
 loading failure and attribution before committing. Verify both the publisher license
 and any credited upstream sources using [the model license review](model-licenses.md).
-Preserve embedded attribution, original material names and paint detection when
-optimizing. Compare rendered desktop and phone views before accepting simplified
-geometry; compressed file size alone does not establish visual fidelity.
+Preserve embedded attribution, original material names, paint detection, source
+mesh detail, normals and texture pixels when optimizing. Compare rendered desktop
+and phone views; compressed file size alone does not establish visual fidelity.

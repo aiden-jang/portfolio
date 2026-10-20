@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { autoFitToLength, detectBodyMaterial, disposeModel, hideBakedPlanes } from './carHelpers';
+import {
+  prepareModelGlass,
+  autoFitToLength,
+  detectBodyMaterial,
+  disposeModel,
+  hideBakedPlanes,
+} from './carHelpers';
 
 const TARGET_LENGTH = 4.5;
 
@@ -182,5 +188,44 @@ describe('hideBakedPlanes', () => {
 
     expect(plane.visible).toBe(false);
     expect(body.visible).toBe(true);
+  });
+});
+
+describe('thin model glass', () => {
+  it('keeps opaque refractive glass see-through without offscreen refraction targets', () => {
+    const glass = new THREE.MeshPhysicalMaterial({ transmission: 0.9, opacity: 1 });
+    const model = new THREE.Mesh(new THREE.BoxGeometry(), glass);
+    prepareModelGlass(model);
+    expect(glass.transmission).toBe(0);
+    expect(glass.transparent).toBe(true);
+    expect(glass.opacity).toBeGreaterThan(0);
+    expect(glass.opacity).toBeLessThan(1);
+    expect(glass.depthWrite).toBe(false);
+  });
+  it('preserves authored glass tint and opacity, paint, and shared material references', () => {
+    const glass = new THREE.MeshPhysicalMaterial({
+      transmission: 0.8,
+      opacity: 0.25,
+      color: '#64808c',
+    });
+    const paint = new THREE.MeshPhysicalMaterial({
+      color: '#b00020',
+      metalness: 1,
+      roughness: 0.2,
+    });
+    const tint = glass.color.clone();
+    const model = new THREE.Group();
+    model.add(
+      new THREE.Mesh(new THREE.BoxGeometry(), glass),
+      new THREE.Mesh(new THREE.BoxGeometry(), [glass, paint]),
+    );
+    prepareModelGlass(model);
+    prepareModelGlass(model);
+    expect(glass.opacity).toBe(0.25);
+    expect(glass.color).toEqual(tint);
+    expect((model.children[0] as THREE.Mesh).material).toBe(glass);
+    expect(paint.color.getHexString()).toBe('b00020');
+    expect(paint.roughness).toBe(0.2);
+    expect(paint.transparent).toBe(false);
   });
 });

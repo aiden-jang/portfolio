@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
-import { CARS, THEMES } from '../config';
+import { CARS, PREFETCH_MODEL_INDICES, THEMES } from '../config';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { smoothTowards } from '../math';
 import { canPrefetchModels } from './modelPrefetch';
@@ -11,6 +11,7 @@ import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import {
   autoFitToLength,
+  prepareModelGlass,
   buildLamps,
   detectBodyMaterial,
   disposeModel,
@@ -22,7 +23,7 @@ const TRANSITION_RATE = 2.5;
 const EXPOSURE_RATE = 2.5;
 
 export function Car() {
-  const { scene } = useThree();
+  const { scene, invalidate } = useThree();
   const carIndex = useAppStore((s) => s.carIndex);
   const retryVersion = useAppStore((s) => s.carRetryVersion);
   const armIntro = useAppStore((s) => s.armIntro);
@@ -75,6 +76,7 @@ export function Car() {
     useAppStore.getState().setCarLoadError(null);
     let cancelled = false;
     let prefetchTimer = 0;
+    let readyFrame = 0;
 
     loader.load(
       `/models/${spec.file}`,
@@ -95,6 +97,7 @@ export function Car() {
         const model = gltf.scene;
         const { scale, orientedSize } = autoFitToLength(model);
         hideBakedPlanes(model);
+        prepareModelGlass(model);
         group.add(model);
         modelRef.current = model;
         displayedIndex.current = carIndex;
@@ -105,12 +108,18 @@ export function Car() {
         setHasBodyMaterial(!!refs.bodyMaterial);
         // Has to run after material discovery, or a shared link's paint reverts on the swap.
         useAppStore.getState().applyBodyColor(useAppStore.getState().activeBodyColor);
-        setCarLoading(false);
+        // The decoded model is not ready to see until the renderer has painted it.
+        invalidate();
+        readyFrame = requestAnimationFrame(() => {
+          readyFrame = requestAnimationFrame(() => {
+            if (!cancelled) setCarLoading(false);
+          });
+        });
 
         if (!refs.introArmed) armIntro();
 
         // Plain `fetch`, not GLTFLoader: this only needs to warm the HTTP cache, and parsing
-        // plus meshopt-decoding two spare cars would compete with the one on screen.
+        // plus meshopt-decoding spare cars would compete with the one on screen.
         if (
           canPrefetchModels(
             (
@@ -121,11 +130,7 @@ export function Car() {
           )
         ) {
           prefetchTimer = window.setTimeout(() => {
-            const adjacent = [
-              (carIndex + 1) % CARS.length,
-              (carIndex - 1 + CARS.length) % CARS.length,
-            ];
-            for (const i of adjacent) {
+            for (const i of PREFETCH_MODEL_INDICES) {
               const a = CARS[i];
               if (a && a.file !== spec.file) {
                 fetch(`/models/${a.file}`, { priority: 'low' } as RequestInit).catch(() => {});
@@ -149,8 +154,10 @@ export function Car() {
     return () => {
       cancelled = true;
       window.clearTimeout(prefetchTimer);
+      cancelAnimationFrame(readyFrame);
+      setCarLoading(false);
     };
-  }, [carIndex, retryVersion, loader, group, armIntro]);
+  }, [carIndex, retryVersion, loader, group, armIntro, invalidate]);
 
   useEffect(() => {
     scene.add(group);

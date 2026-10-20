@@ -25,25 +25,22 @@ when moving, modifying or reusing a model. Attribution metadata is embedded in e
 
 ## Adaptations and other rights
 
-Web exports use compressed geometry and WebP textures. The RWB is additionally
-simplified; the M3, Datsun, NSX and RX-7 receive compression without mesh
-simplification. Original materials and attribution metadata are retained. Site
-lighting, framing and optional paint colors are runtime adaptations.
-
-Optimization uses glTF Transform 4.4.1 and meshoptimizer 0.25.0. The RWB export
-uses a simplification target ratio of 0.1, an error bound of 0.0003 and locked
-mesh borders, followed by filtered meshopt compression with 16-bit positions,
-14-bit texture coordinates and 8-bit normals. The M3 and Datsun use vertex
-reordering and meshopt compression without mesh simplification. Compare original
-and optimized renders as well as decoded geometry when changing these settings.
+Web exports use compressed geometry and WebP textures, retaining full mesh detail.
+The RWB uses its original full-mesh GLB export; no site mesh simplification is applied.
+The M3 and Datsun use vertex reordering and lossless meshopt compression. Original
+materials and attribution metadata are retained. Site lighting, framing and
+optional paint colors are runtime adaptations. Thin glazing uses alpha transparency
+in place of refraction for reliable browser rendering, retaining its authored tint
+and existing alpha where present.
 
 The NSX and RX-7 use Sketchfab's official glTF downloads. Each archive includes a
 license.txt matching the creator, model source and CC BY 4.0 license shown in the
-listing. Their original texture resolutions are retained. Color maps use WebP at
-quality 85, while normal maps use lossless WebP to preserve surface detail. Their
-geometry uses filtered meshopt compression with 16-bit positions, 14-bit texture
-coordinates and 8-bit normals. The source attribution and a web adaptation notice
-are embedded in each GLB.
+listing. Their exports retain the source geometry, floating-point vertex precision,
+texture dimensions and decoded texture pixels. glTF Transform 4.4.1 and
+meshoptimizer 0.25.0 reorder and losslessly compress geometry; Sharp encodes
+lossless WebP textures. The source attribution and a web adaptation notice are
+embedded in each GLB. Compare original and optimized renders as well as decoded
+geometry when changing these settings.
 
 Both listings carry Sketchfab's NoAI platform tag, recorded in the evidence file.
 [Sketchfab's licensing guidance](https://help.sketchfab.com/en/articles/16152133-generative-ai-policies-tagging-and-noai-protection)

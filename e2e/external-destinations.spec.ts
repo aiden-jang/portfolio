@@ -51,5 +51,5 @@ test('external destinations describe the new tab on the page and in dialogs', as
     'href',
     'https://sketchfab.com/3d-models/d35ff630df614771b82e7b2f59035b1e',
   );
-  await expect(credits).toContainText('The RWB mesh is simplified.');
+  await expect(credits).toContainText('Full mesh detail retained.');
 });

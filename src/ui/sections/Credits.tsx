@@ -70,8 +70,8 @@ export function Credits() {
                 3D model credits
               </p>
               <p className="mt-2 font-[var(--font-mono)] text-[0.54rem] tracking-[0.09em] text-[rgba(244,240,255,0.48)]">
-                Models adapted for web display, with compressed textures and geometry. The RWB mesh
-                is simplified. Interactive paint and lighting added.
+                Models adapted for web display with compressed textures and geometry. Full mesh
+                detail retained. Interactive paint and lighting added.
               </p>
               <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 list-none p-0 m-0">
                 {credited.map((car) => {
