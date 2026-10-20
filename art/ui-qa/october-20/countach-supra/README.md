@@ -5,6 +5,11 @@ replaces garage slot 2 and the Countach replaces slot 6; URL indices remain stab
 The model sources, supplied license notices, archive hashes and exported asset
 hashes are recorded in [the license evidence](../../../../docs/model-license-evidence.json).
 
+The Countach material rendering in these initial captures is superseded by the
+[material correction review](../countach-materials/README.md), which fixes
+transparent rubber and matte bodywork. These files remain as historical evidence
+of the initial conversion and lossless compression comparison.
+
 ## Captures
 
 - [Desktop review](desktop-review.jpg): Supra on the first row, Countach on the

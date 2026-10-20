@@ -6,6 +6,12 @@ type Model = {
   extensionsRequired: string[];
   extensionsUsed: string[];
   accessors: { count: number; componentType: number }[];
+  materials: {
+    name: string;
+    alphaMode?: string;
+    pbrMetallicRoughness: { roughnessFactor?: number; metallicFactor?: number };
+    extensions?: { KHR_materials_clearcoat?: { clearcoatFactor?: number } };
+  }[];
   meshes: { primitives: Primitive[] }[];
 };
 
@@ -51,5 +57,20 @@ describe('car fidelity', () => {
         }
       }
     }
+  });
+
+  it('renders Countach tires as opaque rubber and bodywork as coated paint', () => {
+    const { materials } = readModel('lamborghini-countach-5000qv');
+    const rubber = materials.find((material) => material.name === 'Countach_Tire_Rubber');
+    const paint = materials.find((material) => material.name === 'Countach_Body_Paint');
+    expect(rubber).toBeDefined();
+    expect(rubber!.alphaMode ?? 'OPAQUE').toBe('OPAQUE');
+    expect(rubber!.pbrMetallicRoughness.roughnessFactor ?? 1).toBeGreaterThanOrEqual(0.6);
+    expect(rubber!.pbrMetallicRoughness.metallicFactor ?? 1).toBe(0);
+    expect(paint).toBeDefined();
+    expect(paint!.pbrMetallicRoughness.roughnessFactor ?? 1).toBeLessThanOrEqual(0.35);
+    expect(paint!.extensions?.KHR_materials_clearcoat?.clearcoatFactor ?? 0).toBeGreaterThanOrEqual(
+      0.8,
+    );
   });
 });

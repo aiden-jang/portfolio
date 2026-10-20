@@ -104,14 +104,18 @@
       "archiveSha256": "ee1f49b39d8dd77f5eaed68351a620a06b5fab5300f4896aa0379face31a2851",
       "optimization": {
         "referenceBytes": 16409692,
-        "optimizedBytes": 9736508,
+        "optimizedBytes": 9736724,
         "triangles": 174956,
         "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
         "textures": "Original dimensions and decoded RGBA pixels retained.",
-        "assetSha256": "947709a052a0fb400c4be587a76b834c7cd97ced49dbf987ac96e770af186828",
+        "assetSha256": "2e6557407acdacaf2287005ae254fede8f4bcf22f1e051e1f2b4e7cfff01eb95",
         "gltfErrors": 0,
         "gltfWarnings": 0
-      }
+      },
+      "materialAdaptations": [
+        "Tire alpha is ignored for opaque rubber; the downloaded diffuse texture encodes partial alpha that otherwise hides the tire surface. Rubber roughness is 0.85 with a dielectric response.",
+        "Bodywork uses roughness 0.24, a dielectric response, and a clearcoat layer (factor 1, roughness 0.14) for glossy automotive paint. Geometry, UVs and decoded texture pixels remain unchanged."
+      ]
     }
   ]
 }

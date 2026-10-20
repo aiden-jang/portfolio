@@ -46,7 +46,11 @@ The Countach source uses the legacy glTF specular/glossiness material workflow,
 which the site's Three.js loader does not support. glTF Transform converts those
 materials to modern specular/roughness materials before compression. Source
 geometry and image detail remain intact; this material conversion is an adaptation,
-not a promise of identical lighting across different renderers.
+not a promise of identical lighting across different renderers. The tire material
+uses opaque rubber so partial alpha in its source diffuse map does not hide the
+tread and sidewall. Bodywork uses glossy clear-coated paint instead of the converted
+maximum-roughness surface. These are explicit material adaptations; no geometry,
+UVs, texture pixels or attribution are removed.
 
 Listing descriptions, displayed comments and archive notices were checked for
 upstream credits or game extraction. Neither publisher declares an upstream source.
