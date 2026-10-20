@@ -7,7 +7,7 @@ Development setup and commit conventions are in [CONTRIBUTING.md](CONTRIBUTING.m
 
 Run `npm run verify` and `npm run test:browser` before reporting a change complete.
 CI runs both. The verification gate covers:
-typechecking, lint, formatting, repository checks, tests and a production build.
+dependency audit, typechecking, lint, formatting, repository checks, tests and a production build.
 Vercel handles deployment separately.
 
 - `check-size` pins ceilings for files that need size control and rejects oversized

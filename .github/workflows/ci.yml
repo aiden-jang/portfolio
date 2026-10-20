@@ -5,17 +5,20 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Types, lint, formatting, the size ceilings, the comment rules, the test floor, then the
+      # Dependency audit, types, lint, formatting, repository checks, tests, then the
       # build. The same command locally, so CI is never the first place a check runs.
       - run: npm run verify
       - run: npx playwright install --with-deps chromium webkit

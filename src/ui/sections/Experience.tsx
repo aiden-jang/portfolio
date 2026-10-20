@@ -121,7 +121,10 @@ export function ExperienceSection({ onOpen }: Props) {
           type="button"
           className="experience-open-source"
           onClick={(event) =>
-            onOpen(WORK_ITEMS.find((item) => item.contribution)!, event.currentTarget)
+            onOpen(
+              WORK_ITEMS.find((item) => item.contribution)!,
+              event.currentTarget,
+            )
           }
         >
           <span>Open source</span>

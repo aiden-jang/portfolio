@@ -31,7 +31,7 @@ npm run dev
 Vite prints the local URL. No environment variables are required for local development.
 
 ```sh
-npm run verify   # types, lint, formatting, content checks, tests and build
+npm run verify   # dependency audit, types, lint, formatting, content checks, tests and build
 npm run test     # tests only
 npm run preview  # serve dist/ after building
 ```
