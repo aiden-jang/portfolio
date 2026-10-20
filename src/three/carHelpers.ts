@@ -54,12 +54,14 @@ export function disposeModel(obj: THREE.Object3D): void {
 
 /** The returned `orientedSize` is measured before the scale is applied, not after. */
 export function autoFitToLength(model: THREE.Object3D) {
-  const rawSize = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
+  // Rotated local bounding boxes can include empty space beneath the wheels.
+  // Measure actual vertices once at load time so framing seats the model on the floor.
+  const rawSize = new THREE.Box3().setFromObject(model, true).getSize(new THREE.Vector3());
   if (rawSize.x > rawSize.z) model.rotation.y = Math.PI / 2;
-  const orientedSize = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
+  const orientedSize = new THREE.Box3().setFromObject(model, true).getSize(new THREE.Vector3());
   const scale = TARGET_LENGTH / Math.max(orientedSize.z, 0.001);
   model.scale.setScalar(scale);
-  const fitted = new THREE.Box3().setFromObject(model);
+  const fitted = new THREE.Box3().setFromObject(model, true);
   const center = fitted.getCenter(new THREE.Vector3());
   model.position.x -= center.x;
   model.position.z -= center.z;

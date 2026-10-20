@@ -26,16 +26,18 @@
       "review": "source-license-verified"
     },
     {
-      "file": "porsche-930-911.glb",
-      "title": "FREE 1975 Porsche 911 (930) Turbo",
-      "author": "Lionsharp Studios",
-      "creatorId": "081e40be008f4dbd9821af8c8ed278eb",
-      "source": "https://sketchfab.com/3d-models/8568d9d14a994b9cae59499f0dbed21e",
-      "evidence": "https://api.sketchfab.com/v3/models/8568d9d14a994b9cae59499f0dbed21e",
+      "file": "mazda-fd-rx7.glb",
+      "title": "Mazda RX-7 FD",
+      "author": "Lexyc16",
+      "creatorId": "493c518a107848cc91ffe4d6771947b4",
+      "source": "https://sketchfab.com/3d-models/d35ff630df614771b82e7b2f59035b1e",
+      "evidence": "https://api.sketchfab.com/v3/models/d35ff630df614771b82e7b2f59035b1e",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
-      "review": "source-license-verified"
+      "review": "source-license-verified",
+      "downloadLicense": "The official glTF download includes license.txt identifying the same author, source and CC-BY-4.0 license.",
+      "platformTags": ["noai"]
     },
     {
       "file": "porsche-930-911-rwb.glb",
@@ -74,17 +76,18 @@
       "review": "source-license-verified"
     },
     {
-      "file": "polestar-1.glb",
-      "title": "[FREE] Polestar 1",
-      "author": "Martin Trafas",
-      "creatorId": "924b167e7bef485b9b8d929a56efd066",
-      "source": "https://sketchfab.com/3d-models/4a368c71047c4eb0829525d933752828",
-      "evidence": "https://api.sketchfab.com/v3/models/4a368c71047c4eb0829525d933752828",
-      "sourceDownload": "https://drive.google.com/file/d/1QJm1dYsoMyXsqvM9RGYxh6QC_opPr5IW/view",
+      "file": "honda-na1-nsx.glb",
+      "title": "Honda NSX 1990",
+      "author": "Lexyc16",
+      "creatorId": "493c518a107848cc91ffe4d6771947b4",
+      "source": "https://sketchfab.com/3d-models/1cc15628a00a4739a6b6c01128927c8d",
+      "evidence": "https://api.sketchfab.com/v3/models/1cc15628a00a4739a6b6c01128927c8d",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
-      "review": "source-license-verified"
+      "review": "source-license-verified",
+      "downloadLicense": "The official glTF download includes license.txt identifying the same author, source and CC-BY-4.0 license.",
+      "platformTags": ["noai"]
     }
   ]
 }

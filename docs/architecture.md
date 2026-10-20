@@ -40,7 +40,8 @@ and invalidation when the active story or preview changes. Garage links preserve
 case-study fragments.
 
 `Car` owns asynchronous GLB loading and disposal. Models use meshopt compression,
-auto-fit framing and paint-material detection. Adjacent models are prefetched
+auto-fit framing and paint-material detection. Framing measures actual world-space
+vertices once on load so rotated mesh bounds do not lift cars off the floor. Adjacent models are prefetched
 into the HTTP cache when network conditions permit. `carHelpers` owns geometry,
 material detection and GPU-resource disposal. Scene cleanup releases model resources,
 underglow geometry and textures, and the reflection target and material.

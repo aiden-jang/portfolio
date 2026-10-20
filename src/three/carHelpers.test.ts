@@ -46,6 +46,23 @@ describe('autoFitToLength', () => {
     expect(fitted.max.x - fitted.min.x).toBeLessThan(TARGET_LENGTH);
   });
 
+  it('fits actual vertices when nested rotations inflate a mesh bounding box', () => {
+    const model = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), paint(0xff0000));
+    body.scale.set(1, 0.5, 3);
+    body.rotation.x = Math.PI / 4;
+    body.position.set(2, -3, 1);
+    model.add(body);
+
+    autoFitToLength(model);
+    const fitted = new THREE.Box3().setFromObject(model, true);
+
+    expect(fitted.max.z - fitted.min.z).toBeCloseTo(TARGET_LENGTH, 6);
+    expect(fitted.min.y).toBeCloseTo(0, 6);
+    expect(fitted.getCenter(new THREE.Vector3()).x).toBeCloseTo(0, 6);
+    expect(fitted.getCenter(new THREE.Vector3()).z).toBeCloseTo(0, 6);
+  });
+
   it('reports the size it measured before scaling', () => {
     const model = new THREE.Group();
     model.add(box([1.8, 1.2, 9], paint(0xff0000)));

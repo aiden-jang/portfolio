@@ -43,9 +43,13 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expect(licenses).toHaveCount(7);
   for (const license of await licenses.all())
     await expect(license).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
-  await expect(
-    credits.getByRole('link', { name: '[FREE] Polestar 1', exact: true }),
-  ).toHaveAttribute('href', 'https://sketchfab.com/3d-models/4a368c71047c4eb0829525d933752828');
-  await expect(credits).toContainText('Polestar 1');
+  await expect(credits.getByRole('link', { name: 'Honda NSX 1990', exact: true })).toHaveAttribute(
+    'href',
+    'https://sketchfab.com/3d-models/1cc15628a00a4739a6b6c01128927c8d',
+  );
+  await expect(credits.getByRole('link', { name: 'Mazda RX-7 FD', exact: true })).toHaveAttribute(
+    'href',
+    'https://sketchfab.com/3d-models/d35ff630df614771b82e7b2f59035b1e',
+  );
   await expect(credits).toContainText('The RWB mesh is simplified.');
 });
