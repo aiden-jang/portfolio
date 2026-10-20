@@ -1,0 +1,38 @@
+{
+  "geometryAndTextures": [
+    {
+      "car": "countach",
+      "triangles": 174956,
+      "allVertexAttributesExact": true,
+      "textureCount": 23,
+      "textureDimensionsAndPixelsExact": true,
+      "attributionPreserved": true,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "car": "supra",
+      "triangles": 261960,
+      "allVertexAttributesExact": true,
+      "textureCount": 26,
+      "textureDimensionsAndPixelsExact": true,
+      "attributionPreserved": true,
+      "errors": 0,
+      "warnings": 0
+    }
+  ],
+  "visualComparison": [
+    {
+      "car": "countach",
+      "changedChannels": 790,
+      "maxChannelDifference": 9,
+      "meanChannelDifference": 0.00017554012345679014
+    },
+    {
+      "car": "supra",
+      "changedChannels": 7934,
+      "maxChannelDifference": 51,
+      "meanChannelDifference": 0.002691358024691358
+    }
+  ]
+}

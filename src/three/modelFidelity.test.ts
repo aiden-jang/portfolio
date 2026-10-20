@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 type Primitive = { attributes: Record<string, number>; indices?: number };
 type Model = {
+  extensionsRequired: string[];
+  extensionsUsed: string[];
   accessors: { count: number; componentType: number }[];
   meshes: { primitives: Primitive[] }[];
 };
@@ -24,10 +26,23 @@ describe('car fidelity', () => {
     expect(triangles).toBe(2_970_024);
   });
 
-  it('preserves floating-point surfaces on the NSX and RX-7', () => {
-    for (const file of ['honda-na1-nsx', 'mazda-fd-rx7']) {
+  it('preserves the full Countach and Supra meshes and floating-point surfaces', () => {
+    for (const [file, triangles] of [
+      ['lamborghini-countach-5000qv', 174_956],
+      ['toyota-a80-supra', 261_960],
+    ] as const) {
       const model = readModel(file);
-      for (const primitive of model.meshes.flatMap((mesh) => mesh.primitives)) {
+      expect(model.extensionsRequired).toContain('EXT_meshopt_compression');
+      expect(model.extensionsRequired).toContain('EXT_texture_webp');
+      expect(model.extensionsUsed).not.toContain('KHR_materials_pbrSpecularGlossiness');
+      const primitives = model.meshes.flatMap((mesh) => mesh.primitives);
+      expect(
+        primitives.reduce(
+          (sum, p) => sum + model.accessors[p.indices ?? p.attributes.POSITION].count / 3,
+          0,
+        ),
+      ).toBe(triangles);
+      for (const primitive of primitives) {
         for (const semantic of ['POSITION', 'NORMAL', 'TEXCOORD_0']) {
           const accessor = primitive.attributes[semantic];
           if (accessor !== undefined) {

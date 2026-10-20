@@ -27,7 +27,7 @@ in reading sections and resumes for the visible Contact car.
 `useContactArrival` holds the front-facing opening pose, then advances the arrival
 near the end of the Contact scroll. Reduced motion bypasses the arrival animation.
 The composer and reflection target disable floating-point multisampling because it
-produces blank targets in the tested WebKit engine. FXAA smooths the final scene
+produces blank targets in the tested WebKit engine. SMAA smooths the final scene
 instead, including the reflection; DOM text is unaffected.
 
 The Zustand store separates infrequently updated UI state from mutable scene

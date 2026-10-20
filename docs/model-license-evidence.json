@@ -26,18 +26,30 @@
       "review": "source-license-verified"
     },
     {
-      "file": "mazda-fd-rx7.glb",
-      "title": "Mazda RX-7 FD",
-      "author": "Lexyc16",
-      "creatorId": "493c518a107848cc91ffe4d6771947b4",
-      "source": "https://sketchfab.com/3d-models/d35ff630df614771b82e7b2f59035b1e",
-      "evidence": "https://api.sketchfab.com/v3/models/d35ff630df614771b82e7b2f59035b1e",
+      "file": "toyota-a80-supra.glb",
+      "title": "Toyota Supra MK IV (1994)",
+      "author": "Martin Trafas",
+      "creatorId": "924b167e7bef485b9b8d929a56efd066",
+      "source": "https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8",
+      "evidence": "https://api.sketchfab.com/v3/models/eb9bb1eb41db431cb078088ae1ce45f8",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
       "review": "source-license-verified",
-      "downloadLicense": "The official glTF download includes license.txt identifying the same author, source and CC-BY-4.0 license.",
-      "platformTags": ["noai"]
+      "downloadLicense": "The official glTF download includes license.txt identifying the same author display name, source and CC-BY-4.0 license. Its supplied profile URL is preserved verbatim in downloadLicenseText; creatorId comes from the current listing.",
+      "sourceReview": "Listing, description, displayed comments and archive attribution checked. No upstream source or game extraction is declared; this verifies the publisher license, not independent authorship or manufacturer rights.",
+      "downloadLicenseText": "Model Information:\n* title:\tToyota Supra MK IV (1994)\n* source:\thttps://sketchfab.com/3d-models/toyota-supra-mk-iv-1994-eb9bb1eb41db431cb078088ae1ce45f8\n* author:\tMartin Trafas (https://sketchfab.com/Bexxie)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Toyota Supra MK IV (1994)\" (https://sketchfab.com/3d-models/toyota-supra-mk-iv-1994-eb9bb1eb41db431cb078088ae1ce45f8) by Martin Trafas (https://sketchfab.com/Bexxie) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "archiveSha256": "bd871f952bd8530c5877275319e68b84e312f787c45716347245774081a96322",
+      "optimization": {
+        "referenceBytes": 37270244,
+        "optimizedBytes": 26584004,
+        "triangles": 261960,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "assetSha256": "b5e491a42b392755102c4ef221a6cbc5cc11885ca46093190a0c555e3dbaa755",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      }
     },
     {
       "file": "porsche-930-911-rwb.glb",
@@ -76,18 +88,30 @@
       "review": "source-license-verified"
     },
     {
-      "file": "honda-na1-nsx.glb",
-      "title": "Honda NSX 1990",
-      "author": "Lexyc16",
-      "creatorId": "493c518a107848cc91ffe4d6771947b4",
-      "source": "https://sketchfab.com/3d-models/1cc15628a00a4739a6b6c01128927c8d",
-      "evidence": "https://api.sketchfab.com/v3/models/1cc15628a00a4739a6b6c01128927c8d",
+      "file": "lamborghini-countach-5000qv.glb",
+      "title": "Lamborghini Countach 5000QV",
+      "author": "Randomness",
+      "creatorId": "881904d5f7724d56a18e6d77abfaae20",
+      "source": "https://sketchfab.com/3d-models/2f02b54e01fc428e8b19759c5970f882",
+      "evidence": "https://api.sketchfab.com/v3/models/2f02b54e01fc428e8b19759c5970f882",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
       "review": "source-license-verified",
-      "downloadLicense": "The official glTF download includes license.txt identifying the same author, source and CC-BY-4.0 license.",
-      "platformTags": ["noai"]
+      "downloadLicense": "The official glTF download includes license.txt identifying the same author display name, source and CC-BY-4.0 license. Its supplied profile URL is preserved verbatim in downloadLicenseText; creatorId comes from the current listing.",
+      "sourceReview": "Listing, description, displayed comments and archive attribution checked. No upstream source or game extraction is declared; this verifies the publisher license, not independent authorship or manufacturer rights.",
+      "downloadLicenseText": "Model Information:\n* title:\tLamborghini Countach 5000QV\n* source:\thttps://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882\n* author:\tRandomness (https://sketchfab.com/jvfrhrbf9435793)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Lamborghini Countach 5000QV\" (https://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882) by Randomness (https://sketchfab.com/jvfrhrbf9435793) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "archiveSha256": "ee1f49b39d8dd77f5eaed68351a620a06b5fab5300f4896aa0379face31a2851",
+      "optimization": {
+        "referenceBytes": 16409692,
+        "optimizedBytes": 9736508,
+        "triangles": 174956,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "assetSha256": "947709a052a0fb400c4be587a76b834c7cd97ced49dbf987ac96e770af186828",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      }
     }
   ]
 }

@@ -43,13 +43,11 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expect(licenses).toHaveCount(7);
   for (const license of await licenses.all())
     await expect(license).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
-  await expect(credits.getByRole('link', { name: 'Honda NSX 1990', exact: true })).toHaveAttribute(
-    'href',
-    'https://sketchfab.com/3d-models/1cc15628a00a4739a6b6c01128927c8d',
-  );
-  await expect(credits.getByRole('link', { name: 'Mazda RX-7 FD', exact: true })).toHaveAttribute(
-    'href',
-    'https://sketchfab.com/3d-models/d35ff630df614771b82e7b2f59035b1e',
-  );
+  await expect(
+    credits.getByRole('link', { name: 'Lamborghini Countach 5000QV', exact: true }),
+  ).toHaveAttribute('href', 'https://sketchfab.com/3d-models/2f02b54e01fc428e8b19759c5970f882');
+  await expect(
+    credits.getByRole('link', { name: 'Toyota Supra MK IV (1994)', exact: true }),
+  ).toHaveAttribute('href', 'https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8');
   await expect(credits).toContainText('Full mesh detail retained.');
 });
