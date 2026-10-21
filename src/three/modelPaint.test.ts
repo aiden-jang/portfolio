@@ -21,7 +21,13 @@ type Model = {
       };
     };
   }[];
-  accessors: { bufferView: number; byteOffset?: number; count: number }[];
+  accessors: {
+    bufferView: number;
+    byteOffset?: number;
+    count: number;
+    componentType: number;
+    normalized?: boolean;
+  }[];
   materials: {
     name: string;
     alphaMode?: string;
@@ -87,12 +93,23 @@ async function paintFixture(file: string) {
       const values = new Float32Array(accessor.count * 3);
       const reader = new DataView(decoded.buffer, decoded.byteOffset, decoded.byteLength);
       const stride = view.byteStride ?? compressed?.byteStride ?? 12;
+      const signed = accessor.componentType === 5122;
+      const quantized = signed || accessor.componentType === 5123;
+      if (!quantized && accessor.componentType !== 5126)
+        throw new Error('Unsupported position type');
       for (let i = 0; i < accessor.count; i++)
-        for (let axis = 0; axis < 3; axis++)
-          values[i * 3 + axis] = reader.getFloat32(
-            (accessor.byteOffset ?? 0) + i * stride + axis * 4,
-            true,
-          );
+        for (let axis = 0; axis < 3; axis++) {
+          const offset = (accessor.byteOffset ?? 0) + i * stride + axis * (quantized ? 2 : 4);
+          const value = quantized
+            ? signed
+              ? reader.getInt16(offset, true)
+              : reader.getUint16(offset, true)
+            : reader.getFloat32(offset, true);
+          values[i * 3 + axis] =
+            quantized && accessor.normalized
+              ? Math.max(value / (signed ? 32767 : 65535), -1)
+              : value;
+        }
       const geometry = new THREE.BufferGeometry().setAttribute(
         'position',
         new THREE.BufferAttribute(values, 3),
@@ -112,14 +129,17 @@ async function paintFixture(file: string) {
   return { model, materials };
 }
 
-it('paints the 917K body panels without recoloring wheels, wheel wells or frame', async () => {
-  const spec = CARS.find((car) => car.file === 'porsche-917k-lm-red.glb')!;
+it.each([
+  ['porsche-917k-lm-red.glb', 'body'],
+  ['bmw-g82-m4-adro.glb', 'untitledBMW_M4CompetitionG82TNR3_2021PaintTNR_Material_008'],
+])('paints %s body panels without recoloring wheels or trim', async (file, materialName) => {
+  const spec = CARS.find((car) => car.file === file)!;
   const { model, materials } = await paintFixture(spec.file);
   autoFitToLength(model);
   hideBakedPlanes(model);
   const before = materials.map((material) => material.color.clone());
   const selected = detectBodyMaterial(model, spec.paintMaterial);
-  expect(selected?.name).toBe('body');
+  expect(selected?.name).toBe(materialName);
   selected!.color!.set('#365d7b');
   for (const [index, material] of materials.entries()) {
     if (material === selected) expect(material.color.getHexString()).toBe('365d7b');

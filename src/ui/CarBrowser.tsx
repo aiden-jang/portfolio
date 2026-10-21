@@ -127,7 +127,7 @@ export function CarBrowser({ onClose, returnFocus }: Props) {
         ))}
       </div>
       <footer className="car-browser-footer">
-        <span>Models licensed CC BY 4.0.</span>
+        <span>Individual model licenses apply. Credits in Contact.</span>
         <span role="status">{error ?? (loading ? `Loading ${CARS[index].name}…` : '')}</span>
         <span>Arrow keys to browse · Enter to choose</span>
       </footer>

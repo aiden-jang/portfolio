@@ -103,7 +103,7 @@ export function Credits() {
                       </span>
                       {credit.upstream && (
                         <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
-                          Original model by{' '}
+                          Credited source:{' '}
                           <a
                             href={credit.upstream.url}
                             target="_blank"
@@ -112,6 +112,24 @@ export function Credits() {
                           >
                             {credit.upstream.author}
                           </a>
+                          {credit.upstream.license && credit.upstream.licenseUrl && (
+                            <>
+                              {' · '}
+                              <a
+                                href={credit.upstream.licenseUrl}
+                                target="_blank"
+                                aria-describedby="external-link-hint"
+                                rel="noopener"
+                              >
+                                {credit.upstream.license}
+                              </a>
+                            </>
+                          )}
+                        </span>
+                      )}
+                      {credit.notice && (
+                        <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
+                          {credit.notice}
                         </span>
                       )}
                       {credit.copyright && (

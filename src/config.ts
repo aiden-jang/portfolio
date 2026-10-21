@@ -170,6 +170,28 @@ export const CARS: CarSpec[] = [
       },
     },
   },
+  {
+    name: 'BMW M4 ADRO',
+    code: 'G82',
+    file: 'bmw-g82-m4-adro.glb',
+    paintMaterial: 'untitledBMW_M4CompetitionG82TNR3_2021PaintTNR_Material_008',
+    defaultPaint: { name: 'Amethyst', hex: '#66517c' },
+    exposure: 1.0,
+    credit: {
+      title: 'BMW G82 M4 with Adro Kit 2022 | www.vecarz.com',
+      author: 'vecarz',
+      license: 'CC BY 4.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+      url: 'https://sketchfab.com/3d-models/bdea1df6c22e4efd9b01a52034789fd7',
+      upstream: {
+        author: 'Ddiaz Design',
+        url: 'https://sketchfab.com/3d-models/54f2273c00e94ebdba0f0db1a7945bf2',
+        license: 'CC BY-NC-SA 4.0',
+        licenseUrl: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+      },
+      notice: 'Based on a CSR2 model. Permission for the underlying game assets is unverified.',
+    },
+  },
 ];
 
 // Full-detail cars load on selection; only the two smallest models warm the cache.

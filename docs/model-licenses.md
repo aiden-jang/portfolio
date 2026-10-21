@@ -8,17 +8,18 @@ October 21, 2026 using Sketchfab's public model API.
 
 ## Source licenses
 
-| Car                  | Model creator                                                                                                                                                                                                   | Publisher license                                         | Review                                                             |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------ |
-| Ferrari F40          | [vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95)                                                                                                                                      | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Source license verified                                            |
-| Mercedes-Benz 300 SL | [Lexyc16](https://sketchfab.com/3d-models/505241c829c540a4921533000736904e)                                                                                                                                     | CC BY 4.0                                                 | Source license verified                                            |
-| Toyota Supra A80     | [Martin Trafas](https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8)                                                                                                                               | CC BY 4.0                                                 | Source license verified                                            |
-| Porsche 911 RWB      | [SWIZ](https://sketchfab.com/3d-models/9b13e93711db460b99749ae95aea9764)                                                                                                                                        | CC BY 4.0                                                 | Source license verified; retain the embedded SWIZ copyright notice |
-| BMW M3 E30           | [Martin Trafas](https://sketchfab.com/3d-models/ac3c7013434e403e8faff87948caf422)                                                                                                                               | CC BY 4.0                                                 | Source license verified                                            |
-| Datsun 280Z          | [Martin Trafas](https://sketchfab.com/3d-models/0789ab2ece9442de94b3c41595e0ecbd)                                                                                                                               | CC BY 4.0                                                 | Source license verified                                            |
-| Audi R8              | [wallon](https://sketchfab.com/3d-models/e17e438f076f4427a58d93aa779edaed)                                                                                                                                      | CC BY 4.0                                                 | Source license verified                                            |
-| Porsche 911 Turbo    | [Lexyc16](https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136)                                                                                                                                     | CC BY 4.0                                                 | Source license verified                                            |
-| Porsche 917K         | [vecarz](https://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918), based on [JUSTGAME](https://sketchfab.com/3d-models/porsche-917k-abb07de409db42178e3df943dd009103) | CC BY 4.0                                                 | Selected and credited upstream publisher licenses verified         |
+| Car                  | Model creator                                                                                                                                                                                                   | Publisher license                                         | Review                                                                 |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Ferrari F40          | [vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95)                                                                                                                                      | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Source license verified                                                |
+| Mercedes-Benz 300 SL | [Lexyc16](https://sketchfab.com/3d-models/505241c829c540a4921533000736904e)                                                                                                                                     | CC BY 4.0                                                 | Source license verified                                                |
+| Toyota Supra A80     | [Martin Trafas](https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8)                                                                                                                               | CC BY 4.0                                                 | Source license verified                                                |
+| Porsche 911 RWB      | [SWIZ](https://sketchfab.com/3d-models/9b13e93711db460b99749ae95aea9764)                                                                                                                                        | CC BY 4.0                                                 | Source license verified; retain the embedded SWIZ copyright notice     |
+| BMW M3 E30           | [Martin Trafas](https://sketchfab.com/3d-models/ac3c7013434e403e8faff87948caf422)                                                                                                                               | CC BY 4.0                                                 | Source license verified                                                |
+| Datsun 280Z          | [Martin Trafas](https://sketchfab.com/3d-models/0789ab2ece9442de94b3c41595e0ecbd)                                                                                                                               | CC BY 4.0                                                 | Source license verified                                                |
+| Audi R8              | [wallon](https://sketchfab.com/3d-models/e17e438f076f4427a58d93aa779edaed)                                                                                                                                      | CC BY 4.0                                                 | Source license verified                                                |
+| Porsche 911 Turbo    | [Lexyc16](https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136)                                                                                                                                     | CC BY 4.0                                                 | Source license verified                                                |
+| Porsche 917K         | [vecarz](https://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918), based on [JUSTGAME](https://sketchfab.com/3d-models/porsche-917k-abb07de409db42178e3df943dd009103) | CC BY 4.0                                                 | Selected and credited upstream publisher licenses verified             |
+| BMW M4 ADRO          | [vecarz](https://sketchfab.com/3d-models/bdea1df6c22e4efd9b01a52034789fd7), crediting [Ddiaz Design](https://sketchfab.com/3d-models/54f2273c00e94ebdba0f0db1a7945bf2)                                          | CC BY 4.0; upstream CC BY-NC-SA 4.0                       | Restored for personal use; underlying game-asset permission unverified |
 
 CC BY permits sharing and modification, including commercial use, provided its
 conditions are met. The Contact credits give the supplied model titles, authors,
@@ -53,8 +54,8 @@ materials and clearcoat. Its body material is named for paint discovery; its
 material response is unchanged. The default graphite paint and shared thin-glass
 handling are runtime adaptations.
 
-Listing descriptions, displayed comments and archive notices were checked for
-upstream credits or game extraction. Except for the 917K's credited JUSTGAME source, these publishers declare no upstream source.
+The official download listings, displayed comments and archive notices were checked for
+upstream credits or game extraction. Except for the 917K's credited JUSTGAME source, those listings declare no upstream source.
 This establishes the supplied publisher license, not independent proof of authorship
 or clearance of manufacturer rights. The evidence record retains the supplied
 license text, archive hashes and creator IDs, including older profile aliases.
@@ -75,6 +76,26 @@ credited [builder's source](https://sketchfab.com/3d-models/toyota-gr-supra-gt-g
 uses [Free Standard](https://sketchfab.com/licenses), restricting standalone-file
 access, and identifies an unlinked downloaded base model. Resolve these terms
 before publishing it in the public asset directory or repository.
+
+## Restored M4 source and terms
+
+The G82 M4 ADRO is restored at the owner's request for a personal, noncommercial
+portfolio. Its vecarz listing uses CC BY 4.0 and explicitly credits Ddiaz Design.
+That credited listing uses CC BY-NC-SA 4.0 and states that it is based on a CSR2
+model. The uploader labels do not establish permission for the underlying game
+assets; that permission remains unverified.
+
+The web adaptation retains the upstream CC BY-NC-SA terms. Both contributors,
+their source links, the upstream license and the source caveat appear in Contact
+credits and asset metadata. Other assets and the site's source code retain their
+own licenses.
+
+The restored file retains the previous web export's geometry, textures, material
+parameters, orientation and node hierarchy. No further compression, simplification
+or texture resizing is applied. Only attribution metadata is expanded. The site applies
+an Amethyst default paint to the explicitly named body material, preserving the
+carbon fiber, wheels and trim. It is appended to the garage to preserve existing
+shared model indices and loads only when selected.
 
 ## Updating the review
 

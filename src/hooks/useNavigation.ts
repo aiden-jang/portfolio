@@ -129,6 +129,12 @@ export function useNavigation() {
     };
     const linkFrame = requestAnimationFrame(restoreSectionLink);
     onScroll();
+    // WebKit can finish its first layout after effects run, without a scroll event.
+    const layoutObserver = new ResizeObserver(onScroll);
+    for (const id of SECTION_IDS) {
+      const section = document.getElementById(id);
+      if (section) layoutObserver.observe(section);
+    }
     window.addEventListener('hashchange', restoreSectionLink);
     window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
@@ -137,6 +143,7 @@ export function useNavigation() {
     window.addEventListener('resize', onScroll);
     return () => {
       cancelAnimationFrame(linkFrame);
+      layoutObserver.disconnect();
       window.removeEventListener('hashchange', restoreSectionLink);
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('touchstart', onTouchStart);

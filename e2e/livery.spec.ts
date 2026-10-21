@@ -23,9 +23,10 @@ for (const width of [1440, 390]) {
     await expect(commands.getByRole('button', { name: /Change paint color/ })).toHaveCount(0);
     await page.keyboard.press('Escape');
     await page
-      .getByRole('button', { name: 'Next car', exact: true })
+      .getByRole('button', { name: 'Browse cars. Porsche 917K, Le Mans', exact: true })
       .filter({ visible: true })
       .click();
+    await page.getByRole('button', { name: 'Show Ferrari F40, F120', exact: true }).click();
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await expect(
       page

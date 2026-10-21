@@ -40,7 +40,7 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expect(credits).toBeVisible();
   await expectDestinations(credits);
   const licenses = credits.getByRole('link', { name: 'CC BY 4.0', exact: true });
-  await expect(licenses).toHaveCount(9);
+  await expect(licenses).toHaveCount(10);
   for (const license of await licenses.all())
     await expect(license).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
   await expect(credits.getByRole('link', { name: 'Audi R8', exact: true })).toHaveAttribute(
@@ -64,4 +64,13 @@ test('external destinations describe the new tab on the page and in dialogs', as
     'https://sketchfab.com/3d-models/porsche-917k-abb07de409db42178e3df943dd009103',
   );
   await expect(credits).toContainText('Full mesh detail retained.');
+  await expect(credits.getByRole('link', { name: 'Ddiaz Design', exact: true })).toHaveAttribute(
+    'href',
+    'https://sketchfab.com/3d-models/54f2273c00e94ebdba0f0db1a7945bf2',
+  );
+  await expect(credits.getByRole('link', { name: 'CC BY-NC-SA 4.0', exact: true })).toHaveAttribute(
+    'href',
+    'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  );
+  await expect(credits).toContainText('Permission for the underlying game assets is unverified.');
 });

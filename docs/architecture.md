@@ -11,6 +11,8 @@ scene behind a lazy-loading boundary so portfolio content can load independently
 routes keyboard actions and preserves native input and reading behavior.
 `sectionProgress` maps actual section positions to camera progress. Section IDs
 and labels share one definition in `config.ts`, used by navigation, dots and commands.
+Section resize observation refreshes scene and control visibility when initial
+layout or content sizing settles without a scroll event, including WebKit reloads.
 
 Scene visibility, section selection and control visibility have different rules.
 The Contact car becomes visible when its section enters the viewport. Controls

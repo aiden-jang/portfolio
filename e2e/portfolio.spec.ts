@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { PNG } from 'pngjs';
+import { CARS } from '../src/config';
 
 async function accessible(page: Page) {
   const report = await new AxeBuilder({ page })
@@ -69,9 +70,10 @@ for (const width of [1440, 390]) {
           page
             .locator('.car-browser img')
             .evaluateAll(
-              (images) =>
-                images.length === 9 &&
+              (images, count) =>
+                images.length === count &&
                 images.every((image) => (image as HTMLImageElement).naturalWidth > 0),
+              CARS.length,
             ),
         )
         .toBe(true);
