@@ -154,6 +154,7 @@ export const CARS: CarSpec[] = [
     name: 'Porsche 917K',
     code: 'Le Mans',
     file: 'porsche-917k-lm-red.glb',
+    paintMaterial: 'body',
     defaultPaint: { name: 'Le Mans Red', hex: '#a92728', preserveSource: true },
     exposure: 1.0,
     credit: {

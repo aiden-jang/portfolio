@@ -46,7 +46,10 @@ and invalidation when the active story or preview changes. Garage links preserve
 case-study fragments.
 
 `Car` owns asynchronous GLB loading and disposal. Models use meshopt compression,
-auto-fit framing and paint-material detection. Framing measures actual world-space
+auto-fit framing and paint-material detection. Cars with ambiguous material
+layouts can declare an exact `paintMaterial` name; a missing explicit target disables
+paint instead of selecting an unrelated surface. The 917K targets its textured body
+panels so wheel, chassis and trim materials retain their authored colors. Framing measures actual world-space
 vertices once on load so rotated mesh bounds do not lift cars off the floor. Only
 the two smallest models warm the HTTP cache when network conditions permit;
 heavier full-detail cars load on selection. `carHelpers` owns geometry,

@@ -172,6 +172,11 @@ describe('detectBodyMaterial', () => {
     expect(detectBodyMaterial(model)).toBe(bodyMat);
   });
 
+  it('does not substitute another material when an explicit paint target is missing', () => {
+    const model = box([1.8, 1.2, 4], paint(0x111111, 'Frame'));
+    expect(detectBodyMaterial(model, 'Body')).toBeNull();
+  });
+
   it('returns null when nothing in the model qualifies', () => {
     expect(detectBodyMaterial(new THREE.Group())).toBeNull();
   });

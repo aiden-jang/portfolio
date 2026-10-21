@@ -103,7 +103,7 @@ export function Car() {
         displayedIndex.current = carIndex;
 
         refs.lamps = buildLamps(group, orientedSize, scale);
-        refs.bodyMaterial = detectBodyMaterial(model);
+        refs.bodyMaterial = detectBodyMaterial(model, spec.paintMaterial);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);
         // Has to run after material discovery, or a shared link's paint reverts on the swap.

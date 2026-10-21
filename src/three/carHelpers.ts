@@ -134,7 +134,23 @@ type Mat = ColorMaterial & {
   map?: THREE.Texture | null;
 };
 
-export function detectBodyMaterial(model: THREE.Object3D): ColorMaterial | null {
+export function detectBodyMaterial(
+  model: THREE.Object3D,
+  materialName?: string,
+): ColorMaterial | null {
+  if (materialName) {
+    let selected: ColorMaterial | null = null;
+    model.traverse((object) => {
+      const mesh = object as THREE.Mesh;
+      if (!mesh.isMesh || !mesh.visible) return;
+      for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
+        const candidate = material as ColorMaterial;
+        if (candidate.name === materialName && candidate.color) selected = candidate;
+      }
+    });
+    // A missing explicit target must disable paint instead of recoloring unrelated parts.
+    return selected;
+  }
   model.updateMatrixWorld(true);
   const rawByMat = new Map<Mat, number>();
   model.traverse((obj) => {
