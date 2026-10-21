@@ -1,0 +1,30 @@
+# Portfolio to do
+
+## Garage model candidates
+
+Saved for a future garage update. These models have not been added to the site.
+Personal, noncommercial use is intended. Unknown upstream sources are accepted as
+an uncertainty, rather than treated as verified ownership.
+
+- [ ] [2021 Red Bull RB16B](https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813)
+      — Dave Love SketchFab; CC BY 4.0; original source unverified.
+- [ ] [2010 Ferrari F10](https://sketchfab.com/3d-models/2010-ferrari-f10-7ae43257b15c4c8fb59b49f8fc6eb5b4)
+      — Dave Love SketchFab; CC BY 4.0; original source unverified.
+- [ ] [Ferrari F175](https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe)
+      — vecarz; CC BY-NC-SA 4.0; original source unverified.
+- [ ] [Toyota Supra](https://sketchfab.com/3d-models/toyota-supra-b7616ec43ecf4ffd8ed810d94f15eea6)
+      — saitoyang, crediting thelightning; CC BY 4.0; original source unverified.
+- [ ] [Ferrari 296 GT3](https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f)
+      — vecarz, crediting MattDoesBlender; CC BY-NC 4.0; original source unverified.
+- [ ] [2021 Lamborghini Countach LPI 800-4](https://sketchfab.com/3d-models/2021-lamborghini-countach-lpi-800-4-d76b94884432422b966d1a7f8815afb5)
+      — Lexyc16; CC BY-NC 4.0; creator states it was made in Blender.
+- [ ] [Lamborghini Aventador](https://sketchfab.com/3d-models/lamborghini-aventador-e328d9f5dcfd48bdbe8c73324b52ece3)
+      — Outlaw Games; CC BY-NC 4.0; uploader claims its own authorship.
+
+When adding a model, preserve its credits and license, note adaptations, and keep
+applicable ShareAlike terms on adapted assets. Check the downloaded license file,
+test the model under the portfolio lighting, and optimize without reducing visible
+detail. Keep racing liveries intact where repainting affects decals or trim.
+
+Older Japanese cars should retain stock styling. Modified Japanese builds should
+focus on newer cars, such as the GR Supra. F1 candidates should favor newer designs.

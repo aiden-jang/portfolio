@@ -48,6 +48,7 @@ search-update checks.
 - [Architecture](docs/architecture.md): module responsibilities and runtime behavior.
 - [Contributing](CONTRIBUTING.md): setup, changes, validation and commit conventions.
 - [Repository conventions](CONVENTIONS.md): code and verification requirements.
+- [To do](docs/todo.md): saved garage model candidates and selection preferences.
 
 The stack includes Vite, React Three Fiber, drei, postprocessing, Tailwind CSS,
 Zustand, and Vercel Analytics and Speed Insights. Exact versions are in
