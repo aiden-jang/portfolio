@@ -64,9 +64,44 @@ for (const width of [1440, 390]) {
         .filter({ visible: true });
       await carTrigger.click();
       await expect(page.getByRole('dialog', { name: 'Pick your ride.' })).toBeVisible();
+      await expect
+        .poll(() =>
+          page
+            .locator('.car-browser img')
+            .evaluateAll(
+              (images) =>
+                images.length === 7 &&
+                images.every((image) => (image as HTMLImageElement).naturalWidth > 0),
+            ),
+        )
+        .toBe(true);
       await accessible(page);
       await page.keyboard.press('Escape');
       await expect(carTrigger).toBeFocused();
+
+      if (width === 390) {
+        const paint = page
+          .getByRole('button', { name: /^Paint: .+\. Change color$/ })
+          .filter({ visible: true });
+        await expect(paint).toHaveAccessibleName('Paint: Ferrari Red. Change color');
+        await paint.click();
+        await expect.poll(() => new URL(page.url()).searchParams.get('paint')).toBe('#702c43');
+        await expect(paint).toHaveAccessibleName('Paint: Bordeaux. Change color');
+        for (let i = 0; i < 6; i++) await paint.click();
+        await expect(paint).toHaveAccessibleName('Paint: Ferrari Red. Change color');
+      } else {
+        await page
+          .getByRole('button', { name: 'Paint: Bordeaux', exact: true })
+          .filter({ visible: true })
+          .click();
+        await expect.poll(() => new URL(page.url()).searchParams.get('paint')).toBe('#702c43');
+        const defaultPaint = page
+          .getByRole('button', { name: 'Paint: Ferrari Red (default)', exact: true })
+          .filter({ visible: true });
+        await defaultPaint.click();
+        await expect(defaultPaint).toHaveAttribute('aria-pressed', 'true');
+      }
+      await expect.poll(() => new URL(page.url()).searchParams.get('paint')).toBe('original');
 
       await page.keyboard.press('Control+k');
       await expect(page.getByRole('dialog', { name: 'Command menu' })).toBeVisible();

@@ -110,6 +110,7 @@ export function CarBrowser({ onClose, returnFocus }: Props) {
               <span className="car-option-code">
                 {car.code}
                 {index === position ? (error ? ' · Choose to retry' : ' · Selected') : ''}
+                <span className="block">{car.defaultPaint.name}</span>
               </span>
             </button>
             {car.credit && (

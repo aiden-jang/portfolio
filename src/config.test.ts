@@ -28,6 +28,13 @@ describe('CARS', () => {
     }
   });
 
+  it('ships a picker preview for every model', () => {
+    for (const car of CARS) {
+      const file = new URL(`../public/cars/${car.file.replace('.glb', '.jpg')}`, import.meta.url);
+      expect(() => statSync(file), `${car.name} has no picker preview`).not.toThrow();
+    }
+  });
+
   it('holds the arrival download inside its budget', () => {
     const total = arrivalCars.reduce((sum, car) => sum + statSync(modelPath(car.file)).size, 0);
     expect(total).toBeLessThan(ARRIVAL_BUDGET_BYTES);

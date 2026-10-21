@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { CARS } from '../config';
-import { BODY_COLOR_SWATCHES, useAppStore, type ActiveBodyColor } from '../store';
+import { useAppStore } from '../store';
+import { parseScenePaint, type ActiveBodyColor } from '../paint';
 import type { ThemeName } from '../types';
 
 export function useSceneUrl() {
@@ -23,10 +24,7 @@ export function useSceneUrl() {
     const light = params.get('light');
     if (light === 'dusk' || light === 'night') setThemeName(light as ThemeName);
 
-    const paint = params.get('paint');
-    if (paint === 'original' || BODY_COLOR_SWATCHES.some((swatch) => swatch.hex === paint)) {
-      scenePaintRef.current = paint;
-    }
+    scenePaintRef.current = parseScenePaint(params.get('paint'));
     setSceneReady(true);
   }, [setCarIndex, setThemeName]);
 

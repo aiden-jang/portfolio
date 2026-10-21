@@ -33,6 +33,12 @@ instead, including the reflection; DOM text is unaffected.
 The Zustand store separates infrequently updated UI state from mutable scene
 references. Frame updates mutate references rather than rerendering the page.
 Car selection resets paint/material references through a shared store action.
+Each car declares a named default finish in `config.ts`; the Ferrari retains its
+authored red. `paint.ts` owns the complementary swatches, color labels and strict
+hex parsing. The existing `paint=original` URL token restores the selected car's
+curated default; explicit six-digit hex links remain usable after palette updates.
+Desktop swatches and mobile cycling share the same seven choices without duplicate
+colors. Picker previews show each car's default finish.
 `useSceneUrl` restores and synchronizes the selected car, paint and lighting;
 `sceneLink` builds garage links; `browserSharing` handles native sharing, cancellation
 and clipboard fallback. `useShareFeedback` owns request ordering, feedback timers

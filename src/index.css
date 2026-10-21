@@ -249,19 +249,6 @@
       scroll-behavior: auto !important;
     }
   }
-
-  /* Original-color swatch — diagonal slash icon. */
-  .swatch-original {
-    background:
-      linear-gradient(
-        135deg,
-        transparent 47%,
-        rgba(244, 240, 255, 0.55) 47%,
-        rgba(244, 240, 255, 0.55) 53%,
-        transparent 53%
-      ),
-      rgba(255, 255, 255, 0.04);
-  }
 }
 
 @font-face {

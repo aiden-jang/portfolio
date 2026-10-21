@@ -41,6 +41,7 @@ export const CARS: CarSpec[] = [
     name: 'Ferrari F40',
     code: 'F120',
     file: 'ferrari-f120-f40.glb',
+    defaultPaint: { name: 'Ferrari Red', hex: '#cf2428', preserveSource: true },
     exposure: 1.0,
     credit: {
       title: 'Ferrari F40 | www.vecarz.com',
@@ -54,6 +55,7 @@ export const CARS: CarSpec[] = [
     name: 'Mercedes 300 SL',
     code: 'W198',
     file: 'mercedes-benz-w198-300-sl.glb',
+    defaultPaint: { name: 'Silver Blue', hex: '#839aa4' },
     exposure: 0.65,
     credit: {
       title: 'Mercedes-Benz 300 SL Gullwing',
@@ -67,6 +69,7 @@ export const CARS: CarSpec[] = [
     name: 'Toyota Supra',
     code: 'A80',
     file: 'toyota-a80-supra.glb',
+    defaultPaint: { name: 'Deep Jade', hex: '#285c54' },
     exposure: 1.0,
     credit: {
       title: 'Toyota Supra MK IV (1994)',
@@ -80,6 +83,7 @@ export const CARS: CarSpec[] = [
     name: 'Porsche 911 RWB',
     code: '930',
     file: 'porsche-930-911-rwb.glb',
+    defaultPaint: { name: 'Bordeaux', hex: '#702c43' },
     exposure: 1.0,
     credit: {
       title: 'Porsche 911 Turbo - RWB',
@@ -94,6 +98,7 @@ export const CARS: CarSpec[] = [
     name: 'BMW M3',
     code: 'E30',
     file: 'bmw-e30-m3.glb',
+    defaultPaint: { name: 'Atlantic Blue', hex: '#365d7b' },
     exposure: 1.0,
     credit: {
       title: '[FREE] BMW M3 E30',
@@ -107,6 +112,7 @@ export const CARS: CarSpec[] = [
     name: 'Datsun 280Z',
     code: 'S30',
     file: 'datsun-s30-280z.glb',
+    defaultPaint: { name: 'Burnt Copper', hex: '#ad6748' },
     exposure: 1.0,
     credit: {
       title: '[FREE] Datsun 280Z',
@@ -120,6 +126,7 @@ export const CARS: CarSpec[] = [
     name: 'Lamborghini Countach',
     code: '5000QV',
     file: 'lamborghini-countach-5000qv.glb',
+    defaultPaint: { name: 'Golden Yellow', hex: '#d4ab42' },
     exposure: 1.0,
     credit: {
       title: 'Lamborghini Countach 5000QV',

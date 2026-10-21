@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 import type * as THREE from 'three';
 import { CARS } from './config';
+import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
+
+export type { ActiveBodyColor } from './paint';
 
 type Refs = {
   bodyMaterial: ColorMaterial | null;
@@ -12,19 +15,6 @@ type Refs = {
   // Set once the first GLB has loaded, which is what releases the intro animation.
   introArmed: boolean;
 };
-
-// Any value other than "original" is a hex string.
-export type ActiveBodyColor = 'original' | string;
-
-export const BODY_COLOR_SWATCHES: { hex: string; name: string }[] = [
-  { hex: '#ff6b1c', name: 'Signal Orange' },
-  { hex: '#b00020', name: 'Crimson' },
-  { hex: '#0a0a0c', name: 'Gloss Black' },
-  { hex: '#f5f1e8', name: 'Pearl White' },
-  { hex: '#194527', name: 'Racing Green' },
-  { hex: '#163a8a', name: 'Royal Blue' },
-];
-const BODY_COLOR_PALETTE = BODY_COLOR_SWATCHES.map((s) => s.hex);
 
 type AppState = {
   carIndex: number;
@@ -93,9 +83,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     refs.bodyMaterial = null;
     refs.bodyOriginalColor = null;
     const offset = 1 + Math.floor(Math.random() * (CARS.length - 1));
-    const colors: ActiveBodyColor[] = ['original', ...BODY_COLOR_PALETTE];
+    const nextIndex = (currentIndex + offset) % CARS.length;
+    const colors = paintChoices(CARS[nextIndex]).map(({ value }) => value);
     set({
-      carIndex: (currentIndex + offset) % CARS.length,
+      carIndex: nextIndex,
       themeName: Math.random() > 0.5 ? 'dusk' : 'night',
       activeBodyColor: colors[Math.floor(Math.random() * colors.length)] ?? 'original',
       hasBodyMaterial: false,
@@ -126,14 +117,16 @@ export const useAppStore = create<AppState>((set, get) => ({
     const mat = refs.bodyMaterial;
     if (!mat?.color) return;
     if (color === 'original') {
-      if (refs.bodyOriginalColor) mat.color.copy(refs.bodyOriginalColor);
+      const finish = CARS[get().carIndex].defaultPaint;
+      if (finish.preserveSource && refs.bodyOriginalColor) mat.color.copy(refs.bodyOriginalColor);
+      else mat.color.set(finish.hex);
     } else {
       mat.color.set(color);
     }
     set({ activeBodyColor: color });
   },
   cycleBodyColor: () => {
-    const order: ActiveBodyColor[] = ['original', ...BODY_COLOR_PALETTE];
+    const order = paintChoices(CARS[get().carIndex]).map(({ value }) => value);
     const idx = order.indexOf(get().activeBodyColor);
     const next = order[(idx + 1) % order.length];
     get().applyBodyColor(next);

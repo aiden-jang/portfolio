@@ -1,13 +1,14 @@
-import { BODY_COLOR_SWATCHES, useAppStore } from '../store';
+import { useAppStore } from '../store';
+import { CARS } from '../config';
+import { paintChoices, paintFinish } from '../paint';
 
 export function MobileColorButton() {
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const cycleBodyColor = useAppStore((s) => s.cycleBodyColor);
   const hasBody = useAppStore((s) => s.hasBodyMaterial);
-  const isOriginal = activeBodyColor === 'original';
-  const colorName = isOriginal
-    ? 'Original'
-    : BODY_COLOR_SWATCHES.find((swatch) => swatch.hex === activeBodyColor)?.name;
+  const carIndex = useAppStore((s) => s.carIndex);
+  const finish = paintFinish(CARS[carIndex], activeBodyColor);
+  const colorName = finish.name;
 
   return (
     <button
@@ -25,16 +26,15 @@ export function MobileColorButton() {
     >
       <span className="mobile-paint-name">{colorName}</span>
       <span
-        className={`swatch w-5 h-5 rounded-full border border-[var(--color-line)] ${
-          isOriginal ? 'swatch-original' : ''
-        }`}
-        style={isOriginal ? undefined : { background: activeBodyColor }}
+        className="swatch w-5 h-5 rounded-full border border-[var(--color-line)]"
+        style={{ background: finish.hex }}
       />
     </button>
   );
 }
 
 export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
+  const carIndex = useAppStore((s) => s.carIndex);
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const applyBodyColor = useAppStore((s) => s.applyBodyColor);
   const hasBody = useAppStore((s) => s.hasBodyMaterial);
@@ -54,21 +54,14 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
       <span className="control-group-label" aria-hidden="true">
         Paint
       </span>
-      <SwatchButton
-        original
-        title="Original"
-        active={activeBodyColor === 'original'}
-        disabled={!hasBody}
-        onClick={() => applyBodyColor('original')}
-      />
-      {BODY_COLOR_SWATCHES.map(({ hex, name }) => (
+      {paintChoices(CARS[carIndex]).map(({ hex, name, value }) => (
         <SwatchButton
-          key={hex}
+          key={value}
           color={hex}
-          title={name}
-          active={activeBodyColor === hex}
+          title={value === 'original' ? `${name} (default)` : name}
+          active={activeBodyColor === value}
           disabled={!hasBody}
-          onClick={() => applyBodyColor(hex)}
+          onClick={() => applyBodyColor(value)}
         />
       ))}
     </div>
@@ -77,14 +70,12 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
 
 function SwatchButton({
   color,
-  original,
   active,
   title,
   disabled,
   onClick,
 }: {
-  color?: string;
-  original?: boolean;
+  color: string;
   active: boolean;
   title: string;
   disabled?: boolean;
@@ -104,10 +95,9 @@ function SwatchButton({
         swatch w-7 h-7 md:w-[22px] md:h-[22px] rounded-full p-0 cursor-pointer
         transition-transform hover:scale-[1.12]
         border border-[var(--color-line)] hover:border-[var(--color-fg)]
-        ${original ? 'swatch-original' : ''}
         ${active ? 'border-[var(--color-neon)] shadow-[0_0_0_2px_rgba(255,107,28,0.4)]' : ''}
       `}
-      style={!original && color ? { background: color } : undefined}
+      style={{ background: color }}
     />
   );
 }

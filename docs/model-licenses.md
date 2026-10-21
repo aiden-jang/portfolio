@@ -28,8 +28,8 @@ when moving, modifying or reusing a model. Attribution metadata is embedded in e
 Web exports use compressed geometry and WebP textures, retaining full mesh detail.
 The RWB uses its original full-mesh GLB export; no site mesh simplification is applied.
 The M3 and Datsun use vertex reordering and lossless meshopt compression. Original
-materials and attribution metadata are retained. Site lighting, framing and
-optional paint colors are runtime adaptations. Thin glazing uses alpha transparency
+materials and attribution metadata are retained. Site lighting, framing, curated
+paint defaults and optional paint colors are runtime adaptations. Thin glazing uses alpha transparency
 in place of refraction for reliable browser rendering, retaining its authored tint
 and existing alpha where present.
 

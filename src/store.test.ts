@@ -56,3 +56,37 @@ describe('car selection lifecycle', () => {
     expect(useAppStore.getState().carIndex).toBe(CARS.length - 1);
   });
 });
+
+describe('car paint defaults', () => {
+  it('restores each selected car finish and keeps the Ferrari source red', () => {
+    for (const [index, car] of CARS.entries()) {
+      const state = useAppStore.getState();
+      state.setCarIndex(index);
+      const material = new THREE.MeshStandardMaterial({ color: '#c42128' });
+      const original = material.color.clone();
+      state.refs.bodyMaterial = material;
+      state.refs.bodyOriginalColor = original;
+      state.applyBodyColor('#222222');
+      state.applyBodyColor('original');
+      expect(material.color.getHexString()).toBe(
+        car.defaultPaint.preserveSource ? original.getHexString() : car.defaultPaint.hex.slice(1),
+      );
+      expect(useAppStore.getState().activeBodyColor).toBe('original');
+    }
+  });
+
+  it('cycles through a car palette and returns to its default', () => {
+    const state = useAppStore.getState();
+    state.setCarIndex(6);
+    state.refs.bodyMaterial = new THREE.MeshStandardMaterial();
+    state.refs.bodyOriginalColor = state.refs.bodyMaterial.color!.clone();
+    const visited = new Set<string>();
+    for (let i = 0; i < 7; i++) {
+      visited.add(useAppStore.getState().activeBodyColor);
+      state.cycleBodyColor();
+    }
+    expect(visited.size).toBe(7);
+    expect(useAppStore.getState().activeBodyColor).toBe('original');
+    expect(state.refs.bodyMaterial.color!.getHexString()).toBe(CARS[6].defaultPaint.hex.slice(1));
+  });
+});

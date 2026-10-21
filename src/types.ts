@@ -36,6 +36,7 @@ export type CarSpec = {
   code: string;
   file: string;
   exposure: number;
+  defaultPaint: { name: string; hex: string; preserveSource?: boolean };
   credit?: Credit;
 };
 
