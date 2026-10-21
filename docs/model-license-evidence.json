@@ -88,34 +88,31 @@
       "review": "source-license-verified"
     },
     {
-      "file": "lamborghini-countach-5000qv.glb",
-      "title": "Lamborghini Countach 5000QV",
-      "author": "Randomness",
-      "creatorId": "881904d5f7724d56a18e6d77abfaae20",
-      "source": "https://sketchfab.com/3d-models/2f02b54e01fc428e8b19759c5970f882",
-      "evidence": "https://api.sketchfab.com/v3/models/2f02b54e01fc428e8b19759c5970f882",
+      "file": "audi-r8.glb",
+      "title": "Audi R8",
+      "author": "wallon",
+      "creatorId": "0821dee338ec406f8fbebcbc87455628",
+      "source": "https://sketchfab.com/3d-models/audi-r8-e17e438f076f4427a58d93aa779edaed",
+      "evidence": "https://api.sketchfab.com/v3/models/e17e438f076f4427a58d93aa779edaed",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
       "review": "source-license-verified",
-      "downloadLicense": "The official glTF download includes license.txt identifying the same author display name, source and CC-BY-4.0 license. Its supplied profile URL is preserved verbatim in downloadLicenseText; creatorId comes from the current listing.",
-      "sourceReview": "Listing, description, displayed comments and archive attribution checked. No upstream source or game extraction is declared; this verifies the publisher license, not independent authorship or manufacturer rights.",
-      "downloadLicenseText": "Model Information:\n* title:\tLamborghini Countach 5000QV\n* source:\thttps://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882\n* author:\tRandomness (https://sketchfab.com/jvfrhrbf9435793)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Lamborghini Countach 5000QV\" (https://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882) by Randomness (https://sketchfab.com/jvfrhrbf9435793) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "archiveSha256": "ee1f49b39d8dd77f5eaed68351a620a06b5fab5300f4896aa0379face31a2851",
+      "downloadLicense": "The official glTF archive includes license.txt matching the listing author, source and CC BY 4.0 license.",
+      "sourceReview": "The creator describes modeling this vehicle and its textures. Listing description, displayed comments and archive attribution checked; no upstream source or game extraction is declared. This verifies the supplied publisher license, not independent authorship or manufacturer rights.",
+      "downloadLicenseText": "Model Information:\n* title:\tAudi R8\n* source:\thttps://sketchfab.com/3d-models/audi-r8-e17e438f076f4427a58d93aa779edaed\n* author:\twallon (https://sketchfab.com/realwallon)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Audi R8\" (https://sketchfab.com/3d-models/audi-r8-e17e438f076f4427a58d93aa779edaed) by wallon (https://sketchfab.com/realwallon) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "archiveSha256": "5f3917a137ce31ea97bd1a50944dfa4b9d754215802a7167ce6307e199ac21b6",
       "optimization": {
-        "referenceBytes": 16409692,
-        "optimizedBytes": 9736724,
-        "triangles": 174956,
+        "referenceBytes": 22047968,
+        "optimizedBytes": 12348876,
+        "triangles": 447204,
         "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
         "textures": "Original dimensions and decoded RGBA pixels retained.",
-        "assetSha256": "2e6557407acdacaf2287005ae254fede8f4bcf22f1e051e1f2b4e7cfff01eb95",
+        "materials": "Authored PBR materials and clearcoat retained; no roughness or metallic response changes.",
+        "assetSha256": "ce655fcf3266177948e9f8dfc54543d73c1158c5114ec8660cfb7c6b674dff71",
         "gltfErrors": 0,
         "gltfWarnings": 0
-      },
-      "materialAdaptations": [
-        "Tire alpha is ignored for opaque rubber; the downloaded diffuse texture encodes partial alpha that otherwise hides the tire surface. Rubber roughness is 0.85 with a dielectric response.",
-        "Bodywork uses roughness 0.24, a dielectric response, and a clearcoat layer (factor 1, roughness 0.14) for glossy automotive paint. Geometry, UVs and decoded texture pixels remain unchanged."
-      ]
+      }
     }
   ]
 }

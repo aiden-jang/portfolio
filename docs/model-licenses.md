@@ -16,7 +16,7 @@ October 20, 2026 using Sketchfab's public model API.
 | Porsche 911 RWB      | [SWIZ](https://sketchfab.com/3d-models/9b13e93711db460b99749ae95aea9764)          | CC BY 4.0                                                 | Source license verified; retain the embedded SWIZ copyright notice |
 | BMW M3 E30           | [Martin Trafas](https://sketchfab.com/3d-models/ac3c7013434e403e8faff87948caf422) | CC BY 4.0                                                 | Source license verified                                            |
 | Datsun 280Z          | [Martin Trafas](https://sketchfab.com/3d-models/0789ab2ece9442de94b3c41595e0ecbd) | CC BY 4.0                                                 | Source license verified                                            |
-| Lamborghini Countach | [Randomness](https://sketchfab.com/3d-models/2f02b54e01fc428e8b19759c5970f882)    | CC BY 4.0                                                 | Source license verified                                            |
+| Audi R8              | [wallon](https://sketchfab.com/3d-models/e17e438f076f4427a58d93aa779edaed)        | CC BY 4.0                                                 | Source license verified                                            |
 
 CC BY permits sharing and modification, including commercial use, provided its
 conditions are met. The Contact credits give the supplied model titles, authors,
@@ -33,7 +33,7 @@ paint defaults and optional paint colors are runtime adaptations. Thin glazing u
 in place of refraction for reliable browser rendering, retaining its authored tint
 and existing alpha where present.
 
-The Countach and Supra use Sketchfab's official glTF downloads. Each archive includes a
+The R8 and Supra use Sketchfab's official glTF downloads. Each archive includes a
 license.txt matching the creator, model source and CC BY 4.0 license shown in the
 listing. Their exports retain the source geometry, floating-point vertex precision,
 texture dimensions and decoded texture pixels. glTF Transform 4.4.1 and
@@ -42,15 +42,9 @@ lossless WebP textures. The source attribution and a web adaptation notice are
 embedded in each GLB. Compare original and optimized renders as well as decoded
 geometry when changing these settings.
 
-The Countach source uses the legacy glTF specular/glossiness material workflow,
-which the site's Three.js loader does not support. glTF Transform converts those
-materials to modern specular/roughness materials before compression. Source
-geometry and image detail remain intact; this material conversion is an adaptation,
-not a promise of identical lighting across different renderers. The tire material
-uses opaque rubber so partial alpha in its source diffuse map does not hide the
-tread and sidewall. Bodywork uses glossy clear-coated paint instead of the converted
-maximum-roughness surface. These are explicit material adaptations; no geometry,
-UVs, texture pixels or attribution are removed.
+The R8 retains the author's PBR materials, clearcoat and amber-gold paint, including
+separate tires, carbon fiber, glazing and lights. No material workflow conversion
+or roughness changes are applied. It is a modified widebody exterior model.
 
 Listing descriptions, displayed comments and archive notices were checked for
 upstream credits or game extraction. Neither publisher declares an upstream source.

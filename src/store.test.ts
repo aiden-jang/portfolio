@@ -78,7 +78,7 @@ describe('car paint defaults', () => {
   it('cycles through a car palette and returns to its default', () => {
     const state = useAppStore.getState();
     state.setCarIndex(6);
-    state.refs.bodyMaterial = new THREE.MeshStandardMaterial();
+    state.refs.bodyMaterial = new THREE.MeshStandardMaterial({ color: CARS[6].defaultPaint.hex });
     state.refs.bodyOriginalColor = state.refs.bodyMaterial.color!.clone();
     const visited = new Set<string>();
     for (let i = 0; i < 7; i++) {

@@ -34,14 +34,14 @@ it('shows the actual named default and keeps mobile paint in sync with swatches'
   const swatches = host.querySelectorAll<HTMLButtonElement>('[data-color-swatch]');
   expect(swatches.length).toBe(7);
   const defaultButton = host.querySelector<HTMLButtonElement>(
-    '[aria-label="Paint: Golden Yellow (default)"]',
+    '[aria-label="Paint: Amber Gold (default)"]',
   )!;
   expect(defaultButton.getAttribute('aria-pressed')).toBe('true');
-  expect(defaultButton.style.background).toBe('rgb(212, 171, 66)');
+  expect(defaultButton.style.background).toBe('rgb(156, 97, 43)');
   await act(() => host.querySelector<HTMLButtonElement>('[aria-label="Paint: Bordeaux"]')!.click());
   expect(host.querySelector('[aria-label="Paint: Bordeaux. Change color"]')).not.toBeNull();
   await act(() => defaultButton.click());
-  expect(host.querySelector('[aria-label="Paint: Golden Yellow. Change color"]')).not.toBeNull();
+  expect(host.querySelector('[aria-label="Paint: Amber Gold. Change color"]')).not.toBeNull();
 });
 
 it('names old linked colors and cycles back to the car default', async () => {
@@ -50,6 +50,6 @@ it('names old linked colors and cycles back to the car default', async () => {
   const button = host.querySelector<HTMLButtonElement>('button')!;
   expect(button.getAttribute('aria-label')).toBe('Paint: Custom. Change color');
   await act(() => button.click());
-  expect(button.getAttribute('aria-label')).toBe('Paint: Golden Yellow. Change color');
+  expect(button.getAttribute('aria-label')).toBe('Paint: Amber Gold. Change color');
   expect(useAppStore.getState().activeBodyColor).toBe('original');
 });

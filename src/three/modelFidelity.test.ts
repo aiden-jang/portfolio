@@ -32,9 +32,9 @@ describe('car fidelity', () => {
     expect(triangles).toBe(2_970_024);
   });
 
-  it('preserves the full Countach and Supra meshes and floating-point surfaces', () => {
+  it('preserves the full R8 and Supra meshes and floating-point surfaces', () => {
     for (const [file, triangles] of [
-      ['lamborghini-countach-5000qv', 174_956],
+      ['audi-r8', 447_204],
       ['toyota-a80-supra', 261_960],
     ] as const) {
       const model = readModel(file);
@@ -59,18 +59,16 @@ describe('car fidelity', () => {
     }
   });
 
-  it('renders Countach tires as opaque rubber and bodywork as coated paint', () => {
-    const { materials } = readModel('lamborghini-countach-5000qv');
-    const rubber = materials.find((material) => material.name === 'Countach_Tire_Rubber');
-    const paint = materials.find((material) => material.name === 'Countach_Body_Paint');
+  it('keeps R8 paint, tires and glazing separate with their authored finishes', () => {
+    const { materials } = readModel('audi-r8');
+    const rubber = materials.find((material) => material.name === 'tire');
+    const paint = materials.find((material) => material.name === 'body');
+    const glass = materials.find((material) => material.name === 'glass');
     expect(rubber).toBeDefined();
     expect(rubber!.alphaMode ?? 'OPAQUE').toBe('OPAQUE');
-    expect(rubber!.pbrMetallicRoughness.roughnessFactor ?? 1).toBeGreaterThanOrEqual(0.6);
-    expect(rubber!.pbrMetallicRoughness.metallicFactor ?? 1).toBe(0);
     expect(paint).toBeDefined();
-    expect(paint!.pbrMetallicRoughness.roughnessFactor ?? 1).toBeLessThanOrEqual(0.35);
-    expect(paint!.extensions?.KHR_materials_clearcoat?.clearcoatFactor ?? 0).toBeGreaterThanOrEqual(
-      0.8,
-    );
+    expect(paint!.pbrMetallicRoughness.roughnessFactor).toBeCloseTo(0.4739062061903426);
+    expect(paint!.extensions?.KHR_materials_clearcoat?.clearcoatFactor).toBe(1);
+    expect(glass?.alphaMode).toBe('BLEND');
   });
 });
