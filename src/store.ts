@@ -113,6 +113,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       carRetryVersion: state.carRetryVersion + 1,
     })),
   applyBodyColor: (color) => {
+    if (CARS[get().carIndex].fixedLivery) color = 'original';
     const refs = get().refs;
     const mat = refs.bodyMaterial;
     if (!mat?.color) return;

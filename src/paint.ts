@@ -14,6 +14,7 @@ const FINISHES = [
 ];
 
 export function paintChoices(car: CarSpec) {
+  if (car.fixedLivery) return [{ ...car.defaultPaint, value: 'original' }];
   return [
     { ...car.defaultPaint, value: 'original' },
     ...FINISHES.filter(({ hex }) => hex !== car.defaultPaint.hex)

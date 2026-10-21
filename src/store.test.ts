@@ -90,3 +90,18 @@ describe('car paint defaults', () => {
     expect(state.refs.bodyMaterial.color!.getHexString()).toBe(CARS[6].defaultPaint.hex.slice(1));
   });
 });
+
+it('preserves the 917K source livery through direct paint and keyboard cycling', () => {
+  const state = useAppStore.getState();
+  state.setCarIndex(CARS.findIndex((car) => car.file === 'porsche-917k-lm-red.glb'));
+  const material = new THREE.MeshStandardMaterial({ color: '#fafafa' });
+  const original = material.color.clone();
+  state.refs.bodyMaterial = material;
+  state.refs.bodyOriginalColor = original;
+  state.applyBodyColor('#365d7b');
+  expect(material.color).toEqual(original);
+  expect(useAppStore.getState().activeBodyColor).toBe('original');
+  state.cycleBodyColor();
+  expect(material.color).toEqual(original);
+  expect(useAppStore.getState().activeBodyColor).toBe('original');
+});

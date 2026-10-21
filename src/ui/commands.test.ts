@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { CARS, SECTION_IDS, SECTION_LABELS } from '../config';
+import { useAppStore } from '../store';
 import { buildCommands, matchCommands, modifierKey } from './commands';
 
 const build = () => buildCommands({ onSection: vi.fn(), setNotice: vi.fn() });
@@ -78,4 +79,12 @@ it('labels the shortcut for the current keyboard platform', () => {
   vi.stubGlobal('navigator', { platform: 'Linux x86_64' });
   expect(modifierKey()).toBe('Ctrl');
   vi.unstubAllGlobals();
+});
+
+it('omits repainting commands for fixed liveries and restores them for other cars', () => {
+  const state = useAppStore.getState();
+  state.setCarIndex(CARS.findIndex((car) => car.file === 'porsche-917k-lm-red.glb'));
+  expect(build().some(({ id }) => id === 'repaint')).toBe(false);
+  state.setCarIndex(0);
+  expect(build().some(({ id }) => id === 'repaint')).toBe(true);
 });

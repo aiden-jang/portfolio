@@ -17,7 +17,7 @@ type Deps = {
 };
 
 export function buildCommands({ onSection, setNotice }: Deps): Command[] {
-  return [
+  const commands: Command[] = [
     ...SECTION_IDS.map((id) => ({
       id,
       label: `Go to ${SECTION_LABELS[id]}`,
@@ -116,6 +116,9 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
       },
     },
   ];
+  return commands.filter(
+    ({ id }) => id !== 'repaint' || !CARS[useAppStore.getState().carIndex].fixedLivery,
+  );
 }
 
 export function matchCommands(commands: Command[], query: string): Command[] {

@@ -44,8 +44,12 @@ export function useSceneUrl() {
   // Paint has to wait for the GLB to expose its material. Clearing the ref after the first apply
   // keeps a later car change from silently reverting to the shared link's color.
   useEffect(() => {
+    if (CARS[carIndex].fixedLivery) {
+      scenePaintRef.current = null;
+      return;
+    }
     if (!hasBodyMaterial || !scenePaintRef.current) return;
     applyBodyColor(scenePaintRef.current);
     scenePaintRef.current = null;
-  }, [applyBodyColor, hasBodyMaterial]);
+  }, [applyBodyColor, carIndex, hasBodyMaterial]);
 }

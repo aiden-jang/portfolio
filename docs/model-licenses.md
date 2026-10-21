@@ -66,7 +66,9 @@ blanket clearance of vehicle designs. The site credits retain that distinction.
 
 The Porsche 917K uses the selected vecarz red Le Mans export, with JUSTGAME's
 upstream credit retained. Its full mesh, source livery, texture pixels and material
-parameters are preserved. Shared thin-glass handling applies.
+parameters are preserved. Its racing livery is fixed: paint controls and repaint
+commands are hidden, and shared color links keep the original finish. Shared
+thin-glass handling applies.
 
 The proposed Supra GT300 is not included. The vecarz reupload lists CC BY, but the
 credited [builder's source](https://sketchfab.com/3d-models/toyota-gr-supra-gt-gt300-58efbe2b2e144d8e8edfcc0c64e55f88)

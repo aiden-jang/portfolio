@@ -12,10 +12,10 @@ describe('garage finishes', () => {
     }
   });
 
-  it('offers seven distinct swatches with a named default first', () => {
+  it('offers only the original finish for fixed liveries and seven swatches otherwise', () => {
     for (const car of CARS) {
       const choices = paintChoices(car);
-      expect(choices).toHaveLength(7);
+      expect(choices).toHaveLength(car.fixedLivery ? 1 : 7);
       expect(new Set(choices.map(({ hex }) => hex)).size).toBe(choices.length);
       expect(choices[0]).toMatchObject({ ...car.defaultPaint, value: 'original' });
     }

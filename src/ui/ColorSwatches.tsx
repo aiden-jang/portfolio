@@ -9,6 +9,7 @@ export function MobileColorButton() {
   const carIndex = useAppStore((s) => s.carIndex);
   const finish = paintFinish(CARS[carIndex], activeBodyColor);
   const colorName = finish.name;
+  if (CARS[carIndex].fixedLivery) return null;
 
   return (
     <button
@@ -38,6 +39,7 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
   const activeBodyColor = useAppStore((s) => s.activeBodyColor);
   const applyBodyColor = useAppStore((s) => s.applyBodyColor);
   const hasBody = useAppStore((s) => s.hasBodyMaterial);
+  if (CARS[carIndex].fixedLivery) return null;
 
   return (
     <div

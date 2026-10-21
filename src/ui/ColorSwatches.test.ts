@@ -3,6 +3,7 @@ import { act, createElement, Fragment } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, expect, it } from 'vitest';
 import * as THREE from 'three';
+import { CARS } from '../config';
 import { useAppStore } from '../store';
 import { ColorSwatches, MobileColorButton } from './ColorSwatches';
 
@@ -52,4 +53,18 @@ it('names old linked colors and cycles back to the car default', async () => {
   await act(() => button.click());
   expect(button.getAttribute('aria-label')).toBe('Paint: Amber Gold. Change color');
   expect(useAppStore.getState().activeBodyColor).toBe('original');
+});
+
+it('hides desktop and mobile paint controls for the fixed 917K livery', async () => {
+  useAppStore
+    .getState()
+    .setCarIndex(CARS.findIndex((car) => car.file === 'porsche-917k-lm-red.glb'));
+  useAppStore.getState().setHasBodyMaterial(true);
+  await act(() =>
+    root.render(
+      createElement(Fragment, null, createElement(ColorSwatches), createElement(MobileColorButton)),
+    ),
+  );
+  expect(host.querySelector('button')).toBeNull();
+  expect(host.querySelector('[aria-label="Paint"]')).toBeNull();
 });

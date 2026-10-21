@@ -38,7 +38,9 @@ authored red. `paint.ts` owns the complementary swatches, color labels and stric
 hex parsing. The existing `paint=original` URL token restores the selected car's
 curated default; explicit six-digit hex links remain usable after palette updates.
 Desktop swatches and mobile cycling share the same seven choices without duplicate
-colors. Picker previews show each car's default finish.
+colors. A `fixedLivery` car retains its authored finish: paint controls, repaint
+commands and paint shortcut hints are hidden; color actions, shared links and
+randomization preserve its original livery. Picker previews show each car's default finish.
 `useSceneUrl` restores and synchronizes the selected car, paint and lighting;
 `sceneLink` builds garage links; `browserSharing` handles native sharing, cancellation
 and clipboard fallback. `useShareFeedback` owns request ordering, feedback timers

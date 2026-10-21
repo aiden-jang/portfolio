@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { CARS } from '../config';
 import { useAppStore } from '../store';
 import { COMMAND_MENU_EVENT } from './CommandMenu';
 import './keyboard-legend.css';
 
 export function Hint() {
   const [triedOrbit, setTriedOrbit] = useState(false);
+  const carIndex = useAppStore((state) => state.carIndex);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const loading = useAppStore((state) => state.isCarLoading);
   const error = useAppStore((state) => state.carLoadError);
@@ -29,9 +31,11 @@ export function Hint() {
           <kbd>←</kbd>
           <kbd>→</kbd> Car
         </span>
-        <span>
-          <kbd>C</kbd> Paint
-        </span>
+        {!CARS[carIndex].fixedLivery && (
+          <span>
+            <kbd>C</kbd> Paint
+          </span>
+        )}
         <span>
           <kbd>B</kbd> Lighting
         </span>

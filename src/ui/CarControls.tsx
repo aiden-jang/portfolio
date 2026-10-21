@@ -1,4 +1,4 @@
-import { SECTION_IDS, type SectionId } from '../config';
+import { CARS, SECTION_IDS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { CameraResetButton } from './CameraResetButton';
 import { CarSwitcher, MobileCarSwitcher } from './CarSwitcher';
@@ -10,6 +10,7 @@ import { SectionDots } from './SectionDots';
 import { Hint } from './Hint';
 
 export function CarControls({ onSection }: { onSection: (id: SectionId) => void }) {
+  const carIndex = useAppStore((state) => state.carIndex);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const visible = sectionIndex === 0 || SECTION_IDS[sectionIndex] === 'sec-contact';
   return (
@@ -54,8 +55,12 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
             <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
             <CameraResetButton />
             <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-            <ColorSwatches bordered={false} />
-            <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+            {!CARS[carIndex].fixedLivery && (
+              <>
+                <ColorSwatches bordered={false} />
+                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+              </>
+            )}
             <ThemeToggle />
             <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
             <SceneShareButton />

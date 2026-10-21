@@ -1,5 +1,5 @@
 import { useDialogFocus } from './useDialogFocus';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal, flushSync } from 'react-dom';
 import { type SectionId } from '../config';
 import { buildCommands, matchCommands, modifierKey, type Command } from './commands';
@@ -16,7 +16,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const dialogRef = useRef<HTMLElement>(null);
   useDialogFocus(open, dialogRef, inputRef);
   const activeResultRef = useRef<HTMLButtonElement>(null);
-  const commands = useMemo(() => buildCommands({ onSection, setNotice }), [onSection]);
+  const commands = buildCommands({ onSection, setNotice });
 
   const results = matchCommands(commands, query);
   useEffect(() => {
