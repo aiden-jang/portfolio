@@ -20,6 +20,16 @@ an uncertainty, rather than treated as verified ownership.
       — Lexyc16; CC BY-NC 4.0; creator states it was made in Blender.
 - [ ] [Lamborghini Aventador](https://sketchfab.com/3d-models/lamborghini-aventador-e328d9f5dcfd48bdbe8c73324b52ece3)
       — Outlaw Games; CC BY-NC 4.0; uploader claims its own authorship.
+- [ ] [Porsche 911 GT3](https://sketchfab.com/3d-models/porsche-911-gt3-593c83f3662a4a45a016f95dedd9f243)
+      — Outlaw Games; CC BY-NC 4.0; free for noncommercial use.
+- [ ] [Mazda Miata MX-5 NA](https://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041)
+      — Lexyc16; CC BY 4.0; creator states it was made in Blender. Keep stock styling.
+- [ ] [Ferrari LaFerrari](https://sketchfab.com/3d-models/ferrari-laferrari-wwwvecarzcom-979f7085012e4d6399f38de3f9c39012)
+      — vecarz, crediting srineshchethiya; CC BY-NC-SA 4.0. The
+      [linked source](https://sketchfab.com/3d-models/2013-ferrari-laferrari-f75b682bb0de4a14b3b6c1f52862ca48)
+      lists CC BY 4.0; original authorship remains unverified.
+- [ ] [2010 Mercedes-Benz SLS AMG](https://sketchfab.com/3d-models/2010-mercedes-benz-sls-amg-bf1464ad3ffb4f4696aa339f8ab12b07)
+      — srineshchethiya; CC BY 4.0; original source unverified.
 
 When adding a model, preserve its credits and license, note adaptations, and keep
 applicable ShareAlike terms on adapted assets. Check the downloaded license file,
