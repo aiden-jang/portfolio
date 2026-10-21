@@ -40,7 +40,7 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expect(credits).toBeVisible();
   await expectDestinations(credits);
   const licenses = credits.getByRole('link', { name: 'CC BY 4.0', exact: true });
-  await expect(licenses).toHaveCount(7);
+  await expect(licenses).toHaveCount(8);
   for (const license of await licenses.all())
     await expect(license).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
   await expect(credits.getByRole('link', { name: 'Audi R8', exact: true })).toHaveAttribute(
@@ -50,5 +50,8 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expect(
     credits.getByRole('link', { name: 'Toyota Supra MK IV (1994)', exact: true }),
   ).toHaveAttribute('href', 'https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8');
+  await expect(
+    credits.getByRole('link', { name: 'Porsche 911 (930) Turbo 1975', exact: true }),
+  ).toHaveAttribute('href', 'https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136');
   await expect(credits).toContainText('Full mesh detail retained.');
 });

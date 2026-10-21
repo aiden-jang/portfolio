@@ -113,6 +113,33 @@
         "gltfErrors": 0,
         "gltfWarnings": 0
       }
+    },
+    {
+      "file": "porsche-930-turbo-1975.glb",
+      "title": "Porsche 911 (930) Turbo 1975",
+      "author": "Lexyc16",
+      "creatorId": "493c518a107848cc91ffe4d6771947b4",
+      "source": "https://sketchfab.com/3d-models/porsche-911-930-turbo-1975-de1ffd344c41481892511f7fd332c136",
+      "evidence": "https://api.sketchfab.com/v3/models/de1ffd344c41481892511f7fd332c136",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-20",
+      "review": "source-license-verified",
+      "downloadLicense": "The official glTF archive includes license.txt matching the listing author, source and CC BY 4.0 license.",
+      "sourceReview": "Listing, description, displayed comments and archive attribution checked. No upstream source or game extraction is declared. This verifies the supplied publisher license, not independent authorship or manufacturer rights.",
+      "downloadLicenseText": "Model Information:\n* title:\tPorsche 911 (930) Turbo 1975\n* source:\thttps://sketchfab.com/3d-models/porsche-911-930-turbo-1975-de1ffd344c41481892511f7fd332c136\n* author:\tLexyc16 (https://sketchfab.com/Lexyc16)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Porsche 911 (930) Turbo 1975\" (https://sketchfab.com/3d-models/porsche-911-930-turbo-1975-de1ffd344c41481892511f7fd332c136) by Lexyc16 (https://sketchfab.com/Lexyc16) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "archiveSha256": "5489dbe3b710001c144a09e11e5dc6bd3e755c887b1c88c555db121bbd6431b6",
+      "optimization": {
+        "referenceBytes": 4616128,
+        "optimizedBytes": 2962996,
+        "triangles": 61218,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "The official glTF download supplies supported metallic/roughness materials and clearcoat. Material.001 is named Porsche_Body_Paint for paint discovery; material response is unchanged. Runtime thin-glass handling and curated paint apply.",
+        "assetSha256": "afd944be3b89e87286a13df29c4283cf4f1cd493c792fb71f4b2b1dbca7f519a",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      }
     }
   ]
 }

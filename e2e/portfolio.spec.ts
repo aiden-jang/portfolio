@@ -70,7 +70,7 @@ for (const width of [1440, 390]) {
             .locator('.car-browser img')
             .evaluateAll(
               (images) =>
-                images.length === 7 &&
+                images.length === 8 &&
                 images.every((image) => (image as HTMLImageElement).naturalWidth > 0),
             ),
         )

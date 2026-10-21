@@ -17,6 +17,7 @@ October 20, 2026 using Sketchfab's public model API.
 | BMW M3 E30           | [Martin Trafas](https://sketchfab.com/3d-models/ac3c7013434e403e8faff87948caf422) | CC BY 4.0                                                 | Source license verified                                            |
 | Datsun 280Z          | [Martin Trafas](https://sketchfab.com/3d-models/0789ab2ece9442de94b3c41595e0ecbd) | CC BY 4.0                                                 | Source license verified                                            |
 | Audi R8              | [wallon](https://sketchfab.com/3d-models/e17e438f076f4427a58d93aa779edaed)        | CC BY 4.0                                                 | Source license verified                                            |
+| Porsche 911 Turbo    | [Lexyc16](https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136)       | CC BY 4.0                                                 | Source license verified                                            |
 
 CC BY permits sharing and modification, including commercial use, provided its
 conditions are met. The Contact credits give the supplied model titles, authors,
@@ -33,7 +34,7 @@ paint defaults and optional paint colors are runtime adaptations. Thin glazing u
 in place of refraction for reliable browser rendering, retaining its authored tint
 and existing alpha where present.
 
-The R8 and Supra use Sketchfab's official glTF downloads. Each archive includes a
+The R8, Supra and stock Porsche 930 use Sketchfab's official glTF downloads. Each archive includes a
 license.txt matching the creator, model source and CC BY 4.0 license shown in the
 listing. Their exports retain the source geometry, floating-point vertex precision,
 texture dimensions and decoded texture pixels. glTF Transform 4.4.1 and
@@ -46,14 +47,19 @@ The R8 retains the author's PBR materials, clearcoat and amber-gold paint, inclu
 separate tires, carbon fiber, glazing and lights. No material workflow conversion
 or roughness changes are applied. It is a modified widebody exterior model.
 
+The stock Porsche 930 download already supplies supported metallic/roughness
+materials and clearcoat. Its body material is named for paint discovery; its
+material response is unchanged. The default graphite paint and shared thin-glass
+handling are runtime adaptations.
+
 Listing descriptions, displayed comments and archive notices were checked for
-upstream credits or game extraction. Neither publisher declares an upstream source.
+upstream credits or game extraction. These publishers declare no upstream source.
 This establishes the supplied publisher license, not independent proof of authorship
 or clearance of manufacturer rights. The evidence record retains the supplied
 license text, archive hashes and creator IDs, including older profile aliases.
 Asset optimization uses local, deterministic geometry and image tools.
 
-The Porsche publisher identifies Porsche AG as the vehicle-design rights holder.
+The RWB publisher identifies Porsche AG as the vehicle-design rights holder.
 Creator licenses do not grant manufacturer affiliation, trademark rights or a
 blanket clearance of vehicle designs. The site credits retain that distinction.
 

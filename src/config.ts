@@ -136,6 +136,20 @@ export const CARS: CarSpec[] = [
       url: 'https://sketchfab.com/3d-models/e17e438f076f4427a58d93aa779edaed',
     },
   },
+  {
+    name: 'Porsche 911 Turbo',
+    code: '930',
+    file: 'porsche-930-turbo-1975.glb',
+    defaultPaint: { name: 'Graphite', hex: '#3f464e' },
+    exposure: 1.0,
+    credit: {
+      title: 'Porsche 911 (930) Turbo 1975',
+      author: 'Lexyc16',
+      license: 'CC BY 4.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+      url: 'https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136',
+    },
+  },
 ];
 
 // Full-detail cars load on selection; only the two smallest models warm the cache.
