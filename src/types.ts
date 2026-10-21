@@ -29,6 +29,7 @@ type Credit = {
   licenseUrl: string;
   url: string;
   copyright?: string;
+  upstream?: { author: string; url: string };
 };
 
 export type CarSpec = {

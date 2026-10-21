@@ -32,11 +32,12 @@ describe('car fidelity', () => {
     expect(triangles).toBe(2_970_024);
   });
 
-  it('preserves the full R8, Supra and 930 meshes and floating-point surfaces', () => {
+  it('preserves the full source meshes and floating-point surfaces', () => {
     for (const [file, triangles] of [
       ['audi-r8', 447_204],
       ['toyota-a80-supra', 261_960],
       ['porsche-930-turbo-1975', 61_218],
+      ['porsche-917k-lm-red', 389_972],
     ] as const) {
       const model = readModel(file);
       expect(model.extensionsRequired).toContain('EXT_meshopt_compression');

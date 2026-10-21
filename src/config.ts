@@ -150,6 +150,24 @@ export const CARS: CarSpec[] = [
       url: 'https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136',
     },
   },
+  {
+    name: 'Porsche 917K',
+    code: 'Le Mans',
+    file: 'porsche-917k-lm-red.glb',
+    defaultPaint: { name: 'Le Mans Red', hex: '#a92728', preserveSource: true },
+    exposure: 1.0,
+    credit: {
+      title: 'Porsche 917k LM Red | www.vecarz.com',
+      author: 'vecarz',
+      license: 'CC BY 4.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+      url: 'https://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918',
+      upstream: {
+        author: 'JUSTGAME',
+        url: 'https://sketchfab.com/3d-models/porsche-917k-abb07de409db42178e3df943dd009103',
+      },
+    },
+  },
 ];
 
 // Full-detail cars load on selection; only the two smallest models warm the cache.

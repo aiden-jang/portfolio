@@ -40,7 +40,7 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expect(credits).toBeVisible();
   await expectDestinations(credits);
   const licenses = credits.getByRole('link', { name: 'CC BY 4.0', exact: true });
-  await expect(licenses).toHaveCount(8);
+  await expect(licenses).toHaveCount(9);
   for (const license of await licenses.all())
     await expect(license).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/');
   await expect(credits.getByRole('link', { name: 'Audi R8', exact: true })).toHaveAttribute(
@@ -53,5 +53,15 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expect(
     credits.getByRole('link', { name: 'Porsche 911 (930) Turbo 1975', exact: true }),
   ).toHaveAttribute('href', 'https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136');
+  await expect(
+    credits.getByRole('link', { name: 'Porsche 917k LM Red | www.vecarz.com', exact: true }),
+  ).toHaveAttribute(
+    'href',
+    'https://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918',
+  );
+  await expect(credits.getByRole('link', { name: 'JUSTGAME', exact: true })).toHaveAttribute(
+    'href',
+    'https://sketchfab.com/3d-models/porsche-917k-abb07de409db42178e3df943dd009103',
+  );
   await expect(credits).toContainText('Full mesh detail retained.');
 });

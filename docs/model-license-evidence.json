@@ -1,5 +1,5 @@
 {
-  "checkedOn": "2026-10-20",
+  "checkedOn": "2026-10-21",
   "models": [
     {
       "file": "ferrari-f120-f40.glb",
@@ -137,6 +137,40 @@
         "textures": "Original dimensions and decoded RGBA pixels retained.",
         "materials": "The official glTF download supplies supported metallic/roughness materials and clearcoat. Material.001 is named Porsche_Body_Paint for paint discovery; material response is unchanged. Runtime thin-glass handling and curated paint apply.",
         "assetSha256": "afd944be3b89e87286a13df29c4283cf4f1cd493c792fb71f4b2b1dbca7f519a",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      }
+    },
+    {
+      "file": "porsche-917k-lm-red.glb",
+      "title": "Porsche 917k LM Red | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918",
+      "evidence": "https://api.sketchfab.com/v3/models/1b0f1751a3064ea1a015cdfceebf7918",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-21",
+      "review": "source-license-verified",
+      "upstream": {
+        "author": "JUSTGAME",
+        "source": "https://sketchfab.com/3d-models/porsche-917k-abb07de409db42178e3df943dd009103",
+        "evidence": "https://api.sketchfab.com/v3/models/abb07de409db42178e3df943dd009103",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "downloadLicense": "The official glTF archive matches the selected vecarz listing and CC BY 4.0 license. Its credited JUSTGAME source also lists CC BY 4.0. Both credits are retained in the site and asset metadata.",
+      "sourceReview": "The selected listing explicitly credits JUSTGAME. The upstream listing supplies vehicle history and no further source declaration; no game extraction is declared. The supplied publisher licenses agree, but this is not independent proof of authorship or manufacturer-rights clearance.",
+      "downloadLicenseText": "Model Information:\n* title:\tPorsche 917k LM Red | www.vecarz.com\n* source:\thttps://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918\n* author:\tvecarz (https://sketchfab.com/heynic)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Porsche 917k LM Red | www.vecarz.com\" (https://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "archiveSha256": "95e585b18032a02d2c2d9acf18b0e0d73502807a26d0df0a90688e965cfe14b9",
+      "optimization": {
+        "referenceBytes": 25589172,
+        "optimizedBytes": 10996664,
+        "triangles": 389972,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "Authored PBR materials, clearcoat and red racing livery retained. No roughness, metallic response or orientation changes. Shared runtime thin-glass handling applies.",
+        "assetSha256": "0ef83549da8552cf69c1ea6fe341530c981436d777c95fac0d251c8b7a9f3aca",
         "gltfErrors": 0,
         "gltfWarnings": 0
       }
