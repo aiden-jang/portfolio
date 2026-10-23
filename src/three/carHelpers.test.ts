@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
   prepareModelGlass,
+  buildLamps,
   autoFitToLength,
   detectBodyMaterial,
   disposeModel,
@@ -246,4 +247,14 @@ it('normalizes an authored diagonal parking pose before framing and grounding', 
   expect(size.z).toBeCloseTo(4.5);
   expect(size.x).toBeCloseTo(2.25);
   expect(bounds.min.y).toBeCloseTo(0);
+});
+
+it('lets moving headlight assemblies own the front lights while retaining taillights', () => {
+  const fixed = buildLamps(new THREE.Group(), new THREE.Vector3(2, 1, 4), 1);
+  expect(fixed.filter((lamp) => lamp.isHeadlight)).toHaveLength(2);
+  const group = new THREE.Group();
+  const moving = buildLamps(group, new THREE.Vector3(2, 1, 4), 1, false);
+  expect(moving).toHaveLength(2);
+  expect(moving.every((lamp) => !lamp.isHeadlight && lamp.baseIntensity > 0)).toBe(true);
+  expect(group.children).toHaveLength(2);
 });

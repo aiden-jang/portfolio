@@ -1,5 +1,16 @@
 import { readFileSync } from 'node:fs';
-import { AnimationClip, Group, QuaternionKeyframeTrack } from 'three';
+import {
+  AnimationClip,
+  BufferGeometry,
+  Float32BufferAttribute,
+  Group,
+  Mesh,
+  MeshPhysicalMaterial,
+  PointLight,
+  QuaternionKeyframeTrack,
+  Vector3,
+} from 'three';
+import { vi } from 'vitest';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { expect, it } from 'vitest';
 import { CARS } from '../config';
@@ -34,6 +45,33 @@ async function fixture() {
   const pivot = new Group();
   pivot.name = 'headlights';
   root.add(pivot);
+  const fixtureMeshes: Mesh<BufferGeometry, MeshPhysicalMaterial>[] = [];
+  for (const materialName of ['Material.008', 'Material.009']) {
+    const materialIndex = data.materials.findIndex(
+      (material: { name: string }) => material.name === materialName,
+    );
+    const primitives = data.meshes.flatMap(
+      (mesh: { primitives: { material: number; attributes: Record<string, number> }[] }) =>
+        mesh.primitives,
+    );
+    const primitive = primitives.find(
+      (primitive: { material: number }) => primitive.material === materialIndex,
+    );
+    const geometry = new BufferGeometry();
+    geometry.setAttribute(
+      'position',
+      new Float32BufferAttribute(values(primitive.attributes.POSITION, 3), 3),
+    );
+    geometry.setAttribute(
+      'normal',
+      new Float32BufferAttribute(values(primitive.attributes.NORMAL, 3), 3),
+    );
+    const material = new MeshPhysicalMaterial();
+    material.name = materialName;
+    const mesh = new Mesh(geometry, material);
+    fixtureMeshes.push(mesh);
+    pivot.add(mesh);
+  }
   const clip = new AnimationClip('Scene', -1, [
     new QuaternionKeyframeTrack(
       'headlights.quaternion',
@@ -41,7 +79,13 @@ async function fixture() {
       values(sampler.output, 4),
     ),
   ]);
-  return { root, pivot, clip, settings: CARS.find((car) => car.popupHeadlights)!.popupHeadlights };
+  return {
+    root,
+    pivot,
+    clip,
+    fixtureMeshes,
+    settings: CARS.find((car) => car.popupHeadlights)!.popupHeadlights,
+  };
 }
 
 it('uses the authored Miata open pose, reverses mid-travel and holds each endpoint', async () => {
@@ -81,4 +125,44 @@ it('does not expose animation controls when the configured clip is missing', asy
   const { root, settings } = await fixture();
   expect(createPopupHeadlights(root, [], settings)).toBeNull();
   expect(createPopupHeadlights(root, [], undefined)).toBeNull();
+});
+
+it('lights both actual lens surfaces, follows the hinges and restores owned resources', async () => {
+  const { root, pivot, clip, settings, fixtureMeshes } = await fixture();
+  const bulb = fixtureMeshes.find(({ material }) => material.name === settings!.bulbMaterial)!;
+  const original = bulb.material;
+  const controller = createPopupHeadlights(root, [clip], settings)!;
+  const glowing = bulb.material;
+  const disposed = vi.spyOn(glowing, 'dispose');
+  const lights: PointLight[] = [];
+  root.traverse((object) => {
+    if (object instanceof PointLight) lights.push(object);
+  });
+  expect(lights).toHaveLength(2);
+  expect(glowing).not.toBe(original);
+  expect(original.emissiveIntensity).toBe(1);
+  expect(original.emissive.getHex()).toBe(0);
+  expect(glowing.emissiveIntensity).toBeGreaterThan(1);
+  expect(glowing.emissive.r).toBeGreaterThan(glowing.emissive.b);
+  expect(lights.every((light) => light.intensity > 0)).toBe(true);
+  root.updateMatrixWorld(true);
+  const openedPosition = lights[0].getWorldPosition(new Vector3());
+  controller.setRaised(false);
+  for (let i = 0; i < 3; i++) controller.update(0.1);
+  expect(glowing.emissiveIntensity).toBeGreaterThan(0);
+  expect(glowing.emissiveIntensity).toBeLessThan(4);
+  controller.setRaised(false, true);
+  expect(glowing.emissiveIntensity).toBe(0);
+  expect(lights.every((light) => light.intensity === 0)).toBe(true);
+  expect(lights[0].getWorldPosition(new Vector3()).distanceTo(openedPosition)).toBeGreaterThan(
+    0.01,
+  );
+  controller.setRaised(true, true);
+  expect(glowing.emissiveIntensity).toBe(4);
+  expect(lights.every((light) => light.intensity > 0)).toBe(true);
+  controller.dispose();
+  expect(bulb.material).toBe(original);
+  expect(disposed).toHaveBeenCalledOnce();
+  expect(lights.every((light) => light.parent === null)).toBe(true);
+  expect(pivot.children).toHaveLength(2);
 });

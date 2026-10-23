@@ -143,7 +143,9 @@ also corrects the printed body's metallic response, uses neutral transparent
 glazing, and offsets the livery surface to avoid overlap artifacts. These runtime
 material adjustments preserve the source GLB, decals, geometry and wheel finishes.
 The Miata's embedded headlight animation is sampled by a reversible Lights button;
-headlights start raised, with instant pose changes for reduced motion.
+headlights start raised, with instant pose changes for reduced motion. Warm bulb
+emission and lens-mounted lights are added at runtime and fade with the opening
+pose; the source geometry, textures and animation remain unchanged.
 
 The new repaintable defaults are British Racing Green for the Miata, the source
 Solar Orange for the GR Supra, Shark Blue for the GT3 and Verde Ithaca for the

@@ -212,6 +212,7 @@ export function buildLamps(
   parent: THREE.Object3D,
   orientedSize: THREE.Vector3,
   scale: number,
+  includeHeadlights = true,
 ): Lamp[] {
   const halfL = TARGET_LENGTH / 2;
   const halfW = (orientedSize.x * scale) / 2;
@@ -222,8 +223,10 @@ export function buildLamps(
     parent.add(pt);
     out.push({ light: pt, baseIntensity: intensity, isHeadlight });
   };
-  add(HEADLIGHT_COLOR, -halfW * 0.62, halfL - 0.05, HEADLIGHT_INTENSITY, true);
-  add(HEADLIGHT_COLOR, halfW * 0.62, halfL - 0.05, HEADLIGHT_INTENSITY, true);
+  if (includeHeadlights) {
+    add(HEADLIGHT_COLOR, -halfW * 0.62, halfL - 0.05, HEADLIGHT_INTENSITY, true);
+    add(HEADLIGHT_COLOR, halfW * 0.62, halfL - 0.05, HEADLIGHT_INTENSITY, true);
+  }
   add(TAILLIGHT_COLOR, -halfW * 0.68, -halfL + 0.05, TAILLIGHT_INTENSITY, false);
   add(TAILLIGHT_COLOR, halfW * 0.68, -halfL + 0.05, TAILLIGHT_INTENSITY, false);
   return out;

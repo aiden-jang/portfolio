@@ -62,7 +62,10 @@ in front of its coplanar shell and corrects its body/glass metalness for the stu
 lighting without changing textures or wheel finishes. `popupHeadlights` samples the
 Miata's authored opening clip between its closed and raised poses; its Lights button
 reverses travel, starts raised on selection and snaps poses for reduced motion.
-The animation mixer releases its bindings when the model is replaced. Framing measures actual world-space
+The bulb materials emit warm light while raised; lens-mounted point lights follow
+the hinges and replace the Miata’s fixed front lights. Both fade with the opening
+pose. The controller restores cloned bulb materials and removes its lights when
+the model is replaced, alongside releasing animation bindings. Framing measures actual world-space
 vertices once on load so rotated mesh bounds do not lift cars off the floor. Only
 the default car and the smallest companion warm the HTTP cache when network conditions permit;
 heavier full-detail cars load on selection. `carHelpers` owns geometry,

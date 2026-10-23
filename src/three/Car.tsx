@@ -119,7 +119,10 @@ export function Car() {
         modelRef.current = model;
         displayedIndex.current = carIndex;
 
-        refs.lamps = spec.roadLights === false ? [] : buildLamps(group, orientedSize, scale);
+        refs.lamps =
+          spec.roadLights === false
+            ? []
+            : buildLamps(group, orientedSize, scale, !headlights.current);
         refs.bodyMaterial = detectBodyMaterial(model, spec.paintMaterial);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);
@@ -213,9 +216,7 @@ export function Car() {
     underglowMat.opacity = 0.1 + breath * 0.04 + rev * 0.22;
 
     for (const l of refs.lamps) {
-      const hiddenHeadlight =
-        headlights.current && l.isHeadlight && !useAppStore.getState().headlightsRaised;
-      const boost = hiddenHeadlight ? 0 : !l.isHeadlight ? 1 + rev * 6 : 1;
+      const boost = !l.isHeadlight ? 1 + rev * 6 : 1;
       l.light.intensity = l.baseIntensity * boost;
     }
   });

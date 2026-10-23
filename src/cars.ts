@@ -111,7 +111,13 @@ const registry: Omit<CarSpec, 'credit'>[] = [
   },
   {
     file: 'mazda-mx5-na.glb',
-    popupHeadlights: { clip: 'Scene', closedTime: 1 / 24, openTime: 1.7 },
+    popupHeadlights: {
+      clip: 'Scene',
+      closedTime: 1 / 24,
+      openTime: 1.7,
+      bulbMaterial: 'Material.009',
+      lensMaterial: 'Material.008',
+    },
     name: 'Mazda MX-5 Miata',
     code: 'NA',
     paintMaterial: 'Material.002',
