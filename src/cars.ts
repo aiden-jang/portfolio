@@ -189,6 +189,20 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     },
     exposure: 1,
   },
+  {
+    file: 'ferrari-f1-75.glb',
+    name: 'Ferrari F1-75',
+    code: '2022 F1',
+    fixedLivery: true,
+    preserveFlatMeshes: true,
+    roadLights: false,
+    defaultPaint: {
+      name: 'Scuderia Ferrari',
+      hex: '#bc242b',
+      preserveSource: true,
+    },
+    exposure: 1,
+  },
 ];
 
 export const CARS: CarSpec[] = registry.map((car) => ({
@@ -197,7 +211,7 @@ export const CARS: CarSpec[] = registry.map((car) => ({
 }));
 
 // Retired cars remain available to existing links, outside the curated picker.
-export const GARAGE_INDICES: readonly number[] = [0, 1, 5, 4, 2, 10, 3, 9, 6, 11, 12, 13, 14, 15];
+export const GARAGE_INDICES: readonly number[] = [0, 1, 5, 4, 2, 10, 3, 9, 6, 11, 12, 13, 16, 15];
 
 export function adjacentCar(index: number, direction: -1 | 1): number {
   const position = GARAGE_INDICES.indexOf(index);

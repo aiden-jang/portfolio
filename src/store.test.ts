@@ -91,23 +91,25 @@ describe('car paint defaults', () => {
   });
 });
 
-it.each(['porsche-917k-lm-red.glb', 'ferrari-296-gt3.glb', 'red-bull-rb16b.glb'])(
-  'preserves %s livery through direct paint and keyboard cycling',
-  (file) => {
-    const state = useAppStore.getState();
-    state.setCarIndex(CARS.findIndex((car) => car.file === file));
-    const material = new THREE.MeshStandardMaterial({ color: '#fafafa' });
-    const original = material.color.clone();
-    state.refs.bodyMaterial = material;
-    state.refs.bodyOriginalColor = original;
-    state.applyBodyColor('#365d7b');
-    expect(material.color).toEqual(original);
-    expect(useAppStore.getState().activeBodyColor).toBe('original');
-    state.cycleBodyColor();
-    expect(material.color).toEqual(original);
-    expect(useAppStore.getState().activeBodyColor).toBe('original');
-  },
-);
+it.each([
+  'porsche-917k-lm-red.glb',
+  'ferrari-296-gt3.glb',
+  'red-bull-rb16b.glb',
+  'ferrari-f1-75.glb',
+])('preserves %s livery through direct paint and keyboard cycling', (file) => {
+  const state = useAppStore.getState();
+  state.setCarIndex(CARS.findIndex((car) => car.file === file));
+  const material = new THREE.MeshStandardMaterial({ color: '#fafafa' });
+  const original = material.color.clone();
+  state.refs.bodyMaterial = material;
+  state.refs.bodyOriginalColor = original;
+  state.applyBodyColor('#365d7b');
+  expect(material.color).toEqual(original);
+  expect(useAppStore.getState().activeBodyColor).toBe('original');
+  state.cycleBodyColor();
+  expect(material.color).toEqual(original);
+  expect(useAppStore.getState().activeBodyColor).toBe('original');
+});
 
 it('guards headlight controls while unavailable or loading and resets the next Miata visit', () => {
   const state = useAppStore.getState();

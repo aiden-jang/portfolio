@@ -1,5 +1,32 @@
 import { type Mesh, MeshPhysicalMaterial, MeshStandardMaterial, type Object3D } from 'three';
 
+function prepareFerrariF1Finish(model: Object3D): void {
+  const roughness: Record<string, number> = {
+    CAR_CHASSIS: 0.45,
+    DECALS_1: 0.45,
+    CAR_CARBON: 0.45,
+    HALO_CARBON: 0.45,
+    TIRE_SIDES: 0.8,
+    TIRE_TREAD: 0.85,
+  };
+  model.traverse((object) => {
+    const mesh = object as Mesh;
+    if (!mesh.isMesh) return;
+    for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
+      const finish = material as MeshStandardMaterial;
+      if (!finish.isMeshStandardMaterial || !(finish.name in roughness)) continue;
+      // Painted livery, rubber and carbon are dielectric surfaces, not bare wheel metal.
+      finish.metalness = 0;
+      finish.roughness = roughness[finish.name];
+      if (finish.name === 'CAR_CHASSIS' && finish instanceof MeshPhysicalMaterial) {
+        finish.clearcoat = 0.2;
+        finish.clearcoatRoughness = 0.2;
+      }
+      finish.needsUpdate = true;
+    }
+  });
+}
+
 function prepareAventadorPaint(model: Object3D): void {
   const replacements = new Map<MeshStandardMaterial, MeshPhysicalMaterial>();
   model.traverse((object) => {
@@ -30,6 +57,7 @@ function prepareAventadorPaint(model: Object3D): void {
 }
 
 export function prepareModelFinish(model: Object3D, file: string): void {
+  if (file === 'ferrari-f1-75.glb') return prepareFerrariF1Finish(model);
   if (file === 'lamborghini-aventador.glb') return prepareAventadorPaint(model);
   if (file !== 'ferrari-296-gt3.glb') return;
   const visited = new Set<MeshPhysicalMaterial>();

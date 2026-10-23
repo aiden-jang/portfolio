@@ -91,3 +91,38 @@ it('keeps physical paint reusable and limits the coat to this car and body mater
   expect(trim.clearcoat).toBe(0);
   expect(trim.roughness).toBe(0.65);
 });
+
+it('keeps Ferrari F1 livery, carbon and rubber dielectric without repainting textures or rims', () => {
+  const model = new Group();
+  const body = new MeshPhysicalMaterial({
+    color: '#bc242b',
+    metalness: 0.87,
+    clearcoat: 1,
+    map: new Texture(),
+  });
+  body.name = 'CAR_CHASSIS';
+  const rubber = new MeshStandardMaterial({ metalness: 1, map: new Texture() });
+  rubber.name = 'TIRE_SIDES';
+  const carbon = new MeshStandardMaterial({ metalness: 1, map: new Texture() });
+  carbon.name = 'HALO_CARBON';
+  const rim = new MeshStandardMaterial({ metalness: 1, roughness: 0.2 });
+  rim.name = 'WHEEL_NUTS';
+  const materials = [body, rubber, carbon, rim];
+  const maps = materials.map((material) => material.map);
+  const bodyColor = body.color.clone();
+  const mesh = new Mesh(undefined, materials);
+  model.add(mesh);
+  prepareModelFinish(model, 'other.glb');
+  expect(body.metalness).toBe(0.87);
+  prepareModelFinish(model, 'ferrari-f1-75.glb');
+  expect(mesh.material).toEqual(materials);
+  expect(materials.map((material) => material.map)).toEqual(maps);
+  expect(body.color).toEqual(bodyColor);
+  expect(body.metalness).toBe(0);
+  expect(body.clearcoat).toBeLessThan(0.5);
+  expect(rubber.metalness).toBe(0);
+  expect(rubber.roughness).toBeGreaterThanOrEqual(0.8);
+  expect(carbon.metalness).toBe(0);
+  expect(rim.metalness).toBe(1);
+  expect(rim.roughness).toBe(0.2);
+});

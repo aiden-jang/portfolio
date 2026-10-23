@@ -9,24 +9,25 @@ dialogs; the evidence record preserves each earlier model’s own review date.
 
 ## Source licenses
 
-| Car                      | Model creator                                                                                                                                                                                                                              | Publisher license                                         | Review                                                                            |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Ferrari F40              | [vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95)                                                                                                                                                                 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Source license verified                                                           |
-| Mercedes-Benz 300 SL     | [Lexyc16](https://sketchfab.com/3d-models/505241c829c540a4921533000736904e)                                                                                                                                                                | CC BY 4.0                                                 | Source license verified                                                           |
-| Toyota Supra A80         | [Martin Trafas](https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8)                                                                                                                                                          | CC BY 4.0                                                 | Source license verified                                                           |
-| Porsche 911 RWB          | [SWIZ](https://sketchfab.com/3d-models/9b13e93711db460b99749ae95aea9764)                                                                                                                                                                   | CC BY 4.0                                                 | Source license verified; retain the embedded SWIZ copyright notice                |
-| BMW M3 E30               | [Martin Trafas](https://sketchfab.com/3d-models/ac3c7013434e403e8faff87948caf422)                                                                                                                                                          | CC BY 4.0                                                 | Source license verified                                                           |
-| Datsun 280Z              | [Martin Trafas](https://sketchfab.com/3d-models/0789ab2ece9442de94b3c41595e0ecbd)                                                                                                                                                          | CC BY 4.0                                                 | Source license verified                                                           |
-| Audi R8                  | [wallon](https://sketchfab.com/3d-models/e17e438f076f4427a58d93aa779edaed)                                                                                                                                                                 | CC BY 4.0                                                 | Source license verified                                                           |
-| Porsche 911 Turbo        | [Lexyc16](https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136)                                                                                                                                                                | CC BY 4.0                                                 | Source license verified                                                           |
-| Porsche 917K             | [vecarz](https://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918), based on [JUSTGAME](https://sketchfab.com/3d-models/porsche-917k-abb07de409db42178e3df943dd009103)                            | CC BY 4.0                                                 | Selected and credited upstream publisher licenses verified                        |
-| BMW M4 ADRO              | [vecarz](https://sketchfab.com/3d-models/bdea1df6c22e4efd9b01a52034789fd7), crediting [Ddiaz Design](https://sketchfab.com/3d-models/54f2273c00e94ebdba0f0db1a7945bf2)                                                                     | CC BY 4.0; upstream CC BY-NC-SA 4.0                       | Restored for personal use; underlying game-asset permission unverified            |
-| Mazda MX-5 Miata NA      | [Lexyc16](https://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041)                                                                                                                                            | CC BY 4.0                                                 | Matching official glTF archive license; stock styling                             |
-| Toyota GR Supra          | [Jiaxing / saitoyang](https://sketchfab.com/3d-models/toyota-supra-b7616ec43ecf4ffd8ed810d94f15eea6), crediting [thelightning](https://sketchfab.com/3d-models/toyota-gr-supra-9231f2d5e71a43dd87603dc0b339d99d)                           | CC BY 4.0                                                 | Modified modern Supra; both listing licenses checked                              |
-| Porsche 911 GT3 992      | [Outlaw Games](https://sketchfab.com/3d-models/porsche-911-gt3-593c83f3662a4a45a016f95dedd9f243), embedded credit to [Ddiaz Design](https://sketchfab.com/3d-models/2022-porsche-911-gt3-992-ba01afbaf32846e598db315be3507db3)             | CC BY-NC 4.0; upstream CC BY-NC-SA 4.0                    | Web adaptation retains upstream ShareAlike terms; source identifies CSR2 and GM25 |
-| Lamborghini Aventador SV | [Outlaw Games](https://sketchfab.com/3d-models/lamborghini-aventador-e328d9f5dcfd48bdbe8c73324b52ece3), embedded credit to [Ddiaz Design](https://sketchfab.com/3d-models/2019-lamborghini-aventador-svj-1910d24bbad34fdda0c4fe30f01b3cc1) | CC BY-NC 4.0; credited source CC BY 4.0                   | Embedded source names an SVJ base and identifies CSR2                             |
-| Ferrari 296 GT3          | [vecarz](https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f), crediting [MattDoesBlender](https://sketchfab.com/3d-models/ferrari-296-gt3-e6760847bb2d4b579d43cf916f348526)                     | CC BY-NC 4.0; credited source CC BY 4.0                   | Fixed original racing livery                                                      |
-| Red Bull RB16B           | [Dave Love SketchFab / Tyler_Dave](https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813)                                                                                                                    | CC BY 4.0                                                 | Fixed original racing livery; original provenance unverified                      |
+| Car                      | Model creator                                                                                                                                                                                                                              | Publisher license                                         | Review                                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Ferrari F40              | [vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95)                                                                                                                                                                 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Source license verified                                                                                |
+| Mercedes-Benz 300 SL     | [Lexyc16](https://sketchfab.com/3d-models/505241c829c540a4921533000736904e)                                                                                                                                                                | CC BY 4.0                                                 | Source license verified                                                                                |
+| Toyota Supra A80         | [Martin Trafas](https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8)                                                                                                                                                          | CC BY 4.0                                                 | Source license verified                                                                                |
+| Porsche 911 RWB          | [SWIZ](https://sketchfab.com/3d-models/9b13e93711db460b99749ae95aea9764)                                                                                                                                                                   | CC BY 4.0                                                 | Source license verified; retain the embedded SWIZ copyright notice                                     |
+| BMW M3 E30               | [Martin Trafas](https://sketchfab.com/3d-models/ac3c7013434e403e8faff87948caf422)                                                                                                                                                          | CC BY 4.0                                                 | Source license verified                                                                                |
+| Datsun 280Z              | [Martin Trafas](https://sketchfab.com/3d-models/0789ab2ece9442de94b3c41595e0ecbd)                                                                                                                                                          | CC BY 4.0                                                 | Source license verified                                                                                |
+| Audi R8                  | [wallon](https://sketchfab.com/3d-models/e17e438f076f4427a58d93aa779edaed)                                                                                                                                                                 | CC BY 4.0                                                 | Source license verified                                                                                |
+| Porsche 911 Turbo        | [Lexyc16](https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136)                                                                                                                                                                | CC BY 4.0                                                 | Source license verified                                                                                |
+| Porsche 917K             | [vecarz](https://sketchfab.com/3d-models/porsche-917k-lm-red-wwwvecarzcom-1b0f1751a3064ea1a015cdfceebf7918), based on [JUSTGAME](https://sketchfab.com/3d-models/porsche-917k-abb07de409db42178e3df943dd009103)                            | CC BY 4.0                                                 | Selected and credited upstream publisher licenses verified                                             |
+| BMW M4 ADRO              | [vecarz](https://sketchfab.com/3d-models/bdea1df6c22e4efd9b01a52034789fd7), crediting [Ddiaz Design](https://sketchfab.com/3d-models/54f2273c00e94ebdba0f0db1a7945bf2)                                                                     | CC BY 4.0; upstream CC BY-NC-SA 4.0                       | Restored for personal use; underlying game-asset permission unverified                                 |
+| Mazda MX-5 Miata NA      | [Lexyc16](https://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041)                                                                                                                                            | CC BY 4.0                                                 | Matching official glTF archive license; stock styling                                                  |
+| Toyota GR Supra          | [Jiaxing / saitoyang](https://sketchfab.com/3d-models/toyota-supra-b7616ec43ecf4ffd8ed810d94f15eea6), crediting [thelightning](https://sketchfab.com/3d-models/toyota-gr-supra-9231f2d5e71a43dd87603dc0b339d99d)                           | CC BY 4.0                                                 | Modified modern Supra; both listing licenses checked                                                   |
+| Porsche 911 GT3 992      | [Outlaw Games](https://sketchfab.com/3d-models/porsche-911-gt3-593c83f3662a4a45a016f95dedd9f243), embedded credit to [Ddiaz Design](https://sketchfab.com/3d-models/2022-porsche-911-gt3-992-ba01afbaf32846e598db315be3507db3)             | CC BY-NC 4.0; upstream CC BY-NC-SA 4.0                    | Web adaptation retains upstream ShareAlike terms; source identifies CSR2 and GM25                      |
+| Lamborghini Aventador SV | [Outlaw Games](https://sketchfab.com/3d-models/lamborghini-aventador-e328d9f5dcfd48bdbe8c73324b52ece3), embedded credit to [Ddiaz Design](https://sketchfab.com/3d-models/2019-lamborghini-aventador-svj-1910d24bbad34fdda0c4fe30f01b3cc1) | CC BY-NC 4.0; credited source CC BY 4.0                   | Embedded source names an SVJ base and identifies CSR2                                                  |
+| Ferrari 296 GT3          | [vecarz](https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f), crediting [MattDoesBlender](https://sketchfab.com/3d-models/ferrari-296-gt3-e6760847bb2d4b579d43cf916f348526)                     | CC BY-NC 4.0; credited source CC BY 4.0                   | Fixed original racing livery                                                                           |
+| Red Bull RB16B           | [Dave Love SketchFab / Tyler_Dave](https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813)                                                                                                                    | CC BY 4.0                                                 | Fixed original racing livery; original provenance unverified                                           |
+| Ferrari F1-75            | [vecarz](https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe)                                                                                                                                       | CC BY-NC-SA 4.0                                           | Fixed red racing livery; publisher identifies community-sourced assets; original authorship unverified |
 
 CC BY permits sharing and modification, including commercial use, provided its
 conditions are met. The Contact credits give the supplied model titles, authors,
@@ -108,12 +109,12 @@ shared model indices and loads only when selected.
 
 The picker order moves from classics through modified road cars to racing:
 F40, 300 SL, Datsun 280Z, E30, stock Supra A80, stock MX-5 NA, 911 RWB,
-M4 ADRO, R8 widebody, modified GR Supra, 911 GT3, Aventador SV, 296 GT3 and RB16B.
-The stock 930 and 917K remain hosted and credited for older shared URLs, but are
+M4 ADRO, R8 widebody, modified GR Supra, 911 GT3, Aventador SV, Ferrari F1-75 and RB16B.
+The stock 930, 917K and 296 GT3 remain hosted and credited for older shared URLs, but are
 absent from the picker, cycling, randomization and selection commands. Registry
 indices stay permanent; display order is independent.
 
-The six new web exports retain every decoded vertex attribute and triangle,
+The web exports retain every decoded vertex attribute and triangle,
 including the Supra’s detailed interior. Original texture dimensions and RGBA
 pixels, material parameters, node hierarchy and Miata animation data are preserved.
 Only vertex/triangle reordering, lossless meshopt encoding and lossless WebP
@@ -149,12 +150,35 @@ headlights start raised, with instant pose changes for reduced motion. Warm bulb
 emission and lens-mounted lights are added at runtime and fade with the opening
 pose; the source geometry, textures and animation remain unchanged.
 
-The new repaintable defaults are British Racing Green for the Miata, the source
+The repaintable defaults are British Racing Green for the Miata, the source
 Solar Orange for the GR Supra, Shark Blue for the GT3 and Verde Ithaca for the
-Aventador. Body materials are explicit, protecting wheels and trim. Both new race
-cars keep their original liveries and hide repaint controls. The RB16B retains its
-floor and wings and does not receive synthetic road-car headlights or taillights.
+Aventador. Body materials are explicit, protecting wheels and trim. Racing cars
+keep their original liveries and hide repaint controls. The F1-75 and RB16B retain
+their floors and wings and do not receive synthetic road-car headlights or taillights.
 Heavy models load only on selection; the arrival prefetch pool is unchanged.
+
+## Ferrari F1-75 replacement
+
+The Ferrari F1-75 occupies the 296 GT3's picker slot alongside the RB16B. It is
+appended to the permanent registry, so existing 296 GT3 links retain that car.
+The F1-75 preserves its red racing livery, wings and floor;
+paint changes and synthetic road-car lights are disabled.
+
+The selected official full-resolution glTF export contains 271,552 triangles,
+compared with 271,558 in the original upload. Every triangle and decoded vertex
+attribute in the selected export is retained, with exact texture dimensions and
+RGBA pixels. Lossless meshopt and verified lossless WebP encoding reduce the
+reference GLB from 20,792,388 to 13,552,428 bytes. Decoded validation reports no
+errors or warnings. The source has no animation clips. At runtime, painted livery,
+printed decals and carbon use dielectric response, and tires use rough nonmetallic
+rubber. These material corrections retain source colors and maps, wheel hardware,
+the source GLB material definitions and all geometry.
+
+The downloaded license file and current public API agree on CC BY-NC-SA 4.0.
+The adapted model retains that license, with credits in the site, embedded
+metadata and [the accompanying license notice](../public/models/ferrari-f1-75.LICENSE.txt).
+The publisher identifies community-sourced assets and does not establish original
+authorship; that provenance uncertainty remains recorded. The source code stays MIT.
 
 ## Updating the review
 

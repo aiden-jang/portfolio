@@ -8,10 +8,10 @@ for (const width of [1440, 390]) {
     await page.route('**/_vercel/**', (route) =>
       route.fulfill({ body: '', contentType: 'application/javascript' }),
     );
-    await page.goto('/?car=8&paint=original');
+    await page.goto('/?car=14&paint=original');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     const browse = page.getByRole('button', { name: /Browse cars\./ }).filter({ visible: true });
-    await expect(browse).toHaveAccessibleName('Browse cars. Porsche 917K, Le Mans');
+    await expect(browse).toHaveAccessibleName('Browse cars. Ferrari 296 GT3, GT3');
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
     const options = picker.locator('.car-option');
@@ -23,6 +23,12 @@ for (const width of [1440, 390]) {
     await expect(
       picker.getByRole('button', { name: 'Show Porsche 911 Turbo, 930', exact: true }),
     ).toHaveCount(0);
+    await expect(
+      picker.getByRole('button', { name: 'Show Ferrari 296 GT3, GT3', exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      picker.getByRole('button', { name: 'Show Ferrari F1-75, 2022 F1', exact: true }),
+    ).toBeVisible();
     await page.keyboard.press('End');
     await expect(
       picker.getByRole('button', { name: 'Show Red Bull RB16B, 2021 F1', exact: true }),

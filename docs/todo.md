@@ -2,7 +2,8 @@
 
 ## Garage model candidates
 
-Checked entries are in the curated garage. Unchecked entries remain candidates.
+Checked entries are available in the garage; retired entries are labeled below.
+Unchecked entries remain candidates.
 Personal, noncommercial use is intended. Unknown upstream sources are accepted as
 an uncertainty, rather than treated as verified ownership.
 
@@ -10,12 +11,13 @@ an uncertainty, rather than treated as verified ownership.
       — Dave Love SketchFab; CC BY 4.0; original source unverified.
 - [ ] [2010 Ferrari F10](https://sketchfab.com/3d-models/2010-ferrari-f10-7ae43257b15c4c8fb59b49f8fc6eb5b4)
       — Dave Love SketchFab; CC BY 4.0; original source unverified.
-- [ ] [Ferrari F175](https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe)
+- [x] [Ferrari F175](https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe)
       — vecarz; CC BY-NC-SA 4.0; original source unverified.
 - [x] [Toyota Supra](https://sketchfab.com/3d-models/toyota-supra-b7616ec43ecf4ffd8ed810d94f15eea6)
       — saitoyang, crediting thelightning; CC BY 4.0; original source unverified.
 - [x] [Ferrari 296 GT3](https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f)
       — vecarz, crediting MattDoesBlender; CC BY-NC 4.0; original source unverified.
+      Retired from the picker; existing shared links remain available.
 - [ ] [2021 Lamborghini Countach LPI 800-4](https://sketchfab.com/3d-models/2021-lamborghini-countach-lpi-800-4-d76b94884432422b966d1a7f8815afb5)
       — Lexyc16; CC BY-NC 4.0; creator states it was made in Blender.
 - [x] [Lamborghini Aventador](https://sketchfab.com/3d-models/lamborghini-aventador-e328d9f5dcfd48bdbe8c73324b52ece3)
@@ -42,4 +44,5 @@ focus on newer cars, such as the GR Supra. F1 candidates should favor newer desi
 The curated lineup keeps the F40, 300 SL, Datsun, E30, stock A80 Supra, RWB,
 M4 ADRO and R8, alongside the checked additions. The stock 930 and 917K are
 retired from the picker; existing shared URLs still resolve to their original cars.
-The RB16B is the selected F1 car; F10 and F175 remain alternatives.
+The Ferrari F1-75 replaces the 296 GT3 in the picker, alongside the RB16B. The F10
+remains an alternative. Existing 296 GT3 links still resolve to that original car.

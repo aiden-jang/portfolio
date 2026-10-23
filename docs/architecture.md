@@ -54,14 +54,18 @@ auto-fit framing and paint-material detection. Cars with ambiguous material
 layouts can declare an exact `paintMaterial` name; a missing explicit target disables
 paint instead of selecting an unrelated surface. The 917K targets its textured body
 panels so wheel, chassis and trim materials retain their authored colors. The added
-road cars target explicit paint materials. Race cars preserve flat splitter and floor
-meshes that could resemble a baked ground plane; the RB16B omits synthetic road lights.
+road cars target explicit paint materials. The F1-75 replaces the 296 GT3 in the
+picker; both keep permanent registry identities for shared URLs. Race cars preserve
+flat splitter and floor meshes that could resemble a baked ground plane; both F1
+cars omit synthetic road lights.
 The 296 GT3 declares an orientation offset to normalize its diagonal source pose
 before length fitting and grounding. `modelFinishes` keeps the 296's printed livery
 in front of its coplanar shell and corrects its body/glass metalness for the studio
 lighting without changing textures or wheel finishes. The Aventador's named body
 paint receives a physical clearcoat and lower roughness; its color, texture maps,
-wheel and trim materials remain intact. `popupHeadlights` samples the
+wheel and trim materials remain intact. The F1-75 keeps its source racing textures
+while correcting metallic paint, decal, carbon and tire responses for studio lighting.
+`popupHeadlights` samples the
 Miata's authored opening clip between its closed and raised poses; its Lights button
 reverses travel, starts raised on selection and snaps poses for reduced motion.
 The bulb materials emit warm light while raised; lens-mounted point lights follow

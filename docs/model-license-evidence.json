@@ -1,5 +1,5 @@
 {
-  "checkedOn": "2026-10-22",
+  "checkedOn": "2026-10-23",
   "models": [
     {
       "file": "ferrari-f120-f40.glb",
@@ -447,6 +447,43 @@
       },
       "downloadLicenseText": "Model Information:\n* title:\t2021 Redbull RB16B\n* source:\thttps://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813\n* author:\tDave Love SketchFab (https://sketchfab.com/Tyler_Dave)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"2021 Redbull RB16B\" (https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813) by Dave Love SketchFab (https://sketchfab.com/Tyler_Dave) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
       "downloadLicense": "Matching license.txt in official glTF archive."
+    },
+    {
+      "file": "ferrari-f1-75.glb",
+      "title": "Ferrari F175 | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe",
+      "evidence": "https://api.sketchfab.com/v3/models/cd2ace0f8a2c4229952e5453b38d7cfe",
+      "license": "CC BY-NC-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "verifiedOn": "2026-10-23",
+      "review": "publisher-license-recorded-personal-use",
+      "sourceReview": "Free download for study, research, personal projects and limited internal use.\n\n- If you use or publicly share this model, please [credit] VeCarz - www.vecarz.com.\n\n- Assets may come from publicly shared resources and enthusiast communities such as VK, Facebook groups, 3D/modding forums and online archives. Original authorship of older files may sometimes be unknown.\n\n- Please do not use this model in commercial projects, resale or paid asset packs without confirming the necessary rights.\n\n- If you are the original creator or rights holder, please contact us at www.vecarz.com with proof of ownership. We will review and take appropriate action. Showcase: www.vecarz.com Support: [PayPal Link] https://www.vecarz.com/blog/delorean-dmc-12-time-machine-1985\n\nEnjoy the model, and welcome to the VeCarz garage!",
+      "archiveSha256": "f1c699d8aad8ea7ac1af2ec1e6686159fa71124d0c34946fd36433ca0427ac15",
+      "originalArchiveSha256": "e895aa79131a346f7ef8d66bd72beb72bc17eb1ef9f102eaf9dff91f6348f32d",
+      "sourceAssetMetadata": {
+        "author": "vecarz (https://sketchfab.com/heynic)",
+        "license": "CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)",
+        "source": "https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe",
+        "title": "Ferrari F175 | www.vecarz.com"
+      },
+      "optimization": {
+        "referenceBytes": 20792388,
+        "optimizedBytes": 13552428,
+        "triangles": 271552,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "Authored web-export material parameters and node hierarchy retained.",
+        "animations": "Source contains no animation clips.",
+        "assetSha256": "a6b71344aee0c9b5fc2c63e2448650c8f3e3568d915f66042057bc7b260a05d6",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "downloadLicenseText": "Model Information:\n* title:\tFerrari F175 | www.vecarz.com\n* source:\thttps://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe\n* author:\tvecarz (https://sketchfab.com/heynic)\n\nModel License:\n* license type:\tCC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)\n* requirements:\tAuthor must be credited. No commercial use. Modified versions must have the same license.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Ferrari F175 | www.vecarz.com\" (https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)",
+      "notice": "Publisher identifies community-sourced assets. Original authorship and underlying vehicle rights are unverified. Personal noncommercial use only.",
+      "adaptationLicense": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "runtimeAdaptation": "Dielectric body livery, printed decals and carbon; rough nonmetallic tires. Source GLB materials, texture pixels, vertex attributes and hierarchy retained."
     }
   ]
 }
