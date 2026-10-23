@@ -142,6 +142,8 @@ is normalized at runtime before framing, without changing vertex data. The site
 also corrects the printed body's metallic response, uses neutral transparent
 glazing, and offsets the livery surface to avoid overlap artifacts. These runtime
 material adjustments preserve the source GLB, decals, geometry and wheel finishes.
+The Aventador's named body paint receives a runtime clearcoat and lower roughness.
+This retains its source GLB, paint color, textures, wheels and trim materials.
 The Miata's embedded headlight animation is sampled by a reversible Lights button;
 headlights start raised, with instant pose changes for reduced motion. Warm bulb
 emission and lens-mounted lights are added at runtime and fade with the opening

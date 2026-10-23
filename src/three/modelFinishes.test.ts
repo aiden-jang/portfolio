@@ -1,5 +1,5 @@
-import { Group, Mesh, MeshPhysicalMaterial, Texture } from 'three';
-import { expect, it } from 'vitest';
+import { Group, Mesh, MeshPhysicalMaterial, MeshStandardMaterial, Texture } from 'three';
+import { expect, it, vi } from 'vitest';
 import { prepareModelFinish } from './modelFinishes';
 
 function fixture() {
@@ -38,4 +38,56 @@ it('leaves matching material names in other cars untouched', () => {
   expect(body.metalness).toBe(1);
   expect(window.color.getHexString()).toBe('008000');
   expect(window.metalness).toBe(0.79);
+});
+
+it('gives shared Aventador paint a physical clearcoat while retaining its authored surface', () => {
+  const model = new Group();
+  const paint = new MeshStandardMaterial({
+    color: '#7b9e35',
+    roughness: 0.492,
+    metalness: 0.254,
+    map: new Texture(),
+    normalMap: new Texture(),
+  });
+  paint.name = 'RED_PAINT';
+  const wheel = new MeshStandardMaterial({ roughness: 0.7 });
+  const single = new Mesh(undefined, paint);
+  const multi = new Mesh(undefined, [paint, wheel]);
+  model.add(single, multi);
+  const dispose = vi.spyOn(paint, 'dispose');
+  const textureDispose = vi.spyOn(paint.map!, 'dispose');
+  prepareModelFinish(model, 'lamborghini-aventador.glb');
+  const finish = single.material as MeshPhysicalMaterial;
+  expect(finish).toBeInstanceOf(MeshPhysicalMaterial);
+  expect(finish.defines).toHaveProperty('PHYSICAL');
+  expect(finish.roughness).toBeLessThan(0.3);
+  expect(finish.clearcoat).toBe(1);
+  expect(finish.clearcoatRoughness).toBeLessThan(0.1);
+  expect(finish.color).toEqual(paint.color);
+  expect(finish.metalness).toBe(paint.metalness);
+  expect(finish.name).toBe('RED_PAINT');
+  expect(finish.map).toBe(paint.map);
+  expect(finish.normalMap).toBe(paint.normalMap);
+  expect(multi.material).toEqual([finish, wheel]);
+  expect(wheel.roughness).toBe(0.7);
+  expect(dispose).toHaveBeenCalledOnce();
+  expect(textureDispose).not.toHaveBeenCalled();
+});
+
+it('keeps physical paint reusable and limits the coat to this car and body material', () => {
+  const model = new Group();
+  const paint = new MeshPhysicalMaterial({ roughness: 0.492 });
+  paint.name = 'RED_PAINT';
+  const trim = new MeshPhysicalMaterial({ roughness: 0.65 });
+  trim.name = 'PAINT_BLACK';
+  const mesh = new Mesh(undefined, [paint, trim]);
+  model.add(mesh);
+  prepareModelFinish(model, 'other.glb');
+  expect(paint.clearcoat).toBe(0);
+  prepareModelFinish(model, 'lamborghini-aventador.glb');
+  prepareModelFinish(model, 'lamborghini-aventador.glb');
+  expect(mesh.material).toEqual([paint, trim]);
+  expect(paint.clearcoat).toBe(1);
+  expect(trim.clearcoat).toBe(0);
+  expect(trim.roughness).toBe(0.65);
 });

@@ -59,7 +59,9 @@ meshes that could resemble a baked ground plane; the RB16B omits synthetic road 
 The 296 GT3 declares an orientation offset to normalize its diagonal source pose
 before length fitting and grounding. `modelFinishes` keeps the 296's printed livery
 in front of its coplanar shell and corrects its body/glass metalness for the studio
-lighting without changing textures or wheel finishes. `popupHeadlights` samples the
+lighting without changing textures or wheel finishes. The Aventador's named body
+paint receives a physical clearcoat and lower roughness; its color, texture maps,
+wheel and trim materials remain intact. `popupHeadlights` samples the
 Miata's authored opening clip between its closed and raised poses; its Lights button
 reverses travel, starts raised on selection and snaps poses for reduced motion.
 The bulb materials emit warm light while raised; lens-mounted point lights follow
