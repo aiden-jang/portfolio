@@ -35,7 +35,7 @@ instead, including the reflection; DOM text is unaffected.
 The Zustand store separates infrequently updated UI state from mutable scene
 references. Frame updates mutate references rather than rerendering the page.
 Car selection resets paint/material references through a shared store action.
-Each car declares a named default finish in `config.ts`; the Ferrari retains its
+Each car declares a named default finish in `cars.ts`; the Ferrari retains its
 authored red. `paint.ts` owns the complementary swatches, color labels and strict
 hex parsing. The existing `paint=original` URL token restores the selected car's
 curated default; explicit six-digit hex links remain usable after palette updates.
@@ -53,9 +53,13 @@ case-study fragments.
 auto-fit framing and paint-material detection. Cars with ambiguous material
 layouts can declare an exact `paintMaterial` name; a missing explicit target disables
 paint instead of selecting an unrelated surface. The 917K targets its textured body
-panels so wheel, chassis and trim materials retain their authored colors. Framing measures actual world-space
+panels so wheel, chassis and trim materials retain their authored colors. The added
+road cars target explicit paint materials. Race cars preserve flat splitter and floor
+meshes that could resemble a baked ground plane; the RB16B omits synthetic road lights.
+The 296 GT3 declares an orientation offset to normalize its diagonal source pose
+before length fitting and grounding. Framing measures actual world-space
 vertices once on load so rotated mesh bounds do not lift cars off the floor. Only
-the two smallest models warm the HTTP cache when network conditions permit;
+the default car and the smallest companion warm the HTTP cache when network conditions permit;
 heavier full-detail cars load on selection. `carHelpers` owns geometry,
 material detection and GPU-resource disposal. Scene cleanup releases model resources,
 underglow geometry and textures, and the reflection target and material.
@@ -70,6 +74,10 @@ open dialogs and in hidden tabs, resuming when the car becomes available again.
 Reduced-motion scenes render around input, model loading and layout changes, then
 rest instead of drawing identical frames continuously. Model readiness is reported
 after its first rendered frame.
+
+The `?clean` capture mode keeps the scene visible without section bounds or page
+chrome, with a fixed camera. Use it for model previews; normal browsing continues
+to derive visibility from actual section positions.
 
 ## Projects and dialogs
 
@@ -125,8 +133,12 @@ fidelity or physical-device compatibility.
 ## Adding a car
 
 Add the compressed model to `public/models/`, a matching JPEG preview to
-`public/cars/`, and a specification with source attribution to `CARS` in
-`src/config.ts`. Keep the default and the explicit prefetch pool lightweight;
+`public/cars/`, and append a specification to the stable registry in `src/cars.ts`.
+Put attribution in `src/data/carCredits.json`. Never reorder registry IDs: numeric
+shared URLs resolve through that registry, including retired cars. `GARAGE_INDICES`
+defines the visible order for the picker, previous/next, number shortcuts, commands,
+randomization and captions. Add the new ID there; removing an ID retires it from
+selection without breaking old links. Keep the default and the explicit prefetch pool lightweight;
 full-detail models load only when selected. Check framing, paint detection, disposal,
 loading failure and attribution before committing. Verify both the publisher license
 and any credited upstream sources using [the model license review](model-licenses.md).

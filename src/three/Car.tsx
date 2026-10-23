@@ -95,14 +95,14 @@ export function Car() {
         refs.lamps = [];
 
         const model = gltf.scene;
-        const { scale, orientedSize } = autoFitToLength(model);
-        hideBakedPlanes(model);
+        const { scale, orientedSize } = autoFitToLength(model, spec.orientationYaw);
+        if (!spec.preserveFlatMeshes) hideBakedPlanes(model);
         prepareModelGlass(model);
         group.add(model);
         modelRef.current = model;
         displayedIndex.current = carIndex;
 
-        refs.lamps = buildLamps(group, orientedSize, scale);
+        refs.lamps = spec.roadLights === false ? [] : buildLamps(group, orientedSize, scale);
         refs.bodyMaterial = detectBodyMaterial(model, spec.paintMaterial);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);

@@ -234,3 +234,16 @@ describe('thin model glass', () => {
     expect(paint.transparent).toBe(false);
   });
 });
+
+it('normalizes an authored diagonal parking pose before framing and grounding', () => {
+  const model = new THREE.Group();
+  const car = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4));
+  car.rotation.y = 0.6435;
+  model.add(car);
+  autoFitToLength(model, -0.6435);
+  const bounds = new THREE.Box3().setFromObject(model, true);
+  const size = bounds.getSize(new THREE.Vector3());
+  expect(size.z).toBeCloseTo(4.5);
+  expect(size.x).toBeCloseTo(2.25);
+  expect(bounds.min.y).toBeCloseTo(0);
+});

@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { PNG } from 'pngjs';
-import { CARS } from '../src/config';
+import { GARAGE_INDICES } from '../src/config';
 
 async function accessible(page: Page) {
   const report = await new AxeBuilder({ page })
@@ -73,7 +73,7 @@ for (const width of [1440, 390]) {
               (images, count) =>
                 images.length === count &&
                 images.every((image) => (image as HTMLImageElement).naturalWidth > 0),
-              CARS.length,
+              GARAGE_INDICES.length,
             ),
         )
         .toBe(true);
@@ -239,4 +239,15 @@ test('a delayed effects download does not block content or the model request', a
   }
   await effectsDownloaded;
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+});
+
+test('clean capture mode frames a visible car without page chrome', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/?clean&car=0&paint=original');
+  await expect(page.locator('canvas')).toBeVisible();
+  await expect(page.locator('body')).toHaveAttribute('data-car-view', 'visible');
+  await expect(page.getByRole('heading')).toHaveCount(0);
+  await expect
+    .poll(async () => carPixels(await page.screenshot()), { timeout: 60_000 })
+    .toBeGreaterThan(1000);
 });

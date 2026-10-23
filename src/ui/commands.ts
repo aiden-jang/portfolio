@@ -1,4 +1,4 @@
-import { CARS, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
+import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
 
@@ -25,11 +25,11 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
       keywords: `${SECTION_LABELS[id]} navigate`,
       run: () => onSection(id),
     })),
-    ...CARS.map((car, index) => ({
+    ...GARAGE_INDICES.map((index, position) => ({
       id: `car-${index}`,
-      label: `Show ${car.name}`,
-      hint: String(index + 1),
-      keywords: `${car.name} ${car.code} vehicle garage`,
+      label: `Show ${CARS[index].name}`,
+      hint: String(position + 1),
+      keywords: `${CARS[index].name} ${CARS[index].code} vehicle garage`,
       run: () => {
         const state = useAppStore.getState();
         if (!state.isCarLoading && state.carIndex !== index) state.setCarIndex(index);

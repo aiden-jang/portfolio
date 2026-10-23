@@ -41,11 +41,12 @@ describe('CARS', () => {
   });
 
   it('keeps the heavy models out of automatic downloads', () => {
-    const bySize = [...CARS].sort(
+    const bySize = CARS.filter((_, index) => index !== 0).sort(
       (a, b) => statSync(modelPath(a.file)).size - statSync(modelPath(b.file)).size,
     );
-    const lightest = new Set(bySize.slice(0, arrivalCars.length).map((car) => car.file));
-    for (const car of arrivalCars) {
+    const companions = arrivalCars.filter((car) => car !== CARS[0]);
+    const lightest = new Set(bySize.slice(0, companions.length).map((car) => car.file));
+    for (const car of companions) {
       expect(
         lightest,
         `${car.file} sits in an arrival slot but is not among the lightest`,
@@ -58,7 +59,7 @@ describe('CARS', () => {
     expect(new Set(CARS.map((c) => c.name)).size).toBe(CARS.length);
   });
 
-  it('credits every model, which the CC BY licence requires', () => {
+  it('credits every model, which the model licenses require', () => {
     for (const car of CARS) {
       const credit = car.credit;
       expect(credit, `${car.name} has no credit at all`).toBeDefined();

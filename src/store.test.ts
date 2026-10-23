@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { CARS } from './config';
+import { CARS, GARAGE_INDICES } from './config';
 import { useAppStore } from './store';
 
 afterEach(() => useAppStore.setState(useAppStore.getInitialState(), true));
@@ -40,7 +40,7 @@ describe('car selection lifecycle', () => {
     state.refs.bodyMaterial = new THREE.MeshStandardMaterial();
     state.refs.bodyOriginalColor = new THREE.Color('red');
     useAppStore.setState({
-      carIndex: CARS.length - 1,
+      carIndex: GARAGE_INDICES.at(-1)!,
       activeBodyColor: '#ff0000',
       hasBodyMaterial: true,
     });
@@ -53,7 +53,7 @@ describe('car selection lifecycle', () => {
     expect(state.refs.bodyMaterial).toBeNull();
     expect(state.refs.bodyOriginalColor).toBeNull();
     state.prevCar();
-    expect(useAppStore.getState().carIndex).toBe(CARS.length - 1);
+    expect(useAppStore.getState().carIndex).toBe(GARAGE_INDICES.at(-1));
   });
 });
 
@@ -91,17 +91,20 @@ describe('car paint defaults', () => {
   });
 });
 
-it('preserves the 917K source livery through direct paint and keyboard cycling', () => {
-  const state = useAppStore.getState();
-  state.setCarIndex(CARS.findIndex((car) => car.file === 'porsche-917k-lm-red.glb'));
-  const material = new THREE.MeshStandardMaterial({ color: '#fafafa' });
-  const original = material.color.clone();
-  state.refs.bodyMaterial = material;
-  state.refs.bodyOriginalColor = original;
-  state.applyBodyColor('#365d7b');
-  expect(material.color).toEqual(original);
-  expect(useAppStore.getState().activeBodyColor).toBe('original');
-  state.cycleBodyColor();
-  expect(material.color).toEqual(original);
-  expect(useAppStore.getState().activeBodyColor).toBe('original');
-});
+it.each(['porsche-917k-lm-red.glb', 'ferrari-296-gt3.glb', 'red-bull-rb16b.glb'])(
+  'preserves %s livery through direct paint and keyboard cycling',
+  (file) => {
+    const state = useAppStore.getState();
+    state.setCarIndex(CARS.findIndex((car) => car.file === file));
+    const material = new THREE.MeshStandardMaterial({ color: '#fafafa' });
+    const original = material.color.clone();
+    state.refs.bodyMaterial = material;
+    state.refs.bodyOriginalColor = original;
+    state.applyBodyColor('#365d7b');
+    expect(material.color).toEqual(original);
+    expect(useAppStore.getState().activeBodyColor).toBe('original');
+    state.cycleBodyColor();
+    expect(material.color).toEqual(original);
+    expect(useAppStore.getState().activeBodyColor).toBe('original');
+  },
+);

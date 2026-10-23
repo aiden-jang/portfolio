@@ -1,5 +1,5 @@
 {
-  "checkedOn": "2026-10-21",
+  "checkedOn": "2026-10-22",
   "models": [
     {
       "file": "ferrari-f120-f40.glb",
@@ -204,6 +204,249 @@
         "triangles": 221800,
         "preservation": "The original mesh, node hierarchy, vertex data, texture data, orientation and materials are unchanged. Only asset attribution metadata is expanded."
       }
+    },
+    {
+      "file": "mazda-mx5-na.glb",
+      "title": "Mazda Miata MX-5 NA",
+      "author": "Lexyc16",
+      "creatorId": "493c518a107848cc91ffe4d6771947b4",
+      "source": "https://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041",
+      "evidence": "https://api.sketchfab.com/v3/models/d51fcd44b74f4daf8012c41e0400c041",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-22",
+      "review": "publisher-license-recorded-personal-use",
+      "sourceReview": "Maded in blender 2.82a",
+      "archiveSha256": "69438fb7e708c1c0c42b9ab89e1d82125a19196caf86dbfe008215c4a99b3c5f",
+      "sourceAssetMetadata": {
+        "author": "Lexyc16 (https://sketchfab.com/Lexyc16)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041",
+        "title": "Mazda Miata MX-5 NA"
+      },
+      "optimization": {
+        "referenceBytes": 1922816,
+        "optimizedBytes": 868232,
+        "triangles": 51316,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "Authored material parameters and node hierarchy retained.",
+        "animations": "Source animation data retained.",
+        "assetSha256": "5896704383fbae5d22ffcb46cb6e5873cf6021e0fd1b8fe1935986e1019cf2aa",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "downloadLicenseText": "Model Information:\n* title:\tMazda Miata MX-5 NA\n* source:\thttps://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041\n* author:\tLexyc16 (https://sketchfab.com/Lexyc16)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Mazda Miata MX-5 NA\" (https://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041) by Lexyc16 (https://sketchfab.com/Lexyc16) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "downloadLicense": "Matching license.txt in official glTF archive."
+    },
+    {
+      "file": "toyota-gr-supra.glb",
+      "title": "Toyota Supra",
+      "author": "Jiaxing",
+      "creatorId": "ea301dfe3723404c933f5a8f7efbf180",
+      "source": "https://sketchfab.com/3d-models/toyota-supra-b7616ec43ecf4ffd8ed810d94f15eea6",
+      "evidence": "https://api.sketchfab.com/v3/models/b7616ec43ecf4ffd8ed810d94f15eea6",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-22",
+      "review": "publisher-license-recorded-personal-use",
+      "sourceReview": "Modified Supra model from thelightning. Fixed bugs, changed textures, remodeled some parts.\n\nA quick render:![](https://static.wixstatic.com/media/8a357e_0113443daa8a42c98379661fe2a2aefb~mv2.jpg/v1/fill/w_2560,h_1440,al_c,q_90,enc_auto/8a357e_0113443daa8a42c98379661fe2a2aefb~mv2.jpg)\n![](https://static.wixstatic.com/media/8a357e_246b0c7d1b7448e28f166414ae740718~mv2.jpg/v1/fill/w_2560,h_1440,al_c,q_90,enc_auto/8a357e_246b0c7d1b7448e28f166414ae740718~mv2.jpg)\n\n\nPlease click the LIKE button if you enjoy this model.\nCheck my model page for more info!",
+      "archiveSha256": "0aaf200f3cadb9872ac6b2a5419743b9eda4ecce59f22f7c9c1df4c336470a24",
+      "sourceAssetMetadata": {
+        "author": "Jiaxing (https://sketchfab.com/saitoyang)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/toyota-supra-b7616ec43ecf4ffd8ed810d94f15eea6",
+        "title": "Toyota Supra"
+      },
+      "optimization": {
+        "referenceBytes": 56826588,
+        "optimizedBytes": 27451472,
+        "triangles": 1443662,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "Authored material parameters and node hierarchy retained.",
+        "animations": "Source animation data retained.",
+        "assetSha256": "2911f40989b41f9b482b31d2b54e6d93a92641bc95a20fd4e765ce3a30de64a7",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "downloadLicenseText": "Model Information:\n* title:\tToyota Supra\n* source:\thttps://sketchfab.com/3d-models/toyota-supra-b7616ec43ecf4ffd8ed810d94f15eea6\n* author:\tJiaxing (https://sketchfab.com/saitoyang)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Toyota Supra\" (https://sketchfab.com/3d-models/toyota-supra-b7616ec43ecf4ffd8ed810d94f15eea6) by Jiaxing (https://sketchfab.com/saitoyang) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "downloadLicense": "Matching license.txt in official glTF archive.",
+      "upstream": {
+        "author": "thelightning",
+        "url": "https://sketchfab.com/3d-models/toyota-gr-supra-9231f2d5e71a43dd87603dc0b339d99d",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence": "https://api.sketchfab.com/v3/models/9231f2d5e71a43dd87603dc0b339d99d",
+        "description": "If ihad a Toyota GR Supra, i definitely modify it like this :v",
+        "verifiedOn": "2026-10-22"
+      }
+    },
+    {
+      "file": "porsche-992-911-gt3.glb",
+      "title": "Porsche 911 GT3",
+      "author": "Outlaw Games™",
+      "creatorId": "45134c1b3a504520a7c5a78e994d2b25",
+      "source": "https://sketchfab.com/3d-models/porsche-911-gt3-593c83f3662a4a45a016f95dedd9f243",
+      "evidence": "https://api.sketchfab.com/v3/models/593c83f3662a4a45a016f95dedd9f243",
+      "license": "CC BY-NC 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "verifiedOn": "2026-10-22",
+      "review": "publisher-license-recorded-personal-use",
+      "sourceReview": "[**Commercial License**](https://discord.gg/c9ZCUmc6Dw)\n \nThis license grants permission to use the Models for commercial activities that generate revenue. It can be purchased at a price determined by the specific asset, either through our website or by contacting the owner of the asset.\n>  *$189.99 All Models*\n\n>  *$29.99 Per Model*\n\n---\n\n[**Standard License**](https://discord.gg/c9ZCUmc6Dw)\n\nAnyone who downloads any of our assets automatically agrees to this license. This license grants the user the right to use the asset for any purpose that does not generate revenue.\n> *$0,00*",
+      "archiveSha256": "2d3def9534d7bc48f1fc4afad99873afccef897eb335ec17b2ca368b6138a495",
+      "sourceAssetMetadata": {
+        "author": "Ddiaz Design (https://sketchfab.com/ddiaz-design)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/2022-porsche-911-gt3-992-ba01afbaf32846e598db315be3507db3",
+        "title": "2022 Porsche 911 GT3 (992)"
+      },
+      "optimization": {
+        "referenceBytes": 15566040,
+        "optimizedBytes": 11287968,
+        "triangles": 235721,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "Authored material parameters and node hierarchy retained.",
+        "animations": "Source animation data retained.",
+        "assetSha256": "cea9dee41f83a2a7d80d5e2733bc24dabd748b75e2b4a3e16faedec04af29642",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "downloadLicenseText": null,
+      "downloadLicense": "Original-format archive has no license.txt; publisher license was verified in the download dialog and public model API. Embedded source credits are retained separately.",
+      "upstream": {
+        "author": "Ddiaz Design",
+        "url": "https://sketchfab.com/3d-models/2022-porsche-911-gt3-992-ba01afbaf32846e598db315be3507db3",
+        "license": "CC BY-NC-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "evidence": "https://api.sketchfab.com/v3/models/ba01afbaf32846e598db315be3507db3",
+        "description": "Repositorio de modelos 3D de Ddiaz Design\n\nPorsche has taken the new 911 GT3 off the leash. The seventh edition of this high-performance sports car was also developed in close collaboration with Porsche Motorsport\n\nInstagram del proyecto: https://www.instagram.com/ddiaz.design/\n\nPaypal Donations: https://paypal.me/sergiodd\n\nModel from CSR2\n\nCredits: https://www.facebook.com/p/GM25-100042237200164/",
+        "verifiedOn": "2026-10-22"
+      },
+      "notice": "Credited source identifies CSR2 and GM25. Underlying game-asset permission is unverified.",
+      "adaptationLicense": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+    },
+    {
+      "file": "lamborghini-aventador.glb",
+      "title": "Lamborghini Aventador",
+      "author": "Outlaw Games™",
+      "creatorId": "45134c1b3a504520a7c5a78e994d2b25",
+      "source": "https://sketchfab.com/3d-models/lamborghini-aventador-e328d9f5dcfd48bdbe8c73324b52ece3",
+      "evidence": "https://api.sketchfab.com/v3/models/e328d9f5dcfd48bdbe8c73324b52ece3",
+      "license": "CC BY-NC 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "verifiedOn": "2026-10-22",
+      "review": "publisher-license-recorded-personal-use",
+      "sourceReview": "# CURRENT MONEY LOSS: \n$752,620 ($752k)\n\n-\n# SUPPORT ME\nJust join our Discord server already. Link is in ACCOUNT BIO\n\n-\n\n\n**Credits:** *@myself*",
+      "archiveSha256": "43282e3ac23ba3a6ef5425dc12e2d7c388c4ff6212edf1428cdfa0fbda2fac88",
+      "sourceAssetMetadata": {
+        "author": "Ddiaz Design (https://sketchfab.com/ddiaz-design)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/2019-lamborghini-aventador-svj-1910d24bbad34fdda0c4fe30f01b3cc1",
+        "title": "2019 Lamborghini Aventador SVJ"
+      },
+      "optimization": {
+        "referenceBytes": 15395208,
+        "optimizedBytes": 10371596,
+        "triangles": 211767,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "Authored material parameters and node hierarchy retained.",
+        "animations": "Source animation data retained.",
+        "assetSha256": "4b38d8e15ae58a19757a0c2a1623dad4c7bfad4dffa43b68e97b626aac108af6",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "downloadLicenseText": null,
+      "downloadLicense": "Original-format archive has no license.txt; publisher license was verified in the download dialog and public model API. Embedded source credits are retained separately.",
+      "upstream": {
+        "author": "Ddiaz Design",
+        "url": "https://sketchfab.com/3d-models/2019-lamborghini-aventador-svj-1910d24bbad34fdda0c4fe30f01b3cc1",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence": "https://api.sketchfab.com/v3/models/1910d24bbad34fdda0c4fe30f01b3cc1",
+        "description": "Repositorio de modelos 3D de Ddiaz Design\n\n![](https://www.motorsport-total.com/img/2018/181020/268760_w620_h500.jpg?ts=1726076706)\n\nAutomobili Lamborghini unveiled the Lamborghini Aventador SVJ in a worldwide premiere during 2018 Monterey Car Week in California at \"The Quail, A Motorsports Gathering\". The distillation of extraordinary design, groundbreaking technologies and the ultimate in handling, performance and driver enjoyment, the Aventador SVJ creates pure driving perfection, taking the concept of a super sports car to a new dimension.\n\nInstagram del proyecto: https://www.instagram.com/ddiaz.design/\n\nPaypal Donations: https://paypal.me/sergiodd\n\nBased on a CSR2 3d model\n\nCredits: https://vk.com/album-84830094_262202698",
+        "verifiedOn": "2026-10-22"
+      },
+      "notice": "Embedded source credits an SVJ base built from CSR2. Underlying game-asset permission is unverified."
+    },
+    {
+      "file": "ferrari-296-gt3.glb",
+      "title": "Ferrari 296 GT3 | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f",
+      "evidence": "https://api.sketchfab.com/v3/models/a463226115184535928ec75660c6571f",
+      "license": "CC BY-NC 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "verifiedOn": "2026-10-22",
+      "review": "publisher-license-recorded-personal-use",
+      "sourceReview": "Credit[MattDoesBlender]\n\nThis car has devoured GT championships like they were antipasti — from IMSA to Blancpain. And with every win, it proves that while Lamborghini shows off, Ferrari shows up.",
+      "archiveSha256": "30583a950ac2b86ca91c283fed4e459f9202ebf82d0c66bef4be9c671b65491e",
+      "sourceAssetMetadata": {
+        "author": "vecarz (https://sketchfab.com/heynic)",
+        "license": "CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+        "source": "https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f",
+        "title": "Ferrari 296 GT3 | www.vecarz.com"
+      },
+      "optimization": {
+        "referenceBytes": 51844456,
+        "optimizedBytes": 33902304,
+        "triangles": 411750,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "Authored material parameters and node hierarchy retained.",
+        "animations": "Source animation data retained.",
+        "assetSha256": "f775f723e7e9d0ee4466cfe34589e30c3c65eca64c24720c28a02493464bcd9d",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "downloadLicenseText": "Model Information:\n* title:\tFerrari 296 GT3 | www.vecarz.com\n* source:\thttps://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f\n* author:\tvecarz (https://sketchfab.com/heynic)\n\nModel License:\n* license type:\tCC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)\n* requirements:\tAuthor must be credited. No commercial use.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Ferrari 296 GT3 | www.vecarz.com\" (https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+      "downloadLicense": "Matching license.txt in official glTF archive.",
+      "upstream": {
+        "author": "MattDoesBlender",
+        "url": "https://sketchfab.com/3d-models/ferrari-296-gt3-e6760847bb2d4b579d43cf916f348526",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence": "https://api.sketchfab.com/v3/models/e6760847bb2d4b579d43cf916f348526",
+        "description": "",
+        "verifiedOn": "2026-10-22"
+      }
+    },
+    {
+      "file": "red-bull-rb16b.glb",
+      "title": "2021 Redbull RB16B",
+      "author": "Dave Love SketchFab",
+      "creatorId": "d00fd6e7881e43d4821e30a82d10dbf7",
+      "source": "https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813",
+      "evidence": "https://api.sketchfab.com/v3/models/81f071aa2dd04403b0b408c1b0d7b813",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-22",
+      "review": "publisher-license-recorded-personal-use",
+      "sourceReview": "The Redbull RB16B is a Formula One racing car designed and constructed by Redbull to compete in the 2021 Formula One World Championship. The car was driven by Max Verstappen and Sergio Pérez. The RB16B was an evolution of its predecessor, the RB16, which competed during the 2020 season. \n\nIt is historically significant as the car that propelled Max Verstappen to his first World Drivers' Championship, ending Mercedes' seven-year streak of drivers' titles in the turbo-hybrid era. It also marked the final season of Honda's official factory involvement as an engine supplier in Formula One, securing their first drivers' title since Ayrton Senna in 1991.\n\n![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu1fWs-BXRd5JvBKslBSG72ZhVGldEPwEuiNDD6P5TFtsZimqfAQF6L6I&s=10) Official full-resolution glTF export chosen because its opaque tires and carbon materials match the listing presentation. The original upload marks solid surfaces transparent. Geometry comparison is against the selected official web export, which contains 240779 triangles; the original upload contains 240827. No site simplification or texture resizing is applied.",
+      "archiveSha256": "15fa47891c8cb33f3345dee6d3d9178b4d0a286bdec433e0bd8557d4cd1df204",
+      "sourceAssetMetadata": {
+        "author": "Dave Love SketchFab (https://sketchfab.com/Tyler_Dave)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813",
+        "title": "2021 Redbull RB16B"
+      },
+      "optimization": {
+        "referenceBytes": 14394440,
+        "optimizedBytes": 9318232,
+        "triangles": 240779,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "Original dimensions and decoded RGBA pixels retained.",
+        "materials": "Authored material parameters and node hierarchy retained.",
+        "animations": "Source animation data retained.",
+        "assetSha256": "cce78f16aae0423206bab99663bf9fafc63831205af7f8e8ff162076ffea5e85",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "downloadLicenseText": "Model Information:\n* title:\t2021 Redbull RB16B\n* source:\thttps://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813\n* author:\tDave Love SketchFab (https://sketchfab.com/Tyler_Dave)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"2021 Redbull RB16B\" (https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813) by Dave Love SketchFab (https://sketchfab.com/Tyler_Dave) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "downloadLicense": "Matching license.txt in official glTF archive."
     }
   ]
 }

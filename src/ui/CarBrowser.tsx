@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CARS } from '../config';
+import { CARS, GARAGE_INDICES } from '../config';
 import { useAppStore } from '../store';
 import { usePageScrollLock } from './usePageScrollLock';
 
@@ -17,8 +17,10 @@ export function CarBrowser({ onClose, returnFocus }: Props) {
   usePageScrollLock(true);
   useEffect(() => {
     dialog.current?.showModal();
-    options.current[index]?.focus({ preventScroll: true });
-    options.current[index]?.scrollIntoView({ block: 'nearest' });
+    options.current[Math.max(0, GARAGE_INDICES.indexOf(index))]?.focus({ preventScroll: true });
+    options.current[Math.max(0, GARAGE_INDICES.indexOf(index))]?.scrollIntoView({
+      block: 'nearest',
+    });
     return () => {
       const target =
         returnFocus?.isConnected && returnFocus.getClientRects().length
@@ -61,13 +63,13 @@ export function CarBrowser({ onClose, returnFocus }: Props) {
           const next = position + steps[event.key];
           target =
             event.key === 'ArrowLeft' || event.key === 'ArrowRight'
-              ? (next + CARS.length) % CARS.length
-              : next >= 0 && next < CARS.length
+              ? (next + GARAGE_INDICES.length) % GARAGE_INDICES.length
+              : next >= 0 && next < GARAGE_INDICES.length
                 ? next
                 : position;
         }
         if (event.key === 'Home') target = 0;
-        if (event.key === 'End') target = CARS.length - 1;
+        if (event.key === 'End') target = GARAGE_INDICES.length - 1;
         if (target !== undefined) {
           event.preventDefault();
           options.current[target]?.focus();
@@ -84,47 +86,50 @@ export function CarBrowser({ onClose, returnFocus }: Props) {
         </button>
       </header>
       <div className="car-browser-grid">
-        {CARS.map((car, position) => (
-          <div key={car.file} className="car-browser-card">
-            <button
-              ref={(element) => {
-                options.current[position] = element;
-              }}
-              type="button"
-              className="car-option"
-              aria-label={`${index === position && error ? 'Retry' : 'Show'} ${car.name}, ${car.code}`}
-              aria-pressed={index === position}
-              aria-disabled={loading}
-              onClick={() => {
-                if (loading) return;
-                if (position !== index) choose(position);
-                else if (error) retry();
-                onClose();
-              }}
-            >
-              <CarThumbnail file={car.file} />
-              <span className="car-option-name">
-                {car.name}
-                <span aria-hidden="true">{index === position ? '✓' : '↗'}</span>
-              </span>
-              <span className="car-option-code">
-                {car.code}
-                {index === position ? (error ? ' · Choose to retry' : ' · Selected') : ''}
-                <span className="block">{car.defaultPaint.name}</span>
-              </span>
-            </button>
-            {car.credit && (
-              <a
-                href={car.credit.url}
-                target="_blank"
-                aria-describedby="external-link-hint"
-                rel="noopener noreferrer"
+        {GARAGE_INDICES.map((carIndex, position) => {
+          const car = CARS[carIndex];
+          return (
+            <div key={car.file} className="car-browser-card">
+              <button
+                ref={(element) => {
+                  options.current[position] = element;
+                }}
+                type="button"
+                className="car-option"
+                aria-label={`${index === carIndex && error ? 'Retry' : 'Show'} ${car.name}, ${car.code}`}
+                aria-pressed={index === carIndex}
+                aria-disabled={loading}
+                onClick={() => {
+                  if (loading) return;
+                  if (carIndex !== index) choose(carIndex);
+                  else if (error) retry();
+                  onClose();
+                }}
               >
-                Model by {car.credit.author} ↗
-              </a>
-            )}
-          </div>
-        ))}
+                <CarThumbnail file={car.file} />
+                <span className="car-option-name">
+                  {car.name}
+                  <span aria-hidden="true">{index === carIndex ? '✓' : '↗'}</span>
+                </span>
+                <span className="car-option-code">
+                  {car.code}
+                  {index === carIndex ? (error ? ' · Choose to retry' : ' · Selected') : ''}
+                  <span className="block">{car.defaultPaint.name}</span>
+                </span>
+              </button>
+              {car.credit && (
+                <a
+                  href={car.credit.url}
+                  target="_blank"
+                  aria-describedby="external-link-hint"
+                  rel="noopener noreferrer"
+                >
+                  Model by {car.credit.author} ↗
+                </a>
+              )}
+            </div>
+          );
+        })}
       </div>
       <footer className="car-browser-footer">
         <span>Individual model licenses apply. Credits in Contact.</span>

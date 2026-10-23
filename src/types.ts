@@ -40,6 +40,9 @@ export type CarSpec = {
   exposure: number;
   paintMaterial?: string;
   fixedLivery?: boolean;
+  preserveFlatMeshes?: boolean;
+  orientationYaw?: number;
+  roadLights?: boolean;
   defaultPaint: { name: string; hex: string; preserveSource?: boolean };
   credit?: Credit;
 };

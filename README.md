@@ -18,6 +18,8 @@ Car controls appear only when Intro or Contact fills the viewport. The Contact
 car appears earlier, holding its opening angle until the section is almost in
 place. Keyboard controls, reduced motion, loading errors and model attribution
 are supported. The portfolio content remains available if the 3D scene fails.
+The garage mixes stock classics, newer modified road cars and fixed-livery race
+cars. Retired selections remain available through existing shared links.
 
 ## Run locally
 

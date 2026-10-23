@@ -131,6 +131,10 @@ async function paintFixture(file: string) {
 
 it.each([
   ['porsche-917k-lm-red.glb', 'body'],
+  ['mazda-mx5-na.glb', 'Material.002'],
+  ['toyota-gr-supra.glb', 'carpaint'],
+  ['porsche-992-911-gt3.glb', 'Porsche_911GT3_2022Paint_Material'],
+  ['lamborghini-aventador.glb', 'RED_PAINT'],
   ['bmw-g82-m4-adro.glb', 'untitledBMW_M4CompetitionG82TNR3_2021PaintTNR_Material_008'],
 ])('paints %s body panels without recoloring wheels or trim', async (file, materialName) => {
   const spec = CARS.find((car) => car.file === file)!;
@@ -145,4 +149,16 @@ it.each([
     if (material === selected) expect(material.color.getHexString()).toBe('365d7b');
     else expect(material.color).toEqual(before[index]);
   }
+});
+
+it('ships opaque Red Bull tires and outer carbon panels instead of the transparent original export', () => {
+  const bytes = readFileSync(new URL('../../public/models/red-bull-rb16b.glb', import.meta.url));
+  const length = bytes.readUInt32LE(12);
+  const data: Model = JSON.parse(bytes.subarray(20, 20 + length).toString());
+  const solids = data.materials.filter(
+    ({ name }) =>
+      /^Material_\d+$/.test(name) || name === 'redbull_carbon1' || name === 'redbull_paint',
+  );
+  expect(solids.length).toBeGreaterThan(5);
+  for (const material of solids) expect(material.alphaMode ?? 'OPAQUE').toBe('OPAQUE');
 });

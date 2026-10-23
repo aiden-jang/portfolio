@@ -18,7 +18,7 @@ const CAR_LOCK_MS = 600;
 // Below this, a mouse's horizontal jitter would cycle the car on its own.
 const MIN_WHEEL_DELTA = 10;
 
-export function useNavigation() {
+export function useNavigation(sceneOnly = false) {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
   const snapLockUntil = useRef(0);
   const currentSection = useRef(0);
@@ -40,11 +40,12 @@ export function useNavigation() {
   }, []);
 
   const getScrollT = useCallback((): number => {
+    if (sceneOnly) return 0;
     return sectionProgress(
       window.scrollY,
       SECTION_IDS.map((id) => document.getElementById(id)?.offsetTop ?? 0),
     );
-  }, []);
+  }, [sceneOnly]);
 
   const goToSection = useCallback(
     (idx: number): void => {
@@ -61,6 +62,14 @@ export function useNavigation() {
   );
 
   useEffect(() => {
+    if (sceneOnly) {
+      document.body.dataset.carView = 'visible';
+      document.body.dataset.carControls = 'hidden';
+      return () => {
+        delete document.body.dataset.carView;
+        delete document.body.dataset.carControls;
+      };
+    }
     const dialogIsOpen = () =>
       !!document.querySelector(
         'dialog[open], [role="dialog"][aria-modal="true"]:not([aria-hidden="true"])',
@@ -151,7 +160,7 @@ export function useNavigation() {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, [getScrollT, goToSection, setSectionIndex, cycleCarThrottled, prevCarThrottled]);
+  }, [sceneOnly, getScrollT, goToSection, setSectionIndex, cycleCarThrottled, prevCarThrottled]);
 
   return {
     goToSection,

@@ -23,7 +23,7 @@ const isCleanMode =
   typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('clean');
 
 export function App() {
-  const { getScrollT, scrollToSection } = useNavigation();
+  const { getScrollT, scrollToSection } = useNavigation(isCleanMode);
   useSceneUrl();
   useReveal();
 

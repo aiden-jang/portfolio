@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
-import { CARS, SECTION_IDS, SECTION_LABELS } from '../config';
+import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS } from '../config';
 import { useAppStore } from '../store';
 import { buildCommands, matchCommands, modifierKey } from './commands';
 
 const build = () => buildCommands({ onSection: vi.fn(), setNotice: vi.fn() });
 
 describe('buildCommands', () => {
-  it('offers every section and every car', () => {
+  it('offers every section and every curated car', () => {
     const commands = build();
     for (const id of SECTION_IDS) {
       expect(
@@ -14,7 +14,8 @@ describe('buildCommands', () => {
         `no command for ${id}`,
       ).toBe(true);
     }
-    for (const [index, car] of CARS.entries()) {
+    for (const index of GARAGE_INDICES) {
+      const car = CARS[index];
       const command = commands.find((c) => c.id === `car-${index}`);
       expect(command, `no command for ${car.name}`).toBeDefined();
       expect(command!.label).toContain(car.name);

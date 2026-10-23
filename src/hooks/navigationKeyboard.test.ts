@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, expect, it, vi } from 'vitest';
+import { GARAGE_INDICES } from '../config';
 import { handleNavigationKey } from './navigationKeyboard';
 import { useAppStore } from '../store';
 
@@ -57,4 +58,12 @@ it('preserves browser shortcuts and keys another control already handled', () =>
   expect(cycle).not.toHaveBeenCalled();
   expect(navigation.goToSection).not.toHaveBeenCalled();
   expect(navigation.previousCar).not.toHaveBeenCalled();
+});
+
+it('number keys select visible positions after the garage is reordered', () => {
+  useAppStore.setState({ isCarLoading: false });
+  for (let number = 1; number <= 9; number++) {
+    handleNavigationKey(new KeyboardEvent('keydown', { key: String(number) }), 0, actions());
+    expect(useAppStore.getState().carIndex).toBe(GARAGE_INDICES[number - 1]);
+  }
 });

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type * as THREE from 'three';
-import { CARS } from './config';
+import { CARS, GARAGE_INDICES, adjacentCar } from './config';
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
 
@@ -75,15 +75,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     refs.bodyOriginalColor = null;
     set({ carIndex: i, activeBodyColor: 'original', hasBodyMaterial: false });
   },
-  cycleCar: () => get().setCarIndex((get().carIndex + 1) % CARS.length),
-  prevCar: () => get().setCarIndex((get().carIndex - 1 + CARS.length) % CARS.length),
+  cycleCar: () => get().setCarIndex(adjacentCar(get().carIndex, 1)),
+  prevCar: () => get().setCarIndex(adjacentCar(get().carIndex, -1)),
   randomizeGarage: () => {
     const { carIndex: currentIndex } = get();
     const refs = get().refs;
     refs.bodyMaterial = null;
     refs.bodyOriginalColor = null;
-    const offset = 1 + Math.floor(Math.random() * (CARS.length - 1));
-    const nextIndex = (currentIndex + offset) % CARS.length;
+    const choices = GARAGE_INDICES.filter((index) => index !== currentIndex);
+    const nextIndex = choices[Math.floor(Math.random() * choices.length)];
     const colors = paintChoices(CARS[nextIndex]).map(({ value }) => value);
     set({
       carIndex: nextIndex,

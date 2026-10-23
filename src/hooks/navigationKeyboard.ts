@@ -1,4 +1,4 @@
-import { CARS, SECTION_IDS } from '../config';
+import { GARAGE_INDICES, SECTION_IDS } from '../config';
 import { useAppStore } from '../store';
 
 type NavigationActions = {
@@ -24,8 +24,8 @@ export function handleNavigationKey(
     ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(e.key);
   if (inField || readingProjects) return;
   if (/^[1-9]$/.test(e.key)) {
-    const carIndex = Number(e.key) - 1;
-    if (carIndex < CARS.length) {
+    const carIndex = GARAGE_INDICES[Number(e.key) - 1];
+    if (carIndex !== undefined) {
       e.preventDefault();
       const state = useAppStore.getState();
       if (!state.isCarLoading && state.carIndex !== carIndex) state.setCarIndex(carIndex);
