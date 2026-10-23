@@ -8,6 +8,7 @@ import { SceneBoundary } from './SceneBoundary';
 import { WorkModal } from './WorkModal';
 import { ContactSection } from './sections/Contact';
 import { CommandMenu } from './CommandMenu';
+import { HeadlightButton } from './HeadlightButton';
 import { CarPicker } from './CarPicker';
 import { useAppStore } from '../store';
 import type { WorkDetail } from '../types';
@@ -189,5 +190,28 @@ it('keeps new copy feedback until its own timeout expires', async () => {
     expect(host.querySelector('[role="status"]')?.textContent).toBe('');
   } finally {
     vi.useRealTimers();
+  }
+});
+
+it('shows an accessible headlight toggle only for the Miata and disables it until ready', async () => {
+  const previous = useAppStore.getState();
+  try {
+    useAppStore.setState({
+      carIndex: 10,
+      hasPopupHeadlights: true,
+      isCarLoading: true,
+      headlightsRaised: true,
+    });
+    await act(() => root.render(createElement(HeadlightButton)));
+    const button = host.querySelector('button')!;
+    expect(button.disabled).toBe(true);
+    await act(() => useAppStore.setState({ isCarLoading: false }));
+    await act(() => button.click());
+    expect(button.getAttribute('aria-label')).toBe('Pop-up headlights');
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+    await act(() => useAppStore.getState().setCarIndex(0));
+    expect(host.querySelector('button')).toBeNull();
+  } finally {
+    await act(() => useAppStore.setState(previous));
   }
 });

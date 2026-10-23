@@ -28,6 +28,9 @@ type AppState = {
   isCarLoading: boolean;
   carLoadError: string | null;
   carRetryVersion: number;
+  headlightsRaised: boolean;
+  hasPopupHeadlights: boolean;
+  toggleHeadlights: () => void;
 
   refs: Refs;
 
@@ -61,6 +64,13 @@ export const useAppStore = create<AppState>((set, get) => ({
   isCarLoading: true,
   carLoadError: null,
   carRetryVersion: 0,
+  headlightsRaised: true,
+  hasPopupHeadlights: false,
+  toggleHeadlights: () => {
+    const state = get();
+    if (CARS[state.carIndex].popupHeadlights && state.hasPopupHeadlights && !state.isCarLoading)
+      set({ headlightsRaised: !state.headlightsRaised });
+  },
   refs: {
     bodyMaterial: null,
     bodyOriginalColor: null,
@@ -73,7 +83,13 @@ export const useAppStore = create<AppState>((set, get) => ({
     const refs = get().refs;
     refs.bodyMaterial = null;
     refs.bodyOriginalColor = null;
-    set({ carIndex: i, activeBodyColor: 'original', hasBodyMaterial: false });
+    set({
+      headlightsRaised: true,
+      hasPopupHeadlights: false,
+      carIndex: i,
+      activeBodyColor: 'original',
+      hasBodyMaterial: false,
+    });
   },
   cycleCar: () => get().setCarIndex(adjacentCar(get().carIndex, 1)),
   prevCar: () => get().setCarIndex(adjacentCar(get().carIndex, -1)),
@@ -87,6 +103,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     const colors = paintChoices(CARS[nextIndex]).map(({ value }) => value);
     set({
       carIndex: nextIndex,
+      headlightsRaised: true,
+      hasPopupHeadlights: false,
       themeName: Math.random() > 0.5 ? 'dusk' : 'night',
       activeBodyColor: colors[Math.floor(Math.random() * colors.length)] ?? 'original',
       hasBodyMaterial: false,

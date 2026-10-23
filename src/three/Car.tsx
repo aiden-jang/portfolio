@@ -6,6 +6,8 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { CARS, PREFETCH_MODEL_INDICES, THEMES } from '../config';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { smoothTowards } from '../math';
+import { createPopupHeadlights } from './popupHeadlights';
+import { prepareModelFinish } from './modelFinishes';
 import { canPrefetchModels } from './modelPrefetch';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
@@ -27,6 +29,14 @@ export function Car() {
   const carIndex = useAppStore((s) => s.carIndex);
   const retryVersion = useAppStore((s) => s.carRetryVersion);
   const armIntro = useAppStore((s) => s.armIntro);
+
+  const headlightsRaised = useAppStore((s) => s.headlightsRaised);
+  const headlights = useRef<ReturnType<typeof createPopupHeadlights>>(null);
+
+  useEffect(() => {
+    headlights.current?.setRaised(headlightsRaised, prefersReducedMotion());
+    invalidate();
+  }, [headlightsRaised, invalidate]);
 
   const group = useMemo(() => new THREE.Group(), []);
   const displayedIndex = useRef(carIndex);
@@ -72,6 +82,7 @@ export function Car() {
     const setHasBodyMaterial = useAppStore.getState().setHasBodyMaterial;
     const setCarLoading = useAppStore.getState().setCarLoading;
     setHasBodyMaterial(false);
+    useAppStore.setState({ hasPopupHeadlights: false });
     setCarLoading(true);
     useAppStore.getState().setCarLoadError(null);
     let cancelled = false;
@@ -86,6 +97,8 @@ export function Car() {
           return;
         }
 
+        headlights.current?.dispose();
+        headlights.current = null;
         if (modelRef.current) {
           group.remove(modelRef.current);
           disposeModel(modelRef.current);
@@ -98,6 +111,10 @@ export function Car() {
         const { scale, orientedSize } = autoFitToLength(model, spec.orientationYaw);
         if (!spec.preserveFlatMeshes) hideBakedPlanes(model);
         prepareModelGlass(model);
+        prepareModelFinish(model, spec.file);
+        headlights.current = createPopupHeadlights(model, gltf.animations, spec.popupHeadlights);
+        headlights.current?.setRaised(useAppStore.getState().headlightsRaised, true);
+        useAppStore.setState({ hasPopupHeadlights: !!headlights.current });
         group.add(model);
         modelRef.current = model;
         displayedIndex.current = carIndex;
@@ -163,6 +180,7 @@ export function Car() {
     scene.add(group);
     return () => {
       scene.remove(group);
+      headlights.current?.dispose();
       if (modelRef.current) disposeModel(modelRef.current);
       underglow.geometry.dispose();
       underglowMat.map?.dispose();
@@ -171,6 +189,8 @@ export function Car() {
   }, [scene, group, underglow, underglowMat]);
 
   useFrame((state, dt) => {
+    headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
+    headlights.current?.update(dt);
     const refs = useAppStore.getState().refs;
     const target = THEMES[useAppStore.getState().themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
@@ -193,7 +213,9 @@ export function Car() {
     underglowMat.opacity = 0.1 + breath * 0.04 + rev * 0.22;
 
     for (const l of refs.lamps) {
-      const boost = !l.isHeadlight ? 1 + rev * 6 : 1;
+      const hiddenHeadlight =
+        headlights.current && l.isHeadlight && !useAppStore.getState().headlightsRaised;
+      const boost = hiddenHeadlight ? 0 : !l.isHeadlight ? 1 + rev * 6 : 1;
       l.light.intensity = l.baseIntensity * boost;
     }
   });

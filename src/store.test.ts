@@ -108,3 +108,22 @@ it.each(['porsche-917k-lm-red.glb', 'ferrari-296-gt3.glb', 'red-bull-rb16b.glb']
     expect(useAppStore.getState().activeBodyColor).toBe('original');
   },
 );
+
+it('guards headlight controls while unavailable or loading and resets the next Miata visit', () => {
+  const state = useAppStore.getState();
+  state.setCarIndex(10);
+  state.toggleHeadlights();
+  expect(useAppStore.getState().headlightsRaised).toBe(true);
+  useAppStore.setState({ hasPopupHeadlights: true, isCarLoading: true });
+  state.toggleHeadlights();
+  expect(useAppStore.getState().headlightsRaised).toBe(true);
+  useAppStore.setState({ isCarLoading: false });
+  state.toggleHeadlights();
+  expect(useAppStore.getState().headlightsRaised).toBe(false);
+  state.setCarIndex(0);
+  state.toggleHeadlights();
+  expect(useAppStore.getState().headlightsRaised).toBe(true);
+  expect(useAppStore.getState().hasPopupHeadlights).toBe(false);
+  state.setCarIndex(10);
+  expect(useAppStore.getState().headlightsRaised).toBe(true);
+});

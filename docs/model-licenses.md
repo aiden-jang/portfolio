@@ -138,7 +138,12 @@ retain CC BY-NC terms. This does not change the source code’s MIT license.
 The 296 GT3 also uses the official full-resolution web export to retain vecarz’s
 published material response and wheel treatment, rather than the original file’s
 underlying source setup. Its complete mesh is retained. Its diagonal parking pose
-is normalized at runtime before framing, without changing vertex data.
+is normalized at runtime before framing, without changing vertex data. The site
+also corrects the printed body's metallic response, uses neutral transparent
+glazing, and offsets the livery surface to avoid overlap artifacts. These runtime
+material adjustments preserve the source GLB, decals, geometry and wheel finishes.
+The Miata's embedded headlight animation is sampled by a reversible Lights button;
+headlights start raised, with instant pose changes for reduced motion.
 
 The new repaintable defaults are British Racing Green for the Miata, the source
 Solar Orange for the GR Supra, Shark Blue for the GT3 and Verde Ithaca for the

@@ -3,6 +3,7 @@ import { useAppStore } from '../store';
 import { CameraResetButton } from './CameraResetButton';
 import { CarSwitcher, MobileCarSwitcher } from './CarSwitcher';
 import { ColorSwatches, MobileColorButton } from './ColorSwatches';
+import { HeadlightButton } from './HeadlightButton';
 import { RevButton } from './RevButton';
 import { SceneShareButton } from './SceneShareButton';
 import { MobileThemeButton, ThemeToggle } from './ThemeToggle';
@@ -30,6 +31,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
             <MobileCarSwitcher />
             <MobileColorButton />
             <MobileThemeButton />
+            <HeadlightButton />
             <RevButton />
           </div>
         )}
@@ -51,6 +53,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
           >
             <CarSwitcher />
             <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
+            <HeadlightButton />
             <RevButton />
             <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
             <CameraResetButton />

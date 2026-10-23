@@ -36,6 +36,7 @@ export function useSceneActivity(): boolean {
         next.carIndex !== previous.carIndex ||
         next.carRetryVersion !== previous.carRetryVersion ||
         next.themeName !== previous.themeName ||
+        next.headlightsRaised !== previous.headlightsRaised ||
         next.activeBodyColor !== previous.activeBodyColor ||
         next.hasBodyMaterial !== previous.hasBodyMaterial ||
         next.isCarLoading !== previous.isCarLoading ||

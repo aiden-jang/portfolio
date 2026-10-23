@@ -33,13 +33,27 @@ for (const width of [1440, 390]) {
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await expect(browse).toHaveAccessibleName('Browse cars. Mazda MX-5 Miata, NA');
     await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('10');
+    const headlights = page
+      .getByRole('button', { name: 'Pop-up headlights' })
+      .filter({ visible: true });
+    await expect(headlights).toBeEnabled();
+    await expect(headlights).toHaveAttribute('aria-pressed', 'true');
+    await headlights.click();
+    await expect(headlights).toHaveAttribute('aria-pressed', 'false');
+    await headlights.press('Space');
+    await expect(headlights).toHaveAttribute('aria-pressed', 'true');
+    expect(
+      await headlights.evaluate((button) => button.getBoundingClientRect().height),
+    ).toBeGreaterThanOrEqual(44);
     await page.locator('h1').click();
     await page.keyboard.press('3');
     await expect(browse).toHaveAccessibleName('Browse cars. Datsun 280Z, S30');
+    await expect(page.getByRole('button', { name: 'Pop-up headlights' })).toHaveCount(0);
     await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('5');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await page.reload();
     await expect(browse).toHaveAccessibleName('Browse cars. Datsun 280Z, S30');
+    await expect(page.getByRole('button', { name: 'Pop-up headlights' })).toHaveCount(0);
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
   });
 }

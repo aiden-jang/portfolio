@@ -43,6 +43,7 @@ export type CarSpec = {
   preserveFlatMeshes?: boolean;
   orientationYaw?: number;
   roadLights?: boolean;
+  popupHeadlights?: { clip: string; closedTime: number; openTime: number };
   defaultPaint: { name: string; hex: string; preserveSource?: boolean };
   credit?: Credit;
 };
