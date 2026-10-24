@@ -8,15 +8,18 @@ for (const width of [1440, 390]) {
     await page.route('**/_vercel/**', (route) =>
       route.fulfill({ body: '', contentType: 'application/javascript' }),
     );
-    await page.goto('/?car=14&paint=original');
+    await page.goto('/?car=6&paint=original');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     const browse = page.getByRole('button', { name: /Browse cars\./ }).filter({ visible: true });
-    await expect(browse).toHaveAccessibleName('Browse cars. Ferrari 296 GT3, GT3');
+    await expect(browse).toHaveAccessibleName('Browse cars. Audi R8, Widebody');
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
     const options = picker.locator('.car-option');
-    await expect(options).toHaveCount(14);
+    await expect(options).toHaveCount(13);
     await expect(options.first()).toBeFocused();
+    await expect(
+      picker.getByRole('button', { name: 'Show Audi R8, Widebody', exact: true }),
+    ).toHaveCount(0);
     await expect(
       picker.getByRole('button', { name: 'Show Porsche 917K, Le Mans', exact: true }),
     ).toHaveCount(0);

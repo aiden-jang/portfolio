@@ -46,7 +46,8 @@ Older Japanese cars should retain stock styling. Modified Japanese builds should
 focus on newer cars, such as the GR Supra. F1 candidates should favor newer designs.
 
 The curated lineup keeps the F40, 300 SL, Datsun, E30, stock A80 Supra, RWB,
-M4 ADRO and R8, alongside the checked additions. The selected vecarz Aimgain R35
+M4 ADRO, alongside the checked additions. The R8 is retired from the picker;
+existing shared URLs still resolve to it. The selected vecarz Aimgain R35
 replaces the modified GR Supra in the picker; older GR Supra links retain that car. The stock 930 and 917K are
 retired from the picker; existing shared URLs still resolve to their original cars.
 The Ferrari F1-75 replaces the 296 GT3 in the picker, alongside the RB16B. The F10

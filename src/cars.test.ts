@@ -10,6 +10,7 @@ afterEach(() => {
 
 describe('curated garage', () => {
   it('retains shared identities while hiding retired cars from selection commands', () => {
+    expect(CARS[6].file).toBe('audi-r8.glb');
     expect(CARS[7].file).toBe('porsche-930-turbo-1975.glb');
     expect(CARS[8].file).toBe('porsche-917k-lm-red.glb');
     expect(CARS[9].file).toBe('bmw-g82-m4-adro.glb');
@@ -19,6 +20,7 @@ describe('curated garage', () => {
     expect(CARS[16].file).toBe('ferrari-f1-75.glb');
     expect(CARS[17].file).toBe('nissan-r35-aimgain.glb');
     expect(new Set(GARAGE_INDICES).size).toBe(GARAGE_INDICES.length);
+    expect(GARAGE_INDICES).not.toContain(6);
     expect(GARAGE_INDICES).not.toContain(7);
     expect(GARAGE_INDICES).not.toContain(8);
     expect(GARAGE_INDICES).not.toContain(11);
@@ -29,9 +31,9 @@ describe('curated garage', () => {
     expect(CARS[16].preserveFlatMeshes).toBe(true);
     expect(GARAGE_INDICES).toContain(5);
     const commands = buildCommands({ onSection: vi.fn(), setNotice: vi.fn() });
-    expect(commands.some(({ id }) => ['car-7', 'car-8', 'car-11', 'car-14'].includes(id))).toBe(
-      false,
-    );
+    expect(
+      commands.some(({ id }) => ['car-6', 'car-7', 'car-8', 'car-11', 'car-14'].includes(id)),
+    ).toBe(false);
   });
 
   it('cycles every visible car exactly once and reverses the same order', () => {
@@ -48,7 +50,7 @@ describe('curated garage', () => {
   });
 
   it('lets an older shared car link rejoin the visible garage in either direction', () => {
-    for (const index of [7, 8, 11, 14]) {
+    for (const index of [6, 7, 8, 11, 14]) {
       useAppStore.getState().setCarIndex(index);
       expect(useAppStore.getState().carIndex).toBe(index);
       useAppStore.getState().cycleCar();
@@ -60,7 +62,7 @@ describe('curated garage', () => {
   });
 
   it('surprises visitors with another visible car, including when starting at a retired car', () => {
-    for (const source of [7, ...GARAGE_INDICES]) {
+    for (const source of [6, 7, ...GARAGE_INDICES]) {
       for (const random of [0, 0.5, 0.999999]) {
         useAppStore.getState().setCarIndex(source);
         vi.spyOn(Math, 'random').mockReturnValue(random);
