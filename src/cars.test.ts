@@ -21,6 +21,9 @@ describe('curated garage', () => {
     expect(CARS[17].file).toBe('nissan-r35-aimgain.glb');
     expect(CARS[12].file).toBe('porsche-992-911-gt3.glb');
     expect(CARS[18].file).toBe('porsche-992-gt3-rs.glb');
+    expect(CARS[19].file).toBe('lamborghini-countach-5000qv.glb');
+    expect(CARS[19].paintMaterial).toBe('Meshpart19Mtl');
+    expect(GARAGE_INDICES).toContain(19);
     expect(CARS[18].fixedLivery).toBe(true);
     expect(CARS[18].preserveFlatMeshes).toBe(true);
     expect(GARAGE_INDICES).toContain(18);

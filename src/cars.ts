@@ -229,6 +229,18 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     },
     exposure: 1,
   },
+  {
+    file: 'lamborghini-countach-5000qv.glb',
+    name: 'Lamborghini Countach',
+    code: '5000 QV',
+    paintMaterial: 'Meshpart19Mtl',
+    preserveFlatMeshes: true,
+    defaultPaint: {
+      name: 'Giallo',
+      hex: '#d8b53d',
+    },
+    exposure: 1,
+  },
 ];
 
 export const CARS: CarSpec[] = registry.map((car) => ({
@@ -237,7 +249,7 @@ export const CARS: CarSpec[] = registry.map((car) => ({
 }));
 
 // Retired cars remain available to existing links, outside the curated picker.
-export const GARAGE_INDICES: readonly number[] = [0, 1, 5, 4, 2, 10, 3, 9, 17, 18, 13, 16, 15];
+export const GARAGE_INDICES: readonly number[] = [0, 1, 5, 4, 2, 10, 3, 9, 17, 18, 19, 13, 16, 15];
 
 export function adjacentCar(index: number, direction: -1 | 1): number {
   const position = GARAGE_INDICES.indexOf(index);

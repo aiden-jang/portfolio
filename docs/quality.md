@@ -41,7 +41,9 @@ retries remain disabled. A reflection check guards against dark halos cutting in
 beside bright headlights. Garage checks cover retired shared links, curated picker
 focus and wrapping, numbered selection, reloads and a visible clean-capture scene.
 R35 selection and reload run separately from the multi-car navigation tour to
-bound each test’s model-loading work without raising its timeout. The clock is fixed for consistent studio lighting.
+bound each test’s model-loading work without raising its timeout. The Countach check uses one model load per engine, resizing between phone and
+desktop while checking shared paint, default restoration and picker focus. The
+clock is fixed for consistent studio lighting.
 
 Axe checks WCAG A and AA rules on the page and open dialogs. The tests use the real
 models, images and interface. Local telemetry endpoints are stubbed because they

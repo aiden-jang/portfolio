@@ -1,0 +1,18 @@
+Model Information:
+* title:	Lamborghini Countach 5000QV | www.vecarz.com
+* source:	https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5
+* author:	vecarz (https://sketchfab.com/heynic)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lamborghini Countach 5000QV | www.vecarz.com" (https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+
+Credited upstream: "Lamborghini Countach 5000QV" by Randomness (https://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882).
+Upstream license: https://creativecommons.org/licenses/by/4.0/
+
+Portfolio adaptation: all 174,956 source triangles and vertex precision retained. Geometry reordered and losslessly meshopt-compressed. All 19 textures retain their dimensions and decoded pixels; lossless WebP used only where smaller and pixel-identical. Source material parameters and hierarchy retained in the asset. Portfolio framing, lighting, Giallo default paint and optional body colors applied at runtime. Body paint receives a dielectric clearcoat finish; separate opaque tire rubber has metallic clearcoat removed. Wheel, trim and other material finishes retained. Flat meshes preserved. No animation clips supplied.
+Adapted model license: https://creativecommons.org/licenses/by/4.0/
+Creator licenses do not independently establish underlying vehicle or trademark rights.

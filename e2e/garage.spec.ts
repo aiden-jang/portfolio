@@ -15,7 +15,7 @@ for (const width of [1440, 390]) {
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
     const options = picker.locator('.car-option');
-    await expect(options).toHaveCount(13);
+    await expect(options).toHaveCount(14);
     await expect(options.first()).toBeFocused();
     await expect(
       picker.getByRole('button', { name: 'Show Audi R8, Widebody', exact: true }),

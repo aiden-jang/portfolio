@@ -77,6 +77,10 @@ roughness at 0.24 and add a smooth clearcoat while preserving sharper authored
 coats, colors, metalness and maps. The GT3 already has sharp paint and retains its
 authored finish. The F1-75 keeps its source racing textures
 while correcting metallic paint, decal, carbon and tire responses for studio lighting.
+The Countach targets `Meshpart19Mtl` for Giallo paint and glossy dielectric
+clearcoat. Its separate `Meshpart2Mtl` rubber loses the export's metallic coat;
+repainting leaves wheels, rubber, trim and glazing untouched. Flat meshes are
+retained, and the selected export supplies no animation clips.
 `popupHeadlights` samples the
 Miata's authored opening clip between its closed and raised poses; its Lights button
 reverses travel, starts raised on selection and snaps poses for reduced motion.

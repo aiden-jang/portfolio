@@ -19,6 +19,9 @@ an uncertainty, rather than treated as verified ownership.
 - [x] [Ferrari 296 GT3](https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f)
       — vecarz, crediting MattDoesBlender; CC BY-NC 4.0; original source unverified.
       Retired from the picker; existing shared links remain available.
+- [x] [Lamborghini Countach 5000 QV](https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5)
+      — selected vecarz export, crediting Randomness; both list CC BY 4.0.
+      Giallo default with separate glossy paint and opaque rubber finishes.
 - [ ] [2021 Lamborghini Countach LPI 800-4](https://sketchfab.com/3d-models/2021-lamborghini-countach-lpi-800-4-d76b94884432422b966d1a7f8815afb5)
       — Lexyc16; CC BY-NC 4.0; creator states it was made in Blender.
 - [x] [Lamborghini Aventador](https://sketchfab.com/3d-models/lamborghini-aventador-e328d9f5dcfd48bdbe8c73324b52ece3)

@@ -76,7 +76,27 @@ function prepareGlossPaint(
   }
 }
 
+function prepareCountachFinish(model: Object3D): void {
+  prepareGlossPaint(model, 'Meshpart19Mtl', 0.22, 0.055);
+  model.traverse((object) => {
+    const mesh = object as Mesh;
+    if (!mesh.isMesh) return;
+    for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
+      const finish = material as MeshPhysicalMaterial;
+      if (finish.name === 'Meshpart19Mtl') finish.metalness = 0;
+      else if (finish.name === 'Meshpart2Mtl') {
+        // The export gives rubber a metallic clearcoat; keep it separate from body gloss.
+        finish.metalness = 0;
+        finish.roughness = 0.85;
+        finish.clearcoat = 0;
+      } else continue;
+      finish.needsUpdate = true;
+    }
+  });
+}
+
 export function prepareModelFinish(model: Object3D, file: string): void {
+  if (file === 'lamborghini-countach-5000qv.glb') return prepareCountachFinish(model);
   if (Object.hasOwn(roadPaint, file))
     return prepareGlossPaint(model, roadPaint[file], 0.24, 0.06, true);
   if (file === 'ferrari-f1-75.glb') return prepareFerrariF1Finish(model);

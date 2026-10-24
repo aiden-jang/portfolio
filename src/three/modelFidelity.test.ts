@@ -40,6 +40,7 @@ describe('car fidelity', () => {
       ['porsche-917k-lm-red', 389_972],
       ['nissan-r35-aimgain', 549_485],
       ['porsche-992-gt3-rs', 1_721_938],
+      ['lamborghini-countach-5000qv', 174_956],
     ] as const) {
       const model = readModel(file);
       expect(model.extensionsRequired).toContain('EXT_meshopt_compression');

@@ -153,6 +153,7 @@ it.each([
   ['lamborghini-aventador.glb', 'RED_PAINT'],
   ['bmw-g82-m4-adro.glb', 'untitledBMW_M4CompetitionG82TNR3_2021PaintTNR_Material_008'],
   ['nissan-r35-aimgain.glb', 'nNissan_GTRTNR4_2017PaintTNR_Material_002'],
+  ['lamborghini-countach-5000qv.glb', 'Meshpart19Mtl'],
 ])('paints %s body panels without recoloring wheels or trim', async (file, materialName) => {
   const spec = CARS.find((car) => car.file === file)!;
   const { model, materials } = await paintFixture(spec.file);
@@ -219,4 +220,33 @@ it.each([
   }
   prepareModelFinish(model, file);
   expect(detectBodyMaterial(model, spec.paintMaterial)).toBe(finish);
+});
+
+it('separates Countach clear-coated paint from opaque rubber and wheel finishes', async () => {
+  const file = 'lamborghini-countach-5000qv.glb';
+  const { model, materials } = await paintFixture(file);
+  const before = materials.map((material) => material.toJSON());
+  const paint = materials.find((material) => material.name === 'Meshpart19Mtl')!;
+  const tire = materials.find((material) => material.name === 'Meshpart2Mtl')!;
+  const color = paint.color.clone();
+  const tireMap = tire.map;
+  prepareModelFinish(model, file);
+  const finish = detectBodyMaterial(model, 'Meshpart19Mtl') as THREE.MeshPhysicalMaterial;
+  expect(finish).toBeInstanceOf(THREE.MeshPhysicalMaterial);
+  expect(finish.roughness).toBeLessThan(0.25);
+  expect(finish.metalness).toBe(0);
+  expect(finish.clearcoat).toBe(1);
+  expect(finish.clearcoatRoughness).toBeLessThan(0.08);
+  expect(finish.color).toEqual(color);
+  expect(tire.transparent).toBe(false);
+  expect(tire.opacity).toBe(1);
+  expect(tire.metalness).toBe(0);
+  expect(tire.roughness).toBeGreaterThanOrEqual(0.8);
+  expect((tire as THREE.MeshPhysicalMaterial).clearcoat).toBe(0);
+  expect(tire.map).toBe(tireMap);
+  for (const [index, material] of materials.entries()) {
+    if (material !== paint && material !== tire) expect(material.toJSON()).toEqual(before[index]);
+  }
+  prepareModelFinish(model, file);
+  expect(detectBodyMaterial(model, 'Meshpart19Mtl')).toBe(finish);
 });

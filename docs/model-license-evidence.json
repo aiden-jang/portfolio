@@ -590,6 +590,50 @@
         "sourceWarning": "Normal and clearcoat normal textures use different texture coordinates; retained from the source."
       },
       "runtimeAdaptation": "Portfolio framing, lighting and fixed original wrap; flat aero and floor meshes retained. Repainting is disabled to preserve texture colors and carbon."
+    },
+    {
+      "file": "lamborghini-countach-5000qv.glb",
+      "title": "Lamborghini Countach 5000QV | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5",
+      "evidence": "https://api.sketchfab.com/v3/models/309d92b27c1041a3ab79b8919e7d92b5",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-24",
+      "review": "publisher-and-credited-source-licenses-recorded",
+      "sourceReview": "Gallery showcase: www.vecarz.com\n\n==================================================\n\nThank you [Randomness] for your incredible contribution to the community! You’re an absolute legend and a pillar of our community. Folks, let’s rally behind this and show our support by visiting their website and exhibition here: https://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882",
+      "archiveSha256": "e9318cac39f11826cc2c7c335184a35f3178f42173830c2ecab4de7232658ce1",
+      "sourceAssetMetadata": {
+        "author": "vecarz (https://sketchfab.com/heynic)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5",
+        "title": "Lamborghini Countach 5000QV | www.vecarz.com"
+      },
+      "upstream": {
+        "author": "Randomness",
+        "url": "https://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence": "https://api.sketchfab.com/v3/models/2f02b54e01fc428e8b19759c5970f882",
+        "description": "An iconic car from the 80s with a roaring v12 under the hood.",
+        "verifiedOn": "2026-10-24"
+      },
+      "downloadLicenseText": "Model Information:\n* title:\tLamborghini Countach 5000QV | www.vecarz.com\n* source:\thttps://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5\n* author:\tvecarz (https://sketchfab.com/heynic)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Lamborghini Countach 5000QV | www.vecarz.com\" (https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "adaptationLicense": "https://creativecommons.org/licenses/by/4.0/",
+      "optimization": {
+        "referenceBytes": 13336428,
+        "optimizedBytes": 7625704,
+        "triangles": 174956,
+        "textures": "All 19 source textures retain original dimensions and decoded RGBA pixels.",
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "materials": "Source material parameters and hierarchy retained in the asset; explicit paint and rubber corrections applied at runtime.",
+        "animations": "Source contains no animation clips.",
+        "assetSha256": "2ff96eb080fa0211e4c7080fae45b4ce44a7e520fdf3ec45410cd24b74449100",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "runtimeAdaptation": "Giallo default targets only Meshpart19Mtl body paint, with dielectric metalness, roughness 0.22, clearcoat 1 and coat roughness 0.055. Separate Meshpart2Mtl rubber has metalness 0, roughness 0.85 and no clearcoat. Other materials, maps, trim and wheel finishes retained; flat meshes preserved. No authored animation is supplied."
     }
   ]
 }

@@ -184,5 +184,18 @@
       "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
     },
     "notice": "Publisher and credited source list CC BY-NC-SA 4.0. Underlying authorship and vehicle rights remain unverified. Personal noncommercial use only."
+  },
+  "lamborghini-countach-5000qv.glb": {
+    "title": "Lamborghini Countach 5000QV | www.vecarz.com",
+    "author": "vecarz",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "url": "https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5",
+    "upstream": {
+      "author": "Randomness",
+      "url": "https://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
   }
 }
