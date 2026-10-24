@@ -201,38 +201,6 @@
   }
 }
 @media (max-width: 767px) {
-  #mobile-bar :is(.mobile-paint-name, .mobile-light-name) {
-    position: static;
-    border: 0;
-    padding: 0;
-    background: transparent;
-    color: var(--color-fg);
-    font: 11px/1.4 var(--font-display);
-    max-width: 84px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  #mobile-bar button:is([aria-label^='Paint:'], [aria-label^='Lighting:']) {
-    width: auto;
-    padding: 8px 12px;
-    gap: 8px;
-    flex-direction: row-reverse;
-  }
-  #mobile-bar > div.flex {
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: calc(100vw - 32px);
-    width: min(360px, calc(100vw - 32px));
-  }
-  .car-choice-mobile {
-    flex-basis: 100%;
-    width: 100%;
-  }
-  .car-choice-mobile .car-browse-trigger {
-    flex: 1;
-    width: auto;
-  }
   .car-browser-heading,
   .car-browser-grid {
     padding: 16px;

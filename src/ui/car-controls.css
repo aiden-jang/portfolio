@@ -1,0 +1,128 @@
+.car-controls-row {
+  display: grid;
+  align-items: center;
+  gap: 4px;
+}
+.car-controls-row > * {
+  min-width: 0;
+}
+.car-paint-slot,
+.car-action-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+}
+.car-livery {
+  font: 11px/1.4 var(--font-display);
+  color: var(--color-muted);
+}
+.car-choice .car-browse-trigger {
+  height: 44px;
+  min-width: 0;
+}
+.car-browse-trigger > :is(span, small) {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+:is(#desktop-dock, #mobile-bar) button {
+  transform: none;
+  scale: none;
+}
+.car-action-slot > button {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  width: 100%;
+  height: 44px;
+  padding-inline: 6px;
+  gap: 4px;
+  text-align: left;
+}
+.car-action-slot > button > [aria-hidden] {
+  display: inline-grid;
+  place-items: center;
+  width: 14px;
+}
+#desktop-dock .car-controls-row {
+  grid-template-columns: 234px 76px 56px 92px 240px 80px 44px;
+}
+#desktop-dock .car-controls-row > button {
+  width: 100%;
+  height: 44px;
+  white-space: nowrap;
+}
+#desktop-dock .car-paint-slot > [role='group'] {
+  width: 100%;
+  justify-content: center;
+}
+:is(#desktop-dock, #mobile-bar) button[aria-label^='Lighting:'] svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+#desktop-dock button[aria-label^='Lighting:'] {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  text-align: left;
+}
+#desktop-dock button[aria-label^='Lighting:'] .control-group-label {
+  margin: 0;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  #desktop-dock .car-controls-row {
+    grid-template-columns: 234px 76px 44px 44px 202px 44px 44px;
+  }
+  #desktop-dock button[aria-label^='Lighting:'] {
+    display: flex;
+    gap: 0;
+  }
+}
+@media (max-width: 767px) {
+  #mobile-bar .car-controls-row {
+    width: min(360px, calc(100vw - 32px));
+    grid-template-columns: minmax(0, 1fr) 70px 64px 44px;
+  }
+  #mobile-bar .car-choice-mobile {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  #mobile-bar .car-browse-trigger {
+    flex: 1;
+    width: auto;
+  }
+  #mobile-bar .car-paint-slot > button,
+  #mobile-bar button[aria-label^='Lighting:'] {
+    display: grid;
+    width: 100%;
+    height: 44px;
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 6px;
+    padding: 8px;
+    text-align: left;
+  }
+  #mobile-bar button[aria-label^='Lighting:'] {
+    grid-template-columns: 16px minmax(0, 1fr);
+  }
+  #mobile-bar :is(.mobile-paint-name, .mobile-light-name) {
+    position: static;
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-fg);
+    font: 11px/1.4 var(--font-display);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #mobile-bar .car-paint-slot .swatch,
+  #mobile-bar button[aria-label^='Lighting:'] svg {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}

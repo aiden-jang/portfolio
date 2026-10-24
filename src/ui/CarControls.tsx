@@ -10,9 +10,20 @@ import { SceneShareButton } from './SceneShareButton';
 import { MobileThemeButton, ThemeToggle } from './ThemeToggle';
 import { SectionDots } from './SectionDots';
 import { Hint } from './Hint';
+import './car-controls.css';
+
+function CarActionSlot() {
+  return (
+    <div className="car-action-slot">
+      <HeadlightButton />
+      <CarDetailButton />
+    </div>
+  );
+}
 
 export function CarControls({ onSection }: { onSection: (id: SectionId) => void }) {
   const carIndex = useAppStore((state) => state.carIndex);
+  const fixedLivery = CARS[carIndex].fixedLivery;
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const visible = sectionIndex === 0 || SECTION_IDS[sectionIndex] === 'sec-contact';
   return (
@@ -28,12 +39,13 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
       >
         <SectionDots onJump={onSection} placement="bar" />
         {visible && (
-          <div className="flex items-center gap-2">
+          <div className="car-controls-row">
             <MobileCarSwitcher />
-            <MobileColorButton />
+            <div className="car-paint-slot">
+              {fixedLivery ? <span className="car-livery">Livery</span> : <MobileColorButton />}
+            </div>
             <MobileThemeButton />
-            <HeadlightButton />
-            <CarDetailButton />
+            <CarActionSlot />
             <RevButton />
           </div>
         )}
@@ -48,27 +60,23 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
         >
           <div
             className="
-                pointer-events-auto flex items-center gap-1
+                car-controls-row pointer-events-auto
                 rounded-full border border-[var(--color-line)] bg-[rgba(12,12,20,0.55)]
                 px-2 py-1 shadow-[0_10px_34px_-14px_rgba(0,0,0,0.7)]
               "
           >
             <CarSwitcher />
-            <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-            <HeadlightButton />
-            <CarDetailButton />
+            <CarActionSlot />
             <RevButton />
-            <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
             <CameraResetButton />
-            <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-            {!CARS[carIndex].fixedLivery && (
-              <>
+            <div className="car-paint-slot">
+              {fixedLivery ? (
+                <span className="car-livery">Original livery</span>
+              ) : (
                 <ColorSwatches bordered={false} />
-                <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
-              </>
-            )}
+              )}
+            </div>
             <ThemeToggle />
-            <span aria-hidden="true" className="w-px h-5 bg-[var(--color-line)] mx-0.5" />
             <SceneShareButton />
           </div>
         </div>

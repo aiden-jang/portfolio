@@ -21,6 +21,11 @@ The Contact car becomes visible when its section enters the viewport. Controls
 and orbit hints require a complete Intro or Contact viewport. CSS visibility
 updates on scroll without waiting for the active navigation section to change.
 
+`CarControls` uses fixed grid slots for paint, lighting and each car’s optional
+interaction. Livery labels retain the paint slot, and unsupported interactions
+leave their slot empty. Label, icon, loading and feedback changes therefore do
+not move neighboring controls. Picker text truncates within fixed-height rows.
+
 ## Scene and state
 
 `three/Scene.tsx` composes the canvas, models, lighting, floor and effects.

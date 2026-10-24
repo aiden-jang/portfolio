@@ -1,4 +1,5 @@
 import { expect, test, type Locator } from '@playwright/test';
+import { controlLayout, expectControlLayout } from './controlLayout';
 
 function observePulse(button: Locator) {
   return button.evaluate(
@@ -37,12 +38,21 @@ for (const [index, name, action] of [
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     const button = () =>
       page.getByRole('button', { name: action, exact: true }).filter({ visible: true });
+    let lastLayout: number[][] = [];
     for (const width of [320, 1440]) {
       if (width === 1440) await page.setViewportSize({ width, height: 900 });
       await expect(button()).toBeEnabled();
+      lastLayout = await controlLayout(page);
+      await page
+        .getByRole('button', { name: /^Lighting:/ })
+        .filter({ visible: true })
+        .click();
+      await expectControlLayout(page, lastLayout);
       const bounds = await button().evaluate((element) => {
         const rect = element.getBoundingClientRect();
-        const rev = element.parentElement!.querySelector('[aria-label="Rev engine"]')!;
+        const rev = element
+          .closest('#mobile-bar, #desktop-dock')!
+          .querySelector('[aria-label="Rev engine"]')!;
         return {
           x: rect.x,
           right: rect.right,
@@ -58,6 +68,13 @@ for (const [index, name, action] of [
       expect(bounds.right).toBeLessThanOrEqual(width);
       expect(bounds.overflow).toBe(false);
       if (action === 'Flash headlights' && width === 320) expect(bounds.sameRow).toBe(true);
+      if (action === 'Flash headlights' && width === 320) {
+        const paint = page.getByRole('button', { name: /^Paint:.*Change color$/ });
+        for (let i = 0; i < 7; i++) {
+          await paint.click();
+          await expectControlLayout(page, lastLayout);
+        }
+      }
       const pulse = action === 'Flash headlights' ? observePulse(button()) : null;
       if (width === 320) await button().click();
       else await button().press('Space');
@@ -67,11 +84,13 @@ for (const [index, name, action] of [
         expect(await pulse, 'Flash disables briefly, then unlocks for another pulse').toBe(true);
         await expect(button()).toBeEnabled();
       }
+      await expectControlLayout(page, lastLayout);
     }
     await page.locator('h1').click();
     await page.keyboard.press('1');
     await expect(page.getByRole('button', { name: action, exact: true })).toHaveCount(0);
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+    await expectControlLayout(page, lastLayout);
     expect(errors).toEqual([]);
   });
 }

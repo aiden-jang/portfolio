@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { controlLayout, expectControlLayout } from './controlLayout';
 import { CARS, GARAGE_INDICES } from '../src/config';
 
 for (const width of [1440, 390]) {
@@ -59,10 +60,13 @@ for (const width of [1440, 390]) {
       .filter({ visible: true });
     await expect(headlights).toBeEnabled();
     await expect(headlights).toHaveAttribute('aria-pressed', 'true');
+    const originalLayout = await controlLayout(page);
     await headlights.click();
     await expect(headlights).toHaveAttribute('aria-pressed', 'false');
+    await expectControlLayout(page, originalLayout);
     await headlights.press('Space');
     await expect(headlights).toHaveAttribute('aria-pressed', 'true');
+    await expectControlLayout(page, originalLayout);
     expect(
       await headlights.evaluate((button) => button.getBoundingClientRect().height),
     ).toBeGreaterThanOrEqual(44);
@@ -71,6 +75,7 @@ for (const width of [1440, 390]) {
     await expect(browse).toHaveAccessibleName('Browse cars. Datsun 280Z, S30');
     await expect(page.getByRole('button', { name: 'Pop-up headlights' })).toHaveCount(0);
     await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('5');
+    await expectControlLayout(page, originalLayout);
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await page.reload();
     await expect(browse).toHaveAccessibleName('Browse cars. Datsun 280Z, S30');
