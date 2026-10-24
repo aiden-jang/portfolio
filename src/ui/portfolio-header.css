@@ -7,6 +7,11 @@
   justify-content: space-between;
   height: 88px;
   padding: 0 5vw;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease;
   pointer-events: none;
 }
 .portfolio-header > header,
@@ -135,6 +140,9 @@ body.modal-open .portfolio-header {
   .portfolio-menu summary::-webkit-details-marker {
     display: none;
   }
+  .portfolio-menu summary > span {
+    transition: transform 160ms ease;
+  }
   .portfolio-menu[open] summary > span {
     transform: rotate(45deg);
   }
@@ -148,6 +156,9 @@ body.modal-open .portfolio-header {
     border: 1px solid #64646e;
     border-radius: 8px;
     box-shadow: 0 20px 40px #0008;
+  }
+  .portfolio-menu[open] nav {
+    animation: dialog-enter 160ms ease-out both;
   }
   .portfolio-menu nav a {
     display: flex;

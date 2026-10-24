@@ -45,12 +45,12 @@ export function Credits() {
             aria-modal="true"
             aria-label="3D model credits"
             onMouseDown={() => setOpen(false)}
-            className="fixed inset-0 z-[60] grid place-items-center bg-[rgba(5,5,13,0.78)] px-4 backdrop-blur-sm"
+            className="dialog-overlay fixed inset-0 z-[60] grid place-items-center bg-[rgba(5,5,13,0.78)] px-4 backdrop-blur-sm"
           >
             <section
               ref={sheetRef}
               onMouseDown={(event) => event.stopPropagation()}
-              className="relative w-full max-w-[440px] max-h-[76dvh] overflow-y-auto rounded-2xl border border-white/[0.14] bg-[#0b0b15] p-5 text-left shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)] animate-[app-fade-in_160ms_ease-out_both]"
+              className="dialog-panel relative w-full max-w-[440px] max-h-[76dvh] overflow-y-auto rounded-2xl border border-white/[0.14] bg-[#0b0b15] p-5 text-left shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
             >
               <button
                 ref={closeRef}

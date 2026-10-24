@@ -1,6 +1,6 @@
 import { useDialogFocus } from './useDialogFocus';
 import { usePageScrollLock } from './usePageScrollLock';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import type { WorkDetail } from '../types';
 import { WorkModalLinks } from './WorkModalLinks';
@@ -18,6 +18,13 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
   const open = !!item;
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  useLayoutEffect(() => {
+    const panel = dialogRef.current;
+    if (!open || !panel || document.documentElement.dataset.workTransition) return;
+    // Native morph snapshots need a fully visible target; other entries use the shared fade.
+    panel.classList.add('dialog-panel');
+    panel.parentElement?.classList.add('dialog-overlay');
+  }, [open]);
   useDialogFocus(open, dialogRef, closeRef);
   usePageScrollLock(open);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
@@ -67,12 +74,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       aria-modal="true"
       aria-labelledby="work-modal-title"
       onClick={onClose}
-      className={`
-        fixed inset-0 z-50 flex items-center justify-center px-4 py-4
-        bg-[rgba(5,5,13,0.9)]
-        transition-opacity duration-200
-        ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-      `}
+      className="work-modal-overlay fixed inset-0 z-50 flex items-center justify-center px-4 py-4 bg-[rgba(5,5,13,0.9)]"
     >
       <div
         ref={dialogRef}
@@ -92,13 +94,8 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
           if (deltaX > 0) onPrevious();
           else onNext();
         }}
-        style={open ? { viewTransitionName: 'work-morph' } : undefined}
-        className={`
-          work-modal-panel relative flex flex-col w-full max-w-[960px] max-h-[85dvh] overflow-hidden
-          bg-[#0a0a14] border border-[var(--color-line)] rounded-xl
-          transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-          ${open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-        `}
+        style={{ viewTransitionName: 'work-morph' }}
+        className="work-modal-panel relative flex flex-col w-full max-w-[960px] max-h-[85dvh] overflow-hidden bg-[#0a0a14] border border-[var(--color-line)] rounded-xl"
       >
         <button
           ref={closeRef}

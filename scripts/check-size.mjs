@@ -10,7 +10,7 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SLACK = 40;
 
 const CEILINGS = {
-  'src/ui/WorkModal.tsx': 170,
+  'src/ui/WorkModal.tsx': 167,
   'src/ui/CommandMenu.tsx': 179,
   'src/three/CameraRig.tsx': 125,
   'scripts/check-size.mjs': 65,

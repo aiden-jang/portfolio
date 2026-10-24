@@ -32,7 +32,8 @@ build cannot silently stand in for the current source. CI runs this suite after
 The suite checks desktop and phone layouts in Chromium and WebKit. It exercises
 navigation, screenshot inspection, case studies, credits, keyboard focus and
 scroll restoration, cold shared links, and a delayed effects download. Phone
-checks enable touch input. A screenshot pixel check verifies that the default car
+checks enable touch input. The navigation cases exercise normal-motion case studies
+and screenshot viewers as well as reduced-motion page navigation. A screenshot pixel check verifies that the default car
 actually renders; it excludes the paint controls so those cannot disguise a blank
 canvas. Screenshot capture and pixel assertions retry together within their existing
 budgets. Each capture attempt is bounded so a transient browser capture error can

@@ -164,6 +164,7 @@ for (const width of [1440, 390]) {
       }
       await accessible(page);
 
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
       const story = page.getByRole('button', { name: 'How I built it: bloomnote', exact: true });
       await story.click();
       await expect(page.getByRole('dialog')).toBeVisible();
@@ -220,6 +221,7 @@ for (const width of [1440, 390]) {
       await expect(image).toHaveAttribute('src', firstView!);
       await page.keyboard.press('Escape');
       await expect(screenshot).toBeFocused();
+      await page.emulateMedia({ reducedMotion: 'reduce' });
 
       if (width === 390) {
         await page.locator('.portfolio-menu summary').click();

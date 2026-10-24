@@ -45,3 +45,7 @@
   text-wrap: pretty;
   overflow-wrap: anywhere;
 }
+
+.screenshot-image:not(.is-loading) {
+  animation: app-fade-in 160ms ease-out both;
+}

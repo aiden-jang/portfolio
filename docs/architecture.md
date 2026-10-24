@@ -143,7 +143,10 @@ to derive visibility from actual section positions.
 
 Project content lives in `src/data/`. Section components render that data rather
 than owning product descriptions. `Sections` connects case-study selection to
-browser history; `ScrollBody` maintains each story’s reading position.
+browser history; `ScrollBody` maintains each story’s reading position. Case-study
+opening and history-driven closing share the native view transition when available.
+Duplicate history events do not restart it, and superseded callbacks cannot restore
+an older story or clear a newer transition’s target.
 
 Case studies, commands and credits share `useDialogFocus` for focus trapping and
 restoration, and `usePageScrollLock` for background scroll locking. Screenshot and car browsers
@@ -153,6 +156,12 @@ its parent’s lock and returns focus to its trigger when closed.
 ## Styles
 
 `index.css` defines the theme, shared foundations and global motion rules.
+`ui/dialog-motion.css` gives dialogs a short shared entrance and native backdrop
+fade. Case studies use that entrance only when no native morph is running, so it
+does not replay after a morph finishes. Screenshot images fade in after loading;
+mobile navigation and the header use brief local transitions. Reduced motion removes
+durations and stagger delays, including native backdrops. Pointer-follow controls
+react to preference changes without requiring a reload.
 Component stylesheets own their interface rules. `reading-flow.css` owns reading
 visibility. `reading-layout.css` owns responsive reading adjustments, and
 `browsing-controls.css` owns preview and story scrolling controls.

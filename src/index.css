@@ -104,20 +104,6 @@
   }
 }
 
-/* Project filters swap a small grid of cards. A short rise gives the new set
-   a clear arrival without relying on layout animation or keeping old cards in
-   the DOM. Reduced-motion collapses this with the global media rule below. */
-@keyframes project-card-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 @layer components {
   #root {
     animation: app-fade-in 0.5s ease-out both;
@@ -240,10 +226,13 @@
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
-    *::after {
+    *::after,
+    *::backdrop {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
+      animation-delay: 0s !important;
       transition-duration: 0s !important;
+      transition-delay: 0s !important;
       scroll-behavior: auto !important;
     }
   }

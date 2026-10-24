@@ -9,18 +9,27 @@ type ViewTransition = {
 type StartViewTransition = (callback: () => void) => ViewTransition;
 
 const MORPH_NAME = 'work-morph';
+let version = 0;
+let namedCard: HTMLElement | null = null;
 
 /** Morphs the clicked card into the modal and back, falling through to a plain update. */
 export function runMorph(update: () => void, el: HTMLElement | null, opening: boolean): void {
+  const current = ++version;
+  if (namedCard) namedCard.style.viewTransitionName = '';
+  namedCard = null;
+  delete document.documentElement.dataset.workTransition;
   const start = (document as Document & { startViewTransition?: StartViewTransition })
     .startViewTransition;
   if (!start || prefersReducedMotion()) {
     update();
     return;
   }
+  namedCard = el;
+  document.documentElement.dataset.workTransition = 'active';
   // The name has to land on the card before the transition starts, to be in its snapshot.
   if (opening && el) el.style.viewTransitionName = MORPH_NAME;
   const transition = start.call(document, () => {
+    if (current !== version) return;
     flushSync(update);
     // Only one element may hold the name at a time, so it moves to whichever side the
     // transition is heading toward.
@@ -34,6 +43,9 @@ export function runMorph(update: () => void, el: HTMLElement | null, opening: bo
   transition.finished
     .catch(() => {})
     .finally(() => {
+      if (current !== version) return;
       if (el) el.style.viewTransitionName = '';
+      namedCard = null;
+      delete document.documentElement.dataset.workTransition;
     });
 }

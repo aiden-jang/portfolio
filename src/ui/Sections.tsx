@@ -15,23 +15,26 @@ export function Sections() {
   const [activeWork, setActiveWork] = useState<WorkDetail | null>(null);
   const originHash = useRef('#sec-work');
   const lastCard = useRef<HTMLElement | null>(null);
+  const activeId = useRef<string | null>(null);
 
   // Driving the modal off the hash is what makes browser back and forward dismiss and restore it.
   useEffect(() => {
     let initial = true;
     const syncFromHash = () => {
       const match = /^#work\/(.+)$/.exec(window.location.hash);
-      if (!match) {
-        initial = false;
-        setActiveWork(null);
-        return;
-      }
-      const item = WORK_ITEMS.find((candidate) => workId(candidate) === match[1]);
-      if (!item) return;
-      const workSection = document.getElementById('sec-work');
-      if (initial && workSection) window.scrollTo(0, workSection.offsetTop);
+      const item = match ? WORK_ITEMS.find((candidate) => workId(candidate) === match[1]) : null;
+      if (match && !item) return;
+      const first = initial;
       initial = false;
-      setActiveWork(item);
+      const nextId = item ? workId(item) : null;
+      // Back/Forward can report the same route through both popstate and hashchange.
+      if (nextId === activeId.current) return;
+      activeId.current = nextId;
+      const workSection = document.getElementById('sec-work');
+      if (first && item && workSection) window.scrollTo(0, workSection.offsetTop);
+      const update = () => setActiveWork(item ?? null);
+      if (first) update();
+      else runMorph(update, lastCard.current, !!item);
     };
     syncFromHash();
     window.addEventListener('hashchange', syncFromHash);
@@ -51,6 +54,7 @@ export function Sections() {
         : '#sec-experience'
       : window.location.hash || (isPortfolioProject(item) ? '#sec-work' : '#sec-experience');
     lastCard.current = el;
+    activeId.current = workId(item);
     window.history.pushState({ portfolioWork: true }, '', `#work/${workId(item)}`);
     runMorph(() => setActiveWork(item), el, true);
   }, []);
@@ -60,6 +64,7 @@ export function Sections() {
       window.history.back();
       return;
     }
+    activeId.current = null;
     window.history.replaceState(null, '', originHash.current);
     runMorph(() => setActiveWork(null), lastCard.current, false);
   }, []);
@@ -72,6 +77,7 @@ export function Sections() {
         const currentIndex = lane.indexOf(current);
         const nextIndex = (currentIndex + step + lane.length) % lane.length;
         const next = lane[nextIndex];
+        activeId.current = workId(next);
         window.history.replaceState(window.history.state, '', `#work/${workId(next)}`);
         return next;
       });

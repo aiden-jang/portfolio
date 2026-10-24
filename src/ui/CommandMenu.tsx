@@ -74,7 +74,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-[min(18vh,9rem)] bg-[#05050de6]"
+      className="dialog-overlay fixed inset-0 z-50 flex items-start justify-center px-4 pt-[min(18vh,9rem)] bg-[#05050de6]"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) setOpen(false);
       }}
@@ -84,7 +84,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         role="dialog"
         aria-modal="true"
         aria-label="Command menu"
-        className="w-full max-w-[490px] overflow-hidden rounded-[10px] border border-[var(--color-line)] bg-[#17171c] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)] animate-[app-fade-in_160ms_ease-out_both]"
+        className="dialog-panel w-full max-w-[490px] overflow-hidden rounded-[10px] border border-[var(--color-line)] bg-[#17171c] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
       >
         <div className="flex items-center gap-3 border-b border-[var(--color-line)] px-4 py-3">
           <span aria-hidden="true" className="text-[var(--color-neon)]">

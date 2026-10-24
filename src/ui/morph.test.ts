@@ -10,7 +10,7 @@ type Handle = {
 };
 
 /** Stands in for the View Transitions API so each promise can be settled on demand. */
-function stubViewTransitions(): { handles: Handle[]; calls: () => number } {
+function stubViewTransitions(deferred = false): { handles: Handle[]; calls: () => number } {
   const handles: Handle[] = [];
   const start = (callback: () => void) => {
     let resolveReady!: () => void;
@@ -24,7 +24,7 @@ function stubViewTransitions(): { handles: Handle[]; calls: () => number } {
       resolveFinished = res;
     });
     handles.push({ resolveReady, rejectReady, resolveFinished, callback });
-    callback();
+    if (!deferred) callback();
     return { ready, finished };
   };
   Object.defineProperty(document, 'startViewTransition', {
@@ -45,6 +45,7 @@ const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 afterEach(() => {
   Reflect.deleteProperty(document, 'startViewTransition');
+  delete document.documentElement.dataset.workTransition;
   document.body.innerHTML = '';
   vi.restoreAllMocks();
 });
@@ -65,17 +66,31 @@ describe('runMorph', () => {
     expect(unhandled).not.toHaveBeenCalled();
   });
 
-  it('still clears the morph name after a superseded transition, so the card is reusable', async () => {
+  it('keeps a newer closing morph intact when the superseded opening finishes', async () => {
     const { handles } = stubViewTransitions();
     const el = card();
-
     runMorph(() => {}, el, true);
+    runMorph(() => {}, el, false);
     handles[0].rejectReady(new DOMException('aborted', 'InvalidStateError'));
     handles[0].resolveFinished();
     await settle();
+    expect(el.style.viewTransitionName).toBe('work-morph');
+    handles[1].resolveReady();
+    handles[1].resolveFinished();
     await settle();
-
     expect(el.style.viewTransitionName).toBe('');
+  });
+
+  it('ignores an older update callback that arrives after a newer transition', () => {
+    const { handles } = stubViewTransitions(true);
+    const older = vi.fn();
+    const newer = vi.fn();
+    runMorph(older, card(), true);
+    runMorph(newer, card(), false);
+    handles[1].callback();
+    handles[0].callback();
+    expect(newer).toHaveBeenCalledOnce();
+    expect(older).not.toHaveBeenCalled();
   });
 
   it('names the card before the snapshot when opening', () => {
