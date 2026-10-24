@@ -41,12 +41,14 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
         {visible && (
           <div className="car-controls-row">
             <MobileCarSwitcher />
-            <div className="car-paint-slot">
-              {fixedLivery ? <span className="car-livery">Livery</span> : <MobileColorButton />}
+            <div className="car-control-buttons">
+              <div className="car-paint-slot" data-fixed-livery={fixedLivery || undefined}>
+                {fixedLivery ? <span className="car-livery">Livery</span> : <MobileColorButton />}
+              </div>
+              <MobileThemeButton />
+              <CarActionSlot />
+              <RevButton />
             </div>
-            <MobileThemeButton />
-            <CarActionSlot />
-            <RevButton />
           </div>
         )}
       </div>
@@ -69,7 +71,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
             <CarActionSlot />
             <RevButton />
             <CameraResetButton />
-            <div className="car-paint-slot">
+            <div className="car-paint-slot" data-fixed-livery={fixedLivery || undefined}>
               {fixedLivery ? (
                 <span className="car-livery">Original livery</span>
               ) : (

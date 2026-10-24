@@ -26,3 +26,27 @@ export async function expectControlLayout(page: Page, original: number[][]) {
         `control ${i}, coordinate ${axis} stays in place`,
       ).toBeLessThan(0.5);
 }
+
+export async function expectCompactControls(page: Page) {
+  const gaps = await page.evaluate(() => {
+    const bar = document.querySelector(innerWidth < 768 ? '#mobile-bar' : '#desktop-dock')!;
+    const row =
+      bar.querySelector('.car-control-buttons') ?? bar.querySelector('.car-controls-row')!;
+    const controls = [...row.children]
+      .filter(
+        (element) =>
+          element.matches('button') ||
+          element.querySelector('button') ||
+          element.textContent?.trim(),
+      )
+      .map((element) => element.getBoundingClientRect())
+      .filter((rect) => rect.width > 0);
+    return controls.flatMap((rect, index) => {
+      const previous = controls[index - 1];
+      return previous && Math.abs(previous.y - rect.y) < 2 ? [rect.x - previous.right] : [];
+    });
+  });
+  expect(gaps.length).toBeGreaterThan(0);
+  for (const gap of gaps)
+    expect(gap, 'neighboring controls have no empty slot').toBeLessThanOrEqual(8);
+}

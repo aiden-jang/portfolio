@@ -21,10 +21,12 @@ The Contact car becomes visible when its section enters the viewport. Controls
 and orbit hints require a complete Intro or Contact viewport. CSS visibility
 updates on scroll without waiting for the active navigation section to change.
 
-`CarControls` uses fixed grid slots for paint, lighting and each car’s optional
-interaction. Livery labels retain the paint slot, and unsupported interactions
-leave their slot empty. Label, icon, loading and feedback changes therefore do
-not move neighboring controls. Picker text truncates within fixed-height rows.
+`CarControls` gives paint, lighting and optional interactions stable sizes while
+they are in use. Unsupported interactions collapse, and fixed-livery cars use a
+compact label. The bar adapts when switching cars without reserving empty slots;
+label, icon, loading and feedback changes do not move neighboring controls.
+Phone buttons form a compact centered row beneath the picker. Picker text
+truncates within fixed-height rows.
 
 ## Scene and state
 

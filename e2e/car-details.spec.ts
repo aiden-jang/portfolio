@@ -1,5 +1,5 @@
 import { expect, test, type Locator } from '@playwright/test';
-import { controlLayout, expectControlLayout } from './controlLayout';
+import { controlLayout, expectCompactControls, expectControlLayout } from './controlLayout';
 
 function observePulse(button: Locator) {
   return button.evaluate(
@@ -38,11 +38,11 @@ for (const [index, name, action] of [
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     const button = () =>
       page.getByRole('button', { name: action, exact: true }).filter({ visible: true });
-    let lastLayout: number[][] = [];
     for (const width of [320, 1440]) {
       if (width === 1440) await page.setViewportSize({ width, height: 900 });
       await expect(button()).toBeEnabled();
-      lastLayout = await controlLayout(page);
+      await expectCompactControls(page);
+      const lastLayout = await controlLayout(page);
       await page
         .getByRole('button', { name: /^Lighting:/ })
         .filter({ visible: true })
@@ -90,7 +90,7 @@ for (const [index, name, action] of [
     await page.keyboard.press('1');
     await expect(page.getByRole('button', { name: action, exact: true })).toHaveCount(0);
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-    await expectControlLayout(page, lastLayout);
+    await expectCompactControls(page);
     expect(errors).toEqual([]);
   });
 }
