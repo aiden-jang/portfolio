@@ -136,11 +136,12 @@ it.each([
   ['porsche-992-911-gt3.glb', 'Porsche_911GT3_2022Paint_Material'],
   ['lamborghini-aventador.glb', 'RED_PAINT'],
   ['bmw-g82-m4-adro.glb', 'untitledBMW_M4CompetitionG82TNR3_2021PaintTNR_Material_008'],
+  ['nissan-r35-aimgain.glb', 'nNissan_GTRTNR4_2017PaintTNR_Material_002'],
 ])('paints %s body panels without recoloring wheels or trim', async (file, materialName) => {
   const spec = CARS.find((car) => car.file === file)!;
   const { model, materials } = await paintFixture(spec.file);
   autoFitToLength(model);
-  hideBakedPlanes(model);
+  if (!spec.preserveFlatMeshes) hideBakedPlanes(model);
   const before = materials.map((material) => material.color.clone());
   const selected = detectBodyMaterial(model, spec.paintMaterial);
   expect(selected?.name).toBe(materialName);

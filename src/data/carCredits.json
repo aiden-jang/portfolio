@@ -156,5 +156,19 @@
     "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
     "url": "https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe",
     "notice": "Publisher identifies community-sourced assets; original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only."
+  },
+  "nissan-r35-aimgain.glb": {
+    "title": "Nissan Aimgain GT R35 Type2",
+    "author": "vecarz",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "url": "https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c",
+    "upstream": {
+      "author": "Outlaw Games™",
+      "url": "https://sketchfab.com/3d-models/2017-nissan-aimgain-gt-r35-gt-r-type-2-883cf78fadef4d698e50d2c1ae3f59c2",
+      "license": "CC BY-NC 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "notice": "Selected vecarz export; credited source and embedded original upload use CC BY-NC 4.0. Original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only."
   }
 }

@@ -29,6 +29,19 @@ for (const width of [1440, 390]) {
     await expect(
       picker.getByRole('button', { name: 'Show Ferrari F1-75, 2022 F1', exact: true }),
     ).toBeVisible();
+    await expect(
+      picker.getByRole('button', { name: 'Show Toyota GR Supra, A90 Modified', exact: true }),
+    ).toHaveCount(0);
+    await picker
+      .getByRole('button', { name: 'Show Nissan GT-R Aimgain, R35 Type 2', exact: true })
+      .click();
+    await expect(browse).toHaveAccessibleName('Browse cars. Nissan GT-R Aimgain, R35 Type 2');
+    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+    await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('17');
+    await page.reload();
+    await expect(browse).toHaveAccessibleName('Browse cars. Nissan GT-R Aimgain, R35 Type 2');
+    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+    await browse.click();
     await page.keyboard.press('End');
     await expect(
       picker.getByRole('button', { name: 'Show Red Bull RB16B, 2021 F1', exact: true }),

@@ -4,7 +4,7 @@ The source code's MIT license does not cover the car assets. This review records
 what each model's publisher licenses, plus any upstream notice supplied by that
 publisher. The checked source URLs, creator identities and license URLs are in
 [the evidence record](model-license-evidence.json). The review was checked on
-October 22, 2026 for the new lineup using Sketchfab’s public model API and download
+October 23, 2026 for the current lineup using Sketchfab’s public model API and download
 dialogs; the evidence record preserves each earlier model’s own review date.
 
 ## Source licenses
@@ -28,6 +28,8 @@ dialogs; the evidence record preserves each earlier model’s own review date.
 | Ferrari 296 GT3          | [vecarz](https://sketchfab.com/3d-models/ferrari-296-gt3-wwwvecarzcom-a463226115184535928ec75660c6571f), crediting [MattDoesBlender](https://sketchfab.com/3d-models/ferrari-296-gt3-e6760847bb2d4b579d43cf916f348526)                     | CC BY-NC 4.0; credited source CC BY 4.0                   | Fixed original racing livery                                                                           |
 | Red Bull RB16B           | [Dave Love SketchFab / Tyler_Dave](https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813)                                                                                                                    | CC BY 4.0                                                 | Fixed original racing livery; original provenance unverified                                           |
 | Ferrari F1-75            | [vecarz](https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe)                                                                                                                                       | CC BY-NC-SA 4.0                                           | Fixed red racing livery; publisher identifies community-sourced assets; original authorship unverified |
+
+| Nissan GT-R Aimgain R35 | [vecarz](https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c), crediting [Outlaw Games](https://sketchfab.com/3d-models/2017-nissan-aimgain-gt-r35-gt-r-type-2-883cf78fadef4d698e50d2c1ae3f59c2) | CC BY 4.0; upstream CC BY-NC 4.0 | Selected vecarz web export; noncommercial restriction retained; underlying rights unverified |
 
 CC BY permits sharing and modification, including commercial use, provided its
 conditions are met. The Contact credits give the supplied model titles, authors,
@@ -179,6 +181,30 @@ The adapted model retains that license, with credits in the site, embedded
 metadata and [the accompanying license notice](../public/models/ferrari-f1-75.LICENSE.txt).
 The publisher identifies community-sourced assets and does not establish original
 authorship; that provenance uncertainty remains recorded. The source code stays MIT.
+
+## Nissan GT-R Aimgain replacement
+
+The selected vecarz R35 Type 2 replaces the modified A90 Supra in the picker.
+Both retain their permanent registry IDs, so existing A90 links keep the original
+Supra. The stock A80 Supra remains in the picker.
+
+The official full-resolution glTF export preserves vecarz’s material settings,
+including the source graphite paint, separate wheels, carbon trim and glazing.
+The original-format upload retains different Outlaw material settings and is not
+used as the optimized source. No site mesh simplification, texture resizing or
+material conversion is applied. All 549,485 triangles, decoded vertex attributes,
+material parameters, hierarchy, texture dimensions and RGBA pixels are retained.
+Lossless meshopt and verified lossless WebP encoding reduce the reference GLB
+from 22,365,024 to 10,810,140 bytes, with no decoded validation errors or warnings.
+There are no animation clips. Flat splitter and underbody meshes remain visible;
+optional paint changes target only the named body material.
+
+The selected archive’s license.txt matches vecarz’s CC BY 4.0 listing. Its credited
+Outlaw Games source and embedded original-upload metadata use CC BY-NC 4.0.
+The adaptation credits both and retains the noncommercial restriction in its
+[accompanying notice](../public/models/nissan-r35-aimgain.LICENSE.txt), embedded
+metadata and displayed credits. These publisher terms do not independently
+establish original authorship or underlying vehicle rights.
 
 ## Updating the review
 

@@ -1,0 +1,25 @@
+Model Information:
+* title:	Nissan Aimgain GT R35 Type2
+* source:	https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c
+* author:	vecarz (https://sketchfab.com/heynic)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Nissan Aimgain GT R35 Type2" (https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+
+Credited source and original-upload metadata:
+{
+  "author": "Outlaw Games™ (https://sketchfab.com/WarEntertainment)",
+  "license": "CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+  "source": "https://sketchfab.com/3d-models/2017-nissan-aimgain-gt-r35-gt-r-type-2-883cf78fadef4d698e50d2c1ae3f59c2",
+  "title": "2017 Nissan Aimgain GT R35 GT-R Type 2"
+}
+
+The selected vecarz listing uses CC BY 4.0. Its credited Outlaw Games source and original upload use CC BY-NC 4.0. This web adaptation retains the noncommercial restriction and credits both: https://creativecommons.org/licenses/by-nc/4.0/
+
+Portfolio adaptation: full source mesh, vertex precision, material parameters, texture dimensions and decoded pixels retained. Geometry reordered and losslessly meshopt-compressed; textures losslessly encoded where smaller. Portfolio framing and lighting applied, with source graphite finish by default and optional repaint limited to the named body material. Flat splitter and underbody meshes retained. No animation clips are supplied.
+
+Original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only.

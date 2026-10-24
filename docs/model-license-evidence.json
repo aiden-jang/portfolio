@@ -484,6 +484,58 @@
       "notice": "Publisher identifies community-sourced assets. Original authorship and underlying vehicle rights are unverified. Personal noncommercial use only.",
       "adaptationLicense": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
       "runtimeAdaptation": "Dielectric body livery, printed decals and carbon; rough nonmetallic tires. Source GLB materials, texture pixels, vertex attributes and hierarchy retained."
+    },
+    {
+      "file": "nissan-r35-aimgain.glb",
+      "title": "Nissan Aimgain GT R35 Type2",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c",
+      "evidence": "https://api.sketchfab.com/v3/models/77456704dc1b4d299a23fecdf341003c",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-23",
+      "review": "publisher-and-credited-source-licenses-recorded-personal-use",
+      "sourceReview": "Thank you [Outlaw Games™] , tell me how setting the beautiful light!\nhttps://sketchfab.com/3d-models/2017-nissan-aimgain-gt-r35-gt-r-type-2-883cf78fadef4d698e50d2c1ae3f59c2",
+      "archiveSha256": "4d0a4e4eecbb2d310bba9da0eb9de776311c3b1de688c043f7759f6ff2f6762d",
+      "originalArchiveSha256": "5c0e28ddf794b157fcfb8a699fafa2b5cbb51bce0f4e07c62e10fc7169a3b333",
+      "sourceAssetMetadata": {
+        "author": "vecarz (https://sketchfab.com/heynic)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c",
+        "title": "Nissan Aimgain GT R35 Type2"
+      },
+      "originalUploadMetadata": {
+        "author": "Outlaw Games™ (https://sketchfab.com/WarEntertainment)",
+        "license": "CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+        "source": "https://sketchfab.com/3d-models/2017-nissan-aimgain-gt-r35-gt-r-type-2-883cf78fadef4d698e50d2c1ae3f59c2",
+        "title": "2017 Nissan Aimgain GT R35 GT-R Type 2"
+      },
+      "optimization": {
+        "referenceBytes": 22365024,
+        "optimizedBytes": 10810140,
+        "triangles": 549485,
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "textures": "All 35 source textures retain original dimensions and decoded RGBA pixels.",
+        "materials": "Selected vecarz web-export material parameters and hierarchy retained.",
+        "animations": "Source contains no animation clips.",
+        "assetSha256": "6715b160537be133f4363049ea93f06778a07f36106c8e7bdda709e4037b2a6e",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      },
+      "downloadLicenseText": "Model Information:\n* title:\tNissan Aimgain GT R35 Type2\n* source:\thttps://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c\n* author:\tvecarz (https://sketchfab.com/heynic)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Nissan Aimgain GT R35 Type2\" (https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "upstream": {
+        "author": "Outlaw Games™",
+        "url": "https://sketchfab.com/3d-models/2017-nissan-aimgain-gt-r35-gt-r-type-2-883cf78fadef4d698e50d2c1ae3f59c2",
+        "license": "CC BY-NC 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+        "evidence": "https://api.sketchfab.com/v3/models/883cf78fadef4d698e50d2c1ae3f59c2",
+        "description": "# CURRENT MONEY LOSS: \n$118,415 ($118k)\n\n-\n# SUPPORT ME\nJust join our Discord server already. Link is in ACCOUNT BIO\n\n-\n\n\n**Credits:** *@myself*",
+        "verifiedOn": "2026-10-23"
+      },
+      "notice": "Selected vecarz export; credited source and embedded original upload use CC BY-NC 4.0. Original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only.",
+      "adaptationLicense": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "runtimeAdaptation": "Portfolio framing and lighting; source graphite finish by default and optional repaint restricted to the named body material. Flat splitter and underbody meshes retained."
     }
   ]
 }

@@ -203,6 +203,19 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     },
     exposure: 1,
   },
+  {
+    file: 'nissan-r35-aimgain.glb',
+    name: 'Nissan GT-R Aimgain',
+    code: 'R35 Type 2',
+    paintMaterial: 'nNissan_GTRTNR4_2017PaintTNR_Material_002',
+    preserveFlatMeshes: true,
+    defaultPaint: {
+      name: 'Aimgain Graphite',
+      hex: '#171717',
+      preserveSource: true,
+    },
+    exposure: 1,
+  },
 ];
 
 export const CARS: CarSpec[] = registry.map((car) => ({
@@ -211,7 +224,7 @@ export const CARS: CarSpec[] = registry.map((car) => ({
 }));
 
 // Retired cars remain available to existing links, outside the curated picker.
-export const GARAGE_INDICES: readonly number[] = [0, 1, 5, 4, 2, 10, 3, 9, 6, 11, 12, 13, 16, 15];
+export const GARAGE_INDICES: readonly number[] = [0, 1, 5, 4, 2, 10, 3, 9, 6, 17, 12, 13, 16, 15];
 
 export function adjacentCar(index: number, direction: -1 | 1): number {
   const position = GARAGE_INDICES.indexOf(index);
