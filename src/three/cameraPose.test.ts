@@ -151,8 +151,13 @@ describe('easeOutCubic', () => {
   });
 });
 
-it('holds the contact opening camera until the last part of the scroll', () => {
-  expect(contactArrivalProgress(400, 800, 0.6, 0.1, false)).toBe(0);
+it('holds the Contact opening pose, then smoothly arrives and reverses without resetting', () => {
+  expect(contactArrivalProgress(400, 800, 0, 0.1, false)).toBe(0);
+  expect(contactArrivalProgress(400, 800, 1, 0, false)).toBe(1);
+  expect(contactArrivalProgress(400, 800, 0.6, 0.1, false)).toBeCloseTo(0.6 - 0.1 / 2.2);
+  expect(contactArrivalProgress(400, 800, 0.02, 0.1, false)).toBe(0);
+  expect(contactArrivalProgress(120, 800, 0.5, 0.1, false)).toBeCloseTo(0.5 + 0.1 / 2.2);
+  expect(contactArrivalProgress(400, 800, 0.6, 0.1, true)).toBe(0);
   expect(contactArrivalProgress(120, 800, 0, 0.1, false)).toBeCloseTo(0.1 / 2.2);
   expect(contactArrivalProgress(0, 800, 0.9, 1, false)).toBe(1);
   expect(contactArrivalProgress(0, 800, 0, 0.1, true)).toBe(1);

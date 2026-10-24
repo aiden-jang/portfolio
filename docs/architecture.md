@@ -49,7 +49,10 @@ does not block mounting the scene or starting the model request. Rendering pause
 in reading sections and resumes for the visible Contact car.
 `CameraRig` combines section poses, pointer offsets, intro motion and rev motion.
 `useContactArrival` holds the front-facing opening pose, then advances the arrival
-near the end of the Contact scroll. Reduced motion bypasses the arrival animation.
+near the end of the Contact scroll. Scrolling back toward About reverses the same
+progress instead of resetting the camera while Contact is still visible. Changing
+direction partway through continues from the current pose. Reduced motion bypasses
+the arrival and departure animation.
 The composer and reflection target disable floating-point multisampling because it
 produces blank targets in the tested WebKit engine. SMAA smooths the final scene
 instead, including the reflection; DOM text is unaffected.

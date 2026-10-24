@@ -74,6 +74,8 @@ export function contactArrivalProgress(
   dt: number,
   reduced: boolean,
 ): number {
-  if (top > height * 0.15) return 0;
-  return reduced ? 1 : Math.min(1, progress + dt / 2.2);
+  const arriving = top <= height * 0.15;
+  if (reduced) return arriving ? 1 : 0;
+  const step = dt / 2.2;
+  return clamp(progress + (arriving ? step : -step), 0, 1);
 }
