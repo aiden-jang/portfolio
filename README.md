@@ -14,9 +14,10 @@ with an interactive 3D garage. Built with React, TypeScript and Three.js.
 - Filter projects and inspect original screenshots without leaving the portfolio.
 - Reach Contact with the car’s front-to-overhead camera arrival.
 
-Car controls appear only when Intro or Contact fills the viewport. The Contact
-car appears earlier, holding its opening angle until the section is almost in
-place. Keyboard controls, reduced motion, loading errors and model attribution
+Car controls appear only when Intro fills the viewport. The Contact car is a
+decorative backdrop with no drag gestures or car controls. It appears when the
+section enters the viewport, holding its opening angle until the section is almost
+in place. Keyboard controls, reduced motion, loading errors and model attribution
 are supported. The portfolio content remains available if the 3D scene fails.
 The garage mixes stock classics, newer modified road cars and fixed-livery race
 cars. Model-specific controls raise the Miata’s headlights and open DRS on either F1

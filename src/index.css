@@ -217,12 +217,10 @@
   }
 
   /* Dragging the car fades only its copy; reading backgrounds stay opaque. */
-  #sec-intro .panel,
-  #sec-contact .panel {
+  #sec-intro .panel {
     transition: opacity 0.3s ease;
   }
-  body.orbiting #sec-intro .panel,
-  body.orbiting #sec-contact .panel {
+  body.orbiting #sec-intro .panel {
     opacity: 0;
     pointer-events: none;
   }

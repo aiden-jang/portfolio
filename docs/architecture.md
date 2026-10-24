@@ -17,9 +17,12 @@ Section resize observation refreshes scene and control visibility when initial
 layout or content sizing settles without a scroll event, including WebKit reloads.
 
 Scene visibility, section selection and control visibility have different rules.
-The Contact car becomes visible when its section enters the viewport. Controls
-and orbit hints require a complete Intro or Contact viewport. CSS visibility
-updates on scroll without waiting for the active navigation section to change.
+The Contact car becomes visible when its section enters the viewport and keeps
+its automatic arrival animation. Controls and orbit hints require a complete
+Intro viewport. Contact rejects car gestures while leaving its copy and links
+interactive. Scene visibility and gesture eligibility use separate predicates.
+CSS visibility updates on scroll without waiting for the active navigation
+section to change.
 
 `CarControls` gives paint, lighting and optional interactions stable sizes while
 they are in use. Unsupported interactions collapse, and fixed-livery cars use a

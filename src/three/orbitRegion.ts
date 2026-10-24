@@ -1,18 +1,24 @@
 export type SectionBounds = { id: string; top: number; bottom: number };
 
-export function canOrbitAt(y: number, sections: SectionBounds[]): boolean {
-  const section = sections.find((item) => item.top <= y && item.bottom > y);
-  return section?.id === 'sec-intro' || section?.id === 'sec-contact';
+function sectionAt(y: number, sections: SectionBounds[]): string | undefined {
+  return sections.find((item) => item.top <= y && item.bottom > y)?.id;
 }
 
-export function hasFullCarView(height: number, sections: SectionBounds[]): boolean {
+export function canOrbitAt(y: number, sections: SectionBounds[]): boolean {
+  return sectionAt(y, sections) === 'sec-intro';
+}
+
+export function carIsVisibleAt(y: number, sections: SectionBounds[]): boolean {
+  const section = sectionAt(y, sections);
+  return section === 'sec-intro' || section === 'sec-contact';
+}
+
+export function hasFullIntroView(height: number, sections: SectionBounds[]): boolean {
   return (
     height > 0 &&
     sections.some(
       ({ id, top, bottom }) =>
-        (id === 'sec-intro' || id === 'sec-contact') &&
-        Math.round(top) <= 0 &&
-        Math.round(bottom) >= height,
+        id === 'sec-intro' && Math.round(top) <= 0 && Math.round(bottom) >= height,
     )
   );
 }

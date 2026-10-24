@@ -1,4 +1,4 @@
-import { CARS, SECTION_IDS, type SectionId } from '../config';
+import { CARS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { CameraResetButton } from './CameraResetButton';
 import { CarSwitcher, MobileCarSwitcher } from './CarSwitcher';
@@ -25,7 +25,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
   const carIndex = useAppStore((state) => state.carIndex);
   const fixedLivery = CARS[carIndex].fixedLivery;
   const sectionIndex = useAppStore((state) => state.sectionIndex);
-  const visible = sectionIndex === 0 || SECTION_IDS[sectionIndex] === 'sec-contact';
+  const visible = sectionIndex === 0;
   return (
     <>
       <div

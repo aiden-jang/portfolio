@@ -63,6 +63,12 @@ for (const width of [1440, 390]) {
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
       await expectVisibleCar(page);
+      await page.mouse.move(8, 450);
+      await page.mouse.down();
+      await page.mouse.move(16, 490, { steps: 4 });
+      await expect(page.locator('body')).toHaveClass(/orbiting/);
+      await page.mouse.up();
+      await expect(page.locator('body')).not.toHaveClass(/orbiting/);
       expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(
         false,
       );
@@ -225,6 +231,16 @@ for (const width of [1440, 390]) {
         await page.locator('#nav').getByRole('link', { name: 'Contact', exact: true }).click();
       }
       await expect(page.locator('#sec-contact h2')).toBeInViewport();
+      await expect(page.locator('#desktop-dock')).toBeHidden();
+      await expect(page.locator('#mobile-bar')).toBeHidden();
+      await expect(page.locator('#hint')).toBeHidden();
+      await expect(page.locator('.portfolio-scene')).toBeVisible();
+      await page.mouse.move(8, 450);
+      await page.mouse.down();
+      await page.mouse.move(16, 490, { steps: 4 });
+      await expect(page.locator('body')).not.toHaveClass(/orbiting/);
+      await page.mouse.up();
+      await expect(page.getByRole('link', { name: 'Open email ↗' })).toBeVisible();
       const credits = page.getByRole('button', { name: /3D model credits/ });
       await credits.click();
       await expect(page.getByRole('dialog', { name: '3D model credits' })).toBeVisible();

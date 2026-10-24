@@ -6,9 +6,9 @@ import { cancelSmoothScroll, smoothScrollTo } from './scrollNavigation';
 import { useAppStore } from '../store';
 import { sectionProgress } from './sectionProgress';
 import {
-  canOrbitAt,
+  carIsVisibleAt,
   contactIsVisible,
-  hasFullCarView,
+  hasFullIntroView,
   pageSectionBounds,
 } from '../three/orbitRegion';
 
@@ -85,7 +85,7 @@ export function useNavigation(sceneOnly = false) {
       const absX = Math.abs(e.deltaX);
       const absY = Math.abs(e.deltaY);
       if (absX > absY && absX >= MIN_WHEEL_DELTA) {
-        if (!hasFullCarView(window.innerHeight, pageSectionBounds())) return;
+        if (!hasFullIntroView(window.innerHeight, pageSectionBounds())) return;
         if (e.deltaX > 0) cycleCarThrottled();
         else prevCarThrottled();
       } else if (absY >= MIN_WHEEL_DELTA) {
@@ -109,10 +109,10 @@ export function useNavigation(sceneOnly = false) {
       document.body.dataset.contactView = contactVisible ? 'visible' : 'hidden';
       if (useAppStore.getState().isContactVisible !== contactVisible)
         useAppStore.getState().setContactVisible(contactVisible);
-      document.body.dataset.carControls = hasFullCarView(window.innerHeight, bounds)
+      document.body.dataset.carControls = hasFullIntroView(window.innerHeight, bounds)
         ? 'visible'
         : 'hidden';
-      document.body.dataset.carView = canOrbitAt(window.innerHeight * 0.15, bounds)
+      document.body.dataset.carView = carIsVisibleAt(window.innerHeight * 0.15, bounds)
         ? 'visible'
         : 'reading';
       if (performance.now() < snapLockUntil.current) return;
