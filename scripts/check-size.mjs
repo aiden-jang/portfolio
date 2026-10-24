@@ -11,7 +11,7 @@ const SLACK = 40;
 
 const CEILINGS = {
   'src/ui/WorkModal.tsx': 170,
-  'src/ui/CommandMenu.tsx': 181,
+  'src/ui/CommandMenu.tsx': 179,
   'src/three/CameraRig.tsx': 125,
   'scripts/check-size.mjs': 65,
   'scripts/check-comments.mjs': 47,

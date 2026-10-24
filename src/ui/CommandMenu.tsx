@@ -74,7 +74,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-[min(18vh,9rem)] bg-[rgba(5,5,13,0.72)]"
+      className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-[min(18vh,9rem)] bg-[#05050de6]"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) setOpen(false);
       }}
@@ -84,9 +84,9 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         role="dialog"
         aria-modal="true"
         aria-label="Command menu"
-        className="w-full max-w-[490px] overflow-hidden rounded-2xl border border-white/[0.14] bg-[#0b0b15]/95 shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)] backdrop-blur-xl animate-[app-fade-in_160ms_ease-out_both]"
+        className="w-full max-w-[490px] overflow-hidden rounded-[10px] border border-[var(--color-line)] bg-[#17171c] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)] animate-[app-fade-in_160ms_ease-out_both]"
       >
-        <div className="flex items-center gap-3 border-b border-white/[0.1] px-4 py-3">
+        <div className="flex items-center gap-3 border-b border-[var(--color-line)] px-4 py-3">
           <span aria-hidden="true" className="text-[var(--color-neon)]">
             {modifierKey()}
           </span>
@@ -126,9 +126,9 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
               results[activeIndex] ? `command-${results[activeIndex].id}` : undefined
             }
             aria-controls="command-results"
-            className="min-w-0 flex-1 bg-transparent font-[var(--font-display)] text-[0.96rem] text-[var(--color-fg)] outline-none placeholder:text-[rgba(244,240,255,0.36)]"
+            className="min-w-0 flex-1 bg-transparent font-[var(--font-display)] text-[0.96rem] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-muted)]"
           />
-          <kbd className="rounded border border-white/[0.12] px-1.5 py-0.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.1em] text-[var(--color-muted)]">
+          <kbd className="rounded border border-[var(--color-line)] px-1.5 py-0.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.1em] text-[var(--color-muted)]">
             ESC
           </kbd>
         </div>
@@ -144,15 +144,13 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
                 aria-selected={index === activeIndex}
                 onClick={() => void select(command)}
                 onMouseEnter={() => setActiveIndex(index)}
-                className={`group flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition-colors ${
-                  index === activeIndex ? 'bg-white/[0.07]' : 'hover:bg-white/[0.07]'
+                className={`flex w-full items-center justify-between rounded-md px-3 py-3 text-left transition-colors ${
+                  index === activeIndex ? 'bg-white/[0.07]' : ''
                 }`}
               >
                 <span
                   className={`text-[0.92rem] transition-colors ${
-                    index === activeIndex
-                      ? 'text-[var(--color-fg)]'
-                      : 'text-[rgba(244,240,255,0.86)] group-hover:text-[var(--color-fg)]'
+                    index === activeIndex ? 'text-[var(--color-fg)]' : 'text-[var(--color-muted)]'
                   }`}
                 >
                   {command.label}
@@ -170,7 +168,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         </div>
         <div
           aria-live="polite"
-          className="border-t border-white/[0.08] px-4 py-2.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.42)]"
+          className="border-t border-[var(--color-line)] px-4 py-2.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.12em] uppercase text-[var(--color-muted)]"
         >
           {notice || '↑ ↓ browse · Home End jump · Enter run'}
         </div>

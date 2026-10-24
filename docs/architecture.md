@@ -28,6 +28,12 @@ label, icon, loading and feedback changes do not move neighboring controls.
 Phone buttons form a compact centered row beneath the picker. Picker text
 truncates within fixed-height rows.
 
+The car picker distinguishes the current selection from keyboard focus: its check
+and Selected label identify the loaded car, while only the keyboard target receives
+a focus frame. Browsing does not change the car until activation. The command menu
+uses one active result for both pointer and keyboard navigation, without retaining
+a hover highlight on the previous result.
+
 ## Scene and state
 
 `three/Scene.tsx` composes the canvas, models, lighting, floor and effects.

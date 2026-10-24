@@ -55,6 +55,29 @@ for (const width of [1440, 390]) {
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await expect(browse).toHaveAccessibleName('Browse cars. Mazda MX-5 Miata, NA');
     await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('10');
+    await browse.click();
+    const selected = picker.getByRole('button', { name: 'Show Mazda MX-5 Miata, NA', exact: true });
+    await expect(selected).toBeFocused();
+    await selected.hover();
+    await page.keyboard.press('ArrowRight');
+    await expect(
+      picker.getByRole('button', { name: 'Show Datsun 280Z, S30', exact: true }),
+    ).toBeFocused();
+    await expect(selected).toHaveAttribute('aria-pressed', 'true');
+    await expect(selected).toContainText('Selected');
+    const framed = await options.evaluateAll((buttons) =>
+      buttons
+        .filter((button) => {
+          const style = getComputedStyle(button);
+          return button.matches(':focus-visible') || style.borderTopColor === style.color;
+        })
+        .map((button) => button.getAttribute('aria-label')),
+    );
+    expect(framed, 'only the keyboard target has an emphasized car frame').toEqual([
+      'Show Datsun 280Z, S30',
+    ]);
+    await page.keyboard.press('Escape');
+    await expect(browse).toBeFocused();
     const headlights = page
       .getByRole('button', { name: 'Pop-up headlights' })
       .filter({ visible: true });

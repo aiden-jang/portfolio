@@ -115,6 +115,22 @@ for (const width of [1440, 390]) {
 
       await page.keyboard.press('Control+k');
       await expect(page.getByRole('dialog', { name: 'Command menu' })).toBeVisible();
+      const results = page.getByRole('listbox').getByRole('option');
+      await results.first().hover();
+      await page.getByRole('combobox', { name: 'Search portfolio controls' }).press('ArrowDown');
+      await expect(results.nth(1)).toHaveAttribute('aria-selected', 'true');
+      await expect
+        .poll(() =>
+          results.evaluateAll((options) =>
+            options
+              .filter((option) => {
+                const background = getComputedStyle(option).backgroundColor;
+                return background !== 'rgba(0, 0, 0, 0)' && background !== 'transparent';
+              })
+              .map((option) => option.id),
+          ),
+        )
+        .toEqual(['command-sec-experience']);
       for (const index of GARAGE_INDICES.slice(9)) {
         await expect(page.locator(`#command-car-${index}`)).toContainText('select');
       }
