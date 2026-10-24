@@ -46,8 +46,8 @@ desktop while checking shared paint, default restoration and picker focus. The
 clock is fixed for consistent studio lighting. Car-detail checks load each supported
 model once per engine, resize between phone and desktop, exercise keyboard
 activation and reset on selection, and check that unrelated cars hide the controls.
-Real-model unit fixtures check DRS isolation and restoration, front-only lamp
-selection and resource cleanup.
+Real-model unit fixtures check DRS isolation and restoration. The Supra keeps its
+normal lighting without an interactive headlight control.
 
 Axe checks WCAG A and AA rules on the page and open dialogs. The tests use the real
 models, images and interface. Local telemetry endpoints are stubbed because they

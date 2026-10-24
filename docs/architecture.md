@@ -98,15 +98,9 @@ the hinges and replace the Miata’s fixed front lights. Both fade with the open
 pose. The controller restores cloned bulb materials and removes its lights when
 the model is replaced, alongside releasing animation bindings.
 `carDetails` rotates each F1 model’s existing DRS joint from its resting quaternion;
-these are custom runtime movements, not supplied animation clips. The Supra A80
-flash splits only the front triangles of its shared lamp material into a cloned
-emissive material, leaving rear surfaces and source geometry intact. One brief
-pulse boosts its existing front lights, then restores brightness. Reduced motion
-snaps DRS poses and holds one steady light pulse. `useCarDetails` owns their lifecycle
-and updates after base lamp intensities so the flash is not overwritten. The pulse
-uses elapsed frame time and requests frames until it ends, including demand
-rendering after an idle period. Selection
-resets detail state, and disposal restores the source pose, materials and geometry.
+these are custom runtime movements, not supplied animation clips. Reduced motion
+snaps DRS poses. `useCarDetails` owns their lifecycle; selection resets detail
+state, and disposal restores the source pose.
 Framing measures actual world-space
 vertices once on load so rotated mesh bounds do not lift cars off the floor. Only
 the default car and the smallest companion warm the HTTP cache when network conditions permit;

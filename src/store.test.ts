@@ -130,44 +130,31 @@ it('guards headlight controls while unavailable or loading and resets the next M
   expect(useAppStore.getState().headlightsRaised).toBe(true);
 });
 
-it('guards car-specific details, prevents overlapping flashes and resets them on selection', () => {
+it('guards DRS while loading or unavailable and resets it on car changes', () => {
   const state = useAppStore.getState();
   state.setCarIndex(16);
   state.toggleDRS();
   expect(useAppStore.getState().drsOpen).toBe(false);
-  useAppStore.setState({ hasDRS: true, isCarLoading: false });
+  useAppStore.setState({ hasDRS: true, isCarLoading: true });
+  state.toggleDRS();
+  expect(useAppStore.getState().drsOpen).toBe(false);
+  useAppStore.setState({ isCarLoading: false, carLoadError: 'Could not load' });
+  state.toggleDRS();
+  expect(useAppStore.getState().drsOpen).toBe(false);
+  useAppStore.setState({ carLoadError: null });
   state.toggleDRS();
   expect(useAppStore.getState().drsOpen).toBe(true);
   state.setCarIndex(2);
-  expect(useAppStore.getState()).toMatchObject({
-    drsOpen: false,
-    hasDRS: false,
-    hasFlashLights: false,
-  });
-  state.flashLights();
-  expect(useAppStore.getState().flashVersion).toBe(0);
-  useAppStore.setState({ hasFlashLights: true, isCarLoading: true });
-  state.flashLights();
-  expect(useAppStore.getState().flashVersion).toBe(0);
-  useAppStore.setState({ isCarLoading: false, carLoadError: 'Could not load' });
-  state.flashLights();
-  expect(useAppStore.getState().flashVersion).toBe(0);
-  useAppStore.setState({ carLoadError: null });
-  state.flashLights();
-  state.flashLights();
-  expect(useAppStore.getState()).toMatchObject({ flashActive: true, flashVersion: 1 });
-  useAppStore.setState({ flashActive: false });
-  state.flashLights();
-  expect(useAppStore.getState().flashVersion).toBe(2);
-  state.randomizeGarage();
-  expect(useAppStore.getState()).toMatchObject({
-    flashActive: false,
-    drsOpen: false,
-    hasFlashLights: false,
-    hasDRS: false,
-  });
-  state.flashLights();
+  expect(useAppStore.getState()).toMatchObject({ drsOpen: false, hasDRS: false });
+  useAppStore.setState({ hasDRS: true });
   state.toggleDRS();
-  expect(useAppStore.getState().flashVersion).toBe(2);
+  expect(useAppStore.getState().drsOpen).toBe(false);
+  state.setCarIndex(15);
+  useAppStore.setState({ hasDRS: true, isCarLoading: false });
+  state.toggleDRS();
+  expect(useAppStore.getState().drsOpen).toBe(true);
+  state.randomizeGarage();
+  expect(useAppStore.getState()).toMatchObject({ drsOpen: false, hasDRS: false });
+  state.toggleDRS();
   expect(useAppStore.getState().drsOpen).toBe(false);
 });

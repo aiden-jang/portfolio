@@ -28,7 +28,6 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     name: 'Toyota Supra',
     code: 'A80',
     file: 'toyota-a80-supra.glb',
-    flashMaterial: 'TOYOTA_SUPRA_MAIN_LIGHT',
     defaultPaint: {
       name: 'Deep Jade',
       hex: '#285c54',

@@ -1,30 +1,9 @@
-import { expect, test, type Locator } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { controlLayout, expectCompactControls, expectControlLayout } from './controlLayout';
-
-function observePulse(button: Locator) {
-  return button.evaluate(
-    (element) =>
-      new Promise<boolean>((resolve) => {
-        let dimmed = false;
-        const finish = (complete: boolean) => {
-          observer.disconnect();
-          window.clearTimeout(timer);
-          resolve(complete);
-        };
-        const observer = new MutationObserver(() => {
-          if ((element as HTMLButtonElement).disabled) dimmed = true;
-          else if (dimmed) finish(true);
-        });
-        const timer = window.setTimeout(() => finish(false), 20_000);
-        observer.observe(element, { attributes: true, attributeFilter: ['disabled'] });
-      }),
-  );
-}
 
 for (const [index, name, action] of [
   [16, 'Ferrari F1-75', 'DRS rear wing'],
   [15, 'Red Bull RB16B', 'DRS rear wing'],
-  [2, 'Toyota Supra', 'Flash headlights'],
 ] as const) {
   test(`${name} detail works on phone and desktop and clears on a car change`, async ({ page }) => {
     const errors: string[] = [];
@@ -50,15 +29,11 @@ for (const [index, name, action] of [
       await expectControlLayout(page, lastLayout);
       const bounds = await button().evaluate((element) => {
         const rect = element.getBoundingClientRect();
-        const rev = element
-          .closest('#mobile-bar, #desktop-dock')!
-          .querySelector('[aria-label="Rev engine"]')!;
         return {
           x: rect.x,
           right: rect.right,
           width: rect.width,
           height: rect.height,
-          sameRow: Math.abs(rev.getBoundingClientRect().y - rect.y) < 1,
           overflow: document.documentElement.scrollWidth > innerWidth,
         };
       });
@@ -67,23 +42,9 @@ for (const [index, name, action] of [
       expect(bounds.x).toBeGreaterThanOrEqual(0);
       expect(bounds.right).toBeLessThanOrEqual(width);
       expect(bounds.overflow).toBe(false);
-      if (action === 'Flash headlights' && width === 320) expect(bounds.sameRow).toBe(true);
-      if (action === 'Flash headlights' && width === 320) {
-        const paint = page.getByRole('button', { name: /^Paint:.*Change color$/ });
-        for (let i = 0; i < 7; i++) {
-          await paint.click();
-          await expectControlLayout(page, lastLayout);
-        }
-      }
-      const pulse = action === 'Flash headlights' ? observePulse(button()) : null;
       if (width === 320) await button().click();
       else await button().press('Space');
-      if (action === 'DRS rear wing') {
-        await expect(button()).toHaveAttribute('aria-pressed', width === 320 ? 'true' : 'false');
-      } else {
-        expect(await pulse, 'Flash disables briefly, then unlocks for another pulse').toBe(true);
-        await expect(button()).toBeEnabled();
-      }
+      await expect(button()).toHaveAttribute('aria-pressed', width === 320 ? 'true' : 'false');
       await expectControlLayout(page, lastLayout);
     }
     await page.locator('h1').click();
@@ -94,3 +55,37 @@ for (const [index, name, action] of [
     expect(errors).toEqual([]);
   });
 }
+
+test('Supra keeps compact paint controls without a headlight action on phone and desktop', async ({
+  page,
+}) => {
+  await page.route('**/_vercel/**', (route) =>
+    route.fulfill({ body: '', contentType: 'application/javascript' }),
+  );
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto('/?car=2&light=night');
+  await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+  for (const width of [320, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(
+      page.getByRole('button', { name: /Flash headlights|Pop-up headlights|DRS rear wing/ }),
+    ).toHaveCount(0);
+    await expectCompactControls(page);
+    const original = await controlLayout(page);
+    await page
+      .getByRole('button', { name: /^Lighting:/ })
+      .filter({ visible: true })
+      .click();
+    await expectControlLayout(page, original);
+    if (width === 320) {
+      const paint = page.getByRole('button', { name: /^Paint:.*Change color$/ });
+      await expect(paint).toBeEnabled();
+      for (let i = 0; i < 7; i++) {
+        await paint.click();
+        await expectControlLayout(page, original);
+      }
+    } else {
+      await expect(page.getByRole('group', { name: 'Paint', exact: true })).toBeVisible();
+    }
+  }
+});

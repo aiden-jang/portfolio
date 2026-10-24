@@ -159,8 +159,7 @@ Aventador. Body materials are explicit, protecting wheels and trim. Racing cars
 keep their original liveries and hide repaint controls. The F1-75 and RB16B retain
 their floors and wings and do not receive synthetic road-car headlights or taillights.
 Both F1 cars have a custom runtime DRS control using their existing rear-wing
-joints; neither source supplies an animation clip. The Supra A80’s Flash control
-isolates front lamp triangles at runtime, preserving its shared rear lamp surfaces.
+joints; neither source supplies an animation clip.
 These adaptations do not alter the hosted GLBs, textures or attribution.
 Heavy models load only on selection; the arrival prefetch pool is unchanged.
 

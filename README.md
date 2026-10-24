@@ -19,8 +19,8 @@ car appears earlier, holding its opening angle until the section is almost in
 place. Keyboard controls, reduced motion, loading errors and model attribution
 are supported. The portfolio content remains available if the 3D scene fails.
 The garage mixes stock classics, newer modified road cars and fixed-livery race
-cars. Model-specific controls raise the Miata’s headlights, open DRS on either F1
-car, and flash the Supra A80’s headlights. Retired selections remain available through existing shared links.
+cars. Model-specific controls raise the Miata’s headlights and open DRS on either F1
+car. Retired selections remain available through existing shared links.
 
 ## Run locally
 

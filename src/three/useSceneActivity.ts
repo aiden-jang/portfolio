@@ -37,7 +37,6 @@ export function useSceneActivity(): boolean {
         next.carRetryVersion !== previous.carRetryVersion ||
         next.themeName !== previous.themeName ||
         next.drsOpen !== previous.drsOpen ||
-        next.flashVersion !== previous.flashVersion ||
         next.headlightsRaised !== previous.headlightsRaised ||
         next.activeBodyColor !== previous.activeBodyColor ||
         next.hasBodyMaterial !== previous.hasBodyMaterial ||

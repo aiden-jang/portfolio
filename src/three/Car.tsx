@@ -126,7 +126,7 @@ export function Car() {
           spec.roadLights === false
             ? []
             : buildLamps(group, orientedSize, scale, !headlights.current);
-        attachDetails(model, spec, refs.lamps);
+        attachDetails(model, spec);
         refs.bodyMaterial = detectBodyMaterial(model, spec.paintMaterial);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);

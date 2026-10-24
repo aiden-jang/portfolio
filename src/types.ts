@@ -44,7 +44,6 @@ export type CarSpec = {
   orientationYaw?: number;
   roadLights?: boolean;
   drs?: { node: string; openAngle: number };
-  flashMaterial?: string;
   popupHeadlights?: {
     clip: string;
     closedTime: number;

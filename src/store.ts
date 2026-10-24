@@ -30,11 +30,7 @@ type AppState = {
   carRetryVersion: number;
   drsOpen: boolean;
   hasDRS: boolean;
-  hasFlashLights: boolean;
-  flashVersion: number;
-  flashActive: boolean;
   toggleDRS: () => void;
-  flashLights: () => void;
   headlightsRaised: boolean;
   hasPopupHeadlights: boolean;
   toggleHeadlights: () => void;
@@ -73,24 +69,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   carRetryVersion: 0,
   drsOpen: false,
   hasDRS: false,
-  hasFlashLights: false,
-  flashVersion: 0,
-  flashActive: false,
   toggleDRS: () => {
     const state = get();
     if (CARS[state.carIndex].drs && state.hasDRS && !state.isCarLoading && !state.carLoadError)
       set({ drsOpen: !state.drsOpen });
-  },
-  flashLights: () => {
-    const state = get();
-    if (
-      CARS[state.carIndex].flashMaterial &&
-      state.hasFlashLights &&
-      !state.isCarLoading &&
-      !state.carLoadError &&
-      !state.flashActive
-    )
-      set({ flashVersion: state.flashVersion + 1, flashActive: true });
   },
   headlightsRaised: true,
   hasPopupHeadlights: false,
@@ -114,8 +96,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({
       drsOpen: false,
       hasDRS: false,
-      hasFlashLights: false,
-      flashActive: false,
       headlightsRaised: true,
       hasPopupHeadlights: false,
       carIndex: i,
@@ -137,8 +117,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       carIndex: nextIndex,
       drsOpen: false,
       hasDRS: false,
-      hasFlashLights: false,
-      flashActive: false,
       headlightsRaised: true,
       hasPopupHeadlights: false,
       themeName: Math.random() > 0.5 ? 'dusk' : 'night',
@@ -164,9 +142,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         ? {
             isCarLoading: true,
             drsOpen: false,
-            flashActive: false,
             hasDRS: false,
-            hasFlashLights: false,
           }
         : { isCarLoading: false },
     ),
