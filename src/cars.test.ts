@@ -56,6 +56,22 @@ describe('curated garage', () => {
       expect(adjacentCar(next, -1)).toBe(index);
       index = next;
     }
+    expect(visited.map((index) => CARS[index].name)).toEqual([
+      'Ferrari F40',
+      'Mercedes 300 SL',
+      'Mazda MX-5 Miata',
+      'Datsun 280Z',
+      'BMW M3',
+      'Lamborghini Countach',
+      'Toyota Supra',
+      'Porsche 911 RWB',
+      'BMW M4 ADRO',
+      'Nissan GT-R Aimgain',
+      'Porsche 911 GT3 RS',
+      'Lamborghini Aventador',
+      'Ferrari F1-75',
+      'Red Bull RB16B',
+    ]);
     expect(visited).toEqual(GARAGE_INDICES);
     expect(index).toBe(GARAGE_INDICES[0]);
   });

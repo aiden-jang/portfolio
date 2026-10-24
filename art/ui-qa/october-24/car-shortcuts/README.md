@@ -1,5 +1,7 @@
 # Car command hints
 
+These captures record revision `9bdaf99`; later picker orders can assign different keys.
+
 The [desktop](desktop.jpg) and [phone](phone.jpg) captures show the production build
 in Chrome with the command menu filtered to Porsche. The RWB retains its valid
 single-key shortcut, 7. The GT3 RS, beyond the first nine positions, shows Select

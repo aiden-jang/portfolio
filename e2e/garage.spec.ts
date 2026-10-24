@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { CARS, GARAGE_INDICES } from '../src/config';
 
 for (const width of [1440, 390]) {
   test(`curated garage preserves old links and follows visible order at ${width}px`, async ({
@@ -16,6 +17,11 @@ for (const width of [1440, 390]) {
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
     const options = picker.locator('.car-option');
     await expect(options).toHaveCount(14);
+    await expect
+      .poll(() =>
+        options.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('aria-label'))),
+      )
+      .toEqual(GARAGE_INDICES.map((index) => `Show ${CARS[index].name}, ${CARS[index].code}`));
     await expect(options.first()).toBeFocused();
     await expect(
       picker.getByRole('button', { name: 'Show Audi R8, Widebody', exact: true }),
@@ -61,7 +67,7 @@ for (const width of [1440, 390]) {
       await headlights.evaluate((button) => button.getBoundingClientRect().height),
     ).toBeGreaterThanOrEqual(44);
     await page.locator('h1').click();
-    await page.keyboard.press('3');
+    await page.keyboard.press('4');
     await expect(browse).toHaveAccessibleName('Browse cars. Datsun 280Z, S30');
     await expect(page.getByRole('button', { name: 'Pop-up headlights' })).toHaveCount(0);
     await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('5');

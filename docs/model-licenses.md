@@ -110,8 +110,8 @@ shared model indices and loads only when selected.
 ## Curated lineup and new exports
 
 The picker order moves from classics through modified road cars to racing:
-F40, 300 SL, Datsun 280Z, E30, stock Supra A80, stock MX-5 NA, 911 RWB,
-M4 ADRO, Aimgain R35, 911 GT3 RS, Countach 5000 QV, Aventador SV, Ferrari F1-75 and RB16B.
+F40, 300 SL, stock MX-5 NA, Datsun 280Z, E30, Countach 5000 QV, stock Supra A80,
+911 RWB, M4 ADRO, Aimgain R35, 911 GT3 RS, Aventador SV, Ferrari F1-75 and RB16B.
 The R8, stock 930, 917K, modified GR Supra, standard GT3 and 296 GT3 remain hosted and credited
 for older shared URLs, but are
 absent from the picker, cycling, randomization and selection commands. Registry
