@@ -34,7 +34,10 @@ navigation, screenshot inspection, case studies, credits, keyboard focus and
 scroll restoration, cold shared links, and a delayed effects download. Phone
 checks enable touch input. A screenshot pixel check verifies that the default car
 actually renders; it excludes the paint controls so those cannot disguise a blank
-canvas. A reflection check guards against dark halos cutting into the floor glow
+canvas. Screenshot capture and pixel assertions retry together within their existing
+budgets. Each capture attempt is bounded so a transient browser capture error can
+recover; persistent capture errors or missing car pixels still fail. Whole-test
+retries remain disabled. A reflection check guards against dark halos cutting into the floor glow
 beside bright headlights. Garage checks cover retired shared links, curated picker
 focus and wrapping, numbered selection, reloads and a visible clean-capture scene.
 R35 selection and reload run separately from the multi-car navigation tour to

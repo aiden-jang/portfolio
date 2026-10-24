@@ -30,6 +30,14 @@ function carPixels(bytes: Buffer): number {
   return red;
 }
 
+async function expectVisibleCar(page: Page, timeout = 20_000) {
+  // Retry capture errors within the same budget as frames that have not drawn the car.
+  await expect(async () => {
+    const pixels = carPixels(await page.screenshot({ timeout: 5_000 }));
+    expect(pixels).toBeGreaterThan(1000);
+  }).toPass({ timeout });
+}
+
 test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-10-13T18:00:00Z'));
   await page.route('**/_vercel/**', (route) =>
@@ -54,7 +62,7 @@ for (const width of [1440, 390]) {
       await page.goto('/');
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-      await expect.poll(async () => carPixels(await page.screenshot())).toBeGreaterThan(1000);
+      await expectVisibleCar(page);
       expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(
         false,
       );
@@ -247,7 +255,5 @@ test('clean capture mode frames a visible car without page chrome', async ({ pag
   await expect(page.locator('canvas')).toBeVisible();
   await expect(page.locator('body')).toHaveAttribute('data-car-view', 'visible');
   await expect(page.getByRole('heading')).toHaveCount(0);
-  await expect
-    .poll(async () => carPixels(await page.screenshot()), { timeout: 60_000 })
-    .toBeGreaterThan(1000);
+  await expectVisibleCar(page, 60_000);
 });
