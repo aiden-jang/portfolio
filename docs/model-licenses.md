@@ -216,3 +216,12 @@ Check the original model and any credited upstream sources, not just a free-down
 label or an embedded metadata field. Record the publisher identity and exact
 license URL in the evidence record, update the displayed credits, and preserve
 original copyright notices. Recheck a replacement asset before publishing it.
+
+## Road paint rendering
+
+The F40, 300 SL, Datsun 280Z, E30, A80 Supra, Miata, RWB and M4 ADRO receive a
+runtime gloss adjustment limited to their verified body paint material. Base
+roughness is capped at 0.24 with full clearcoat and coat roughness capped at 0.06;
+sharper authored coats are retained. Colors, metalness, maps, geometry and the
+source GLB files stay intact. Other material finishes retain their authored
+settings. Existing license requirements and attribution continue to apply.

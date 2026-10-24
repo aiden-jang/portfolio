@@ -1,5 +1,16 @@
 import { type Mesh, MeshPhysicalMaterial, MeshStandardMaterial, type Object3D } from 'three';
 
+const roadPaint: Record<string, string> = {
+  'ferrari-f120-f40.glb': 'Metallic',
+  'mercedes-benz-w198-300-sl.glb': 'main_color',
+  'datsun-s30-280z.glb': '280z_CarPaint',
+  'bmw-e30-m3.glb': 'BMW_E30_M3_PAINT',
+  'toyota-a80-supra.glb': 'TOYOTA_SUPRA_CAR_PAINT',
+  'mazda-mx5-na.glb': 'Material.002',
+  'porsche-930-911-rwb.glb': 'M_Body',
+  'bmw-g82-m4-adro.glb': 'untitledBMW_M4CompetitionG82TNR3_2021PaintTNR_Material_008',
+};
+
 function prepareFerrariF1Finish(model: Object3D): void {
   const roughness: Record<string, number> = {
     CAR_CHASSIS: 0.45,
@@ -32,6 +43,7 @@ function prepareGlossPaint(
   materialName: string,
   roughness: number,
   coatRoughness: number,
+  preserveSharper = false,
 ): void {
   const replacements = new Map<MeshStandardMaterial, MeshPhysicalMaterial>();
   model.traverse((object) => {
@@ -45,9 +57,12 @@ function prepareGlossPaint(
       // Copy the standard surface without overwriting the physical material's coat defaults.
       if (finish !== material) MeshStandardMaterial.prototype.copy.call(finish, material);
       finish.defines.PHYSICAL = '';
-      finish.roughness = roughness;
+      finish.roughness = preserveSharper ? Math.min(finish.roughness, roughness) : roughness;
+      finish.clearcoatRoughness =
+        preserveSharper && finish.clearcoat > 0
+          ? Math.min(finish.clearcoatRoughness, coatRoughness)
+          : coatRoughness;
       finish.clearcoat = 1;
-      finish.clearcoatRoughness = coatRoughness;
       finish.needsUpdate = true;
       replacements.set(material, finish);
       return finish;
@@ -62,6 +77,8 @@ function prepareGlossPaint(
 }
 
 export function prepareModelFinish(model: Object3D, file: string): void {
+  if (Object.hasOwn(roadPaint, file))
+    return prepareGlossPaint(model, roadPaint[file], 0.24, 0.06, true);
   if (file === 'ferrari-f1-75.glb') return prepareFerrariF1Finish(model);
   if (file === 'lamborghini-aventador.glb')
     return prepareGlossPaint(model, 'RED_PAINT', 0.23, 0.08);

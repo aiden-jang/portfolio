@@ -68,7 +68,10 @@ before length fitting and grounding. `modelFinishes` keeps the 296's printed liv
 in front of its coplanar shell and corrects its body/glass metalness for the studio
 lighting without changing textures or wheel finishes. The Aventador's named body
 paint receives a physical clearcoat and lower roughness; its color, texture maps,
-wheel and trim materials remain intact. The F1-75 keeps its source racing textures
+wheel and trim materials remain intact. The other road-car finish profiles target verified body material names, cap base
+roughness at 0.24 and add a smooth clearcoat while preserving sharper authored
+coats, colors, metalness and maps. The GT3 already has sharp paint and retains its
+authored finish. The F1-75 keeps its source racing textures
 while correcting metallic paint, decal, carbon and tire responses for studio lighting.
 `popupHeadlights` samples the
 Miata's authored opening clip between its closed and raised poses; its Lights button

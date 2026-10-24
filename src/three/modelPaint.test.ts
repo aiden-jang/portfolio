@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { CARS } from '../config';
 import { autoFitToLength, detectBodyMaterial, hideBakedPlanes } from './carHelpers';
+import { prepareModelFinish } from './modelFinishes';
 
 type Model = {
   bufferViews: {
@@ -31,7 +32,15 @@ type Model = {
   materials: {
     name: string;
     alphaMode?: string;
-    pbrMetallicRoughness?: { baseColorFactor?: number[]; baseColorTexture?: unknown };
+    pbrMetallicRoughness?: {
+      baseColorFactor?: number[];
+      baseColorTexture?: unknown;
+      metallicFactor?: number;
+      roughnessFactor?: number;
+    };
+    extensions?: {
+      KHR_materials_clearcoat?: { clearcoatFactor?: number; clearcoatRoughnessFactor?: number };
+    };
   }[];
   meshes: {
     primitives: { attributes: { POSITION: number }; indices: number; material: number }[];
@@ -56,7 +65,14 @@ async function paintFixture(file: string) {
   const binary = bytes.subarray(28 + jsonLength);
   await MeshoptDecoder.ready;
   const materials = data.materials.map((source) => {
-    const material = new THREE.MeshStandardMaterial();
+    const coat = source.extensions?.KHR_materials_clearcoat;
+    const material = coat ? new THREE.MeshPhysicalMaterial() : new THREE.MeshStandardMaterial();
+    material.metalness = source.pbrMetallicRoughness?.metallicFactor ?? 1;
+    material.roughness = source.pbrMetallicRoughness?.roughnessFactor ?? 1;
+    if (material instanceof THREE.MeshPhysicalMaterial) {
+      material.clearcoat = coat?.clearcoatFactor ?? 0;
+      material.clearcoatRoughness = coat?.clearcoatRoughnessFactor ?? 0;
+    }
     material.name = source.name;
     const factor = source.pbrMetallicRoughness?.baseColorFactor ?? [1, 1, 1, 1];
     material.color.setRGB(factor[0], factor[1], factor[2]);
@@ -162,4 +178,45 @@ it('ships opaque Red Bull tires and outer carbon panels instead of the transpare
   );
   expect(solids.length).toBeGreaterThan(5);
   for (const material of solids) expect(material.alphaMode ?? 'OPAQUE').toBe('OPAQUE');
+});
+
+it.each([
+  ['ferrari-f120-f40.glb', 'Metallic'],
+  ['mercedes-benz-w198-300-sl.glb', 'main_color'],
+  ['datsun-s30-280z.glb', '280z_CarPaint'],
+  ['bmw-e30-m3.glb', 'BMW_E30_M3_PAINT'],
+  ['toyota-a80-supra.glb', 'TOYOTA_SUPRA_CAR_PAINT'],
+  ['mazda-mx5-na.glb', 'Material.002'],
+  ['porsche-930-911-rwb.glb', 'M_Body'],
+  ['bmw-g82-m4-adro.glb', 'untitledBMW_M4CompetitionG82TNR3_2021PaintTNR_Material_008'],
+])('adds gloss only to the real %s paint surface', async (file, materialName) => {
+  const spec = CARS.find((car) => car.file === file)!;
+  const { model, materials } = await paintFixture(file);
+  autoFitToLength(model);
+  hideBakedPlanes(model);
+  const body = detectBodyMaterial(model, spec.paintMaterial) as THREE.MeshStandardMaterial;
+  expect(body.name).toBe(materialName);
+  const before = materials.map((material) => material.toJSON());
+  const color = body.color.clone();
+  const metalness = body.metalness;
+  const roughness = body.roughness;
+  const coatRoughness =
+    body instanceof THREE.MeshPhysicalMaterial && body.clearcoat > 0
+      ? Math.min(body.clearcoatRoughness, 0.06)
+      : 0.06;
+  prepareModelFinish(model, file);
+  const finish = detectBodyMaterial(model, spec.paintMaterial) as THREE.MeshPhysicalMaterial;
+  expect(finish.name).toBe(materialName);
+  expect(finish).toBeInstanceOf(THREE.MeshPhysicalMaterial);
+  expect(finish.roughness).toBeLessThanOrEqual(Math.min(roughness, 0.24));
+  expect(finish.clearcoat).toBe(1);
+  expect(finish.clearcoatRoughness).toBe(coatRoughness);
+  expect(finish.color).toEqual(color);
+  expect(finish.map).toBe(body.map);
+  expect(finish.metalness).toBe(metalness);
+  for (const [index, material] of materials.entries()) {
+    if (material !== body) expect(material.toJSON()).toEqual(before[index]);
+  }
+  prepareModelFinish(model, file);
+  expect(detectBodyMaterial(model, spec.paintMaterial)).toBe(finish);
 });

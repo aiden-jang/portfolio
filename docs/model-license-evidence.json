@@ -11,7 +11,8 @@
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
-      "review": "source-license-verified"
+      "review": "source-license-verified",
+      "runtimeAdaptation": "Body paint roughness capped at 0.24 with full clearcoat and coat roughness capped at 0.06, preserving sharper authored coats. Source colors, metalness, maps and other material finishes retained; source GLB unchanged."
     },
     {
       "file": "mercedes-benz-w198-300-sl.glb",
@@ -23,7 +24,8 @@
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
-      "review": "source-license-verified"
+      "review": "source-license-verified",
+      "runtimeAdaptation": "Body paint roughness capped at 0.24 with full clearcoat and coat roughness capped at 0.06, preserving sharper authored coats. Source colors, metalness, maps and other material finishes retained; source GLB unchanged."
     },
     {
       "file": "toyota-a80-supra.glb",
@@ -49,7 +51,8 @@
         "assetSha256": "b5e491a42b392755102c4ef221a6cbc5cc11885ca46093190a0c555e3dbaa755",
         "gltfErrors": 0,
         "gltfWarnings": 0
-      }
+      },
+      "runtimeAdaptation": "Body paint roughness capped at 0.24 with full clearcoat and coat roughness capped at 0.06, preserving sharper authored coats. Source colors, metalness, maps and other material finishes retained; source GLB unchanged."
     },
     {
       "file": "porsche-930-911-rwb.glb",
@@ -61,7 +64,8 @@
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
-      "review": "source-license-verified"
+      "review": "source-license-verified",
+      "runtimeAdaptation": "Body paint roughness capped at 0.24 with full clearcoat and coat roughness capped at 0.06, preserving sharper authored coats. Source colors, metalness, maps and other material finishes retained; source GLB unchanged."
     },
     {
       "file": "bmw-e30-m3.glb",
@@ -73,7 +77,8 @@
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
-      "review": "source-license-verified"
+      "review": "source-license-verified",
+      "runtimeAdaptation": "Body paint roughness capped at 0.24 with full clearcoat and coat roughness capped at 0.06, preserving sharper authored coats. Source colors, metalness, maps and other material finishes retained; source GLB unchanged."
     },
     {
       "file": "datsun-s30-280z.glb",
@@ -85,7 +90,8 @@
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "verifiedOn": "2026-10-20",
-      "review": "source-license-verified"
+      "review": "source-license-verified",
+      "runtimeAdaptation": "Body paint roughness capped at 0.24 with full clearcoat and coat roughness capped at 0.06, preserving sharper authored coats. Source colors, metalness, maps and other material finishes retained; source GLB unchanged."
     },
     {
       "file": "audi-r8.glb",
@@ -203,7 +209,8 @@
         "assetSha256": "b34b0ee0e908409805ccbcf7bb42ef7c2c37ac52ec982ec1095dce02fa2712b4",
         "triangles": 221800,
         "preservation": "The original mesh, node hierarchy, vertex data, texture data, orientation and materials are unchanged. Only asset attribution metadata is expanded."
-      }
+      },
+      "runtimeAdaptation": "Body paint roughness capped at 0.24 with full clearcoat and coat roughness capped at 0.06, preserving sharper authored coats. Source colors, metalness, maps and other material finishes retained; source GLB unchanged."
     },
     {
       "file": "mazda-mx5-na.glb",
@@ -237,7 +244,8 @@
         "gltfWarnings": 0
       },
       "downloadLicenseText": "Model Information:\n* title:\tMazda Miata MX-5 NA\n* source:\thttps://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041\n* author:\tLexyc16 (https://sketchfab.com/Lexyc16)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Mazda Miata MX-5 NA\" (https://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041) by Lexyc16 (https://sketchfab.com/Lexyc16) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "downloadLicense": "Matching license.txt in official glTF archive."
+      "downloadLicense": "Matching license.txt in official glTF archive.",
+      "runtimeAdaptation": "Body paint roughness capped at 0.24 with full clearcoat and coat roughness capped at 0.06, preserving sharper authored coats. Source colors, metalness, maps and other material finishes retained; source GLB unchanged."
     },
     {
       "file": "toyota-gr-supra.glb",
