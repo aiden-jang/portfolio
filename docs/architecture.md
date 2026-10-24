@@ -24,6 +24,10 @@ interactive. Scene visibility and gesture eligibility use separate predicates.
 CSS visibility updates on scroll without waiting for the active navigation
 section to change.
 
+Contact makes the email address its main link, with an adjacent copy action and
+secondary social links. Model credits open from the section footer. `ui/contact.css`
+owns this layout and its feedback spacing.
+
 `CarControls` gives paint, lighting and optional interactions stable sizes while
 they are in use. Unsupported interactions collapse, and fixed-livery cars use a
 compact label. The bar adapts when switching cars without reserving empty slots;

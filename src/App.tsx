@@ -15,6 +15,7 @@ import { Sections } from './ui/Sections';
 import { SectionDots } from './ui/SectionDots';
 import './ui/reading-flow.css';
 import './ui/portfolio-surfaces.css';
+import './ui/contact.css';
 
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 

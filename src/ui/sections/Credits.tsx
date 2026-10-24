@@ -32,15 +32,10 @@ export function Credits() {
           event.currentTarget.focus({ preventScroll: true });
           setOpen(true);
         }}
-        className="group pointer-events-auto mt-5 inline-flex items-center gap-2 border-t border-[var(--color-line)] pt-3 font-[var(--font-mono)] text-[0.6rem] tracking-[0.18em] uppercase text-[var(--color-muted)] transition-colors hover:text-[var(--color-fg)]"
+        className="contact-credits"
       >
-        <span>3D model credits ({credited.length})</span>
-        <span
-          aria-hidden="true"
-          className="grid h-5 w-5 place-items-center rounded-full border border-[var(--color-line)] text-[0.8rem] transition-colors group-hover:border-[var(--color-neon)] group-hover:text-[var(--color-neon)]"
-        >
-          +
-        </span>
+        <span>3D model credits</span>
+        <span aria-hidden="true">+</span>
       </button>
 
       {open &&

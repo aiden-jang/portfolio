@@ -181,16 +181,6 @@ body[data-car-view='reading'] .portfolio-header {
 #sec-about {
   padding-bottom: 56px;
 }
-#sec-contact {
-  align-items: center;
-  padding-top: 96px;
-  padding-bottom: 96px;
-  background: radial-gradient(ellipse at center, #101014c9 0, #10101480 35%, #10101400 75%);
-}
-#sec-contact .panel {
-  width: 100%;
-  text-align: center;
-}
 .control-group-label {
   font-size: 10px;
   color: var(--color-muted);
@@ -250,10 +240,6 @@ body[data-car-view='reading'] .portfolio-header {
   #sec-about {
     padding-bottom: 40px;
   }
-  #sec-contact {
-    padding-top: 96px;
-    padding-bottom: 96px;
-  }
 }
 
 .garage-project-featured [data-project='bloomnote'] img {
@@ -276,10 +262,4 @@ body[data-car-view='reading'] .portfolio-header {
   color: var(--color-fg);
   font: 11px var(--font-display);
   white-space: nowrap;
-}
-@media (max-width: 767px) {
-  #sec-contact .panel > button[aria-haspopup='dialog'] {
-    background: #101014d9;
-    padding: 12px 10px 6px;
-  }
 }

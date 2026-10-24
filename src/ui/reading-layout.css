@@ -40,18 +40,6 @@
 .garage-project-featured .project-preview[data-project='bloomnote'][data-view='0'] img {
   object-position: center 18%;
 }
-.contact-copy-status {
-  min-height: 3em;
-  margin-top: 12px;
-  font: 11px/1.5 var(--font-display);
-  color: var(--color-muted);
-}
-#sec-contact .panel {
-  text-shadow: 0 1px 16px #101014;
-}
-#sec-contact .panel > p {
-  color: var(--color-fg);
-}
 button:disabled {
   cursor: default;
 }
@@ -106,9 +94,6 @@ button:disabled {
     font-size: 13px;
     margin-top: 12px;
   }
-  #sec-contact {
-    min-height: 620px;
-  }
   .keyboard-legend {
     display: none;
   }
@@ -128,12 +113,6 @@ button:disabled {
     position: static;
   }
 }
-@media (max-width: 767px) and (max-height: 740px) {
-  #sec-contact {
-    padding-bottom: 190px;
-  }
-}
-
 #sec-experience {
   min-height: auto;
   padding-bottom: 64px;

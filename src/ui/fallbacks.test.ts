@@ -68,7 +68,7 @@ it('keeps the latest copy feedback when an earlier request finishes afterward', 
   await act(async () => copy.click());
   await act(async () => resolveFirst());
   expect(host.querySelector('.contact-copy-status')?.textContent).toContain('select the address');
-  expect(copy.textContent).toBe('Copy unavailable');
+  expect(copy.getAttribute('aria-label')).toBe('Copy unavailable');
 });
 it('removes closed story controls from keyboard navigation', async () => {
   const noop = () => {};

@@ -1,0 +1,105 @@
+#sec-contact {
+  position: relative;
+  min-height: max(100dvh, 560px);
+  align-items: center;
+  padding-top: 112px;
+  padding-bottom: 128px;
+  background: radial-gradient(ellipse at center, #101014c9 0, #10101480 35%, #10101400 75%);
+}
+#sec-contact .panel {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  text-align: center;
+  text-shadow: 0 1px 6px #101014;
+}
+#sec-contact .panel::before {
+  content: '';
+  position: absolute;
+  inset: -32px -12px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse, #101014d9 20%, #10101499 48%, transparent 76%);
+}
+#sec-contact .panel > p {
+  color: var(--color-fg);
+}
+.contact-email {
+  margin-top: 28px;
+}
+.contact-email-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.contact-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  border-bottom: 1px solid var(--color-muted);
+  color: var(--color-fg);
+  font-size: clamp(17px, 2.4vw, 23px);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.contact-email-link span {
+  font-size: 14px;
+}
+.contact-copy {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  color: #b9b9c0;
+  border-radius: 6px;
+}
+.contact-copy[data-copied] {
+  color: var(--color-fg);
+}
+.contact-copy-status {
+  min-height: 3em;
+  margin-top: 8px;
+  font: 12px/1.5 var(--font-display);
+  color: #b9b9c0;
+}
+.contact-social-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+.contact-social-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  color: #b9b9c0;
+  font-size: 13px;
+  text-decoration: none;
+}
+.contact-footer {
+  position: absolute;
+  inset-inline: 6vw;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  pointer-events: auto;
+  text-align: center;
+}
+.contact-credits {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding-inline: 8px;
+  color: #b9b9c0;
+  font: 12px/1.5 var(--font-display);
+}
+#sec-contact :is(a, button):hover {
+  color: var(--color-fg);
+  border-color: var(--color-fg);
+}
+#sec-contact :is(a, button):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}

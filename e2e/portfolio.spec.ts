@@ -240,7 +240,7 @@ for (const width of [1440, 390]) {
       await page.mouse.move(16, 490, { steps: 4 });
       await expect(page.locator('body')).not.toHaveClass(/orbiting/);
       await page.mouse.up();
-      await expect(page.getByRole('link', { name: 'Open email ↗' })).toBeVisible();
+      await expect(page.getByRole('link', { name: 'me@aidenjang.com', exact: true })).toBeVisible();
       const credits = page.getByRole('button', { name: /3D model credits/ });
       await credits.click();
       await expect(page.getByRole('dialog', { name: '3D model credits' })).toBeVisible();

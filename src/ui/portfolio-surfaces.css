@@ -1,17 +1,3 @@
-.contact-email-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 12px;
-  font: 11px/1.5 var(--font-mono);
-}
-.contact-email-actions a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-}
 .experience-company {
   display: block;
   margin-top: 2px;
@@ -115,17 +101,6 @@
   outline: 2px solid var(--color-fg);
   outline-offset: 3px;
 }
-#sec-contact .panel {
-  position: relative;
-  isolation: isolate;
-}
-#sec-contact .panel::before {
-  content: '';
-  position: absolute;
-  inset: -32px -48px;
-  z-index: -1;
-  pointer-events: none;
-}
 :is(.garage-project-links, .preview-states, .work-modal-footer, #desktop-dock, #mobile-bar)
   :is(a, button),
 .portfolio-menu summary {
@@ -173,9 +148,6 @@
   }
   .work-story-overview section {
     margin-bottom: 16px;
-  }
-  #sec-contact .panel::before {
-    inset-inline: -12px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -348,22 +320,6 @@
   transform: scale(1.4);
   transform-origin: center 40%;
 }
-#sec-contact .panel::before {
-  background: radial-gradient(ellipse, #101014d9 20%, #10101499 48%, transparent 76%);
-}
-#sec-contact .panel {
-  text-shadow: 0 1px 6px #101014;
-}
-#sec-contact .panel > button[aria-haspopup='dialog'],
-#sec-contact .panel a:is([aria-label='GitHub'], [aria-label='LinkedIn']) {
-  background: #101014d9;
-  color: #b9b9c0;
-}
-#sec-contact .panel > button[aria-haspopup='dialog'] {
-  min-height: 44px;
-  padding-inline: 12px;
-  border-radius: 24px;
-}
 @media (max-width: 767px) {
   .project-toolbar {
     top: 80px;
@@ -415,23 +371,6 @@ dialog.preview-dialog[open] {
 #desktop-dock button[title='Share this garage setup'] {
   min-width: 44px;
   min-height: 44px;
-}
-#sec-contact .contact-email-actions button,
-#sec-contact .panel > button[aria-haspopup='dialog'] {
-  font: 12px/1.4 var(--font-display);
-  letter-spacing: 0;
-  text-transform: none;
-  border: 1px solid var(--color-line);
-  border-radius: 6px;
-  padding: 8px 14px;
-}
-#sec-contact :is(a, button):hover {
-  color: var(--color-fg);
-  border-color: var(--color-muted);
-}
-#sec-contact :is(a, button):focus-visible {
-  outline: 2px solid var(--color-fg);
-  outline-offset: 3px;
 }
 @media (max-width: 767px) {
   .project-toolbar {
