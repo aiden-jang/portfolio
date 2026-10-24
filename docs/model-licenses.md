@@ -197,7 +197,10 @@ material parameters, hierarchy, texture dimensions and RGBA pixels are retained.
 Lossless meshopt and verified lossless WebP encoding reduce the reference GLB
 from 22,365,024 to 10,810,140 bytes, with no decoded validation errors or warnings.
 There are no animation clips. Flat splitter and underbody meshes remain visible;
-optional paint changes target only the named body material.
+optional paint changes target only the named body material. At runtime, that body
+material uses lower roughness and a smooth full clearcoat for sharper reflections,
+retaining its source color, metalness and maps. Wheel, tire, carbon and glass
+finishes retain their authored settings.
 
 The selected archive’s license.txt matches vecarz’s CC BY 4.0 listing. Its credited
 Outlaw Games source and embedded original-upload metadata use CC BY-NC 4.0.

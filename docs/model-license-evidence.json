@@ -535,7 +535,7 @@
       },
       "notice": "Selected vecarz export; credited source and embedded original upload use CC BY-NC 4.0. Original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only.",
       "adaptationLicense": "https://creativecommons.org/licenses/by-nc/4.0/",
-      "runtimeAdaptation": "Portfolio framing and lighting; source graphite finish by default and optional repaint restricted to the named body material. Flat splitter and underbody meshes retained."
+      "runtimeAdaptation": "Portfolio framing and lighting; source graphite finish by default and optional repaint restricted to the named body material. Flat splitter and underbody meshes retained. Named body paint uses roughness 0.18, clearcoat 1 and clearcoat roughness 0.06; source color, metalness, maps and other material finishes are retained."
     }
   ]
 }

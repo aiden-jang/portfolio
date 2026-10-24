@@ -23,3 +23,5 @@ The selected vecarz listing uses CC BY 4.0. Its credited Outlaw Games source and
 Portfolio adaptation: full source mesh, vertex precision, material parameters, texture dimensions and decoded pixels retained. Geometry reordered and losslessly meshopt-compressed; textures losslessly encoded where smaller. Portfolio framing and lighting applied, with source graphite finish by default and optional repaint limited to the named body material. Flat splitter and underbody meshes retained. No animation clips are supplied.
 
 Original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only.
+
+Runtime finish adaptation: named body paint uses roughness 0.18, clearcoat 1 and clearcoat roughness 0.06 for sharper reflections. Source body color, metalness and maps, other material finishes and all geometry remain unchanged.

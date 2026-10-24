@@ -32,16 +32,9 @@ for (const width of [1440, 390]) {
     await expect(
       picker.getByRole('button', { name: 'Show Toyota GR Supra, A90 Modified', exact: true }),
     ).toHaveCount(0);
-    await picker
-      .getByRole('button', { name: 'Show Nissan GT-R Aimgain, R35 Type 2', exact: true })
-      .click();
-    await expect(browse).toHaveAccessibleName('Browse cars. Nissan GT-R Aimgain, R35 Type 2');
-    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-    await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('17');
-    await page.reload();
-    await expect(browse).toHaveAccessibleName('Browse cars. Nissan GT-R Aimgain, R35 Type 2');
-    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-    await browse.click();
+    await expect(
+      picker.getByRole('button', { name: 'Show Nissan GT-R Aimgain, R35 Type 2', exact: true }),
+    ).toBeVisible();
     await page.keyboard.press('End');
     await expect(
       picker.getByRole('button', { name: 'Show Red Bull RB16B, 2021 F1', exact: true }),
@@ -73,6 +66,27 @@ for (const width of [1440, 390]) {
     await page.reload();
     await expect(browse).toHaveAccessibleName('Browse cars. Datsun 280Z, S30');
     await expect(page.getByRole('button', { name: 'Pop-up headlights' })).toHaveCount(0);
+    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+  });
+
+  test(`R35 selection survives a reload at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.route('**/_vercel/**', (route) =>
+      route.fulfill({ body: '', contentType: 'application/javascript' }),
+    );
+    await page.goto('/');
+    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+    const browse = page.getByRole('button', { name: /Browse cars\./ }).filter({ visible: true });
+    await browse.click();
+    await page
+      .getByRole('dialog', { name: 'Pick your ride.' })
+      .getByRole('button', { name: 'Show Nissan GT-R Aimgain, R35 Type 2', exact: true })
+      .click();
+    await expect(browse).toHaveAccessibleName('Browse cars. Nissan GT-R Aimgain, R35 Type 2');
+    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+    await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('17');
+    await page.reload();
+    await expect(browse).toHaveAccessibleName('Browse cars. Nissan GT-R Aimgain, R35 Type 2');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
   });
 }

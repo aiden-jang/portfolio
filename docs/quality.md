@@ -36,7 +36,9 @@ checks enable touch input. A screenshot pixel check verifies that the default ca
 actually renders; it excludes the paint controls so those cannot disguise a blank
 canvas. A reflection check guards against dark halos cutting into the floor glow
 beside bright headlights. Garage checks cover retired shared links, curated picker
-focus and wrapping, numbered selection, reloads and a visible clean-capture scene. The clock is fixed for consistent studio lighting.
+focus and wrapping, numbered selection, reloads and a visible clean-capture scene.
+R35 selection and reload run separately from the multi-car navigation tour to
+bound each test’s model-loading work without raising its timeout. The clock is fixed for consistent studio lighting.
 
 Axe checks WCAG A and AA rules on the page and open dialogs. The tests use the real
 models, images and interface. Local telemetry endpoints are stubbed because they

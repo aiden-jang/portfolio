@@ -92,6 +92,38 @@ it('keeps physical paint reusable and limits the coat to this car and body mater
   expect(trim.roughness).toBe(0.65);
 });
 
+it('sharpens R35 body reflections while retaining its color, maps and surrounding finishes', () => {
+  const model = new Group();
+  const paint = new MeshPhysicalMaterial({
+    color: '#171717',
+    metalness: 1,
+    roughness: 0.32762,
+    clearcoat: 0.46781,
+    clearcoatRoughness: 0.58362,
+    map: new Texture(),
+  });
+  paint.name = 'nNissan_GTRTNR4_2017PaintTNR_Material_002';
+  const trim = new MeshPhysicalMaterial({ roughness: 0.7, clearcoat: 0.3 });
+  trim.name = 'nNissan_GTRTNR4_2017Carbon1_Material_004';
+  const color = paint.color.clone();
+  const map = paint.map;
+  const mesh = new Mesh(undefined, [paint, trim]);
+  model.add(mesh);
+  prepareModelFinish(model, 'other.glb');
+  expect(paint.roughness).toBe(0.32762);
+  prepareModelFinish(model, 'nissan-r35-aimgain.glb');
+  prepareModelFinish(model, 'nissan-r35-aimgain.glb');
+  expect(mesh.material).toEqual([paint, trim]);
+  expect(paint.roughness).toBeLessThan(0.2);
+  expect(paint.clearcoat).toBe(1);
+  expect(paint.clearcoatRoughness).toBeLessThan(0.1);
+  expect(paint.color).toEqual(color);
+  expect(paint.map).toBe(map);
+  expect(paint.metalness).toBe(1);
+  expect(trim.roughness).toBe(0.7);
+  expect(trim.clearcoat).toBe(0.3);
+});
+
 it('keeps Ferrari F1 livery, carbon and rubber dielectric without repainting textures or rims', () => {
   const model = new Group();
   const body = new MeshPhysicalMaterial({

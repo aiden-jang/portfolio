@@ -27,22 +27,27 @@ function prepareFerrariF1Finish(model: Object3D): void {
   });
 }
 
-function prepareAventadorPaint(model: Object3D): void {
+function prepareGlossPaint(
+  model: Object3D,
+  materialName: string,
+  roughness: number,
+  coatRoughness: number,
+): void {
   const replacements = new Map<MeshStandardMaterial, MeshPhysicalMaterial>();
   model.traverse((object) => {
     const mesh = object as Mesh;
     if (!mesh.isMesh) return;
     const prepare = (material: MeshStandardMaterial) => {
-      if (!material.isMeshStandardMaterial || material.name !== 'RED_PAINT') return material;
+      if (!material.isMeshStandardMaterial || material.name !== materialName) return material;
       if (replacements.has(material)) return replacements.get(material)!;
       const finish =
         material instanceof MeshPhysicalMaterial ? material : new MeshPhysicalMaterial();
       // Copy the standard surface without overwriting the physical material's coat defaults.
       if (finish !== material) MeshStandardMaterial.prototype.copy.call(finish, material);
       finish.defines.PHYSICAL = '';
-      finish.roughness = 0.23;
+      finish.roughness = roughness;
       finish.clearcoat = 1;
-      finish.clearcoatRoughness = 0.08;
+      finish.clearcoatRoughness = coatRoughness;
       finish.needsUpdate = true;
       replacements.set(material, finish);
       return finish;
@@ -58,7 +63,10 @@ function prepareAventadorPaint(model: Object3D): void {
 
 export function prepareModelFinish(model: Object3D, file: string): void {
   if (file === 'ferrari-f1-75.glb') return prepareFerrariF1Finish(model);
-  if (file === 'lamborghini-aventador.glb') return prepareAventadorPaint(model);
+  if (file === 'lamborghini-aventador.glb')
+    return prepareGlossPaint(model, 'RED_PAINT', 0.23, 0.08);
+  if (file === 'nissan-r35-aimgain.glb')
+    return prepareGlossPaint(model, 'nNissan_GTRTNR4_2017PaintTNR_Material_002', 0.18, 0.06);
   if (file !== 'ferrari-296-gt3.glb') return;
   const visited = new Set<MeshPhysicalMaterial>();
   model.traverse((object) => {

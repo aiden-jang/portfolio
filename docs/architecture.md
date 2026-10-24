@@ -57,8 +57,10 @@ panels so wheel, chassis and trim materials retain their authored colors. The ad
 road cars target explicit paint materials. The F1-75 replaces the 296 GT3 in the
 picker; both keep permanent registry identities for shared URLs. The selected vecarz
 Aimgain R35 replaces the modified A90 Supra in the picker, with that Supra retained
-for existing links. Its source finish, separate wheel/trim materials and flat
-splitter meshes are preserved, and repaint targets only its named body material. Race cars preserve
+for existing links. Its source body color, separate wheel/trim materials and flat
+splitter meshes are preserved, and repaint targets only its named body material.
+That body receives lower roughness and a smooth clearcoat for glossy reflections,
+retaining its color, metalness and maps. Race cars preserve
 flat splitter and floor meshes that could resemble a baked ground plane; both F1
 cars omit synthetic road lights.
 The 296 GT3 declares an orientation offset to normalize its diagonal source pose
