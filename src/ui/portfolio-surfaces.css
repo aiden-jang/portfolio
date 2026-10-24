@@ -250,23 +250,6 @@
   scrollbar-width: thin;
   scrollbar-color: #55545a #101014;
 }
-#hint.keyboard-legend {
-  border: 0;
-  border-radius: 0;
-  gap: 16px;
-  padding: 4px 0;
-}
-#hint kbd {
-  border: 0;
-  border-radius: 0;
-  min-width: 18px;
-  height: 20px;
-  font-size: 10px;
-}
-#hint > button:focus-visible {
-  outline: 2px solid var(--color-fg);
-  outline-offset: 4px;
-}
 #sec-about {
   min-height: 100svh;
   align-items: center;
@@ -339,10 +322,6 @@
 
 #desktop-dock button:not(.swatch) {
   color: #b9b9c0;
-}
-#hint.keyboard-legend {
-  background: linear-gradient(90deg, transparent, #101014f2 12%, #101014f2 88%, transparent);
-  text-shadow: 0 1px 4px #101014;
 }
 .garage-intro p {
   position: relative;

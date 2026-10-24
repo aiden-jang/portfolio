@@ -5,11 +5,15 @@
   transform: translateX(-50%);
   z-index: 20;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 24px;
-  padding: 6px 14px;
+  justify-content: center;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  gap: 16px;
+  padding: 6px 16px;
   border: 1px solid var(--color-line);
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgba(16, 16, 20, 0.88);
   color: var(--color-muted);
   font-size: 11px;
@@ -18,26 +22,31 @@
 .keyboard-legend > span,
 .keyboard-legend > button {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 6px;
 }
 .keyboard-legend kbd {
   display: inline-grid;
   place-items: center;
-  min-width: 23px;
-  height: 24px;
-  border: 1px solid var(--color-line);
-  border-bottom-width: 2px;
-  border-radius: 5px;
-  font: 11px var(--font-mono);
+  min-width: 18px;
+  height: 20px;
+  border: 0;
+  font: 10px var(--font-mono);
   color: var(--color-fg);
 }
 .keyboard-legend > button {
   min-height: 32px;
+  padding-left: 14px;
+  border-left: 1px solid var(--color-line);
   cursor: pointer;
 }
 .keyboard-legend > button:hover {
   color: var(--color-fg);
+}
+.keyboard-legend > button:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
 }
 @media (max-width: 767px) {
   .keyboard-legend {
