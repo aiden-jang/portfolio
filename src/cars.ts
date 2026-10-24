@@ -28,6 +28,7 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     name: 'Toyota Supra',
     code: 'A80',
     file: 'toyota-a80-supra.glb',
+    flashMaterial: 'TOYOTA_SUPRA_MAIN_LIGHT',
     defaultPaint: {
       name: 'Deep Jade',
       hex: '#285c54',
@@ -177,6 +178,7 @@ const registry: Omit<CarSpec, 'credit'>[] = [
   },
   {
     file: 'red-bull-rb16b.glb',
+    drs: { node: 'DRS_1_22', openAngle: -Math.PI / 4 },
     name: 'Red Bull RB16B',
     code: '2021 F1',
     fixedLivery: true,
@@ -191,6 +193,7 @@ const registry: Omit<CarSpec, 'credit'>[] = [
   },
   {
     file: 'ferrari-f1-75.glb',
+    drs: { node: 'DRS1_183', openAngle: -Math.PI / 5 },
     name: 'Ferrari F1-75',
     code: '2022 F1',
     fixedLivery: true,

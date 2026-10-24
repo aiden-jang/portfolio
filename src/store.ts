@@ -28,6 +28,13 @@ type AppState = {
   isCarLoading: boolean;
   carLoadError: string | null;
   carRetryVersion: number;
+  drsOpen: boolean;
+  hasDRS: boolean;
+  hasFlashLights: boolean;
+  flashVersion: number;
+  flashActive: boolean;
+  toggleDRS: () => void;
+  flashLights: () => void;
   headlightsRaised: boolean;
   hasPopupHeadlights: boolean;
   toggleHeadlights: () => void;
@@ -64,6 +71,27 @@ export const useAppStore = create<AppState>((set, get) => ({
   isCarLoading: true,
   carLoadError: null,
   carRetryVersion: 0,
+  drsOpen: false,
+  hasDRS: false,
+  hasFlashLights: false,
+  flashVersion: 0,
+  flashActive: false,
+  toggleDRS: () => {
+    const state = get();
+    if (CARS[state.carIndex].drs && state.hasDRS && !state.isCarLoading && !state.carLoadError)
+      set({ drsOpen: !state.drsOpen });
+  },
+  flashLights: () => {
+    const state = get();
+    if (
+      CARS[state.carIndex].flashMaterial &&
+      state.hasFlashLights &&
+      !state.isCarLoading &&
+      !state.carLoadError &&
+      !state.flashActive
+    )
+      set({ flashVersion: state.flashVersion + 1, flashActive: true });
+  },
   headlightsRaised: true,
   hasPopupHeadlights: false,
   toggleHeadlights: () => {
@@ -84,6 +112,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     refs.bodyMaterial = null;
     refs.bodyOriginalColor = null;
     set({
+      drsOpen: false,
+      hasDRS: false,
+      hasFlashLights: false,
+      flashActive: false,
       headlightsRaised: true,
       hasPopupHeadlights: false,
       carIndex: i,
@@ -103,6 +135,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     const colors = paintChoices(CARS[nextIndex]).map(({ value }) => value);
     set({
       carIndex: nextIndex,
+      drsOpen: false,
+      hasDRS: false,
+      hasFlashLights: false,
+      flashActive: false,
       headlightsRaised: true,
       hasPopupHeadlights: false,
       themeName: Math.random() > 0.5 ? 'dusk' : 'night',
@@ -122,7 +158,18 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().refs.introArmed = true;
   },
   setHasBodyMaterial: (v) => set({ hasBodyMaterial: v }),
-  setCarLoading: (v) => set({ isCarLoading: v }),
+  setCarLoading: (v) =>
+    set(
+      v
+        ? {
+            isCarLoading: true,
+            drsOpen: false,
+            flashActive: false,
+            hasDRS: false,
+            hasFlashLights: false,
+          }
+        : { isCarLoading: false },
+    ),
   setCarLoadError: (carLoadError) => set({ carLoadError }),
   retryCar: () =>
     set((state) => ({

@@ -6,6 +6,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { CARS, PREFETCH_MODEL_INDICES, THEMES } from '../config';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { smoothTowards } from '../math';
+import { useCarDetails } from './useCarDetails';
 import { createPopupHeadlights } from './popupHeadlights';
 import { prepareModelFinish } from './modelFinishes';
 import { canPrefetchModels } from './modelPrefetch';
@@ -38,6 +39,7 @@ export function Car() {
     invalidate();
   }, [headlightsRaised, invalidate]);
 
+  const { attach: attachDetails, release: releaseDetails, update: updateDetails } = useCarDetails();
   const group = useMemo(() => new THREE.Group(), []);
   const displayedIndex = useRef(carIndex);
   const modelRef = useRef<THREE.Object3D | null>(null);
@@ -97,6 +99,7 @@ export function Car() {
           return;
         }
 
+        releaseDetails();
         headlights.current?.dispose();
         headlights.current = null;
         if (modelRef.current) {
@@ -123,6 +126,7 @@ export function Car() {
           spec.roadLights === false
             ? []
             : buildLamps(group, orientedSize, scale, !headlights.current);
+        attachDetails(model, spec, refs.lamps);
         refs.bodyMaterial = detectBodyMaterial(model, spec.paintMaterial);
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);
@@ -177,19 +181,20 @@ export function Car() {
       cancelAnimationFrame(readyFrame);
       setCarLoading(false);
     };
-  }, [carIndex, retryVersion, loader, group, armIntro, invalidate]);
+  }, [carIndex, retryVersion, loader, group, armIntro, invalidate, attachDetails, releaseDetails]);
 
   useEffect(() => {
     scene.add(group);
     return () => {
       scene.remove(group);
+      releaseDetails();
       headlights.current?.dispose();
       if (modelRef.current) disposeModel(modelRef.current);
       underglow.geometry.dispose();
       underglowMat.map?.dispose();
       underglowMat.dispose();
     };
-  }, [scene, group, underglow, underglowMat]);
+  }, [scene, group, underglow, underglowMat, releaseDetails]);
 
   useFrame((state, dt) => {
     headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
@@ -219,6 +224,7 @@ export function Car() {
       const boost = !l.isHeadlight ? 1 + rev * 6 : 1;
       l.light.intensity = l.baseIntensity * boost;
     }
+    updateDetails(dt);
   });
 
   return null;

@@ -43,7 +43,11 @@ focus and wrapping, numbered selection, reloads and a visible clean-capture scen
 R35 selection and reload run separately from the multi-car navigation tour to
 bound each test’s model-loading work without raising its timeout. The Countach check uses one model load per engine, resizing between phone and
 desktop while checking shared paint, default restoration and picker focus. The
-clock is fixed for consistent studio lighting.
+clock is fixed for consistent studio lighting. Car-detail checks load each supported
+model once per engine, resize between phone and desktop, exercise keyboard
+activation and reset on selection, and check that unrelated cars hide the controls.
+Real-model unit fixtures check DRS isolation and restoration, front-only lamp
+selection and resource cleanup.
 
 Axe checks WCAG A and AA rules on the page and open dialogs. The tests use the real
 models, images and interface. Local telemetry endpoints are stubbed because they

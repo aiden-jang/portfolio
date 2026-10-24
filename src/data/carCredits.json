@@ -18,7 +18,8 @@
     "author": "Martin Trafas",
     "license": "CC BY 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-    "url": "https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8"
+    "url": "https://sketchfab.com/3d-models/eb9bb1eb41db431cb078088ae1ce45f8",
+    "notice": "Headlight flash added at runtime; source geometry and textures retained."
   },
   "porsche-930-911-rwb.glb": {
     "title": "Porsche 911 Turbo - RWB",
@@ -147,7 +148,8 @@
     "author": "Dave Love SketchFab",
     "license": "CC BY 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-    "url": "https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813"
+    "url": "https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813",
+    "notice": "Custom DRS movement added at runtime using the existing rear-wing joint."
   },
   "ferrari-f1-75.glb": {
     "title": "Ferrari F175 | www.vecarz.com",
@@ -155,7 +157,7 @@
     "license": "CC BY-NC-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
     "url": "https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe",
-    "notice": "Publisher identifies community-sourced assets; original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only."
+    "notice": "Publisher identifies community-sourced assets; original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only. Custom DRS movement added at runtime using the existing rear-wing joint."
   },
   "nissan-r35-aimgain.glb": {
     "title": "Nissan Aimgain GT R35 Type2",

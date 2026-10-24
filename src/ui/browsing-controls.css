@@ -156,3 +156,14 @@
   outline: 2px solid var(--color-fg);
   outline-offset: -3px;
 }
+
+@media (max-width: 359px) {
+  #mobile-bar button:is([aria-label^='Paint:'], [aria-label^='Lighting:']) {
+    padding-inline: 6px;
+    gap: 5px;
+  }
+  #mobile-bar button[aria-label='Flash headlights'] {
+    padding-inline: 6px;
+    gap: 4px;
+  }
+}
