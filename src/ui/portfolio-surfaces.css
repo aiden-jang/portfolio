@@ -466,25 +466,14 @@ dialog.preview-dialog[open] {
   }
   .mobile-project-filter {
     display: block;
-    width: 100%;
-    min-width: 0;
-    min-height: 44px;
-    padding: 8px;
-    border: 1px solid var(--color-line);
-    background: #101014;
-    color: var(--color-fg);
-    font-size: 12px;
   }
   .project-browse {
     min-width: 0;
     gap: 0;
   }
-  .project-browse select {
+  .project-toolbar select {
     width: 100%;
     min-width: 0;
-    min-height: 44px;
-    padding: 8px;
-    font-size: 12px;
   }
   .project-browse p {
     position: absolute;
