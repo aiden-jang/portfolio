@@ -25,6 +25,10 @@ an uncertainty, rather than treated as verified ownership.
       — Outlaw Games; CC BY-NC 4.0; downloaded file credits Ddiaz Design’s CSR2-based source.
 - [x] [Porsche 911 GT3](https://sketchfab.com/3d-models/porsche-911-gt3-593c83f3662a4a45a016f95dedd9f243)
       — Outlaw Games; CC BY-NC 4.0; embedded Ddiaz Design source uses CC BY-NC-SA 4.0 and identifies CSR2.
+      Retired from the picker; existing shared links remain available.
+- [x] [Porsche 992 GT3 RS 2024](https://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c)
+      — vecarz, crediting MattDoesBlender; both list CC BY-NC-SA 4.0.
+      Original wrap retained; replaces the standard 992 GT3 in the picker.
 - [x] [Mazda Miata MX-5 NA](https://sketchfab.com/3d-models/mazda-miata-mx-5-na-d51fcd44b74f4daf8012c41e0400c041)
       — Lexyc16; CC BY 4.0; creator states it was made in Blender. Keep stock styling.
 - [ ] [Ferrari LaFerrari](https://sketchfab.com/3d-models/ferrari-laferrari-wwwvecarzcom-979f7085012e4d6399f38de3f9c39012)
@@ -52,3 +56,4 @@ replaces the modified GR Supra in the picker; older GR Supra links retain that c
 retired from the picker; existing shared URLs still resolve to their original cars.
 The Ferrari F1-75 replaces the 296 GT3 in the picker, alongside the RB16B. The F10
 remains an alternative. Existing 296 GT3 links still resolve to that original car.
+The GT3 RS replaces the standard GT3; older GT3 links retain their original car.

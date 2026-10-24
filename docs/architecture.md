@@ -54,7 +54,11 @@ auto-fit framing and paint-material detection. Cars with ambiguous material
 layouts can declare an exact `paintMaterial` name; a missing explicit target disables
 paint instead of selecting an unrelated surface. The 917K targets its textured body
 panels so wheel, chassis and trim materials retain their authored colors. The added
-road cars target explicit paint materials. The F1-75 replaces the 296 GT3 in the
+road cars target explicit paint materials. The GT3 RS replaces the standard GT3
+in the picker with a new permanent identity; existing GT3 links keep their car.
+Its textured wrap and carbon remain fixed, with flat aero meshes preserved and
+no authored animation clips. It is loaded only on selection, outside the small
+arrival prefetch pool. The F1-75 replaces the 296 GT3 in the
 picker; both keep permanent registry identities for shared URLs. The selected vecarz
 Aimgain R35 replaces the modified A90 Supra in the picker, with that Supra retained
 for existing links. Its source body color, separate wheel/trim materials and flat

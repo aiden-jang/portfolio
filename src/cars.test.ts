@@ -19,6 +19,12 @@ describe('curated garage', () => {
     expect(CARS[15].file).toBe('red-bull-rb16b.glb');
     expect(CARS[16].file).toBe('ferrari-f1-75.glb');
     expect(CARS[17].file).toBe('nissan-r35-aimgain.glb');
+    expect(CARS[12].file).toBe('porsche-992-911-gt3.glb');
+    expect(CARS[18].file).toBe('porsche-992-gt3-rs.glb');
+    expect(CARS[18].fixedLivery).toBe(true);
+    expect(CARS[18].preserveFlatMeshes).toBe(true);
+    expect(GARAGE_INDICES).toContain(18);
+    expect(GARAGE_INDICES).not.toContain(12);
     expect(new Set(GARAGE_INDICES).size).toBe(GARAGE_INDICES.length);
     expect(GARAGE_INDICES).not.toContain(6);
     expect(GARAGE_INDICES).not.toContain(7);
@@ -32,7 +38,9 @@ describe('curated garage', () => {
     expect(GARAGE_INDICES).toContain(5);
     const commands = buildCommands({ onSection: vi.fn(), setNotice: vi.fn() });
     expect(
-      commands.some(({ id }) => ['car-6', 'car-7', 'car-8', 'car-11', 'car-14'].includes(id)),
+      commands.some(({ id }) =>
+        ['car-6', 'car-7', 'car-8', 'car-11', 'car-12', 'car-14'].includes(id),
+      ),
     ).toBe(false);
   });
 
@@ -50,7 +58,7 @@ describe('curated garage', () => {
   });
 
   it('lets an older shared car link rejoin the visible garage in either direction', () => {
-    for (const index of [6, 7, 8, 11, 14]) {
+    for (const index of [6, 7, 8, 11, 12, 14]) {
       useAppStore.getState().setCarIndex(index);
       expect(useAppStore.getState().carIndex).toBe(index);
       useAppStore.getState().cycleCar();

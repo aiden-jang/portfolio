@@ -1,0 +1,17 @@
+Model Information:
+* title:	Porsche 992 GT3 RS 2024 | www.vecarz.com
+* source:	https://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c
+* author:	vecarz (https://sketchfab.com/heynic)
+
+Model License:
+* license type:	CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions must have the same license.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Porsche 992 GT3 RS 2024 | www.vecarz.com" (https://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)
+Credited upstream: "992" by MattDoesBlender (https://sketchfab.com/3d-models/992-92b889aca7964b268fb1c9669216c266).
+Upstream license: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Portfolio adaptation: all 1,721,938 source triangles and vertex precision retained. Geometry reordered and losslessly meshopt-compressed. All 48 textures retain their dimensions and decoded pixels; lossless WebP used only where smaller and pixel-identical. Source materials and hierarchy retained. Portfolio framing and lighting applied, with original wrap fixed and flat aero meshes preserved. No animation clips are supplied.
+Adapted model license: https://creativecommons.org/licenses/by-nc-sa/4.0/
+Original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only.

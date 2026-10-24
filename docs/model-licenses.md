@@ -29,6 +29,8 @@ dialogs; the evidence record preserves each earlier model’s own review date.
 | Red Bull RB16B           | [Dave Love SketchFab / Tyler_Dave](https://sketchfab.com/3d-models/2021-redbull-rb16b-81f071aa2dd04403b0b408c1b0d7b813)                                                                                                                    | CC BY 4.0                                                 | Fixed original racing livery; original provenance unverified                                           |
 | Ferrari F1-75            | [vecarz](https://sketchfab.com/3d-models/ferrari-f175-wwwvecarzcom-cd2ace0f8a2c4229952e5453b38d7cfe)                                                                                                                                       | CC BY-NC-SA 4.0                                           | Fixed red racing livery; publisher identifies community-sourced assets; original authorship unverified |
 
+| Porsche 992 GT3 RS | [vecarz](https://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c), crediting [MattDoesBlender](https://sketchfab.com/3d-models/992-92b889aca7964b268fb1c9669216c266) | CC BY-NC-SA 4.0; credited source CC BY-NC-SA 4.0 | Matching official glTF archive license; fixed original wrap; underlying rights unverified |
+
 | Nissan GT-R Aimgain R35 | [vecarz](https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c), crediting [Outlaw Games](https://sketchfab.com/3d-models/2017-nissan-aimgain-gt-r35-gt-r-type-2-883cf78fadef4d698e50d2c1ae3f59c2) | CC BY 4.0; upstream CC BY-NC 4.0 | Selected vecarz web export; noncommercial restriction retained; underlying rights unverified |
 
 CC BY permits sharing and modification, including commercial use, provided its
@@ -111,8 +113,8 @@ shared model indices and loads only when selected.
 
 The picker order moves from classics through modified road cars to racing:
 F40, 300 SL, Datsun 280Z, E30, stock Supra A80, stock MX-5 NA, 911 RWB,
-M4 ADRO, Aimgain R35, 911 GT3, Aventador SV, Ferrari F1-75 and RB16B.
-The R8, stock 930, 917K, modified GR Supra and 296 GT3 remain hosted and credited
+M4 ADRO, Aimgain R35, 911 GT3 RS, Aventador SV, Ferrari F1-75 and RB16B.
+The R8, stock 930, 917K, modified GR Supra, standard GT3 and 296 GT3 remain hosted and credited
 for older shared URLs, but are
 absent from the picker, cycling, randomization and selection commands. Registry
 indices stay permanent; display order is independent.
@@ -225,3 +227,22 @@ roughness is capped at 0.24 with full clearcoat and coat roughness capped at 0.0
 sharper authored coats are retained. Colors, metalness, maps, geometry and the
 source GLB files stay intact. Other material finishes retain their authored
 settings. Existing license requirements and attribution continue to apply.
+
+## Porsche 992 GT3 RS
+
+The selected [vecarz GT3 RS](https://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c)
+and its [credited MattDoesBlender source](https://sketchfab.com/3d-models/992-92b889aca7964b268fb1c9669216c266)
+both list CC BY-NC-SA 4.0. The downloaded archive and embedded metadata match;
+both creators and license links appear in Contact. The adapted asset retains
+ShareAlike terms. Original authorship and underlying vehicle rights remain unverified.
+
+The full official glTF export is retained: 1,721,938 triangles, all source vertex
+values, materials, hierarchy and 48 texture images with exact dimensions and decoded
+pixels. Lossless compression reduces the reference GLB from 96,861,092 to 39,102,656
+bytes. Validation reports no errors and retains the source's single warning about
+normal and clearcoat normal texture coordinates. The archive and asset hashes are
+recorded in the evidence file. The wrap stays fixed to preserve its color blocks
+and carbon; flat aero meshes remain visible. No animation clips are supplied.
+
+The GT3 RS replaces the standard GT3 in selection. The older model, credits and
+numeric shared links are retained. This heavy asset is excluded from arrival prefetch.

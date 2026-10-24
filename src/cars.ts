@@ -216,6 +216,19 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     },
     exposure: 1,
   },
+  {
+    file: 'porsche-992-gt3-rs.glb',
+    name: 'Porsche 911 GT3 RS',
+    code: '992',
+    fixedLivery: true,
+    preserveFlatMeshes: true,
+    defaultPaint: {
+      name: 'RS Heritage Livery',
+      hex: '#247eae',
+      preserveSource: true,
+    },
+    exposure: 1,
+  },
 ];
 
 export const CARS: CarSpec[] = registry.map((car) => ({
@@ -224,7 +237,7 @@ export const CARS: CarSpec[] = registry.map((car) => ({
 }));
 
 // Retired cars remain available to existing links, outside the curated picker.
-export const GARAGE_INDICES: readonly number[] = [0, 1, 5, 4, 2, 10, 3, 9, 17, 12, 13, 16, 15];
+export const GARAGE_INDICES: readonly number[] = [0, 1, 5, 4, 2, 10, 3, 9, 17, 18, 13, 16, 15];
 
 export function adjacentCar(index: number, direction: -1 | 1): number {
   const position = GARAGE_INDICES.indexOf(index);

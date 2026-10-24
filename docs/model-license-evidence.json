@@ -544,6 +544,52 @@
       "notice": "Selected vecarz export; credited source and embedded original upload use CC BY-NC 4.0. Original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only.",
       "adaptationLicense": "https://creativecommons.org/licenses/by-nc/4.0/",
       "runtimeAdaptation": "Portfolio framing and lighting; source graphite finish by default and optional repaint restricted to the named body material. Flat splitter and underbody meshes retained. Named body paint uses roughness 0.18, clearcoat 1 and clearcoat roughness 0.06; source color, metalness, maps and other material finishes are retained."
+    },
+    {
+      "file": "porsche-992-gt3-rs.glb",
+      "title": "Porsche 992 GT3 RS 2024 | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c",
+      "evidence": "https://api.sketchfab.com/v3/models/68672d105f2c4e3b8550a741e8836b0c",
+      "license": "CC BY-NC-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "verifiedOn": "2026-10-23",
+      "review": "publisher-and-credited-source-licenses-recorded-personal-use",
+      "sourceReview": "credit [MattDoesBlender] https://sketchfab.com/3d-models/992-92b889aca7964b268fb1c9669216c266",
+      "archiveSha256": "ec918a923caeae73723727835a5ba21cf4144a9e2ee56f63c45a9b5e16f9d86c",
+      "sourceAssetMetadata": {
+        "author": "vecarz (https://sketchfab.com/heynic)",
+        "license": "CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)",
+        "source": "https://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c",
+        "title": "Porsche 992 GT3 RS 2024 | www.vecarz.com"
+      },
+      "upstream": {
+        "author": "MattDoesBlender",
+        "url": "https://sketchfab.com/3d-models/992-92b889aca7964b268fb1c9669216c266",
+        "license": "CC BY-NC-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "evidence": "https://api.sketchfab.com/v3/models/92b889aca7964b268fb1c9669216c266",
+        "description": "Automotive model - 992",
+        "verifiedOn": "2026-10-23"
+      },
+      "downloadLicenseText": "Model Information:\n* title:\tPorsche 992 GT3 RS 2024 | www.vecarz.com\n* source:\thttps://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c\n* author:\tvecarz (https://sketchfab.com/heynic)\n\nModel License:\n* license type:\tCC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)\n* requirements:\tAuthor must be credited. No commercial use. Modified versions must have the same license.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"Porsche 992 GT3 RS 2024 | www.vecarz.com\" (https://sketchfab.com/3d-models/porsche-992-gt3-rs-2024-wwwvecarzcom-68672d105f2c4e3b8550a741e8836b0c) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)",
+      "adaptationLicense": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "notice": "Publisher and credited source list CC BY-NC-SA 4.0. Underlying authorship and vehicle rights remain unverified. Personal noncommercial use only.",
+      "optimization": {
+        "referenceBytes": 96861092,
+        "optimizedBytes": 39102656,
+        "triangles": 1721938,
+        "textures": "All 48 source textures retain original dimensions and decoded RGBA pixels.",
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering.",
+        "materials": "Source material parameters and hierarchy retained.",
+        "animations": "Source contains no animation clips.",
+        "assetSha256": "e83c32ccd50ea64f5a405d6ee2f1b06aa7df4565cbac8d712292c4b289c49a3c",
+        "gltfErrors": 0,
+        "gltfWarnings": 1,
+        "sourceWarning": "Normal and clearcoat normal textures use different texture coordinates; retained from the source."
+      },
+      "runtimeAdaptation": "Portfolio framing, lighting and fixed original wrap; flat aero and floor meshes retained. Repainting is disabled to preserve texture colors and carbon."
     }
   ]
 }
