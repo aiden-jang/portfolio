@@ -28,7 +28,7 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
     ...GARAGE_INDICES.map((index, position) => ({
       id: `car-${index}`,
       label: `Show ${CARS[index].name}`,
-      hint: String(position + 1),
+      hint: position < 9 ? String(position + 1) : 'select',
       keywords: `${CARS[index].name} ${CARS[index].code} vehicle garage`,
       run: () => {
         const state = useAppStore.getState();

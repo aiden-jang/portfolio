@@ -9,6 +9,8 @@ scene behind a lazy-loading boundary so portfolio content can load independently
 `useNavigation` owns scroll tracking, section jumps and event registration.
 `scrollNavigation` owns the cancellable scroll animation. `navigationKeyboard`
 routes keyboard actions and preserves native input and reading behavior.
+Direct car keys cover positions 1–9; later cars show a Select action in the command
+menu and remain reachable through search, the picker and previous/next controls.
 `sectionProgress` maps actual section positions to camera progress. Section IDs
 and labels share one definition in `config.ts`, used by navigation, dots and commands.
 Section resize observation refreshes scene and control visibility when initial

@@ -14,11 +14,12 @@ describe('buildCommands', () => {
         `no command for ${id}`,
       ).toBe(true);
     }
-    for (const index of GARAGE_INDICES) {
+    for (const [position, index] of GARAGE_INDICES.entries()) {
       const car = CARS[index];
       const command = commands.find((c) => c.id === `car-${index}`);
       expect(command, `no command for ${car.name}`).toBeDefined();
       expect(command!.label).toContain(car.name);
+      expect(command!.hint).toBe(position < 9 ? String(position + 1) : 'select');
     }
   });
 

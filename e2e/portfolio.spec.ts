@@ -115,6 +115,9 @@ for (const width of [1440, 390]) {
 
       await page.keyboard.press('Control+k');
       await expect(page.getByRole('dialog', { name: 'Command menu' })).toBeVisible();
+      for (const index of GARAGE_INDICES.slice(9)) {
+        await expect(page.locator(`#command-car-${index}`)).toContainText('select');
+      }
       await accessible(page);
       await page.keyboard.press('Escape');
 
