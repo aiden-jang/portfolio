@@ -554,10 +554,6 @@
   }
 }
 
-#mobile-bar > .flex {
-  gap: 4px;
-}
-
 /* Reading sections follow their content rather than leaving a full screen of empty space. */
 #sec-experience,
 #sec-about,

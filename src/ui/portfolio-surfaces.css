@@ -399,12 +399,6 @@
   letter-spacing: 0;
   text-transform: none;
 }
-section[aria-label='Command menu'] > div[aria-live='polite'] {
-  font: 11px/1.5 var(--font-display);
-  letter-spacing: 0;
-  text-transform: none;
-  color: #b9b9c0;
-}
 #sec-work {
   padding-top: max(120px, 13vh);
 }

@@ -215,9 +215,6 @@
   .car-browser-footer {
     padding: 12px 16px;
   }
-  .car-browser-footer > span:last-child {
-    display: none;
-  }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
   #desktop-dock button[aria-label='Reset camera view'] > span:last-child {

@@ -1,4 +1,4 @@
-import { CARS, type SectionId } from '../config';
+import { CARS } from '../config';
 import { useAppStore } from '../store';
 import { CameraResetButton } from './CameraResetButton';
 import { CarSwitcher, MobileCarSwitcher } from './CarSwitcher';
@@ -6,7 +6,6 @@ import { ColorSwatches, MobileColorButton } from './ColorSwatches';
 import { CarDetailButton } from './CarDetailButton';
 import { HeadlightButton } from './HeadlightButton';
 import { MobileThemeButton, ThemeToggle } from './ThemeToggle';
-import { SectionDots } from './SectionDots';
 import { Hint, AllControlsButton } from './Hint';
 import './car-controls.css';
 
@@ -19,7 +18,7 @@ function CarActionSlot() {
   );
 }
 
-export function CarControls({ onSection }: { onSection: (id: SectionId) => void }) {
+export function CarControls() {
   const carIndex = useAppStore((state) => state.carIndex);
   const fixedLivery = CARS[carIndex].fixedLivery;
   const sectionIndex = useAppStore((state) => state.sectionIndex);
@@ -36,7 +35,6 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
               bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/70 to-transparent
             "
       >
-        <SectionDots onJump={onSection} placement="bar" />
         {visible && (
           <div className="car-controls-row">
             {manualView && <CameraResetButton />}

@@ -134,7 +134,7 @@ export function CarBrowser({ onClose, returnFocus }: Props) {
       <footer className="car-browser-footer">
         <span>Individual model licenses apply. Credits in Contact.</span>
         <span role="status">{error ?? (loading ? `Loading ${CARS[index].name}…` : '')}</span>
-        <span>Arrow keys to browse · Enter to choose</span>
+        <span className="keyboard-hint">Arrow keys to browse · Enter to choose</span>
       </footer>
     </dialog>,
     document.body,

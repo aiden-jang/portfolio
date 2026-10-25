@@ -2,7 +2,7 @@ import { useDialogFocus } from './useDialogFocus';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal, flushSync } from 'react-dom';
 import { type SectionId } from '../config';
-import { buildCommands, matchCommands, modifierKey, type Command } from './commands';
+import { buildCommands, matchCommands, type Command } from './commands';
 import { usePageScrollLock } from './usePageScrollLock';
 export const COMMAND_MENU_EVENT = 'portfolio:open-command-menu';
 
@@ -87,9 +87,6 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         className="dialog-panel w-full max-w-[490px] overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-line)] bg-[var(--color-panel)] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
       >
         <div className="flex items-center gap-3 border-b border-[var(--color-line)] px-4 py-3">
-          <span aria-hidden="true" className="text-[var(--color-neon)]">
-            {modifierKey()}
-          </span>
           <input
             ref={inputRef}
             value={query}
@@ -126,11 +123,16 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
               results[activeIndex] ? `command-${results[activeIndex].id}` : undefined
             }
             aria-controls="command-results"
-            className="min-w-0 flex-1 bg-transparent font-[var(--font-display)] text-[0.96rem] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-muted)]"
+            className="min-w-0 flex-1 bg-transparent font-[var(--font-display)] text-base text-[var(--color-fg)] outline-none placeholder:text-[var(--color-muted)]"
           />
-          <kbd className="rounded border border-[var(--color-line)] px-1.5 py-0.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.1em] text-[var(--color-muted)]">
-            ESC
-          </kbd>
+          <button
+            type="button"
+            className="command-menu-close"
+            aria-label="Close controls"
+            onClick={() => setOpen(false)}
+          >
+            Close
+          </button>
         </div>
         <div id="command-results" role="listbox" className="max-h-[52dvh] overflow-y-auto p-2">
           {results.length ? (
@@ -155,7 +157,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
                 >
                   {command.label}
                 </span>
-                <span className="font-[var(--font-mono)] text-[0.58rem] tracking-[0.14em] uppercase text-[var(--color-muted)]">
+                <span className="keyboard-hint font-[var(--font-mono)] text-[0.58rem] tracking-[0.14em] uppercase text-[var(--color-muted)]">
                   {command.hint}
                 </span>
               </button>
@@ -166,11 +168,8 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             </p>
           )}
         </div>
-        <div
-          aria-live="polite"
-          className="border-t border-[var(--color-line)] px-4 py-2.5 font-[var(--font-mono)] text-[0.58rem] tracking-[0.12em] uppercase text-[var(--color-muted)]"
-        >
-          {notice || '↑ ↓ browse · Home End jump · Enter run'}
+        <div aria-live="polite" className="command-menu-footer">
+          {notice || <span className="keyboard-hint">↑ ↓ browse · Home End jump · Enter run</span>}
         </div>
       </section>
     </div>,

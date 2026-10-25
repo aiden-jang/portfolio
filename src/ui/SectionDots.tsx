@@ -3,52 +3,10 @@ import { useAppStore } from '../store';
 
 type Props = {
   onJump: (id: SectionId) => void;
-  placement: 'rail' | 'bar';
 };
 
-export function SectionDots({ onJump, placement }: Props) {
+export function SectionDots({ onJump }: Props) {
   const activeIndex = useAppStore((s) => s.sectionIndex);
-
-  if (placement === 'bar') {
-    const activeId = SECTION_IDS[activeIndex];
-    return (
-      <nav
-        aria-label="Section progress"
-        className="pointer-events-auto flex flex-col items-center gap-1.5"
-      >
-        <span className="font-[var(--font-mono)] text-[0.55rem] tracking-[0.26em] uppercase text-[var(--color-neon)]">
-          {SECTION_LABELS[activeId]}
-        </span>
-        <div className="flex flex-row items-center gap-1">
-          {SECTION_IDS.map((id, i) => {
-            const active = i === activeIndex;
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => onJump(id)}
-                aria-label={`Go to ${SECTION_LABELS[id]}`}
-                aria-current={active ? 'true' : undefined}
-                className="flex items-center justify-center min-w-[40px] min-h-[44px] cursor-pointer"
-              >
-                <span
-                  className={`
-                    block rounded-full transition-all duration-200
-                    ${
-                      active
-                        ? 'w-2 h-2 bg-[var(--color-neon)] shadow-[0_0_10px_rgba(255,107,28,0.6)]'
-                        : 'w-1.5 h-1.5 bg-[var(--color-muted)]'
-                    }
-                  `}
-                />
-              </button>
-            );
-          })}
-        </div>
-      </nav>
-    );
-  }
-
   return (
     <nav
       aria-label="Section progress"

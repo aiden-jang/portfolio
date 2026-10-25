@@ -60,8 +60,8 @@ export function App() {
       {!isCleanMode && (
         <>
           <PortfolioHeader onLink={scrollToSection} />
-          <CarControls onSection={scrollToSection} />
-          <SectionDots onJump={scrollToSection} placement="rail" />
+          <CarControls />
+          <SectionDots onJump={scrollToSection} />
           <Sections />
           <CarLoadNotice />
           <CommandMenu onSection={scrollToSection} />

@@ -1,6 +1,7 @@
 import { useProgress } from '@react-three/drei';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
+import './loading-bar.css';
 
 export function LoadingBar() {
   const { progress, active } = useProgress();
@@ -11,7 +12,6 @@ export function LoadingBar() {
     <div
       className={`
         car-loading-progress
-        fixed top-0 left-0 right-0 z-50 pointer-events-none
         transition-opacity duration-300
         ${active ? 'opacity-100' : 'opacity-0'}
       `}
@@ -25,12 +25,7 @@ export function LoadingBar() {
           style={{ transform: `scaleX(${progress / 100})` }}
         />
       </div>
-      <div
-        className="
-          mt-2 text-center font-[var(--font-mono)] text-[0.6rem] tracking-[0.28em]
-          uppercase text-[var(--color-muted)]
-        "
-      >
+      <div className="car-loading-copy">
         Bringing in {car?.name ?? 'the car'}
         <span className="text-[var(--color-fg)] tabular-nums"> · {pct}%</span>
       </div>

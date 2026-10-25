@@ -36,7 +36,11 @@ checks enable touch input. The navigation cases exercise normal-motion case stud
 and screenshot viewers as well as reduced-motion page navigation. They also check
 the compact All controls entry, contextual camera reset, stable dock placement and
 access to setup sharing. Unit checks cover a held manual camera angle and model
-hit testing that rejects empty space and hidden geometry. A screenshot pixel check verifies that the default car
+hit testing that rejects empty space and hidden geometry. Phone chrome checks cover
+menu-only section navigation, touch dismissal without keyboard hints, visible
+sharing feedback and a deliberately held next-car
+download at narrow widths so loading feedback must clear the header.
+A screenshot pixel check verifies that the default car
 actually renders; it excludes the paint controls so those cannot disguise a blank
 canvas. Screenshot capture and pixel assertions retry together within their existing
 budgets. Each capture attempt is bounded so a transient browser capture error can

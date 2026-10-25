@@ -15,6 +15,11 @@ menu and remain reachable through search, the picker and previous/next controls.
 and labels share one definition in `config.ts`, used by navigation, dots and commands.
 Section resize observation refreshes scene and control visibility when initial
 layout or content sizing settles without a scroll event, including WebKit reloads.
+Phones use the persistent header menu for section navigation; the progress-dot rail
+is desktop-only. Model-loading feedback sits below the shared header height, clear
+of Menu and Résumé. Keyboard hints appear only in wide layouts with a fine primary
+pointer; shortcuts still work with an attached keyboard. All controls has a visible
+Close button on every screen, and sharing feedback stays visible on touch screens.
 
 Scene visibility, section selection and control visibility have different rules.
 The Contact car becomes visible when its section enters the viewport and keeps

@@ -1,0 +1,18 @@
+.car-loading-progress {
+  position: fixed;
+  top: var(--portfolio-header-height, 88px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+  width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+.car-loading-copy {
+  margin-top: 2px;
+  padding-inline: 4px;
+  border-radius: 4px;
+  background: var(--color-bg);
+  color: var(--color-muted);
+  font: 11px/16px var(--font-display);
+  text-align: center;
+}

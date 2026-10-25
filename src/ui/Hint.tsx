@@ -9,8 +9,11 @@ export function AllControlsButton() {
       type="button"
       className="all-controls-trigger"
       aria-label="All controls"
-      title="All controls (?)"
-      onClick={() => window.dispatchEvent(new Event(COMMAND_MENU_EVENT))}
+      title="All controls"
+      onClick={(event) => {
+        event.currentTarget.focus({ preventScroll: true });
+        window.dispatchEvent(new Event(COMMAND_MENU_EVENT));
+      }}
     >
       <span aria-hidden="true">···</span>
       <span>All controls</span>
