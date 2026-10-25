@@ -220,9 +220,7 @@
   }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
-  #desktop-dock
-    button:is([aria-label='Rev engine'], [aria-label='Reset camera view'])
-    > span:last-child {
+  #desktop-dock button[aria-label='Reset camera view'] > span:last-child {
     display: none;
   }
 }

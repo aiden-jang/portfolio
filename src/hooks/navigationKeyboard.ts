@@ -70,11 +70,6 @@ export function handleNavigationKey(
       e.preventDefault();
       useAppStore.getState().toggleTheme();
       break;
-    case 'r':
-    case 'R':
-      e.preventDefault();
-      useAppStore.getState().triggerRev();
-      break;
     case 'v':
     case 'V':
       e.preventDefault();

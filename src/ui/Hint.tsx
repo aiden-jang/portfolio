@@ -1,12 +1,25 @@
 import { useEffect, useState } from 'react';
-import { CARS } from '../config';
 import { useAppStore } from '../store';
 import { COMMAND_MENU_EVENT } from './CommandMenu';
-import './keyboard-legend.css';
+import './all-controls.css';
+
+export function AllControlsButton() {
+  return (
+    <button
+      type="button"
+      className="all-controls-trigger"
+      aria-label="All controls"
+      title="All controls (?)"
+      onClick={() => window.dispatchEvent(new Event(COMMAND_MENU_EVENT))}
+    >
+      <span aria-hidden="true">···</span>
+      <span>All controls</span>
+    </button>
+  );
+}
 
 export function Hint() {
   const [triedOrbit, setTriedOrbit] = useState(false);
-  const carIndex = useAppStore((state) => state.carIndex);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const loading = useAppStore((state) => state.isCarLoading);
   const error = useAppStore((state) => state.carLoadError);
@@ -26,23 +39,6 @@ export function Hint() {
         </p>
       )}
       <p className="orbit-status">Drag to orbit · release to scroll</p>
-      <div id="hint" className="keyboard-legend" aria-label="Car controls and keyboard shortcuts">
-        <span>
-          <kbd>←</kbd>
-          <kbd>→</kbd> Car
-        </span>
-        {!CARS[carIndex].fixedLivery && (
-          <span>
-            <kbd>C</kbd> Paint
-          </span>
-        )}
-        <span>
-          <kbd>B</kbd> Lighting
-        </span>
-        <button type="button" onClick={() => window.dispatchEvent(new Event(COMMAND_MENU_EVENT))}>
-          <kbd>?</kbd> All controls
-        </button>
-      </div>
     </>
   );
 }

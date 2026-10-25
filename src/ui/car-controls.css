@@ -1,4 +1,5 @@
 .car-controls-row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -60,11 +61,8 @@
   height: 44px;
   white-space: nowrap;
 }
-#desktop-dock button[aria-label='Rev engine'] {
-  width: 56px;
-}
 #desktop-dock button[aria-label='Reset camera view'] {
-  width: 92px;
+  width: 108px;
 }
 #desktop-dock .car-paint-slot {
   width: 240px;
@@ -72,10 +70,8 @@
 #desktop-dock .car-paint-slot[data-fixed-livery] {
   width: 100px;
 }
-#desktop-dock .car-controls-row > div:last-child,
-#desktop-dock button[title='Share this garage setup'] {
-  width: 44px;
-  height: 44px;
+#desktop-dock .all-controls-trigger {
+  width: 100px;
 }
 #desktop-dock .car-paint-slot > [role='group'] {
   width: 100%;
@@ -99,7 +95,7 @@
   #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
     width: 202px;
   }
-  #desktop-dock button:is([aria-label='Rev engine'], [aria-label='Reset camera view']) {
+  #desktop-dock button[aria-label='Reset camera view'] {
     width: 44px;
   }
   #desktop-dock button[aria-label^='Lighting:'] {
@@ -121,7 +117,7 @@
     gap: 4px;
   }
   #mobile-bar .car-paint-slot {
-    flex: 0 1 110px;
+    flex: 0 1 154px;
     min-width: 0;
   }
   #mobile-bar .car-paint-slot[data-fixed-livery] {
@@ -131,10 +127,7 @@
   #mobile-bar .car-action-slot {
     flex: 0 0 64px;
   }
-  #mobile-bar .car-control-buttons > button[aria-label='Rev engine'] {
-    flex: 0 0 44px;
-    pointer-events: auto;
-  }
+
   #mobile-bar .car-choice-mobile {
     grid-column: 1 / -1;
     width: 100%;
@@ -175,5 +168,30 @@
   #mobile-bar button[aria-label^='Lighting:'] svg {
     grid-column: 1;
     grid-row: 1;
+  }
+}
+
+.camera-reset-button {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  height: 44px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-control);
+  background: var(--color-panel);
+  pointer-events: auto;
+}
+.camera-reset-button > span:last-child {
+  font: 12px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+@media (max-width: 767px) {
+  .camera-reset-button {
+    justify-content: center;
+    width: 44px;
+  }
+  .camera-reset-button > span:last-child {
+    display: none;
   }
 }

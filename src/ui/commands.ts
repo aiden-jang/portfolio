@@ -83,11 +83,11 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
       },
     },
     {
-      id: 'rev',
-      label: 'Rev the engine',
-      hint: 'R',
-      keywords: 'engine car rumble shake',
-      run: () => useAppStore.getState().triggerRev(),
+      id: 'pulse-lights',
+      label: 'Pulse car lights',
+      hint: 'car',
+      keywords: 'lights glow pulse',
+      run: () => useAppStore.getState().pulseCarLights(),
     },
     {
       id: 'reset-view',
@@ -116,9 +116,17 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
       },
     },
   ];
-  return commands.filter(
-    ({ id }) => id !== 'repaint' || !CARS[useAppStore.getState().carIndex].fixedLivery,
-  );
+  const state = useAppStore.getState();
+  return commands.filter(({ id }) => {
+    if (id === 'pulse-lights')
+      return (
+        !state.isCarLoading &&
+        !state.carLoadError &&
+        state.sectionIndex === 0 &&
+        state.refs.lamps.length > 0
+      );
+    return id !== 'repaint' || !CARS[state.carIndex].fixedLivery;
+  });
 }
 
 export function matchCommands(commands: Command[], query: string): Command[] {

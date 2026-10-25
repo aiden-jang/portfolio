@@ -5,6 +5,31 @@ import { useAppStore } from './store';
 
 afterEach(() => useAppStore.setState(useAppStore.getInitialState(), true));
 
+it('only pulses existing lamps on a ready car in the intro', () => {
+  const state = useAppStore.getState();
+  useAppStore.setState({ refs: { ...state.refs, lightPulseT: 0, lamps: [] }, isCarLoading: false });
+  const pulse = () => useAppStore.getState().pulseCarLights();
+  pulse();
+  expect(useAppStore.getState().refs.lightPulseT).toBe(0);
+  useAppStore.getState().refs.lamps = [
+    { light: new THREE.PointLight(), baseIntensity: 2, isHeadlight: false },
+  ];
+  for (const blocked of [
+    { isCarLoading: true },
+    { isCarLoading: false, carLoadError: 'Failed' },
+    { carLoadError: null, sectionIndex: 4 },
+  ]) {
+    useAppStore.setState(blocked);
+    pulse();
+    expect(useAppStore.getState().refs.lightPulseT).toBe(0);
+  }
+  useAppStore.setState({ sectionIndex: 0 });
+  pulse();
+  expect(useAppStore.getState().refs.lightPulseT).toBe(1);
+  useAppStore.getState().setCarIndex(1);
+  expect(useAppStore.getState().refs.lightPulseT).toBe(0);
+});
+
 describe('car retry', () => {
   it('retries the selected car without changing the garage', () => {
     useAppStore.setState({

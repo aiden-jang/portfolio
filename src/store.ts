@@ -11,7 +11,8 @@ type Refs = {
   bodyOriginalColor: THREE.Color | null;
   lamps: Lamp[];
   exposureCurrent: number;
-  revT: number;
+  lightPulseT: number;
+  carModel: THREE.Object3D | null;
   // Set once the first GLB has loaded, which is what releases the intro animation.
   introArmed: boolean;
 };
@@ -23,6 +24,7 @@ type AppState = {
   isContactVisible: boolean;
   // Incremented to ask CameraRig to drop any manual orbit offsets.
   cameraResetVersion: number;
+  hasManualView: boolean;
   activeBodyColor: ActiveBodyColor;
   hasBodyMaterial: boolean;
   isCarLoading: boolean;
@@ -45,7 +47,7 @@ type AppState = {
   toggleTheme: () => void;
   setSectionIndex: (i: number) => void;
   setContactVisible: (visible: boolean) => void;
-  triggerRev: () => void;
+  pulseCarLights: () => void;
   resetCamera: () => void;
   armIntro: () => void;
   setHasBodyMaterial: (v: boolean) => void;
@@ -62,6 +64,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   sectionIndex: 0,
   isContactVisible: false,
   cameraResetVersion: 0,
+  hasManualView: false,
   activeBodyColor: 'original',
   hasBodyMaterial: false,
   isCarLoading: true,
@@ -86,13 +89,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     bodyOriginalColor: null,
     lamps: [],
     exposureCurrent: CARS[0]?.exposure ?? 1,
-    revT: 0,
+    lightPulseT: 0,
+    carModel: null,
     introArmed: false,
   },
   setCarIndex: (i) => {
     const refs = get().refs;
     refs.bodyMaterial = null;
     refs.bodyOriginalColor = null;
+    refs.lightPulseT = 0;
     set({
       drsOpen: false,
       hasDRS: false,
@@ -128,10 +133,18 @@ export const useAppStore = create<AppState>((set, get) => ({
   toggleTheme: () => set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
   setSectionIndex: (i) => set({ sectionIndex: i }),
   setContactVisible: (isContactVisible) => set({ isContactVisible }),
-  triggerRev: () => {
-    get().refs.revT = 1;
+  pulseCarLights: () => {
+    const state = get();
+    if (
+      !state.isCarLoading &&
+      !state.carLoadError &&
+      state.sectionIndex === 0 &&
+      state.refs.lamps.length
+    )
+      state.refs.lightPulseT = 1;
   },
-  resetCamera: () => set((state) => ({ cameraResetVersion: state.cameraResetVersion + 1 })),
+  resetCamera: () =>
+    set((state) => ({ cameraResetVersion: state.cameraResetVersion + 1, hasManualView: false })),
   armIntro: () => {
     get().refs.introArmed = true;
   },

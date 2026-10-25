@@ -47,7 +47,16 @@ a hover highlight on the previous result.
 Effects have their own lazy-loading boundary inside the canvas, so their download
 does not block mounting the scene or starting the model request. Rendering pauses
 in reading sections and resumes for the visible Contact car.
-`CameraRig` combines section poses, pointer offsets, intro motion and rev motion.
+`CameraRig` combines section poses, pointer offsets and intro motion. Manual orbit
+holds the chosen angle until Reset view; automatic intro rotation resumes after a
+reset. Reset appears outside the dock's layout so its arrival does not move the
+other controls. Share and randomization live in All controls alongside keyboard
+navigation. The primary dock keeps car selection, paint, lighting and available
+model-specific details. Film grain is static.
+`carHitTest` raycasts only the loaded model, excluding hidden meshes. A tap on the
+car briefly boosts its existing lamps without camera shake or a floor-glow pulse;
+empty intro space does not trigger it. Cars without road lamps omit this response.
+The command menu provides the same light response without requiring a pointer.
 `useContactArrival` holds the front-facing opening pose, then advances the arrival
 near the end of the Contact scroll. Scrolling back toward About reverses the same
 progress instead of resetting the camera while Contact is still visible. Changing
@@ -168,7 +177,8 @@ durations and stagger delays, including native backdrops. Pointer-follow control
 react to preference changes without requiring a reload.
 Component stylesheets own their interface rules. `reading-flow.css` owns reading
 visibility. `reading-layout.css` owns responsive reading adjustments, and
-`browsing-controls.css` owns preview and story scrolling controls.
+`browsing-controls.css` owns story scrolling controls. `all-controls.css` styles
+the compact entry to secondary actions and shortcuts.
 `portfolio-surfaces.css` contains cross-section layouts and
 surface refinements. Its rule order preserves the existing responsive cascade.
 Avoid adding new files named after polish passes; change the relevant owner.

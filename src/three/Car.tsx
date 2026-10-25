@@ -120,6 +120,7 @@ export function Car() {
         useAppStore.setState({ hasPopupHeadlights: !!headlights.current });
         group.add(model);
         modelRef.current = model;
+        refs.carModel = model;
         displayedIndex.current = carIndex;
 
         refs.lamps =
@@ -190,6 +191,7 @@ export function Car() {
       releaseDetails();
       headlights.current?.dispose();
       if (modelRef.current) disposeModel(modelRef.current);
+      useAppStore.getState().refs.carModel = null;
       underglow.geometry.dispose();
       underglowMat.map?.dispose();
       underglowMat.dispose();
@@ -217,11 +219,12 @@ export function Car() {
     const reduced = prefersReducedMotion();
     const time = state.clock.elapsedTime;
     const breath = reduced ? 0.5 : 0.5 + Math.sin(time * 0.7) * 0.5;
-    const rev = reduced ? 0 : refs.revT;
-    underglowMat.opacity = 0.1 + breath * 0.04 + rev * 0.22;
+    refs.lightPulseT = Math.max(0, refs.lightPulseT - dt * 2);
+    const pulse = reduced ? 0 : refs.lightPulseT;
+    underglowMat.opacity = 0.1 + breath * 0.04;
 
     for (const l of refs.lamps) {
-      const boost = !l.isHeadlight ? 1 + rev * 6 : 1;
+      const boost = 1 + pulse * 0.8;
       l.light.intensity = l.baseIntensity * boost;
     }
     updateDetails(dt);

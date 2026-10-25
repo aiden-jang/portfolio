@@ -6,10 +6,16 @@ export function CameraResetButton() {
   return (
     <button
       type="button"
-      onClick={resetCamera}
+      onClick={(event) => {
+        event.currentTarget
+          .closest('.car-controls-row')
+          ?.querySelector<HTMLButtonElement>('[aria-label="All controls"]')
+          ?.focus({ preventScroll: true });
+        resetCamera();
+      }}
       aria-label="Reset camera view"
       title="Reset camera view (V)"
-      className="group inline-flex h-8 items-center gap-1.5 rounded-full px-2 text-[var(--color-muted)] transition-colors hover:text-[var(--color-neon)]"
+      className="camera-reset-button group inline-flex h-8 items-center gap-1.5 rounded-full px-2 text-[var(--color-muted)] transition-colors hover:text-[var(--color-neon)]"
     >
       <span
         aria-hidden="true"

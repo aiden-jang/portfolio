@@ -338,13 +338,10 @@
 .mobile-project-filter {
   display: none;
 }
-#desktop-dock button:is([aria-label='Rev engine'], [aria-label='Reset camera view']) {
+#desktop-dock button[aria-label='Reset camera view'] {
   color: #a3a3ad;
 }
-#desktop-dock button[title='Share this garage setup'] {
-  min-width: 44px;
-  min-height: 44px;
-}
+
 @media (max-width: 767px) {
   .project-toolbar {
     display: grid;

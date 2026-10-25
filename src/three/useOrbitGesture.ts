@@ -33,10 +33,11 @@ export type RigState = {
   introT: number;
 };
 
-/** Owns the pointer gestures that feed CameraRig: orbit drag, touch hold-to-orbit, tap-to-rev. */
-export function useOrbitGesture(state: MutableRefObject<RigState>): void {
-  const triggerRev = useAppStore((s) => s.triggerRev);
-
+/** Owns intro orbit gestures; the scene decides whether a tap hits the car. */
+export function useOrbitGesture(
+  state: MutableRefObject<RigState>,
+  onTap: (x: number, y: number) => void,
+): void {
   useEffect(() => {
     const isNonDraggable = (target: EventTarget | null) =>
       !!(target as HTMLElement | null)?.closest?.(NON_DRAGGABLE_SELECTOR);
@@ -109,7 +110,9 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
       }
       if (!s.dragMoved) return;
       // The class is what fades the DOM text out, so the car reads clean while you orbit.
-      if (s.dragMoved) document.body.classList.add('orbiting');
+      document.body.classList.add('orbiting');
+      if (!useAppStore.getState().hasManualView) useAppStore.setState({ hasManualView: true });
+      s.introT = 1;
       s.dragAzimuth += dx * DRAG_YAW_SENSITIVITY;
       s.dragElevation = clamp(
         s.dragElevation - dy * DRAG_PITCH_SENSITIVITY,
@@ -129,9 +132,8 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
         endGesture(s);
         return;
       }
-      // Don't add `&& !s.orbitHold` here. A press that outlasts the hold but never moves should
-      // still rev instead of reading as a dead press.
-      if (!s.dragMoved) triggerRev();
+      if (!s.dragMoved && canOrbitAt(e.clientY, pageSectionBounds()) && !isNonDraggable(e.target))
+        onTap(e.clientX, e.clientY);
       s.idleSpin += s.dragAzimuth;
       s.dragAzimuth = 0;
       s.isDown = false;
@@ -139,6 +141,8 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
     };
     const onPointerCancel = () => {
       activePointer = null;
+      state.current.idleSpin += state.current.dragAzimuth;
+      state.current.dragAzimuth = 0;
       state.current.isDown = false;
       endGesture(state.current);
     };
@@ -165,5 +169,5 @@ export function useOrbitGesture(state: MutableRefObject<RigState>): void {
       window.removeEventListener('blur', onPointerCancel);
       document.body.classList.remove('orbiting');
     };
-  }, [state, triggerRev]);
+  }, [state, onTap]);
 }

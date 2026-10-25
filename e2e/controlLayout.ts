@@ -7,7 +7,7 @@ export async function controlLayout(page: Page) {
       bar,
       bar.querySelector('.car-choice')!,
       bar.querySelector('[aria-label^="Lighting:"]')!,
-      bar.querySelector('[aria-label="Rev engine"]')!,
+      bar.querySelector('[aria-label="All controls"]')!,
     ];
     return targets.map((element) => {
       const { x, y, width, height } = element.getBoundingClientRect();

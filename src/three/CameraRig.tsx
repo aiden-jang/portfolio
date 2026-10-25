@@ -1,5 +1,5 @@
 import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { KEYFRAMES } from '../config';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { clamp } from '../math';
@@ -17,14 +17,10 @@ import {
 import { useAppStore } from '../store';
 import { useContactArrival } from './useContactArrival';
 import type { Keyframe } from '../types';
+import { hitsCar } from './carHitTest';
 
 const INTRO_DURATION = 2.0;
-const DRAG_DECAY_RATE = 1.5;
-const DRAG_DECAY_FRACTION = 0.6;
 const IDLE_SPIN_RATE = 0.12;
-const REV_DECAY_RATE = 1.8;
-const REV_RUMBLE_FREQ_HZ = 90 / (2 * Math.PI);
-const REV_SHAKE_AMP = 0.12;
 
 // `?clean` freezes the camera for OG screenshots. It needs its own azimuth because KEYFRAMES[0]
 // sits near the nose, and the shot wants more flank.
@@ -37,7 +33,7 @@ type Props = {
 };
 
 export function CameraRig({ getScrollT }: Props) {
-  const { camera } = useThree();
+  const { camera, gl } = useThree();
   const contactArrival = useContactArrival();
   const cameraResetVersion = useAppStore((s) => s.cameraResetVersion);
 
@@ -58,7 +54,15 @@ export function CameraRig({ getScrollT }: Props) {
   });
   const baseKf = useRef<Keyframe>({ ...KEYFRAMES[0] });
 
-  useOrbitGesture(state);
+  const onTap = useCallback(
+    (x: number, y: number) => {
+      const store = useAppStore.getState();
+      if (hitsCar(store.refs.carModel, camera, gl.domElement.getBoundingClientRect(), x, y))
+        store.pulseCarLights();
+    },
+    [camera, gl],
+  );
+  useOrbitGesture(state, onTap);
 
   useEffect(() => {
     const s = state.current;
@@ -76,13 +80,15 @@ export function CameraRig({ getScrollT }: Props) {
       scrollT = getScrollT();
 
     s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
-    if (s.scrollActiveTimer === 0 && !s.isDown && !isCleanMode && !reduced && scrollT === 0) {
+    if (
+      s.scrollActiveTimer === 0 &&
+      !s.isDown &&
+      !isCleanMode &&
+      !reduced &&
+      scrollT === 0 &&
+      !useAppStore.getState().hasManualView
+    ) {
       s.idleSpin += dt * IDLE_SPIN_RATE;
-    }
-    if (!s.isDown) {
-      const k = Math.min(1, dt * DRAG_DECAY_RATE);
-      s.dragAzimuth *= 1 - k * DRAG_DECAY_FRACTION;
-      s.dragElevation *= 1 - k * DRAG_DECAY_FRACTION;
     }
 
     const kf = baseKf.current;
@@ -96,7 +102,11 @@ export function CameraRig({ getScrollT }: Props) {
     const dist = kf.distance * framingDistanceMultiplier(aspect);
     const tgtY = kf.targetY;
 
-    const el = clamp(kf.elevation + s.dragElevation, floorElevation(dist, tgtY), MAX_ELEVATION);
+    const el = clamp(
+      kf.elevation + s.dragElevation * (1 - clamp(scrollT, 0, 1)),
+      floorElevation(dist, tgtY),
+      MAX_ELEVATION,
+    );
     if (s.isDown) s.dragElevation = el - kf.elevation;
     let pose = orbitPosition(az, el, dist, tgtY);
 
@@ -106,20 +116,6 @@ export function CameraRig({ getScrollT }: Props) {
     }
     camera.position.set(pose.x, pose.y, pose.z);
     camera.lookAt(0, tgtY, 0);
-
-    // Two blocks: the counter has to decay under reduced motion too, it just skips the shake.
-    if (refs.revT > 0) {
-      refs.revT = Math.max(0, refs.revT - dt * REV_DECAY_RATE);
-    }
-    if (refs.revT > 0 && !reduced) {
-      const time = three.clock.elapsedTime;
-      const rumble =
-        (Math.sin(time * REV_RUMBLE_FREQ_HZ * 2 * Math.PI) * 0.6 + (Math.random() - 0.5) * 0.4) *
-        refs.revT *
-        REV_SHAKE_AMP;
-      camera.position.x += rumble;
-      camera.position.y += Math.abs(rumble) * 0.4;
-    }
   });
   return null;
 }

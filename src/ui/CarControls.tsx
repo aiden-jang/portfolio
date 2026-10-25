@@ -5,11 +5,9 @@ import { CarSwitcher, MobileCarSwitcher } from './CarSwitcher';
 import { ColorSwatches, MobileColorButton } from './ColorSwatches';
 import { CarDetailButton } from './CarDetailButton';
 import { HeadlightButton } from './HeadlightButton';
-import { RevButton } from './RevButton';
-import { SceneShareButton } from './SceneShareButton';
 import { MobileThemeButton, ThemeToggle } from './ThemeToggle';
 import { SectionDots } from './SectionDots';
-import { Hint } from './Hint';
+import { Hint, AllControlsButton } from './Hint';
 import './car-controls.css';
 
 function CarActionSlot() {
@@ -26,6 +24,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
   const fixedLivery = CARS[carIndex].fixedLivery;
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const visible = sectionIndex === 0;
+  const manualView = useAppStore((state) => state.hasManualView);
   return (
     <>
       <div
@@ -40,6 +39,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
         <SectionDots onJump={onSection} placement="bar" />
         {visible && (
           <div className="car-controls-row">
+            {manualView && <CameraResetButton />}
             <MobileCarSwitcher />
             <div className="car-control-buttons">
               <div className="car-paint-slot" data-fixed-livery={fixedLivery || undefined}>
@@ -47,7 +47,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
               </div>
               <MobileThemeButton />
               <CarActionSlot />
-              <RevButton />
+              <AllControlsButton />
             </div>
           </div>
         )}
@@ -69,8 +69,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
           >
             <CarSwitcher />
             <CarActionSlot />
-            <RevButton />
-            <CameraResetButton />
+            {manualView && <CameraResetButton />}
             <div className="car-paint-slot" data-fixed-livery={fixedLivery || undefined}>
               {fixedLivery ? (
                 <span className="car-livery">Original livery</span>
@@ -79,7 +78,7 @@ export function CarControls({ onSection }: { onSection: (id: SectionId) => void 
               )}
             </div>
             <ThemeToggle />
-            <SceneShareButton />
+            <AllControlsButton />
           </div>
         </div>
       )}

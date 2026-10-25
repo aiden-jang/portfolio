@@ -60,41 +60,6 @@
   }
 }
 
-/* Animate the tiled grain position so the fixed overlay never creates horizontal overflow. */
-@keyframes filmgrain {
-  0%,
-  100% {
-    background-position: 0 0;
-  }
-  10% {
-    background-position: -3px -3px;
-  }
-  20% {
-    background-position: 3px 1px;
-  }
-  30% {
-    background-position: -4px 3px;
-  }
-  40% {
-    background-position: 4px -3px;
-  }
-  50% {
-    background-position: -1px 4px;
-  }
-  60% {
-    background-position: 3px -4px;
-  }
-  70% {
-    background-position: -4px -1px;
-  }
-  80% {
-    background-position: 1px 4px;
-  }
-  90% {
-    background-position: -3px -4px;
-  }
-}
-
 /* Smooth entrance: the DOM chrome fades in on load, and the 3D canvas fades in
    when its (lazy) chunk mounts, so neither pops in abruptly. Reduced-motion
    collapses these to instant via the media block above. */
@@ -217,7 +182,6 @@
   /* Hide fixed chrome through modal overlays. Opacity avoids conflicts with later layout utilities. */
   body.modal-open #mobile-bar,
   body.modal-open #desktop-dock,
-  body.modal-open #hint,
   body.modal-open header,
   body.modal-open #nav,
   body.modal-open #mobile-resume {
@@ -593,16 +557,7 @@
 #mobile-bar > .flex {
   gap: 4px;
 }
-#mobile-bar button[aria-label='Rev engine'] {
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  justify-content: center;
-  border: 1px solid var(--color-line);
-}
-#mobile-bar button[aria-label='Rev engine'] > span:last-child {
-  display: none;
-}
+
 /* Reading sections follow their content rather than leaving a full screen of empty space. */
 #sec-experience,
 #sec-about,

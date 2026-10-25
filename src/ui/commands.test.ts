@@ -62,12 +62,12 @@ describe('matchCommands', () => {
   });
 
   it('matches on keywords the label never shows', () => {
-    const hits = matchCommands(build(), 'rumble');
-    expect(hits.map((c) => c.id)).toEqual(['rev']);
+    const hits = matchCommands(build(), 'shuffle');
+    expect(hits.map((c) => c.id)).toEqual(['surprise']);
   });
 
   it('ignores case and surrounding space', () => {
-    expect(matchCommands(build(), '  ReV ThE ENGINE ').map((c) => c.id)).toEqual(['rev']);
+    expect(matchCommands(build(), '  SuRpRiSe ME ').map((c) => c.id)).toEqual(['surprise']);
   });
 
   it('finds nothing for a query that matches nothing', () => {

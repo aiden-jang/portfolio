@@ -1,6 +1,5 @@
 body:not([data-car-controls='visible']) #desktop-dock,
 body:not([data-car-controls='visible']) #mobile-bar,
-body:not([data-car-controls='visible']) #hint,
 body:not([data-car-controls='visible']) .orbit-invitation,
 body:not([data-car-controls='visible']) .orbit-status {
   visibility: hidden;
@@ -11,7 +10,6 @@ body:not([data-car-controls='visible']) .orbit-status {
 body[data-car-view='reading']:not([data-contact-view='visible']) .portfolio-scene,
 body[data-car-view='reading'] #desktop-dock,
 body[data-car-view='reading'] #mobile-bar,
-body[data-car-view='reading'] #hint,
 body[data-car-view='reading'] .car-load-notice,
 body[data-car-view='reading'] .car-loading-progress,
 body[data-car-view='reading'] .scene-loading-note {
