@@ -6,6 +6,9 @@
   --color-muted: rgba(244, 240, 255, 0.55);
   --color-neon: #e8e8e6;
   --color-line: rgba(255, 255, 255, 0.12);
+  --color-panel: #17171c;
+  --radius-control: 6px;
+  --radius-panel: 10px;
   --font-display: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
 }
@@ -515,40 +518,6 @@
   padding: 10px 14px;
   font-size: 12px;
 }
-.preview-dialog {
-  background: #101014;
-  color: var(--color-fg);
-  border: 1px solid var(--color-line);
-  padding: 20px;
-  width: min(1400px, 96vw);
-  max-height: 94dvh;
-  margin: auto;
-  overflow: auto;
-}
-.preview-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.88);
-}
-.preview-dialog-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.preview-dialog button {
-  cursor: pointer;
-  min-height: 44px;
-  padding: 8px 14px;
-  border: 1px solid var(--color-line);
-}
-.preview-dialog img {
-  width: 100%;
-  height: auto;
-}
-.preview-dialog p {
-  margin-top: 12px;
-  color: var(--color-muted);
-  font-size: 12px;
-}
 .work-story {
   font-size: 0.98rem;
   line-height: 1.6;
@@ -592,21 +561,6 @@
   #sec-work {
     padding-bottom: 100px;
   }
-}
-
-.preview-dialog-heading {
-  gap: 8px;
-}
-.preview-dialog-heading > span {
-  margin-right: auto;
-}
-.preview-image {
-  max-height: 72dvh;
-  overflow: auto;
-}
-.preview-image.is-zoomed img {
-  width: max(100%, 1000px);
-  max-width: none;
 }
 
 .orbit-invitation {

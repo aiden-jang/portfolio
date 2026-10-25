@@ -88,7 +88,7 @@ body[data-car-view='reading'] .portfolio-header {
   gap: 8px;
   padding: 0 12px;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: var(--radius-control);
 }
 .garage-filters button:hover {
   border-color: var(--color-line);

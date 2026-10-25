@@ -84,7 +84,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         role="dialog"
         aria-modal="true"
         aria-label="Command menu"
-        className="dialog-panel w-full max-w-[490px] overflow-hidden rounded-[10px] border border-[var(--color-line)] bg-[#17171c] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
+        className="dialog-panel w-full max-w-[490px] overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-line)] bg-[var(--color-panel)] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
       >
         <div className="flex items-center gap-3 border-b border-[var(--color-line)] px-4 py-3">
           <span aria-hidden="true" className="text-[var(--color-neon)]">

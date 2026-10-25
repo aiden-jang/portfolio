@@ -51,9 +51,10 @@
   border: 1px solid var(--color-line);
   background: #0a0a14;
   color: var(--color-fg);
-  border-radius: 20px;
-  padding: 7px 14px;
-  font: 10px/1.4 var(--font-mono);
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: var(--radius-control);
+  font: 12px/1.4 var(--font-display);
 }
 .mobile-paint-name {
   position: absolute;
@@ -102,56 +103,6 @@
 #mobile-bar button[aria-label^='Lighting:'] {
   position: relative;
 }
-.preview-dialog-heading {
-  position: sticky;
-  top: -20px;
-  z-index: 1;
-  background: var(--color-bg);
-  padding: 8px 0;
-}
-.preview-dialog-heading > span {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.preview-zoom-help {
-  display: block;
-  margin-bottom: 8px;
-  font: 10px/1.5 var(--font-mono);
-}
-.preview-view-navigation {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 8px 0;
-  border-block: 1px solid var(--color-line);
-  font-size: 12px;
-}
-.preview-view-navigation button {
-  flex: none;
-  min-height: 44px;
-  padding: 6px 10px;
-  border: 1px solid var(--color-line);
-  border-radius: 6px;
-}
-.preview-view-navigation > span {
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-@media (max-width: 767px) {
-  .preview-dialog-heading {
-    flex-wrap: wrap;
-  }
-  .preview-dialog-heading > span {
-    flex-basis: 100%;
-  }
-  .preview-dialog-heading button {
-    flex: 1;
-  }
-}
-
-.preview-image:focus-visible,
 .story-scroll-area:focus-visible {
   outline: 2px solid var(--color-fg);
   outline-offset: -3px;

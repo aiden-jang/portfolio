@@ -189,6 +189,17 @@ for (const width of [1440, 390]) {
       await screenshot.click();
       await expect(page.getByRole('dialog', { name: 'bloomnote screenshot' })).toBeVisible();
       const viewer = page.getByRole('dialog', { name: 'bloomnote screenshot' });
+      if (width === 390) {
+        await page.setViewportSize({ width: 320, height: 900 });
+        const heights = await viewer
+          .locator('.preview-dialog-heading button')
+          .evaluateAll((buttons) => buttons.map((button) => button.getBoundingClientRect().height));
+        expect(
+          Math.max(...heights),
+          'screenshot actions stay on one line on a narrow phone',
+        ).toBeLessThanOrEqual(48);
+        await page.setViewportSize({ width, height: 900 });
+      }
       const image = viewer.getByRole('img');
       const firstView = await image.getAttribute('src');
       await viewer.getByRole('button', { name: 'Next →', exact: true }).click();

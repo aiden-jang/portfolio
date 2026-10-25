@@ -1,0 +1,142 @@
+.preview-dialog {
+  width: min(1400px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-panel);
+  background: var(--color-panel);
+  color: var(--color-fg);
+}
+.preview-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.preview-dialog::backdrop {
+  background: rgba(5, 5, 13, 0.9);
+}
+.preview-dialog-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.preview-dialog-heading > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font: 500 14px/1.4 var(--font-display);
+}
+.preview-dialog-actions {
+  display: flex;
+  grid-column: 2;
+  grid-row: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.preview-dialog-close {
+  grid-column: 3;
+  grid-row: 1;
+}
+.preview-dialog button,
+.preview-dialog-actions > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-control);
+  font: 12px/1.4 var(--font-display);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+.preview-dialog .preview-copy {
+  min-width: 128px;
+}
+.preview-dialog-actions > button:not(.preview-copy) {
+  min-width: 88px;
+}
+.preview-dialog :is(button, a):hover {
+  border-color: var(--color-muted);
+  color: var(--color-fg);
+  background-color: #ffffff06;
+}
+.preview-dialog :is(button, a):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}
+.preview-view-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 8px;
+  padding: 8px 0;
+  border-block: 1px solid var(--color-line);
+  font: 12px/1.4 var(--font-display);
+}
+.preview-view-navigation button {
+  flex: none;
+  padding-inline: 10px;
+}
+.preview-view-navigation > span {
+  min-width: 0;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.preview-image {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 68dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y pinch-zoom;
+  scrollbar-width: thin;
+  scrollbar-color: #55545a var(--color-panel);
+}
+.preview-image:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: -3px;
+}
+.preview-dialog img {
+  width: 100%;
+  height: auto;
+}
+.preview-image.is-zoomed img {
+  width: max(100%, 1000px);
+  max-width: none;
+}
+.preview-dialog > p {
+  flex-shrink: 0;
+  margin-top: 12px;
+  color: #b9b9c0;
+  font: 12px/1.6 var(--font-display);
+}
+.preview-zoom-help {
+  display: block;
+  margin-bottom: 8px;
+  font: 11px/1.5 var(--font-mono);
+}
+@media (max-width: 600px) {
+  .preview-dialog {
+    padding: 16px;
+  }
+  .preview-dialog-heading {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .preview-dialog-close {
+    grid-column: 2;
+  }
+  .preview-dialog-actions {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ScreenshotImage } from './ScreenshotImage';
+import './screenshot-viewer.css';
 
 type Props = {
   image: string;
@@ -67,20 +68,28 @@ export function ScreenshotViewer({
     >
       <div className="preview-dialog-heading">
         <span>{name}</span>
-        {onShare && (
-          <button type="button" onClick={onShare}>
-            {shareStatus === 'copied'
-              ? 'Link copied ✓'
-              : shareStatus === 'failed'
-                ? 'Copy unavailable'
-                : 'Copy view link'}
+        <div className="preview-dialog-actions">
+          {onShare && (
+            <button type="button" className="preview-copy" onClick={onShare}>
+              {shareStatus === 'copied'
+                ? 'Link copied ✓'
+                : shareStatus === 'failed'
+                  ? 'Copy unavailable'
+                  : 'Copy view link'}
+            </button>
+          )}
+          {shareStatus === 'failed' && viewLink && <a href={viewLink}>Open view link ↗</a>}
+          <button type="button" aria-pressed={zoomed} onClick={() => setZoomed(!zoomed)}>
+            {zoomed ? 'Fit image' : 'Zoom in'}
           </button>
-        )}
-        {shareStatus === 'failed' && viewLink && <a href={viewLink}>Open view link ↗</a>}
-        <button type="button" aria-pressed={zoomed} onClick={() => setZoomed(!zoomed)}>
-          {zoomed ? 'Fit image' : 'Zoom in'}
-        </button>
-        <button type="button" autoFocus onClick={onClose} aria-label="Close screenshot">
+        </div>
+        <button
+          type="button"
+          className="preview-dialog-close"
+          autoFocus
+          onClick={onClose}
+          aria-label="Close screenshot"
+        >
           Close ×
         </button>
       </div>

@@ -3,6 +3,7 @@ import { usePageScrollLock } from '../usePageScrollLock';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CARS } from '../../config';
+import './credits.css';
 
 export function Credits() {
   const credited = CARS.filter((car) => !!car.credit);
@@ -50,25 +51,23 @@ export function Credits() {
             <section
               ref={sheetRef}
               onMouseDown={(event) => event.stopPropagation()}
-              className="dialog-panel relative w-full max-w-[440px] max-h-[76dvh] overflow-y-auto rounded-2xl border border-white/[0.14] bg-[#0b0b15] p-5 text-left shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
+              className="dialog-panel model-credits-panel"
             >
               <button
                 ref={closeRef}
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close model credits"
-                className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full border border-[var(--color-line)] text-lg text-[var(--color-muted)] transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]"
+                className="model-credits-close"
               >
                 ×
               </button>
-              <p className="pr-10 font-[var(--font-mono)] text-[0.62rem] tracking-[0.2em] uppercase text-[var(--color-fg)]">
-                3D model credits
-              </p>
-              <p className="mt-2 font-[var(--font-mono)] text-[0.54rem] tracking-[0.09em] text-[rgba(244,240,255,0.48)]">
+              <h2 className="model-credits-title">3D model credits</h2>
+              <p className="model-credits-description">
                 Models adapted for web display with compressed textures and geometry. Full mesh
                 detail retained. Interactive paint and lighting added.
               </p>
-              <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 list-none p-0 m-0">
+              <ul className="model-credits-list">
                 {credited.map((car) => {
                   const credit = car.credit!;
                   return (
@@ -136,7 +135,7 @@ export function Credits() {
                   );
                 })}
               </ul>
-              <p className="mt-4 text-[0.68rem] leading-relaxed text-[var(--color-muted)]">
+              <p className="model-credits-notice">
                 Vehicle designs and trademarks belong to their owners, including Porsche AG. No
                 manufacturer affiliation or endorsement is implied.
               </p>

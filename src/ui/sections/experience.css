@@ -14,8 +14,9 @@
   color: var(--color-fg);
 }
 .experience-outcome:focus-visible {
-  outline: 1px solid var(--color-fg);
-  outline-offset: 4px;
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+  border-radius: var(--radius-control);
 }
 .experience-outcome:last-child {
   border-bottom: 1px solid var(--color-line);
@@ -84,4 +85,41 @@
 }
 #sec-experience {
   background: var(--color-bg);
+}
+
+@media (max-width: 380px) {
+  .experience-role {
+    display: block;
+  }
+  .experience-role > span:last-child {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+  }
+  .experience-outcome {
+    grid-template-columns: minmax(0, 1fr) 16px;
+    gap: 12px;
+  }
+  .experience-figure {
+    grid-column: 1;
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+  .experience-figure span {
+    font-size: 10px;
+  }
+  .experience-story {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .experience-story span {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .experience-arrow {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }

@@ -155,7 +155,11 @@ its parent’s lock and returns focus to its trigger when closed.
 
 ## Styles
 
-`index.css` defines the theme, shared foundations and global motion rules.
+`index.css` defines the theme, shared foundations and global motion rules. Shared
+panel, corner and control tokens keep utility dialogs consistent. The fixed header
+and sticky project toolbar share their height through `portfolio-header.css`.
+Screenshot-viewer and model-credit layouts live in `ui/screenshot-viewer.css` and
+`ui/sections/credits.css`, including their narrow-phone reflow.
 `ui/dialog-motion.css` gives dialogs a short shared entrance and native backdrop
 fade. Case studies use that entrance only when no native morph is running, so it
 does not replay after a morph finishes. Screenshot images fade in after loading;

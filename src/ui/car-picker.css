@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   border: 1px solid var(--color-line);
-  border-radius: 6px;
+  border-radius: var(--radius-control);
   background: #24242a;
   pointer-events: auto;
 }
@@ -71,9 +71,9 @@
   padding: 0;
   margin: auto;
   border: 1px solid var(--color-line);
-  border-radius: 10px;
+  border-radius: var(--radius-panel);
   color: var(--color-fg);
-  background: #17171c;
+  background: var(--color-panel);
   overflow: hidden;
 }
 .car-browser[open] {
@@ -106,7 +106,7 @@
   min-height: 44px;
   padding: 8px 14px;
   border: 1px solid var(--color-line);
-  border-radius: 6px;
+  border-radius: var(--radius-control);
   background: #101014;
   color: var(--color-fg);
   font: 12px var(--font-display);
@@ -126,9 +126,9 @@
   display: block;
   width: 100%;
   border: 1px solid var(--color-line);
-  border-radius: 6px;
+  border-radius: var(--radius-control);
   overflow: hidden;
-  background: #17171c;
+  background: var(--color-panel);
   color: var(--color-fg);
   text-align: left;
   cursor: pointer;

@@ -1,3 +1,6 @@
+:root {
+  --portfolio-header-height: 88px;
+}
 .portfolio-header {
   position: fixed;
   inset: 0 0 auto;
@@ -5,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 88px;
+  height: var(--portfolio-header-height);
   padding: 0 5vw;
   background: transparent;
   border-bottom: 1px solid transparent;
@@ -33,7 +36,7 @@
 }
 .project-toolbar {
   position: sticky;
-  top: 87px;
+  top: var(--portfolio-header-height);
   z-index: 15;
   background: #101014;
   display: flex;
@@ -108,8 +111,10 @@ body.modal-open .portfolio-header {
   }
 }
 @media (max-width: 767px) {
+  :root {
+    --portfolio-header-height: 84px;
+  }
   .portfolio-header {
-    height: 84px;
     padding: 0 6vw;
   }
   .portfolio-mobile-header {
@@ -122,7 +127,7 @@ body.modal-open .portfolio-header {
     letter-spacing: 0;
     font-family: var(--font-display);
     font-size: 12px;
-    border-radius: 5px;
+    border-radius: var(--radius-control);
     text-transform: none;
   }
   .portfolio-menu summary {
@@ -134,7 +139,7 @@ body.modal-open .portfolio-header {
     padding: 8px 12px;
     font-size: 12px;
     border: 1px solid var(--color-line);
-    border-radius: 5px;
+    border-radius: var(--radius-control);
     list-style: none;
   }
   .portfolio-menu summary::-webkit-details-marker {
@@ -176,7 +181,6 @@ body.modal-open .portfolio-header {
     color: var(--color-fg);
   }
   .project-toolbar {
-    top: 83px;
     flex-wrap: wrap;
     gap: 0;
     padding-bottom: 12px;
