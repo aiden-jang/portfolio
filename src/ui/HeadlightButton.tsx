@@ -16,12 +16,10 @@ export function HeadlightButton() {
       aria-label="Pop-up headlights"
       aria-pressed={raised}
       title={raised ? 'Lower headlights' : 'Raise headlights'}
-      className="pointer-events-auto inline-flex min-h-11 items-center gap-1.5 rounded-full px-2 text-[var(--color-muted)] transition-colors hover:text-[var(--color-neon)] disabled:opacity-40"
+      className="scene-control-button"
     >
       <span aria-hidden="true">{raised ? '◉' : '◡'}</span>
-      <span className="font-[var(--font-mono)] text-[0.58rem] tracking-[0.13em] uppercase">
-        Lights
-      </span>
+      <span>Lights</span>
     </button>
   );
 }

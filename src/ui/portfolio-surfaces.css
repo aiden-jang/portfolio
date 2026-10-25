@@ -89,9 +89,6 @@
   font-size: 28px;
   font-weight: 600;
 }
-#desktop-dock :is(button:not(.swatch), a) {
-  min-height: 44px;
-}
 #desktop-dock svg {
   width: 16px;
   height: 16px;
@@ -112,7 +109,8 @@
 }
 @media (min-width: 1024px) {
   #sec-about .about-copy {
-    max-width: 1040px;
+    max-width: 1180px;
+    margin-inline: auto;
     display: grid;
     grid-template-columns: minmax(0, 1.4fr) minmax(240px, 1fr);
     column-gap: 72px;
@@ -141,7 +139,7 @@
     font-size: 22px;
   }
   .garage-project-featured figcaption {
-    font-size: 11px;
+    font-size: 12px;
   }
   .garage-project-featured {
     padding-block: 28px;
@@ -221,16 +219,14 @@
   scrollbar-color: #55545a #101014;
 }
 #sec-about {
-  min-height: 100svh;
-  align-items: center;
-  padding-block: 144px;
+  min-height: auto;
+  align-items: flex-start;
+  padding-block: 120px;
 }
 @media (min-width: 1024px) {
-  #sec-experience {
-    min-height: 100svh;
-  }
   #sec-experience .panel {
-    max-width: 1100px;
+    max-width: 1180px;
+    margin-inline: auto;
     display: grid;
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.6fr);
     column-gap: 64px;
@@ -239,7 +235,7 @@
     grid-column: 1;
   }
   #sec-experience h2 {
-    font-size: clamp(28px, 3vw, 38px);
+    font-size: clamp(32px, 4vw, 44px);
   }
   #sec-experience .panel > p {
     grid-column: 2;
@@ -290,9 +286,6 @@
   outline-offset: 2px;
 }
 
-#desktop-dock button:not(.swatch) {
-  color: #b9b9c0;
-}
 .garage-intro p {
   position: relative;
   max-width: 45ch;
@@ -379,14 +372,16 @@
   min-height: 44px;
 }
 .garage-project .garage-stack {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.6;
 }
 .portfolio-header a[aria-label^='Résumé'] {
   min-height: 44px;
   padding: 8px 14px;
-  border-radius: 6px;
-  font: 12px/1.4 var(--font-display);
+  border-radius: var(--radius-control);
+  border-color: var(--color-control-line);
+  background: var(--color-panel);
+  font: 13px/1.4 var(--font-display);
   letter-spacing: 0;
   text-transform: none;
 }

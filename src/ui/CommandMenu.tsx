@@ -157,7 +157,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
                 >
                   {command.label}
                 </span>
-                <span className="keyboard-hint font-[var(--font-mono)] text-[0.58rem] tracking-[0.14em] uppercase text-[var(--color-muted)]">
+                <span className="keyboard-hint font-[var(--font-mono)] text-xs tracking-[0.08em] uppercase text-[var(--color-muted)]">
                   {command.hint}
                 </span>
               </button>

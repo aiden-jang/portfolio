@@ -44,10 +44,7 @@ export function ThemeToggle() {
       aria-pressed={isNight}
       title={`Lighting: ${isNight ? 'Night' : 'Dusk'}`}
       onClick={toggleTheme}
-      className="
-        inline-flex items-center justify-center gap-2 px-2 h-8 rounded-full cursor-pointer
-        transition-transform duration-200 hover:scale-110
-      "
+      className="scene-control-button"
     >
       {isNight ? <MoonIcon /> : <SunIcon />}
       <span className="control-group-label">{isNight ? 'Night' : 'Dusk'}</span>
@@ -67,11 +64,7 @@ export function MobileThemeButton() {
       aria-pressed={isNight}
       title={`Lighting: ${isNight ? 'Night' : 'Dusk'}`}
       onClick={toggleTheme}
-      className="
-        pointer-events-auto inline-flex items-center justify-center w-11 h-11 shrink-0 rounded-full cursor-pointer
-        bg-white/[0.04] border border-[var(--color-line)]
-        transition-colors active:border-[var(--color-neon)]
-      "
+      className="scene-control-button"
     >
       <span className="mobile-light-name">{isNight ? 'Night' : 'Dusk'}</span>
       {isNight ? <MoonIcon /> : <SunIcon />}

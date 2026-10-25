@@ -12,7 +12,7 @@
 }
 .garage-project .garage-stack {
   color: var(--color-muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .garage-project-links button,
 .garage-project-links a {
@@ -46,12 +46,6 @@ button:disabled {
 .garage-project-links :is(a, button):hover {
   color: var(--color-fg);
   border-color: var(--color-fg);
-}
-#desktop-dock :is(button:not(.swatch), a) {
-  min-height: 36px;
-}
-#desktop-dock button[aria-pressed='true'] {
-  color: var(--color-fg);
 }
 .portfolio-menu nav {
   max-height: calc(100dvh - 100px);
@@ -89,9 +83,6 @@ button:disabled {
   .garage-intro p {
     font-size: 13px;
     margin-top: 12px;
-  }
-  .garage-caption {
-    display: none;
   }
 }
 

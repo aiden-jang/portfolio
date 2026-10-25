@@ -17,12 +17,10 @@ export function CarDetailButton() {
       aria-label="DRS rear wing"
       aria-pressed={open}
       title={`${open ? 'Close' : 'Open'} rear-wing flap`}
-      className="pointer-events-auto inline-flex min-h-11 min-w-11 justify-center items-center gap-1.5 rounded-full px-2 text-[var(--color-muted)] transition-colors hover:text-[var(--color-neon)] disabled:opacity-40 aria-pressed:text-[var(--color-neon)]"
+      className="scene-control-button"
     >
       <span aria-hidden="true">{open ? '↔' : '↗'}</span>
-      <span className="font-[var(--font-mono)] text-[0.58rem] tracking-[0.13em] uppercase">
-        DRS
-      </span>
+      <span>DRS</span>
     </button>
   );
 }

@@ -3,12 +3,14 @@
 @theme {
   --color-bg: #101014;
   --color-fg: #e8e8e6;
-  --color-muted: rgba(244, 240, 255, 0.55);
+  --color-muted: #aaaab3;
   --color-neon: #e8e8e6;
   --color-line: rgba(255, 255, 255, 0.12);
   --color-panel: #17171c;
-  --radius-control: 6px;
-  --radius-panel: 10px;
+  --color-control-hover: #24242c;
+  --color-control-line: #45454f;
+  --radius-control: 8px;
+  --radius-panel: 12px;
   --font-display: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
 }
@@ -222,6 +224,7 @@
   font-weight: 500;
 }
 #nav {
+  font: 13px/1.4 var(--font-display);
   text-transform: none;
   letter-spacing: 0;
 }
@@ -252,24 +255,6 @@
   line-height: 1.6;
 }
 
-.garage-caption {
-  position: absolute;
-  right: 5vw;
-  bottom: 140px;
-  text-align: right;
-  font: 11px/1.8 var(--font-mono);
-  color: #aaaab2;
-}
-#desktop-dock > div {
-  border-radius: 8px;
-  background: #141419e8;
-  box-shadow: none;
-}
-#desktop-dock button {
-  text-transform: none;
-  letter-spacing: 0;
-  border-radius: 5px;
-}
 #sec-work {
   background: #101014;
   padding-top: 13vh;
@@ -290,12 +275,13 @@
   justify-content: space-between;
 }
 .garage-work-heading h2 {
-  font-size: 32px;
+  font-size: clamp(32px, 4vw, 44px);
   font-weight: 500;
-  letter-spacing: -1px;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 .garage-work-heading span {
-  font: 11px var(--font-mono);
+  font: 13px/1.5 var(--font-display);
   color: #aaaab2;
 }
 .garage-filters {
@@ -305,7 +291,7 @@
 }
 .garage-filters button {
   min-height: 44px;
-  font-size: 12px;
+  font-size: 13px;
   color: #aaaab2;
   cursor: pointer;
   border-bottom: 1px solid transparent;
@@ -342,7 +328,7 @@
   max-width: 550px;
 }
 .garage-project .garage-stack {
-  font: 11px/1.8 var(--font-mono);
+  font: 12px/1.7 var(--font-display);
   margin-top: 20px;
 }
 .garage-project figure {
@@ -362,7 +348,7 @@
   display: flex;
   gap: 24px;
   margin-top: 22px;
-  font-size: 12px;
+  font-size: 13px;
 }
 .garage-project-links > * {
   cursor: pointer;
@@ -381,11 +367,6 @@
     margin-top: 20px;
   }
 
-  .garage-caption {
-    bottom: 195px;
-    font-size: 9px;
-    right: 6vw;
-  }
   #sec-work {
     padding-top: 12vh;
     padding-bottom: 180px;
@@ -529,7 +510,7 @@
 
 .orbit-invitation {
   position: fixed;
-  bottom: 8.7rem;
+  bottom: 7rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -544,8 +525,8 @@
 }
 @media (max-width: 767px) {
   .orbit-invitation {
-    bottom: 10rem;
-    font-size: 11px;
+    bottom: max(144px, calc(env(safe-area-inset-bottom) + 128px));
+    font-size: 12px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -580,7 +561,7 @@
 }
 .about-details dt {
   color: var(--color-muted);
-  font: 11px/1.7 var(--font-mono);
+  font: 12px/1.7 var(--font-display);
 }
 .about-details dd {
   font-size: 14px;

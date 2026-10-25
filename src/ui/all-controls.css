@@ -6,7 +6,7 @@
   height: 44px;
   padding: 8px;
   color: var(--color-muted);
-  font: 11px/1.4 var(--font-display);
+  font: 12px/1.4 var(--font-display);
   cursor: pointer;
 }
 .all-controls-trigger > [aria-hidden] {
@@ -28,7 +28,7 @@
   border: 1px solid var(--color-line);
   border-radius: var(--radius-control);
   color: var(--color-muted);
-  font: 12px/1.4 var(--font-display);
+  font: 13px/1.4 var(--font-display);
   cursor: pointer;
 }
 .command-menu-close:hover {
@@ -42,7 +42,7 @@
 .command-menu-footer {
   border-top: 1px solid var(--color-line);
   padding: 10px 16px;
-  font: 11px/1.5 var(--font-display);
+  font: 12px/1.5 var(--font-display);
   color: #b9b9c0;
 }
 @media (max-width: 767px), (pointer: coarse) {
@@ -58,8 +58,6 @@
   .all-controls-trigger {
     flex: 0 0 44px;
     pointer-events: auto;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-control);
   }
   .all-controls-trigger > span:last-child {
     display: none;

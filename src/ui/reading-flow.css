@@ -180,9 +180,17 @@ body[data-car-view='reading'] .portfolio-header {
   padding-bottom: 56px;
 }
 .control-group-label {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--color-muted);
   margin-right: 4px;
+}
+#sec-experience .panel,
+#sec-about .panel {
+  text-shadow: none;
+}
+#sec-experience .panel::before,
+#sec-about .panel::before {
+  display: none;
 }
 @media (max-width: 1023px) {
   .filter-label,

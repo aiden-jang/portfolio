@@ -1,6 +1,6 @@
 import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
-import { EYEBROW, H2, P_LI, PANEL_BASE, Section } from './shared';
+import { H2, P_LI, PANEL_BASE, Section } from './shared';
 import { Credits } from './Credits';
 
 const EMAIL = 'me@aidenjang.com';
@@ -11,13 +11,10 @@ const SOCIAL_LINKS = [
 
 export function ContactSection() {
   return (
-    <Section id="sec-contact" side="center">
+    <Section id="sec-contact" side="left">
       <div className={PANEL_BASE}>
-        <span className={EYEBROW}>04 / CONTACT</span>
         <h2 className={H2}>Let’s talk.</h2>
-        <p className={`${P_LI} mx-auto mt-3 max-w-[30ch]`}>
-          Have a role, project or question in mind?
-        </p>
+        <p className={`${P_LI} mt-3 max-w-[30ch]`}>Have a role, project or question in mind?</p>
         <EmailActions />
         <div className="contact-social-links">
           {SOCIAL_LINKS.map(({ label, url }) => (

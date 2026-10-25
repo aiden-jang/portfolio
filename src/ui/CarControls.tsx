@@ -31,7 +31,7 @@ export function CarControls() {
         style={visible ? undefined : { display: 'none' }}
         className="
               md:hidden fixed inset-x-0 bottom-0 z-30 pointer-events-none
-              flex flex-col items-center gap-2 pt-5 pb-[max(3vh,env(safe-area-inset-bottom))]
+              flex flex-col items-center pt-5 pb-[max(16px,env(safe-area-inset-bottom))]
               bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/70 to-transparent
             "
       >
@@ -54,17 +54,11 @@ export function CarControls() {
         <div
           id="desktop-dock"
           className="
-              hidden md:flex justify-center fixed left-1/2 -translate-x-1/2 bottom-[4.5rem] z-20
+              hidden md:flex justify-center fixed left-1/2 -translate-x-1/2 bottom-8 z-20
               pointer-events-none
             "
         >
-          <div
-            className="
-                car-controls-row pointer-events-auto
-                rounded-full border border-[var(--color-line)] bg-[rgba(12,12,20,0.55)]
-                px-2 py-1 shadow-[0_10px_34px_-14px_rgba(0,0,0,0.7)]
-              "
-          >
+          <div className="car-controls-row">
             <CarSwitcher />
             <CarActionSlot />
             {manualView && <CameraResetButton />}

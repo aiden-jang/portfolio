@@ -2,11 +2,56 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-panel);
+  background: #17171cf2;
+  pointer-events: auto;
 }
 .car-controls-row > * {
   min-width: 0;
   flex-shrink: 0;
+}
+.scene-control-button,
+.car-controls-row .all-controls-trigger {
+  min-height: 44px;
+  border-radius: var(--radius-control);
+  color: #c9c9d0;
+  font: 12px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+  transform: none;
+  scale: none;
+}
+.car-controls-row button:not(.swatch) {
+  min-height: 44px;
+  border-radius: var(--radius-control);
+  transform: none;
+  scale: none;
+}
+.scene-control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.car-controls-row button:not(.swatch):hover {
+  color: var(--color-fg);
+  background: var(--color-control-hover);
+}
+.scene-control-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.scene-control-button[aria-pressed='true'] {
+  color: var(--color-fg);
 }
 .car-paint-slot,
 .car-action-slot {
@@ -19,12 +64,13 @@
   display: none;
 }
 .car-livery {
-  font: 11px/1.4 var(--font-display);
+  font: 12px/1.4 var(--font-display);
   color: var(--color-muted);
 }
 .car-choice .car-browse-trigger {
   height: 44px;
   min-width: 0;
+  font-size: 13px;
 }
 .car-browse-trigger > :is(span, small) {
   display: block;
@@ -33,15 +79,10 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-:is(#desktop-dock, #mobile-bar) button {
-  transform: none;
-  scale: none;
-}
 .car-action-slot > button {
   display: grid;
   grid-template-columns: 14px minmax(0, 1fr);
   width: 100%;
-  height: 44px;
   padding-inline: 6px;
   gap: 4px;
   text-align: left;
@@ -51,24 +92,31 @@
   place-items: center;
   width: 14px;
 }
+.car-controls-row .swatch:not(span) {
+  width: 24px;
+  height: 24px;
+}
+.mobile-paint-chip {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+}
 #desktop-dock .car-choice {
-  width: 234px;
+  width: 240px;
 }
 #desktop-dock .car-action-slot {
-  width: 76px;
+  width: 80px;
 }
 #desktop-dock .car-controls-row > button {
   height: 44px;
   white-space: nowrap;
 }
-#desktop-dock button[aria-label='Reset camera view'] {
-  width: 108px;
-}
 #desktop-dock .car-paint-slot {
-  width: 240px;
+  width: 264px;
 }
 #desktop-dock .car-paint-slot[data-fixed-livery] {
-  width: 100px;
+  width: 112px;
 }
 #desktop-dock .all-controls-trigger {
   width: 100px;
@@ -77,13 +125,13 @@
   width: 100%;
   justify-content: center;
 }
-:is(#desktop-dock, #mobile-bar) button[aria-label^='Lighting:'] svg {
+.car-controls-row button[aria-label^='Lighting:'] svg {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
 }
 #desktop-dock button[aria-label^='Lighting:'] {
-  width: 80px;
+  width: 88px;
   display: grid;
   grid-template-columns: 16px minmax(0, 1fr);
   text-align: left;
@@ -92,11 +140,20 @@
   margin: 0;
 }
 @media (min-width: 768px) and (max-width: 1023px) {
-  #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
-    width: 202px;
+  .car-controls-row {
+    gap: 4px;
   }
-  #desktop-dock button[aria-label='Reset camera view'] {
-    width: 44px;
+  #desktop-dock .car-choice {
+    width: 212px;
+  }
+  #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
+    width: 212px;
+  }
+  #desktop-dock .car-paint-slot > [role='group'] {
+    gap: 4px;
+  }
+  #desktop-dock .all-controls-trigger {
+    width: 92px;
   }
   #desktop-dock button[aria-label^='Lighting:'] {
     width: 44px;
@@ -109,6 +166,7 @@
     display: grid;
     width: min(360px, calc(100vw - 32px));
     grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
   }
   #mobile-bar .car-control-buttons {
     display: flex;
@@ -125,12 +183,14 @@
     padding-inline: 8px;
   }
   #mobile-bar .car-action-slot {
-    flex: 0 0 64px;
+    flex: 0 0 70px;
   }
-
   #mobile-bar .car-choice-mobile {
     grid-column: 1 / -1;
     width: 100%;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--color-line);
+    border-radius: 0;
   }
   #mobile-bar .car-browse-trigger {
     flex: 1;
@@ -141,13 +201,12 @@
     display: grid;
     width: 100%;
     height: 44px;
-    grid-template-columns: 20px minmax(0, 1fr);
+    grid-template-columns: 18px minmax(0, 1fr);
     gap: 6px;
-    padding: 8px;
     text-align: left;
   }
   #mobile-bar button[aria-label^='Lighting:'] {
-    flex: 0 0 70px;
+    flex: 0 0 74px;
     grid-template-columns: 16px minmax(0, 1fr);
   }
   #mobile-bar :is(.mobile-paint-name, .mobile-light-name) {
@@ -159,7 +218,7 @@
     border: 0;
     background: transparent;
     color: var(--color-fg);
-    font: 11px/1.4 var(--font-display);
+    font: 12px/1.4 var(--font-display);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -170,11 +229,11 @@
     grid-row: 1;
   }
 }
-
 .camera-reset-button {
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 10px);
   right: 0;
+  width: 108px;
   height: 44px;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-control);
@@ -186,7 +245,7 @@
   letter-spacing: 0;
   text-transform: none;
 }
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .camera-reset-button {
     justify-content: center;
     width: 44px;

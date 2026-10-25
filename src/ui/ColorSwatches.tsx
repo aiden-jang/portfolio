@@ -18,18 +18,10 @@ export function MobileColorButton() {
       title={`Paint: ${colorName}`}
       onClick={cycleBodyColor}
       disabled={!hasBody}
-      className="
-        pointer-events-auto inline-flex items-center justify-center w-11 h-11 shrink-0 rounded-full cursor-pointer
-        bg-white/[0.04] border border-[var(--color-line)]
-        transition-colors active:border-[var(--color-neon)]
-        disabled:opacity-30 disabled:pointer-events-none
-      "
+      className="scene-control-button mobile-color-button"
     >
       <span className="mobile-paint-name">{colorName}</span>
-      <span
-        className="swatch w-5 h-5 rounded-full border border-[var(--color-line)]"
-        style={{ background: finish.hex }}
-      />
+      <span className="swatch mobile-paint-chip" style={{ background: finish.hex }} />
     </button>
   );
 }

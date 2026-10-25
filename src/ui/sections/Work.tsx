@@ -102,9 +102,7 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
         <div className="garage-project-list" aria-label="Project previews">
           {featured.length > 0 && (
             <div className="project-featured-group" aria-label="Featured projects">
-              <p className="project-group-label">
-                Featured / {String(featured.length).padStart(2, '0')}
-              </p>
+              <p className="project-group-label">Featured projects</p>
               {featured.map((item) => (
                 <Project key={item.title} item={item} onOpen={onOpen} featured />
               ))}
@@ -144,9 +142,7 @@ function Project({
     >
       <div className="garage-project-copy">
         <div className="project-title">
-          <p className="project-role">
-            {item.contribution ? 'Open-source contributor' : 'Designed & built'}
-          </p>
+          {item.contribution && <p className="project-role">Open-source contributor</p>}
           <h3>{item.shortName}</h3>
         </div>
         <p>{preview?.description ?? item.summary}</p>

@@ -1,9 +1,11 @@
 .project-group-label {
   padding: 20px 0 8px;
-  font: 10px var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+  font: 12px/1.5 var(--font-display);
   color: var(--color-muted);
+}
+.project-featured-group > .garage-project:first-of-type {
+  padding-top: 12px;
+  border-top: 0;
 }
 .project-gallery-heading {
   display: flex;

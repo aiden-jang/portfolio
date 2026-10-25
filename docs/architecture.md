@@ -31,14 +31,23 @@ section to change.
 
 Contact makes the email address its main link, with an adjacent copy action and
 secondary social links. Model credits open from the section footer. `ui/contact.css`
-owns this layout and its feedback spacing.
+owns this layout and its feedback spacing. Copy sits beside the car on desktop and
+above it on phones. The contact camera framing leaves room for the phone copy and
+uses a wider view on short screens; the arrival and reversal use the same progress.
+The camera projection follows Contact's document position while neighboring
+sections share the viewport, then clears its offset outside Contact. This keeps
+the previous reading surface from cutting through the car during a transition.
 
 `CarControls` gives paint, lighting and optional interactions stable sizes while
 they are in use. Unsupported interactions collapse, and fixed-livery cars use a
 compact label. The bar adapts when switching cars without reserving empty slots;
 label, icon, loading and feedback changes do not move neighboring controls.
-Phone buttons form a compact centered row beneath the picker. Picker text
-truncates within fixed-height rows.
+The picker, paint, lighting and details share one panel with consistent control
+corners and utility type. Phone controls occupy a second row inside that panel;
+picker text truncates within fixed-height rows. The floating duplicate car caption
+is omitted. Header actions and project selectors share the same control tokens.
+Reading sections use content-led heights, matching heading sizes and clearer
+metadata; the default project list avoids repeating an ownership label on every card.
 
 The car picker distinguishes the current selection from keyboard focus: its check
 and Selected label identify the loaded car, while only the keyboard target receives
