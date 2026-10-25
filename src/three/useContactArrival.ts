@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { KEYFRAMES } from '../config';
 import type { Keyframe } from '../types';
 import { contactArrivalProgress, easeOutCubic } from './cameraPose';
-import { clamp, lerp } from '../math';
 import { useThree } from '@react-three/fiber';
 
 export function useContactArrival() {
@@ -36,11 +35,9 @@ export function useContactArrival() {
     const t = easeOutCubic(state.progress);
     pose.azimuth = 0;
     pose.elevation = 0.12 + (pose.elevation - 0.12) * t;
-    const phone = window.innerWidth < 768;
-    const compact = clamp((740 - window.innerHeight) / 160, 0, 1);
-    // Portrait keeps the car below the contact copy; short screens also need a wider shot.
-    if (phone) pose.targetY = lerp(2.8, 5.4, compact);
-    const distance = phone ? lerp(pose.distance, 14, compact) : pose.distance;
-    pose.distance = 10 + (distance - 10) * t;
+    // Keep the car's silhouette visible around the centered copy on short phones.
+    const framing =
+      window.innerWidth < 768 ? Math.min(1, Math.max(568, window.innerHeight) / 740) : 1;
+    pose.distance = (10 + (pose.distance - 10) * t) * framing;
   };
 }

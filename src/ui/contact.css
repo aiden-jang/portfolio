@@ -2,20 +2,25 @@
   position: relative;
   min-height: max(100dvh, 568px);
   align-items: center;
-  justify-content: flex-start;
-  padding-top: 128px;
+  justify-content: center;
+  padding-top: 104px;
   padding-bottom: 104px;
-  background: linear-gradient(90deg, #101014, #101014e6 24%, #10101400 55%);
+  background: radial-gradient(ellipse at center, #101014b3 0, #10101466 35%, #10101400 75%);
 }
 #sec-contact .panel {
   position: relative;
   isolation: isolate;
-  width: min(420px, 42%);
-  text-align: left;
-  text-shadow: none;
+  width: 100%;
+  text-align: center;
+  text-shadow: 0 1px 6px #101014;
 }
 #sec-contact .panel::before {
-  display: none;
+  content: '';
+  position: absolute;
+  inset: -32px -12px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse, #101014d9 20%, #10101499 48%, transparent 76%);
 }
 #sec-contact h2 {
   margin-top: 0;
@@ -28,7 +33,7 @@
 }
 .contact-email-actions {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   gap: 8px;
 }
@@ -66,7 +71,7 @@
 }
 .contact-social-links {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 24px;
 }
 .contact-social-links a {
@@ -83,7 +88,7 @@
   inset-inline: 5vw;
   bottom: max(24px, env(safe-area-inset-bottom));
   pointer-events: auto;
-  text-align: left;
+  text-align: center;
 }
 .contact-credits {
   display: inline-flex;
@@ -107,29 +112,4 @@
 #sec-contact :is(a, button):focus-visible {
   outline: 2px solid var(--color-fg);
   outline-offset: 3px;
-}
-@media (max-width: 767px) {
-  #sec-contact {
-    align-items: flex-start;
-    padding-top: calc(var(--portfolio-header-height) + 32px);
-    padding-bottom: 96px;
-    background: linear-gradient(#101014 0, #101014 38%, #10101400 58%);
-  }
-  #sec-contact .panel {
-    width: 100%;
-  }
-  #sec-contact .panel > p {
-    max-width: none;
-  }
-  .contact-footer {
-    inset-inline: 6vw;
-  }
-}
-@media (max-width: 767px) and (max-height: 740px) {
-  #sec-contact {
-    padding-top: calc(var(--portfolio-header-height) + 20px);
-  }
-  .contact-email {
-    margin-top: 12px;
-  }
 }

@@ -40,9 +40,10 @@ hit testing that rejects empty space and hidden geometry. Phone chrome checks co
 menu-only section navigation, touch dismissal without keyboard hints, visible
 sharing feedback and a deliberately held next-car
 download at narrow widths so loading feedback must clear the header.
-Contact composition checks reserve clear text space beside or above the car at
-desktop, phone and short-phone sizes. Screenshot pixels require the red car to
-remain visible outside the copy and reject car pixels behind it.
+Contact composition checks keep the copy centered at desktop, phone and short-phone
+sizes while clearing the header and footer and keeping email actions in view.
+Screenshot pixels require the red car to remain visible outside the copy; visual
+review checks readability over the softened car.
 A screenshot pixel check verifies that the default car
 actually renders; it excludes the paint controls so those cannot disguise a blank
 canvas. Screenshot capture and pixel assertions retry together within their existing

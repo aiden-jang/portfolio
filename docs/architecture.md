@@ -31,9 +31,11 @@ section to change.
 
 Contact makes the email address its main link, with an adjacent copy action and
 secondary social links. Model credits open from the section footer. `ui/contact.css`
-owns this layout and its feedback spacing. Copy sits beside the car on desktop and
-above it on phones. The contact camera framing leaves room for the phone copy and
-uses a wider view on short screens; the arrival and reversal use the same progress.
+owns this layout and its feedback spacing. Copy is centered over the car on desktop
+and phones, with a soft radial scrim keeping the text readable over reflections.
+Symmetric section padding keeps it centered while clearing the header and credits;
+short phones bring the car closer so its silhouette surrounds the copy. The
+arrival and reversal use the same progress.
 The camera projection follows Contact's document position while neighboring
 sections share the viewport, then clears its offset outside Contact. This keeps
 the previous reading surface from cutting through the car during a transition.

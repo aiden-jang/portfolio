@@ -11,10 +11,12 @@ const SOCIAL_LINKS = [
 
 export function ContactSection() {
   return (
-    <Section id="sec-contact" side="left">
+    <Section id="sec-contact" side="center">
       <div className={PANEL_BASE}>
         <h2 className={H2}>Let’s talk.</h2>
-        <p className={`${P_LI} mt-3 max-w-[30ch]`}>Have a role, project or question in mind?</p>
+        <p className={`${P_LI} mx-auto mt-3 max-w-[30ch]`}>
+          Have a role, project or question in mind?
+        </p>
         <EmailActions />
         <div className="contact-social-links">
           {SOCIAL_LINKS.map(({ label, url }) => (

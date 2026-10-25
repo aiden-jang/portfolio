@@ -1,5 +1,8 @@
 # Visual consistency review
 
+The [centered Contact review](../centered-contact/README.md) records the current
+Contact composition. The captures below retain this broader styling pass's evidence.
+
 The visual pass keeps the dark palette, large introduction and full-detail car
 models. It gives the garage one shared control panel, consistent control corners
 and more readable utility text. The duplicate car caption and repeated project

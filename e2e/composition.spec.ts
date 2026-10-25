@@ -6,7 +6,7 @@ for (const [width, height] of [
   [390, 844],
   [320, 568],
 ]) {
-  test(`Contact gives its copy clear space beside the car at ${width}px`, async ({ page }) => {
+  test(`Contact centers its copy over a visible car at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     await page.route('**/_vercel/**', (route) =>
       route.fulfill({ body: '', contentType: 'application/javascript' }),
@@ -34,16 +34,22 @@ for (const [width, height] of [
     await jump('Contact');
     await expect(page.locator('#sec-contact h2')).toBeInViewport();
     await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
+    await expect(async () => {
+      const copy = await page.locator('#sec-contact .panel').boundingBox();
+      expect(Math.abs(copy!.x + copy!.width / 2 - width / 2)).toBeLessThan(2);
+      expect(Math.abs(copy!.y + copy!.height / 2 - height / 2)).toBeLessThan(2);
+    }).toPass({ timeout: 5000 });
     const copy = await page.locator('#sec-contact .panel').boundingBox();
     const header = await page.locator('.portfolio-header').boundingBox();
+    const footer = await page.locator('.contact-footer').boundingBox();
     expect(copy!.y).toBeGreaterThanOrEqual(header!.y + header!.height);
-    if (width >= 768) expect(copy!.x + copy!.width).toBeLessThan(width * 0.45);
-    else expect(copy!.y + copy!.height).toBeLessThan(height < 740 ? 350 : 420);
+    expect(copy!.y + copy!.height).toBeLessThan(footer!.y);
+    await expect(page.getByRole('link', { name: 'me@aidenjang.com' })).toBeInViewport();
+    await expect(page.getByRole('button', { name: 'Copy email address' })).toBeInViewport();
 
     await expect(async () => {
       const bytes = await page.screenshot({ timeout: 5000 });
       const pixels = PNG.sync.read(bytes);
-      let inside = 0;
       let outside = 0;
       for (let y = 0; y < pixels.height; y += 2) {
         for (let x = 0; x < pixels.width; x += 2) {
@@ -54,18 +60,16 @@ for (const [width, height] of [
             pixels.data[i] > pixels.data[i + 2] * 1.4
           ) {
             if (
-              x >= copy!.x &&
-              x <= copy!.x + copy!.width &&
-              y >= copy!.y &&
-              y <= copy!.y + copy!.height
+              x < copy!.x ||
+              x > copy!.x + copy!.width ||
+              y < copy!.y ||
+              y > copy!.y + copy!.height
             )
-              inside++;
-            else outside++;
+              outside++;
           }
         }
       }
       expect(outside, 'the red car remains visible outside the text area').toBeGreaterThan(500);
-      expect(inside, 'the car does not run behind the contact copy').toBeLessThan(50);
     }).toPass({ timeout: 20_000 });
     await page.screenshot({ path: test.info().outputPath(`contact-${width}.png`) });
   });
