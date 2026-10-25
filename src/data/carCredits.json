@@ -199,5 +199,19 @@
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
     }
+  },
+  "corvette-c8r-tf-sport.glb": {
+    "title": "Corvette C8R GT3TF Sport | www.vecarz.com",
+    "author": "vecarz",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "url": "https://sketchfab.com/3d-models/corvette-c8r-gt3tf-sport-wwwvecarzcom-82fe57ca25ee4e09a8b787ed9a2be3c0",
+    "upstream": {
+      "author": "toddeppe",
+      "url": "https://sketchfab.com/3d-models/corvette-c8r-gt3-tf-sport-4f351ff764c74a398e15b648c3b7928c",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "notice": "Embedded source credits toddeppe, whose listing credits MattDoesBlender. Full source geometry, texture dimensions and original livery retained; lossless geometry compression and high-quality texture encoding and portfolio framing applied. Underlying authorship and vehicle rights remain unverified."
   }
 }

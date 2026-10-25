@@ -23,7 +23,9 @@ describe('curated garage', () => {
     expect(CARS[18].file).toBe('porsche-992-gt3-rs.glb');
     expect(CARS[19].file).toBe('lamborghini-countach-5000qv.glb');
     expect(CARS[19].paintMaterial).toBe('Meshpart19Mtl');
-    expect(GARAGE_INDICES).toContain(19);
+    expect(GARAGE_INDICES).not.toContain(19);
+    expect(GARAGE_INDICES).not.toContain(2);
+    expect(GARAGE_INDICES).not.toContain(13);
     expect(CARS[18].fixedLivery).toBe(true);
     expect(CARS[18].preserveFlatMeshes).toBe(true);
     expect(GARAGE_INDICES).toContain(18);
@@ -36,13 +38,26 @@ describe('curated garage', () => {
     expect(GARAGE_INDICES).not.toContain(14);
     expect(GARAGE_INDICES).toContain(16);
     expect(GARAGE_INDICES).toContain(17);
+    expect(CARS[20].file).toBe('corvette-c8r-tf-sport.glb');
+    expect(CARS[20].fixedLivery).toBe(true);
+    expect(GARAGE_INDICES).toContain(20);
     expect(CARS[16].roadLights).toBe(false);
     expect(CARS[16].preserveFlatMeshes).toBe(true);
     expect(GARAGE_INDICES).toContain(5);
     const commands = buildCommands({ onSection: vi.fn(), setNotice: vi.fn() });
     expect(
       commands.some(({ id }) =>
-        ['car-6', 'car-7', 'car-8', 'car-11', 'car-12', 'car-14'].includes(id),
+        [
+          'car-2',
+          'car-6',
+          'car-7',
+          'car-8',
+          'car-11',
+          'car-12',
+          'car-13',
+          'car-14',
+          'car-19',
+        ].includes(id),
       ),
     ).toBe(false);
   });
@@ -62,13 +77,11 @@ describe('curated garage', () => {
       'Mazda MX-5 Miata',
       'Datsun 280Z',
       'BMW M3',
-      'Lamborghini Countach',
-      'Toyota Supra',
       'Porsche 911 RWB',
       'BMW M4 ADRO',
       'Nissan GT-R Aimgain',
       'Porsche 911 GT3 RS',
-      'Lamborghini Aventador',
+      'Chevrolet Corvette',
       'Ferrari F1-75',
       'Red Bull RB16B',
     ]);
@@ -77,7 +90,7 @@ describe('curated garage', () => {
   });
 
   it('lets an older shared car link rejoin the visible garage in either direction', () => {
-    for (const index of [6, 7, 8, 11, 12, 14]) {
+    for (const index of [2, 6, 7, 8, 11, 12, 13, 14, 19]) {
       useAppStore.getState().setCarIndex(index);
       expect(useAppStore.getState().carIndex).toBe(index);
       useAppStore.getState().cycleCar();

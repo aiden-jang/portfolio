@@ -21,11 +21,12 @@ an uncertainty, rather than treated as verified ownership.
       Retired from the picker; existing shared links remain available.
 - [x] [Lamborghini Countach 5000 QV](https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5)
       — selected vecarz export, crediting Randomness; both list CC BY 4.0.
-      Giallo default with separate glossy paint and opaque rubber finishes.
+      Retired from the picker; existing shared links retain the Giallo finish.
 - [ ] [2021 Lamborghini Countach LPI 800-4](https://sketchfab.com/3d-models/2021-lamborghini-countach-lpi-800-4-d76b94884432422b966d1a7f8815afb5)
       — Lexyc16; CC BY-NC 4.0; creator states it was made in Blender.
 - [x] [Lamborghini Aventador](https://sketchfab.com/3d-models/lamborghini-aventador-e328d9f5dcfd48bdbe8c73324b52ece3)
       — Outlaw Games; CC BY-NC 4.0; downloaded file credits Ddiaz Design’s CSR2-based source.
+      Retired from the picker; existing shared links remain available.
 - [x] [Porsche 911 GT3](https://sketchfab.com/3d-models/porsche-911-gt3-593c83f3662a4a45a016f95dedd9f243)
       — Outlaw Games; CC BY-NC 4.0; embedded Ddiaz Design source uses CC BY-NC-SA 4.0 and identifies CSR2.
       Retired from the picker; existing shared links remain available.
@@ -41,6 +42,10 @@ an uncertainty, rather than treated as verified ownership.
 - [x] [Nissan Aimgain GT R35 Type2](https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c)
       — selected vecarz export; CC BY 4.0; credited Outlaw Games source uses
       CC BY-NC 4.0. The adaptation retains noncommercial terms; underlying rights unverified.
+      Titanium Silver default; repainting remains limited to the body panels.
+- [x] [Corvette C8R GT3 TF Sport](https://sketchfab.com/3d-models/corvette-c8r-gt3tf-sport-wwwvecarzcom-82fe57ca25ee4e09a8b787ed9a2be3c0)
+      — vecarz; embedded toddeppe source also lists CC BY 4.0 and credits MattDoesBlender.
+      Fixed yellow TF Sport livery; underlying authorship remains unverified.
 - [ ] [2010 Mercedes-Benz SLS AMG](https://sketchfab.com/3d-models/2010-mercedes-benz-sls-amg-bf1464ad3ffb4f4696aa339f8ab12b07)
       — srineshchethiya; CC BY 4.0; original source unverified.
 
@@ -52,8 +57,10 @@ detail. Keep racing liveries intact where repainting affects decals or trim.
 Older Japanese cars should retain stock styling. Modified Japanese builds should
 focus on newer cars, such as the GR Supra. F1 candidates should favor newer designs.
 
-The curated order is F40, 300 SL, Miata NA, Datsun 280Z, E30, Countach 5000 QV,
-stock A80 Supra, RWB, M4 ADRO, Aimgain R35, GT3 RS, Aventador SV, Ferrari F1-75 and RB16B.
+The curated order is F40, 300 SL, Miata NA, Datsun 280Z, E30, RWB, M4 ADRO,
+Aimgain R35, GT3 RS, Corvette TF Sport, Ferrari F1-75 and RB16B.
+The stock A80 Supra, Countach 5000 QV and Aventador SV are retired from the picker;
+their permanent registry identities and existing shared links remain available.
 The R8 is retired from the picker;
 existing shared URLs still resolve to it. The selected vecarz Aimgain R35
 replaces the modified GR Supra in the picker; older GR Supra links retain that car. The stock 930 and 917K are

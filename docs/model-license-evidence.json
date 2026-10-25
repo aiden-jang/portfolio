@@ -1,5 +1,5 @@
 {
-  "checkedOn": "2026-10-23",
+  "checkedOn": "2026-10-25",
   "models": [
     {
       "file": "ferrari-f120-f40.glb",
@@ -543,7 +543,7 @@
       },
       "notice": "Selected vecarz export; credited source and embedded original upload use CC BY-NC 4.0. Original authorship and underlying vehicle rights remain unverified. Personal noncommercial use only.",
       "adaptationLicense": "https://creativecommons.org/licenses/by-nc/4.0/",
-      "runtimeAdaptation": "Portfolio framing and lighting; source graphite finish by default and optional repaint restricted to the named body material. Flat splitter and underbody meshes retained. Named body paint uses roughness 0.18, clearcoat 1 and clearcoat roughness 0.06; source color, metalness, maps and other material finishes are retained."
+      "runtimeAdaptation": "Portfolio framing and lighting; Titanium Silver default body paint and optional repaint restricted to the named body material. Flat splitter and underbody meshes retained. Named body paint uses roughness 0.18, clearcoat 1 and clearcoat roughness 0.06; source metalness, maps and other material finishes are retained."
     },
     {
       "file": "porsche-992-gt3-rs.glb",
@@ -634,6 +634,50 @@
         "gltfWarnings": 0
       },
       "runtimeAdaptation": "Giallo default targets only Meshpart19Mtl body paint, with dielectric metalness, roughness 0.22, clearcoat 1 and coat roughness 0.055. Separate Meshpart2Mtl rubber has metalness 0, roughness 0.85 and no clearcoat. Other materials, maps, trim and wheel finishes retained; flat meshes preserved. No authored animation is supplied."
+    },
+    {
+      "file": "corvette-c8r-tf-sport.glb",
+      "title": "Corvette C8R GT3TF Sport | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/corvette-c8r-gt3tf-sport-wwwvecarzcom-82fe57ca25ee4e09a8b787ed9a2be3c0",
+      "evidence": "https://api.sketchfab.com/v3/models/82fe57ca25ee4e09a8b787ed9a2be3c0",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-25",
+      "review": "publisher-and-embedded-source-licenses-recorded",
+      "sourceReview": "Thank you [toddeppe] for your incredible contribution to the community! You’re an absolute legend and a pillar of our community. Folks, let’s rally behind this and show our support by visiting their website and exhibition His website and cheer for his hard work! 🎉 here: https://sketchfab.com/toddeppe\n\ncredit[toddeppe]",
+      "archiveSha256": "6e9618418f6b1b36cba69b5d1c205d222448ff12055fcb04ea3a5a7ba05af492",
+      "sourceAssetMetadata": {
+        "author": "toddeppe (https://sketchfab.com/toddeppe)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/corvette-c8r-gt3-tf-sport-4f351ff764c74a398e15b648c3b7928c",
+        "title": "Corvette C8R GT3-TF Sport"
+      },
+      "upstream": {
+        "author": "toddeppe",
+        "url": "https://sketchfab.com/3d-models/corvette-c8r-gt3-tf-sport-4f351ff764c74a398e15b648c3b7928c",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence": "https://api.sketchfab.com/v3/models/4f351ff764c74a398e15b648c3b7928c",
+        "description": "Based on a model by [MattDoesBlender](https://sketchfab.com/MattDoesBlender).",
+        "verifiedOn": "2026-10-25"
+      },
+      "archiveLicenseReview": "Original archive has no separate license text file. The source GLB embeds toddeppe attribution, its source URL and CC-BY-4.0 license in asset.extras. Publisher download dialog also states CC Attribution. The credited listing identifies MattDoesBlender without linking a specific base asset; underlying rights remain unverified.",
+      "adaptationLicense": "https://creativecommons.org/licenses/by/4.0/",
+      "runtimeAdaptation": "Portfolio framing and lighting; fixed original TF Sport livery with repainting disabled. Flat aero and underbody meshes retained.",
+      "optimization": {
+        "referenceBytes": 78375424,
+        "optimizedBytes": 44385812,
+        "triangles": 218147,
+        "textures": "All 25 source textures retain their 2048 × 2048 dimensions. Near-lossless WebP is used only where smaller and alpha-exact; original images are retained otherwise. Measured maximum RGB error is 2/255; alpha is unchanged.",
+        "vertexAttributes": "Exact decoded source values retained, allowing vertex and triangle reordering and deduplication of identical accessors.",
+        "materials": "Source material parameters and node hierarchy retained.",
+        "animations": "Source contains no animation clips.",
+        "assetSha256": "7275bed6b9acde1f86b0d951e3bc46244bd6c4e5ba98f2f627e3bcd2f2cf8f63",
+        "gltfErrors": 0,
+        "gltfWarnings": 0
+      }
     }
   ]
 }

@@ -17,7 +17,7 @@ for (const width of [1440, 390]) {
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
     const options = picker.locator('.car-option');
-    await expect(options).toHaveCount(14);
+    await expect(options).toHaveCount(12);
     await expect
       .poll(() =>
         options.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('aria-label'))),
@@ -45,6 +45,13 @@ for (const width of [1440, 390]) {
     await expect(
       picker.getByRole('button', { name: 'Show Nissan GT-R Aimgain, R35 Type 2', exact: true }),
     ).toBeVisible();
+    for (const retired of [
+      'Show Lamborghini Countach, 5000 QV',
+      'Show Toyota Supra, A80',
+      'Show Lamborghini Aventador, SV',
+    ]) {
+      await expect(picker.getByRole('button', { name: retired, exact: true })).toHaveCount(0);
+    }
     await page.keyboard.press('End');
     await expect(
       picker.getByRole('button', { name: 'Show Red Bull RB16B, 2021 F1', exact: true }),
@@ -109,6 +116,15 @@ for (const width of [1440, 390]) {
 
   test(`R35 selection survives a reload at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
+    const defaultPaint = page
+      .getByRole('button', {
+        name:
+          width === 390
+            ? 'Paint: Titanium Silver. Change color'
+            : 'Paint: Titanium Silver (default)',
+        exact: true,
+      })
+      .filter({ visible: true });
     await page.route('**/_vercel/**', (route) =>
       route.fulfill({ body: '', contentType: 'application/javascript' }),
     );
@@ -123,8 +139,12 @@ for (const width of [1440, 390]) {
     await expect(browse).toHaveAccessibleName('Browse cars. Nissan GT-R Aimgain, R35 Type 2');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('17');
+    await expect(defaultPaint).toBeVisible();
+    if (width === 1440) await expect(defaultPaint).toHaveAttribute('aria-pressed', 'true');
     await page.reload();
     await expect(browse).toHaveAccessibleName('Browse cars. Nissan GT-R Aimgain, R35 Type 2');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+    await expect(defaultPaint).toBeVisible();
+    if (width === 1440) await expect(defaultPaint).toHaveAttribute('aria-pressed', 'true');
   });
 }

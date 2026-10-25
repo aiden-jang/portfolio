@@ -95,10 +95,10 @@ no authored animation clips. It is loaded only on selection, outside the small
 arrival prefetch pool. The F1-75 replaces the 296 GT3 in the
 picker; both keep permanent registry identities for shared URLs. The selected vecarz
 Aimgain R35 replaces the modified A90 Supra in the picker, with that Supra retained
-for existing links. Its source body color, separate wheel/trim materials and flat
-splitter meshes are preserved, and repaint targets only its named body material.
+for existing links. Titanium Silver is its default body paint; separate wheel/trim
+materials and flat splitter meshes are preserved, and repaint targets only its named body material.
 That body receives lower roughness and a smooth clearcoat for glossy reflections,
-retaining its color, metalness and maps. Race cars preserve
+retaining source metalness and maps. Race cars preserve
 flat splitter and floor meshes that could resemble a baked ground plane; both F1
 cars omit synthetic road lights.
 The 296 GT3 declares an orientation offset to normalize its diagonal source pose
@@ -115,6 +115,10 @@ The Countach targets `Meshpart19Mtl` for Giallo paint and glossy dielectric
 clearcoat. Its separate `Meshpart2Mtl` rubber loses the export's metallic coat;
 repainting leaves wheels, rubber, trim and glazing untouched. Flat meshes are
 retained, and the selected export supplies no animation clips.
+The A80 Supra, Countach and Aventador remain reachable by existing shared URLs,
+outside the picker. The Corvette TF Sport has a new permanent registry identity,
+a fixed original yellow livery and preserved flat aero meshes. It loads only on
+selection and is excluded from arrival prefetching.
 `popupHeadlights` samples the
 Miata's authored opening clip between its closed and raised poses; its Lights button
 reverses travel, starts raised on selection and snaps poses for reduced motion.

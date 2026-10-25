@@ -12,7 +12,7 @@ for (const width of [1440, 390]) {
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
-    await expect(picker.locator('.car-option')).toHaveCount(14);
+    await expect(picker.locator('.car-option')).toHaveCount(12);
     await expect(
       picker.getByRole('button', { name: 'Show Porsche 911 GT3, 992', exact: true }),
     ).toHaveCount(0);

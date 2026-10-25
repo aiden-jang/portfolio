@@ -212,9 +212,8 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     paintMaterial: 'nNissan_GTRTNR4_2017PaintTNR_Material_002',
     preserveFlatMeshes: true,
     defaultPaint: {
-      name: 'Aimgain Graphite',
-      hex: '#171717',
-      preserveSource: true,
+      name: 'Titanium Silver',
+      hex: '#969da4',
     },
     exposure: 1,
   },
@@ -243,6 +242,19 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     },
     exposure: 1,
   },
+  {
+    file: 'corvette-c8r-tf-sport.glb',
+    name: 'Chevrolet Corvette',
+    code: 'C8.R TF Sport',
+    fixedLivery: true,
+    preserveFlatMeshes: true,
+    defaultPaint: {
+      name: 'TF Sport Yellow',
+      hex: '#d7c527',
+      preserveSource: true,
+    },
+    exposure: 1,
+  },
 ];
 
 export const CARS: CarSpec[] = registry.map((car) => ({
@@ -251,7 +263,7 @@ export const CARS: CarSpec[] = registry.map((car) => ({
 }));
 
 // Retired cars remain available to existing links, outside the curated picker.
-export const GARAGE_INDICES: readonly number[] = [0, 1, 10, 5, 4, 19, 2, 3, 9, 17, 18, 13, 16, 15];
+export const GARAGE_INDICES: readonly number[] = [0, 1, 10, 5, 4, 3, 9, 17, 18, 20, 16, 15];
 
 export function adjacentCar(index: number, direction: -1 | 1): number {
   const position = GARAGE_INDICES.indexOf(index);

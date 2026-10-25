@@ -121,6 +121,7 @@ it.each([
   'ferrari-296-gt3.glb',
   'red-bull-rb16b.glb',
   'ferrari-f1-75.glb',
+  'corvette-c8r-tf-sport.glb',
 ])('preserves %s livery through direct paint and keyboard cycling', (file) => {
   const state = useAppStore.getState();
   state.setCarIndex(CARS.findIndex((car) => car.file === file));

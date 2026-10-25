@@ -1,0 +1,24 @@
+Corvette C8R GT3 TF Sport
+
+Selected publisher: vecarz
+https://sketchfab.com/3d-models/corvette-c8r-gt3tf-sport-wwwvecarzcom-82fe57ca25ee4e09a8b787ed9a2be3c0
+Publisher license: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+
+The downloaded original GLB embeds these credits:
+Title: Corvette C8R GT3-TF Sport
+Author: toddeppe (https://sketchfab.com/toddeppe)
+Source: https://sketchfab.com/3d-models/corvette-c8r-gt3-tf-sport-4f351ff764c74a398e15b648c3b7928c
+License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+
+toddeppe's source listing credits MattDoesBlender:
+https://sketchfab.com/MattDoesBlender
+No specific base asset is linked. Underlying authorship and vehicle rights
+are not independently verified. These records describe published terms.
+
+Web adaptation: full source mesh, vertex precision, texture dimensions,
+material settings and original racing livery retained. Geometry reordered and
+losslessly meshopt compressed. High-quality texture compression applied;
+alpha retained exactly. Portfolio framing and lighting applied at runtime.
+Adaptation license: Creative Commons Attribution 4.0 International.
+The website source code's MIT license does not replace these asset terms.
