@@ -13,7 +13,8 @@ describe('optional model downloads', () => {
   it('warms spare models on a fast connection', () => {
     expect(canPrefetchModels({ effectiveType: '4g' })).toBe(true);
   });
-  it('works in browsers without connection information', () => {
-    expect(canPrefetchModels()).toBe(true);
+  it('keeps optional downloads off when connection quality is unknown', () => {
+    for (const connection of [undefined, {}, { saveData: false }])
+      expect(canPrefetchModels(connection)).toBe(false);
   });
 });

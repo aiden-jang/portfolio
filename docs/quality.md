@@ -93,3 +93,8 @@ WebKit is an engine check; it does not replace testing Safari on a physical iPho
 Screen-reader audio, touch gestures and actual device performance still require
 manual checks. Record unavailable checks explicitly rather than treating them as
 passed.
+
+The [October resource and loading review](../art/ui-qa/october-26/resource-review/README.md)
+records decoded-image cleanup, connection-aware optional downloads and production
+shader diagnostics. Its throttled local runs identify remaining startup delays;
+they do not replace physical-phone or field measurements.

@@ -100,7 +100,9 @@ and invalidation when the active story or preview changes. Garage links preserve
 case-study fragments.
 
 `Car` owns asynchronous GLB loading and disposal. `carHelpers` handles world-space
-vertex fitting, material detection, baked-plane handling and GPU-resource cleanup.
+vertex fitting, material detection, baked-plane handling and resource cleanup.
+Retired models release shared geometry, materials, textures and decoded image
+bitmaps once each; GPU texture disposal alone does not release decoded images.
 `modelFinishes` applies verified, material-specific finish corrections without
 changing geometry or texture detail. Cars with ambiguous paint surfaces declare a
 material name; a missing explicit target disables repainting instead of selecting
@@ -114,9 +116,11 @@ changes. Reduced motion snaps detail poses.
 
 The stable car registry and curated picker order are separate. Retired cars retain
 their original IDs, models and credits for existing shared links. The default car
-and the smallest companion warm the HTTP cache when network conditions permit;
-other models load only on selection. Per-model source, licensing, optimization and
-material decisions live in [the model license review](model-licenses.md).
+and the smallest companion warm the HTTP cache only when the browser reports a
+fast connection without data saving; missing connection information disables
+these optional downloads. All other models load only on selection. Per-model source,
+licensing, optimization and material decisions live in
+[the model license review](model-licenses.md).
 
 Lighting combines the themed key/fill/rim lights with a locally generated, low-intensity
 studio environment for readable metallic surfaces. Effects bloom in HDR, then apply
@@ -125,6 +129,8 @@ transparency with its authored tint and opacity instead of multisampled refracti
 targets for the main view and its reflection. Multisampling
 stays off for WebKit compatibility. The scene stops drawing continuously behind
 open dialogs and in hidden tabs, resuming when the car becomes available again.
+Shader diagnostics stay enabled in development; production skips synchronous
+shader-log reads without changing shaders, materials or rendering quality.
 Reduced-motion scenes render around input, model loading and layout changes, then
 rest instead of drawing identical frames continuously. Model readiness is reported
 after its first rendered frame.

@@ -31,25 +31,33 @@ export function makeRadialGlowTexture(): THREE.CanvasTexture {
   return tex;
 }
 
-// The textures are the point. `material.dispose()` frees the compiled program but not the
-// textures the material points at, and those are most of a car's GPU memory, so leaking them
-// on every swap eventually OOMs a mobile tab.
+// A loaded car owns its resources. GPU disposal does not release decoded ImageBitmaps;
+// shared material and texture views must release each resource only once.
 export function disposeModel(obj: THREE.Object3D): void {
+  const geometries = new Set<THREE.BufferGeometry>();
+  const materials = new Set<THREE.Material>();
+  const textures = new Set<THREE.Texture>();
+  const bitmaps = new Set<ImageBitmap>();
   obj.traverse((c) => {
     const m = c as THREE.Mesh;
-    if (m.geometry) m.geometry.dispose();
+    if (m.geometry) geometries.add(m.geometry);
     if (m.material) {
       const mats = Array.isArray(m.material) ? m.material : [m.material];
-      for (const mat of mats) {
-        for (const value of Object.values(mat)) {
-          if (value && (value as THREE.Texture).isTexture) {
-            (value as THREE.Texture).dispose();
-          }
-        }
-        mat.dispose();
-      }
+      for (const mat of mats) materials.add(mat);
     }
   });
+  for (const material of materials) {
+    for (const value of Object.values(material))
+      if (value && (value as THREE.Texture).isTexture) textures.add(value as THREE.Texture);
+    material.dispose();
+  }
+  for (const texture of textures) {
+    const image = texture.image;
+    if (typeof ImageBitmap !== 'undefined' && image instanceof ImageBitmap) bitmaps.add(image);
+    texture.dispose();
+  }
+  for (const geometry of geometries) geometry.dispose();
+  for (const bitmap of bitmaps) bitmap.close();
 }
 
 // Thin glass needs transparency, not multisampled refraction buffers for every reflected view.

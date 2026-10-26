@@ -35,6 +35,7 @@ export function Scene({ getScrollT }: Props) {
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         camera={{ fov: 35, near: 0.1, far: 200, position: [0, 2, 10] }}
         onCreated={({ gl }) => {
+          gl.debug.checkShaderErrors = import.meta.env.DEV;
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
           gl.outputColorSpace = THREE.SRGBColorSpace;
           gl.toneMapping = THREE.ACESFilmicToneMapping;

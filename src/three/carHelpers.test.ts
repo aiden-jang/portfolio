@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as THREE from 'three';
 import {
   prepareModelGlass,
@@ -10,6 +10,8 @@ import {
 } from './carHelpers';
 
 const TARGET_LENGTH = 4.5;
+
+afterEach(() => vi.unstubAllGlobals());
 
 function box(
   size: [number, number, number],
@@ -82,6 +84,42 @@ describe('autoFitToLength', () => {
 });
 
 describe('disposeModel', () => {
+  it('releases shared geometry, materials, texture views and their decoded bitmap only once', () => {
+    class Bitmap implements ImageBitmap {
+      readonly width = 1;
+      readonly height = 1;
+      close = vi.fn();
+    }
+    vi.stubGlobal('ImageBitmap', Bitmap);
+    const bitmap = new Bitmap();
+    const material = paint(0xff0000);
+    material.map = new THREE.Texture(bitmap);
+    material.normalMap = new THREE.Texture(bitmap);
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const disposals = [geometry, material, material.map, material.normalMap].map((resource) =>
+      vi.spyOn(resource, 'dispose'),
+    );
+    const model = new THREE.Group();
+    model.add(new THREE.Mesh(geometry, material), new THREE.Mesh(geometry, material));
+
+    expect(bitmap.close).not.toHaveBeenCalled();
+    disposeModel(model);
+
+    expect(bitmap.close).toHaveBeenCalledTimes(1);
+    for (const dispose of disposals) expect(dispose).toHaveBeenCalledTimes(1);
+  });
+
+  it('also releases ordinary texture sources when ImageBitmap is unavailable', () => {
+    vi.stubGlobal('ImageBitmap', undefined);
+    const texture = new THREE.DataTexture(new Uint8Array(4), 1, 1);
+    const material = paint(0xff0000);
+    material.map = texture;
+    const dispose = vi.spyOn(texture, 'dispose');
+
+    expect(() => disposeModel(box([1, 1, 1], material))).not.toThrow();
+    expect(dispose).toHaveBeenCalledTimes(1);
+  });
+
   it('disposes the textures a material references, not just the material', () => {
     const disposed: string[] = [];
     const material = paint(0xff0000);
