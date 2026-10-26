@@ -15,6 +15,8 @@ menu and remain reachable through search, the picker and previous/next controls.
 and labels share one definition in `config.ts`, used by navigation, dots and commands.
 Section resize observation refreshes scene and control visibility when initial
 layout or content sizing settles without a scroll event, including WebKit reloads.
+The first frame and font readiness also refresh position-only layout changes,
+which do not necessarily trigger a section resize.
 Phones use the persistent header menu for section navigation; the progress-dot rail
 is desktop-only. Model-loading feedback sits below the shared header height, clear
 of Menu and Résumé. Keyboard hints appear only in wide layouts with a fine primary
@@ -81,6 +83,12 @@ the arrival and departure animation.
 The composer and reflection target disable floating-point multisampling because it
 produces blank targets in the tested WebKit engine. SMAA smooths the final scene
 instead, including the reflection; DOM text is unaffected.
+`Effects` builds its pass graph directly on the scene renderer, avoiding a second
+WebGL context for capability detection. It keeps the HDR bloom and ACES pass before
+SMAA, resizes the buffers with the viewport, and disposes the graph on unmount.
+The floor glow loads a lossless texture instead of creating another canvas.
+Regenerate it with `npm run generate:glow`; the generator verifies that encoding
+preserves every RGBA value from the original gradient.
 
 The Zustand store separates infrequently updated UI state from mutable scene
 references. Frame updates mutate references rather than rerendering the page.
@@ -141,6 +149,13 @@ to derive visibility from actual section positions.
 
 ## Projects and dialogs
 
+The featured projects are everythingisfine, mrrp and worth. Other products and
+contributions remain in the compact gallery. Moving a project between these groups
+keeps its screenshot states and existing preview links available.
+`EngineeringStory` renders the everythingisfine and Accounts flows, failure cases
+and tradeoffs from `projectStories.ts`. These descriptions follow the source
+implementations, and their case studies link to the public repositories.
+
 Project content lives in `src/data/`. Section components render that data rather
 than owning product descriptions. `Sections` connects case-study selection to
 browser history; `ScrollBody` maintains each story’s reading position. Case-study
@@ -169,6 +184,7 @@ stylesheet to override an earlier styling pass. Paths below are relative to `src
 | `ui/car-controls.css`, `ui/car-picker.css`, `ui/all-controls.css`                | Stable car dock, native picker and secondary actions        |
 | `ui/car-load-notice.css`, `ui/loading-bar.css`                                   | Model loading and failure feedback                          |
 | `ui/work-modal.css`, `ui/work-story.css`, `ui/scroll-body.css`                   | Case-study shell, content, screenshots and reading controls |
+| `ui/engineering-story.css`                                                       | Case-study system flows, failure cases and tradeoffs        |
 | `ui/screenshot-viewer.css`, `ui/screenshot-image.css`, `ui/sections/credits.css` | Image inspection, image fallbacks and attribution           |
 | `ui/reading-flow.css`                                                            | Scene and control visibility over reading sections          |
 | `ui/dialog-motion.css`                                                           | Shared dialog entrance and native backdrop motion           |

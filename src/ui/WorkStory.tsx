@@ -5,6 +5,7 @@ import { PREVIEWS } from '../data/projectPreviews';
 import { CAREER_STORIES, PROJECT_STORIES } from '../data/projectStories';
 import './work-story.css';
 import { usePreviewSelection } from './usePreviewSelection';
+import { EngineeringStory } from './EngineeringStory';
 
 export function WorkStory({ item }: { item: WorkDetail }) {
   const projectStory = PROJECT_STORIES[item.mark ?? item.shortName ?? ''];
@@ -42,6 +43,9 @@ export function WorkStory({ item }: { item: WorkDetail }) {
           />
         )}
       </div>
+      {projectStory?.engineering && (
+        <EngineeringStory story={projectStory.engineering} id={workId(item)} />
+      )}
       {item.body.length > 1 && (
         <details>
           <summary>Engineering details</summary>

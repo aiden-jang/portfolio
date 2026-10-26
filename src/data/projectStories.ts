@@ -1,7 +1,19 @@
-export const PROJECT_STORIES: Record<
-  string,
-  { problem: string; result: string; decision?: string; built?: string }
-> = {
+export type EngineeringStory = {
+  summary: string;
+  steps: { title: string; detail: string }[];
+  failure: { title: string; detail: string };
+  tradeoff: string;
+};
+
+type ProjectStory = {
+  problem: string;
+  result: string;
+  decision?: string;
+  built?: string;
+  engineering?: EngineeringStory;
+};
+
+export const PROJECT_STORIES: Record<string, ProjectStory> = {
   iodine: {
     built:
       'My changes covered command approval rules and the feedback loop between file edits and the agent.',
@@ -18,7 +30,28 @@ export const PROJECT_STORIES: Record<
     problem:
       'Every new app needed sign-in, recovery, and sessions. Rebuilding those each time meant more places for the same contract to drift.',
     result:
-      'One account works across the apps. Each app pins a published SDK version and verifies sessions without holding the signing secret.',
+      'One account works across the apps. Each app pins a published SDK version and resolves identity without direct access to the session database.',
+    engineering: {
+      summary: 'Apps ask Accounts to resolve identity on the server through a versioned client.',
+      steps: [
+        { title: 'Browser', detail: 'The HttpOnly session cookie travels with the app request.' },
+        {
+          title: 'App Worker',
+          detail: 'The auth client forwards the cookie to Accounts’ /auth/me endpoint.',
+        },
+        {
+          title: 'Accounts + D1',
+          detail: 'The service checks the session hash and expiry, then returns the user.',
+        },
+      ],
+      failure: {
+        title: 'When Accounts cannot answer',
+        detail:
+          'A network failure or 503 response resolves to unavailable. A 401 or 403 resolves to signed out. Consumers can distinguish a service outage from an expired session.',
+      },
+      tradeoff:
+        'Central verification adds a network dependency. In return, apps share one session contract and never need direct access to the identity database.',
+    },
   },
   everythingisfine: {
     built: 'An interactive globe that brings natural-event feeds into one explorable view.',
@@ -28,6 +61,31 @@ export const PROJECT_STORIES: Record<
       'Natural events arrive through different feeds, at different speeds. The globe needs to show earthquakes, storms, volcanoes, fires, floods and aurora without making every source look equally certain.',
     result:
       'Earthquakes retain both agencies’ readings and magnitude scales. A shared link restores the camera, filters and pinned event.',
+    engineering: {
+      summary: 'Two earthquake feeds enter one store without losing their separate readings.',
+      steps: [
+        {
+          title: 'Receive',
+          detail: 'USGS polling and an EMSC WebSocket report events and revisions.',
+        },
+        {
+          title: 'Match + retain',
+          detail:
+            'Time, distance and magnitude identify likely matches. Both readings stay attached.',
+        },
+        {
+          title: 'Explore + share',
+          detail: 'The globe shows source details; the URL restores the view and selected event.',
+        },
+      ],
+      failure: {
+        title: 'When a feed disconnects',
+        detail:
+          'A dropped EMSC socket reconnects with backoff while USGS keeps polling. The interface reports feed availability instead of presenting a partial view as complete.',
+      },
+      tradeoff:
+        'Matching is a heuristic: nearby events can be ambiguous. Keeping both agencies’ readings visible makes disagreement inspectable instead of hiding it behind one blended value.',
+    },
   },
   worth: {
     built: 'Ranked collections with revisit logs and shareable lists.',

@@ -40,7 +40,9 @@ for (const file of files.filter((file) => file.endsWith('.md'))) {
 
 for (const file of files.filter((file) => /\.(tsx?|css)$/.test(file) && file.includes('/src/'))) {
   const text = readFileSync(file, 'utf8');
-  for (const match of text.matchAll(/['"](\/(?:projects|fonts|cars|models)\/[^'"${}]+)['"]/g)) {
+  for (const match of text.matchAll(
+    /['"](\/(?:projects|fonts|cars|models|textures)\/[^'"${}]+)['"]/g,
+  )) {
     requireFile(join(root, 'public', match[1]), file);
   }
 }

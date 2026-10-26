@@ -14,19 +14,8 @@ const HEADLIGHT_COLOR = 0xfff2cc;
 const TAILLIGHT_COLOR = 0xff1f3a;
 const LAMP_Y = 0.75;
 
-export function makeRadialGlowTexture(): THREE.CanvasTexture {
-  const size = 256;
-  const c = document.createElement('canvas');
-  c.width = c.height = size;
-  const ctx = c.getContext('2d')!;
-  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  g.addColorStop(0.0, 'rgba(255,255,255,1.0)');
-  g.addColorStop(0.25, 'rgba(255,255,255,0.7)');
-  g.addColorStop(0.55, 'rgba(255,255,255,0.22)');
-  g.addColorStop(1.0, 'rgba(255,255,255,0.0)');
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, size, size);
-  const tex = new THREE.CanvasTexture(c);
+export function makeRadialGlowTexture(onLoad?: () => void): THREE.Texture {
+  const tex = new THREE.TextureLoader().load('/textures/underglow.png', () => onLoad?.());
   tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
 }

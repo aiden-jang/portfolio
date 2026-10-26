@@ -62,6 +62,12 @@ activation and reset on selection, and check that unrelated cars hide the contro
 Real-model unit fixtures check DRS isolation and restoration. The Supra keeps its
 normal lighting without an interactive headlight control.
 
+The delayed-effects case also counts successfully created graphics contexts:
+startup must reuse the scene’s WebGL context and load the pre-rendered glow without
+creating a 2D canvas. The same case still requires the car to render visibly.
+Navigation unit checks cover initial position settling and delayed font layout
+without requiring a resize or scroll to reveal the Intro controls.
+
 The retired M1 check resizes one shared-link scene across desktop, tablet and phone
 layouts, then checks picker exclusion, focus, fixed-livery links, reloads,
 rejoining the curated garage and both creator credits.
@@ -93,6 +99,10 @@ WebKit is an engine check; it does not replace testing Safari on a physical iPho
 Screen-reader audio, touch gestures and actual device performance still require
 manual checks. Record unavailable checks explicitly rather than treating them as
 passed.
+
+Use the [first-visit walkthrough](visitor-review.md) to observe project discovery,
+engineering explanations, résumé access and contact on actual phones. Its results
+remain unverified until those sessions happen.
 
 The [October resource and loading review](../art/ui-qa/october-26/resource-review/README.md)
 records decoded-image cleanup, connection-aware optional downloads and production

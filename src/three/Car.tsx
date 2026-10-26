@@ -52,14 +52,14 @@ export function Car() {
 
   const underglowMat = useMemo(() => {
     return new THREE.MeshBasicMaterial({
-      map: makeRadialGlowTexture(),
+      map: makeRadialGlowTexture(invalidate),
       color: 0xffffff,
       transparent: true,
       opacity: 0.14,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
-  }, []);
+  }, [invalidate]);
   const underglow = useMemo(() => {
     const g = new THREE.CircleGeometry(1, 96);
     g.scale(2.3, 3.1, 1);

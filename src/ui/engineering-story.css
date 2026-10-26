@@ -1,0 +1,77 @@
+.engineering-story {
+  margin: 32px 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-line);
+}
+.engineering-story figure {
+  margin: 0;
+}
+.engineering-story h4 {
+  color: var(--color-fg);
+  font: 10px/1.5 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.engineering-story p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.engineering-flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  list-style: none;
+  margin: 20px 0 24px;
+  padding: 0;
+}
+.engineering-flow li {
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--color-line);
+  background: rgb(255 255 255 / 2%);
+}
+.engineering-step {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--color-muted);
+  font: 10px/1 var(--font-mono);
+}
+.engineering-flow strong {
+  color: var(--color-fg);
+  font-size: 14px;
+  font-weight: 500;
+}
+.engineering-flow p {
+  font-size: 13px;
+}
+.engineering-arrow {
+  position: absolute;
+  top: calc(50% - 10px);
+  right: -23px;
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-muted);
+  fill: none;
+  stroke-width: 1.25;
+}
+.engineering-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.work-story .engineering-notes section {
+  margin: 0;
+}
+@media (max-width: 767px) {
+  .engineering-flow,
+  .engineering-notes {
+    grid-template-columns: 1fr;
+  }
+  .engineering-arrow {
+    top: auto;
+    right: calc(50% - 10px);
+    bottom: -23px;
+    transform: rotate(90deg);
+  }
+}

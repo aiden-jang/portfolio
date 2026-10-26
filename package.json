@@ -21,7 +21,8 @@
     "format:check": "prettier --check .",
     "test:browser": "playwright test",
     "check-content": "node scripts/check-content.mjs",
-    "security:check": "npm audit --audit-level=low"
+    "security:check": "npm audit --audit-level=low",
+    "generate:glow": "node scripts/generate-glow.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -51,7 +52,6 @@
   "dependencies": {
     "@react-three/drei": "^9.121.0",
     "@react-three/fiber": "^8.17.10",
-    "@react-three/postprocessing": "^2.16.5",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "postprocessing": "^6.39.1",

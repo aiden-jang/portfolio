@@ -176,7 +176,7 @@ function Project({
           image={preview.image}
           name={item.shortName ?? item.title}
           caption={preview.caption}
-          states={featured ? preview.states : undefined}
+          states={preview.states}
         />
       )}
       {item.contribution && <IodineContributions />}

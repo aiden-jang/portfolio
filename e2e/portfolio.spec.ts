@@ -185,7 +185,10 @@ for (const width of [1440, 390]) {
       await accessible(page);
 
       await page.emulateMedia({ reducedMotion: 'no-preference' });
-      const story = page.getByRole('button', { name: 'How I built it: bloomnote', exact: true });
+      const story = page.getByRole('button', {
+        name: 'How I built it: everythingisfine',
+        exact: true,
+      });
       await story.click();
       await expect(page.getByRole('dialog')).toBeVisible();
       const closeStory = page.getByRole('button', { name: 'Close', exact: true });
@@ -293,6 +296,25 @@ for (const width of [1440, 390]) {
 }
 
 test('a delayed effects download does not block content or the model request', async ({ page }) => {
+  await page.addInitScript(() => {
+    const contexts = { webgl: 0, canvas2d: 0 };
+    const seen = new WeakSet<HTMLCanvasElement>();
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (
+      this: HTMLCanvasElement,
+      type: string,
+      ...args: unknown[]
+    ) {
+      const context = Reflect.apply(original, this, [type, ...args]);
+      if (context && !seen.has(this)) {
+        seen.add(this);
+        if (type === '2d') contexts.canvas2d++;
+        else if (type === 'webgl2' || type === 'webgl') contexts.webgl++;
+      }
+      return context;
+    } as typeof original;
+    Object.assign(window, { portfolioGraphicsContexts: contexts });
+  });
   let release!: () => void;
   const held = new Promise<void>((resolve) => {
     release = resolve;
@@ -313,8 +335,21 @@ test('a delayed effects download does not block content or the model request', a
   } finally {
     release();
   }
-  await effectsDownloaded;
+  await (await effectsDownloaded).finished();
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+  await expectVisibleCar(page);
+  await page.evaluate(async () => {
+    for (let frame = 0; frame < 6; frame++)
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  });
+  expect(
+    await page.evaluate(
+      () =>
+        (window as Window & { portfolioGraphicsContexts?: { webgl: number; canvas2d: number } })
+          .portfolioGraphicsContexts,
+    ),
+    'startup reuses the scene context and the pre-rendered glow',
+  ).toEqual({ webgl: 1, canvas2d: 0 });
 });
 
 test('clean capture mode frames a visible car without page chrome', async ({ page }) => {

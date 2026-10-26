@@ -50,6 +50,7 @@ search-update checks.
 ## Development
 
 - [Quality checks](docs/quality.md): browser setup, regression coverage and visual review.
+- [Visitor walkthrough](docs/visitor-review.md): first impressions and real-phone checks.
 - [Architecture](docs/architecture.md): module responsibilities and runtime behavior.
 - [Contributing](CONTRIBUTING.md): setup, changes, validation and commit conventions.
 - [Repository conventions](CONVENTIONS.md): code and verification requirements.

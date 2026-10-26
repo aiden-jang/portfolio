@@ -16,7 +16,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     summary: 'I built one sign-in service for my apps and a shared library for checking sessions.',
     body: [
       'The accounts service handles identity for the apps on aidenjang.com. It runs on Cloudflare Workers, with D1 and Durable Objects supporting storage and rate limits.',
-      'Apps forward the shared session cookie to /auth/me through @aidenjang/auth-client, without receiving the signing secret. The service supports email and password, Google sign-in and magic links.',
+      'Apps forward the shared session cookie to /auth/me through @aidenjang/auth-client, without accessing the identity database. The service supports email and password, Google sign-in and passkeys.',
       'Each app pins an SDK version and decides which actions require a session. A contract change gets a version bump rather than silently changing every app.',
     ],
     stack: [
@@ -33,6 +33,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     tagline: 'One login, every app.',
     categories: ['systems'],
     link: { label: 'Visit the sign-in hub', url: 'https://accounts.aidenjang.com' },
+    links: [{ label: 'Source code', url: 'https://github.com/aiden-jang/auth' }],
   },
   {
     title: 'everythingisfine: the planet, live',
@@ -53,6 +54,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     principle:
       'Keep source readings visible when agencies disagree. The globe is a way to explore the data, not smooth over its differences.',
     link: { label: 'Open everythingisfine', url: 'https://everythingisfine.aidenjang.com' },
+    links: [{ label: 'Source code', url: 'https://github.com/aiden-jang/everythingisfine' }],
   },
   {
     title: 'worth: keep your own taste',

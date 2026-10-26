@@ -24,13 +24,12 @@ describe('case study browsing', () => {
     expect(lane.every((item) => !isPortfolioProject(item))).toBe(true);
     expect(lane.some((item) => item.contribution)).toBe(false);
   });
-  it('features bloomnote and mrrp while keeping owewell in the smaller gallery', () => {
-    expect(FEATURED_PROJECTS).toEqual(expect.arrayContaining(['bloomnote', 'mrrp', 'iodine']));
-    expect(FEATURED_PROJECTS).not.toContain('owewell');
+  it('gives three projects the spotlight while keeping the rest available in the gallery', () => {
+    expect(FEATURED_PROJECTS).toEqual(['everythingisfine', 'mrrp', 'worth']);
     expect(
       visibleProjects('all')
         .filter((item) => !FEATURED_PROJECTS.includes(item.shortName!))
         .map((item) => item.shortName),
-    ).toContain('owewell');
+    ).toEqual(['bloomnote', 'iodine', 'owewell', 'platform', 'iguess', 'wherever']);
   });
 });

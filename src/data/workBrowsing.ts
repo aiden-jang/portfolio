@@ -2,8 +2,16 @@ import { WORK_ITEMS } from './workItems';
 import type { WorkDetail } from '../types';
 
 export type ProjectFilter = 'all' | 'realtime' | 'ai' | 'social' | 'systems';
-export const FEATURED_PROJECTS = ['everythingisfine', 'bloomnote', 'mrrp', 'worth', 'iodine'];
-const PROJECT_ORDER = [...FEATURED_PROJECTS, 'owewell', 'platform', 'iguess', 'wherever'];
+export const FEATURED_PROJECTS = ['everythingisfine', 'mrrp', 'worth'];
+const PROJECT_ORDER = [
+  ...FEATURED_PROJECTS,
+  'bloomnote',
+  'iodine',
+  'owewell',
+  'platform',
+  'iguess',
+  'wherever',
+];
 
 export function isPortfolioProject(item: WorkDetail): boolean {
   return !!(item.mark || item.contribution);

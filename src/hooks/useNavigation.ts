@@ -136,7 +136,15 @@ export function useNavigation(sceneOnly = false) {
       currentSection.current = index;
       setSectionIndex(index);
     };
-    const linkFrame = requestAnimationFrame(restoreSectionLink);
+    let active = true;
+    const refreshLayout = () => {
+      if (active) onScroll();
+    };
+    const linkFrame = requestAnimationFrame(() => {
+      restoreSectionLink();
+      refreshLayout();
+    });
+    void document.fonts?.ready.then(refreshLayout);
     onScroll();
     // WebKit can finish its first layout after effects run, without a scroll event.
     const layoutObserver = new ResizeObserver(onScroll);
@@ -151,6 +159,7 @@ export function useNavigation(sceneOnly = false) {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => {
+      active = false;
       cancelAnimationFrame(linkFrame);
       layoutObserver.disconnect();
       window.removeEventListener('hashchange', restoreSectionLink);
