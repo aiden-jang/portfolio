@@ -36,7 +36,9 @@ for (const [width, height] of [
     await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
     await expect(async () => {
       const copy = await page.locator('#sec-contact .panel').boundingBox();
-      expect(Math.abs(copy!.x + copy!.width / 2 - width / 2)).toBeLessThan(2);
+      // Classic scrollbars reserve layout space that viewportSize includes.
+      const layoutWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      expect(Math.abs(copy!.x + copy!.width / 2 - layoutWidth / 2)).toBeLessThan(2);
       expect(Math.abs(copy!.y + copy!.height / 2 - height / 2)).toBeLessThan(2);
     }).toPass({ timeout: 5000 });
     const copy = await page.locator('#sec-contact .panel').boundingBox();

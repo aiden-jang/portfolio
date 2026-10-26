@@ -678,6 +678,141 @@
         "gltfErrors": 0,
         "gltfWarnings": 0
       }
+    },
+    {
+      "file": "bmw-m1-turbo.glb",
+      "title": "BMW M1 Turbo | www.vecarz.com",
+      "author": "vecarz",
+      "creatorId": "3f3128e66b434556a831444e846717c0",
+      "source": "https://sketchfab.com/3d-models/bmw-m1-turbo-wwwvecarzcom-a1d94649b23440269c97c210444dd7cb",
+      "evidence": "https://api.sketchfab.com/v3/models/a1d94649b23440269c97c210444dd7cb",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "verifiedOn": "2026-10-25",
+      "review": "publisher-and-credited-source-licenses-verified",
+      "downloadLicenseText": "Model Information:\n* title:\tBMW M1 Turbo | www.vecarz.com\n* source:\thttps://sketchfab.com/3d-models/bmw-m1-turbo-wwwvecarzcom-a1d94649b23440269c97c210444dd7cb\n* author:\tvecarz (https://sketchfab.com/heynic)\n\nModel License:\n* license type:\tCC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)\n* requirements:\tAuthor must be credited. Commercial use is allowed.\n\nIf you use this 3D model in your project be sure to copy paste this credit wherever you share it:\nThis work is based on \"BMW M1 Turbo | www.vecarz.com\" (https://sketchfab.com/3d-models/bmw-m1-turbo-wwwvecarzcom-a1d94649b23440269c97c210444dd7cb) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "archiveSha256": "c30ca25eacde7475c33794b491a78127e3b1ef43ef3022869adb391c43e707d0",
+      "downloadGlbSha256": "14891528308dbfa5e4ad76e7dea49adddc62e4e8f947fa59aced555e3ac6baa5",
+      "sourceDescription": "Gallery Web: https://www.vecarz.com/cars/bmw-m1-turbo\n=========================\nThank [JUSTGAME] https://sketchfab.com/3d-models/bmw-m1-turbo-275b2afd66604918affef8529074fdde\n it’s becoming increasingly obvious that you’ve struck some kind of unholy bargain with the automotive gods themselves. Or perhaps—just perhaps—you’re secretly one of their offspring, born with an uncanny ability to summon the finest, most jaw-droppingly amazing models into your possession. Honestly, it’s enough to make anyone’s envy hit top gear.\n\nBut, true to form, I couldn’t resist sneaking in like a thief in the night, laying claim to your prized creation, and scuttling away with it in my grubby, gleeful hands. And oh, the joy—like winning a free round at the Nürburgring! So, thank you for this act of generosity—or is it a cleverly disguised flex? Either way, I shall forever remember your legendary alias: JustGame!\n\nAnd every time I glance at this masterpiece,  \"JustGame!\"—like a rallying cry for petrolheads everywhere.",
+      "upstream": {
+        "author": "JUSTGAME",
+        "creatorId": "dfa91ad67c934efbb61b84ba63d44072",
+        "source": "https://sketchfab.com/3d-models/bmw-m1-turbo-275b2afd66604918affef8529074fdde",
+        "evidence": "https://api.sketchfab.com/v3/models/275b2afd66604918affef8529074fdde",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "sourceDescription": "BMW M1is a mid-engined sports car produced by BMW from 1978 to 1981. It was designed as a homologation special to compete in Group 4 and Group 5 racing. The M1 Turbo was a turbocharged version of the M1, designed to compete with Porsche's 935 in the Group 5 racing category."
+      },
+      "sourceReview": "Matching selected publisher, credited original and downloaded archive licenses. Underlying authorship and vehicle rights remain unverified.",
+      "optimization": {
+        "sourceBytes": 25142788,
+        "referenceBytes": 25112068,
+        "optimizedBytes": 8639908,
+        "file": "bmw-m1-turbo.glb",
+        "triangles": 256718,
+        "lines": 32,
+        "allVertexAttributesExact": true,
+        "textureCount": 11,
+        "textureDimensionsAndPixelsExact": true,
+        "materialsExact": true,
+        "hierarchyExact": true,
+        "animationsExact": true,
+        "errors": 0,
+        "warnings": 0,
+        "assetSha256": "38b3ee34bd060c5c651c1f8e93a6bdaef03aad6dbb813c13e4a6a027a12447fe",
+        "materials": "Legacy specular/glossiness converted to modern IOR/specular PBR. Source diffuse factor, alpha, texture bindings, roughness and specular factors retained. Compression preserves the converted material settings.",
+        "textures": [
+          {
+            "name": "",
+            "dimensions": [1024, 1024],
+            "sourceBytes": 516418,
+            "optimizedBytes": 376614,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [256, 256],
+            "sourceBytes": 20520,
+            "optimizedBytes": 11214,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [2048, 2048],
+            "sourceBytes": 372777,
+            "optimizedBytes": 238166,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [512, 256],
+            "sourceBytes": 98847,
+            "optimizedBytes": 79104,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [512, 512],
+            "sourceBytes": 206060,
+            "optimizedBytes": 136496,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [512, 512],
+            "sourceBytes": 63539,
+            "optimizedBytes": 42738,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [256, 256],
+            "sourceBytes": 58288,
+            "optimizedBytes": 32300,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [512, 512],
+            "sourceBytes": 151011,
+            "optimizedBytes": 115700,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [1024, 1024],
+            "sourceBytes": 268553,
+            "optimizedBytes": 150850,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [1024, 128],
+            "sourceBytes": 9447,
+            "optimizedBytes": 6722,
+            "decodedPixelsIdentical": true
+          },
+          {
+            "name": "",
+            "dimensions": [128, 64],
+            "sourceBytes": 2252,
+            "optimizedBytes": 1568,
+            "decodedPixelsIdentical": true
+          }
+        ],
+        "referenceErrors": 0,
+        "referenceWarnings": 0,
+        "materialComparisonReference": "Converted modern PBR reference before compression."
+      },
+      "runtimeAdaptation": "Original BMW Motorsport livery retained with repainting disabled. Flat aero meshes retained. Automatic fitting, framing and lighting applied. Loaded only on selection, outside arrival prefetch.",
+      "materialConversion": {
+        "allDrawPrimitivesAndVertexAttributesExact": true,
+        "texturePixelsAndDimensionsExact": true,
+        "diffuseAndAlphaExact": true,
+        "roughnessAndSpecularExact": true,
+        "textureBindingsExact": true,
+        "hierarchyExact": true
+      }
     }
   ]
 }

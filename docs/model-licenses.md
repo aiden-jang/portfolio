@@ -31,6 +31,7 @@ the evidence record preserves each model’s own review date.
 | Nissan GT-R Aimgain R35      | [vecarz](https://sketchfab.com/3d-models/nissan-aimgain-gt-r35-type2-77456704dc1b4d299a23fecdf341003c), crediting [Outlaw Games](https://sketchfab.com/3d-models/2017-nissan-aimgain-gt-r35-gt-r-type-2-883cf78fadef4d698e50d2c1ae3f59c2)   | CC BY 4.0; upstream CC BY-NC 4.0                          | Selected vecarz web export; noncommercial restriction retained; underlying rights unverified           |
 | Lamborghini Countach 5000 QV | [vecarz](https://sketchfab.com/3d-models/lamborghini-countach-5000qv-wwwvecarzcom-309d92b27c1041a3ab79b8919e7d92b5), crediting [Randomness](https://sketchfab.com/3d-models/lamborghini-countach-5000qv-2f02b54e01fc428e8b19759c5970f882)   | CC BY 4.0; credited source CC BY 4.0                      | Matching official glTF archive license; separate paint and rubber runtime finishes                     |
 | Chevrolet Corvette TF Sport  | [vecarz](https://sketchfab.com/3d-models/corvette-c8r-gt3tf-sport-wwwvecarzcom-82fe57ca25ee4e09a8b787ed9a2be3c0), embedded credit to [toddeppe](https://sketchfab.com/3d-models/corvette-c8r-gt3-tf-sport-4f351ff764c74a398e15b648c3b7928c) | CC BY 4.0; embedded source CC BY 4.0                      | Original yellow livery retained; source listing credits MattDoesBlender; underlying rights unverified  |
+| BMW M1 Turbo                 | [vecarz](https://sketchfab.com/3d-models/bmw-m1-turbo-wwwvecarzcom-a1d94649b23440269c97c210444dd7cb), crediting [JUSTGAME](https://sketchfab.com/3d-models/bmw-m1-turbo-275b2afd66604918affef8529074fdde)                                   | CC BY 4.0; credited source CC BY 4.0                      | Matching publisher, credited source and downloaded license; original Motorsport livery retained        |
 
 CC BY permits sharing and modification, including commercial use, provided its
 conditions are met. The Contact credits give the supplied model titles, authors,
@@ -291,3 +292,24 @@ The source GLB is 78,448,624 bytes and the optimized asset is 44,385,812 bytes.
 The yellow TF Sport livery is fixed, with no repaint controls or authored animations.
 Flat aero and underbody meshes remain visible. The model loads only when selected,
 outside the arrival prefetch pool. This asset remains a substantial optional download.
+
+## BMW M1 Turbo
+
+The selected vecarz export, its downloaded attribution file and the credited
+JUSTGAME listing all state CC BY 4.0. Both creators, source links and the license
+appear in Contact and the [asset notice](../public/models/bmw-m1-turbo.LICENSE.txt).
+These records establish the published terms; underlying authorship and vehicle
+rights remain unverified.
+
+The full-resolution GLB contains 256,718 triangles and 32 line segments. All
+decoded vertex attributes, primitive geometry and node hierarchy are retained.
+Its legacy specular/glossiness materials are converted to modern specular/IOR PBR,
+preserving diffuse colors, alpha, texture bindings, roughness and specular factors.
+All source textures retain their dimensions, up to 2048 × 2048, and identical
+decoded RGBA pixels. Lossless meshopt and WebP compression reduce the 25,142,788-byte
+download to 8,639,908 bytes. Validation reports no errors or warnings.
+
+The original BMW Motorsport livery is fixed. The export supplies no animation clips.
+The model is oriented before automatic fitting, retains flat aero meshes and
+loads only when selected. It sits after the Corvette and before the F1 cars in
+the picker, with a permanent registry identity for shared links.

@@ -46,6 +46,9 @@ an uncertainty, rather than treated as verified ownership.
 - [x] [Corvette C8R GT3 TF Sport](https://sketchfab.com/3d-models/corvette-c8r-gt3tf-sport-wwwvecarzcom-82fe57ca25ee4e09a8b787ed9a2be3c0)
       — vecarz; embedded toddeppe source also lists CC BY 4.0 and credits MattDoesBlender.
       Fixed yellow TF Sport livery; underlying authorship remains unverified.
+- [x] [BMW M1 Turbo](https://sketchfab.com/3d-models/bmw-m1-turbo-wwwvecarzcom-a1d94649b23440269c97c210444dd7cb)
+      — vecarz, crediting JUSTGAME; both list CC BY 4.0.
+      Original BMW Motorsport livery retained; underlying authorship remains unverified.
 - [ ] [2010 Mercedes-Benz SLS AMG](https://sketchfab.com/3d-models/2010-mercedes-benz-sls-amg-bf1464ad3ffb4f4696aa339f8ab12b07)
       — srineshchethiya; CC BY 4.0; original source unverified.
 
@@ -58,7 +61,7 @@ Older Japanese cars should retain stock styling. Modified Japanese builds should
 focus on newer cars, such as the GR Supra. F1 candidates should favor newer designs.
 
 The curated order is F40, 300 SL, Miata NA, Datsun 280Z, E30, RWB, M4 ADRO,
-Aimgain R35, GT3 RS, Corvette TF Sport, Ferrari F1-75 and RB16B.
+Aimgain R35, GT3 RS, Corvette TF Sport, M1 Turbo, Ferrari F1-75 and RB16B.
 The stock A80 Supra, Countach 5000 QV and Aventador SV are retired from the picker;
 their permanent registry identities and existing shared links remain available.
 The R8 is retired from the picker;

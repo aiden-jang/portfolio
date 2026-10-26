@@ -1,0 +1,8 @@
+{
+  "allDrawPrimitivesAndVertexAttributesExact": true,
+  "texturePixelsAndDimensionsExact": true,
+  "diffuseAndAlphaExact": true,
+  "roughnessAndSpecularExact": true,
+  "textureBindingsExact": true,
+  "hierarchyExact": true
+}

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-type Primitive = { attributes: Record<string, number>; indices?: number };
+type Primitive = { attributes: Record<string, number>; indices?: number; mode?: number };
 type Model = {
   extensionsRequired: string[];
   extensionsUsed: string[];
@@ -42,6 +42,7 @@ describe('car fidelity', () => {
       ['porsche-992-gt3-rs', 1_721_938],
       ['lamborghini-countach-5000qv', 174_956],
       ['corvette-c8r-tf-sport', 218_147],
+      ['bmw-m1-turbo', 256_718],
     ] as const) {
       const model = readModel(file);
       expect(model.extensionsRequired).toContain('EXT_meshopt_compression');
@@ -50,7 +51,11 @@ describe('car fidelity', () => {
       const primitives = model.meshes.flatMap((mesh) => mesh.primitives);
       expect(
         primitives.reduce(
-          (sum, p) => sum + model.accessors[p.indices ?? p.attributes.POSITION].count / 3,
+          (sum, p) =>
+            sum +
+            ((p.mode ?? 4) === 4
+              ? model.accessors[p.indices ?? p.attributes.POSITION].count / 3
+              : 0),
           0,
         ),
       ).toBe(triangles);

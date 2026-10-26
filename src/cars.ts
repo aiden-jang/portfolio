@@ -255,6 +255,19 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     },
     exposure: 1,
   },
+  {
+    file: 'bmw-m1-turbo.glb',
+    name: 'BMW M1 Turbo',
+    code: 'Group 5',
+    fixedLivery: true,
+    preserveFlatMeshes: true,
+    defaultPaint: {
+      name: 'BMW Motorsport',
+      hex: '#2879bd',
+      preserveSource: true,
+    },
+    exposure: 1,
+  },
 ];
 
 export const CARS: CarSpec[] = registry.map((car) => ({
@@ -263,7 +276,7 @@ export const CARS: CarSpec[] = registry.map((car) => ({
 }));
 
 // Retired cars remain available to existing links, outside the curated picker.
-export const GARAGE_INDICES: readonly number[] = [0, 1, 10, 5, 4, 3, 9, 17, 18, 20, 16, 15];
+export const GARAGE_INDICES: readonly number[] = [0, 1, 10, 5, 4, 3, 9, 17, 18, 20, 21, 16, 15];
 
 export function adjacentCar(index: number, direction: -1 | 1): number {
   const position = GARAGE_INDICES.indexOf(index);

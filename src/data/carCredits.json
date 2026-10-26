@@ -200,6 +200,20 @@
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
     }
   },
+  "bmw-m1-turbo.glb": {
+    "title": "BMW M1 Turbo | www.vecarz.com",
+    "author": "vecarz",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "url": "https://sketchfab.com/3d-models/bmw-m1-turbo-wwwvecarzcom-a1d94649b23440269c97c210444dd7cb",
+    "upstream": {
+      "author": "JUSTGAME",
+      "url": "https://sketchfab.com/3d-models/bmw-m1-turbo-275b2afd66604918affef8529074fdde",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "notice": "Legacy materials converted to modern PBR. Full source geometry, vertex precision, texture dimensions, decoded pixels and original BMW Motorsport livery retained; lossless compression, portfolio framing and lighting applied. Published licenses verified; underlying authorship and vehicle rights remain unverified."
+  },
   "corvette-c8r-tf-sport.glb": {
     "title": "Corvette C8R GT3TF Sport | www.vecarz.com",
     "author": "vecarz",

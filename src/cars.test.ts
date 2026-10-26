@@ -41,6 +41,9 @@ describe('curated garage', () => {
     expect(CARS[20].file).toBe('corvette-c8r-tf-sport.glb');
     expect(CARS[20].fixedLivery).toBe(true);
     expect(GARAGE_INDICES).toContain(20);
+    expect(CARS[21]?.file).toBe('bmw-m1-turbo.glb');
+    expect(CARS[21]?.fixedLivery).toBe(true);
+    expect(GARAGE_INDICES).toContain(21);
     expect(CARS[16].roadLights).toBe(false);
     expect(CARS[16].preserveFlatMeshes).toBe(true);
     expect(GARAGE_INDICES).toContain(5);
@@ -82,6 +85,7 @@ describe('curated garage', () => {
       'Nissan GT-R Aimgain',
       'Porsche 911 GT3 RS',
       'Chevrolet Corvette',
+      'BMW M1 Turbo',
       'Ferrari F1-75',
       'Red Bull RB16B',
     ]);

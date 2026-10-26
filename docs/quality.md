@@ -40,8 +40,9 @@ hit testing that rejects empty space and hidden geometry. Phone chrome checks co
 menu-only section navigation, touch dismissal without keyboard hints, visible
 sharing feedback and a deliberately held next-car
 download at narrow widths so loading feedback must clear the header.
-Contact composition checks keep the copy centered at desktop, phone and short-phone
-sizes while clearing the header and footer and keeping email actions in view.
+Contact composition checks keep the copy centered within the layout viewport at
+desktop, phone and short-phone sizes, excluding any reserved scrollbar gutter.
+They check header/footer clearance and keep email actions in view.
 Screenshot pixels require the red car to remain visible outside the copy; visual
 review checks readability over the softened car.
 A screenshot pixel check verifies that the default car
@@ -60,6 +61,10 @@ model once per engine, resize between phone and desktop, exercise keyboard
 activation and reset on selection, and check that unrelated cars hide the controls.
 Real-model unit fixtures check DRS isolation and restoration. The Supra keeps its
 normal lighting without an interactive headlight control.
+
+The M1 check resizes one scene across desktop, tablet and phone layouts,
+then checks its picker preview, fixed-livery link, reload and both creator credits.
+Screenshot pixels require its red and blue Motorsport colors in both lighting modes.
 
 Axe checks WCAG A and AA rules on the page and open dialogs. The tests use the real
 models, images and interface. Local telemetry endpoints are stubbed because they

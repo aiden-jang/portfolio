@@ -17,7 +17,7 @@ for (const width of [1440, 390]) {
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
     const options = picker.locator('.car-option');
-    await expect(options).toHaveCount(12);
+    await expect(options).toHaveCount(13);
     await expect
       .poll(() =>
         options.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('aria-label'))),

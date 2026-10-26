@@ -1,0 +1,16 @@
+{
+  "file": "bmw-m1-turbo.glb",
+  "triangles": 256718,
+  "lines": 32,
+  "allVertexAttributesExact": true,
+  "textureCount": 11,
+  "textureDimensionsAndPixelsExact": true,
+  "materialsExact": true,
+  "hierarchyExact": true,
+  "animationsExact": true,
+  "sourceErrors": 0,
+  "sourceWarnings": 0,
+  "errors": 0,
+  "warnings": 0,
+  "assetSha256": "38b3ee34bd060c5c651c1f8e93a6bdaef03aad6dbb813c13e4a6a027a12447fe"
+}

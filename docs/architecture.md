@@ -135,6 +135,10 @@ The A80 Supra, Countach and Aventador remain reachable by existing shared URLs,
 outside the picker. The Corvette TF Sport has a new permanent registry identity,
 a fixed original yellow livery and preserved flat aero meshes. It loads only on
 selection and is excluded from arrival prefetching.
+The M1 Turbo follows the Corvette in the racing group, before the F1 cars. Its
+original BMW Motorsport livery is fixed, flat aero meshes are retained, and it
+loads only when selected. Its legacy specular/glossiness materials are converted
+to modern specular/IOR PBR while preserving texture pixels and vertex precision.
 `popupHeadlights` samples the
 Miata's authored opening clip between its closed and raised poses; its Lights button
 reverses travel, starts raised on selection and snaps poses for reduced motion.

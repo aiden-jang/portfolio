@@ -1,0 +1,28 @@
+Model Information:
+* title:	BMW M1 Turbo | www.vecarz.com
+* source:	https://sketchfab.com/3d-models/bmw-m1-turbo-wwwvecarzcom-a1d94649b23440269c97c210444dd7cb
+* author:	vecarz (https://sketchfab.com/heynic)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "BMW M1 Turbo | www.vecarz.com" (https://sketchfab.com/3d-models/bmw-m1-turbo-wwwvecarzcom-a1d94649b23440269c97c210444dd7cb) by vecarz (https://sketchfab.com/heynic) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+Credited original source: BMW M1 Turbo by JUSTGAME
+https://sketchfab.com/3d-models/bmw-m1-turbo-275b2afd66604918affef8529074fdde
+Original source license: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+
+Adaptation: Legacy specular/glossiness materials converted to modern
+specular/IOR PBR with source diffuse textures, alpha, roughness and specular
+response retained. All source triangle and line geometry, vertex precision,
+texture dimensions, decoded texture pixels and original racing livery retained.
+Geometry reordered and losslessly meshopt compressed; lossless WebP applied
+only where smaller. Portfolio framing and lighting applied at runtime.
+Adaptation license: Creative Commons Attribution 4.0 International.
+The website source code MIT license does not replace these asset terms.
+
+The selected publisher and credited source both list CC BY 4.0.
+These records verify published terms; underlying authorship and vehicle rights
+are not independently verified.
