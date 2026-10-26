@@ -62,8 +62,9 @@ activation and reset on selection, and check that unrelated cars hide the contro
 Real-model unit fixtures check DRS isolation and restoration. The Supra keeps its
 normal lighting without an interactive headlight control.
 
-The M1 check resizes one scene across desktop, tablet and phone layouts,
-then checks its picker preview, fixed-livery link, reload and both creator credits.
+The retired M1 check resizes one shared-link scene across desktop, tablet and phone
+layouts, then checks picker exclusion, focus, fixed-livery links, reloads,
+rejoining the curated garage and both creator credits.
 Screenshot pixels require its red and blue Motorsport colors in both lighting modes.
 
 Axe checks WCAG A and AA rules on the page and open dialogs. The tests use the real

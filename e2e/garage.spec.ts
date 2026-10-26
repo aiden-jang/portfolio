@@ -17,7 +17,7 @@ for (const width of [1440, 390]) {
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
     const options = picker.locator('.car-option');
-    await expect(options).toHaveCount(13);
+    await expect(options).toHaveCount(12);
     await expect
       .poll(() =>
         options.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('aria-label'))),
@@ -49,9 +49,11 @@ for (const width of [1440, 390]) {
       'Show Lamborghini Countach, 5000 QV',
       'Show Toyota Supra, A80',
       'Show Lamborghini Aventador, SV',
+      'Show BMW M1 Turbo, Group 5',
     ]) {
       await expect(picker.getByRole('button', { name: retired, exact: true })).toHaveCount(0);
     }
+    await page.screenshot({ path: test.info().outputPath(`garage-${width}.png`) });
     await page.keyboard.press('End');
     await expect(
       picker.getByRole('button', { name: 'Show Red Bull RB16B, 2021 F1', exact: true }),

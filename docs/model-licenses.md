@@ -311,5 +311,5 @@ download to 8,639,908 bytes. Validation reports no errors or warnings.
 
 The original BMW Motorsport livery is fixed. The export supplies no animation clips.
 The model is oriented before automatic fitting, retains flat aero meshes and
-loads only when selected. It sits after the Corvette and before the F1 cars in
-the picker, with a permanent registry identity for shared links.
+loads only when selected. It is retired from the picker, with its permanent
+registry identity retained for existing shared links.

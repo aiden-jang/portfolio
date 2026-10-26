@@ -1,7 +1,8 @@
 # BMW M1 Turbo review
 
-The M1 keeps its original BMW Motorsport livery and sits between the Corvette and
-the F1 cars. It loads only on selection, with a permanent shared-link identity.
+These captures document the M1's initial addition. It is now retired from the
+picker; its permanent shared-link identity and original BMW Motorsport livery remain.
+It loads only on selection.
 Both vecarz and the credited JUSTGAME source list CC BY 4.0; attribution and the
 adaptation notice are included in the asset and Contact credits.
 

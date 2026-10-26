@@ -16,7 +16,7 @@ async function expectRacingColors(page: Page) {
   }).toPass({ timeout: 20_000 });
 }
 
-test('M1 preserves its livery, picker preview, shared identity and credits across layouts', async ({
+test('retired M1 preserves shared links, livery and credits outside the picker across layouts', async ({
   page,
 }) => {
   await page.clock.setFixedTime(new Date('2026-10-13T18:00:00Z'));
@@ -65,18 +65,23 @@ test('M1 preserves its livery, picker preview, shared identity and credits acros
   await page.setViewportSize({ width: 390, height: 844 });
   await browse.click();
   const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
-  const m1 = picker.getByRole('button', { name: 'Show BMW M1 Turbo, Group 5', exact: true });
-  await expect(m1).toBeFocused();
-  await expect(m1).toHaveAttribute('aria-pressed', 'true');
-  await expect
-    .poll(() => m1.locator('img').evaluate((img) => (img as HTMLImageElement).naturalWidth))
-    .toBeGreaterThan(0);
+  await expect(
+    picker.getByRole('button', { name: 'Show BMW M1 Turbo, Group 5', exact: true }),
+  ).toHaveCount(0);
+  await expect(picker.locator('.car-option').first()).toBeFocused();
+  await expect(picker.locator('.car-option[aria-pressed="true"]')).toHaveCount(0);
   await page.keyboard.press('Escape');
   await expect(browse).toBeFocused();
   await page.reload();
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
   await expect(browse).toHaveAccessibleName('Browse cars. BMW M1 Turbo, Group 5');
   expect(new URL(page.url()).searchParams.get('car')).toBe('21');
+  await page
+    .getByRole('button', { name: 'Next car', exact: true })
+    .filter({ visible: true })
+    .click();
+  await expect(browse).toHaveAccessibleName('Browse cars. Ferrari F40, F120');
+  await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('0');
   await page.locator('.portfolio-menu summary').click();
   await page
     .getByRole('navigation', { name: 'Mobile navigation' })

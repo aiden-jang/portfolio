@@ -43,7 +43,7 @@ describe('curated garage', () => {
     expect(GARAGE_INDICES).toContain(20);
     expect(CARS[21]?.file).toBe('bmw-m1-turbo.glb');
     expect(CARS[21]?.fixedLivery).toBe(true);
-    expect(GARAGE_INDICES).toContain(21);
+    expect(GARAGE_INDICES).not.toContain(21);
     expect(CARS[16].roadLights).toBe(false);
     expect(CARS[16].preserveFlatMeshes).toBe(true);
     expect(GARAGE_INDICES).toContain(5);
@@ -60,6 +60,7 @@ describe('curated garage', () => {
           'car-13',
           'car-14',
           'car-19',
+          'car-21',
         ].includes(id),
       ),
     ).toBe(false);
@@ -85,7 +86,6 @@ describe('curated garage', () => {
       'Nissan GT-R Aimgain',
       'Porsche 911 GT3 RS',
       'Chevrolet Corvette',
-      'BMW M1 Turbo',
       'Ferrari F1-75',
       'Red Bull RB16B',
     ]);
@@ -94,7 +94,7 @@ describe('curated garage', () => {
   });
 
   it('lets an older shared car link rejoin the visible garage in either direction', () => {
-    for (const index of [2, 6, 7, 8, 11, 12, 13, 14, 19]) {
+    for (const index of [2, 6, 7, 8, 11, 12, 13, 14, 19, 21]) {
       useAppStore.getState().setCarIndex(index);
       expect(useAppStore.getState().carIndex).toBe(index);
       useAppStore.getState().cycleCar();
@@ -106,7 +106,7 @@ describe('curated garage', () => {
   });
 
   it('surprises visitors with another visible car, including when starting at a retired car', () => {
-    for (const source of [6, 7, ...GARAGE_INDICES]) {
+    for (const source of [6, 7, 21, ...GARAGE_INDICES]) {
       for (const random of [0, 0.5, 0.999999]) {
         useAppStore.getState().setCarIndex(source);
         vi.spyOn(Math, 'random').mockReturnValue(random);
