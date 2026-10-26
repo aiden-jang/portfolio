@@ -22,10 +22,6 @@
 .car-choice-desktop {
   flex-shrink: 0;
 }
-#desktop-dock button[aria-label='Reset camera view'] {
-  white-space: nowrap;
-  flex-shrink: 0;
-}
 .car-browse-trigger {
   display: flex;
   flex-direction: column;
@@ -215,8 +211,10 @@
     padding: 12px 16px;
   }
 }
-@media (min-width: 768px) and (max-width: 1023px) {
-  #desktop-dock button[aria-label='Reset camera view'] > span:last-child {
-    display: none;
-  }
+.car-browse-trigger > :is(span, small) {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

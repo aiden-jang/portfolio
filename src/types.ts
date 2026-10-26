@@ -80,7 +80,6 @@ export type WorkDetail = {
   context: string;
   body: string[];
   stack: string[];
-  image?: string;
   link?: { label: string; url: string };
   links?: { label: string; url: string }[];
   // Stable product identity connects a project to its previews and story.

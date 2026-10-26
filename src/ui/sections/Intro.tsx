@@ -16,3 +16,4 @@ export function IntroSection() {
     </Section>
   );
 }
+import './intro.css';

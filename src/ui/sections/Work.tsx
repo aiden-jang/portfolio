@@ -1,5 +1,4 @@
 import '../project-gallery.css';
-import '../reading-layout.css';
 import { PREVIEWS } from '../../data/projectPreviews';
 import { FEATURED_PROJECTS, visibleProjects, type ProjectFilter } from '../../data/workBrowsing';
 import { workId } from '../../data/workItems';

@@ -61,10 +61,6 @@
     border-radius: inherit;
   }
 }
-
-/* Smooth entrance: the DOM chrome fades in on load, and the 3D canvas fades in
-   when its (lazy) chunk mounts, so neither pops in abruptly. Reduced-motion
-   collapses these to instant via the media block above. */
 @keyframes app-fade-in {
   from {
     opacity: 0;
@@ -185,8 +181,7 @@
   body.modal-open #mobile-bar,
   body.modal-open #desktop-dock,
   body.modal-open header,
-  body.modal-open #nav,
-  body.modal-open #mobile-resume {
+  body.modal-open #nav {
     opacity: 0;
     pointer-events: none;
   }
@@ -218,379 +213,6 @@
   src: url('/fonts/geist-mono.woff2') format('woff2');
   font-weight: 100 900;
   font-display: swap;
-}
-.garage-brand {
-  font-size: 13px;
-  font-weight: 500;
-}
-#nav {
-  font: 13px/1.4 var(--font-display);
-  text-transform: none;
-  letter-spacing: 0;
-}
-#sec-intro {
-  position: relative;
-  text-align: left;
-  padding-top: 15vh;
-}
-.garage-intro {
-  width: 100%;
-  max-width: none;
-  text-shadow: none;
-}
-.garage-intro::before {
-  display: none;
-}
-.garage-intro h1 {
-  font-size: clamp(72px, 12vw, 164px);
-  font-weight: 500;
-  letter-spacing: -0.075em;
-  line-height: 1;
-  margin: 0;
-}
-.garage-intro p {
-  margin-top: 24px;
-  color: #b9b9c0;
-  font-size: 16px;
-  line-height: 1.6;
-}
-
-#sec-work {
-  background: #101014;
-  padding-top: 13vh;
-  padding-bottom: 48px;
-}
-.garage-work {
-  width: 100%;
-  max-width: 1180px;
-  text-align: left;
-  text-shadow: none;
-}
-.garage-work::before {
-  display: none;
-}
-.garage-work-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-.garage-work-heading h2 {
-  font-size: clamp(32px, 4vw, 44px);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-}
-.garage-work-heading span {
-  font: 13px/1.5 var(--font-display);
-  color: #aaaab2;
-}
-.garage-filters {
-  display: flex;
-  gap: 20px;
-  padding: 18px 0;
-}
-.garage-filters button {
-  min-height: 44px;
-  font-size: 13px;
-  color: #aaaab2;
-  cursor: pointer;
-  border-bottom: 1px solid transparent;
-}
-.garage-filters button[aria-pressed='true'] {
-  color: #e8e8e6;
-  border-color: #e8e8e6;
-}
-.garage-project-list {
-  max-height: calc(100dvh - 290px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding-right: 16px;
-}
-.garage-project {
-  padding: 24px 0;
-  border-top: 1px solid var(--color-line);
-}
-.garage-project-featured {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 36px;
-}
-.garage-project h3 {
-  font-size: 24px;
-  font-weight: 500;
-  letter-spacing: -0.7px;
-  margin-bottom: 14px;
-}
-.garage-project p {
-  color: #b9b9c0;
-  font-size: 14px;
-  line-height: 1.7;
-  max-width: 550px;
-}
-.garage-project .garage-stack {
-  font: 12px/1.7 var(--font-display);
-  margin-top: 20px;
-}
-.garage-project figure {
-  margin: 0;
-}
-.garage-project img {
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--color-line);
-}
-.garage-project figcaption {
-  font: 10px/1.6 var(--font-mono);
-  color: #aaaab2;
-  margin-top: 10px;
-}
-.garage-project-links {
-  display: flex;
-  gap: 24px;
-  margin-top: 22px;
-  font-size: 13px;
-}
-.garage-project-links > * {
-  cursor: pointer;
-  padding: 8px 0;
-  border-bottom: 1px solid #777780;
-}
-@media (max-width: 767px) {
-  #sec-intro {
-    padding-top: 14vh;
-  }
-  .garage-intro h1 {
-    font-size: clamp(58px, 17vw, 80px);
-  }
-  .garage-intro p {
-    font-size: 14px;
-    margin-top: 20px;
-  }
-
-  #sec-work {
-    padding-top: 12vh;
-    padding-bottom: 180px;
-  }
-  .garage-work-heading span {
-    display: none;
-  }
-  .garage-project-list {
-    max-height: calc(100dvh - 290px);
-    padding-right: 8px;
-  }
-  .garage-project-featured {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .garage-project-links > * {
-    min-height: 44px;
-  }
-  .garage-filters {
-    gap: 18px;
-  }
-}
-
-.garage-project img {
-  max-height: 340px;
-  object-fit: cover;
-  object-position: top;
-  background: #141419;
-}
-.garage-project:not(.garage-project-featured) .garage-project-copy {
-  display: grid;
-  grid-template-columns: 200px 1fr auto;
-  gap: 24px;
-  align-items: center;
-}
-.garage-project:not(.garage-project-featured) h3,
-.garage-project:not(.garage-project-featured) .garage-project-links {
-  margin: 0;
-}
-@media (max-width: 767px) {
-  .garage-project:not(.garage-project-featured) .garage-project-copy {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-}
-
-#sec-work {
-  scroll-snap-stop: normal;
-}
-.garage-project-list {
-  max-height: none;
-  overflow: visible;
-  padding-right: 0;
-}
-.garage-project-featured {
-  display: block;
-}
-.garage-project-featured .garage-project-copy {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr auto;
-  gap: 16px 32px;
-  align-items: start;
-  margin-bottom: 28px;
-}
-.garage-project-featured h3,
-.garage-project-featured .garage-project-links {
-  margin: 0;
-}
-.garage-project-featured .garage-stack {
-  grid-column: 2;
-  margin: 0;
-}
-.garage-project-featured .garage-project-links {
-  grid-column: 3;
-  grid-row: 1 / 3;
-}
-.garage-project img {
-  max-height: none;
-  display: block;
-}
-.project-preview {
-  display: block;
-  width: 100%;
-  text-align: left;
-  cursor: zoom-in;
-  position: relative;
-}
-.project-preview > span {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  background: #101014;
-  border: 1px solid var(--color-line);
-  padding: 10px 14px;
-  font-size: 12px;
-}
-.work-story {
-  font-size: 0.98rem;
-  line-height: 1.6;
-  color: #c9c9ce;
-}
-.work-story h4 {
-  font-size: 12px;
-  color: #aaaab2;
-  margin-bottom: 8px;
-}
-.work-story section {
-  margin-bottom: 24px;
-}
-.work-story summary {
-  cursor: pointer;
-  padding: 14px 0;
-  border-top: 1px solid var(--color-line);
-}
-.work-story details p {
-  margin-top: 16px;
-}
-@media (max-width: 767px) {
-  .garage-project-featured .garage-project-copy {
-    display: block;
-  }
-  .garage-project-featured h3 {
-    margin-bottom: 12px;
-  }
-  .garage-project-featured .garage-stack {
-    margin-top: 16px;
-  }
-  .garage-project-featured .garage-project-links {
-    margin-top: 16px;
-  }
-  .project-preview > span {
-    position: static;
-    display: block;
-    padding: 10px 0;
-    border: 0;
-  }
-  #sec-work {
-    padding-bottom: 100px;
-  }
-}
-
-.orbit-invitation {
-  position: fixed;
-  bottom: 7rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  pointer-events: none;
-  color: var(--color-muted);
-  font-size: 12px;
-  white-space: nowrap;
-  transition: opacity 400ms;
-}
-.orbit-invitation-used {
-  opacity: 0;
-}
-@media (max-width: 767px) {
-  .orbit-invitation {
-    bottom: max(144px, calc(env(safe-area-inset-bottom) + 128px));
-    font-size: 12px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .orbit-invitation {
-    transition: none;
-  }
-}
-
-/* Reading sections follow their content rather than leaving a full screen of empty space. */
-#sec-experience,
-#sec-about,
-#sec-contact {
-  min-height: auto;
-  background: var(--color-bg);
-  padding-top: 120px;
-  padding-bottom: 120px;
-  align-items: flex-start;
-}
-#sec-about {
-  border-top: 1px solid var(--color-line);
-}
-.about-details {
-  margin-top: 32px;
-  border-top: 1px solid var(--color-line);
-}
-.about-details > div {
-  padding: 14px 0;
-  display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
-  gap: 20px;
-  border-bottom: 1px solid var(--color-line);
-}
-.about-details dt {
-  color: var(--color-muted);
-  font: 12px/1.7 var(--font-display);
-}
-.about-details dd {
-  font-size: 14px;
-  line-height: 1.7;
-}
-@media (max-width: 767px) {
-  #sec-experience,
-  #sec-about,
-  #sec-contact {
-    padding-top: 100px;
-    padding-bottom: 100px;
-  }
-  .about-details > div {
-    grid-template-columns: 90px minmax(0, 1fr);
-    gap: 12px;
-  }
-}
-
-/* Reading copy stays available even before a reveal observer catches up with scrolling. */
-#sec-experience .panel > *,
-#sec-about .panel > *,
-#sec-contact .panel > * {
-  opacity: 1;
-  transform: none;
-}
-
-/* The final section needs enough height for its navigation target to reach the header. */
-#sec-contact {
-  min-height: 100dvh;
 }
 
 input:is(:autofill, :-webkit-autofill),
@@ -646,4 +268,40 @@ textarea::selection {
   textarea::selection {
     -webkit-text-fill-color: HighlightText;
   }
+}
+:root {
+  --portfolio-header-height: 88px;
+}
+body.modal-open .portfolio-header {
+  visibility: hidden;
+}
+@media (max-width: 767px) {
+  :root {
+    --portfolio-header-height: 84px;
+  }
+}
+button:disabled {
+  cursor: default;
+}
+:is(#desktop-dock, #mobile-bar) :is(button, select):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}
+:is(.garage-project-links, .preview-states, .work-modal-footer, #desktop-dock, #mobile-bar)
+  :is(a, button) {
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.garage-project-links, .preview-states, .work-modal-footer, #desktop-dock, #mobile-bar)
+    :is(a, button) {
+    transition: none;
+  }
+}
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: #55545a #101014;
 }

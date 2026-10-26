@@ -100,3 +100,4 @@ function EmailActions() {
     </div>
   );
 }
+import '../contact.css';

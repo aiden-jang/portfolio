@@ -15,13 +15,6 @@ export function WorkStory({ item }: { item: WorkDetail }) {
   const view = preview?.states?.[selected] ?? preview;
   return (
     <div className="work-story">
-      <p className="project-role">
-        {item.contribution
-          ? 'Open-source contributor'
-          : item.mark
-            ? 'Designed & built'
-            : item.context}
-      </p>
       <div className="work-story-overview">
         <div>
           <section>

@@ -35,9 +35,10 @@ npm run dev
 Vite prints the local URL. No environment variables are required for local development.
 
 ```sh
-npm run verify   # dependency audit, types, lint, formatting, content checks, tests and build
-npm run test     # tests only
-npm run preview  # serve dist/ after building
+npm run verify       # dependency audit, types, lint, formatting, content checks, tests and build
+npm run test         # unit and DOM tests only
+npm run test:browser # browser regressions; see Quality checks for browser setup
+npm run preview      # serve dist/ after building
 ```
 
 CI runs verification on pull requests and pushes to `main`. Vercel handles
@@ -54,9 +55,15 @@ search-update checks.
 - [Repository conventions](CONVENTIONS.md): code and verification requirements.
 - [To do](docs/todo.md): saved garage model candidates and selection preferences.
 
+Page components live in `src/ui/`, project content in `src/data/`, and the car scene
+in `src/three/`. Change a component’s own stylesheet when adjusting its UI;
+[the style ownership map](docs/architecture.md#styles) identifies the shared rules.
+Retiring a car removes it from the picker while preserving its ID, asset and credits
+for existing shared links.
+
 The stack includes Vite, React Three Fiber, drei, postprocessing, Tailwind CSS,
-Zustand, and Vercel Analytics and Speed Insights. Exact versions are in
-[package.json](package.json) and [package-lock.json](package-lock.json).
+Zustand, and Vercel Analytics and Speed Insights. Dependency ranges and locked
+versions are in [package.json](package.json) and [package-lock.json](package-lock.json).
 
 ## Licenses and credits
 

@@ -13,3 +13,4 @@ export function CarLoadNotice() {
     </div>
   );
 }
+import './car-load-notice.css';

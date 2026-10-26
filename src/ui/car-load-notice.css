@@ -1,0 +1,36 @@
+.scene-loading-note,
+.car-load-notice {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 11rem;
+  z-index: 35;
+  width: min(360px, calc(100vw - 40px));
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--color-muted);
+}
+.car-load-notice {
+  padding: 16px;
+  background: #17131bf5;
+  border: 1px solid var(--color-line);
+  border-radius: 5px;
+}
+.car-load-notice button {
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 0 16px;
+  color: var(--color-fg);
+  border: 1px solid var(--color-line);
+  cursor: pointer;
+}
+
+@media (max-width: 767px) and (max-height: 740px) {
+  .scene-loading-note,
+  .car-load-notice {
+    bottom: 140px;
+    background: var(--color-bg);
+    padding: 10px;
+  }
+}

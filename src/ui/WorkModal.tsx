@@ -1,12 +1,13 @@
 import { useDialogFocus } from './useDialogFocus';
 import { usePageScrollLock } from './usePageScrollLock';
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import type { WorkDetail } from '../types';
 import { WorkModalLinks } from './WorkModalLinks';
 import { WorkModalNav } from './WorkModalNav';
 import { WorkStory } from './WorkStory';
 import { ScrollBody } from './ScrollBody';
+import './work-modal.css';
 type Props = {
   item: WorkDetail | null;
   onClose: () => void;
@@ -115,9 +116,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         {item && (
           <>
             <ScrollBody key={item.title} storyId={item.title}>
-              {item.image && (
-                <WorkBanner key={item.image} src={item.image} alt={`${item.title} screenshot`} />
-              )}
               <Eyebrow>{item.context}</Eyebrow>
               <h3
                 id="work-modal-title"
@@ -132,7 +130,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
               <p className="work-technologies">{item.stack.join(' · ')}</p>
             </ScrollBody>
             <div className="work-modal-footer">
-              <WorkModalNav {...{ item, onPrevious, onNext, position }} />
+              <WorkModalNav {...{ onPrevious, onNext, position }} />
               <WorkModalLinks item={item} />
             </div>
           </>
@@ -147,21 +145,5 @@ function Eyebrow({ children }: { children: ReactNode }) {
     <span className="font-[var(--font-mono)] text-[0.66rem] tracking-[0.36em] uppercase text-[var(--color-muted)]">
       <span data-nosnippet>{children}</span>
     </span>
-  );
-}
-/** The negative margins have to match the panel's own `p-5` / `p-7` padding to bleed cleanly. */
-function WorkBanner({ src, alt }: { src: string; alt: string }) {
-  const [failed, setFailed] = useState(false);
-  if (failed) return null;
-  return (
-    <div className="-mx-5 -mt-5 md:-mx-7 md:-mt-6 mb-5 border-b border-[var(--color-line)] overflow-hidden">
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        onError={() => setFailed(true)}
-        className="block w-full h-auto max-h-[300px] object-cover object-top"
-      />
-    </div>
   );
 }

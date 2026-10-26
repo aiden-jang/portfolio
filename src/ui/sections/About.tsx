@@ -46,3 +46,4 @@ export function AboutSection() {
     </Section>
   );
 }
+import './about.css';

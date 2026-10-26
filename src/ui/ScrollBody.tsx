@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
-import './browsing-controls.css';
+import './scroll-body.css';
 
 const readingPositions = new Map<string, { fraction: number; expanded: number[] }>();
 

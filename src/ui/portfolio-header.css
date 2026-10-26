@@ -1,5 +1,11 @@
-:root {
-  --portfolio-header-height: 88px;
+.garage-brand {
+  font-size: 13px;
+  font-weight: 500;
+}
+#nav {
+  font: 13px/1.4 var(--font-display);
+  text-transform: none;
+  letter-spacing: 0;
 }
 .portfolio-header {
   position: fixed;
@@ -34,72 +40,6 @@
 .portfolio-header #nav {
   gap: 24px;
 }
-.project-toolbar {
-  position: sticky;
-  top: var(--portfolio-header-height);
-  z-index: 15;
-  background: #101014;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  border-bottom: 1px solid var(--color-line);
-  margin-bottom: 8px;
-}
-.project-browse {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  color: #aaaab2;
-  font-size: 12px;
-}
-.project-browse p {
-  white-space: nowrap;
-}
-.project-toolbar select {
-  appearance: none;
-  color-scheme: dark;
-  background-color: #101014;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23b9b9c0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  border: 1px solid var(--color-control-line);
-  border-radius: var(--radius-control);
-  color: var(--color-fg);
-  min-height: 44px;
-  padding: 8px 36px 8px 12px;
-  font: 13px/1.4 var(--font-display);
-  cursor: pointer;
-  transition: border-color 160ms ease;
-}
-.project-toolbar select:hover {
-  border-color: #a3a3ad;
-}
-.project-toolbar select:focus-visible {
-  border-color: var(--color-fg);
-}
-@media (forced-colors: active) {
-  .project-toolbar select {
-    appearance: auto;
-    background-image: none;
-    padding-inline-end: 12px;
-  }
-}
-.garage-project {
-  scroll-margin-top: 180px;
-}
-.project-preview img {
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  object-position: top;
-}
-.garage-project:not(.garage-project-featured) .garage-project-copy {
-  grid-template-columns: 200px 1fr auto;
-}
-body.modal-open .portfolio-header {
-  visibility: hidden;
-}
-.project-toolbar select:focus-visible,
 .portfolio-menu summary:focus-visible {
   outline: 2px solid #e8e8e6;
   outline-offset: 3px;
@@ -111,9 +51,6 @@ body.modal-open .portfolio-header {
   }
 }
 @media (max-width: 767px) {
-  :root {
-    --portfolio-header-height: 84px;
-  }
   .portfolio-header {
     padding: 0 6vw;
   }
@@ -181,103 +118,35 @@ body.modal-open .portfolio-header {
   .portfolio-menu nav a[aria-current] {
     color: var(--color-fg);
   }
-  .project-toolbar {
-    flex-wrap: wrap;
-    gap: 0;
-    padding-bottom: 12px;
-  }
-  .garage-filters {
-    padding: 8px 0;
-    width: 100%;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .project-browse {
-    width: 100%;
-    justify-content: space-between;
-  }
-  .garage-project {
-    scroll-margin-top: 220px;
-  }
-  .garage-project:not(.garage-project-featured) .garage-project-copy {
-    grid-template-columns: 1fr;
+}
+.portfolio-menu nav {
+  max-height: calc(100dvh - 100px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.portfolio-menu summary {
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-menu summary {
+    transition: none;
   }
 }
-
-#sec-about {
-  background: var(--color-bg);
+.portfolio-menu nav {
+  scrollbar-width: thin;
+  scrollbar-color: #55545a #101014;
 }
-
-@media (max-width: 767px) {
-  #sec-about {
-    background: var(--color-bg);
-  }
-}
-
-.scene-loading-note,
-.car-load-notice {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 11rem;
-  z-index: 35;
-  width: min(360px, calc(100vw - 40px));
-  font-size: 12px;
-  line-height: 1.6;
-  text-align: center;
-  color: var(--color-muted);
-}
-.car-load-notice {
-  padding: 16px;
-  background: #17131bf5;
-  border: 1px solid var(--color-line);
-  border-radius: 5px;
-}
-.car-load-notice button {
+.portfolio-header a[aria-label^='Résumé'] {
   min-height: 44px;
-  margin-top: 8px;
-  padding: 0 16px;
-  color: var(--color-fg);
-  border: 1px solid var(--color-line);
-  cursor: pointer;
-}
-
-.orbit-status {
-  display: none;
-  pointer-events: none;
-  position: fixed;
-  z-index: 35;
-  left: 0;
-  right: 0;
-  bottom: 150px;
-  text-align: center;
-  font: 11px/1.5 var(--font-mono);
-  color: var(--color-fg);
-}
-@media (pointer: coarse) {
-  body.orbiting .orbit-status {
-    display: block;
-  }
-}
-
-@media (max-width: 767px) and (max-height: 740px) {
-  #sec-intro {
-    min-height: 820px;
-    padding-top: 104px;
-  }
-  #sec-intro .garage-intro h1 {
-    font-size: 48px;
-  }
-  #sec-intro .garage-intro p {
-    font-size: 12px;
-    line-height: 1.5;
-    margin-top: 12px;
-  }
-
-  .scene-loading-note,
-  .car-load-notice {
-    bottom: 140px;
-    background: var(--color-bg);
-    padding: 10px;
-  }
+  padding: 8px 14px;
+  border-radius: var(--radius-control);
+  border-color: var(--color-control-line);
+  background: var(--color-panel);
+  font: 13px/1.4 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
 }

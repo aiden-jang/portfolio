@@ -1,7 +1,7 @@
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 import { CameraResetButton } from './CameraResetButton';
-import { CarSwitcher, MobileCarSwitcher } from './CarSwitcher';
+import { CarPicker } from './CarPicker';
 import { ColorSwatches, MobileColorButton } from './ColorSwatches';
 import { CarDetailButton } from './CarDetailButton';
 import { HeadlightButton } from './HeadlightButton';
@@ -38,7 +38,7 @@ export function CarControls() {
         {visible && (
           <div className="car-controls-row">
             {manualView && <CameraResetButton />}
-            <MobileCarSwitcher />
+            <CarPicker mobile />
             <div className="car-control-buttons">
               <div className="car-paint-slot" data-fixed-livery={fixedLivery || undefined}>
                 {fixedLivery ? <span className="car-livery">Livery</span> : <MobileColorButton />}
@@ -59,7 +59,7 @@ export function CarControls() {
             "
         >
           <div className="car-controls-row">
-            <CarSwitcher />
+            <CarPicker />
             <CarActionSlot />
             {manualView && <CameraResetButton />}
             <div className="car-paint-slot" data-fixed-livery={fixedLivery || undefined}>

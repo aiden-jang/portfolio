@@ -99,63 +99,24 @@ and clipboard fallback. `useShareFeedback` owns request ordering, feedback timer
 and invalidation when the active story or preview changes. Garage links preserve
 case-study fragments.
 
-`Car` owns asynchronous GLB loading and disposal. Models use meshopt compression,
-auto-fit framing and paint-material detection. Cars with ambiguous material
-layouts can declare an exact `paintMaterial` name; a missing explicit target disables
-paint instead of selecting an unrelated surface. The 917K targets its textured body
-panels so wheel, chassis and trim materials retain their authored colors. The added
-road cars target explicit paint materials. The GT3 RS replaces the standard GT3
-in the picker with a new permanent identity; existing GT3 links keep their car.
-Its textured wrap and carbon remain fixed, with flat aero meshes preserved and
-no authored animation clips. It is loaded only on selection, outside the small
-arrival prefetch pool. The F1-75 replaces the 296 GT3 in the
-picker; both keep permanent registry identities for shared URLs. The selected vecarz
-Aimgain R35 replaces the modified A90 Supra in the picker, with that Supra retained
-for existing links. Titanium Silver is its default body paint; separate wheel/trim
-materials and flat splitter meshes are preserved, and repaint targets only its named body material.
-That body receives lower roughness and a smooth clearcoat for glossy reflections,
-retaining source metalness and maps. Race cars preserve
-flat splitter and floor meshes that could resemble a baked ground plane; both F1
-cars omit synthetic road lights.
-The 296 GT3 declares an orientation offset to normalize its diagonal source pose
-before length fitting and grounding. `modelFinishes` keeps the 296's printed livery
-in front of its coplanar shell and corrects its body/glass metalness for the studio
-lighting without changing textures or wheel finishes. The Aventador's named body
-paint receives a physical clearcoat and lower roughness; its color, texture maps,
-wheel and trim materials remain intact. The other road-car finish profiles target verified body material names, cap base
-roughness at 0.24 and add a smooth clearcoat while preserving sharper authored
-coats, colors, metalness and maps. The GT3 already has sharp paint and retains its
-authored finish. The F1-75 keeps its source racing textures
-while correcting metallic paint, decal, carbon and tire responses for studio lighting.
-The Countach targets `Meshpart19Mtl` for Giallo paint and glossy dielectric
-clearcoat. Its separate `Meshpart2Mtl` rubber loses the export's metallic coat;
-repainting leaves wheels, rubber, trim and glazing untouched. Flat meshes are
-retained, and the selected export supplies no animation clips.
-The A80 Supra, Countach and Aventador remain reachable by existing shared URLs,
-outside the picker. The Corvette TF Sport has a new permanent registry identity,
-a fixed original yellow livery and preserved flat aero meshes. It loads only on
-selection and is excluded from arrival prefetching.
-The M1 Turbo is retired from the picker but remains reachable by existing shared
-URLs. Its original BMW Motorsport livery is fixed, flat aero meshes are retained,
-and it loads only when selected. Its legacy specular/glossiness materials are converted
-to modern specular/IOR PBR while preserving texture pixels and vertex precision.
-`popupHeadlights` samples the
-Miata's authored opening clip between its closed and raised poses; its Lights button
-reverses travel, starts raised on selection and snaps poses for reduced motion.
-The bulb materials emit warm light while raised; lens-mounted point lights follow
-the hinges and replace the Miata’s fixed front lights. Both fade with the opening
-pose. The controller restores cloned bulb materials and removes its lights when
-the model is replaced, alongside releasing animation bindings.
-`carDetails` rotates each F1 model’s existing DRS joint from its resting quaternion;
-these are custom runtime movements, not supplied animation clips. Reduced motion
-snaps DRS poses. `useCarDetails` owns their lifecycle; selection resets detail
-state, and disposal restores the source pose.
-Framing measures actual world-space
-vertices once on load so rotated mesh bounds do not lift cars off the floor. Only
-the default car and the smallest companion warm the HTTP cache when network conditions permit;
-heavier full-detail cars load on selection. `carHelpers` owns geometry,
-material detection and GPU-resource disposal. Scene cleanup releases model resources,
-underglow geometry and textures, and the reflection target and material.
+`Car` owns asynchronous GLB loading and disposal. `carHelpers` handles world-space
+vertex fitting, material detection, baked-plane handling and GPU-resource cleanup.
+`modelFinishes` applies verified, material-specific finish corrections without
+changing geometry or texture detail. Cars with ambiguous paint surfaces declare a
+material name; a missing explicit target disables repainting instead of selecting
+an unrelated surface. Fixed-livery models omit paint actions.
+
+`popupHeadlights` samples the Miata's authored opening clip and keeps its warm bulb
+materials and hinge-mounted lights in sync with the pose. `carDetails` moves each
+F1 model's existing DRS joint; those movements are runtime animations, rather than
+supplied clips. `useCarDetails` resets and disposes these interactions on selection
+changes. Reduced motion snaps detail poses.
+
+The stable car registry and curated picker order are separate. Retired cars retain
+their original IDs, models and credits for existing shared links. The default car
+and the smallest companion warm the HTTP cache when network conditions permit;
+other models load only on selection. Per-model source, licensing, optimization and
+material decisions live in [the model license review](model-licenses.md).
 
 Lighting combines the themed key/fill/rim lights with a locally generated, low-intensity
 studio environment for readable metallic surfaces. Effects bloom in HDR, then apply
@@ -188,24 +149,29 @@ its parent’s lock and returns focus to its trigger when closed.
 
 ## Styles
 
-`index.css` defines the theme, shared foundations and global motion rules. Shared
-panel, corner and control tokens keep utility dialogs consistent. The fixed header
-and sticky project toolbar share their height through `portfolio-header.css`.
-Screenshot-viewer and model-credit layouts live in `ui/screenshot-viewer.css` and
-`ui/sections/credits.css`, including their narrow-phone reflow.
-`ui/dialog-motion.css` gives dialogs a short shared entrance and native backdrop
-fade. Case studies use that entrance only when no native morph is running, so it
-does not replay after a morph finishes. Screenshot images fade in after loading;
-mobile navigation and the header use brief local transitions. Reduced motion removes
-durations and stagger delays, including native backdrops. Pointer-follow controls
-react to preference changes without requiring a reload.
-Component stylesheets own their interface rules. `reading-flow.css` owns reading
-visibility. `reading-layout.css` owns responsive reading adjustments, and
-`browsing-controls.css` owns story scrolling controls. `all-controls.css` styles
-the compact entry to secondary actions and shortcuts.
-`portfolio-surfaces.css` contains cross-section layouts and
-surface refinements. Its rule order preserves the existing responsive cascade.
-Avoid adding new files named after polish passes; change the relevant owner.
+`index.css` owns theme tokens, fonts, base accessibility styles and shared motion.
+Component imports own their layouts and responsive rules; avoid adding a later
+stylesheet to override an earlier styling pass. Paths below are relative to `src/`.
+
+| Owner                                                                            | Responsibility                                              |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `ui/sections/intro.css`, `ui/sections/about.css`, `ui/sections/experience.css`   | Section copy, layout and responsive composition             |
+| `ui/contact.css`                                                                 | Centered Contact composition, email feedback and footer     |
+| `ui/portfolio-header.css`                                                        | Shared header, mobile menu and résumé actions               |
+| `ui/project-gallery.css`                                                         | Project groups, filtering toolbar and preview framing       |
+| `ui/project-preview.css`, `ui/iodine-contributions.css`                          | Screenshot states and contribution walkthrough              |
+| `ui/car-controls.css`, `ui/car-picker.css`, `ui/all-controls.css`                | Stable car dock, native picker and secondary actions        |
+| `ui/car-load-notice.css`, `ui/loading-bar.css`                                   | Model loading and failure feedback                          |
+| `ui/work-modal.css`, `ui/work-story.css`, `ui/scroll-body.css`                   | Case-study shell, content, screenshots and reading controls |
+| `ui/screenshot-viewer.css`, `ui/screenshot-image.css`, `ui/sections/credits.css` | Image inspection, image fallbacks and attribution           |
+| `ui/reading-flow.css`                                                            | Scene and control visibility over reading sections          |
+| `ui/dialog-motion.css`                                                           | Shared dialog entrance and native backdrop motion           |
+
+The fixed header and project toolbar share `--portfolio-header-height`. Case
+studies use the shared entrance only when no native morph is running. Images fade
+in after loading; header and menu transitions remain local. Reduced motion removes
+animation durations and stagger delays, including native backdrops. Pointer-follow
+controls react to preference changes without requiring a reload.
 
 ## Initial HTML and search metadata
 
@@ -244,7 +210,7 @@ Add the compressed model to `public/models/`, a matching JPEG preview to
 Put attribution in `src/data/carCredits.json`. Never reorder registry IDs: numeric
 shared URLs resolve through that registry, including retired cars. `GARAGE_INDICES`
 defines the visible order for the picker, previous/next, number shortcuts, commands,
-randomization and captions. Add the new ID there; removing an ID retires it from
+and randomization. Add the new ID there; removing an ID retires it from
 selection without breaking old links. Keep the default and the explicit prefetch pool lightweight;
 full-detail models load only when selected. Check framing, paint detection, disposal,
 loading failure and attribution before committing. Verify both the publisher license

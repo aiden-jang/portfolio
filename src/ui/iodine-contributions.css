@@ -1,0 +1,109 @@
+.contribution-flow {
+  border-top: 1px solid var(--color-line);
+  margin-top: 16px;
+  font: 12px/1.7 var(--font-mono);
+}
+.contribution-flow summary {
+  cursor: pointer;
+  color: var(--color-fg);
+  padding: 6px 0;
+}
+.contribution-flow ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  padding-left: 24px;
+}
+.contribution-flow li span {
+  display: block;
+  color: var(--color-muted);
+  margin-top: 8px;
+}
+.contribution-flow p {
+  color: var(--color-muted);
+  font-size: 10px;
+}
+@media (max-width: 767px) {
+  .contribution-flow ol {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+.contribution-flow {
+  padding: 16px 24px;
+}
+.contribution-panel {
+  border: 1px solid var(--color-line);
+  background: #151519;
+}
+.contribution-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-line);
+  font: 11px/1.5 var(--font-mono);
+  color: var(--color-muted);
+}
+.contribution-heading a {
+  color: var(--color-fg);
+}
+.contribution-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.contribution-grid > a {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px 24px;
+  text-decoration: none;
+  border-right: 1px solid var(--color-line);
+}
+.contribution-grid > a:last-child {
+  border-right: 0;
+}
+.contribution-grid > a:hover {
+  background: #ffffff05;
+}
+.contribution-number,
+.contribution-label {
+  font: 10px var(--font-mono);
+  color: var(--color-muted);
+}
+.contribution-number {
+  margin-bottom: 18px;
+}
+.contribution-grid strong {
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.contribution-grid a > span:last-child {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--color-muted);
+}
+@media (max-width: 767px) {
+  .contribution-heading {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px;
+  }
+  .contribution-grid {
+    grid-template-columns: 1fr;
+  }
+  .contribution-grid > a {
+    padding: 24px 16px;
+    gap: 10px;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .contribution-grid > a:last-child {
+    border-bottom: 0;
+  }
+  .contribution-number {
+    margin-bottom: 8px;
+  }
+}

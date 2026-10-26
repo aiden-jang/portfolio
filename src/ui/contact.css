@@ -1,4 +1,10 @@
+#sec-contact .panel > * {
+  opacity: 1;
+  transform: none;
+}
 #sec-contact {
+  user-select: text;
+  -webkit-user-select: text;
   position: relative;
   min-height: max(100dvh, 568px);
   align-items: center;

@@ -72,3 +72,4 @@ export function IodineContributions() {
     </div>
   );
 }
+import './iodine-contributions.css';

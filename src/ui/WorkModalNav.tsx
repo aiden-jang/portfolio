@@ -1,6 +1,4 @@
-import type { WorkDetail } from '../types';
 type Props = {
-  item: WorkDetail;
   onPrevious: () => void;
   onNext: () => void;
   position: { current: number; total: number } | null;
@@ -9,8 +7,7 @@ type Props = {
 const stepButton =
   'grid h-11 w-11 md:h-9 md:w-9 place-items-center rounded-full border border-[var(--color-line)] text-[var(--color-muted)] transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]';
 
-export function WorkModalNav({ item, onPrevious, onNext, position }: Props) {
-  const lane = item.mark || item.contribution ? 'Projects' : 'Employer work';
+export function WorkModalNav({ onPrevious, onNext, position }: Props) {
   return (
     <div className="work-modal-nav shrink-0 flex items-center justify-between gap-3 px-5 md:px-7 py-3 border-t border-[var(--color-line)]">
       <div className="flex items-center gap-1">
@@ -46,12 +43,6 @@ export function WorkModalNav({ item, onPrevious, onNext, position }: Props) {
           </>
         )}
       </div>
-      <span className="font-[var(--font-mono)] text-[0.5rem] tracking-[0.1em] uppercase text-[rgba(244,240,255,0.38)] md:hidden">
-        {lane}
-      </span>
-      <span className="font-[var(--font-mono)] text-[0.55rem] tracking-[0.12em] uppercase text-[rgba(244,240,255,0.38)] max-md:hidden">
-        {lane} · ← →
-      </span>
     </div>
   );
 }

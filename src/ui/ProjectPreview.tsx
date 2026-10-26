@@ -4,10 +4,9 @@ import { ScreenshotImage } from './ScreenshotImage';
 import { useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from './ScreenshotViewer';
 import type { PreviewState } from '../data/projectPreviews';
-import './preview-states.css';
+import './project-preview.css';
 import { usePreviewSelection } from './usePreviewSelection';
 import { previewIndex, previewLink } from './previewLinks';
-import './browsing-controls.css';
 
 type Props = { image: string; name: string; caption: string; states?: PreviewState[] };
 
