@@ -4,8 +4,6 @@ import { CARS, GARAGE_INDICES, adjacentCar } from './config';
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
 
-export type { ActiveBodyColor } from './paint';
-
 type Refs = {
   bodyMaterial: ColorMaterial | null;
   bodyOriginalColor: THREE.Color | null;

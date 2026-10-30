@@ -27,7 +27,10 @@ npm run test:browser
 The browser suite builds the application and starts an isolated production preview
 on port 4175. It refuses to reuse another server, so development mode or a stale
 build cannot silently stand in for the current source. CI runs this suite after
-`npm run verify` and installs the browser system dependencies on its runner.
+`npm run verify` and installs the browser system dependencies on its runner. It sets
+`PORTFOLIO_BUILD_READY=1` to test that verified build without building it again.
+The standalone browser command still builds by default. Use the flag locally only
+immediately after a successful verification, with no intervening source changes.
 
 The suite checks desktop and phone layouts in Chromium and WebKit. It exercises
 navigation, screenshot inspection, case studies, credits, keyboard focus and

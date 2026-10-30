@@ -27,3 +27,5 @@ jobs:
       - run: npm run verify
       - run: npx playwright install --with-deps chromium webkit
       - run: npm run test:browser
+        env:
+          PORTFOLIO_BUILD_READY: '1'

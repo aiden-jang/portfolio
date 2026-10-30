@@ -1,5 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
+const preview = 'npm run preview -- --host 127.0.0.1 --port 4175 --strictPort';
+
 export default defineConfig({
   testDir: './e2e',
   workers: 1,
@@ -19,7 +21,7 @@ export default defineConfig({
     { name: 'webkit', use: { browserName: 'webkit' } },
   ],
   webServer: {
-    command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4175 --strictPort',
+    command: process.env.PORTFOLIO_BUILD_READY === '1' ? preview : `npm run build && ${preview}`,
     url: 'http://127.0.0.1:4175',
     reuseExistingServer: false,
     timeout: 120_000,
