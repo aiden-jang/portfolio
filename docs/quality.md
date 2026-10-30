@@ -92,8 +92,8 @@ Generated browser output is ignored by Git and repository source scans.
 Passing automation does not establish visual quality or physical-device behavior.
 Inspect the changed surfaces at desktop, tablet and narrow-phone widths, including
 short viewports. Review readable copy, control targets, fixed navigation, loading
-and failure states, reduced motion and the Contact arrival. Keep useful evidence
-in `art/ui-qa/` and label historical reviews as evidence of their own revision.
+and failure states, reduced motion and the Contact arrival. Keep generated evidence
+in an ignored local output directory and summarize relevant findings in the change description.
 
 WebKit is an engine check; it does not replace testing Safari on a physical iPhone.
 Screen-reader audio, touch gestures and actual device performance still require
@@ -104,7 +104,14 @@ Use the [first-visit walkthrough](visitor-review.md) to observe project discover
 engineering explanations, résumé access and contact on actual phones. Its results
 remain unverified until those sessions happen.
 
-The [October resource and loading review](../art/ui-qa/october-26/resource-review/README.md)
-records decoded-image cleanup, connection-aware optional downloads and production
-shader diagnostics. Its throttled local runs identify remaining startup delays;
-they do not replace physical-phone or field measurements.
+When reviewing loading or GPU changes, use a throttled local preview and inspect
+resource cleanup and shader diagnostics. Local timing does not replace physical-phone
+or field measurements.
+
+## Review artifacts
+
+Keep generated screenshot sets, videos, traces and run reports in ignored
+`test-results/` output or a temporary local directory. CI artifacts should expire.
+Commit authored design references and a small curated set of README images only;
+keep runtime and installation assets separate. Earlier audit records remain in Git
+history. Use synthetic data and remove private information from shared evidence.

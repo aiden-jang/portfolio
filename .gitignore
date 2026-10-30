@@ -28,3 +28,9 @@ npm-debug.log*
 # Browser test output
 playwright-report/
 test-results/
+
+# Generated review output; authored references and curated README images stay tracked.
+/docs/ui-qa/
+/docs/ui-review/
+/art/ui-qa/
+/art/code-audit/

@@ -53,3 +53,5 @@ the scenario they exercise; the source comment scanner excludes test files.
 Do not put live test totals, file lengths or check totals in prose documentation.
 Let the verification tools report them. Documentation should describe the current
 system; Git history records previous implementations.
+
+Keep generated review output out of Git; follow the [artifact policy](docs/quality.md#review-artifacts).

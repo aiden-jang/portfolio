@@ -37,9 +37,9 @@ widths; viewport emulation does not establish physical-phone compatibility.
 - Try car selection, paint, lighting and shared garage URLs in a fresh tab.
 - Check reduced motion, loading failures, attribution and contact actions.
 
-Record relevant evidence and unavailable browser/device checks in the PR. Existing
-captures and review notes live in `art/ui-qa/`; they describe the reviewed revision,
-not an automatic guarantee for later changes.
+Record relevant evidence and unavailable browser/device checks in the change description.
+Keep generated captures local or in temporary CI artifacts; [quality checks](docs/quality.md)
+describes the review workflow.
 
 ## Deployment and search updates
 
