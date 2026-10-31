@@ -1,6 +1,8 @@
+export type EngineeringStepArt = 'browser' | 'worker' | 'accounts' | 'feeds' | 'records' | 'globe';
+
 export type EngineeringStory = {
   summary: string;
-  steps: { title: string; detail: string }[];
+  steps: { title: string; detail: string; art: EngineeringStepArt }[];
   failure: { title: string; detail: string };
   tradeoff: string;
 };
@@ -34,13 +36,19 @@ export const PROJECT_STORIES: Record<string, ProjectStory> = {
     engineering: {
       summary: 'Apps ask Accounts to resolve identity on the server through a versioned client.',
       steps: [
-        { title: 'Browser', detail: 'The HttpOnly session cookie travels with the app request.' },
+        {
+          title: 'Browser',
+          detail: 'The HttpOnly session cookie travels with the app request.',
+          art: 'browser',
+        },
         {
           title: 'App Worker',
+          art: 'worker',
           detail: 'The auth client forwards the cookie to Accounts’ /auth/me endpoint.',
         },
         {
           title: 'Accounts + D1',
+          art: 'accounts',
           detail: 'The service checks the session hash and expiry, then returns the user.',
         },
       ],
@@ -66,15 +74,18 @@ export const PROJECT_STORIES: Record<string, ProjectStory> = {
       steps: [
         {
           title: 'Receive',
+          art: 'feeds',
           detail: 'USGS polling and an EMSC WebSocket report events and revisions.',
         },
         {
           title: 'Match + retain',
+          art: 'records',
           detail:
             'Time, distance and magnitude identify likely matches. Both readings stay attached.',
         },
         {
           title: 'Explore + share',
+          art: 'globe',
           detail: 'The globe shows source details; the URL restores the view and selected event.',
         },
       ],

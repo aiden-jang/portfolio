@@ -155,6 +155,8 @@ keeps its screenshot states and existing preview links available.
 `EngineeringStory` renders the everythingisfine and Accounts flows, failure cases
 and tradeoffs from `projectStories.ts`. These descriptions follow the source
 implementations, and their case studies link to the public repositories.
+`SystemSketch` adds static line illustrations to those same steps. Text carries the
+system behavior; the sketches remain decorative and inherit the reading palette.
 
 Project content lives in `src/data/`. Section components render that data rather
 than owning product descriptions. `Sections` connects case-study selection to

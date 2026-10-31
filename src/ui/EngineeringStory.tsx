@@ -1,5 +1,6 @@
 import type { EngineeringStory as Story } from '../data/projectStories';
 import './engineering-story.css';
+import { SystemSketch } from './SystemSketch';
 
 export function EngineeringStory({ story, id }: { story: Story; id: string }) {
   const caption = `engineering-${id}`;
@@ -14,7 +15,8 @@ export function EngineeringStory({ story, id }: { story: Story; id: string }) {
           {story.steps.map((step, index) => (
             <li key={step.title}>
               <span className="engineering-step" aria-hidden="true">
-                0{index + 1}
+                <SystemSketch kind={step.art} />
+                <span>0{index + 1}</span>
               </span>
               <strong>{step.title}</strong>
               <p>{step.detail}</p>

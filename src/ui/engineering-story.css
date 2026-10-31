@@ -32,10 +32,18 @@
   background: rgb(255 255 255 / 2%);
 }
 .engineering-step {
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: 14px;
   color: var(--color-muted);
   font: 10px/1 var(--font-mono);
+}
+.system-sketch {
+  width: 96px;
+  height: 64px;
+  flex: none;
+  color: var(--color-fg);
 }
 .engineering-flow strong {
   color: var(--color-fg);
