@@ -34,7 +34,7 @@ if (!summary) {
 if (problems.length) {
   console.error('check-tests failed:');
   for (const problem of problems) console.error(`  ${problem}`);
-  if (!summary) console.error(output.trimEnd());
+  console.error(output.trimEnd());
   process.exit(1);
 }
 console.log(`check-tests: ${passed} tests passed, floor ${FLOOR}.`);

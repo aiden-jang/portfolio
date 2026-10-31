@@ -89,7 +89,13 @@ export async function modelFixture(file: string) {
       throw new Error('Unsupported fixture component type');
     const bytes = type === 5126 || type === 5125 ? 4 : 2;
     const stride = view.byteStride ?? compressed?.byteStride ?? width * bytes;
-    return Array.from({ length: accessor.count * width }, (_, i) => {
+    const result =
+      width === 1
+        ? type === 5125
+          ? new Uint32Array(accessor.count)
+          : new Uint16Array(accessor.count)
+        : new Float32Array(accessor.count * width);
+    for (let i = 0; i < result.length; i++) {
       const offset =
         (accessor.byteOffset ?? 0) + Math.floor(i / width) * stride + (i % width) * bytes;
       const value =
@@ -100,8 +106,11 @@ export async function modelFixture(file: string) {
             : type === 5122
               ? reader.getInt16(offset, true)
               : reader.getUint16(offset, true);
-      return accessor.normalized ? Math.max(value / (type === 5122 ? 32767 : 65535), -1) : value;
-    });
+      result[i] = accessor.normalized
+        ? Math.max(value / (type === 5122 ? 32767 : 65535), -1)
+        : value;
+    }
+    return result;
   }
   const materials = data.materials.map((source) => {
     const coat = source.extensions?.KHR_materials_clearcoat;
@@ -133,7 +142,7 @@ export async function modelFixture(file: string) {
         'position',
         new THREE.Float32BufferAttribute(values(primitive.attributes.POSITION, 3), 3),
       );
-      geometry.setIndex(values(primitive.indices, 1));
+      geometry.setIndex(new THREE.BufferAttribute(values(primitive.indices, 1), 1));
       group.add(new THREE.Mesh(geometry, materials[primitive.material]));
     }
     return group;
