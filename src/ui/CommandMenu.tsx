@@ -29,6 +29,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
+      if (event.isComposing || event.keyCode === 229) return;
       if (document.querySelector('[role="dialog"], dialog[open]') && !dialogRef.current) return;
       const target = event.target as HTMLElement | null;
       const inField =
@@ -68,8 +69,6 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
     await command.run();
   };
 
-  // `aria-hidden` alone does not keep an input out of the tab order in every browser, so the
-  // dialog has to leave the tree entirely while closed.
   if (!open) return null;
 
   return createPortal(
@@ -92,6 +91,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
+              if (event.nativeEvent.isComposing || event.keyCode === 229) return;
               if (event.key === 'ArrowDown' && results.length) {
                 event.preventDefault();
                 setActiveIndex((index) => (index + 1) % results.length);

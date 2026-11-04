@@ -32,6 +32,11 @@ build cannot silently stand in for the current source. CI runs this suite after
 The standalone browser command still builds by default. Use the flag locally only
 immediately after a successful verification, with no intervening source changes.
 
+CI pins Ubuntu 24.04 to keep browser system dependencies stable across runner-image migrations.
+
+Control search leaves IME composition keys to the input. Enter executes a command
+only after text composition has finished; ordinary keyboard navigation remains available.
+
 The suite checks desktop and phone layouts in Chromium and WebKit. It exercises
 navigation, screenshot inspection, case studies, credits, keyboard focus and
 scroll restoration, cold shared links, and a delayed effects download. Phone
