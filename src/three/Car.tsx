@@ -10,6 +10,7 @@ import { useCarDetails } from './useCarDetails';
 import { createPopupHeadlights } from './popupHeadlights';
 import { prepareModelFinish } from './modelFinishes';
 import { canPrefetchModels } from './modelPrefetch';
+import { loadCarModel } from './loadCarModel';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import {
@@ -88,11 +89,11 @@ export function Car() {
     setCarLoading(true);
     useAppStore.getState().setCarLoadError(null);
     let cancelled = false;
+    const controller = new AbortController();
     let prefetchTimer = 0;
     let readyFrame = 0;
 
-    loader.load(
-      `/models/${spec.file}`,
+    void loadCarModel(loader, `/models/${spec.file}`, controller.signal).then(
       (gltf) => {
         if (cancelled) {
           disposeModel(gltf.scene);
@@ -158,13 +159,15 @@ export function Car() {
             for (const i of PREFETCH_MODEL_INDICES) {
               const a = CARS[i];
               if (a && a.file !== spec.file) {
-                fetch(`/models/${a.file}`, { priority: 'low' } as RequestInit).catch(() => {});
+                fetch(`/models/${a.file}`, {
+                  priority: 'low',
+                  signal: controller.signal,
+                } as RequestInit).catch(() => {});
               }
             }
           }, 1500);
         }
       },
-      undefined,
       (err) => {
         if (cancelled) return;
         setCarLoading(false);
@@ -178,6 +181,7 @@ export function Car() {
 
     return () => {
       cancelled = true;
+      controller.abort();
       window.clearTimeout(prefetchTimer);
       cancelAnimationFrame(readyFrame);
       setCarLoading(false);

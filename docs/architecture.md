@@ -109,6 +109,8 @@ case-study fragments.
 
 `Car` owns asynchronous GLB loading and disposal. `carHelpers` handles world-space
 vertex fitting, material detection, baked-plane handling and resource cleanup.
+`loadCarModel` aborts superseded downloads before decoding while passing the original bytes to
+the same GLTF/Meshopt loader. Scene cleanup also cancels optional cache-warming downloads.
 Retired models release shared geometry, materials, textures and decoded image
 bitmaps once each; GPU texture disposal alone does not release decoded images.
 `modelFinishes` applies verified, material-specific finish corrections without
