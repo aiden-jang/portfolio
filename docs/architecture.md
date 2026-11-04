@@ -111,6 +111,8 @@ case-study fragments.
 vertex fitting, material detection, baked-plane handling and resource cleanup.
 `loadCarModel` aborts superseded downloads before decoding while passing the original bytes to
 the same GLTF/Meshopt loader. Scene cleanup also cancels optional cache-warming downloads.
+The selected download stays in Three's loading manager through decoding, with balanced completion
+on success, failure or cancellation, so the loading banner remains accurate.
 Retired models release shared geometry, materials, textures and decoded image
 bitmaps once each; GPU texture disposal alone does not release decoded images.
 `modelFinishes` applies verified, material-specific finish corrections without
