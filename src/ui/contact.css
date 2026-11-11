@@ -94,9 +94,17 @@
   inset-inline: 5vw;
   bottom: max(24px, env(safe-area-inset-bottom));
   pointer-events: auto;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0 12px;
 }
-.contact-credits {
+.contact-policy-links {
+  display: flex;
+  flex-wrap: wrap;
+}
+:is(.contact-credits, .contact-policy-links a) {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -105,6 +113,10 @@
   color: #b9b9c0;
   font: 12px/1.5 var(--font-display);
   border-radius: var(--radius-control);
+}
+.contact-policy-links a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 #sec-contact :is(a, button) {
   transition:
