@@ -8,13 +8,13 @@ export const THEMES: Record<ThemeName, Theme> = {
     fogFar: 80,
     ambient: { color: 0xfff4e8, intensity: 0.35 },
     hemi: { sky: 0xfff2e0, ground: 0x1c1612, intensity: 0.55 },
-    key: { color: 0xfff0d8, intensity: 1.8 },
-    fill: { color: 0xb8cce8, intensity: 0.55 },
+    key: { color: 0xfff0d8, intensity: 1.55 },
+    fill: { color: 0xb8cce8, intensity: 0.62 },
     rim: { color: 0xffd8b0, intensity: 0.7 },
-    reflectorColor: 0x707080,
+    reflectorColor: 0x565662,
     underglow: 0xff5a1c,
-    bloomStrength: 0.28,
-    bloomThreshold: 0.95,
+    bloomStrength: 0.17,
+    bloomThreshold: 1.05,
     exposure: 1.0,
   },
   night: {
@@ -42,16 +42,18 @@ export const PREFETCH_MODEL_INDICES = [0, 1] as const;
 
 export const KEYFRAMES: Keyframe[] = [
   { azimuth: 0.65, elevation: 0.22, distance: 9.5, targetY: 0.7 }, // intro:      front 3/4
+  { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // selected work: rear
   { azimuth: 1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // experience: side (right)
-  { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // work:       rear
+  { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // more projects: rear
   { azimuth: -1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // about:      side (left)
   { azimuth: 0, elevation: 0.62, distance: 9, targetY: 0.7 }, // contact:    elevated front
 ];
 
 export const SECTION_IDS = [
   'sec-intro',
-  'sec-experience',
   'sec-work',
+  'sec-experience',
+  'sec-more-work',
   'sec-about',
   'sec-contact',
 ] as const;
@@ -61,6 +63,7 @@ export const SECTION_LABELS: Record<SectionId, string> = {
   'sec-intro': 'Intro',
   'sec-experience': 'Experience',
   'sec-work': 'Projects',
+  'sec-more-work': 'More projects',
   'sec-about': 'About',
   'sec-contact': 'Contact',
 };

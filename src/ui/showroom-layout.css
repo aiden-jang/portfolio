@@ -10,7 +10,7 @@ html:root .portfolio-header {
   padding-inline: var(--portfolio-gutter);
 }
 
-html:root :is(#sec-intro, #sec-experience, #sec-work, #sec-about) {
+html:root :is(#sec-intro, #sec-experience, #sec-work, #sec-more-work, #sec-about) {
   padding-inline: var(--portfolio-gutter);
 }
 
@@ -21,11 +21,11 @@ html:root :is(.garage-intro, .garage-work, #sec-experience .panel, .about-copy) 
 }
 
 html:root #sec-intro {
-  padding-top: max(112px, 14vh);
+  padding-top: max(112px, 12.8vh);
 }
 
 html:root .garage-intro h1 {
-  font-size: clamp(72px, 10.5vw, 152px);
+  font-size: clamp(72px, 8.9vw, 128px);
   letter-spacing: -0.04em;
   font-weight: 500;
 }
@@ -97,11 +97,11 @@ html:root :is(a, button, summary, select) {
   }
 
   html:root #sec-intro {
-    padding-top: max(112px, 14vh);
+    padding-top: max(112px, 12.8vh);
   }
 
   html:root .garage-intro h1 {
-    font-size: clamp(48px, 15vw, 72px);
+    font-size: clamp(48px, 14.4vw, 56px);
   }
 
   html:root .garage-intro p {
@@ -123,5 +123,44 @@ html:root :is(a, button, summary, select) {
 
   html:root .car-option-name {
     font-size: 12px;
+  }
+}
+
+html:root .garage-intro .intro-role {
+  color: var(--color-fg);
+  margin-top: 26px;
+}
+html:root .garage-intro .intro-role + p {
+  margin-top: 4px;
+  color: #b9b9c1;
+}
+@media (max-width: 767px) {
+  html:root #sec-intro {
+    padding-top: 124px;
+  }
+  html:root .garage-intro .intro-role {
+    margin-top: 22px;
+  }
+}
+@media (max-width: 767px) and (max-height: 740px) {
+  html:root #sec-intro {
+    padding-top: 104px;
+  }
+  html:root .garage-intro p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  html:root .garage-intro .intro-role {
+    margin-top: 12px;
+  }
+}
+@media (min-width: 768px) and (max-height: 800px) {
+  html:root #sec-intro {
+    padding-top: 110px;
+  }
+}
+@media (min-width: 768px) and (max-height: 500px) {
+  html:root .garage-intro h1 {
+    font-size: 64px;
   }
 }

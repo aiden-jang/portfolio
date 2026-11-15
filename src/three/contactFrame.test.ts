@@ -6,9 +6,9 @@ import { framingDistanceMultiplier, orbitPosition } from './cameraPose';
 
 function cameraAt(distance: number, aspect: number) {
   const camera = new PerspectiveCamera(35, aspect, 0.1, 200);
-  const pose = orbitPosition(0, KEYFRAMES[4].elevation, distance, KEYFRAMES[4].targetY);
+  const pose = orbitPosition(0, KEYFRAMES.at(-1)!.elevation, distance, KEYFRAMES.at(-1)!.targetY);
   camera.position.set(pose.x, pose.y, pose.z);
-  camera.lookAt(0, KEYFRAMES[4].targetY, 0);
+  camera.lookAt(0, KEYFRAMES.at(-1)!.targetY, 0);
   camera.updateMatrixWorld();
   return camera;
 }
@@ -30,7 +30,7 @@ describe('Contact composition', () => {
     it(`matches the approved section framing at ${width} × ${height} while scrolling`, () => {
       const desktop = width >= 900;
       const stageDistance =
-        KEYFRAMES[4].distance *
+        KEYFRAMES.at(-1)!.distance *
         framingDistanceMultiplier(width / sectionHeight) *
         (desktop ? 1 : 1.08);
       const reference = cameraAt(stageDistance, width / sectionHeight);
@@ -46,7 +46,7 @@ describe('Contact composition', () => {
       for (const sectionTop of [160, 0, -120]) {
         const view = contactFrame({ width, height, sectionHeight, sectionTop, progress: 1 });
         const actual = cameraAt(
-          KEYFRAMES[4].distance *
+          KEYFRAMES.at(-1)!.distance *
             framingDistanceMultiplier(width / height) *
             view.distanceMultiplier,
           width / height,

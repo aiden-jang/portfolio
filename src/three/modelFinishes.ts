@@ -43,7 +43,7 @@ function prepareGlossPaint(
   materialName: string,
   roughness: number,
   coatRoughness: number,
-  preserveSharper = false,
+  preserveSource: 'none' | 'coat' | 'both' = 'none',
 ): void {
   const replacements = new Map<MeshStandardMaterial, MeshPhysicalMaterial>();
   model.traverse((object) => {
@@ -57,9 +57,10 @@ function prepareGlossPaint(
       // Copy the standard surface without overwriting the physical material's coat defaults.
       if (finish !== material) MeshStandardMaterial.prototype.copy.call(finish, material);
       finish.defines.PHYSICAL = '';
-      finish.roughness = preserveSharper ? Math.min(finish.roughness, roughness) : roughness;
+      finish.roughness =
+        preserveSource === 'both' ? Math.min(finish.roughness, roughness) : roughness;
       finish.clearcoatRoughness =
-        preserveSharper && finish.clearcoat > 0
+        preserveSource !== 'none' && finish.clearcoat > 0
           ? Math.min(finish.clearcoatRoughness, coatRoughness)
           : coatRoughness;
       finish.clearcoat = 1;
@@ -96,9 +97,11 @@ function prepareCountachFinish(model: Object3D): void {
 }
 
 export function prepareModelFinish(model: Object3D, file: string): void {
+  if (file === 'ferrari-f120-f40.glb')
+    return prepareGlossPaint(model, roadPaint[file], 0.26, 0.06, 'coat');
   if (file === 'lamborghini-countach-5000qv.glb') return prepareCountachFinish(model);
   if (Object.hasOwn(roadPaint, file))
-    return prepareGlossPaint(model, roadPaint[file], 0.24, 0.06, true);
+    return prepareGlossPaint(model, roadPaint[file], 0.24, 0.06, 'both');
   if (file === 'ferrari-f1-75.glb') return prepareFerrariF1Finish(model);
   if (file === 'lamborghini-aventador.glb')
     return prepareGlossPaint(model, 'RED_PAINT', 0.23, 0.08);

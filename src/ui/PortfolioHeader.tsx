@@ -19,7 +19,7 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
   }, []);
   return (
     <div
-      className={`portfolio-header ${active > 0 && active < 4 ? 'portfolio-header-reading' : ''}`}
+      className={`portfolio-header ${active > 0 && active < SECTION_IDS.length - 1 ? 'portfolio-header-reading' : ''}`}
     >
       <Brand onHome={() => onLink('sec-intro')} />
       <Nav onLink={onLink} />

@@ -38,7 +38,7 @@ it('restores the viewport projection when Contact leaves the screen', async () =
   const root = createRoot(host);
   try {
     await act(() => root.render(createElement(Probe)));
-    applyArrival({ ...KEYFRAMES[4] }, 0, true);
+    applyArrival({ ...KEYFRAMES.at(-1)! }, 0, true);
     expect(camera.view?.enabled).toBe(true);
     expect(camera.aspect).toBeCloseTo(320 / 820);
 
@@ -68,10 +68,10 @@ it('updates the viewport crop when a short phone resizes inside the same tall se
   const root = createRoot(host);
   try {
     await act(() => root.render(createElement(Probe)));
-    applyArrival({ ...KEYFRAMES[4] }, 0, true);
+    applyArrival({ ...KEYFRAMES.at(-1)! }, 0, true);
     expect(camera.view?.height).toBe(740);
     size.height = 568;
-    applyArrival({ ...KEYFRAMES[4] }, 0, true);
+    applyArrival({ ...KEYFRAMES.at(-1)! }, 0, true);
     expect(camera.view?.height).toBe(568);
     expect(camera.view?.fullHeight).toBe(820);
   } finally {

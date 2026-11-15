@@ -156,7 +156,7 @@ for (const width of [1440, 390]) {
               .map((option) => option.id),
           ),
         )
-        .toEqual(['command-sec-experience']);
+        .toEqual(['command-sec-work']);
       for (const index of GARAGE_INDICES.slice(9)) {
         await expect(page.locator(`#command-car-${index}`)).toContainText('select');
       }
@@ -167,7 +167,7 @@ for (const width of [1440, 390]) {
         await page.locator('.portfolio-menu summary').click();
         await page
           .getByRole('navigation', { name: 'Mobile navigation' })
-          .getByRole('link', { name: 'Projects' })
+          .getByRole('link', { name: 'Projects', exact: true })
           .click();
       } else {
         await page.locator('#nav').getByRole('link', { name: 'Projects', exact: true }).click();

@@ -1,5 +1,5 @@
 html:root :is(#sec-experience, #sec-about) {
-  padding-block: 112px;
+  padding-block: 100px;
 }
 
 html:root :is(#sec-experience, #sec-about) h2 {
@@ -32,12 +32,12 @@ html:root #sec-experience .panel > p {
 
 html:root .experience-outcome {
   padding-block: 24px;
-  grid-template-columns: 140px minmax(0, 1fr) 18px;
+  grid-template-columns: 145px minmax(0, 1fr) 18px;
   gap: 24px;
 }
 
 html:root .experience-figure strong {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
@@ -57,25 +57,6 @@ html:root .experience-story span {
   font-size: 14px;
   line-height: 1.65;
   max-width: 60ch;
-}
-
-html:root .experience-open-source {
-  grid-template-columns: 96px minmax(0, 1fr);
-  gap: 10px 20px;
-}
-
-html:root .experience-open-source > span:first-child {
-  font: 12px/1.5 var(--font-display);
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-html:root .experience-open-source strong {
-  font-size: 16px;
-}
-
-html:root .experience-open-source > span:last-child {
-  font-size: 14px;
 }
 
 html:root .about-copy :is(p, dd) {
@@ -127,32 +108,42 @@ html:root .engineering-flow li {
 
 @media (min-width: 1024px) {
   html:root #sec-experience .panel {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
-    column-gap: 72px;
+    grid-template-columns: minmax(0, 350px) minmax(0, 1fr);
+    column-gap: 80px;
   }
 
   html:root #sec-experience .panel > h2 {
+    grid-column: 1 / -1;
     grid-row: 1;
+    margin-bottom: 44px;
+  }
+
+  html:root #sec-experience .panel > ul {
+    grid-column: 1;
+    grid-row: 2 / span 2;
+    margin-top: 0;
   }
 
   html:root #sec-experience .panel > p {
-    grid-row: 1;
-    align-self: center;
-  }
-
-  html:root #sec-experience .panel > ul,
-  html:root #sec-experience .panel > div {
+    grid-column: 2;
     grid-row: 2;
-    margin-top: 28px;
+    margin: 0 0 15px;
   }
 
-  html:root #sec-experience :is(.experience-more, .experience-open-source) {
+  html:root #sec-experience .panel > div {
+    grid-column: 2;
     grid-row: 3;
+    margin: 0;
+  }
+
+  html:root #sec-experience .experience-more {
+    grid-column: 2;
+    grid-row: 4;
   }
 
   html:root #sec-about .about-copy {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
-    gap: 24px 72px;
+    grid-template-columns: minmax(0, 350px) minmax(0, 1fr);
+    gap: 24px 80px;
   }
 
   html:root .about-copy h2 {
@@ -180,7 +171,7 @@ html:root .engineering-flow li {
 
 @media (max-width: 767px) {
   html:root :is(#sec-experience, #sec-about) {
-    padding-block: 116px 88px;
+    padding-block: 108px 70px;
   }
 
   html:root #sec-experience .panel > p {

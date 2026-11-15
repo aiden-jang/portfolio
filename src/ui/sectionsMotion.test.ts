@@ -13,6 +13,7 @@ vi.mock('./sections/Experience', () => ({ ExperienceSection: () => null }));
 vi.mock('./sections/About', () => ({ AboutSection: () => null }));
 vi.mock('./sections/Contact', () => ({ ContactSection: () => null }));
 vi.mock('./sections/Work', () => ({
+  MoreProjectsSection: () => null,
   WorkSection: ({ onOpen }: { onOpen: (item: WorkDetail, el: HTMLElement) => void }) =>
     createElement(
       'button',

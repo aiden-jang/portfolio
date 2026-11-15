@@ -11,7 +11,7 @@ with an interactive 3D garage. Built with React, TypeScript and Three.js.
 
 - Orbit the car, browse models, change paint and lighting, and share a setup.
 - Read experience and project case studies in a continuous page.
-- Filter projects and inspect original screenshots without leaving the portfolio.
+- Explore featured projects and inspect original screenshots without leaving the portfolio.
 - Reach Contact with the car’s front-to-overhead camera arrival.
 
 Car controls appear only when Intro fills the viewport. The Contact car is a

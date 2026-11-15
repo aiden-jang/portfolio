@@ -1,7 +1,7 @@
 import { LoadingBar } from '../ui/LoadingBar';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
-import { THEMES } from '../config';
+import { SECTION_IDS, THEMES } from '../config';
 import { Car } from './Car';
 import { CameraRig } from './CameraRig';
 import { lazy, Suspense } from 'react';
@@ -27,7 +27,9 @@ export function Scene({ getScrollT }: Props) {
       <Canvas
         aria-hidden="true"
         frameloop={
-          paused || !active || (sectionIndex > 0 && sectionIndex < 4 && !contactVisible)
+          paused ||
+          !active ||
+          (sectionIndex > 0 && sectionIndex < SECTION_IDS.length - 1 && !contactVisible)
             ? 'demand'
             : 'always'
         }

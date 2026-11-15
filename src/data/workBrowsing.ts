@@ -9,9 +9,9 @@ const PROJECT_ORDER = [
   'worth',
   'bloomnote',
   'owewell',
-  'platform',
   'iguess',
   'wherever',
+  'platform',
 ];
 
 export function isPortfolioProject(item: WorkDetail): boolean {

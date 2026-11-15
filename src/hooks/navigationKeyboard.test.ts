@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, expect, it, vi } from 'vitest';
-import { GARAGE_INDICES } from '../config';
+import { GARAGE_INDICES, SECTION_IDS } from '../config';
 import { handleNavigationKey } from './navigationKeyboard';
 import { useAppStore } from '../store';
 
@@ -15,7 +15,8 @@ const actions = () => ({ goToSection: vi.fn(), nextCar: vi.fn(), previousCar: vi
 it('preserves native reading keys in projects and keyboard input in controls', () => {
   const navigation = actions();
   const reading = new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true });
-  handleNavigationKey(reading, 2, navigation);
+  for (const id of ['sec-work', 'sec-more-work'] as const)
+    handleNavigationKey(reading, SECTION_IDS.indexOf(id), navigation);
   expect(reading.defaultPrevented).toBe(false);
   expect(navigation.goToSection).not.toHaveBeenCalled();
   const button = document.createElement('button');
@@ -27,8 +28,8 @@ it('preserves native reading keys in projects and keyboard input in controls', (
 
 it('routes section and car keys independently and blocks numbered selection while loading', () => {
   const navigation = actions();
-  handleNavigationKey(new KeyboardEvent('keydown', { key: 'ArrowDown' }), 1, navigation);
-  expect(navigation.goToSection).toHaveBeenCalledWith(2);
+  handleNavigationKey(new KeyboardEvent('keydown', { key: 'ArrowDown' }), 0, navigation);
+  expect(navigation.goToSection).toHaveBeenCalledWith(1);
   handleNavigationKey(new KeyboardEvent('keydown', { key: 'ArrowLeft' }), 0, navigation);
   expect(navigation.previousCar).toHaveBeenCalledOnce();
   useAppStore.setState({ carIndex: 0, isCarLoading: true });

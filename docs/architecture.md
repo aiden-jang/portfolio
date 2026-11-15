@@ -33,11 +33,10 @@ section to change.
 
 Contact makes the email address its main link, with an adjacent copy action and
 secondary social links. Model credits open from the section footer. `ui/contact.css`
-owns this layout and its feedback spacing. Copy is centered over the car on desktop
-and phones, with a soft radial scrim keeping the text readable over reflections.
-Symmetric section padding keeps it centered while clearing the header and credits;
-short phones bring the car closer so its silhouette surrounds the copy. The
-arrival and reversal use the same progress.
+owns this layout and its feedback spacing. Copy sits to the left of the fixed car
+on desktop, and above it on phones. The phone section leaves room for both the
+contact actions and the car before the credits. The arrival and reversal use the
+same progress.
 The camera projection follows Contact's document position while neighboring
 sections share the viewport, then clears its offset outside Contact. This keeps
 the previous reading surface from cutting through the car during a transition.
@@ -49,7 +48,7 @@ label, icon, loading and feedback changes do not move neighboring controls.
 The picker, paint, lighting and details share one panel with consistent control
 corners and utility type. Phone controls occupy a second row inside that panel;
 picker text truncates within fixed-height rows. The floating duplicate car caption
-is omitted. Header actions and project selectors share the same control tokens.
+is omitted. Header actions and garage controls share the same control tokens.
 Reading sections use content-led heights, matching heading sizes and clearer
 metadata; the default project list avoids repeating an ownership label on every card.
 
@@ -153,8 +152,8 @@ to derive visibility from actual section positions.
 
 ## Projects and dialogs
 
-The featured projects are everythingisfine, mrrp and worth. Other products and
-contributions remain in the compact gallery. Moving a project between these groups
+The featured projects are everythingisfine and Iodine, immediately after the
+showroom. Experience separates them from the supporting collection. Moving a project between these groups
 keeps its screenshot states and existing preview links available.
 `EngineeringStory` renders the everythingisfine and Accounts flows, failure cases
 and tradeoffs from `projectStories.ts`. These descriptions follow the source
@@ -185,8 +184,8 @@ stylesheet to override an earlier styling pass. Paths below are relative to `src
 | `ui/sections/intro.css`, `ui/sections/about.css`, `ui/sections/experience.css`   | Section copy, layout and responsive composition             |
 | `ui/contact.css`                                                                 | Centered Contact composition, email feedback and footer     |
 | `ui/portfolio-header.css`                                                        | Shared header, mobile menu and résumé actions               |
-| `ui/project-gallery.css`                                                         | Project groups, filtering toolbar and preview framing       |
-| `ui/project-preview.css`, `ui/iodine-contributions.css`                          | Screenshot states and contribution walkthrough              |
+| `ui/project-gallery.css`                                                         | Project groups, preview framing and screenshot actions      |
+| `ui/project-preview.css`                                                         | Screenshot states and sharing                               |
 | `ui/car-controls.css`, `ui/car-picker.css`, `ui/all-controls.css`                | Stable car dock, native picker and secondary actions        |
 | `ui/car-load-notice.css`, `ui/loading-bar.css`                                   | Model loading and failure feedback                          |
 | `ui/work-modal.css`, `ui/work-story.css`, `ui/scroll-body.css`                   | Case-study shell, content, screenshots and reading controls |
@@ -195,7 +194,7 @@ stylesheet to override an earlier styling pass. Paths below are relative to `src
 | `ui/reading-flow.css`                                                            | Scene and control visibility over reading sections          |
 | `ui/dialog-motion.css`                                                           | Shared dialog entrance and native backdrop motion           |
 
-The fixed header and project toolbar share `--portfolio-header-height`. Case
+Section and project anchors clear the fixed header using `--portfolio-header-height`. Case
 studies use the shared entrance only when no native morph is running. Images fade
 in after loading; header and menu transitions remain local. Reduced motion removes
 animation durations and stagger delays, including native backdrops. Pointer-follow

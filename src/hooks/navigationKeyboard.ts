@@ -20,7 +20,8 @@ export function handleNavigationKey(
     !!target?.isContentEditable ||
     !!target?.closest('button, a, summary, select');
   const readingProjects =
-    (sectionIndex === 2 || target?.closest('.garage-project-list')) &&
+    (['sec-work', 'sec-more-work'].includes(SECTION_IDS[sectionIndex]) ||
+      target?.closest('.garage-project-list')) &&
     ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(e.key);
   if (inField || readingProjects) return;
   if (/^[1-9]$/.test(e.key)) {

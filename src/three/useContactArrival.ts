@@ -21,7 +21,7 @@ export function useContactArrival() {
       return;
     }
     state.progress = contactArrivalProgress(contact.top, size.height, state.progress, dt, reduced);
-    Object.assign(pose, KEYFRAMES[4]);
+    Object.assign(pose, KEYFRAMES.at(-1)!);
     const t = easeOutCubic(state.progress);
     const view = contactFrame({
       ...size,

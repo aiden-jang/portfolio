@@ -30,6 +30,6 @@ describe('case study browsing', () => {
       visibleProjects('all')
         .filter((item) => !FEATURED_PROJECTS.includes(item.shortName!))
         .map((item) => item.shortName),
-    ).toEqual(['mrrp', 'worth', 'bloomnote', 'owewell', 'platform', 'iguess', 'wherever']);
+    ).toEqual(['mrrp', 'worth', 'bloomnote', 'owewell', 'iguess', 'wherever', 'platform']);
   });
 });

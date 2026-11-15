@@ -126,7 +126,9 @@ export function useNavigation(sceneOnly = false) {
       setSectionIndex(idx);
     };
 
-    const restoreSectionLink = () => {
+    const restoreSectionLink = (event?: HashChangeEvent) => {
+      // A case-study close restores its saved reading position through browser history.
+      if (event?.oldURL && new URL(event.oldURL).hash.startsWith('#work/')) return;
       const index = SECTION_IDS.indexOf(window.location.hash.slice(1) as SectionId);
       if (index < 0) return;
       const section = document.getElementById(SECTION_IDS[index]);

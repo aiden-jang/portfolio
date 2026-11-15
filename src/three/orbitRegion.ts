@@ -1,3 +1,5 @@
+import { SECTION_IDS } from '../config';
+
 export type SectionBounds = { id: string; top: number; bottom: number };
 
 function sectionAt(y: number, sections: SectionBounds[]): string | undefined {
@@ -24,7 +26,7 @@ export function hasFullIntroView(height: number, sections: SectionBounds[]): boo
 }
 
 export function pageSectionBounds(): SectionBounds[] {
-  return ['sec-intro', 'sec-experience', 'sec-work', 'sec-about', 'sec-contact'].flatMap((id) => {
+  return SECTION_IDS.flatMap((id) => {
     const element = document.getElementById(id);
     if (!element) return [];
     const { top, bottom } = element.getBoundingClientRect();

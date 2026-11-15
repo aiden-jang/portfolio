@@ -81,5 +81,8 @@ hierarchy; they do not replace the portfolio's identity.
 ## Current Direction
 
 The car-led showroom and project presentation polish have been applied. Keep the
-approved `art/ui-mocks/showroom-refinement/` reference as the design record. No new
-metrics, testimonials or hiring claims have been provided.
+car centered with its full orbit area. The page leads from the showroom into
+everythingisfine and Iodine, then Experience, the supporting collection, About and
+Contact. Featured images fill the content width on desktop and lead the project
+copy on phones. Supporting preview frames share a 2:1 ratio. No new metrics,
+testimonials or hiring claims have been provided.

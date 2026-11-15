@@ -116,20 +116,6 @@ export function ExperienceSection({ onOpen }: Props) {
             <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
           ))}
         </details>
-        <button
-          type="button"
-          className="experience-open-source"
-          onClick={(event) =>
-            onOpen(
-              WORK_ITEMS.find((item) => item.contribution)!,
-              event.currentTarget,
-            )
-          }
-        >
-          <span>Open source</span>
-          <strong>iodine</strong>
-          <span>Agent approvals, local embeddings and undo ↗</span>
-        </button>
       </div>
     </Section>
   );
