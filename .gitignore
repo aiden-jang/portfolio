@@ -34,3 +34,7 @@ test-results/
 /docs/ui-review/
 /art/ui-qa/
 /art/code-audit/
+
+# Generated design comparison and review artifacts
+.impeccable/mocks/
+.impeccable/review/
