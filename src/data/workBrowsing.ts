@@ -2,11 +2,12 @@ import { WORK_ITEMS } from './workItems';
 import type { WorkDetail } from '../types';
 
 export type ProjectFilter = 'all' | 'realtime' | 'ai' | 'social' | 'systems';
-export const FEATURED_PROJECTS = ['everythingisfine', 'mrrp', 'worth'];
+export const FEATURED_PROJECTS = ['everythingisfine', 'iodine'];
 const PROJECT_ORDER = [
   ...FEATURED_PROJECTS,
+  'mrrp',
+  'worth',
   'bloomnote',
-  'iodine',
   'owewell',
   'platform',
   'iguess',

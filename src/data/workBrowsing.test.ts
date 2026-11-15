@@ -11,7 +11,7 @@ describe('case study browsing', () => {
   it('keeps a filtered case study in the visible project lane', () => {
     const lane = visibleProjects('ai');
     expect(caseStudyLane(lane[0], 'ai')).toEqual(lane);
-    expect(lane.map((item) => item.shortName)).toEqual(['bloomnote', 'iodine', 'iguess']);
+    expect(lane.map((item) => item.shortName)).toEqual(['iodine', 'bloomnote', 'iguess']);
   });
   it('lets a direct link outside the filter browse all projects', () => {
     const worth = WORK_ITEMS.find((item) => item.mark === 'worth')!;
@@ -24,12 +24,12 @@ describe('case study browsing', () => {
     expect(lane.every((item) => !isPortfolioProject(item))).toBe(true);
     expect(lane.some((item) => item.contribution)).toBe(false);
   });
-  it('gives three projects the spotlight while keeping the rest available in the gallery', () => {
-    expect(FEATURED_PROJECTS).toEqual(['everythingisfine', 'mrrp', 'worth']);
+  it('leads with everythingisfine and iodine while keeping the other projects in order', () => {
+    expect(FEATURED_PROJECTS).toEqual(['everythingisfine', 'iodine']);
     expect(
       visibleProjects('all')
         .filter((item) => !FEATURED_PROJECTS.includes(item.shortName!))
         .map((item) => item.shortName),
-    ).toEqual(['bloomnote', 'iodine', 'owewell', 'platform', 'iguess', 'wherever']);
+    ).toEqual(['mrrp', 'worth', 'bloomnote', 'owewell', 'platform', 'iguess', 'wherever']);
   });
 });
