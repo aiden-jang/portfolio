@@ -13,30 +13,31 @@ export function ContactSection() {
   return (
     <Section id="sec-contact" side="center">
       <div className={PANEL_BASE}>
-        <h2 className={H2}>Let’s talk.</h2>
-        <p className={`${P_LI} mx-auto mt-3 max-w-[30ch]`}>
-          Have a role, project or question in mind?
-        </p>
-        <EmailActions />
-        <div className="contact-social-links">
-          {SOCIAL_LINKS.map(({ label, url }) => (
-            <a
-              key={url}
-              href={url}
-              target="_blank"
-              aria-describedby="external-link-hint"
-              rel="noopener"
-            >
-              {label} <span aria-hidden="true">↗</span>
-            </a>
-          ))}
+        <div className="contact-copy-block">
+          <h2 className={H2}>Let’s talk.</h2>
+          <p className={`${P_LI} mx-auto mt-3 max-w-[30ch]`}>
+            Have a role, project or question in mind?
+          </p>
+          <EmailActions />
+          <div className="contact-social-links">
+            {SOCIAL_LINKS.map(({ label, url }) => (
+              <a
+                key={url}
+                href={url}
+                target="_blank"
+                aria-describedby="external-link-hint"
+                rel="noopener"
+              >
+                {label} <span aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
       <footer className="contact-footer">
         <Credits />
         <nav className="contact-policy-links" aria-label="Legal">
           <a href="https://accounts.aidenjang.com/privacy#legal-cookies-and-analytics">Privacy</a>
-          <a href="https://accounts.aidenjang.com/terms">Terms</a>
         </nav>
       </footer>
     </Section>

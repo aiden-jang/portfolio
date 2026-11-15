@@ -1,0 +1,33 @@
+import { framingDistanceMultiplier } from './cameraPose';
+
+type ContactFrameInput = {
+  width: number;
+  height: number;
+  sectionHeight: number;
+  sectionTop: number;
+  progress: number;
+};
+
+export function contactFrame({
+  width,
+  height,
+  sectionHeight,
+  sectionTop,
+  progress,
+}: ContactFrameInput) {
+  const desktop = width >= 900;
+  const fullHeight = Math.max(1, sectionHeight);
+  const distanceMultiplier =
+    framingDistanceMultiplier(width / fullHeight) /
+    framingDistanceMultiplier(width / Math.max(1, height));
+
+  return {
+    fullWidth: width,
+    fullHeight,
+    offsetX: desktop ? -width * 0.22 * progress : 0,
+    offsetY: -sectionTop - (desktop ? 0 : fullHeight * 0.2 * progress),
+    width,
+    height,
+    distanceMultiplier: distanceMultiplier * (desktop ? 1 : 1 + 0.08 * progress),
+  };
+}
