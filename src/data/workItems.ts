@@ -259,6 +259,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   {
     title: 'iodine',
     shortName: 'iodine',
+    mark: 'iodine',
     contribution: true,
     tagline: 'Keep the human in control of the agent.',
     categories: ['ai', 'systems'],

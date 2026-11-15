@@ -1,7 +1,15 @@
 import type * as THREE from 'three';
 
 type MarkKey =
-  'worth' | 'owewell' | 'iguess' | 'wherever' | 'bloomnote' | 'auth' | 'mrrp' | 'everythingisfine';
+  | 'worth'
+  | 'owewell'
+  | 'iguess'
+  | 'wherever'
+  | 'bloomnote'
+  | 'auth'
+  | 'mrrp'
+  | 'everythingisfine'
+  | 'iodine';
 
 export type ThemeName = 'dusk' | 'night';
 
