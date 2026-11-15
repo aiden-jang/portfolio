@@ -5,7 +5,6 @@ import { workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
-import { IodineContributions } from '../IodineContributions';
 import { prefersReducedMotion } from '../../hooks/reducedMotion';
 import { cancelSmoothScroll } from '../../hooks/scrollNavigation';
 import { useActiveProject } from '../useActiveProject';
@@ -60,7 +59,6 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
             ))}
           </select>
           <div className="garage-filters" aria-label="Filter projects">
-            <span className="filter-label">Show</span>
             {FILTERS.map((option) => (
               <button
                 key={option.id}
@@ -101,7 +99,6 @@ export function WorkSection({ onOpen, filter, onFilterChange }: BrowseProps) {
         <div className="garage-project-list" aria-label="Project previews">
           {featured.length > 0 && (
             <div className="project-featured-group" aria-label="Featured projects">
-              <p className="project-group-label">Featured projects</p>
               {featured.map((item) => (
                 <Project key={item.title} item={item} onOpen={onOpen} featured />
               ))}
@@ -179,7 +176,6 @@ function Project({
           states={preview.states}
         />
       )}
-      {item.contribution && <IodineContributions />}
     </article>
   );
 }

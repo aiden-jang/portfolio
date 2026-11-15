@@ -1,0 +1,229 @@
+html:root :is(#sec-experience, #sec-about) {
+  padding-block: 112px;
+}
+
+html:root :is(#sec-experience, #sec-about) h2 {
+  margin-top: 0;
+  font-size: clamp(36px, 3.5vw, 48px);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+html:root .experience-role {
+  padding-block: 18px;
+}
+
+html:root .experience-company {
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+html:root .experience-role > span:last-child {
+  font: 12px/1.6 var(--font-display);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+html:root #sec-experience .panel > p {
+  font: 14px/1.5 var(--font-display);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html:root .experience-outcome {
+  padding-block: 24px;
+  grid-template-columns: 140px minmax(0, 1fr) 18px;
+  gap: 24px;
+}
+
+html:root .experience-figure strong {
+  font-size: 28px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+html:root .experience-figure span {
+  font: 12px/1.5 var(--font-display);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html:root .experience-story strong {
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+html:root .experience-story span {
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 60ch;
+}
+
+html:root .experience-open-source {
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 10px 20px;
+}
+
+html:root .experience-open-source > span:first-child {
+  font: 12px/1.5 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html:root .experience-open-source strong {
+  font-size: 16px;
+}
+
+html:root .experience-open-source > span:last-child {
+  font-size: 14px;
+}
+
+html:root .about-copy :is(p, dd) {
+  color: var(--color-fg);
+  font-size: 17px;
+  line-height: 1.8;
+  max-width: 65ch;
+}
+
+html:root .about-details > div {
+  padding-block: 20px;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 20px;
+}
+
+html:root .about-details dd {
+  font-size: 14px;
+}
+
+html:root .work-modal-panel {
+  max-width: 1100px;
+}
+
+html:root :is(.work-story h4, .engineering-story h4, .work-technologies) {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html:root .work-story-overview {
+  gap: 40px;
+}
+
+html:root .work-story {
+  line-height: 1.75;
+}
+
+html:root .story-screenshot figcaption {
+  font-size: 12px;
+}
+
+html:root .engineering-flow li {
+  padding: 20px 0;
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  background: transparent;
+}
+
+@media (min-width: 1024px) {
+  html:root #sec-experience .panel {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+    column-gap: 72px;
+  }
+
+  html:root #sec-experience .panel > h2 {
+    grid-row: 1;
+  }
+
+  html:root #sec-experience .panel > p {
+    grid-row: 1;
+    align-self: center;
+  }
+
+  html:root #sec-experience .panel > ul,
+  html:root #sec-experience .panel > div {
+    grid-row: 2;
+    margin-top: 28px;
+  }
+
+  html:root #sec-experience :is(.experience-more, .experience-open-source) {
+    grid-row: 3;
+  }
+
+  html:root #sec-about .about-copy {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+    gap: 24px 72px;
+  }
+
+  html:root .about-copy h2 {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  html:root .about-copy > div {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  html:root .about-copy > p {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+  }
+
+  html:root .about-copy .about-details {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  html:root :is(#sec-experience, #sec-about) {
+    padding-block: 116px 88px;
+  }
+
+  html:root #sec-experience .panel > p {
+    margin-block: 36px 8px;
+  }
+
+  html:root .experience-outcome {
+    grid-template-columns: minmax(0, 1fr) 18px;
+    gap: 12px;
+  }
+
+  html:root .experience-figure {
+    grid-column: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+  }
+
+  html:root .experience-story {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  html:root .experience-arrow {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  html:root .about-copy :is(p, dd) {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  html:root .about-details {
+    margin-top: 32px;
+  }
+
+  html:root .about-details dd {
+    font-size: 14px;
+  }
+
+  html:root .work-story-overview {
+    gap: 24px;
+  }
+}

@@ -25,12 +25,10 @@ for (const width of [1440, 1024, 768, 390]) {
           name: item.id,
           top: item.getBoundingClientRect().top,
           links: item.querySelector('.garage-project-links')!.getBoundingClientRect().top,
-          descriptionEnd: item.querySelector('.garage-project-copy > p')!.getBoundingClientRect()
-            .bottom,
+          stackEnd: item.querySelector('.garage-stack')!.getBoundingClientRect().bottom,
           image: box.top,
           height: box.height,
-          expectedHeight:
-            (box.width * Number(img.getAttribute('height'))) / Number(img.getAttribute('width')),
+          expectedHeight: box.width / 2,
         };
       }),
     );
@@ -44,7 +42,7 @@ for (const width of [1440, 1024, 768, 390]) {
           expect.soft(Math.abs(card.image - peer.image), `${card.name} image`).toBeLessThan(1);
         }
       } else {
-        expect.soft(card.links - card.descriptionEnd, `${card.name} links gap`).toBeLessThan(24);
+        expect.soft(card.links - card.stackEnd, `${card.name} links gap`).toBeLessThan(24);
       }
     }
     await expect(page.locator('.project-featured-group article h3')).toHaveText([

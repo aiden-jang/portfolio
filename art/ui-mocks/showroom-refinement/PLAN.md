@@ -101,6 +101,12 @@ contact copy
 fixed car
 ```
 
+## Implementation status
+
+The approved composition is applied to the main portfolio app. The isolated mock
+remains as a design reference. Set `PORTFOLIO_MOCK_ROUTE=/` when running the capture
+helper to review the main app; those captures are saved under the `production` folder.
+
 ## Review and implementation plan
 
 1. Review the full mock at desktop and phone sizes, including the garage and case studies.

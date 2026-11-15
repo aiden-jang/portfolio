@@ -2,7 +2,7 @@ import { workId, WORK_ITEMS } from '../../data/workItems';
 import { isPortfolioProject } from '../../data/workBrowsing';
 import './experience.css';
 import type { WorkDetail } from '../../types';
-import { EYEBROW, H2, P_LI, Section, UL_BASE } from './shared';
+import { H2, P_LI, Section, UL_BASE } from './shared';
 
 const OUTCOMES: Record<string, { figure: string; label: string; title: string; detail: string }> = {
   'monolith-django-rest-react-rewrite': {
@@ -82,7 +82,6 @@ export function ExperienceSection({ onOpen }: Props) {
   return (
     <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">
       <div data-nosnippet className="panel pointer-events-auto w-full max-w-[650px]">
-        <span className={EYEBROW}>01 / EXPERIENCE</span>
         <h2 className={H2}>Where I&apos;ve worked</h2>
         <ul className={`${UL_BASE} ${P_LI}`}>
           {ROLES.map((r) => (

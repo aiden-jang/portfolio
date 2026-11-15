@@ -1,10 +1,9 @@
-import { EYEBROW, H2, P_LI, Section } from './shared';
+import { H2, P_LI, Section } from './shared';
 
 export function AboutSection() {
   return (
     <Section id="sec-about" side="left" desktopVertical="top" mobileVertical="top">
       <div className="about-copy panel pointer-events-auto w-full max-w-[560px] text-left">
-        <span className={EYEBROW}>03 / ABOUT</span>
         <h2 className={H2}>A bit about me.</h2>
         <div data-nosnippet>
           <p className={`${P_LI} max-w-[48ch]`}>

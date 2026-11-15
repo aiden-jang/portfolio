@@ -1,11 +1,6 @@
 import type { ReactNode } from 'react';
 
 export const PANEL_BASE = 'panel pointer-events-auto max-w-[420px]';
-// Wide tracking adds a letter-space after the final glyph, which makes a centered eyebrow read
-// as shifted left. The negative inline-end margin cancels exactly that space, and needs
-// `inline-block` to apply. jsdom does no layout, so nothing can test this.
-export const EYEBROW =
-  'inline-block font-[var(--font-mono)] text-[0.6875rem] md:text-xs tracking-[0.16em] -me-[0.16em] text-[var(--color-muted)] uppercase';
 export const H2 =
   'mt-3 mb-4 text-[clamp(2rem,4vw,2.75rem)] leading-[1.1] font-medium tracking-[-0.04em]';
 export const P_LI =

@@ -1,6 +1,6 @@
 import { useDialogFocus } from './useDialogFocus';
 import { usePageScrollLock } from './usePageScrollLock';
-import { useEffect, useLayoutEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import type { WorkDetail } from '../types';
 import { WorkModalLinks } from './WorkModalLinks';
@@ -116,7 +116,9 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         {item && (
           <>
             <ScrollBody key={item.title} storyId={item.title}>
-              <Eyebrow>{item.context}</Eyebrow>
+              <span data-nosnippet className="sr-only">
+                {item.context}
+              </span>
               <h3
                 id="work-modal-title"
                 className="mt-3 mb-1 text-[clamp(1.6rem,3.2vw,2.2rem)] leading-[1.05] font-semibold tracking-[-0.03em]"
@@ -138,12 +140,5 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       </div>
     </div>,
     document.body,
-  );
-}
-function Eyebrow({ children }: { children: ReactNode }) {
-  return (
-    <span className="font-[var(--font-mono)] text-[0.66rem] tracking-[0.36em] uppercase text-[var(--color-muted)]">
-      <span data-nosnippet>{children}</span>
-    </span>
   );
 }

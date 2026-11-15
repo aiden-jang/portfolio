@@ -4,12 +4,16 @@ import { strict as assert } from 'node:assert';
 
 const base = process.env.PORTFOLIO_MOCK_URL ?? 'http://127.0.0.1:5190';
 const browserType = process.env.PORTFOLIO_MOCK_BROWSER === 'webkit' ? webkit : chromium;
-const output = new URL(`../../ui-qa/showroom-refinement/${browserType.name()}/`, import.meta.url);
+const mode = process.env.PORTFOLIO_MOCK_ROUTE === '/' ? 'production/' : '';
+const output = new URL(
+  `../../ui-qa/showroom-refinement/${mode}${browserType.name()}/`,
+  import.meta.url,
+);
 await mkdir(output, { recursive: true });
 const browser = await browserType.launch();
 const routes = [
   ['before', '/'],
-  ['after', '/art/ui-mocks/showroom-refinement/'],
+  ['after', process.env.PORTFOLIO_MOCK_ROUTE ?? '/art/ui-mocks/showroom-refinement/'],
 ];
 const sections = [
   ['intro', '#sec-intro'],
