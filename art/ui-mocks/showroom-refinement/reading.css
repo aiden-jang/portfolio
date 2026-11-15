@@ -1,0 +1,237 @@
+html[data-showroom-study] :is(#sec-experience, #sec-about) {
+  padding-block: 112px;
+}
+
+html[data-showroom-study] :is(#sec-experience, #sec-about) .panel > span {
+  display: none;
+}
+
+html[data-showroom-study] :is(#sec-experience, #sec-about) h2 {
+  margin-top: 0;
+  font-size: clamp(36px, 3.5vw, 48px);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+html[data-showroom-study] .experience-role {
+  padding-block: 18px;
+}
+
+html[data-showroom-study] .experience-company {
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+html[data-showroom-study] .experience-role > span:last-child {
+  font: 12px/1.6 var(--font-display);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-showroom-study] #sec-experience .panel > p {
+  font: 14px/1.5 var(--font-display);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html[data-showroom-study] .experience-outcome {
+  padding-block: 24px;
+  grid-template-columns: 140px minmax(0, 1fr) 18px;
+  gap: 24px;
+}
+
+html[data-showroom-study] .experience-figure strong {
+  font-size: 28px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-showroom-study] .experience-figure span {
+  font: 12px/1.5 var(--font-display);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html[data-showroom-study] .experience-story strong {
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+html[data-showroom-study] .experience-story span {
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 60ch;
+}
+
+html[data-showroom-study] .experience-open-source {
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 10px 20px;
+}
+
+html[data-showroom-study] .experience-open-source > span:first-child {
+  font: 12px/1.5 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[data-showroom-study] .experience-open-source strong {
+  font-size: 16px;
+}
+
+html[data-showroom-study] .experience-open-source > span:last-child {
+  font-size: 14px;
+}
+
+html[data-showroom-study] .about-copy :is(p, dd) {
+  color: var(--color-fg);
+  font-size: 17px;
+  line-height: 1.8;
+  max-width: 65ch;
+}
+
+html[data-showroom-study] .about-details > div {
+  padding-block: 20px;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 20px;
+}
+
+html[data-showroom-study] .about-details dd {
+  font-size: 14px;
+}
+
+html[data-showroom-study] .work-modal-panel {
+  max-width: 1100px;
+}
+
+html[data-showroom-study] :is(.work-story h4, .engineering-story h4, .work-technologies) {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[data-showroom-study] .work-story-overview {
+  gap: 40px;
+}
+
+html[data-showroom-study] .work-story {
+  line-height: 1.75;
+}
+
+html[data-showroom-study] .story-scroll-area > div > span:first-child {
+  display: none;
+}
+
+html[data-showroom-study] .story-screenshot figcaption {
+  font-size: 12px;
+}
+
+html[data-showroom-study] .engineering-flow li {
+  padding: 20px 0;
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  background: transparent;
+}
+
+@media (min-width: 1024px) {
+  html[data-showroom-study] #sec-experience .panel {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+    column-gap: 72px;
+  }
+
+  html[data-showroom-study] #sec-experience .panel > h2 {
+    grid-row: 1;
+  }
+
+  html[data-showroom-study] #sec-experience .panel > p {
+    grid-row: 1;
+    align-self: center;
+  }
+
+  html[data-showroom-study] #sec-experience .panel > ul,
+  html[data-showroom-study] #sec-experience .panel > div {
+    grid-row: 2;
+    margin-top: 28px;
+  }
+
+  html[data-showroom-study] #sec-experience :is(.experience-more, .experience-open-source) {
+    grid-row: 3;
+  }
+
+  html[data-showroom-study] #sec-about .about-copy {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+    gap: 24px 72px;
+  }
+
+  html[data-showroom-study] .about-copy h2 {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  html[data-showroom-study] .about-copy > div {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  html[data-showroom-study] .about-copy > p {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+  }
+
+  html[data-showroom-study] .about-copy .about-details {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  html[data-showroom-study] :is(#sec-experience, #sec-about) {
+    padding-block: 116px 88px;
+  }
+
+  html[data-showroom-study] #sec-experience .panel > p {
+    margin-block: 36px 8px;
+  }
+
+  html[data-showroom-study] .experience-outcome {
+    grid-template-columns: minmax(0, 1fr) 18px;
+    gap: 12px;
+  }
+
+  html[data-showroom-study] .experience-figure {
+    grid-column: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+  }
+
+  html[data-showroom-study] .experience-story {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  html[data-showroom-study] .experience-arrow {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  html[data-showroom-study] .about-copy :is(p, dd) {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  html[data-showroom-study] .about-details {
+    margin-top: 32px;
+  }
+
+  html[data-showroom-study] .about-details dd {
+    font-size: 14px;
+  }
+
+  html[data-showroom-study] .work-story-overview {
+    gap: 24px;
+  }
+}

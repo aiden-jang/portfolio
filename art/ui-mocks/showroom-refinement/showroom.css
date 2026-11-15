@@ -1,0 +1,127 @@
+html[data-showroom-study] {
+  color-scheme: dark;
+  --study-width: 1280px;
+  --study-gutter: max(5vw, calc((100vw - var(--study-width)) / 2));
+  scrollbar-color: #64646e #101014;
+  scrollbar-width: thin;
+}
+
+html[data-showroom-study] .portfolio-header {
+  padding-inline: var(--study-gutter);
+}
+
+html[data-showroom-study] :is(#sec-intro, #sec-experience, #sec-work, #sec-about) {
+  padding-inline: var(--study-gutter);
+}
+
+html[data-showroom-study] :is(.garage-intro, .garage-work, #sec-experience .panel, .about-copy) {
+  width: 100%;
+  max-width: var(--study-width);
+  margin-inline: auto;
+}
+
+html[data-showroom-study] #sec-intro {
+  padding-top: max(112px, 14vh);
+}
+
+html[data-showroom-study] .garage-intro h1 {
+  font-size: clamp(72px, 10.5vw, 152px);
+  letter-spacing: -0.04em;
+  font-weight: 500;
+}
+
+html[data-showroom-study] .garage-intro p {
+  margin-top: 24px;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+html[data-showroom-study] .car-controls-row {
+  background: #17171c;
+  padding: 8px;
+  gap: 8px;
+}
+
+html[data-showroom-study] #desktop-dock .car-paint-slot {
+  border-left: 1px solid var(--color-line);
+  padding-left: 12px;
+}
+
+html[data-showroom-study] .car-browse-trigger small {
+  margin-top: 3px;
+  font-size: 11px;
+}
+
+html[data-showroom-study] .car-browser {
+  width: min(1080px, calc(100vw - 48px));
+}
+
+html[data-showroom-study] :is(.car-browser-heading, .car-browser-grid) {
+  padding: 28px;
+}
+
+html[data-showroom-study] .car-browser-grid {
+  gap: 24px;
+}
+
+html[data-showroom-study] .car-option-name {
+  font-size: 14px;
+}
+
+html[data-showroom-study] .car-option-code {
+  font-size: 12px;
+}
+
+html[data-showroom-study] .panel > * {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+
+html[data-showroom-study] :is(a, button, summary, select) {
+  scroll-margin-block: calc(var(--portfolio-header-height) + 24px) 24px;
+  touch-action: manipulation;
+}
+
+@media (max-width: 1023px) {
+  html[data-showroom-study] .car-controls-row {
+    gap: 4px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 767px) {
+  html[data-showroom-study] {
+    --study-gutter: 6vw;
+  }
+
+  html[data-showroom-study] #sec-intro {
+    padding-top: max(112px, 14vh);
+  }
+
+  html[data-showroom-study] .garage-intro h1 {
+    font-size: clamp(48px, 15vw, 72px);
+  }
+
+  html[data-showroom-study] .garage-intro p {
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+  html[data-showroom-study] :is(.car-browser-heading, .car-browser-grid) {
+    padding: 16px;
+  }
+
+  html[data-showroom-study] .car-browser {
+    width: calc(100vw - 24px);
+  }
+
+  html[data-showroom-study] .car-browser-grid {
+    gap: 16px 12px;
+  }
+
+  html[data-showroom-study] .car-option-name {
+    font-size: 12px;
+  }
+}
