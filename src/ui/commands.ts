@@ -16,6 +16,15 @@ type Deps = {
   setNotice: (text: string) => void;
 };
 
+export const COMMAND_GROUPS = ['Garage', 'Explore', 'Cars'] as const;
+export function commandGroup(command: Command) {
+  return command.id.startsWith('sec-')
+    ? 'Explore'
+    : command.id.startsWith('car-')
+      ? 'Cars'
+      : 'Garage';
+}
+
 export function buildCommands({ onSection, setNotice }: Deps): Command[] {
   const commands: Command[] = [
     ...SECTION_IDS.map((id) => ({
@@ -32,7 +41,9 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
       keywords: `${CARS[index].name} ${CARS[index].code} vehicle garage`,
       run: () => {
         const state = useAppStore.getState();
-        if (!state.isCarLoading && state.carIndex !== index) state.setCarIndex(index);
+        if (state.isCarLoading) return;
+        onSection('sec-intro');
+        if (state.carIndex !== index) state.setCarIndex(index);
       },
     })),
     {
@@ -117,16 +128,20 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
     },
   ];
   const state = useAppStore.getState();
-  return commands.filter(({ id }) => {
-    if (id === 'pulse-lights')
-      return (
-        !state.isCarLoading &&
-        !state.carLoadError &&
-        state.sectionIndex === 0 &&
-        state.refs.lamps.length > 0
-      );
-    return id !== 'repaint' || !CARS[state.carIndex].fixedLivery;
-  });
+  return commands
+    .filter(({ id }) => {
+      if (id === 'pulse-lights')
+        return (
+          !state.isCarLoading &&
+          !state.carLoadError &&
+          state.sectionIndex === 0 &&
+          state.refs.lamps.length > 0
+        );
+      return id !== 'repaint' || !CARS[state.carIndex].fixedLivery;
+    })
+    .sort(
+      (a, b) => COMMAND_GROUPS.indexOf(commandGroup(a)) - COMMAND_GROUPS.indexOf(commandGroup(b)),
+    );
 }
 
 export function matchCommands(commands: Command[], query: string): Command[] {

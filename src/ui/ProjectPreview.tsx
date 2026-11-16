@@ -7,6 +7,7 @@ import type { PreviewState } from '../data/projectPreviews';
 import './project-preview.css';
 import { usePreviewSelection } from './usePreviewSelection';
 import { previewIndex, previewLink } from './previewLinks';
+import { ExpandIcon } from './ExpandIcon';
 
 type Props = { image: string; name: string; caption: string; states?: PreviewState[] };
 
@@ -62,22 +63,8 @@ export function ProjectPreview({
           <div className="preview-thumbnail">
             <ScreenshotImage key={image} src={image} alt={`${name} product interface`} lazy />
           </div>
-          <span>Inspect screenshot ↗</span>
+          <ExpandIcon />
         </button>
-        {states && (
-          <div className="preview-states" role="group" aria-label={`${name} product views`}>
-            {states.map((state, index) => (
-              <button
-                key={state.label}
-                type="button"
-                aria-pressed={selected === index}
-                onClick={() => setSelected(index)}
-              >
-                {state.label}
-              </button>
-            ))}
-          </div>
-        )}
         {states &&
           previewIndex(new URLSearchParams(location.search).get('preview'), name, states.length) !==
             null && (

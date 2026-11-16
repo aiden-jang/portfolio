@@ -56,7 +56,9 @@ The car picker distinguishes the current selection from keyboard focus: its chec
 and Selected label identify the loaded car, while only the keyboard target receives
 a focus frame. Browsing does not change the car until activation. The command menu
 uses one active result for both pointer and keyboard navigation, without retaining
-a hover highlight on the previous result.
+a hover highlight on the previous result. Commands are grouped into garage actions,
+section navigation and cars, with one flat keyboard order across the groups.
+Selecting a car command reveals the showroom.
 
 ## Scene and state
 
@@ -85,6 +87,9 @@ instead, including the reflection; DOM text is unaffected.
 `Effects` builds its pass graph directly on the scene renderer, avoiding a second
 WebGL context for capability detection. It keeps the HDR bloom and ACES pass before
 SMAA, resizes the buffers with the viewport, and disposes the graph on unmount.
+`studioReflection` fades the existing floor reflection with distance from the car
+without another render target. The default F40 finish and Dusk lights use a softer
+studio treatment; model selection, paint and lighting remain interactive.
 The floor glow loads a lossless texture instead of creating another canvas.
 Regenerate it with `npm run generate:glow`; the generator verifies that encoding
 preserves every RGBA value from the original gradient.
@@ -154,10 +159,16 @@ to derive visibility from actual section positions.
 
 The featured projects are everythingisfine and Iodine, immediately after the
 showroom. Experience separates them from the supporting collection. Moving a project between these groups
-keeps its screenshot states and existing preview links available.
+keeps its screenshot states and existing preview links available. Supporting frames
+share a 2:1 ratio; Platform closes the desktop collection beside its explanation.
+Featured image crops emphasize the globe and editor while inspection shows the
+complete capture. Screenshot view controls share selection with the project reader.
 `EngineeringStory` renders the everythingisfine and Accounts flows, failure cases
 and tradeoffs from `projectStories.ts`. These descriptions follow the source
 implementations, and their case studies link to the public repositories.
+On phones, the reader places its screenshot before the longer explanation. Source
+links and sharing remain available in a keyboard-accessible overflow control; Escape
+closes that control before dismissing the reader.
 `SystemSketch` adds static line illustrations to those same steps. Text carries the
 system behavior; the sketches remain decorative and inherit the reading palette.
 

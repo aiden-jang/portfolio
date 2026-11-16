@@ -35,8 +35,10 @@ export function AboutSection() {
                 target="_blank"
                 aria-describedby="external-link-hint"
                 rel="noopener noreferrer"
+                className="about-contribution-link"
               >
-                iodine · agent approvals and undo ↗
+                <span>iodine · agent approvals and undo</span>
+                <span aria-hidden="true">↗</span>
               </a>
             </dd>
           </div>

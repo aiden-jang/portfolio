@@ -38,7 +38,7 @@ describe('Contact composition', () => {
         width,
         sectionHeight,
         desktop ? -width * 0.22 : 0,
-        desktop ? 0 : -sectionHeight * 0.2,
+        desktop ? 0 : -sectionHeight * 0.2 + 42,
         width,
         sectionHeight,
       );
@@ -68,7 +68,10 @@ describe('Contact composition', () => {
         }
         const target = screen(new Vector3(0, 0.7, 0), actual, width, height);
         expect(target.x).toBeCloseTo(width * (desktop ? 0.72 : 0.5), 7);
-        expect(target.y).toBeCloseTo(sectionHeight * (desktop ? 0.5 : 0.7) + sectionTop, 7);
+        expect(target.y).toBeCloseTo(
+          sectionHeight * (desktop ? 0.5 : 0.7) + sectionTop - (desktop ? 0 : 42),
+          7,
+        );
       }
     });
   }

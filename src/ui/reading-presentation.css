@@ -1,5 +1,6 @@
 html:root :is(#sec-experience, #sec-about) {
   padding-block: 100px;
+  border: 0;
 }
 
 html:root :is(#sec-experience, #sec-about) h2 {
@@ -10,7 +11,8 @@ html:root :is(#sec-experience, #sec-about) h2 {
 }
 
 html:root .experience-role {
-  padding-block: 18px;
+  padding-block: 0 24px;
+  border: 0;
 }
 
 html:root .experience-company {
@@ -31,13 +33,14 @@ html:root #sec-experience .panel > p {
 }
 
 html:root .experience-outcome {
-  padding-block: 24px;
+  padding-block: 19px;
+  border: 0;
   grid-template-columns: 145px minmax(0, 1fr) 18px;
   gap: 24px;
 }
 
 html:root .experience-figure strong {
-  font-size: 30px;
+  font-size: 29px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
@@ -61,19 +64,21 @@ html:root .experience-story span {
 
 html:root .about-copy :is(p, dd) {
   color: var(--color-fg);
-  font-size: 17px;
-  line-height: 1.8;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.85;
   max-width: 65ch;
 }
 
 html:root .about-details > div {
-  padding-block: 20px;
+  padding-block: 14px;
+  border: 0;
   grid-template-columns: 96px minmax(0, 1fr);
   gap: 20px;
 }
 
 html:root .about-details dd {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 html:root .work-modal-panel {
@@ -85,6 +90,10 @@ html:root :is(.work-story h4, .engineering-story h4, .work-technologies) {
   font-size: 13px;
   letter-spacing: 0;
   text-transform: none;
+}
+
+html:root .work-story-overview h4 {
+  color: var(--color-muted);
 }
 
 html:root .work-story-overview {
@@ -115,7 +124,7 @@ html:root .engineering-flow li {
   html:root #sec-experience .panel > h2 {
     grid-column: 1 / -1;
     grid-row: 1;
-    margin-bottom: 44px;
+    margin-bottom: 36px;
   }
 
   html:root #sec-experience .panel > ul {
@@ -142,8 +151,9 @@ html:root .engineering-flow li {
   }
 
   html:root #sec-about .about-copy {
-    grid-template-columns: minmax(0, 350px) minmax(0, 1fr);
+    grid-template-columns: 350px minmax(0, 650px);
     gap: 24px 80px;
+    justify-content: space-between;
   }
 
   html:root .about-copy h2 {
@@ -171,7 +181,7 @@ html:root .engineering-flow li {
 
 @media (max-width: 767px) {
   html:root :is(#sec-experience, #sec-about) {
-    padding-block: 108px 70px;
+    padding-block: 100px 72px;
   }
 
   html:root #sec-experience .panel > p {
@@ -180,7 +190,8 @@ html:root .engineering-flow li {
 
   html:root .experience-outcome {
     grid-template-columns: minmax(0, 1fr) 18px;
-    gap: 12px;
+    gap: 10px;
+    padding-block: 20px;
   }
 
   html:root .experience-figure {
@@ -203,11 +214,11 @@ html:root .engineering-flow li {
 
   html:root .about-copy :is(p, dd) {
     font-size: 16px;
-    line-height: 1.75;
+    line-height: 1.8;
   }
 
   html:root .about-details {
-    margin-top: 32px;
+    margin-top: 24px;
   }
 
   html:root .about-details dd {
@@ -216,5 +227,57 @@ html:root .engineering-flow li {
 
   html:root .work-story-overview {
     gap: 24px;
+  }
+}
+
+html:root .experience-outcome:last-child {
+  border: 0;
+}
+html:root .experience-outcome-lead {
+  background: transparent;
+}
+html:root .experience-outcome-lead .experience-figure strong {
+  font-size: 32px;
+}
+html:root .experience-story > .experience-context {
+  font: 11px/1.4 var(--font-display);
+  color: #a5a5ae;
+  margin-top: 3px;
+}
+html:root .experience-more summary {
+  border: 0;
+  margin-top: 12px;
+  color: #b9b9c0;
+}
+html:root .experience-outcome:hover {
+  background: #ffffff05;
+}
+html:root #sec-experience .panel > p {
+  font-size: 13px;
+  color: #a8a8b1;
+}
+html:root .about-details {
+  border: 0;
+}
+html:root .about-copy > :is(div, p) {
+  max-width: 61ch;
+}
+.about-contribution-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+@media (max-width: 767px) {
+  html:root .experience-role {
+    padding-block: 0 22px;
+  }
+  html:root .experience-outcome .experience-figure strong {
+    font-size: 28px;
+  }
+  html:root .experience-outcome-lead .experience-figure strong {
+    font-size: 31px;
+  }
+  html:root .about-details > div {
+    padding-block: 12px;
   }
 }

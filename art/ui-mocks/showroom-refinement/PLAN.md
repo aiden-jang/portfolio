@@ -37,7 +37,7 @@ exception to the general display-size ceiling because it belongs to this showroo
 A shared 1280px content width aligns the header, showroom introduction, reading sections
 and Contact. Desktop sections have 112px vertical breathing room; mobile uses 116px above headings to clear the fixed navigation, and 88px below.
 Controls keep 44px targets, 8px corners and visible focus. Screenshots use 12px corners, with no extra image mat or artificial browser frame.
-Featured images retain their native proportions. Supporting previews use uniform
+Featured images use deliberate globe and editor crops, with complete captures available through inspection. Supporting previews use uniform
 2:1 frames; crops can differ by app, and the screenshot viewer preserves every pixel.
 
 ## Proposed work by surface

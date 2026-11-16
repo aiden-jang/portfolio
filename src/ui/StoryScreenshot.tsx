@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { ScreenshotImage } from './ScreenshotImage';
 import { ScreenshotViewer } from './ScreenshotViewer';
+import { ExpandIcon } from './ExpandIcon';
 
 export function StoryScreenshot({
   image,
@@ -25,7 +26,7 @@ export function StoryScreenshot({
         <span className="story-image-crop">
           <ScreenshotImage key={image} src={image} alt={`${name} product interface`} />
         </span>
-        <span className="story-image-action">Inspect screenshot ↗</span>
+        <ExpandIcon />
       </button>
       <figcaption>{caption}</figcaption>
       {open && (

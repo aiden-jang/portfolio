@@ -25,7 +25,7 @@ export function contactFrame({
     fullWidth: width,
     fullHeight,
     offsetX: desktop ? -width * 0.22 * progress : 0,
-    offsetY: -sectionTop - (desktop ? 0 : fullHeight * 0.2 * progress),
+    offsetY: -sectionTop - (desktop ? 0 : (fullHeight * 0.2 - 42) * progress),
     width,
     height,
     distanceMultiplier: distanceMultiplier * (desktop ? 1 : 1 + 0.08 * progress),

@@ -4,6 +4,7 @@ import { createPortal, flushSync } from 'react-dom';
 import { type SectionId } from '../config';
 import { buildCommands, matchCommands, type Command } from './commands';
 import { usePageScrollLock } from './usePageScrollLock';
+import { CommandResults } from './CommandResults';
 export const COMMAND_MENU_EVENT = 'portfolio:open-command-menu';
 
 export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void }) {
@@ -85,7 +86,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
         aria-label="Command menu"
         className="dialog-panel w-full max-w-[490px] overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-line)] bg-[var(--color-panel)] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
       >
-        <div className="flex items-center gap-3 border-b border-[var(--color-line)] px-4 py-3">
+        <div className="command-menu-search">
           <input
             ref={inputRef}
             value={query}
@@ -113,7 +114,9 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
                 void select(results[activeIndex]);
               }
             }}
-            placeholder="Jump somewhere, change the scene…"
+            placeholder="Find a control…"
+            autoComplete="off"
+            spellCheck={false}
             role="combobox"
             aria-label="Search portfolio controls"
             aria-autocomplete="list"
@@ -134,40 +137,13 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             Close
           </button>
         </div>
-        <div id="command-results" role="listbox" className="max-h-[52dvh] overflow-y-auto p-2">
-          {results.length ? (
-            results.map((command, index) => (
-              <button
-                key={command.id}
-                ref={index === activeIndex ? activeResultRef : null}
-                id={`command-${command.id}`}
-                type="button"
-                role="option"
-                aria-selected={index === activeIndex}
-                onClick={() => void select(command)}
-                onMouseEnter={() => setActiveIndex(index)}
-                className={`flex w-full items-center justify-between rounded-md px-3 py-3 text-left transition-colors ${
-                  index === activeIndex ? 'bg-white/[0.07]' : ''
-                }`}
-              >
-                <span
-                  className={`text-[0.92rem] transition-colors ${
-                    index === activeIndex ? 'text-[var(--color-fg)]' : 'text-[var(--color-muted)]'
-                  }`}
-                >
-                  {command.label}
-                </span>
-                <span className="keyboard-hint font-[var(--font-mono)] text-xs tracking-[0.08em] uppercase text-[var(--color-muted)]">
-                  {command.hint}
-                </span>
-              </button>
-            ))
-          ) : (
-            <p className="px-3 py-6 text-center text-[0.85rem] text-[var(--color-muted)]">
-              No matching controls.
-            </p>
-          )}
-        </div>
+        <CommandResults
+          results={results}
+          activeIndex={activeIndex}
+          activeRef={activeResultRef}
+          onActive={setActiveIndex}
+          onSelect={select}
+        />
         <div aria-live="polite" className="command-menu-footer">
           {notice || <span className="keyboard-hint">↑ ↓ browse · Home End jump · Enter run</span>}
         </div>

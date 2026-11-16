@@ -1,17 +1,16 @@
 html:root :is(#sec-work, #sec-more-work) {
   min-height: auto;
-  padding-block: 110px 0;
+  padding-block: 116px 0;
   align-items: flex-start;
   background: var(--color-bg);
   user-select: text;
   -webkit-user-select: text;
 }
 html:root #sec-more-work {
-  padding-block: 100px 90px;
-  border-top: 1px solid var(--color-line);
+  padding-block: 96px 100px;
 }
 html:root :is(.garage-work-heading, .project-gallery-heading) {
-  margin-bottom: 54px;
+  margin-bottom: 44px;
   padding: 0;
   display: flex;
   justify-content: space-between;
@@ -19,11 +18,11 @@ html:root :is(.garage-work-heading, .project-gallery-heading) {
   gap: 32px;
 }
 html:root .garage-work-heading h2 {
-  font-size: clamp(40px, 4.5vw, 64px);
+  font-size: 56px;
   letter-spacing: -0.035em;
 }
 html:root .project-gallery-heading h2 {
-  font-size: clamp(36px, 3.5vw, 48px);
+  font-size: 44px;
   letter-spacing: -0.035em;
   line-height: 1.1;
   font-weight: 500;
@@ -34,19 +33,18 @@ html:root :is(.garage-work-heading, .project-gallery-heading) > span {
 }
 html:root .garage-project-featured {
   display: block;
-  padding-block: 80px 92px;
+  padding-block: 68px 84px;
 }
 html:root .project-featured-group > article:first-of-type {
   padding-top: 0;
-  border-top: 0;
 }
 html:root .garage-project-featured .garage-project-copy {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  column-gap: 72px;
+  column-gap: 64px;
   row-gap: 0;
   align-items: start;
-  margin: 0 0 38px;
+  margin: 0 0 28px;
   padding: 0;
 }
 html:root .garage-project-featured .project-title {
@@ -54,7 +52,7 @@ html:root .garage-project-featured .project-title {
   grid-row: 1 / span 3;
 }
 html:root .garage-project-featured h3 {
-  font-size: clamp(28px, 3.1vw, 44px);
+  font-size: 42px;
   letter-spacing: -0.035em;
   line-height: 1.15;
   margin: 0;
@@ -62,26 +60,28 @@ html:root .garage-project-featured h3 {
 }
 html:root .garage-project-featured .garage-project-copy > p:first-of-type {
   grid-column: 2;
-  font-size: 17px;
-  line-height: 1.65;
+  font-size: 16px;
+  line-height: 1.7;
+  font-weight: 400;
   color: var(--color-fg);
-  max-width: 58ch;
+  max-width: 52ch;
 }
 html:root .garage-project-featured .garage-stack {
   grid-column: 2;
   grid-row: 2;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 html:root .garage-project-featured .garage-project-links {
   grid-column: 2;
   grid-row: 3;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 html:root .garage-project .project-title .project-role {
-  font: 13px/1.5 var(--font-display);
+  font: 12px/1.5 var(--font-display);
   letter-spacing: 0;
   text-transform: none;
-  margin-bottom: 14px;
+  margin-block: 8px 14px;
+  color: var(--color-muted);
 }
 html:root .garage-project .preview-thumbnail {
   padding: 0;
@@ -96,20 +96,30 @@ html:root .garage-project .project-preview img {
   object-fit: contain;
   border: 0;
 }
-html:root .garage-project .project-preview > span {
-  font: 12px/1.5 var(--font-display);
-  color: var(--color-muted);
-  padding-block: 14px 4px;
-}
-html:root .garage-project figcaption {
+html:root .garage-project-featured figcaption {
   font: 12px/1.6 var(--font-display);
-  margin: 4px 0 0;
-  max-width: 68ch;
+  margin: 12px 0 0;
+  color: var(--color-muted);
 }
-html:root .garage-project-links {
-  flex-wrap: wrap;
-  gap: 8px 24px;
-  font-size: 14px;
+html:root #project-everythingisfine .preview-thumbnail {
+  aspect-ratio: 1.65;
+  background: #0f141d;
+}
+html:root #project-everythingisfine .project-preview img {
+  width: 148.5%;
+  max-width: none;
+  height: auto;
+  transform: translate(-32.63%, -12.2%);
+}
+html:root #project-iodine .preview-thumbnail {
+  aspect-ratio: 2.35;
+  background: #202020;
+}
+html:root #project-iodine .project-preview img {
+  width: 118%;
+  max-width: none;
+  height: auto;
+  transform: translate(-15%, -3.2%);
 }
 html:root .project-gallery {
   gap: 56px 48px;
@@ -129,50 +139,88 @@ html:root #project-worth .project-preview img {
 html:root #project-owewell .project-preview img {
   object-position: center 20%;
 }
+html:root #project-iguess .preview-thumbnail {
+  background: #202622;
+}
+html:root #project-wherever .preview-thumbnail {
+  background: #242329;
+}
+html:root #project-platform .preview-thumbnail {
+  background: #f4f3fa;
+}
+html:root :is(#project-iguess, #project-wherever, #project-platform) .project-preview img {
+  object-fit: contain;
+}
+html:root #project-bloomnote .project-preview[data-view='1'] .preview-thumbnail {
+  background: #f6f4eb;
+}
+html:root #project-bloomnote .project-preview[data-view='1'] img {
+  object-fit: contain;
+}
 html:root .project-gallery .garage-project-compact {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: subgrid;
-  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
   padding: 0;
-  border: 0;
-  row-gap: 24px;
+  gap: 18px;
 }
 html:root .project-gallery .garage-project-copy {
-  grid-column: 1;
-  grid-row: 2;
   margin: 0;
+  flex: 1;
 }
 html:root .project-gallery .garage-project-compact > figure {
-  grid-column: 1;
-  grid-row: 1;
-  display: block;
+  order: -1;
 }
 html:root .project-gallery .garage-project-compact h3 {
-  font-size: 28px;
-  margin-bottom: 12px;
-}
-html:root .project-gallery .garage-project-compact p {
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 27px;
+  margin: 0 0 10px;
 }
 html:root .project-gallery .garage-project-compact .garage-stack {
-  font-size: 12px;
   margin-top: 12px;
+  color: #a4a4ad;
 }
 html:root .project-gallery .garage-project-compact .garage-project-links {
   margin-top: auto;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 html:root .project-gallery .garage-project-compact figcaption {
   display: none;
+}
+html:root .project-gallery #project-platform {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+  margin-top: 8px;
+}
+html:root .project-gallery #project-platform > figure {
+  grid-column: 1;
+  grid-row: 1;
+}
+html:root .project-gallery #project-platform .garage-project-copy {
+  grid-column: 2;
+  grid-row: 1;
+  padding-inline: 24px 48px;
+}
+html:root #project-platform .garage-project-links {
+  margin-top: 8px;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  html:root .garage-project-featured .garage-project-copy {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  html:root .garage-project-featured .garage-project-copy > * {
+    grid-column: 1;
+    grid-row: auto;
+  }
 }
 @media (max-width: 767px) {
   html:root :is(#sec-work, #sec-more-work) {
     padding-block: 108px 0;
   }
   html:root #sec-more-work {
-    padding-bottom: 70px;
+    padding-block: 100px 72px;
   }
   html:root :is(.garage-work-heading, .project-gallery-heading) {
     display: block;
@@ -181,6 +229,9 @@ html:root .project-gallery .garage-project-compact figcaption {
   html:root .garage-work-heading h2 {
     font-size: 38px;
   }
+  html:root .project-gallery-heading h2 {
+    font-size: 36px;
+  }
   html:root :is(.garage-work-heading, .project-gallery-heading) > span {
     display: block;
     margin-top: 12px;
@@ -188,7 +239,7 @@ html:root .project-gallery .garage-project-compact figcaption {
   html:root .garage-project-featured {
     display: flex;
     flex-direction: column;
-    padding-block: 48px 56px;
+    padding-block: 44px 56px;
   }
   html:root .garage-project-featured > figure {
     order: 0;
@@ -196,33 +247,50 @@ html:root .project-gallery .garage-project-compact figcaption {
   html:root .garage-project-featured .garage-project-copy {
     display: block;
     order: 1;
-    margin: 24px 0 0;
+    margin: 20px 0 0;
   }
   html:root .garage-project-featured h3 {
     font-size: 28px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
   html:root .garage-project-featured .garage-project-copy > p:first-of-type {
-    font-size: 16px;
-  }
-  html:root .garage-project-featured .garage-stack {
-    margin-top: 14px;
-  }
-  html:root .garage-project-featured .garage-project-links {
-    margin-top: 10px;
+    font-size: 15px;
+    line-height: 1.75;
   }
   html:root .garage-project-featured figcaption {
     display: none;
   }
+  html:root #project-everythingisfine .preview-thumbnail {
+    aspect-ratio: 1.3;
+  }
+  html:root #project-everythingisfine .project-preview img {
+    width: 169.5%;
+    transform: translate(-36.85%, -10.6%);
+  }
+  html:root #project-iodine .preview-thumbnail {
+    aspect-ratio: 1.4;
+  }
+  html:root #project-iodine .project-preview img {
+    width: 300%;
+    transform: translate(-59.17%, -15.4%);
+  }
   html:root .project-gallery {
-    row-gap: 42px;
+    gap: 40px;
   }
   html:root .project-gallery .garage-project-compact {
-    grid-row: auto;
-    grid-template-rows: auto auto;
-    row-gap: 20px;
+    gap: 15px;
   }
-  html:root .project-gallery .garage-project-compact .garage-project-links {
-    padding-top: 12px;
+  html:root .project-gallery .garage-project-compact h3 {
+    font-size: 25px;
+  }
+  html:root .project-gallery #project-platform {
+    grid-column: auto;
+    display: flex;
+    align-items: stretch;
+    gap: 18px;
+    margin-top: 6px;
+  }
+  html:root .project-gallery #project-platform .garage-project-copy {
+    padding: 0;
   }
 }

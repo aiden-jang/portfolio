@@ -11,25 +11,24 @@
   min-height: 0;
 }
 .story-scroll-cue {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 22px 0 8px;
+  position: relative;
+  flex-shrink: 0;
+  padding: 6px 0;
+  border-top: 1px solid #ffffff0a;
   text-align: center;
-  background: linear-gradient(transparent, #0a0a14 70%);
+  background: var(--color-bg);
   pointer-events: none;
 }
 .story-scroll-cue button {
   pointer-events: auto;
   cursor: pointer;
-  border: 1px solid var(--color-line);
-  background: #0a0a14;
+  border: 0;
+  background: transparent;
   color: var(--color-fg);
-  min-height: 44px;
+  min-height: 32px;
   padding: 8px 14px;
   border-radius: var(--radius-control);
-  font: 12px/1.4 var(--font-display);
+  font: 11px/1.4 var(--font-display);
 }
 .story-scroll-area:focus-visible {
   outline: 2px solid var(--color-fg);

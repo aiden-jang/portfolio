@@ -5,6 +5,7 @@ import { workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
+import { ProjectPreviewControls } from '../ProjectPreviewControls';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
@@ -60,10 +61,13 @@ function Project({
     >
       <div className="garage-project-copy">
         <div className="project-title">
-          {item.contribution && <p className="project-role">Open-source contributor</p>}
           <h3>{item.shortName}</h3>
+          {item.contribution && <p className="project-role">Open-source contributor</p>}
         </div>
         <p>{preview?.description ?? item.summary}</p>
+        {preview?.states && (
+          <ProjectPreviewControls name={item.shortName!} states={preview.states} />
+        )}
         <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>
         <div className="garage-project-links">
           <button
@@ -71,11 +75,11 @@ function Project({
             onClick={(event) => onOpen(item, event.currentTarget)}
             aria-label={
               item.contribution
-                ? `My contributions to ${item.shortName}`
+                ? `Read my contribution to ${item.shortName}`
                 : `How I built it: ${item.shortName}`
             }
           >
-            {item.contribution ? 'My contributions ↗' : 'How I built it ↗'}
+            {item.contribution ? 'Read my contribution' : 'How I built it'}
           </button>
           {item.link && (
             <a
@@ -83,9 +87,13 @@ function Project({
               target="_blank"
               aria-describedby="external-link-hint"
               rel="noopener"
-              aria-label={`Open ${item.shortName}`}
+              aria-label={
+                item.contribution
+                  ? `View changes on GitHub: ${item.shortName}`
+                  : `Open ${item.shortName}`
+              }
             >
-              {item.contribution ? 'Contributions ↗' : 'Open app ↗'}
+              {item.contribution ? 'View changes on GitHub ↗' : 'Open app ↗'}
             </a>
           )}
         </div>

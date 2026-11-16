@@ -6,9 +6,6 @@ import { PREVIEWS } from '../data/projectPreviews';
 import { usePreviewSelection } from './usePreviewSelection';
 import { previewLink } from './previewLinks';
 
-const pill =
-  'inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--color-line)] font-[var(--font-mono)] text-[0.72rem] tracking-[0.2em] uppercase no-underline transition-colors hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]';
-
 export function WorkModalLinks({ item }: { item: WorkDetail }) {
   const preview = PREVIEWS[item.mark ?? ''];
   const [selected] = usePreviewSelection(item.shortName ?? '', preview?.states?.length ?? 1);
@@ -30,21 +27,8 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
   };
 
   if (!item.link && !item.links?.length && !item.shortName) return null;
-
-  return (
-    <div className="work-modal-links shrink-0 flex flex-wrap gap-2.5 px-5 md:px-7 py-4 border-t border-[var(--color-line)]">
-      {item.link && (
-        <a
-          href={item.link.url}
-          target="_blank"
-          aria-describedby="external-link-hint"
-          rel="noopener"
-          className={`${pill} text-[var(--color-fg)]`}
-        >
-          {item.link.label}
-          <span aria-hidden="true">→</span>
-        </a>
-      )}
+  const secondary = (
+    <>
       {item.links?.map((link) => (
         <a
           key={link.url}
@@ -52,20 +36,42 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
           target="_blank"
           aria-describedby="external-link-hint"
           rel="noopener"
-          className={`${pill} text-[var(--color-muted)]`}
         >
           {link.label}
           <span aria-hidden="true">↗</span>
         </a>
       ))}
-      <button
-        type="button"
-        onClick={() => void share()}
-        className={`${pill} cursor-pointer text-[var(--color-muted)]`}
-      >
+      <button type="button" onClick={() => void share()}>
         {result === 'shared' ? 'Link shared' : result === 'copied' ? 'Link copied' : 'Share link'}
         <span aria-hidden="true">{result === 'shared' || result === 'copied' ? '✓' : '↗'}</span>
       </button>
+    </>
+  );
+
+  return (
+    <div className="work-modal-links">
+      {item.link && (
+        <a
+          href={item.link.url}
+          target="_blank"
+          aria-describedby="external-link-hint"
+          rel="noopener"
+        >
+          {item.link.label}
+          <span aria-hidden="true">→</span>
+        </a>
+      )}
+      <div className="story-secondary-inline">{secondary}</div>
+      <details className="story-secondary-menu">
+        <summary aria-label="Source and sharing">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="5" cy="12" r="1.5" />
+            <circle cx="12" cy="12" r="1.5" />
+            <circle cx="19" cy="12" r="1.5" />
+          </svg>
+        </summary>
+        <div className="story-secondary-panel">{secondary}</div>
+      </details>
       <span className="story-share-status" role="status">
         {result === 'failed'
           ? 'Copy unavailable. Select the link below to share it.'

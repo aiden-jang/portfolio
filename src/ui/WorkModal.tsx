@@ -7,6 +7,7 @@ import { WorkModalLinks } from './WorkModalLinks';
 import { WorkModalNav } from './WorkModalNav';
 import { WorkStory } from './WorkStory';
 import { ScrollBody } from './ScrollBody';
+import { dismissStoryActions } from './dismissStoryActions';
 import './work-modal.css';
 type Props = {
   item: WorkDetail | null;
@@ -45,7 +46,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape' && !dismissStoryActions(dialogRef.current)) onClose();
       if (
         e.key.startsWith('Arrow') &&
         (e.target as HTMLElement)?.closest('summary, input, textarea, select')
@@ -68,7 +69,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
       body.classList.remove('modal-open');
     };
   }, [onClose, onNext, onPrevious, open]);
-  if (!open) return null;
+  if (!item) return null;
   return createPortal(
     <div
       role="dialog"
@@ -103,40 +104,29 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="
-            absolute top-2.5 right-2.5 z-10 w-11 h-11 md:w-9 md:h-9 rounded-full cursor-pointer
-            border border-[var(--color-line)] bg-[#0a0a14]
-            text-[var(--color-muted)] text-xl leading-none
-            hover:border-[var(--color-neon)] hover:text-[var(--color-neon)]
-            transition-colors
-          "
+          className="work-modal-close"
         >
           ×
         </button>
-        {item && (
-          <>
-            <ScrollBody key={item.title} storyId={item.title}>
-              <span data-nosnippet className="sr-only">
-                {item.context}
-              </span>
-              <h3
-                id="work-modal-title"
-                className="mt-3 mb-1 text-[clamp(1.6rem,3.2vw,2.2rem)] leading-[1.05] font-semibold tracking-[-0.03em]"
-              >
-                {item.displayTitle ?? item.title}
-              </h3>
-              <p className="mt-2 mb-5 text-[rgba(244,240,255,0.6)] text-[0.95rem] leading-[1.5]">
-                {item.summary}
-              </p>
-              <WorkStory item={item} />
-              <p className="work-technologies">{item.stack.join(' · ')}</p>
-            </ScrollBody>
-            <div className="work-modal-footer">
-              <WorkModalNav {...{ onPrevious, onNext, position }} />
-              <WorkModalLinks item={item} />
-            </div>
-          </>
-        )}
+        <>
+          <ScrollBody key={item.title} storyId={item.title}>
+            <span data-nosnippet className="sr-only">
+              {item.context}
+            </span>
+            <h3 id="work-modal-title" className="work-modal-title">
+              {item.displayTitle ?? item.title}
+            </h3>
+            <p className="mt-2 mb-5 text-[rgba(244,240,255,0.6)] text-[0.95rem] leading-[1.5]">
+              {item.summary}
+            </p>
+            <WorkStory item={item} />
+            <p className="work-technologies">{item.stack.join(' · ')}</p>
+          </ScrollBody>
+          <div className="work-modal-footer">
+            <WorkModalNav {...{ onPrevious, onNext, position }} />
+            <WorkModalLinks key={item.title} item={item} />
+          </div>
+        </>
       </div>
     </div>,
     document.body,

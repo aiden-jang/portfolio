@@ -83,6 +83,10 @@ hierarchy; they do not replace the portfolio's identity.
 The car-led showroom and project presentation polish have been applied. Keep the
 car centered with its full orbit area. The page leads from the showroom into
 everythingisfine and Iodine, then Experience, the supporting collection, About and
-Contact. Featured images fill the content width on desktop and lead the project
-copy on phones. Supporting preview frames share a 2:1 ratio. No new metrics,
-testimonials or hiring claims have been provided.
+Contact. Featured images use deliberate globe and editor crops, fill the content width on
+desktop, and lead the copy on phones. Opening an image reveals the complete capture.
+Supporting preview frames share a 2:1 ratio; Platform closes the desktop collection
+with its explanation beside the preview. Studio lighting softens the default paint
+and fades the floor reflection. Phone readers keep source and sharing actions in an
+overflow control; the full garage remains available with grouped controls. No new
+metrics, testimonials or hiring claims have been provided.

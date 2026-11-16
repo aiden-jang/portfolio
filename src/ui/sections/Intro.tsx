@@ -7,6 +7,20 @@ export function IntroSection() {
         <h1>Aiden Jang</h1>
         <p className="intro-role">Software engineer in New York.</p>
         <p>I build tools for publishers, and apps for notes, games and everyday decisions.</p>
+        <a href="#sec-work" className="intro-work-cue">
+          Selected work
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 4v16m-5-5 5 5 5-5" />
+          </svg>
+        </a>
       </div>
     </Section>
   );

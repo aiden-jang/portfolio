@@ -44,6 +44,7 @@ function prepareGlossPaint(
   roughness: number,
   coatRoughness: number,
   preserveSource: 'none' | 'coat' | 'both' = 'none',
+  coatStrength = 1,
 ): void {
   const replacements = new Map<MeshStandardMaterial, MeshPhysicalMaterial>();
   model.traverse((object) => {
@@ -63,7 +64,7 @@ function prepareGlossPaint(
         preserveSource !== 'none' && finish.clearcoat > 0
           ? Math.min(finish.clearcoatRoughness, coatRoughness)
           : coatRoughness;
-      finish.clearcoat = 1;
+      finish.clearcoat = coatStrength;
       finish.needsUpdate = true;
       replacements.set(material, finish);
       return finish;
@@ -98,7 +99,7 @@ function prepareCountachFinish(model: Object3D): void {
 
 export function prepareModelFinish(model: Object3D, file: string): void {
   if (file === 'ferrari-f120-f40.glb')
-    return prepareGlossPaint(model, roadPaint[file], 0.26, 0.06, 'coat');
+    return prepareGlossPaint(model, roadPaint[file], 0.3, 0.18, 'none', 0.65);
   if (file === 'lamborghini-countach-5000qv.glb') return prepareCountachFinish(model);
   if (Object.hasOwn(roadPaint, file))
     return prepareGlossPaint(model, roadPaint[file], 0.24, 0.06, 'both');

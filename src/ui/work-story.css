@@ -90,6 +90,7 @@
 }
 
 .story-image-trigger {
+  position: relative;
   display: block;
   width: 100%;
   text-align: left;
@@ -112,22 +113,31 @@
   aspect-ratio: auto;
   overflow: visible;
 }
-.story-image-action {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 4px 0;
-  border-bottom: 1px solid var(--color-line);
-  font: 11px/1.5 var(--font-display);
-  color: var(--color-muted);
-}
-.story-image-trigger:hover .story-image-action {
-  color: var(--color-fg);
-}
-.story-image-trigger:focus-visible {
-  outline: 2px solid var(--color-fg);
-  outline-offset: 4px;
-}
 .story-screenshot figcaption {
   font: 11px/1.7 var(--font-display);
   margin-top: 10px;
+}
+
+@media (max-width: 767px) {
+  html:root .work-story-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  html:root .work-story-overview > figure {
+    order: -1;
+    width: 100%;
+  }
+  html:root .story-image-crop {
+    aspect-ratio: 1.8;
+    border: 0;
+    border-radius: 8px;
+  }
+  html:root .work-story-overview figcaption {
+    display: none;
+  }
+  html:root .work-story-overview section p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
 }

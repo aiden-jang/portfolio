@@ -5,9 +5,6 @@ export const H2 =
   'mt-3 mb-4 text-[clamp(2rem,4vw,2.75rem)] leading-[1.1] font-medium tracking-[-0.04em]';
 export const P_LI =
   'text-[clamp(1rem,1.3vw,1.0625rem)] leading-[1.65] text-[rgba(244,240,255,0.78)]';
-export const UL_BASE =
-  'list-none p-0 mt-4 [&>li]:py-2.5 [&>li]:border-t [&>li]:border-white/[0.07] [&>li:last-child]:border-b [&>li:last-child]:border-white/[0.07]';
-
 export type SectionSide = 'left' | 'right' | 'center';
 
 export function Section({

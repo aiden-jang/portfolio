@@ -6,6 +6,7 @@ import { THEMES } from '../config';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
+import { applyStudioReflection } from './studioReflection';
 
 const FLOOR_RADIUS = 14;
 const REFLECTOR_RESOLUTION = 1024;
@@ -29,6 +30,7 @@ export function Floor() {
       multisample: 0,
       color: new THREE.Color(THEMES.dusk.reflectorColor),
     });
+    applyStudioReflection(r.material as THREE.ShaderMaterial);
     r.rotation.x = -Math.PI / 2;
     return r;
   }, []);

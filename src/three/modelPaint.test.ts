@@ -70,10 +70,10 @@ it.each([
   const finish = detectBodyMaterial(model, spec.paintMaterial) as THREE.MeshPhysicalMaterial;
   expect(finish.name).toBe(materialName);
   expect(finish).toBeInstanceOf(THREE.MeshPhysicalMaterial);
-  if (file === 'ferrari-f120-f40.glb') expect(finish.roughness).toBe(0.26);
+  if (file === 'ferrari-f120-f40.glb') expect(finish.roughness).toBe(0.3);
   else expect(finish.roughness).toBeLessThanOrEqual(Math.min(roughness, 0.24));
-  expect(finish.clearcoat).toBe(1);
-  expect(finish.clearcoatRoughness).toBe(coatRoughness);
+  expect(finish.clearcoat).toBe(file === 'ferrari-f120-f40.glb' ? 0.65 : 1);
+  expect(finish.clearcoatRoughness).toBe(file === 'ferrari-f120-f40.glb' ? 0.18 : coatRoughness);
   expect(finish.color).toEqual(color);
   expect(finish.map).toBe(body.map);
   expect(finish.metalness).toBe(metalness);

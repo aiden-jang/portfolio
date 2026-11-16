@@ -111,7 +111,7 @@
   height: auto;
 }
 .preview-image.is-zoomed img {
-  width: max(100%, 1000px);
+  width: max(150%, 1000px);
   max-width: none;
 }
 .preview-dialog > p {
