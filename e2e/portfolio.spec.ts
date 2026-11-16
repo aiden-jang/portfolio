@@ -81,6 +81,17 @@ for (const width of [1440, 390]) {
         .getByRole('button', { name: 'Reset camera view', exact: true })
         .filter({ visible: true });
       await expect(reset).toBeVisible();
+      if (width === 390) {
+        for (const phoneWidth of [390, 320]) {
+          await page.setViewportSize({ width: phoneWidth, height: 900 });
+          const bounds = (await reset.boundingBox())!;
+          const layoutWidth = await page.evaluate(() => document.documentElement.clientWidth);
+          expect(Math.abs(bounds.x + bounds.width / 2 - layoutWidth / 2)).toBeLessThan(1);
+          const dock = (await page.locator('#mobile-bar .car-controls-row').boundingBox())!;
+          expect(bounds.y + bounds.height).toBeLessThanOrEqual(dock.y - 10);
+        }
+        await page.setViewportSize({ width, height: 900 });
+      }
       expect(await controls.boundingBox()).toEqual(controlsPosition);
       await reset.click();
       await expect(controls).toBeFocused();

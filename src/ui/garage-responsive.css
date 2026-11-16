@@ -176,7 +176,7 @@
   }
 }
 @media (max-width: 767px) {
-  .camera-reset-button:not(.desktop-camera-reset) {
+  #mobile-bar .camera-reset-button {
     right: auto;
     left: 50%;
     transform: translateX(-50%);
