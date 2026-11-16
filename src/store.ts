@@ -28,6 +28,9 @@ type AppState = {
   isCarLoading: boolean;
   carLoadError: string | null;
   carRetryVersion: number;
+  sceneUnavailable: boolean;
+  sceneRetryVersion: number;
+  retryScene: () => void;
   drsOpen: boolean;
   hasDRS: boolean;
   toggleDRS: () => void;
@@ -68,6 +71,17 @@ export const useAppStore = create<AppState>((set, get) => ({
   isCarLoading: true,
   carLoadError: null,
   carRetryVersion: 0,
+  sceneUnavailable: false,
+  sceneRetryVersion: 0,
+  retryScene: () =>
+    set((state) => ({
+      sceneUnavailable: false,
+      sceneRetryVersion: state.sceneRetryVersion + 1,
+      isCarLoading: true,
+      hasBodyMaterial: false,
+      carLoadError: null,
+      hasManualView: false,
+    })),
   drsOpen: false,
   hasDRS: false,
   toggleDRS: () => {

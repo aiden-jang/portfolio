@@ -1,0 +1,306 @@
+@media (min-width: 1024px) and (min-height: 501px) {
+  html:root #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
+    width: 320px;
+  }
+}
+.desktop-paint-swatches {
+  width: 100%;
+}
+.paint-swatches {
+  justify-content: center;
+}
+.paint-swatches button.swatch {
+  display: grid;
+  place-items: center;
+  position: relative;
+  width: 32px;
+  height: 44px;
+  flex: 0 0 32px;
+  background: transparent !important;
+  border: 0;
+  border-radius: var(--radius-control);
+  box-shadow: none;
+  transform: none;
+  scale: none;
+}
+.paint-sample {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ffffff35;
+  border-radius: 50%;
+}
+.swatch[aria-pressed='true'] .paint-sample {
+  outline: 1px solid var(--color-fg);
+  outline-offset: 3px;
+}
+.paint-swatches .swatch:hover .paint-sample {
+  filter: brightness(1.15);
+}
+.paint-swatches .swatch:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 1px;
+}
+.compact-paint-trigger,
+.compact-paint-label {
+  display: none;
+}
+.paint-picker-panel {
+  position: fixed;
+  inset: auto auto 157px 50%;
+  margin: 0;
+  transform: translateX(-50%);
+  width: min(340px, calc(100vw - 24px));
+  padding: 16px;
+  background: var(--color-panel);
+  color: var(--color-fg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-panel);
+}
+.paint-picker-panel p {
+  font: 13px/1.5 var(--font-display);
+  margin-bottom: 8px;
+}
+.paint-picker-panel:not(:popover-open) {
+  display: none;
+}
+.paint-picker-panel .control-group-label {
+  display: none;
+}
+.paint-picker-panel .paint-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 0;
+  height: auto;
+}
+.paint-picker-panel .paint-swatches button.swatch {
+  width: 40px;
+  flex-basis: 40px;
+}
+.desktop-camera-reset {
+  display: none;
+}
+.section-dot:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+@media (min-width: 768px) {
+  .desktop-camera-reset {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 104px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 112px;
+    z-index: 30;
+  }
+  .desktop-camera-reset > span:last-child {
+    display: inline;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) and (min-height: 501px) {
+  html:root #desktop-dock .car-controls-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 90px 100px;
+    width: 540px;
+    gap: 4px;
+  }
+  html:root #desktop-dock .car-choice {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--color-line);
+    border-radius: 0;
+  }
+  html:root #desktop-dock .car-browse-trigger {
+    flex: 1;
+    width: auto;
+  }
+  html:root #desktop-dock .car-paint-slot {
+    grid-column: 2;
+    grid-row: 2;
+    width: auto;
+    padding-left: 0;
+    border-left: 0;
+  }
+  html:root #desktop-dock .car-action-slot {
+    grid-column: 1;
+    grid-row: 2;
+    width: 80px;
+  }
+  html:root #desktop-dock button[aria-label^='Lighting:'] {
+    grid-column: 3;
+    grid-row: 2;
+    width: 90px;
+    display: grid;
+    gap: 6px;
+  }
+  html:root #desktop-dock .all-controls-trigger {
+    grid-column: 4;
+    grid-row: 2;
+    width: 100px;
+  }
+  html:root #desktop-dock .control-group-label {
+    display: inline;
+  }
+  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) {
+    grid-template-columns: 1fr 90px 100px;
+  }
+  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .car-paint-slot {
+    grid-column: 1;
+  }
+  html:root
+    #desktop-dock
+    .car-controls-row:has(.car-action-slot:empty)
+    button[aria-label^='Lighting:'] {
+    grid-column: 2;
+  }
+  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .all-controls-trigger {
+    grid-column: 3;
+  }
+  .desktop-paint-swatches {
+    display: none;
+  }
+  .compact-paint-trigger {
+    display: flex;
+  }
+  .desktop-camera-reset {
+    bottom: 157px;
+  }
+  .orbit-invitation {
+    bottom: 166px;
+  }
+}
+@media (max-width: 767px) {
+  .camera-reset-button:not(.desktop-camera-reset) {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 112px;
+    bottom: calc(100% + 12px);
+  }
+  .camera-reset-button > span:last-child {
+    display: inline;
+  }
+}
+@media (min-width: 768px) and (max-height: 500px) {
+  html:root #sec-intro {
+    height: 100dvh;
+    min-height: 100dvh;
+    padding: 76px 28px 76px;
+    padding-inline: max(28px, env(safe-area-inset-left)) max(28px, env(safe-area-inset-right));
+    align-items: flex-start;
+  }
+  html:root .garage-intro {
+    max-width: 250px;
+    margin: 0 auto 0 0;
+    text-align: left;
+  }
+  html:root .garage-intro h1 {
+    font-size: 42px;
+    letter-spacing: -0.04em;
+  }
+  html:root .garage-intro .intro-role {
+    font-size: 12px;
+    margin-top: 14px;
+  }
+  html:root .garage-intro .intro-role + p {
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 29ch;
+    margin-top: 8px;
+  }
+  html:root .intro-work-cue {
+    display: none;
+  }
+  html:root #desktop-dock {
+    display: flex;
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  html:root #mobile-bar {
+    display: none;
+  }
+  html:root #desktop-dock .car-controls-row {
+    width: 640px;
+    max-width: calc(100vw - 32px);
+    padding: 4px;
+    gap: 4px;
+  }
+  html:root #desktop-dock .car-choice {
+    width: 240px;
+  }
+  html:root #desktop-dock .car-browse-trigger {
+    width: 152px;
+  }
+  html:root #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
+    width: 104px;
+  }
+  html:root #desktop-dock .car-action-slot {
+    width: 80px;
+  }
+  html:root #desktop-dock button[aria-label^='Lighting:'] {
+    width: 90px;
+    display: grid;
+    gap: 6px;
+  }
+  html:root #desktop-dock .control-group-label {
+    display: inline;
+  }
+  html:root #desktop-dock .all-controls-trigger {
+    width: 88px;
+  }
+  .desktop-paint-swatches {
+    display: none;
+  }
+  .compact-paint-trigger,
+  .compact-paint-label {
+    display: inline-flex;
+  }
+  .compact-paint-name {
+    display: none;
+  }
+  .paint-picker-panel {
+    bottom: 78px;
+  }
+  html:root .orbit-invitation {
+    left: max(28px, env(safe-area-inset-left));
+    bottom: auto;
+    top: 226px;
+    transform: none;
+    max-width: 250px;
+    font-size: 11px;
+    white-space: normal;
+  }
+  .orbit-invitation .orbit-hint-desktop {
+    display: block;
+  }
+  .orbit-invitation .orbit-hint-mobile {
+    display: none;
+  }
+  html:root nav[aria-label='Section progress'] {
+    display: none;
+  }
+  .desktop-camera-reset {
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    left: max(28px, env(safe-area-inset-left));
+    right: auto;
+    top: 218px;
+    bottom: auto;
+    width: 112px;
+    transform: none;
+    z-index: 30;
+  }
+  .desktop-camera-reset > span:last-child {
+    display: inline;
+  }
+  html:root .portfolio-header {
+    height: 60px;
+    min-height: 60px;
+  }
+}

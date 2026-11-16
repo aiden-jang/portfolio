@@ -171,3 +171,21 @@ export function useOrbitGesture(
     };
   }, [state, onTap]);
 }
+
+export function createRigState(): RigState {
+  return {
+    dragAzimuth: 0,
+    dragElevation: 0,
+    isDown: false,
+    isTouch: false,
+    dragMoved: false,
+    orbitHold: false,
+    startX: 0,
+    startY: 0,
+    lastX: 0,
+    lastY: 0,
+    idleSpin: 0,
+    scrollActiveTimer: 0,
+    introT: 0,
+  };
+}

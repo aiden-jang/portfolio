@@ -25,6 +25,8 @@ export function useSceneUrl() {
     if (light === 'dusk' || light === 'night') setThemeName(light as ThemeName);
 
     scenePaintRef.current = parseScenePaint(params.get('paint'));
+    if (scenePaintRef.current && !CARS[useAppStore.getState().carIndex].fixedLivery)
+      useAppStore.setState({ activeBodyColor: scenePaintRef.current });
     setSceneReady(true);
   }, [setCarIndex, setThemeName]);
 

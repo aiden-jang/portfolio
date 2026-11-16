@@ -9,7 +9,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
   everythingisfine: {
     image: '/projects/everythingisfine.jpg',
     description:
-      'Explore earthquakes, storms, volcanoes, wildfires, floods and aurora on one globe, with the source details intact.',
+      'Explore earthquakes, storms and more on one globe. Matching USGS and EMSC reports keeps both sources’ readings intact.',
     caption: 'Live globe: storm radar, surface wind and reported events explored together.',
   },
   worth: {
@@ -66,7 +66,8 @@ export const PREVIEWS: Record<string, ProductPreview> = {
   iodine: {
     image: '/projects/iodine.png',
     description:
-      'An open-source IDE where I contributed scoped command approvals and agent edit undo.',
-    caption: 'Iodine’s editor beside its coding assistant explaining the selected code.',
+      'An open-source IDE where I contributed scoped approvals, local embedding suggestions, and file snapshots that keep the agent informed when edits are undone.',
+    caption:
+      'Editor overview. Approval and undo changes are documented in my GitHub contributions.',
   },
 };

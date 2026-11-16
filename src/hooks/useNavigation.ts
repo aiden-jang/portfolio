@@ -27,14 +27,14 @@ export function useNavigation(sceneOnly = false) {
   const cycleCarThrottled = useCallback(() => {
     const now = performance.now();
     if (now < carLockUntil.current) return;
-    if (useAppStore.getState().isCarLoading) return;
+    if (useAppStore.getState().isCarLoading || useAppStore.getState().sceneUnavailable) return;
     carLockUntil.current = now + CAR_LOCK_MS;
     useAppStore.getState().cycleCar();
   }, []);
   const prevCarThrottled = useCallback(() => {
     const now = performance.now();
     if (now < carLockUntil.current) return;
-    if (useAppStore.getState().isCarLoading) return;
+    if (useAppStore.getState().isCarLoading || useAppStore.getState().sceneUnavailable) return;
     carLockUntil.current = now + CAR_LOCK_MS;
     useAppStore.getState().prevCar();
   }, []);

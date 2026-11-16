@@ -109,10 +109,6 @@
   object-position: center;
   border: 0;
 }
-.story-image-crop:has(.screenshot-unavailable) {
-  aspect-ratio: auto;
-  overflow: visible;
-}
 .story-screenshot figcaption {
   font: 11px/1.7 var(--font-display);
   margin-top: 10px;

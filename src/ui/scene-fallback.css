@@ -1,0 +1,75 @@
+.scene-fallback-poster {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: #000;
+}
+.scene-fallback-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.scene-recovery {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  text-align: center;
+  width: max-content;
+  max-width: calc(100% - 32px);
+}
+.scene-recovery p {
+  font: 12px/1.5 var(--font-display);
+  color: var(--color-muted);
+  margin: 0 0 12px;
+}
+.scene-recovery > div {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.scene-recovery :is(button, a) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-control);
+  background: var(--color-panel);
+  color: var(--color-fg);
+  font: 12px var(--font-display);
+  cursor: pointer;
+}
+.scene-recovery :is(button, a):hover {
+  border-color: var(--color-muted);
+}
+.scene-recovery :is(button, a):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 4px;
+}
+body:not([data-car-controls='visible']) .scene-recovery {
+  visibility: hidden;
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .scene-recovery {
+    bottom: max(24px, env(safe-area-inset-bottom));
+    width: calc(100% - 32px);
+  }
+  .scene-recovery p {
+    max-width: 32ch;
+    margin: 0 auto 12px;
+  }
+}
+@media (max-height: 500px) {
+  .scene-fallback-poster img {
+    object-fit: contain;
+    transform: translateY(-40px);
+  }
+  .scene-recovery {
+    bottom: 12px;
+  }
+}

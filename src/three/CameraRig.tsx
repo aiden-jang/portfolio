@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { KEYFRAMES } from '../config';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { clamp } from '../math';
-import { useOrbitGesture, type RigState } from './useOrbitGesture';
+import { useOrbitGesture, createRigState } from './useOrbitGesture';
 import {
   blendIntro,
   easeOutCubic,
@@ -18,6 +18,7 @@ import { useAppStore } from '../store';
 import { useContactArrival } from './useContactArrival';
 import type { Keyframe } from '../types';
 import { hitsCar } from './carHitTest';
+import { CarFraming } from './carFraming';
 
 const INTRO_DURATION = 2.0;
 const IDLE_SPIN_RATE = 0.12;
@@ -37,22 +38,9 @@ export function CameraRig({ getScrollT }: Props) {
   const contactArrival = useContactArrival();
   const cameraResetVersion = useAppStore((s) => s.cameraResetVersion);
 
-  const state = useRef<RigState>({
-    dragAzimuth: 0,
-    dragElevation: 0,
-    isDown: false,
-    isTouch: false,
-    dragMoved: false,
-    orbitHold: false,
-    startX: 0,
-    startY: 0,
-    lastX: 0,
-    lastY: 0,
-    idleSpin: 0,
-    scrollActiveTimer: 0,
-    introT: 0,
-  });
+  const state = useRef(createRigState());
   const baseKf = useRef<Keyframe>({ ...KEYFRAMES[0] });
+  const framing = useRef(new CarFraming());
 
   const onTap = useCallback(
     (x: number, y: number) => {
@@ -99,7 +87,7 @@ export function CameraRig({ getScrollT }: Props) {
       ? CLEAN_AZIMUTH
       : kf.azimuth + s.dragAzimuth + s.idleSpin * (1 - clamp(scrollT, 0, 1));
     const aspect = three.size.height > 0 ? three.size.width / three.size.height : FRAME_BASE_ASPECT;
-    const dist = kf.distance * framingDistanceMultiplier(aspect);
+    let dist = kf.distance * framingDistanceMultiplier(aspect);
     const tgtY = kf.targetY;
 
     const el = clamp(
@@ -108,7 +96,18 @@ export function CameraRig({ getScrollT }: Props) {
       MAX_ELEVATION,
     );
     if (s.isDown) s.dragElevation = el - kf.elevation;
-    let pose = orbitPosition(az, el, dist, tgtY);
+    if (scrollT === 0 && useAppStore.getState().hasManualView)
+      dist = framing.current.fit(
+        refs.carModel,
+        az,
+        el,
+        dist,
+        tgtY,
+        three.size.width,
+        three.size.height,
+        'fov' in camera ? (camera.fov as number) : 35,
+      );
+    let pose = orbitPosition(az, Math.max(el, floorElevation(dist, tgtY)), dist, tgtY);
 
     if (refs.introArmed && s.introT < 1 && !isCleanMode && !reduced) {
       s.introT = Math.min(1, s.introT + dt / INTRO_DURATION);

@@ -153,15 +153,17 @@
 .car-option-name {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
+  min-height: 48px;
   gap: 6px;
-  padding: 0 12px;
+  padding: 8px 12px 0;
   font: 12px/1.5 var(--font-display);
 }
 .car-option-code {
   display: block;
   padding: 4px 12px 12px;
-  font: 10px/1.5 var(--font-mono);
+  font: 12px/1.5 var(--font-display);
+  min-height: 64px;
   color: #b9b9c0;
 }
 .car-browser-card > a {
@@ -217,4 +219,34 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.car-option-name svg {
+  flex-shrink: 0;
+}
+.car-option-code > span {
+  min-height: 36px;
+}
+.car-browser-card > a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-size: 12px;
+}
+
+.car-browser-card {
+  display: flex;
+  flex-direction: column;
+}
+.car-browser-card .car-option {
+  flex: 1;
+}
+.car-option-title {
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.car-option-name {
+  min-height: 50px;
 }

@@ -3,17 +3,18 @@ import { isPortfolioProject } from '../../data/workBrowsing';
 import './experience.css';
 import type { WorkDetail } from '../../types';
 import { H2, P_LI, Section } from './shared';
+import { ControlIcon } from '../ControlIcon';
 
 const OUTCOMES: Record<string, { figure: string; label: string; title: string; detail: string }> = {
   'monolith-django-rest-react-rewrite': {
-    figure: '6 months',
-    label: 'two engineers',
+    figure: '30,000+',
+    label: 'newsletters served',
     title: 'Replaced a live PHP backend',
-    detail: 'PostgreSQL + Django REST, with a React interface. Serving 30,000+ newsletters.',
+    detail: 'Two engineers, six months. PostgreSQL + Django REST, with a React interface.',
   },
   'agentic-ai-playwright-framework': {
-    figure: 'First',
-    label: 'automated coverage',
+    figure: 'Playwright',
+    label: 'introduced automated coverage',
     title: 'Tests that keep up with a rewrite',
     detail: 'Playwright agents plan, generate and repair tests during the UI rewrite.',
   },
@@ -127,7 +128,7 @@ function HighlightRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLEle
     <button
       type="button"
       onClick={(e) => onOpen(e.currentTarget)}
-      className={`experience-outcome${workId(item) === 'ad-slot-details-120-1-api-call' ? ' experience-outcome-lead' : ''}`}
+      className={`experience-outcome${workId(item) === 'agentic-ai-playwright-framework' ? ' experience-outcome-qualitative' : ''}`}
     >
       {outcome ? (
         <>
@@ -145,7 +146,7 @@ function HighlightRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLEle
         <span>{item.summary}</span>
       )}
       <span className="experience-arrow" aria-hidden="true">
-        ↗
+        <ControlIcon name="arrow" />
       </span>
     </button>
   );

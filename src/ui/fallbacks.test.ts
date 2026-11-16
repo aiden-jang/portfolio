@@ -111,7 +111,7 @@ it('replaces a failed image with useful readable content', async () => {
   await act(() => root.render(createElement(ScreenshotImage, { src: '/missing.png', alt: 'App' })));
   await act(() => host.querySelector('img')!.dispatchEvent(new Event('error')));
   expect(host.querySelector('img')).toBeNull();
-  expect(host.querySelector('[role="status"]')?.textContent).toContain('project story');
+  expect(host.querySelector('[role="status"]')?.textContent).toContain('project details');
 });
 
 it('keeps the portfolio readable when the scene fails', async () => {

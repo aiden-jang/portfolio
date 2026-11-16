@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAppStore } from '../store';
-import { COMMAND_MENU_EVENT } from './CommandMenu';
+import { COMMAND_MENU_EVENT } from './useCommandMenuEvents';
 import './all-controls.css';
 
 export function AllControlsButton() {
@@ -26,6 +26,7 @@ export function Hint() {
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const loading = useAppStore((state) => state.isCarLoading);
   const error = useAppStore((state) => state.carLoadError);
+  const manual = useAppStore((state) => state.hasManualView);
   useEffect(() => {
     const observer = new MutationObserver(() => {
       if (document.body.classList.contains('orbiting')) setTriedOrbit(true);
@@ -35,10 +36,12 @@ export function Hint() {
   }, []);
   return (
     <>
-      {sectionIndex === 0 && !loading && !error && (
-        <p className={`orbit-invitation ${triedOrbit ? 'orbit-invitation-used' : ''}`}>
-          <span className="hidden md:inline">Drag to look around.</span>
-          <span className="md:hidden">Hold the car, then drag to look around.</span>
+      {sectionIndex === 0 && !loading && !error && !manual && !triedOrbit && (
+        <p className="orbit-invitation">
+          <span className="orbit-hint-desktop hidden md:inline">Drag to look around.</span>
+          <span className="orbit-hint-mobile md:hidden">
+            Hold the car, then drag to look around.
+          </span>
         </p>
       )}
       <p className="orbit-status">Drag to orbit · release to scroll</p>

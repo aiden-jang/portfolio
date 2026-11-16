@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { CARS, GARAGE_INDICES } from '../config';
 import { useAppStore } from '../store';
 import { usePageScrollLock } from './usePageScrollLock';
+import { ControlIcon } from './ControlIcon';
 
 type Props = { onClose: () => void; returnFocus: HTMLElement | null };
 
@@ -108,8 +109,8 @@ export function CarBrowser({ onClose, returnFocus }: Props) {
               >
                 <CarThumbnail file={car.file} />
                 <span className="car-option-name">
-                  {car.name}
-                  <span aria-hidden="true">{index === carIndex ? '✓' : '↗'}</span>
+                  <span className="car-option-title">{car.name}</span>
+                  <ControlIcon name={index === carIndex ? 'check' : 'chevron'} />
                 </span>
                 <span className="car-option-code">
                   {car.code}

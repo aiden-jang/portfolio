@@ -260,6 +260,12 @@ html:root #project-platform .garage-project-links {
   html:root .garage-project-featured figcaption {
     display: none;
   }
+  html:root .garage-project-featured .project-proof {
+    display: block;
+    margin: 12px 0 0;
+    font-size: 12px;
+    line-height: 1.6;
+  }
   html:root #project-everythingisfine .preview-thumbnail {
     aspect-ratio: 1.3;
   }
@@ -293,4 +299,8 @@ html:root #project-platform .garage-project-links {
   html:root .project-gallery #project-platform .garage-project-copy {
     padding: 0;
   }
+}
+
+html:root .garage-project-copy > p {
+  text-wrap: pretty;
 }

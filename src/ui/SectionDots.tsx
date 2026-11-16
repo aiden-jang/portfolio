@@ -11,7 +11,7 @@ export function SectionDots({ onJump }: Props) {
     <nav
       aria-label="Section progress"
       className="
-        hidden md:flex flex-col gap-4 z-20
+        hidden md:flex flex-col z-20
         fixed right-[2.4vw] top-1/2 -translate-y-1/2
       "
     >
@@ -24,7 +24,7 @@ export function SectionDots({ onJump }: Props) {
             onClick={() => onJump(id)}
             aria-label={`Go to ${SECTION_LABELS[id]}`}
             aria-current={active ? 'true' : undefined}
-            className="group relative cursor-pointer flex items-center justify-center w-3 h-3"
+            className="section-dot group relative cursor-pointer flex items-center justify-center w-7 h-7"
           >
             <span
               className="

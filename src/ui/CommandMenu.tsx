@@ -5,7 +5,8 @@ import { type SectionId } from '../config';
 import { buildCommands, matchCommands, type Command } from './commands';
 import { usePageScrollLock } from './usePageScrollLock';
 import { CommandResults } from './CommandResults';
-export const COMMAND_MENU_EVENT = 'portfolio:open-command-menu';
+import { useAppStore } from '../store';
+import { useCommandMenuEvents } from './useCommandMenuEvents';
 
 export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void }) {
   const [open, setOpen] = useState(false);
@@ -17,7 +18,8 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const dialogRef = useRef<HTMLElement>(null);
   useDialogFocus(open, dialogRef, inputRef);
   const activeResultRef = useRef<HTMLButtonElement>(null);
-  const commands = buildCommands({ onSection, setNotice });
+  const sceneUnavailable = useAppStore((state) => state.sceneUnavailable);
+  const commands = buildCommands({ onSection, setNotice, sceneUnavailable });
 
   const results = matchCommands(commands, query);
   useEffect(() => {
@@ -28,35 +30,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
     activeResultRef.current?.scrollIntoView({ block: 'nearest' });
   }, [activeIndex, query]);
 
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.isComposing || event.keyCode === 229) return;
-      if (document.querySelector('[role="dialog"], dialog[open]') && !dialogRef.current) return;
-      const target = event.target as HTMLElement | null;
-      const inField =
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        !!target?.isContentEditable;
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        event.preventDefault();
-        setOpen((value) => !value);
-        return;
-      }
-      if (!inField && event.key === '?') {
-        event.preventDefault();
-        setOpen(true);
-      }
-      if (event.key === 'Escape') setOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
-
-  useEffect(() => {
-    const openFromControl = () => setOpen(true);
-    window.addEventListener(COMMAND_MENU_EVENT, openFromControl);
-    return () => window.removeEventListener(COMMAND_MENU_EVENT, openFromControl);
-  }, []);
+  useCommandMenuEvents(open, setOpen, dialogRef);
 
   useEffect(() => {
     if (!open) {

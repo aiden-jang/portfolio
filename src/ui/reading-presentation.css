@@ -233,12 +233,6 @@ html:root .engineering-flow li {
 html:root .experience-outcome:last-child {
   border: 0;
 }
-html:root .experience-outcome-lead {
-  background: transparent;
-}
-html:root .experience-outcome-lead .experience-figure strong {
-  font-size: 32px;
-}
 html:root .experience-story > .experience-context {
   font: 11px/1.4 var(--font-display);
   color: #a5a5ae;
@@ -274,10 +268,41 @@ html:root .about-copy > :is(div, p) {
   html:root .experience-outcome .experience-figure strong {
     font-size: 28px;
   }
-  html:root .experience-outcome-lead .experience-figure strong {
-    font-size: 31px;
-  }
   html:root .about-details > div {
     padding-block: 12px;
+  }
+}
+
+html:root .experience-outcome .experience-figure strong {
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+html:root .experience-outcome-qualitative .experience-figure strong {
+  font-size: 16px;
+  line-height: 1.4;
+}
+html:root .experience-figure span {
+  font: 12px/1.45 var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+html:root .experience-arrow {
+  display: grid;
+  place-items: center;
+}
+html:root .experience-story span,
+html:root .about-copy p {
+  text-wrap: pretty;
+}
+html:root .about-contribution-link > span:first-child {
+  text-wrap: balance;
+}
+@media (max-width: 767px) {
+  html:root .experience-outcome .experience-figure strong {
+    font-size: 22px;
+  }
+  html:root .experience-outcome-qualitative .experience-figure strong {
+    font-size: 14px;
   }
 }

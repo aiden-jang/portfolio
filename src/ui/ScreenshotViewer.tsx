@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ScreenshotImage } from './ScreenshotImage';
+import { ControlIcon } from './ControlIcon';
 import './screenshot-viewer.css';
 
 type Props = {
@@ -27,6 +28,15 @@ export function ScreenshotViewer({
   navigation,
 }: Props) {
   const [zoomed, setZoomed] = useState(false);
+  const [failedImage, setFailedImage] = useState<string | null>(null);
+  const onReady = useCallback(
+    () => setFailedImage((current) => (current === image ? null : current)),
+    [image],
+  );
+  const onUnavailable = useCallback(() => {
+    setFailedImage(image);
+    setZoomed(false);
+  }, [image]);
   const dialog = useRef<HTMLDialogElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -71,16 +81,28 @@ export function ScreenshotViewer({
         <div className="preview-dialog-actions">
           {onShare && (
             <button type="button" className="preview-copy" onClick={onShare}>
-              {shareStatus === 'copied'
-                ? 'Link copied ✓'
-                : shareStatus === 'failed'
-                  ? 'Copy unavailable'
-                  : 'Copy view link'}
+              <span className="preview-action-label">
+                {shareStatus === 'copied'
+                  ? 'Link copied'
+                  : shareStatus === 'failed'
+                    ? 'Copy unavailable'
+                    : 'Copy view link'}
+              </span>
+              <ControlIcon
+                name={shareStatus === 'copied' ? 'check' : 'copy'}
+                className="preview-action-icon"
+              />
             </button>
           )}
           {shareStatus === 'failed' && viewLink && <a href={viewLink}>Open view link ↗</a>}
-          <button type="button" aria-pressed={zoomed} onClick={() => setZoomed(!zoomed)}>
-            {zoomed ? 'Fit image' : 'Zoom in'}
+          <button
+            type="button"
+            disabled={failedImage === image}
+            aria-pressed={zoomed}
+            onClick={() => setZoomed(!zoomed)}
+          >
+            <span className="preview-action-label">{zoomed ? 'Fit image' : 'Zoom in'}</span>
+            <ControlIcon name={zoomed ? 'fit' : 'zoom'} className="preview-action-icon" />
           </button>
         </div>
         <button
@@ -90,7 +112,8 @@ export function ScreenshotViewer({
           onClick={onClose}
           aria-label="Close screenshot"
         >
-          Close ×
+          <span className="preview-action-label">Close ×</span>
+          <ControlIcon name="close" className="preview-action-icon" />
         </button>
       </div>
       {navigation && (
@@ -125,6 +148,8 @@ export function ScreenshotViewer({
           key={image}
           src={image}
           alt={`${name} product interface, full screenshot`}
+          onUnavailable={onUnavailable}
+          onReady={onReady}
         />
       </div>
       <p>

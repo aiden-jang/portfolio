@@ -10,6 +10,7 @@ import { Lights } from './Lights';
 import { useAppStore } from '../store';
 import { useScenePaused } from './useScenePaused';
 import { useSceneActivity } from './useSceneActivity';
+import { SceneHealth } from './SceneHealth';
 
 const Effects = lazy(() => import('./Effects').then((module) => ({ default: module.Effects })));
 
@@ -45,6 +46,7 @@ export function Scene({ getScrollT }: Props) {
           gl.setClearColor(THEMES.dusk.bg, 1);
         }}
       >
+        <SceneHealth />
         <Lights />
         <Floor />
         <Car />

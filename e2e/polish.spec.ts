@@ -45,13 +45,14 @@ test('phone reader keeps source and sharing available with independent Escape di
   await page.keyboard.press('Shift+Tab');
   await expect(more).toBeFocused();
   await more.press('Enter');
-  await expect(dialog.getByRole('link', { name: 'Source code', exact: true })).toBeVisible();
+  const menu = dialog.locator('.story-secondary-panel');
+  await expect(menu.getByRole('link', { name: 'Source code', exact: true })).toBeVisible();
   await dialog.getByRole('button', { name: 'Share link', exact: true }).click();
   await expect(dialog.getByRole('button', { name: 'Link copied', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(dialog).toBeVisible();
   await expect(more).toBeFocused();
-  await expect(dialog.getByRole('link', { name: 'Source code', exact: true })).toBeHidden();
+  await expect(menu.getByRole('link', { name: 'Source code', exact: true })).toBeHidden();
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveCount(0);
   await expect(trigger).toBeFocused();

@@ -5,6 +5,7 @@ import type { WorkDetail } from '../types';
 import { PREVIEWS } from '../data/projectPreviews';
 import { usePreviewSelection } from './usePreviewSelection';
 import { previewLink } from './previewLinks';
+import { ControlIcon } from './ControlIcon';
 
 export function WorkModalLinks({ item }: { item: WorkDetail }) {
   const preview = PREVIEWS[item.mark ?? ''];
@@ -29,6 +30,17 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
   if (!item.link && !item.links?.length && !item.shortName) return null;
   const secondary = (
     <>
+      {item.link && (
+        <a
+          href={item.link.url}
+          target="_blank"
+          rel="noopener"
+          aria-describedby="external-link-hint"
+        >
+          {item.link.label}
+          <span aria-hidden="true">↗</span>
+        </a>
+      )}
       {item.links?.map((link) => (
         <a
           key={link.url}
@@ -43,25 +55,13 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
       ))}
       <button type="button" onClick={() => void share()}>
         {result === 'shared' ? 'Link shared' : result === 'copied' ? 'Link copied' : 'Share link'}
-        <span aria-hidden="true">{result === 'shared' || result === 'copied' ? '✓' : '↗'}</span>
+        <ControlIcon name={result === 'shared' || result === 'copied' ? 'check' : 'share'} />
       </button>
     </>
   );
 
   return (
     <div className="work-modal-links">
-      {item.link && (
-        <a
-          href={item.link.url}
-          target="_blank"
-          aria-describedby="external-link-hint"
-          rel="noopener"
-        >
-          {item.link.label}
-          <span aria-hidden="true">→</span>
-        </a>
-      )}
-      <div className="story-secondary-inline">{secondary}</div>
       <details className="story-secondary-menu">
         <summary aria-label="Source and sharing">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
@@ -70,26 +70,28 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
             <circle cx="19" cy="12" r="1.5" />
           </svg>
         </summary>
-        <div className="story-secondary-panel">{secondary}</div>
+        <div className="story-secondary-panel">
+          {secondary}
+          <span className="story-share-status" role="status">
+            {result === 'failed'
+              ? 'Copy unavailable. Select the link below to share it.'
+              : result === 'shared'
+                ? 'Link shared.'
+                : result === 'copied'
+                  ? 'Link copied.'
+                  : ''}
+          </span>
+          {result === 'failed' && (
+            <input
+              className="story-share-fallback"
+              aria-label="Case study link"
+              readOnly
+              value={fallbackUrl}
+              onFocus={(event) => event.currentTarget.select()}
+            />
+          )}
+        </div>
       </details>
-      <span className="story-share-status" role="status">
-        {result === 'failed'
-          ? 'Copy unavailable. Select the link below to share it.'
-          : result === 'shared'
-            ? 'Link shared.'
-            : result === 'copied'
-              ? 'Link copied.'
-              : ''}
-      </span>
-      {result === 'failed' && (
-        <input
-          className="story-share-fallback"
-          aria-label="Case study link"
-          readOnly
-          value={fallbackUrl}
-          onFocus={(event) => event.currentTarget.select()}
-        />
-      )}
     </div>
   );
 }

@@ -180,7 +180,7 @@
   /* Hide fixed chrome through modal overlays. Opacity avoids conflicts with later layout utilities. */
   body.modal-open #mobile-bar,
   body.modal-open #desktop-dock,
-  body.modal-open header,
+  body.modal-open .portfolio-header,
   body.modal-open #nav {
     opacity: 0;
     pointer-events: none;

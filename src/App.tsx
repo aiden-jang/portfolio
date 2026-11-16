@@ -18,6 +18,7 @@ import './ui/dialog-motion.css';
 import './ui/showroom-layout.css';
 import './ui/project-presentation.css';
 import './ui/reading-presentation.css';
+import './ui/garage-responsive.css';
 
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 

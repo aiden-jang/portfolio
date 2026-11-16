@@ -2,7 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { THEMES } from '../config';
+import { CARS, THEMES } from '../config';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
@@ -53,7 +53,17 @@ export function Lights() {
   const current = useRef<typeof THEMES.dusk>(JSON.parse(JSON.stringify(THEMES.dusk)));
 
   useFrame((_state, dt) => {
-    const target = THEMES[useAppStore.getState().themeName];
+    const state = useAppStore.getState();
+    const target = THEMES[state.themeName];
+    const sculpted = ['mercedes-benz-w198-300-sl.glb', 'red-bull-rb16b.glb'].includes(
+      CARS[state.carIndex].file,
+    );
+    const duskSeparation = sculpted && state.themeName === 'dusk';
+    scene.environmentIntensity = smoothTowards(
+      scene.environmentIntensity,
+      sculpted ? 0.29 : 0.22,
+      Math.min(1, dt * TRANSITION_RATE),
+    );
     const k = Math.min(1, dt * TRANSITION_RATE);
     const c = current.current;
 
@@ -79,12 +89,20 @@ export function Lights() {
     key.current.intensity = c.key.intensity * sunFactor;
 
     c.fill.color = smoothColorHex(c.fill.color, target.fill.color, k);
-    c.fill.intensity = smoothTowards(c.fill.intensity, target.fill.intensity, k);
+    c.fill.intensity = smoothTowards(
+      c.fill.intensity,
+      duskSeparation ? 0.92 : target.fill.intensity,
+      k,
+    );
     fill.current.color.setHex(c.fill.color);
     fill.current.intensity = c.fill.intensity;
 
     c.rim.color = smoothColorHex(c.rim.color, target.rim.color, k);
-    c.rim.intensity = smoothTowards(c.rim.intensity, target.rim.intensity, k);
+    c.rim.intensity = smoothTowards(
+      c.rim.intensity,
+      duskSeparation ? 1.08 : target.rim.intensity,
+      k,
+    );
     rim.current.color.setHex(c.rim.color);
     rim.current.intensity = c.rim.intensity;
   });

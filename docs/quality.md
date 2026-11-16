@@ -76,10 +76,11 @@ creating a 2D canvas. The same case still requires the car to render visibly.
 Navigation unit checks cover initial position settling and delayed font layout
 without requiring a resize or scroll to reveal the Intro controls.
 
-The retired M1 check resizes one shared-link scene across desktop, tablet and phone
-layouts, then checks picker exclusion, focus, fixed-livery links, reloads,
-rejoining the curated garage and both creator credits.
-Screenshot pixels require its red and blue Motorsport colors in both lighting modes.
+The retired M1 rendering check resizes one shared-link scene across desktop, tablet
+and phone layouts. Screenshot pixels require its red and blue Motorsport colors in
+both lighting modes. A separate flow checks picker exclusion, focus, reloads,
+rejoining the curated garage and both creator credits, keeping repeated model loads
+within the existing test budgets.
 
 Axe checks WCAG A and AA rules on the page and open dialogs. The tests use the real
 models, images and interface. Local telemetry endpoints are stubbed because they

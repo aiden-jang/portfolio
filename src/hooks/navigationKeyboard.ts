@@ -24,6 +24,11 @@ export function handleNavigationKey(
       target?.closest('.garage-project-list')) &&
     ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(e.key);
   if (inField || readingProjects) return;
+  if (
+    useAppStore.getState().sceneUnavailable &&
+    /^(?:[1-9cbvx]|ArrowLeft|ArrowRight)$/i.test(e.key)
+  )
+    return;
   if (/^[1-9]$/.test(e.key)) {
     const carIndex = GARAGE_INDICES[Number(e.key) - 1];
     if (carIndex !== undefined) {

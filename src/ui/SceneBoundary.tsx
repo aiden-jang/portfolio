@@ -1,28 +1,34 @@
 import { Component, type ReactNode } from 'react';
+import { useAppStore } from '../store';
+import { SceneFallback } from './SceneFallback';
 
 type Props = { children: ReactNode };
 type State = { failed: boolean };
 
-// The 3D is decorative and the DOM portfolio works without it, so a missing WebGL context or a
-// failed GLB should drop the canvas rather than throw past Suspense and blank the page.
 export class SceneBoundary extends Component<Props, State> {
   state: State = { failed: false };
+  unsubscribe?: () => void;
+
+  componentDidMount(): void {
+    this.unsubscribe = useAppStore.subscribe((state, previous) => {
+      if (state.sceneRetryVersion !== previous.sceneRetryVersion) this.setState({ failed: false });
+    });
+  }
+
+  componentWillUnmount(): void {
+    this.unsubscribe?.();
+  }
 
   static getDerivedStateFromError(): State {
     return { failed: true };
   }
 
   componentDidCatch(error: unknown): void {
+    useAppStore.setState({ sceneUnavailable: true, isCarLoading: false, hasBodyMaterial: false });
     console.warn('3D scene disabled:', error);
   }
 
   render(): ReactNode {
-    return this.state.failed ? (
-      <p className="scene-loading-note" role="status">
-        The car is sitting this one out. Your browser couldn’t start the 3D view.
-      </p>
-    ) : (
-      this.props.children
-    );
+    return this.state.failed ? <SceneFallback /> : this.props.children;
   }
 }

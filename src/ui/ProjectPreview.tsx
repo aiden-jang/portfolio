@@ -1,7 +1,7 @@
 import { copyText } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
 import { ScreenshotImage } from './ScreenshotImage';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from './ScreenshotViewer';
 import type { PreviewState } from '../data/projectPreviews';
 import './project-preview.css';
@@ -23,6 +23,13 @@ export function ProjectPreview({
   const image = states?.[selected]?.image ?? initialImage;
   const caption = states?.[selected]?.caption ?? initialCaption;
   const [open, setOpen] = useState(false);
+  const [failedImage, setFailedImage] = useState<string | null>(null);
+  const unavailable = failedImage === image;
+  const onUnavailable = useCallback(() => setFailedImage(image), [image]);
+  const onReady = useCallback(
+    () => setFailedImage((current) => (current === image ? null : current)),
+    [image],
+  );
   const trigger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const linked = previewIndex(
@@ -55,15 +62,22 @@ export function ProjectPreview({
           className="project-preview"
           data-project={name}
           data-view={selected}
+          disabled={unavailable}
           onClick={() => {
             setOpen(true);
           }}
           aria-label={`Inspect screenshot: ${name}`}
         >
           <div className="preview-thumbnail">
-            <ScreenshotImage key={image} src={image} alt={`${name} product interface`} lazy />
+            <ScreenshotImage
+              src={image}
+              alt={`${name} product interface`}
+              lazy
+              onUnavailable={onUnavailable}
+              onReady={onReady}
+            />
           </div>
-          <ExpandIcon />
+          {!unavailable && <ExpandIcon />}
         </button>
         {states &&
           previewIndex(new URLSearchParams(location.search).get('preview'), name, states.length) !==
@@ -72,7 +86,9 @@ export function ProjectPreview({
               <a href="#sec-intro">Back to portfolio ↑</a>
             </div>
           )}
-        <figcaption aria-live="polite">{caption}</figcaption>
+        <figcaption className={name === 'iodine' ? 'project-proof' : undefined} aria-live="polite">
+          {caption}
+        </figcaption>
       </figure>
       {open && (
         <ScreenshotViewer

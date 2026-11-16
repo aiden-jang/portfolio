@@ -39,7 +39,7 @@ export function ColorSwatches({ bordered = true }: { bordered?: boolean }) {
       aria-label="Paint"
       aria-hidden={!hasBody}
       className={`
-        inline-flex items-center gap-1.5 px-1.5 h-9
+        paint-swatches inline-flex items-center gap-1.5 px-1.5 h-11
         ${bordered ? 'border-x border-[var(--color-line)]' : ''}
         transition-opacity duration-200
         ${hasBody ? 'opacity-100' : 'opacity-30 pointer-events-none'}
@@ -92,6 +92,8 @@ function SwatchButton({
         ${active ? 'border-[var(--color-neon)] shadow-[0_0_0_2px_rgba(255,107,28,0.4)]' : ''}
       `}
       style={{ background: color }}
-    />
+    >
+      <span className="paint-sample" style={{ background: color }} />
+    </button>
   );
 }

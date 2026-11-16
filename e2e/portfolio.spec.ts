@@ -194,11 +194,7 @@ for (const width of [1440, 390]) {
       const closeStory = page.getByRole('button', { name: 'Close', exact: true });
       await expect(closeStory).toBeFocused();
       await page.keyboard.press('Shift+Tab');
-      await expect(
-        width === 390
-          ? page.getByLabel('Source and sharing')
-          : page.getByRole('button', { name: 'Share link', exact: true }),
-      ).toBeFocused();
+      await expect(page.getByLabel('Source and sharing')).toBeFocused();
       await page.keyboard.press('Tab');
       await expect(closeStory).toBeFocused();
       await accessible(page);

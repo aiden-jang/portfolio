@@ -48,9 +48,6 @@
   white-space: nowrap;
   transition: opacity 400ms;
 }
-.orbit-invitation-used {
-  opacity: 0;
-}
 @media (max-width: 767px) {
   .orbit-invitation {
     bottom: max(144px, calc(env(safe-area-inset-bottom) + 128px));

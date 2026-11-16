@@ -1,5 +1,6 @@
 import { CARS } from '../config';
 import { useAppStore } from '../store';
+import { ControlIcon } from './ControlIcon';
 
 export function HeadlightButton() {
   const carIndex = useAppStore((state) => state.carIndex);
@@ -18,7 +19,7 @@ export function HeadlightButton() {
       title={raised ? 'Lower headlights' : 'Raise headlights'}
       className="scene-control-button"
     >
-      <span aria-hidden="true">{raised ? '◉' : '◡'}</span>
+      <ControlIcon name="headlights" />
       <span>Lights</span>
     </button>
   );

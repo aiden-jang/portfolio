@@ -4,7 +4,11 @@
 
 `src/App.tsx` composes the decorative scene, page chrome and content. It keeps the
 scene behind a lazy-loading boundary so portfolio content can load independently.
-`SceneBoundary` contains scene failures without replacing the page.
+`SceneBoundary` contains scene failures without replacing the page. An unavailable
+WebGL context shows a static showroom preview with retry and project navigation,
+while unavailable garage actions leave the controls and command search.
+`SceneHealth` also reports a lost rendering context through that boundary.
+Retry remounts the scene and retains the selected model, paint and lighting.
 
 `useNavigation` owns scroll tracking, section jumps and event registration.
 `scrollNavigation` owns the cancellable scroll animation. `navigationKeyboard`
@@ -48,7 +52,10 @@ label, icon, loading and feedback changes do not move neighboring controls.
 The picker, paint, lighting and details share one panel with consistent control
 corners and utility type. Phone controls occupy a second row inside that panel;
 picker text truncates within fixed-height rows. The floating duplicate car caption
-is omitted. Header actions and garage controls share the same control tokens.
+is omitted. Header actions and garage controls share the same control tokens. Tablet controls
+use a full-width picker above labeled actions. Short landscape screens retain a
+compact dock and separate orbit/reset space. Compact paint opens a native popover
+with every finish, while normal desktop swatches retain larger invisible targets.
 Reading sections use content-led heights, matching heading sizes and clearer
 metadata; the default project list avoids repeating an ownership label on every card.
 
@@ -67,7 +74,9 @@ Effects have their own lazy-loading boundary inside the canvas, so their downloa
 does not block mounting the scene or starting the model request. Rendering pauses
 in reading sections and resumes for the visible Contact car.
 `CameraRig` combines section poses, pointer offsets and intro motion. Manual orbit
-holds the chosen angle until Reset view; automatic intro rotation resumes after a
+holds the chosen angle until Reset view; `carFraming` caches visible model bounds
+and increases distance when needed to fit a resized manual view without changing
+its angle. Hidden export planes do not participate in that framing. Automatic intro rotation resumes after a
 reset. Reset appears outside the dock's layout so its arrival does not move the
 other controls. Share and randomization live in All controls alongside keyboard
 navigation. The primary dock keeps car selection, paint, lighting and available

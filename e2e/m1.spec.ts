@@ -16,17 +16,29 @@ async function expectRacingColors(page: Page) {
   }).toPass({ timeout: 20_000 });
 }
 
-test('retired M1 preserves shared links, livery and credits outside the picker across layouts', async ({
-  page,
-}) => {
+test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-10-13T18:00:00Z'));
   await page.route('**/_vercel/**', (route) =>
     route.fulfill({ body: '', contentType: 'application/javascript' }),
   );
+});
+
+test('retired M1 keeps its racing colors across layouts and lighting', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.setViewportSize({ width: 1280, height: 720 });
+  const downloaded = page.waitForResponse('**/models/bmw-m1-turbo.glb');
   await page.goto('/?clean&car=21&paint=original&light=dusk');
+  const response = await downloaded;
+  expect(response.ok()).toBe(true);
+  await response.finished();
+  await expect(page.locator('.car-loading-progress')).toHaveAttribute('aria-hidden', 'true', {
+    timeout: 60_000,
+  });
+  await page.evaluate(async () => {
+    for (let frame = 0; frame < 2; frame++)
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  });
   await expectRacingColors(page);
   await page.screenshot({ path: test.info().outputPath('m1-clean.png') });
   await page.goto('/?car=21&paint=%23365d7b&light=dusk');
@@ -62,7 +74,17 @@ test('retired M1 preserves shared links, livery and credits outside the picker a
       .filter({ visible: true })
       .click();
   }
+  expect(errors).toEqual([]);
+});
+
+test('retired M1 keeps shared identity, picker focus and model credits', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/?car=21&paint=original&light=dusk');
+  const browse = page.getByRole('button', { name: /Browse cars\./ }).filter({ visible: true });
+  await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+  await expect(browse).toHaveAccessibleName('Browse cars. BMW M1 Turbo, Group 5');
   await browse.click();
   const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
   await expect(
@@ -82,6 +104,7 @@ test('retired M1 preserves shared links, livery and credits outside the picker a
     .click();
   await expect(browse).toHaveAccessibleName('Browse cars. Ferrari F40, F120');
   await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('0');
+  await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
   await page.locator('.portfolio-menu summary').click();
   await page
     .getByRole('navigation', { name: 'Mobile navigation' })

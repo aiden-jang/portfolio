@@ -5,6 +5,7 @@ import { useAppStore } from '../store';
 import { Brand } from './Brand';
 import { Nav } from './Nav';
 import { ResumeButton } from './ResumeButton';
+import { ControlIcon } from './ControlIcon';
 
 export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void }) {
   const active = useAppStore((state) => state.sectionIndex);
@@ -54,7 +55,7 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
                 }}
               >
                 <span>{SECTION_LABELS[id]}</span>
-                <span aria-hidden="true">↗</span>
+                <ControlIcon name="arrow" />
               </a>
             ))}
           </nav>

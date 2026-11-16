@@ -98,6 +98,18 @@ function prepareCountachFinish(model: Object3D): void {
 }
 
 export function prepareModelFinish(model: Object3D, file: string): void {
+  if (file === 'mercedes-benz-w198-300-sl.glb') {
+    prepareGlossPaint(model, roadPaint[file], 0.28, 0.18, 'none', 0.65);
+    model.traverse((object) => {
+      const mesh = object as Mesh;
+      if (!mesh.isMesh) return;
+      for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
+        const finish = material as MeshStandardMaterial;
+        if (finish.name === roadPaint[file]) finish.metalness = 0.55;
+      }
+    });
+    return;
+  }
   if (file === 'ferrari-f120-f40.glb')
     return prepareGlossPaint(model, roadPaint[file], 0.3, 0.18, 'none', 0.65);
   if (file === 'lamborghini-countach-5000qv.glb') return prepareCountachFinish(model);

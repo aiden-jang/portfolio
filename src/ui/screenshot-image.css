@@ -1,13 +1,32 @@
 .screenshot-unavailable {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
   min-height: 180px;
   padding: 24px;
-  border: 1px solid var(--color-line);
   color: var(--color-muted);
-  background: var(--color-bg);
-  font: 12px/1.6 var(--font-display);
+  background: var(--color-panel);
+  font: 13px/1.6 var(--font-display);
   text-align: center;
+}
+.screenshot-unavailable strong {
+  color: var(--color-fg);
+  font-size: 17px;
+  font-weight: 500;
+}
+.screenshot-unavailable > span {
+  max-width: 34ch;
+}
+:is(.project-preview, .story-image-trigger):disabled {
+  cursor: default;
+}
+:is(.project-preview, .story-image-trigger):disabled:hover
+  :is(.preview-thumbnail, .story-image-crop) {
+  filter: none;
 }
 .story-reading-progress {
   position: absolute;

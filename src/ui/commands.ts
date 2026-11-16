@@ -14,6 +14,7 @@ export type Command = {
 type Deps = {
   onSection: (id: SectionId) => void;
   setNotice: (text: string) => void;
+  sceneUnavailable?: boolean;
 };
 
 export const COMMAND_GROUPS = ['Garage', 'Explore', 'Cars'] as const;
@@ -25,8 +26,22 @@ export function commandGroup(command: Command) {
       : 'Garage';
 }
 
-export function buildCommands({ onSection, setNotice }: Deps): Command[] {
+export function buildCommands({
+  onSection,
+  setNotice,
+  sceneUnavailable = useAppStore.getState().sceneUnavailable,
+}: Deps): Command[] {
   const commands: Command[] = [
+    {
+      id: 'retry-scene',
+      label: 'Retry 3D',
+      hint: 'garage',
+      keywords: 'retry restore showroom WebGL',
+      run: () => {
+        onSection('sec-intro');
+        useAppStore.getState().retryScene();
+      },
+    },
     ...SECTION_IDS.map((id) => ({
       id,
       label: `Go to ${SECTION_LABELS[id]}`,
@@ -130,6 +145,8 @@ export function buildCommands({ onSection, setNotice }: Deps): Command[] {
   const state = useAppStore.getState();
   return commands
     .filter(({ id }) => {
+      if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';
+      if (id === 'retry-scene') return false;
       if (id === 'pulse-lights')
         return (
           !state.isCarLoading &&

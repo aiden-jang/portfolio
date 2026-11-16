@@ -1,5 +1,6 @@
 import { CARS } from '../config';
 import { useAppStore } from '../store';
+import { ControlIcon } from './ControlIcon';
 
 export function CarDetailButton() {
   const car = CARS[useAppStore((state) => state.carIndex)];
@@ -19,7 +20,7 @@ export function CarDetailButton() {
       title={`${open ? 'Close' : 'Open'} rear-wing flap`}
       className="scene-control-button"
     >
-      <span aria-hidden="true">{open ? '↔' : '↗'}</span>
+      <ControlIcon name="wing" />
       <span>DRS</span>
     </button>
   );

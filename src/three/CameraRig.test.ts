@@ -2,7 +2,7 @@
 import { act, createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, expect, it, vi } from 'vitest';
-import { PerspectiveCamera } from 'three';
+import { Box3, BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Vector3 } from 'three';
 import { CameraRig } from './CameraRig';
 import { useAppStore } from '../store';
 
@@ -41,10 +41,13 @@ it('holds the chosen camera angle after dragging until the view is reset', async
   const host = document.createElement('div');
   document.body.append(intro, host);
   const root = createRoot(host);
+  const model = new Mesh(new BoxGeometry(2, 1.4, 6), new MeshBasicMaterial());
+  model.position.y = 0.7;
+  useAppStore.getState().refs.carModel = model;
   try {
     await act(() => root.render(createElement(CameraRig, { getScrollT: () => 0 })));
-    const tick = () =>
-      frame({ size: { width: 1440, height: 900 }, clock: { elapsedTime: 5 } }, 0.1);
+    const tick = (width = 1440, height = 900) =>
+      frame({ size: { width, height }, clock: { elapsedTime: 5 } }, 0.1);
     tick();
     await act(() => {
       pointer('pointerdown', 400, 400);
@@ -59,11 +62,30 @@ it('holds the chosen camera angle after dragging until the view is reset', async
       'manual view must not resume automatic rotation',
     ).toBeLessThan(0.000001);
     expect(useAppStore.getState()).toMatchObject({ hasManualView: true });
+    camera.aspect = 320 / 844;
+    camera.updateProjectionMatrix();
+    tick(320, 844);
+    camera.updateMatrixWorld();
+    expect(camera.position.y).toBeGreaterThanOrEqual(0.25 - 0.000001);
+    expect(Math.atan2(camera.position.x, camera.position.z)).toBeCloseTo(
+      Math.atan2(chosen.x, chosen.z),
+    );
+    const bounds = new Box3().setFromObject(model);
+    for (let corner = 0; corner < 8; corner++) {
+      const point = new Vector3(
+        corner & 1 ? bounds.max.x : bounds.min.x,
+        corner & 2 ? bounds.max.y : bounds.min.y,
+        corner & 4 ? bounds.max.z : bounds.min.z,
+      ).project(camera);
+      expect(Math.abs(point.x)).toBeLessThanOrEqual(1 - 48 / 320 + 0.000001);
+    }
     await act(() => useAppStore.getState().resetCamera());
     tick();
     expect(camera.position.distanceTo(chosen)).toBeGreaterThan(1);
     expect(useAppStore.getState()).toMatchObject({ hasManualView: false });
   } finally {
     await act(() => root.unmount());
+    model.geometry.dispose();
+    model.material.dispose();
   }
 });

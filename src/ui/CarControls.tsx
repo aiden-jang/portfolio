@@ -8,6 +8,8 @@ import { HeadlightButton } from './HeadlightButton';
 import { MobileThemeButton, ThemeToggle } from './ThemeToggle';
 import { Hint, AllControlsButton } from './Hint';
 import './car-controls.css';
+import { useEffect, useRef } from 'react';
+import { PaintPicker } from './PaintPicker';
 
 function CarActionSlot() {
   return (
@@ -24,6 +26,19 @@ export function CarControls() {
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const visible = sectionIndex === 0;
   const manualView = useAppStore((state) => state.hasManualView);
+  const unavailable = useAppStore((state) => state.sceneUnavailable);
+  const loading = useAppStore((state) => state.isCarLoading);
+  const retrying = useRef(false);
+  useEffect(() => {
+    if (unavailable) retrying.current = true;
+    else if (!loading && retrying.current) {
+      retrying.current = false;
+      Array.from(document.querySelectorAll<HTMLButtonElement>('.car-browse-trigger'))
+        .find((element) => element.getClientRects().length)
+        ?.focus({ preventScroll: true });
+    }
+  }, [loading, unavailable]);
+  if (unavailable) return null;
   return (
     <>
       <div
@@ -61,12 +76,16 @@ export function CarControls() {
           <div className="car-controls-row">
             <CarPicker />
             <CarActionSlot />
-            {manualView && <CameraResetButton />}
             <div className="car-paint-slot" data-fixed-livery={fixedLivery || undefined}>
               {fixedLivery ? (
                 <span className="car-livery">Original livery</span>
               ) : (
-                <ColorSwatches bordered={false} />
+                <>
+                  <div className="desktop-paint-swatches">
+                    <ColorSwatches bordered={false} />
+                  </div>
+                  <PaintPicker />
+                </>
               )}
             </div>
             <ThemeToggle />
@@ -74,6 +93,7 @@ export function CarControls() {
           </div>
         </div>
       )}
+      {visible && manualView && <CameraResetButton className="desktop-camera-reset" />}
       {visible && <Hint />}
     </>
   );

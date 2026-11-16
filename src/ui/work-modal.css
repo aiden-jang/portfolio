@@ -3,101 +3,88 @@
   border-radius: var(--radius-panel);
   background: var(--color-bg);
 }
+.work-modal-heading {
+  padding: 18px 76px 18px 28px;
+  border-bottom: 1px solid var(--color-line);
+  flex: none;
+}
+.work-modal-title {
+  margin: 0;
+  font: 500 20px/1.3 var(--font-display);
+  letter-spacing: -0.03em;
+  text-wrap: pretty;
+}
+.work-modal-summary {
+  margin: 0 0 24px;
+  color: #b9b9c0;
+  font: 15px/1.5 var(--font-display);
+}
 .work-technologies {
   margin-top: 24px;
   color: var(--color-muted);
-  font: 11px/1.8 var(--font-mono);
-  letter-spacing: 0;
+  font: 11px/1.8 var(--font-display);
 }
 .work-modal-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0 24px;
+  gap: 16px;
   padding: 8px 28px;
+  min-height: 68px;
   position: relative;
   border-top: 1px solid var(--color-line);
   flex-shrink: 0;
 }
-.work-modal-nav,
-.work-modal-links {
+.work-modal-nav {
+  flex: 1;
+  min-width: 0;
   border: 0;
   padding: 0;
+}
+.work-modal-nav > div {
+  width: 100%;
+  gap: 12px;
 }
 .work-modal-nav button {
   width: 44px;
   height: 44px;
+  flex-shrink: 0;
   border-radius: var(--radius-control);
 }
-.work-modal-links {
+.work-modal-nav .work-modal-next {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  min-width: 0;
-}
-.work-modal-links :is(a, button) {
+  gap: 8px;
+  margin-left: auto;
+  width: auto;
+  max-width: 60%;
+  padding: 0 8px;
   border: 0;
-  border-bottom: 1px solid var(--color-line);
-  border-radius: 0;
-  padding: 0;
-  min-height: 44px;
-  font: 11px/1.5 var(--font-display);
-  letter-spacing: 0;
-  text-transform: none;
+  color: var(--color-fg);
+  font: 13px/1.5 var(--font-display);
 }
-.work-modal-footer :is(a, button):focus-visible {
+.work-modal-next > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.work-modal-next svg {
+  flex-shrink: 0;
+}
+.work-modal-position {
+  margin-left: 0;
+  font: 12px/1.5 var(--font-display);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.work-modal-links {
+  flex: 0 0 auto;
+  min-width: 0;
+  position: relative;
+}
+.work-modal-footer :is(a, button, summary):focus-visible,
+.work-story-ending a:focus-visible {
   outline: 2px solid var(--color-fg);
   outline-offset: 3px;
-}
-@media (max-width: 767px) {
-  .work-modal-footer {
-    padding: 8px 20px;
-    gap: 4px 16px;
-  }
-  .work-modal-links {
-    flex: 1;
-    justify-content: flex-end;
-    gap: 14px;
-  }
-}
-.story-share-status:empty {
-  display: none;
-}
-.story-share-status,
-.story-share-fallback {
-  flex-basis: 100%;
-  min-width: 0;
-  font-size: 12px;
-}
-.story-share-status {
-  color: var(--color-fg);
-}
-.story-share-fallback {
-  padding: 12px;
-  background: #101014;
-  color: var(--color-fg);
-  border: 1px solid var(--color-muted);
-  border-radius: 4px;
-}
-.story-share-fallback:focus-visible {
-  outline: 2px solid var(--color-fg);
-  outline-offset: 2px;
-}
-.work-modal-panel > button[aria-label='Close'] {
-  min-width: 44px;
-  min-height: 44px;
-}
-
-.work-modal-title {
-  margin: 12px 0 4px;
-  padding-right: 44px;
-  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
-  line-height: 1.15;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
 }
 .work-modal-close {
   position: absolute;
@@ -121,31 +108,7 @@
   outline: 2px solid var(--color-fg);
   outline-offset: 3px;
 }
-.work-modal-position {
-  font: 12px/1.5 var(--font-display);
-  color: var(--color-muted);
-}
-.work-modal-links :is(a, button) {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--color-muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.work-modal-links > a {
-  color: var(--color-fg);
-}
-.work-modal-links :is(a, button):hover {
-  color: var(--color-fg);
-  border-color: var(--color-fg);
-}
-.story-secondary-inline {
-  display: flex;
-  gap: 20px;
-}
 .story-secondary-menu {
-  display: none;
   position: relative;
 }
 .story-secondary-menu summary {
@@ -157,16 +120,15 @@
   list-style: none;
   border-radius: var(--radius-control);
 }
+.story-secondary-menu summary:hover {
+  background: var(--color-control-hover);
+}
 .story-secondary-menu summary::-webkit-details-marker {
   display: none;
 }
 .story-secondary-menu svg {
   width: 18px;
   height: 18px;
-}
-.story-secondary-menu summary:focus-visible {
-  outline: 2px solid var(--color-fg);
-  outline-offset: 3px;
 }
 .story-secondary-panel {
   display: none;
@@ -186,8 +148,56 @@
   display: grid;
 }
 .story-secondary-panel :is(a, button) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
+  min-height: 44px;
   border: 0;
+  color: var(--color-muted);
+  font: 12px/1.5 var(--font-display);
+  cursor: pointer;
+}
+.story-secondary-panel :is(a, button):hover {
+  color: var(--color-fg);
+}
+.story-share-status:empty {
+  display: none;
+}
+.story-share-status:not(:empty) {
+  display: block;
+  margin-block: 8px;
+  color: var(--color-fg);
+  font: 12px/1.5 var(--font-display);
+}
+.story-share-fallback {
+  width: 100%;
+  max-width: 100%;
+  padding: 12px;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  border: 1px solid var(--color-muted);
+  border-radius: 4px;
+}
+.work-story-ending {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-line);
+}
+.work-story-ending a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font: 13px/1.5 var(--font-display);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.work-story-ending a:hover {
+  color: #fff;
 }
 @media (max-width: 767px) {
   .work-modal-overlay {
@@ -196,32 +206,29 @@
   .work-modal-panel {
     max-height: calc(100dvh - 24px);
   }
+  .work-modal-heading {
+    padding: 16px 64px 16px 20px;
+  }
   .work-modal-title {
-    margin-top: 6px;
-    font-size: 24px;
+    font-size: 18px;
   }
   .work-modal-panel .story-scroll-area {
-    padding: 20px;
+    padding: 18px 20px 20px;
   }
   .work-modal-footer {
-    gap: 4px;
-    padding: 8px 16px;
-  }
-  .work-modal-nav {
+    padding: 6px 12px;
     gap: 6px;
   }
   .work-modal-nav > div {
-    gap: 4px;
+    gap: 8px;
   }
   .work-modal-nav button {
     width: 36px;
-    height: 40px;
     border: 0;
   }
-  .story-secondary-inline {
-    display: none;
-  }
-  .story-secondary-menu {
-    display: block;
+  .work-modal-nav .work-modal-next {
+    padding: 0 2px;
+    width: auto;
+    font-size: 12px;
   }
 }
