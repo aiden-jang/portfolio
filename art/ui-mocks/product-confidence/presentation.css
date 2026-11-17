@@ -199,12 +199,6 @@ html:root[data-product-study] #sec-about .about-story > p {
   line-height: 1.6;
   font-weight: 450;
 }
-html:root[data-product-study] #sec-about .about-personal-line {
-  margin-top: 72px;
-  font-size: 32px;
-  font-weight: 450;
-  letter-spacing: -0.025em;
-}
 html:root[data-product-study]
   :is(.product-iodine-shot, .product-undo-disclosure summary):focus-visible {
   outline: 2px solid #ececea;
@@ -363,10 +357,6 @@ html:root[data-product-study] .product-iodine-shot:hover img {
   }
   html:root[data-product-study] #sec-about .about-story > p {
     font-size: 19px;
-  }
-  html:root[data-product-study] #sec-about .about-personal-line {
-    margin-top: 40px;
-    font-size: 28px;
   }
 }
 @media (max-width: 767px) and (max-height: 740px) {

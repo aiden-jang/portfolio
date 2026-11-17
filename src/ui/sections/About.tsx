@@ -44,7 +44,6 @@ export function AboutSection() {
             </dd>
           </div>
         </dl>
-        <p className="about-personal-line">The cat does not appreciate the infrastructure.</p>
       </div>
     </Section>
   );

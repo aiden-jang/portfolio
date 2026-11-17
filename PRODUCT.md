@@ -101,7 +101,7 @@ the inspector and readers. Bean uses mrrp's own artwork, bloomnote exposes a sam
 flower meaning, and iguess includes an illustrated message flow. Platform closes
 the desktop collection with its explanation beside the preview.
 
-About has a distinct personal line; Contact leads with the email and keeps the
+Contact leads with the email and keeps the
 stationary car alongside on desktop and below on phones. Reduced motion removes
 coasting and decorative transitions. Keep all existing garage controls, credits,
 sharing and recovery paths. No new metrics, testimonials or hiring claims have

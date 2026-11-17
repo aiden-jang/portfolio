@@ -317,15 +317,6 @@ html:root .story-scroll-area .flow-note {
   color: #8f8f9b;
   margin: 0;
 }
-html:root #sec-about .about-personal-line {
-  grid-column: 1/-1;
-  grid-row: 3;
-  font: 400 40px/1.18 var(--font-display);
-  letter-spacing: -0.03em;
-  max-width: 31ch;
-  margin: 50px 0 0;
-  color: #ececea;
-}
 html:root #sec-contact .contact-copy-block {
   display: flex;
   flex-direction: column;
@@ -390,10 +381,6 @@ html:root #sec-contact .contact-social-links {
   }
   html:root .flow-title h4 {
     font-size: 21px;
-  }
-  html:root #sec-about .about-personal-line {
-    font-size: 30px;
-    margin-top: 32px;
   }
   html:root #sec-contact .contact-email-link {
     font-size: 26px;
