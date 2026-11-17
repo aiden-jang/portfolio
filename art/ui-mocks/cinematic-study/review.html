@@ -56,6 +56,12 @@
         padding: 8px 12px;
         cursor: pointer;
       }
+      [data-orbit] {
+        border-color: #ececea;
+      }
+      .orbit-status {
+        color: #bdbdc8;
+      }
       button:hover {
         background: #292930;
       }
@@ -105,23 +111,41 @@
   <body>
     <header>
       <div>
-        <strong>Cinematic showroom</strong>
-        <p>Motion study. Review controls stay outside the design.</p>
+        <strong>Opening car orbit</strong>
+        <p>A short sweep into the existing showroom angle.</p>
       </div>
       <nav aria-label="Preview size">
         <button data-size="desktop" aria-pressed="true">Desktop</button
         ><button data-size="phone" aria-pressed="false">Mobile</button>
       </nav>
+      <button type="button" data-orbit>Replay opening orbit</button>
       <nav aria-label="Review moments">
         <button data-play>Replay first scroll</button><button data-moment="hero">Opening</button
         ><button data-moment="handoff">Handoff</button><button data-moment="globe">Globe</button
         ><button data-moment="iodine">Iodine</button>
       </nav>
+      <span class="orbit-status" role="status"></span>
       <a href="./" target="_blank" rel="noopener">Open full preview</a>
     </header>
     <main><iframe title="Cinematic portfolio mock" src="./index.html"></iframe></main>
     <script>
       const frame = document.querySelector('iframe');
+      const status = document.querySelector('.orbit-status');
+      const messages = {
+        waiting: 'Waiting for the car to load.',
+        playing: 'Drag or scroll to interrupt.',
+        settled: 'Opening orbit finished.',
+        interrupted: 'Opening orbit stopped.',
+        reduced: 'Reduced motion: settled view.',
+      };
+      window.addEventListener('message', (event) => {
+        if (event.source !== frame.contentWindow || event.origin !== location.origin) return;
+        const phase = event.data?.openingOrbit;
+        if (Object.hasOwn(messages, phase)) status.textContent = messages[phase];
+      });
+      document.querySelector('[data-orbit]').addEventListener('click', () => {
+        frame.contentWindow.postMessage({ replayOpeningOrbit: true }, location.origin);
+      });
       document
         .querySelectorAll('[data-moment]')
         .forEach((b) =>
@@ -134,12 +158,22 @@
         .addEventListener('click', () =>
           frame.contentWindow.postMessage({ cinemaPlay: true }, location.origin),
         );
+      function selectSize(size) {
+        frame.toggleAttribute('data-phone', size === 'phone');
+        document
+          .querySelectorAll('[data-size]')
+          .forEach((p) => p.setAttribute('aria-pressed', String(p.dataset.size === size)));
+      }
+      const initialSize = new URLSearchParams(location.search).get('size');
+      selectSize(
+        initialSize === 'phone' || (!initialSize && innerWidth < 768) ? 'phone' : 'desktop',
+      );
       document.querySelectorAll('[data-size]').forEach((b) =>
         b.addEventListener('click', () => {
-          frame.toggleAttribute('data-phone', b.dataset.size === 'phone');
-          document
-            .querySelectorAll('[data-size]')
-            .forEach((p) => p.setAttribute('aria-pressed', String(p === b)));
+          selectSize(b.dataset.size);
+          const url = new URL(location.href);
+          url.searchParams.set('size', b.dataset.size);
+          history.replaceState(null, '', url);
         }),
       );
     </script>

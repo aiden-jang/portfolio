@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useAppStore } from '../../../src/store';
+import { cancelSmoothScroll } from '../../../src/hooks/scrollNavigation';
+import { replayOpeningOrbit } from './useOpeningOrbit';
 
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 export function CinemaDirector() {
@@ -19,6 +21,13 @@ export function CinemaDirector() {
             110;
     const receive = (event: MessageEvent) => {
       if (event.source !== parent || event.origin !== location.origin) return;
+      if (event.data?.replayOpeningOrbit === true) {
+        interrupt();
+        cancelSmoothScroll();
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        replayOpeningOrbit();
+        return;
+      }
       if (['hero', 'handoff', 'globe', 'iodine'].includes(event.data?.cinemaMoment)) {
         interrupt();
         window.scrollTo({ top: target(event.data.cinemaMoment), behavior: 'instant' });

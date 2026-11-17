@@ -4,9 +4,16 @@ The approved study is implemented in the production application for desktop and
 mobile. This review entry point reuses that application with replay and jump
 controls outside the portfolio; production does not import those review tools.
 
-Open `/art/ui-mocks/cinematic-study/review.html` on the development server. Use **Replay first
-scroll** to see the camera and type handoff, or the moment buttons to jump to Opening,
-Handoff, Globe and Iodine. These are review tools, not proposed portfolio controls.
+Build the preview with `npx vite build --config vite.opening-orbit.config.ts`, then
+serve it with `npm run preview -- --config vite.opening-orbit.config.ts` and open
+`/art/ui-mocks/cinematic-study/review.html` on port 5199. Use **Replay opening orbit**
+to replay the preview’s single sweep. The camera travels 26° on desktop and 20° on
+phones in about 2.4 seconds after the car is ready, then stops on the existing angle.
+Drag or scroll to take over sooner. Reduced motion starts at the settled angle.
+The preview configuration applies only to this study and production keeps its current opening.
+
+Use **Replay first scroll** to see the camera and type handoff, or the moment buttons
+to jump to Opening, Handoff, Globe and Iodine. These are review tools.
 The review frame switches between desktop and phone sizes. Normal scrolling
 remains available; wheel, touch and keyboard input interrupt replay.
 
