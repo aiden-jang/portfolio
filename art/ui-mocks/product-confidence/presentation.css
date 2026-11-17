@@ -1,0 +1,393 @@
+html:root[data-product-study] {
+  --study-space: 120px;
+}
+html:root[data-product-study] .garage-intro h1 {
+  font-size: 104px;
+  font-weight: 450;
+  letter-spacing: -0.035em;
+}
+html:root[data-product-study] .garage-intro .intro-role {
+  max-width: 36ch;
+  margin-top: 22px;
+  font-size: 16px;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+html:root[data-product-study] .intro-work-cue {
+  margin-top: 16px;
+}
+html:root[data-product-study] :is(.garage-work-heading, .project-gallery-heading) {
+  align-items: baseline;
+  margin-bottom: 44px;
+}
+html:root[data-product-study] :is(.garage-work-heading, .project-gallery-heading) h2 {
+  font-size: 48px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 450;
+}
+html:root[data-product-study] #sec-work {
+  padding-block: 112px 88px;
+}
+html:root[data-product-study] .project-featured-group {
+  gap: var(--study-space);
+}
+html:root[data-product-study] .garage-project-featured h3 {
+  font-size: 42px;
+  line-height: 1.1;
+  font-weight: 450;
+  margin-bottom: 20px;
+}
+html:root[data-product-study] .garage-project-featured .garage-project-copy > p:first-of-type {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #d2d2d7;
+}
+html:root[data-product-study] .garage-project-featured .project-evidence {
+  font-size: 13px;
+  line-height: 1.7;
+  margin-top: 24px;
+  max-width: 41ch;
+}
+html:root[data-product-study] #project-everythingisfine > .garage-project-copy {
+  top: 50%;
+  width: 33%;
+  max-width: 400px;
+}
+html:root[data-product-study] #project-everythingisfine .preview-thumbnail {
+  aspect-ratio: 1.95;
+}
+html:root[data-product-study] #project-everythingisfine .orbit-feature figcaption {
+  margin-top: 16px;
+  max-width: 70ch;
+  font-size: 11px;
+}
+html:root[data-product-study] #project-iodine {
+  grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
+  gap: 64px;
+  align-items: start;
+}
+html:root[data-product-study] #project-iodine > .garage-project-copy {
+  padding-top: 48px;
+}
+html:root[data-product-study] #project-iodine > .iodine-example > :is(.iodine-editor, figcaption) {
+  display: none;
+}
+html:root[data-product-study] .product-iodine-shot {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1.5;
+  width: 100%;
+  background: #242424;
+  border: 0;
+  padding: 0;
+  border-radius: 14px;
+  cursor: zoom-in;
+}
+html:root[data-product-study] #project-iodine .product-iodine-shot img {
+  display: block;
+  width: 140%;
+  max-width: none;
+  height: auto;
+  transform: translate(-16%, -3%);
+}
+html:root[data-product-study] .product-iodine-presentation .product-shot-caption {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #aaaab3;
+  max-width: 66ch;
+  margin: 14px 0 0;
+}
+html:root[data-product-study] .product-undo-disclosure {
+  margin-top: 22px;
+}
+html:root[data-product-study] .product-undo-disclosure summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  font-size: 13px;
+  border-top: 1px solid #ffffff24;
+  cursor: pointer;
+  list-style: none;
+}
+html:root[data-product-study] .product-undo-disclosure summary::after {
+  content: '+';
+  font-size: 18px;
+  color: #aaaab3;
+}
+html:root[data-product-study] .product-undo-disclosure[open] summary::after {
+  content: '−';
+}
+html:root[data-product-study] .product-undo-disclosure .iodine-example {
+  margin-top: 14px;
+}
+html:root[data-product-study] #sec-experience {
+  padding-block: var(--study-space);
+}
+html:root[data-product-study] #sec-experience .panel {
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 104px;
+}
+html:root[data-product-study] #sec-experience h2 {
+  font-size: 46px;
+  font-weight: 450;
+  letter-spacing: -0.03em;
+  margin-bottom: 40px;
+}
+html:root[data-product-study] .experience-outcome {
+  grid-template-columns: 150px minmax(0, 1fr) 18px;
+  padding-block: 26px;
+  gap: 24px;
+}
+html:root[data-product-study] .experience-figure strong {
+  font-size: 36px;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+}
+html:root[data-product-study] .experience-story strong {
+  font-size: 18px;
+  font-weight: 500;
+}
+html:root[data-product-study] .experience-story > span:not(.experience-context) {
+  font-size: 15px;
+  line-height: 1.65;
+}
+html:root[data-product-study] .experience-figure > span,
+html:root[data-product-study] .experience-story .experience-context {
+  font-size: 12px;
+}
+html:root[data-product-study] .experience-outcome-qualitative .experience-figure strong {
+  font-size: 18px;
+}
+html:root[data-product-study] #sec-more-work {
+  padding-block: var(--study-space);
+}
+html:root[data-product-study] .project-gallery {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px 32px;
+}
+html:root[data-product-study] .project-gallery .garage-project-compact {
+  gap: 18px;
+  border: 0;
+  padding: 0;
+}
+html:root[data-product-study] .project-gallery h3 {
+  font-size: 30px;
+  font-weight: 450;
+  letter-spacing: -0.025em;
+}
+html:root[data-product-study] .project-gallery .garage-project-copy > p:first-of-type {
+  font-size: 15px;
+  max-width: 49ch;
+  line-height: 1.65;
+}
+html:root[data-product-study] .project-gallery .garage-project-links {
+  margin-top: 10px;
+}
+html:root[data-product-study] #sec-about {
+  padding-block: var(--study-space);
+}
+html:root[data-product-study] #sec-about h2 {
+  font-size: 46px;
+  font-weight: 450;
+}
+html:root[data-product-study] #sec-about .about-story > p {
+  font-size: 21px;
+  line-height: 1.6;
+  font-weight: 450;
+}
+html:root[data-product-study] #sec-about .about-personal-line {
+  margin-top: 72px;
+  font-size: 32px;
+  font-weight: 450;
+  letter-spacing: -0.025em;
+}
+html:root[data-product-study]
+  :is(.product-iodine-shot, .product-undo-disclosure summary):focus-visible {
+  outline: 2px solid #ececea;
+  outline-offset: 5px;
+}
+html:root[data-product-study] .project-preview:hover img {
+  filter: brightness(1.035);
+}
+html:root[data-product-study] :is(.project-preview img, .product-iodine-shot img) {
+  transition: filter 180ms ease-out;
+}
+html:root[data-product-study] .product-iodine-shot:hover img {
+  filter: brightness(1.035);
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  html:root[data-product-study] .garage-intro h1 {
+    font-size: 88px;
+  }
+  html:root[data-product-study] #project-everythingisfine .preview-thumbnail {
+    aspect-ratio: 1.65;
+  }
+  html:root[data-product-study] .garage-project-featured h3 {
+    font-size: 32px;
+  }
+  html:root[data-product-study] #project-iodine {
+    gap: 36px;
+  }
+  html:root[data-product-study] #sec-experience .panel {
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 40px;
+  }
+  html:root[data-product-study] .experience-outcome {
+    grid-template-columns: 110px minmax(0, 1fr) 16px;
+    gap: 16px;
+  }
+  html:root[data-product-study] .experience-figure strong {
+    font-size: 30px;
+  }
+}
+@media (max-width: 767px) {
+  html:root[data-product-study] {
+    --study-space: 80px;
+  }
+  html:root[data-product-study] .garage-intro h1 {
+    font-size: 50px;
+  }
+  html:root[data-product-study] .garage-intro .intro-role {
+    font-size: 14px;
+    max-width: 34ch;
+    margin-top: 18px;
+  }
+  html:root[data-product-study] #sec-work,
+  html:root[data-product-study] #sec-more-work,
+  html:root[data-product-study] #sec-experience,
+  html:root[data-product-study] #sec-about {
+    padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
+  }
+  html:root[data-product-study] :is(.garage-work-heading, .project-gallery-heading) {
+    display: block;
+    margin-bottom: 38px;
+  }
+  html:root[data-product-study] :is(.garage-work-heading, .project-gallery-heading) h2,
+  html:root[data-product-study] #sec-experience h2,
+  html:root[data-product-study] #sec-about h2 {
+    font-size: 34px;
+  }
+  html:root[data-product-study] .project-featured-group {
+    gap: 80px;
+  }
+  html:root[data-product-study] .garage-project-featured,
+  html:root[data-product-study] #project-iodine,
+  html:root[data-product-study] #project-everythingisfine {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  html:root[data-product-study] .garage-project-featured > .garage-project-copy,
+  html:root[data-product-study] #project-everythingisfine > .garage-project-copy {
+    display: contents;
+  }
+  html:root[data-product-study] .garage-project-featured .project-title {
+    grid-row: 1;
+    margin: 0;
+  }
+  html:root[data-product-study] #sec-work .garage-project-featured .garage-project-copy > * {
+    grid-column: 1;
+  }
+  html:root[data-product-study] .garage-project-featured h3 {
+    font-size: 30px;
+    font-weight: 450;
+    margin-bottom: 14px;
+  }
+  html:root[data-product-study] .garage-project-featured .project-role {
+    margin-block: -4px 14px;
+  }
+  html:root[data-product-study] .garage-project-featured .garage-project-copy > p:first-of-type {
+    grid-row: 2;
+    font-size: 16px;
+    margin: 0 0 22px;
+    line-height: 1.6;
+    max-width: none;
+  }
+  html:root[data-product-study] .garage-project-featured > figure,
+  html:root[data-product-study] #project-iodine > figure {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  html:root[data-product-study] .garage-project-featured .project-evidence {
+    grid-row: 4;
+    margin-top: 22px;
+    font-size: 13px;
+  }
+  html:root[data-product-study] .garage-project-featured .garage-project-links {
+    grid-row: 5;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  html:root[data-product-study] #project-everythingisfine .preview-thumbnail {
+    aspect-ratio: 1.05;
+  }
+  html:root[data-product-study] #project-everythingisfine .orbit-feature figcaption {
+    display: block;
+    margin-top: 12px;
+    font-size: 11px;
+  }
+  html:root[data-product-study] .product-iodine-shot {
+    aspect-ratio: 1.08;
+  }
+  html:root[data-product-study] #project-iodine .product-iodine-shot img {
+    width: 300%;
+    transform: translate(-58%, -4%);
+  }
+  html:root[data-product-study] #sec-experience .panel {
+    display: block;
+  }
+  html:root[data-product-study] #sec-experience .experience-proof {
+    margin-top: 42px;
+  }
+  html:root[data-product-study] .experience-outcome {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding-block: 26px;
+  }
+  html:root[data-product-study] .experience-figure strong {
+    font-size: 34px;
+  }
+  html:root[data-product-study] .experience-story strong {
+    font-size: 17px;
+  }
+  html:root[data-product-study] .project-gallery {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+  html:root[data-product-study] .project-gallery h3 {
+    font-size: 27px;
+  }
+  html:root[data-product-study] #sec-about .about-story > p {
+    font-size: 19px;
+  }
+  html:root[data-product-study] #sec-about .about-personal-line {
+    margin-top: 40px;
+    font-size: 28px;
+  }
+}
+@media (max-width: 767px) and (max-height: 740px) {
+  html:root[data-product-study] .garage-intro h1 {
+    font-size: 46px;
+  }
+  html:root[data-product-study] .garage-intro .intro-role {
+    font-size: 12px;
+    margin-top: 12px;
+  }
+}
+@media (min-width: 768px) and (max-height: 500px) {
+  html:root[data-product-study] .garage-intro h1 {
+    font-size: 42px;
+  }
+  html:root[data-product-study] .garage-intro .intro-role {
+    font-size: 12px;
+    margin-top: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:root[data-product-study] :is(.project-preview img, .product-iodine-shot img) {
+    transition: none;
+  }
+}

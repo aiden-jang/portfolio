@@ -116,6 +116,10 @@ fixed car
 
 ## Implementation status
 
+The [product confidence mock](../product-confidence/README.md) extends the current
+portfolio with the product presentation, visual rhythm and interaction refinements
+described above. It provides fresh desktop and phone comparisons for approval.
+
 The main portfolio uses the subsequent approved full-width featured project
 presentation, with Experience between the featured and supporting projects. This
 isolated mock preserves the earlier split layout as an archived design reference. Set `PORTFOLIO_MOCK_ROUTE=/` when running the capture
