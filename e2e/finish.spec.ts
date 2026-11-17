@@ -77,11 +77,11 @@ for (const width of [1440, 390]) {
     ).toBeVisible();
   });
 
-  test(`a failed screenshot settles honestly without changing its frame at ${width}px`, async ({
+  test(`failed preview images settle without changing the globe frame at ${width}px`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.route('**/projects/everythingisfine.jpg', (route) =>
+    await page.route(/\/projects\/(everythingisfine|kamchatka-globe)\.jpg$/, (route) =>
       route.fulfill({ status: 404, body: 'Not found' }),
     );
     await page.goto('/#sec-work');
@@ -93,7 +93,7 @@ for (const width of [1440, 390]) {
       project.getByRole('button', { name: 'Inspect screenshot: everythingisfine', exact: true }),
     ).toBeDisabled();
     const frame = await project.locator('.preview-thumbnail').boundingBox();
-    expect(frame!.width / frame!.height).toBeCloseTo(width < 768 ? 1.12 : 1.65, 1);
+    expect(frame!.width / frame!.height).toBeCloseTo(width < 768 ? 1.26 : 1.53, 1);
     await project
       .getByRole('button', { name: 'How I built it: everythingisfine', exact: true })
       .click();

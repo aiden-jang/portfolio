@@ -1,0 +1,189 @@
+.featured-story-opening {
+  color: var(--color-fg);
+  padding-bottom: 22px;
+}
+.featured-story-opening h4 {
+  font-size: clamp(44px, 6.2vw, 82px);
+  line-height: 1;
+  font-weight: 440;
+  letter-spacing: -0.04em;
+  margin: 4px 0 16px;
+}
+.featured-story-opening > p {
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.5;
+  color: #d4d3d7;
+  max-width: 52ch;
+  margin-bottom: 21px;
+}
+.featured-story-evidence,
+.iodine-story-example {
+  background: #202025;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.featured-story-evidence-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 19px;
+  border-bottom: 1px solid #393940;
+  font-size: 13px;
+}
+.featured-story-evidence-heading span,
+.iodine-archive-label {
+  color: #c3c1c9;
+  font-size: 12px;
+}
+.earthquake-merge {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) 45px minmax(0, 0.9fr);
+  align-items: center;
+  padding: 15px 19px;
+}
+.earthquake-merge dl > div {
+  display: grid;
+  grid-template-columns: minmax(46px, 0.7fr) minmax(0, 1.6fr);
+  align-items: baseline;
+  gap: 8px;
+  padding: 9px 0;
+  border-bottom: 1px solid #393940;
+}
+.earthquake-merge dd {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2px 6px;
+  font-variant-numeric: tabular-nums;
+}
+.earthquake-merge dt,
+.earthquake-merge dd > span,
+.earthquake-merged span {
+  font-size: 13px;
+}
+.earthquake-merge dd > span,
+.earthquake-merged span {
+  color: #c3c1c9;
+}
+.earthquake-merged {
+  display: grid;
+  gap: 3px;
+  padding-left: 12px;
+  border-left: 1px solid #79757e;
+}
+.earthquake-merged strong {
+  font-size: clamp(16px, 2.35vw, 24px);
+  font-weight: 520;
+  letter-spacing: -0.025em;
+}
+.reading-connector {
+  width: 50%;
+  height: 36px;
+  border: 1px solid #79757e;
+  border-left: 0;
+  border-radius: 0 4px 4px 0;
+  position: relative;
+}
+.reading-connector::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  width: 24px;
+  border-top: 1px solid #79757e;
+}
+.featured-story-evidence figcaption {
+  padding: 0 19px 16px;
+  color: #c3c1c9;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.featured-story-evidence figcaption a {
+  color: var(--color-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+.iodine-story-example > pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 15px 20px;
+  font: 13px/1.7 var(--font-mono);
+  margin: 0;
+}
+.iodine-story-example mark {
+  color: #ffd2af;
+  background: #533930;
+  border-radius: 2px;
+}
+.iodine-story-example .cinema-result {
+  min-height: 79px;
+  padding: 0 20px 12px;
+}
+.iodine-story-example .cinema-result strong {
+  font-size: 17px;
+  font-weight: 550;
+}
+html:root .iodine-story-example .cinema-result p {
+  margin-top: 5px;
+  color: #d4d3d7;
+}
+.iodine-story-example :is(.cinema-code-heading, .cinema-code-actions) {
+  align-items: center;
+  padding-inline: 20px;
+}
+@media (max-width: 767px) {
+  .featured-story-opening h4 {
+    font-size: clamp(32px, 9vw, 52px);
+    margin-bottom: 10px;
+  }
+  .featured-story-opening > p {
+    font-size: 15px;
+    margin-bottom: 15px;
+  }
+  .featured-story-evidence-heading {
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+  .featured-story-evidence-heading span {
+    font-size: 11px;
+  }
+  .earthquake-merge {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 4px 11px 9px;
+  }
+  .earthquake-merge dl > div {
+    padding: 5px 0;
+  }
+  .reading-connector {
+    height: 10px;
+    border: 0;
+    border-right: 1px solid #79757e;
+    border-radius: 0;
+  }
+  .reading-connector::after {
+    display: none;
+  }
+  .earthquake-merged {
+    border: 0;
+    border-top: 1px solid #79757e;
+    padding: 5px 0 0;
+    text-align: center;
+  }
+  .featured-story-evidence figcaption {
+    padding: 0 11px 10px;
+    font-size: 12px;
+  }
+  .iodine-story-example > pre {
+    padding: 12px;
+    font-size: 11px;
+  }
+  .iodine-story-example :is(.cinema-code-heading, .cinema-code-actions, .cinema-result) {
+    padding-inline: 12px;
+  }
+  .iodine-story-example .cinema-result {
+    min-height: 85px;
+  }
+}

@@ -1,4 +1,3 @@
-import { InteractiveGlobe } from './showcase/InteractiveGlobe';
 import { IodinePresentation } from './showcase/IodinePresentation';
 import { BloomPreview } from './showcase/BloomPreview';
 import { copyText } from '../browserSharing';
@@ -120,9 +119,7 @@ function ScreenshotProjectPreview({
 }
 
 export function ProjectPreview(props: Props) {
-  return props.name === 'everythingisfine' ? (
-    <InteractiveGlobe {...props} />
-  ) : props.name === 'iodine' ? (
+  return props.name === 'iodine' ? (
     <IodinePresentation {...props} />
   ) : props.name === 'bloomnote' ? (
     <BloomPreview {...props} />

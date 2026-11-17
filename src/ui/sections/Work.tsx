@@ -1,4 +1,5 @@
 import { Bean } from '../showcase/Bean';
+import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
 import '../project-gallery.css';
 import { PREVIEWS } from '../../data/projectPreviews';
 import { PROJECT_STORIES } from '../../data/projectStories';
@@ -20,12 +21,20 @@ export function WorkSection({ onOpen }: Props) {
       <div className="garage-work pointer-events-auto">
         <div className="garage-work-heading">
           <h2>Selected work</h2>
-          <span>Personal products &amp; open source</span>
         </div>
         <div className="garage-project-list project-featured-group" aria-label="Featured projects">
-          {featured.map((item) => (
-            <Project key={item.title} item={item} onOpen={onOpen} featured />
-          ))}
+          {featured.map((item) =>
+            item.mark === 'everythingisfine' ? (
+              <EarthquakeFeature
+                key={item.title}
+                item={item}
+                preview={PREVIEWS.everythingisfine}
+                onOpen={onOpen}
+              />
+            ) : (
+              <Project key={item.title} item={item} onOpen={onOpen} featured />
+            ),
+          )}
         </div>
       </div>
     </Section>

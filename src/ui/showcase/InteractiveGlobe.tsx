@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import { ScreenshotImage } from '../ScreenshotImage';
 import { previewLink } from '../previewLinks';
+import { EarthquakeGlobeStill } from './EarthquakeEvidence';
 
 type Engine = ReturnType<(typeof import('./globe-engine'))['createOrbitGlobe']>;
 export function InteractiveGlobe({ image, caption }: { image: string; caption: string }) {
@@ -12,7 +13,6 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
     inspect = useRef<HTMLButtonElement>(null);
   const handle = useRef<Engine | null>(null),
     visible = useRef(false),
-    stopped = useRef(false),
     requestedFocus = useRef(false);
   const [active, setActive] = useState(false),
     [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
@@ -21,12 +21,12 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
   );
   const [selected, setSelected] = useState<import('./globe-engine').PickedEvent | null>(null);
   const show = useRef<HTMLButtonElement>(null);
-  const [unavailable, setUnavailable] = useState(false);
+  const [posterUnavailable, setPosterUnavailable] = useState(false);
+  const [screenshotUnavailable, setScreenshotUnavailable] = useState(false);
   const [viewer, setViewer] = useState(false),
     [captured, setCaptured] = useState('');
   const exitRef = useRef<() => void>(() => {});
   exitRef.current = () => {
-    stopped.current = true;
     setActive(false);
     setSelected(null);
     setPhase('idle');
@@ -34,16 +34,10 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
   };
   useEffect(() => {
     const media = matchMedia('(max-width: 767px), (pointer: coarse)');
-    const update = () => {
-      setMobile(media.matches);
-      stopped.current = false;
-      setActive(!media.matches && visible.current);
-      setPhase('idle');
-    };
+    const update = () => setMobile(media.matches);
     media.addEventListener('change', update);
     const observer = new IntersectionObserver(([entry]) => {
       visible.current = entry!.isIntersecting;
-      if (visible.current && !media.matches && !stopped.current) setActive(true);
       handle.current?.sync();
     });
     observer.observe(figure.current!);
@@ -71,7 +65,6 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
     setPhase('loading');
     const failed = () => {
       if (!disposed) {
-        stopped.current = true;
         setPhase('error');
         setActive(false);
         requestAnimationFrame(() => launch.current?.focus({ preventScroll: true }));
@@ -130,12 +123,16 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
       <figure ref={figure} className="orbit-feature" data-globe-phase={phase}>
         <div className="project-preview orbit-preview" data-project="everythingisfine">
           <div className="preview-thumbnail">
-            <ScreenshotImage
-              src={image}
-              alt="everythingisfine product interface"
-              lazy
-              onUnavailable={() => setUnavailable(true)}
-            />
+            {posterUnavailable ? (
+              <ScreenshotImage
+                src={image}
+                alt="everythingisfine product interface"
+                lazy
+                onUnavailable={() => setScreenshotUnavailable(true)}
+              />
+            ) : (
+              <EarthquakeGlobeStill onUnavailable={() => setPosterUnavailable(true)} />
+            )}
             {active && (
               <div className="orbit-viewport" aria-busy={phase === 'loading'}>
                 <canvas
@@ -148,6 +145,9 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
               </div>
             )}
           </div>
+          {!ready && !posterUnavailable && (
+            <span className="earthquake-map-label">Kamchatka · M5.8</span>
+          )}
           <div className="orbit-actions">
             {!ready && (
               <button
@@ -156,7 +156,6 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
                 className="orbit-launch"
                 disabled={phase === 'loading'}
                 onClick={() => {
-                  stopped.current = false;
                   requestedFocus.current = true;
                   setActive(true);
                 }}
@@ -207,7 +206,7 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
               ref={inspect}
               type="button"
               className="orbit-screenshot"
-              disabled={unavailable}
+              disabled={screenshotUnavailable}
               aria-label="Inspect screenshot: everythingisfine"
               title="View full screenshot"
               onClick={() => setViewer(true)}
@@ -238,7 +237,7 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
             ? 'The globe could not start. You can retry, view the screenshot or open the app.'
             : ready
               ? `${mobile ? 'Drag to rotate; tap a marker for details. Done returns to scrolling.' : 'Drag to rotate; select a marker for details.'} Recorded USGS events${captured ? ' · ' + captured + ' UTC' : ''}.`
-              : 'Explore the globe here, or open the full app for live layers.'}
+              : 'Recorded Kamchatka earthquake. Explore the globe to browse more recorded events.'}
         </figcaption>
       </figure>
       {viewer && (

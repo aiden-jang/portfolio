@@ -15,35 +15,50 @@ export function WorkStory({ item }: { item: WorkDetail }) {
   const preview = PREVIEWS[item.mark ?? ''];
   const [selected] = usePreviewSelection(item.shortName ?? '', preview?.states?.length ?? 1);
   const view = preview?.states?.[selected] ?? preview;
-  return (
-    <div className="work-story">
-      <div className="work-story-overview">
-        <div>
+  const featured = item.mark === 'everythingisfine' || item.mark === 'iodine';
+  const overview = (
+    <div className="work-story-overview">
+      <div>
+        <section>
+          <h4>{item.contribution ? 'My contribution' : 'The brief'}</h4>
+          <p>{item.contribution ? projectStory?.built : (story?.problem ?? item.summary)}</p>
+        </section>
+        {decision && (
           <section>
-            <h4>{item.contribution ? 'My contribution' : 'The brief'}</h4>
-            <p>{item.contribution ? projectStory?.built : (story?.problem ?? item.summary)}</p>
+            <h4>The key decision</h4>
+            <p>{decision}</p>
           </section>
-          {decision && (
-            <section>
-              <h4>The key decision</h4>
-              <p>{decision}</p>
-            </section>
-          )}
-          {story && (
-            <section>
-              <h4>The result</h4>
-              <p>{story.result}</p>
-            </section>
-          )}
-        </div>
-        {preview && (
-          <StoryScreenshot
-            image={view?.image ?? preview.image}
-            name={item.shortName ?? item.title}
-            caption={view?.caption ?? preview.caption}
-          />
+        )}
+        {story && (
+          <section>
+            <h4>The result</h4>
+            <p>{story.result}</p>
+          </section>
         )}
       </div>
+      {preview && (
+        <StoryScreenshot
+          image={view?.image ?? preview.image}
+          name={item.shortName ?? item.title}
+          caption={view?.caption ?? preview.caption}
+        />
+      )}
+    </div>
+  );
+  return (
+    <div className="work-story">
+      {featured ? (
+        <details className="featured-story-context">
+          <summary>
+            {item.contribution
+              ? 'Command approvals and editor'
+              : 'The app and the design decisions'}
+          </summary>
+          {overview}
+        </details>
+      ) : (
+        overview
+      )}
       {item.shortName === 'iguess' && <FlowWalkthrough />}
       {projectStory?.engineering && (
         <EngineeringStory story={projectStory.engineering} id={workId(item)} />

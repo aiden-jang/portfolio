@@ -5,9 +5,15 @@ The entire car garage remains separate from the project globe.
 
 ## Globe
 
-The globe starts when its featured image becomes visible on desktop. On touch screens,
-visitors choose Explore globe first; Done restores the screenshot and ordinary page
-scrolling. Mouse wheel input scrolls the page. Dragging, arrow keys, reset and event
+The featured still marks an August 2026 Kamchatka earthquake from real USGS and EMSC
+readings recorded in Everything Is Fine’s reconciliation fixture. Inspect an earthquake
+shows both agencies’ readings without WebGL. The event case study uses the same evidence.
+The still renders the existing Natural Earth mesh, coastlines, and tectonic boundaries.
+The app’s [recorded agency reports](https://github.com/aiden-jang/everythingisfine/blob/main/src/sources/fixtures/one-quake-both-feeds.json)
+include the source IDs, original precision and measured separation.
+
+Explore globe starts the interactive USGS snapshot on request. Done restores the
+Kamchatka still and ordinary page scrolling. Mouse wheel input scrolls the page. Dragging, arrow keys, reset and event
 selection stay inside the globe. Motion stops when the globe is idle, offscreen,
 behind a dialog or in a hidden tab. Reduced motion removes coasting.
 
@@ -36,7 +42,8 @@ using its snapshot service. The example file is synthetic. Undo and Replay switc
 between those recorded contents. Play recorded example shows the edited file and
 restores it after a short interval, preserving keyboard focus. Its timer stops
 when the component unmounts. No live agent runs or edits visitor files.
-The contributor label and inspectable editor screenshot remain available.
+The contributor label and inspectable editor screenshot remain available. The case study
+opens with the same recorded edit and highlights the changed expression.
 
 Bean's small artwork frames come from mrrp's native sit/perk renderer and eye painter.
 The flower uses bloomnote's native Gerbera petal and seed geometry, with the meaning

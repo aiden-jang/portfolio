@@ -6,10 +6,10 @@ import { WorkModalLinks } from './WorkModalLinks';
 import { WorkModalNav } from './WorkModalNav';
 import { WorkStoryEnding } from './WorkStoryEnding';
 import { WorkStory } from './WorkStory';
+import { WorkStoryOpening } from './WorkStoryOpening';
 import { ScrollBody } from './ScrollBody';
 import { useWorkDialog } from './useWorkDialog';
 import './work-modal.css';
-
 type Props = {
   item: WorkDetail | null;
   onClose: () => void;
@@ -60,7 +60,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
           <span data-nosnippet className="sr-only">
             {item.context}
           </span>
-          <p className="work-modal-summary">{item.summary}</p>
+          <WorkStoryOpening item={item} />
           <WorkStory item={item} />
           <p className="work-technologies">{item.stack.join(' · ')}</p>
           <WorkStoryEnding item={item} />

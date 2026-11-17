@@ -82,14 +82,6 @@ try {
             )
             .every((i) => i.complete && i.naturalWidth),
         );
-        if (name === 'projects' && device === 'desktop')
-          await page.waitForFunction(
-            () =>
-              document.querySelector('.orbit-feature')?.getAttribute('data-globe-phase') ===
-              'ready',
-            null,
-            { timeout: 90000 },
-          );
         if (name !== 'contact')
           await page.evaluate(
             () => (document.querySelector('.portfolio-header').style.visibility = 'hidden'),

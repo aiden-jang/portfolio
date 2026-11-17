@@ -8,7 +8,7 @@ for (const width of [1440, 390]) {
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto('/#sec-work');
     const globe = page.locator('.orbit-feature');
-    if (width < 768) await page.getByRole('button', { name: 'Explore globe', exact: true }).click();
+    await page.getByRole('button', { name: 'Explore globe', exact: true }).click();
     await expect(globe).toHaveAttribute('data-globe-phase', 'ready', { timeout: 60000 });
     await page.locator('.orbit-preview').hover();
     await page.getByRole('button', { name: 'Show an event', exact: true }).click();
@@ -54,9 +54,7 @@ for (const width of [1440, 390]) {
     await page.screenshot({ path: test.info().outputPath(`showcase-${width}.png`) });
   });
 }
-test('globe assets wait for the section and a failed start keeps a screenshot and retry', async ({
-  page,
-}) => {
+test('globe starts on request and a failed start keeps the preview and retry', async ({ page }) => {
   const assets: string[] = [];
   page.on('request', (r) => {
     if (/globe-engine|globe-geography|orbit-snapshot/.test(r.url())) assets.push(r.url());
@@ -68,6 +66,8 @@ test('globe assets wait for the section and a failed start keeps a screenshot an
     r.fulfill({ status: 503, body: 'Unavailable' }),
   );
   await page.locator('#sec-work').scrollIntoViewIfNeeded();
+  expect(assets).toEqual([]);
+  await page.getByRole('button', { name: 'Explore globe', exact: true }).click();
   await expect(page.locator('.orbit-feature')).toHaveAttribute('data-globe-phase', 'error', {
     timeout: 60000,
   });

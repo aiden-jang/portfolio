@@ -88,8 +88,10 @@ The page leads into everythingisfine and Iodine, then
 Experience, the supporting collection, About and Contact.
 
 The featured globe uses an interactive, recorded USGS snapshot with native app
-geography and selectable event links. Desktop starts it when visible; touch screens
-use Explore and Done. Iodine pairs its original editor screenshot with a prominent
+geography and selectable event links. Visitors can inspect one recorded Kamchatka
+earthquake and compare its agency readings directly, or launch the orbiting snapshot
+with Explore globe. Featured case studies lead with their engineering evidence.
+Iodine pairs its original editor screenshot with a prominent
 recorded snapshot/revert example. Visitors can undo the edit directly or play the
 recorded sequence, with contributor attribution visible.
 
