@@ -37,6 +37,11 @@ CI pins Ubuntu 24.04 to keep browser system dependencies stable across runner-im
 Control search leaves IME composition keys to the input. Enter executes a command
 only after text composition has finished; ordinary keyboard navigation remains available.
 
+Project showcase checks exercise globe event links and retry, keyboard exit,
+recorded Iodine undo/replay, Bean feedback, the flower meaning and the iguess flow.
+They also keep screenshot history available through the inspector after removing
+inline view controls from the supporting collection.
+
 The suite checks desktop and phone layouts in Chromium and WebKit. It exercises
 navigation, screenshot inspection, case studies, credits, keyboard focus and
 scroll restoration, cold shared links, and a delayed effects download. Phone

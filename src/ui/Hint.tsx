@@ -16,7 +16,7 @@ export function AllControlsButton() {
       }}
     >
       <span aria-hidden="true">···</span>
-      <span>All controls</span>
+      <span>Garage</span>
     </button>
   );
 }

@@ -6,16 +6,16 @@ export const THEMES: Record<ThemeName, Theme> = {
     fogColor: 0x12121a,
     fogNear: 22,
     fogFar: 80,
-    ambient: { color: 0xfff4e8, intensity: 0.38 },
+    ambient: { color: 0xfff4e8, intensity: 0.4 },
     hemi: { sky: 0xfff2e0, ground: 0x1c1612, intensity: 0.55 },
-    key: { color: 0xfff0d8, intensity: 0.95 },
-    fill: { color: 0xb8cce8, intensity: 0.75 },
+    key: { color: 0xfff0d8, intensity: 0.85 },
+    fill: { color: 0xb8cce8, intensity: 0.8 },
     rim: { color: 0xffd8b0, intensity: 0.78 },
     reflectorColor: 0x565662,
     underglow: 0xff5a1c,
     bloomStrength: 0.11,
     bloomThreshold: 1.15,
-    exposure: 0.96,
+    exposure: 0.94,
   },
   night: {
     bg: 0x080b12,
@@ -41,7 +41,12 @@ export { CARS, GARAGE_INDICES, adjacentCar } from './cars';
 export const PREFETCH_MODEL_INDICES = [0, 1] as const;
 
 export const KEYFRAMES: Keyframe[] = [
-  { azimuth: 0.65, elevation: 0.22, distance: 9.5, targetY: 0.7 }, // intro:      front 3/4
+  {
+    azimuth: 0.65,
+    elevation: 0.19,
+    distance: typeof window !== 'undefined' && window.innerWidth < 768 ? 9.35 : 8.7,
+    targetY: 0.55,
+  }, // intro:      front 3/4
   { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // selected work: rear
   { azimuth: 1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // experience: side (right)
   { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // more projects: rear

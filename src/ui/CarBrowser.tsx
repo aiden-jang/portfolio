@@ -7,13 +7,33 @@ import { ControlIcon } from './ControlIcon';
 
 type Props = { onClose: () => void; returnFocus: HTMLElement | null };
 
-export function CarBrowser({ onClose, returnFocus }: Props) {
+export function CarBrowser({ onClose: finishClose, returnFocus }: Props) {
   const index = useAppStore((state) => state.carIndex);
   const choose = useAppStore((state) => state.setCarIndex);
   const loading = useAppStore((state) => state.isCarLoading);
   const error = useAppStore((state) => state.carLoadError);
   const retry = useAppStore((state) => state.retryCar);
   const dialog = useRef<HTMLDialogElement>(null);
+  const closing = useRef(false);
+  const onClose = () => {
+    const el = dialog.current;
+    if (closing.current) return;
+    if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      finishClose();
+      return;
+    }
+    closing.current = true;
+    el.classList.add('is-exiting');
+    el.animate(
+      [
+        { opacity: 1, transform: 'translateY(0) scale(1)' },
+        { opacity: 0, transform: 'translateY(8px) scale(.99)' },
+      ],
+      { duration: 160, easing: 'ease-out', fill: 'forwards' },
+    )
+      .finished.catch(() => {})
+      .then(finishClose);
+  };
   const options = useRef<(HTMLButtonElement | null)[]>([]);
   usePageScrollLock(true);
   useEffect(() => {

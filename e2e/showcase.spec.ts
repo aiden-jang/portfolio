@@ -1,0 +1,81 @@
+import { expect, test } from '@playwright/test';
+for (const width of [1440, 390]) {
+  test(`project interactions preserve their examples and navigation at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto('/#sec-work');
+    const globe = page.locator('.orbit-feature');
+    if (width < 768) await page.getByRole('button', { name: 'Explore globe', exact: true }).click();
+    await expect(globe).toHaveAttribute('data-globe-phase', 'ready', { timeout: 60000 });
+    await page.locator('.orbit-preview').hover();
+    await page.getByRole('button', { name: 'Show an event', exact: true }).click();
+    const link = page.getByRole('link', { name: 'Open this event' });
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAccessibleDescription('Opens in a new tab');
+    const url = new URL((await link.getAttribute('href'))!);
+    expect(url.hostname).toBe('everythingisfine.aidenjang.com');
+    expect(new URLSearchParams(url.hash.slice(1)).get('e')).toMatch(/^usgs:/);
+    await page.getByRole('button', { name: 'Close event details' }).click();
+    const canvas = page.locator('#globe-view');
+    await canvas.focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('button', { name: 'Explore globe', exact: true })).toBeFocused();
+    await expect(canvas).toHaveCount(0);
+    await page.getByRole('button', { name: 'Undo edit', exact: true }).click();
+    await expect(page.locator('.iodine-code')).not.toContainText('.trim()');
+    await expect(page.locator('.iodine-feedback')).toContainText('Feedback queued');
+    await page.getByRole('button', { name: 'Replay edit', exact: true }).click();
+    await expect(page.locator('.iodine-code')).toContainText('.trim()');
+    await page.getByRole('button', { name: 'Pet Bean', exact: true }).click();
+    await expect(page.locator('.bean-response')).toHaveText('mrrp.');
+    await expect(page.locator('.bean-cameo img')).toHaveJSProperty('complete', true);
+    await page.getByRole('button', { name: 'Open Gerbera’s meaning' }).click();
+    await expect(page.getByRole('region', { name: 'Gerbera meaning' })).toContainText(
+      'For that brilliant laugh',
+    );
+    await expect(page.getByRole('button', { name: 'Close flower meaning' })).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('button', { name: 'Open Gerbera’s meaning' })).toBeFocused();
+    await page.getByRole('button', { name: 'How I built it: iguess', exact: true }).click();
+    await page.getByRole('button', { name: 'Follow the flow' }).click();
+    await expect(page.locator('.flow-explanation')).toContainText('AI Worker');
+    const hash = new URL(page.url()).hash;
+    await page.getByRole('button', { name: 'Draw', exact: true }).press('ArrowRight');
+    expect(new URL(page.url()).hash).toBe(hash);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.work-modal-panel')).toHaveCount(0);
+    expect(await page.locator('.garage-project').count()).toBe(9);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
+    expect(errors).toEqual([]);
+    await page.screenshot({ path: test.info().outputPath(`showcase-${width}.png`) });
+  });
+}
+test('globe assets wait for the section and a failed start keeps a screenshot and retry', async ({
+  page,
+}) => {
+  const assets: string[] = [];
+  page.on('request', (r) => {
+    if (/globe-engine|globe-geography|orbit-snapshot/.test(r.url())) assets.push(r.url());
+  });
+  await page.goto('/');
+  await expect(page.locator('#sec-intro h1')).toBeVisible();
+  expect(assets).toEqual([]);
+  await page.route('**/projects/globe-geography.bin.gz', (r) =>
+    r.fulfill({ status: 503, body: 'Unavailable' }),
+  );
+  await page.locator('#sec-work').scrollIntoViewIfNeeded();
+  await expect(page.locator('.orbit-feature')).toHaveAttribute('data-globe-phase', 'error', {
+    timeout: 60000,
+  });
+  await expect(page.locator('.orbit-feature .screenshot-image')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Retry globe', exact: true })).toBeVisible();
+  await page.unroute('**/projects/globe-geography.bin.gz');
+  await page.getByRole('button', { name: 'Retry globe', exact: true }).click();
+  await expect(page.locator('.orbit-feature')).toHaveAttribute('data-globe-phase', 'ready', {
+    timeout: 60000,
+  });
+});

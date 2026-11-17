@@ -1,3 +1,4 @@
+import { FlowWalkthrough } from './showcase/FlowWalkthrough';
 import { StoryScreenshot } from './StoryScreenshot';
 import { workId } from '../data/workItems';
 import type { WorkDetail } from '../types';
@@ -43,6 +44,7 @@ export function WorkStory({ item }: { item: WorkDetail }) {
           />
         )}
       </div>
+      {item.shortName === 'iguess' && <FlowWalkthrough />}
       {projectStory?.engineering && (
         <EngineeringStory story={projectStory.engineering} id={workId(item)} />
       )}

@@ -80,13 +80,25 @@ hierarchy; they do not replace the portfolio's identity.
 
 ## Current Direction
 
-The car-led showroom and project presentation polish have been applied. Keep the
-car centered with its full orbit area. The page leads from the showroom into
-everythingisfine and Iodine, then Experience, the supporting collection, About and
-Contact. Featured images use deliberate globe and editor crops, fill the content width on
-desktop, and lead the copy on phones. Opening an image reveals the complete capture.
-Supporting preview frames share a 2:1 ratio; Platform closes the desktop collection
-with its explanation beside the preview. Studio lighting softens the default paint
-and fades the floor reflection. Phone readers keep source and sharing actions in an
-overflow control; the full garage remains available with grouped controls. No new
-metrics, testimonials or hiring claims have been provided.
+The car-led showroom uses a brief, interruptible lighting and camera settle, then
+holds its angle until the visitor orbits. Keep the car centered with its full orbit
+area and the full garage. The page leads into everythingisfine and Iodine, then
+Experience, the supporting collection, About and Contact.
+
+The featured globe uses an interactive, recorded USGS snapshot with native app
+geography and selectable event links. Desktop starts it when visible; touch screens
+use Explore and Done. Iodine presents a clearly labeled recorded snapshot/revert
+example alongside its contributor details and original screenshot.
+
+Supporting preview frames share a 2:1 ratio, with three columns on wide desktops.
+Project titles open their case studies; full screenshot views and sharing stay in
+the inspector and readers. Bean uses mrrp's own artwork, bloomnote exposes a sample
+flower meaning, and iguess includes an illustrated message flow. Platform closes
+the desktop collection with its explanation beside the preview.
+
+About has a distinct personal line; Contact leads with the email and keeps the
+stationary car alongside on desktop and below on phones. Reduced motion removes
+coasting and decorative transitions. Keep all existing garage controls, credits,
+sharing and recovery paths. No new metrics, testimonials or hiring claims have
+been provided. Implementation details and asset provenance are documented in
+[Project interactions](docs/project-interactions.md).

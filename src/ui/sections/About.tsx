@@ -5,19 +5,20 @@ export function AboutSection() {
     <Section id="sec-about" side="left" desktopVertical="top" mobileVertical="top">
       <div className="about-copy panel pointer-events-auto w-full max-w-[560px] text-left">
         <h2 className={H2}>A bit about me.</h2>
-        <div data-nosnippet>
-          <p className={`${P_LI} max-w-[48ch]`}>
-            At Zeta Global, I work on publisher tools: scheduling ads, managing demand and
-            onboarding newsletters. Before that, I worked at LiveIntent. I work across the database,
-            API and interface, and help other engineers build on those systems.
+        <div className="about-story">
+          <p className={`${P_LI} mt-4 max-w-[48ch]`}>
+            Outside work, the projects tend to start with something ordinary: where to eat, whether
+            a drink was worth another go, what to write to someone. Those became wherever, worth and
+            bloomnote. Then came mrrp, a room for two people and a pixel cat.
           </p>
+          <div data-nosnippet>
+            <p className={`${P_LI} max-w-[48ch]`}>
+              At Zeta Global, I work on publisher tools: scheduling ads, managing demand and
+              onboarding newsletters. Before that, I worked at LiveIntent. I work across the
+              database, API and interface, and help other engineers build on those systems.
+            </p>
+          </div>
         </div>
-        <p className={`${P_LI} mt-4 max-w-[48ch]`}>
-          Outside work, the projects tend to start with something ordinary: where to eat, whether a
-          drink was worth another go, what to write to someone. Those became wherever, worth and
-          bloomnote. Then came mrrp, a room for two people and a pixel cat. The cat does not
-          appreciate the infrastructure.
-        </p>
         <dl className="about-details">
           <div>
             <dt>Background</dt>
@@ -43,6 +44,7 @@ export function AboutSection() {
             </dd>
           </div>
         </dl>
+        <p className="about-personal-line">The cat does not appreciate the infrastructure.</p>
       </div>
     </Section>
   );

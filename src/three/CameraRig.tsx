@@ -1,3 +1,4 @@
+import { motionState } from './studioEntrance';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useEffect, useRef } from 'react';
 import { KEYFRAMES } from '../config';
@@ -20,8 +21,7 @@ import type { Keyframe } from '../types';
 import { hitsCar } from './carHitTest';
 import { CarFraming } from './carFraming';
 
-const INTRO_DURATION = 2.0;
-const IDLE_SPIN_RATE = 0.12;
+const INTRO_DURATION = 0.78;
 
 // `?clean` freezes the camera for OG screenshots. It needs its own azimuth because KEYFRAMES[0]
 // sits near the nose, and the shot wants more flank.
@@ -67,17 +67,17 @@ export function CameraRig({ getScrollT }: Props) {
     const reduced = prefersReducedMotion(),
       scrollT = getScrollT();
 
-    s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
-    if (
-      s.scrollActiveTimer === 0 &&
-      !s.isDown &&
-      !isCleanMode &&
-      !reduced &&
-      scrollT === 0 &&
-      !useAppStore.getState().hasManualView
-    ) {
-      s.idleSpin += dt * IDLE_SPIN_RATE;
+    if (s.isDown || scrollT > 0 || useAppStore.getState().hasManualView) s.introT = 1;
+    motionState.progress = reduced ? 1 : s.introT;
+    if ('fov' in camera) {
+      const startFov = three.size.width > 767 ? 32 : 34;
+      const nextFov = startFov + (35 - startFov) * Math.min(1, Math.max(0, scrollT * 5));
+      if (camera.fov !== nextFov) {
+        camera.fov = nextFov;
+        camera.updateProjectionMatrix();
+      }
     }
+    s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
 
     const kf = baseKf.current;
     interpolateKeyframe(KEYFRAMES, scrollT, kf);

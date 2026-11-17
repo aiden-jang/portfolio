@@ -150,7 +150,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (
       !state.isCarLoading &&
       !state.carLoadError &&
-      state.sectionIndex === 0 &&
+      (state.sectionIndex === 0 || state.isContactVisible) &&
       state.refs.lamps.length
     )
       state.refs.lightPulseT = 1;

@@ -1,3 +1,4 @@
+import { Bean } from '../showcase/Bean';
 import '../project-gallery.css';
 import { PREVIEWS } from '../../data/projectPreviews';
 import { FEATURED_PROJECTS, visibleProjects } from '../../data/workBrowsing';
@@ -61,26 +62,50 @@ function Project({
     >
       <div className="garage-project-copy">
         <div className="project-title">
-          <h3>{item.shortName}</h3>
+          <h3>
+            {featured ? (
+              item.shortName
+            ) : (
+              <button
+                type="button"
+                onClick={(event) => onOpen(item, event.currentTarget)}
+                aria-label={'How I built it: ' + item.shortName}
+              >
+                {item.shortName}
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M4 12h15m-5-5 5 5-5 5" />
+                </svg>
+              </button>
+            )}
+          </h3>
+          {item.shortName === 'mrrp' && <Bean />}
           {item.contribution && <p className="project-role">Open-source contributor</p>}
         </div>
         <p>{preview?.description ?? item.summary}</p>
-        {preview?.states && (
+        {featured && preview?.states && (
           <ProjectPreviewControls name={item.shortName!} states={preview.states} />
         )}
         <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>
         <div className="garage-project-links">
-          <button
-            type="button"
-            onClick={(event) => onOpen(item, event.currentTarget)}
-            aria-label={
-              item.contribution
-                ? `Read my contribution to ${item.shortName}`
-                : `How I built it: ${item.shortName}`
-            }
-          >
-            {item.contribution ? 'Read my contribution' : 'How I built it'}
-          </button>
+          {featured && (
+            <button
+              type="button"
+              onClick={(event) => onOpen(item, event.currentTarget)}
+              aria-label={
+                item.contribution
+                  ? `Read my contribution to ${item.shortName}`
+                  : `How I built it: ${item.shortName}`
+              }
+            >
+              {item.contribution ? 'Read my contribution' : 'How I built it'}
+            </button>
+          )}
           {item.link && (
             <a
               href={item.link.url}

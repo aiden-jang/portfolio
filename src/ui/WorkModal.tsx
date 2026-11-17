@@ -1,3 +1,4 @@
+import { useStoryMotion } from './useStoryMotion';
 import { createPortal } from 'react-dom';
 import type { WorkDetail } from '../types';
 import { caseStudyLane } from '../data/workBrowsing';
@@ -16,13 +17,13 @@ type Props = {
   onNext: () => void;
   position: { current: number; total: number } | null;
 };
-
 export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props) {
   const { dialogRef, closeRef, onTouchStart, onTouchEnd } = useWorkDialog(item, {
     onClose,
     onPrevious,
     onNext,
   });
+  useStoryMotion(item?.title, dialogRef);
   if (!item) return null;
   const lane = caseStudyLane(item, 'all');
   const next = lane[(lane.indexOf(item) + 1) % lane.length];
@@ -39,7 +40,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         onClick={(event) => event.stopPropagation()}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        style={{ viewTransitionName: 'work-morph' }}
         className="work-modal-panel relative flex flex-col w-full max-w-[960px] max-h-[85dvh] overflow-hidden bg-[#0a0a14] border border-[var(--color-line)] rounded-xl"
       >
         <header className="work-modal-heading">

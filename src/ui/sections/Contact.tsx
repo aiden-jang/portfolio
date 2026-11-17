@@ -1,3 +1,4 @@
+import { useAppStore } from '../../store';
 import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
 import { H2, P_LI, PANEL_BASE, Section } from './shared';
@@ -62,7 +63,12 @@ function EmailActions() {
         </a>
         <button
           type="button"
-          onClick={() => run(() => copyText(EMAIL))}
+          onClick={() =>
+            run(() => copyText(EMAIL)).then((result) => {
+              if (result === 'copied' && !matchMedia('(prefers-reduced-motion:reduce)').matches)
+                useAppStore.getState().pulseCarLights();
+            })
+          }
           aria-label={copyLabel}
           aria-describedby="contact-copy-status"
           className="contact-copy"

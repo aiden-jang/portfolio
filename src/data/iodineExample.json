@@ -1,0 +1,20 @@
+{
+  "file": "src/greeting.ts",
+  "before": "export function greeting(name: string) {\n  return `Hello, ${name}.`;\n}\n",
+  "after": "export function greeting(name: string) {\n  return `Hello, ${name.trim()}.`;\n}\n",
+  "restored": "export function greeting(name: string) {\n  return `Hello, ${name}.`;\n}\n",
+  "outcome": "reverted",
+  "feedback": {
+    "id": "portfolio-revert",
+    "type": "edit_reverted",
+    "source": "revert_button",
+    "timestamp": 1794881155917,
+    "summary": "The user reverted your edit to src/greeting.ts. The file is back to its contents from before that edit.",
+    "state": "cancelled",
+    "sideEffects": false,
+    "guidance": "Do not assume the edit is still applied. Read the file again before changing it."
+  },
+  "formattedContext": "<EventContext>\nType: edit_reverted\nSource: revert_button\nState: cancelled\nSummary: The user reverted your edit to src/greeting.ts. The file is back to its contents from before that edit.\nUnfinished side effects: no\nGuidance: Do not assume the edit is still applied. Read the file again before changing it.\n</EventContext>",
+  "source": "https://github.com/aiden-jang/iodine/blob/60e7bbf/server/src/services/editSnapshots.ts",
+  "label": "Recorded local example using Iodine’s snapshot and revert code. No AI session is running."
+}

@@ -277,7 +277,8 @@ for (const width of [1440, 390]) {
       } else {
         await page.locator('#nav').getByRole('link', { name: 'Contact', exact: true }).click();
       }
-      await expect(page.locator('#sec-contact h2')).toBeInViewport();
+      await expect(page.locator('.contact-email-link')).toBeInViewport();
+      await expect(page.getByRole('heading', { name: 'Let’s talk.', exact: true })).toBeAttached();
       await expect(page.locator('#desktop-dock')).toBeHidden();
       await expect(page.locator('#mobile-bar')).toBeHidden();
       await expect(page.getByRole('button', { name: 'All controls', exact: true })).toHaveCount(0);

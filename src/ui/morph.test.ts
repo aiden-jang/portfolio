@@ -1,143 +1,97 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { runMorph } from './morph';
-
-type Handle = {
-  resolveReady: () => void;
-  rejectReady: (reason: unknown) => void;
-  resolveFinished: () => void;
-  callback: () => void;
-};
-
-/** Stands in for the View Transitions API so each promise can be settled on demand. */
-function stubViewTransitions(deferred = false): { handles: Handle[]; calls: () => number } {
-  const handles: Handle[] = [];
-  const start = (callback: () => void) => {
-    let resolveReady!: () => void;
-    let rejectReady!: (reason: unknown) => void;
-    let resolveFinished!: () => void;
-    const ready = new Promise<void>((res, rej) => {
-      resolveReady = res;
-      rejectReady = rej;
-    });
-    const finished = new Promise<void>((res) => {
-      resolveFinished = res;
-    });
-    handles.push({ resolveReady, rejectReady, resolveFinished, callback });
-    if (!deferred) callback();
-    return { ready, finished };
-  };
-  Object.defineProperty(document, 'startViewTransition', {
-    value: start,
-    configurable: true,
-    writable: true,
-  });
-  return { handles, calls: () => handles.length };
-}
-
-function card(): HTMLElement {
-  const el = document.createElement('button');
-  document.body.append(el);
-  return el;
-}
-
+vi.mock('../hooks/reducedMotion', () => ({ prefersReducedMotion: () => reduced }));
+let reduced = false;
+const handles: { resolve: () => void; cancel: () => void }[] = [];
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
-
+beforeEach(() => {
+  reduced = false;
+  handles.length = 0;
+  document.body.innerHTML =
+    '<div class="work-modal-overlay"><div class="work-modal-panel"></div></div>';
+  Object.defineProperty(Element.prototype, 'animate', {
+    configurable: true,
+    value: vi.fn(() => {
+      let resolve!: () => void, reject!: (error: Error) => void;
+      const finished = new Promise<void>((yes, no) => {
+        resolve = yes;
+        reject = no;
+      });
+      const cancel = vi.fn(() => reject(new DOMException('Cancelled', 'AbortError')));
+      handles.push({ resolve, cancel });
+      return { finished, cancel };
+    }),
+  });
+});
 afterEach(() => {
-  Reflect.deleteProperty(document, 'startViewTransition');
-  delete document.documentElement.dataset.workTransition;
+  reduced = true;
+  runMorph(() => {}, null, false);
   document.body.innerHTML = '';
+  Reflect.deleteProperty(Element.prototype, 'animate');
   vi.restoreAllMocks();
 });
-
-describe('runMorph', () => {
-  it('does not leave an unhandled rejection when a transition is superseded', async () => {
-    const unhandled = vi.fn();
-    process.on('unhandledRejection', unhandled);
-    const { handles } = stubViewTransitions();
-
-    runMorph(() => {}, card(), true);
-    handles[0].rejectReady(new DOMException('Transition was aborted', 'InvalidStateError'));
-    handles[0].resolveFinished();
-    await settle();
-    await settle();
-
-    process.off('unhandledRejection', unhandled);
-    expect(unhandled).not.toHaveBeenCalled();
-  });
-
-  it('keeps a newer closing morph intact when the superseded opening finishes', async () => {
-    const { handles } = stubViewTransitions();
-    const el = card();
-    runMorph(() => {}, el, true);
-    runMorph(() => {}, el, false);
-    handles[0].rejectReady(new DOMException('aborted', 'InvalidStateError'));
-    handles[0].resolveFinished();
-    await settle();
-    expect(el.style.viewTransitionName).toBe('work-morph');
-    handles[1].resolveReady();
-    handles[1].resolveFinished();
-    await settle();
-    expect(el.style.viewTransitionName).toBe('');
-  });
-
-  it('ignores an older update callback that arrives after a newer transition', () => {
-    const { handles } = stubViewTransitions(true);
-    const older = vi.fn();
-    const newer = vi.fn();
-    runMorph(older, card(), true);
-    runMorph(newer, card(), false);
-    handles[1].callback();
-    handles[0].callback();
-    expect(newer).toHaveBeenCalledOnce();
-    expect(older).not.toHaveBeenCalled();
-  });
-
-  it('names the card before the snapshot when opening', () => {
-    const { handles } = stubViewTransitions();
-    const el = card();
-    const seen: string[] = [];
-    // The callback runs inside the transition, so record what the name was on the way in.
-    runMorph(() => seen.push(el.style.viewTransitionName), el, true);
-
-    expect(seen).toEqual(['work-morph']);
-    expect(handles).toHaveLength(1);
-  });
-
-  it('hands the name to the card when closing, so the morph target is the card', () => {
-    stubViewTransitions();
-    const el = card();
-
-    runMorph(() => {}, el, false);
-
-    expect(el.style.viewTransitionName).toBe('work-morph');
-  });
-
-  it('applies the update exactly once', () => {
-    stubViewTransitions();
-    const update = vi.fn();
-
-    runMorph(update, card(), true);
-
-    expect(update).toHaveBeenCalledOnce();
-  });
-
-  it('updates without a transition when the browser has no support', () => {
-    const update = vi.fn();
-
-    runMorph(update, card(), true);
-
-    expect(update).toHaveBeenCalledOnce();
-  });
-
-  it('survives a null element, which is what a direct deep link gives it', async () => {
-    const { handles } = stubViewTransitions();
-    const update = vi.fn();
-
-    expect(() => runMorph(update, null, false)).not.toThrow();
-    handles[0].resolveReady();
-    handles[0].resolveFinished();
-    await settle();
-    expect(update).toHaveBeenCalledOnce();
-  });
+it('opens immediately so keyboard focus can enter the mounted reader', () => {
+  const update = vi.fn();
+  runMorph(update, null, true);
+  expect(update).toHaveBeenCalledOnce();
+  expect(handles).toHaveLength(2);
+});
+it('keeps the reader mounted until its exit finishes', async () => {
+  const update = vi.fn();
+  runMorph(update, null, false);
+  expect(update).not.toHaveBeenCalled();
+  handles.forEach((h) => h.resolve());
+  await settle();
+  expect(update).toHaveBeenCalledOnce();
+});
+it('cancels an entry cleanly when the reader is closed quickly', async () => {
+  const unhandled = vi.fn();
+  process.on('unhandledRejection', unhandled);
+  runMorph(() => {}, null, true);
+  const entry = [...handles];
+  const close = vi.fn();
+  runMorph(close, null, false);
+  entry.forEach((h) => expect(h.cancel).toHaveBeenCalledOnce());
+  handles.slice(2).forEach((h) => h.resolve());
+  await settle();
+  expect(close).toHaveBeenCalledOnce();
+  expect(unhandled).not.toHaveBeenCalled();
+  process.off('unhandledRejection', unhandled);
+});
+it('does not let a stale exit dismiss a newer reader', async () => {
+  const stale = vi.fn(),
+    next = vi.fn();
+  runMorph(stale, null, false);
+  runMorph(next, null, true);
+  await settle();
+  expect(stale).not.toHaveBeenCalled();
+  expect(next).toHaveBeenCalledOnce();
+});
+it('applies a closing update exactly once even after cancellation', async () => {
+  const update = vi.fn();
+  runMorph(update, null, false);
+  handles.forEach((h) => h.cancel());
+  await settle();
+  expect(update).toHaveBeenCalledOnce();
+});
+it('skips both entry and exit motion for reduced motion', () => {
+  reduced = true;
+  const update = vi.fn();
+  runMorph(update, null, true);
+  runMorph(update, null, false);
+  expect(update).toHaveBeenCalledTimes(2);
+  expect(handles).toHaveLength(0);
+});
+it('falls back to direct updates when animation is unavailable', () => {
+  Reflect.deleteProperty(Element.prototype, 'animate');
+  const update = vi.fn();
+  runMorph(update, null, true);
+  expect(update).toHaveBeenCalledOnce();
+});
+it('closes a direct link safely even if its panel has already gone', () => {
+  document.body.innerHTML = '';
+  const update = vi.fn();
+  runMorph(update, null, false);
+  expect(update).toHaveBeenCalledOnce();
 });

@@ -1,0 +1,745 @@
+html:root {
+  --color-bg: #101014;
+  --color-fg: #ececea;
+  --color-muted: #aaaab3;
+  --color-panel: #17171b;
+  --color-line: #ffffff1b;
+  --portfolio-gutter: max(64px, calc((100vw - 1280px) / 2));
+  color: var(--color-fg);
+  background: var(--color-bg);
+}
+html:root .portfolio-header {
+  padding-inline: var(--portfolio-gutter);
+}
+html:root .portfolio-header a[href$='.pdf'] {
+  border: 0;
+  background: transparent;
+}
+html:root .portfolio-menu summary {
+  border: 0;
+  background: transparent;
+}
+html:root nav[aria-label='Section progress'] {
+  display: none;
+}
+html:root #sec-intro {
+  padding: 112px var(--portfolio-gutter) 0;
+}
+html:root #sec-intro::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--color-bg));
+  pointer-events: none;
+}
+html:root .garage-intro {
+  position: static;
+}
+html:root .garage-intro h1 {
+  font-size: 112px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+}
+html:root .garage-intro .intro-role {
+  font-size: 15px;
+  margin-top: 20px;
+  color: #c6c6cc;
+}
+html:root .garage-intro .intro-role + p {
+  display: none;
+}
+html:root .intro-work-cue {
+  position: static;
+  display: inline-flex;
+  margin-top: 20px;
+  z-index: 30;
+  font-size: 14px;
+  color: var(--color-fg);
+  opacity: 1;
+}
+html:root #desktop-dock {
+  bottom: 30px;
+}
+html:root #desktop-dock .car-controls-row {
+  padding: 5px;
+  gap: 6px;
+  border: 1px solid #ffffff1b;
+  background: #141418e8;
+  border-radius: 12px;
+}
+html:root #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
+  width: 272px;
+  padding-left: 10px;
+}
+html:root #desktop-dock .desktop-paint-swatches .control-group-label {
+  display: none;
+}
+html:root #desktop-dock .all-controls-trigger {
+  width: 82px;
+}
+html:root #desktop-dock .car-browse-trigger {
+  width: 144px;
+}
+html:root #desktop-dock .car-browse-trigger strong {
+  font-size: 13px;
+}
+html:root #desktop-dock .car-browse-trigger small {
+  font-size: 10px;
+  color: #aaaab3;
+}
+html:root .orbit-invitation {
+  bottom: 106px;
+  font-size: 12px;
+  color: #aaaab3;
+}
+html:root :is(#sec-work, #sec-more-work, #sec-experience, #sec-about) {
+  padding-inline: var(--portfolio-gutter);
+}
+html:root #sec-work {
+  padding-block: 100px 80px;
+}
+html:root .garage-work-heading {
+  margin-bottom: 52px;
+}
+html:root .garage-work-heading h2 {
+  font-size: 56px;
+}
+html:root .project-featured-group {
+  display: grid;
+  gap: 104px;
+}
+html:root .garage-project-featured {
+  display: grid;
+  align-items: center;
+  gap: 72px;
+  padding: 0;
+  border: 0;
+}
+html:root #project-everythingisfine {
+  display: block;
+  position: relative;
+}
+html:root #project-everythingisfine > figure {
+  position: relative;
+}
+html:root #project-everythingisfine > .garage-project-copy {
+  position: absolute;
+  left: 0;
+  top: 48%;
+  transform: translateY(-50%);
+  width: 34%;
+  max-width: 400px;
+  z-index: 3;
+}
+html:root #project-everythingisfine .project-preview::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, #101014 0%, #101014 31%, #101014c7 43%, transparent 63%),
+    linear-gradient(to top, #101014, transparent 13%);
+}
+html:root #project-everythingisfine .project-preview > span {
+  z-index: 4;
+}
+html:root #project-iodine {
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.32fr);
+}
+html:root #project-iodine > figure {
+  grid-column: 2;
+  grid-row: 1;
+}
+html:root #project-iodine > .garage-project-copy {
+  grid-column: 1;
+  grid-row: 1;
+}
+html:root .garage-project-featured .garage-project-copy {
+  display: block;
+  margin: 0;
+}
+html:root .garage-project-featured h3 {
+  font-size: 42px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  margin-bottom: 22px;
+}
+html:root .garage-project-featured .garage-project-copy > p:first-of-type {
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 36ch;
+  color: #c6c6cd;
+}
+html:root .garage-project-featured .garage-stack {
+  margin-top: 22px;
+  font-size: 12px;
+}
+html:root .garage-project-featured .garage-project-links {
+  margin-top: 20px;
+  gap: 22px;
+}
+html:root .garage-project-featured .project-role {
+  margin-block: -10px 20px;
+  font-size: 12px;
+}
+html:root #project-everythingisfine .preview-thumbnail {
+  aspect-ratio: 1.65;
+  border-radius: 14px;
+}
+html:root #project-everythingisfine .project-preview img {
+  width: 165%;
+  max-width: none;
+  height: auto;
+  transform: translate(-22.7%, -18.4%);
+}
+html:root #project-iodine .preview-thumbnail {
+  aspect-ratio: 1.75;
+  border-radius: 14px;
+}
+html:root #project-iodine .project-preview img {
+  width: 160%;
+  max-width: none;
+  height: auto;
+  transform: translate(-22%, -4%);
+}
+html:root .garage-project-featured figcaption {
+  font-size: 11px;
+  margin-top: 12px;
+  color: #aaaab3;
+  line-height: 1.65;
+}
+html:root #sec-experience {
+  min-height: auto;
+  padding-block: 100px;
+}
+html:root #sec-experience .panel {
+  max-width: 1280px;
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 92px;
+}
+html:root #sec-experience .experience-history {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+html:root #sec-experience .experience-proof {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+}
+html:root #sec-experience h2 {
+  font-size: 48px;
+  max-width: 10ch;
+  line-height: 1.08;
+  margin-bottom: 36px;
+}
+html:root .experience-history ul {
+  margin-top: 0;
+}
+html:root .experience-role {
+  padding-bottom: 24px;
+  gap: 16px;
+}
+html:root .experience-role > span:first-child {
+  font-size: 15px;
+}
+html:root .experience-role > span:last-child {
+  font-size: 11px;
+}
+html:root .experience-company {
+  font-size: 13px;
+  margin-top: 4px;
+}
+html:root .experience-outcome {
+  grid-template-columns: 142px minmax(0, 1fr) 18px;
+  gap: 22px;
+  padding-block: 20px;
+}
+html:root .experience-outcome:first-child {
+  padding-top: 0;
+}
+html:root .experience-figure strong {
+  font-size: 32px;
+  letter-spacing: -0.025em;
+}
+html:root .experience-figure span {
+  font-size: 11px;
+}
+html:root .experience-story strong {
+  font-size: 16px;
+}
+html:root .experience-story span {
+  font-size: 14px;
+  max-width: 51ch;
+}
+html:root .experience-outcome-qualitative .experience-figure strong {
+  font-size: 14px;
+  letter-spacing: 0;
+}
+html:root .experience-more {
+  margin-top: 14px;
+}
+html:root #sec-more-work {
+  padding-block: 92px 100px;
+}
+html:root .project-gallery-heading {
+  margin-bottom: 40px;
+}
+html:root .project-gallery-heading h2 {
+  font-size: 48px;
+}
+html:root .project-gallery {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 44px 28px;
+}
+html:root .project-gallery .garage-project-compact {
+  gap: 18px;
+}
+html:root .project-gallery .garage-project-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+html:root .project-gallery .project-title {
+  margin-bottom: 8px;
+}
+html:root .project-gallery h3 {
+  font-size: 25px;
+  line-height: 1.2;
+  margin: 0;
+}
+html:root .project-gallery h3 button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+  min-height: 36px;
+}
+html:root .project-gallery h3 svg {
+  width: 17px;
+  height: 17px;
+  color: #aaaab3;
+}
+html:root .project-gallery .garage-project-copy > p {
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 44ch;
+  color: #b8b8c1;
+}
+html:root .project-gallery .garage-stack {
+  display: none;
+}
+html:root .project-gallery .garage-project-copy > [role='group'] {
+  display: none;
+}
+html:root .project-gallery .garage-project-links {
+  margin-top: auto;
+  padding-top: 12px;
+}
+html:root .project-gallery .garage-project-links a {
+  font-size: 12px;
+}
+html:root .project-gallery #project-platform {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 60px;
+  margin-top: 16px;
+}
+html:root .project-gallery #project-platform .garage-project-copy {
+  grid-column: 2;
+  padding-inline: 0 48px;
+  display: block;
+}
+html:root #project-platform h3 {
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+html:root #project-platform .garage-project-links {
+  margin-top: 12px;
+}
+html:root #sec-about {
+  min-height: auto;
+  padding-block: 108px;
+}
+html:root .about-copy {
+  max-width: 1280px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  column-gap: 100px;
+  align-items: start;
+}
+html:root #sec-about h2 {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 48px;
+  line-height: 1.12;
+}
+html:root .about-story {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+html:root .about-story > p {
+  font-size: 20px;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 50ch;
+}
+html:root .about-story > div p {
+  color: #aaaab3;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-top: 24px;
+}
+html:root .about-details {
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: 32px;
+}
+html:root .about-details dd {
+  font-size: 13px;
+}
+html:root #sec-contact {
+  --contact-gutter: var(--portfolio-gutter);
+}
+html:root #sec-contact h2 {
+  font-size: 96px;
+  letter-spacing: -0.035em;
+}
+html:root .contact-email-link {
+  font-size: 38px;
+}
+html:root .contact-copy-block {
+  width: 48%;
+}
+html:root :is(a, button, summary):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 4px;
+}
+html:root .project-gallery h3 button:hover {
+  color: #fff;
+}
+html:root .project-gallery h3 button:hover svg {
+  transform: translateX(3px);
+}
+@media (max-width: 1050px) and (min-width: 768px) {
+  html:root {
+    --portfolio-gutter: 40px;
+  }
+  html:root .garage-intro h1 {
+    font-size: 96px;
+  }
+  html:root .garage-project-featured {
+    gap: 40px;
+  }
+  html:root .garage-project-featured h3 {
+    font-size: 32px;
+  }
+  html:root #sec-experience .panel {
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 44px;
+  }
+  html:root .experience-outcome {
+    grid-template-columns: 110px minmax(0, 1fr) 16px;
+    gap: 16px;
+  }
+  html:root .project-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  html:root .about-copy {
+    column-gap: 48px;
+  }
+}
+@media (max-width: 767px) {
+  html:root {
+    --portfolio-gutter: 24px;
+  }
+  html:root #sec-intro {
+    padding: 104px 24px 0;
+  }
+  html:root .garage-intro h1 {
+    font-size: 52px;
+    line-height: 1.04;
+  }
+  html:root .garage-intro .intro-role {
+    margin-top: 18px;
+    font-size: 14px;
+  }
+  html:root .intro-work-cue {
+    position: static;
+    display: inline-flex;
+    margin-top: 20px;
+    font-size: 13px;
+  }
+  html:root .portfolio-mobile-header > a {
+    border: 0;
+    background: transparent;
+  }
+  html:root .orbit-invitation {
+    bottom: 148px;
+    font-size: 11px;
+  }
+  html:root #mobile-bar {
+    background: transparent;
+  }
+  html:root #mobile-bar .car-controls-row {
+    background: #151519ed;
+    border-color: #ffffff1b;
+  }
+  html:root #sec-work {
+    padding-block: 76px 56px;
+  }
+  html:root .garage-work-heading {
+    margin-bottom: 32px;
+  }
+  html:root .garage-work-heading h2 {
+    font-size: 36px;
+  }
+  html:root .garage-work-heading > span {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  html:root .project-featured-group {
+    gap: 72px;
+  }
+  html:root .garage-project-featured {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  html:root #project-everythingisfine {
+    display: flex;
+  }
+  html:root #project-everythingisfine > .garage-project-copy {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    margin-top: 22px;
+  }
+  html:root #project-everythingisfine .project-preview::after {
+    display: none;
+  }
+  html:root .garage-project-featured > figure {
+    order: 1;
+  }
+  html:root .garage-project-featured > .garage-project-copy {
+    order: 2;
+    margin-top: 22px;
+  }
+  html:root .garage-project-featured h3 {
+    font-size: 30px;
+    margin-bottom: 16px;
+  }
+  html:root .garage-project-featured .garage-project-copy > p:first-of-type {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  html:root .garage-project-featured .garage-stack {
+    font-size: 11px;
+    margin-top: 16px;
+  }
+  html:root .garage-project-featured .garage-project-links {
+    margin-top: 12px;
+  }
+  html:root #project-everythingisfine .preview-thumbnail {
+    aspect-ratio: 1.12;
+  }
+  html:root #project-everythingisfine .project-preview img {
+    width: 230%;
+    transform: translate(-43.5%, -12%);
+  }
+  html:root #project-iodine .preview-thumbnail {
+    aspect-ratio: 1.25;
+  }
+  html:root #project-iodine .project-preview img {
+    width: 300%;
+    transform: translate(-59.1%, 0);
+  }
+  html:root .garage-project-featured .project-proof {
+    display: block;
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.65;
+  }
+  html:root .garage-project-featured figcaption:not(.project-proof) {
+    display: none;
+  }
+  html:root #sec-experience {
+    padding-block: 72px;
+  }
+  html:root #sec-experience .panel {
+    display: block;
+  }
+  html:root #sec-experience h2 {
+    max-width: none;
+    font-size: 36px;
+    margin-bottom: 28px;
+  }
+  html:root .experience-role {
+    padding-bottom: 22px;
+  }
+  html:root #sec-experience .experience-proof {
+    margin-top: 44px;
+  }
+  html:root .experience-outcome {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding-block: 22px;
+  }
+  html:root .experience-figure {
+    flex-wrap: wrap;
+  }
+  html:root .experience-figure strong {
+    font-size: 28px;
+  }
+  html:root .experience-story strong {
+    font-size: 16px;
+  }
+  html:root .experience-story span {
+    font-size: 14px;
+  }
+  html:root .experience-arrow {
+    display: none;
+  }
+  html:root #sec-more-work {
+    padding-block: 64px 72px;
+  }
+  html:root .project-gallery-heading h2 {
+    font-size: 36px;
+  }
+  html:root .project-gallery-heading > span {
+    font-size: 12px;
+  }
+  html:root .project-gallery {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  html:root .project-gallery .garage-project-compact {
+    gap: 14px;
+  }
+  html:root .project-gallery h3 {
+    font-size: 25px;
+  }
+  html:root .project-gallery .garage-project-copy > p {
+    font-size: 14px;
+  }
+  html:root .project-gallery .garage-project-links {
+    padding-top: 8px;
+  }
+  html:root .project-gallery #project-platform {
+    display: flex;
+    grid-column: 1;
+    gap: 14px;
+    margin-top: 0;
+  }
+  html:root .project-gallery #project-platform .garage-project-copy {
+    padding: 0;
+  }
+  html:root #project-platform h3 {
+    font-size: 25px;
+    margin-bottom: 0;
+  }
+  html:root #sec-about {
+    padding-block: 72px;
+  }
+  html:root .about-copy {
+    display: flex;
+    flex-direction: column;
+  }
+  html:root #sec-about h2 {
+    font-size: 36px;
+    margin-bottom: 28px;
+  }
+  html:root .about-story > p {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+  html:root .about-story > div p {
+    font-size: 14px;
+  }
+  html:root .about-details {
+    width: 100%;
+    margin-top: 30px;
+  }
+  html:root #sec-contact {
+    min-height: max(100svh, 780px);
+  }
+  html:root #sec-contact h2 {
+    font-size: 64px;
+  }
+  html:root .contact-copy-block {
+    width: 100%;
+  }
+  html:root .contact-email-link {
+    font-size: 26px;
+  }
+}
+@media (max-width: 359px) {
+  html:root {
+    --portfolio-gutter: 20px;
+  }
+  html:root .garage-intro h1 {
+    font-size: 46px;
+  }
+  html:root .contact-email-link {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) and (min-height: 501px) {
+  html:root #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
+    width: auto;
+    padding-left: 0;
+  }
+  html:root #desktop-dock .car-browse-trigger {
+    width: auto;
+  }
+  html:root .orbit-invitation {
+    bottom: 166px;
+  }
+}
+@media (min-width: 768px) and (max-height: 500px) {
+  html:root #sec-intro {
+    padding-top: 76px;
+  }
+  html:root .garage-intro h1 {
+    font-size: 42px;
+    max-width: 6ch;
+  }
+  html:root .garage-intro .intro-role {
+    font-size: 12px;
+    margin-top: 12px;
+    max-width: 24ch;
+  }
+  html:root .intro-work-cue {
+    display: none;
+  }
+  html:root #desktop-dock {
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  html:root #desktop-dock .car-controls-row {
+    padding: 4px;
+    gap: 4px;
+  }
+  html:root #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
+    width: 104px;
+    padding-left: 0;
+  }
+  html:root #desktop-dock .car-browse-trigger {
+    width: 152px;
+  }
+  html:root #desktop-dock .all-controls-trigger {
+    width: 88px;
+  }
+}

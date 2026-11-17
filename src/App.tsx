@@ -5,20 +5,21 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useNavigation } from './hooks/useNavigation';
 import { useSceneUrl } from './hooks/useSceneUrl';
 import { CarControls } from './ui/CarControls';
-import { useReveal } from './hooks/useReveal';
+import { useShowroomTransition } from './hooks/useShowroomTransition';
 import { PortfolioHeader } from './ui/PortfolioHeader';
 import { CommandMenu } from './ui/CommandMenu';
-import { FilmGrain } from './ui/FilmGrain';
 import { CarLoadNotice } from './ui/CarLoadNotice';
 import { SceneBoundary } from './ui/SceneBoundary';
 import { Sections } from './ui/Sections';
-import { SectionDots } from './ui/SectionDots';
 import './ui/reading-flow.css';
 import './ui/dialog-motion.css';
 import './ui/showroom-layout.css';
 import './ui/project-presentation.css';
 import './ui/reading-presentation.css';
 import './ui/garage-responsive.css';
+import './ui/studio-layout.css';
+import './ui/studio-motion.css';
+import './ui/showcase/showcase.css';
 
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 
@@ -29,7 +30,7 @@ const isCleanMode =
 export function App() {
   const { getScrollT, scrollToSection } = useNavigation(isCleanMode);
   useSceneUrl();
-  useReveal();
+  useShowroomTransition();
 
   return (
     <>
@@ -57,13 +58,10 @@ export function App() {
           <Scene getScrollT={getScrollT} />
         </Suspense>
       </SceneBoundary>
-      <div className="vignette" aria-hidden="true" />
-      <FilmGrain />
       {!isCleanMode && (
         <>
           <PortfolioHeader onLink={scrollToSection} />
           <CarControls />
-          <SectionDots onJump={scrollToSection} />
           <Sections />
           <CarLoadNotice />
           <CommandMenu onSection={scrollToSection} />

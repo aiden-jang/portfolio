@@ -16,22 +16,24 @@ for (const width of [1440, 390]) {
       } as typeof get;
     });
     await page.goto('/?preview=bloomnote:0#project-bloomnote');
-    const views = page.getByRole('group', { name: 'bloomnote product views' });
-    const first = views.getByRole('button').nth(0);
-    const second = views.getByRole('button').nth(1);
-    await expect(first).toHaveAttribute('aria-pressed', 'true');
-    await second.click();
-    await expect(second).toHaveAttribute('aria-pressed', 'true');
+    const inspect = page.getByRole('button', {
+      name: 'Inspect screenshot: bloomnote',
+      exact: true,
+    });
+    await inspect.click();
+    const views = page.getByRole('group', { name: 'Screenshot views' });
+    await expect(views).toContainText('Open the garden');
+    await views.getByRole('button', { name: 'Next →', exact: true }).click();
+    await expect(views).toContainText('Read the note');
     await page.evaluate(() => {
       const url = new URL(location.href);
       url.searchParams.set('preview', 'bloomnote:1');
       history.pushState(null, '', url);
     });
     await page.goBack();
-    await expect(first).toHaveAttribute('aria-pressed', 'true');
+    await expect(views).toContainText('Open the garden');
     await page.goForward();
-    await expect(second).toHaveAttribute('aria-pressed', 'true');
-    await page.getByRole('button', { name: 'Inspect screenshot: bloomnote', exact: true }).click();
+    await expect(views).toContainText('Read the note');
     const dialog = page.getByRole('dialog', { name: 'bloomnote screenshot' });
     await expect(dialog).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(

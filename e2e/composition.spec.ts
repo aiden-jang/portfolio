@@ -32,7 +32,8 @@ for (const [width, height] of [
       await page.screenshot({ path: test.info().outputPath(`about-${width}.png`) });
     }
     await jump('Contact');
-    await expect(page.locator('#sec-contact h2')).toBeInViewport();
+    await expect(page.locator('.contact-email-link')).toBeInViewport();
+    await expect(page.getByRole('heading', { name: 'Let’s talk.', exact: true })).toBeAttached();
     await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
     await expect(async () => {
       const copy = await page.locator('.contact-copy-block').boundingBox();

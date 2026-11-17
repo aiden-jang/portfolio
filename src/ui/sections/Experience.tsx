@@ -83,40 +83,40 @@ export function ExperienceSection({ onOpen }: Props) {
   return (
     <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">
       <div data-nosnippet className="panel pointer-events-auto w-full max-w-[650px]">
-        <h2 className={H2}>Where I&apos;ve worked</h2>
-        <ul className={`list-none p-0 mt-4 ${P_LI}`}>
-          {ROLES.map((r) => (
-            <li
-              key={`${r.company}-${r.period}`}
-              className="experience-role flex items-baseline justify-between gap-4"
-            >
-              <span>
-                <span className="text-[var(--color-fg)]">{r.title}</span>
-                <span className="experience-company text-[var(--color-muted)]">{r.company}</span>
-              </span>
-              <span className="shrink-0 font-[var(--font-mono)] text-[0.62rem] tracking-[0.08em] text-[var(--color-muted)]">
-                {r.period}
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        <p className="mt-5 mb-0.5 font-[var(--font-mono)] text-[0.62rem] tracking-[0.24em] uppercase text-[var(--color-muted)]">
-          Selected outcomes
-        </p>
-        <div>
-          {highlights.slice(0, 4).map((item) => (
-            <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
-          ))}
+        <div className="experience-history">
+          <h2 className={H2}>Where I&apos;ve worked</h2>
+          <ul className={`list-none p-0 mt-4 ${P_LI}`}>
+            {ROLES.map((r) => (
+              <li
+                key={`${r.company}-${r.period}`}
+                className="experience-role flex items-baseline justify-between gap-4"
+              >
+                <span>
+                  <span className="text-[var(--color-fg)]">{r.title}</span>
+                  <span className="experience-company text-[var(--color-muted)]">{r.company}</span>
+                </span>
+                <span className="shrink-0 font-[var(--font-mono)] text-[0.62rem] tracking-[0.08em] text-[var(--color-muted)]">
+                  {r.period}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <details className="experience-more">
-          <summary>
-            More engineering work <span aria-hidden="true">+</span>
-          </summary>
-          {highlights.slice(4).map((item) => (
-            <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
-          ))}
-        </details>
+        <div className="experience-proof">
+          <div>
+            {highlights.slice(0, 4).map((item) => (
+              <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
+            ))}
+          </div>
+          <details className="experience-more">
+            <summary>
+              More engineering work <span aria-hidden="true">+</span>
+            </summary>
+            {highlights.slice(4).map((item) => (
+              <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
+            ))}
+          </details>
+        </div>
       </div>
     </Section>
   );

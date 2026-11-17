@@ -9,8 +9,8 @@ export function applyStudioReflection(material: ShaderMaterial) {
   );
   material.fragmentShader = material.fragmentShader.replace('varying vec4 vUv;', varying).replace(
     '#include <tonemapping_fragment>',
-    `float fade = 1.0 - smoothstep(0.8, 4.8, length(vFloorPosition.xz));
-       gl_FragColor.rgb = mix(vec3(0.0035, 0.0035, 0.0045), gl_FragColor.rgb, 0.60 * fade);
+    `float fade = 1.0 - smoothstep(0.3, 3.1, length(vFloorPosition.xz));
+       gl_FragColor.rgb = mix(vec3(0.0035, 0.0035, 0.0045), gl_FragColor.rgb, 0.25 * fade);
        #include <tonemapping_fragment>`,
   );
 }

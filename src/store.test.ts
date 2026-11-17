@@ -5,7 +5,7 @@ import { useAppStore } from './store';
 
 afterEach(() => useAppStore.setState(useAppStore.getInitialState(), true));
 
-it('only pulses existing lamps on a ready car in the intro', () => {
+it('only pulses existing lamps on a ready car in the intro or contact', () => {
   const state = useAppStore.getState();
   useAppStore.setState({ refs: { ...state.refs, lightPulseT: 0, lamps: [] }, isCarLoading: false });
   const pulse = () => useAppStore.getState().pulseCarLights();
@@ -24,6 +24,10 @@ it('only pulses existing lamps on a ready car in the intro', () => {
     expect(useAppStore.getState().refs.lightPulseT).toBe(0);
   }
   useAppStore.setState({ sectionIndex: 0 });
+  pulse();
+  expect(useAppStore.getState().refs.lightPulseT).toBe(1);
+  useAppStore.getState().refs.lightPulseT = 0;
+  useAppStore.setState({ sectionIndex: 5, isContactVisible: true });
   pulse();
   expect(useAppStore.getState().refs.lightPulseT).toBe(1);
   useAppStore.getState().setCarIndex(1);

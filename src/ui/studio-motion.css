@@ -1,0 +1,151 @@
+html:root .panel > * {
+  opacity: 1;
+  transform: none;
+}
+html:root .portfolio-scene {
+  opacity: var(--stage-opacity, 1);
+  transform: translateY(var(--stage-shift, 0px));
+}
+html:root #sec-intro {
+  height: 100svh;
+  min-height: 100svh;
+  position: relative;
+}
+html:root .project-gallery h3 button {
+  cursor: pointer;
+}
+html:root .preview-thumbnail {
+  transition: box-shadow 180ms ease-out;
+}
+html:root .project-preview img {
+  transition: filter 180ms ease-out;
+}
+html:root .project-preview:hover img {
+  filter: brightness(1.065);
+}
+html:root .project-gallery h3 svg {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+html:root .garage-project-links :is(a, button) {
+  transition:
+    color 140ms ease-out,
+    border-color 140ms ease-out;
+}
+html:root
+  :is(.scene-control-button, .car-step, .all-controls-trigger, .car-browse-trigger, .swatch) {
+  transition:
+    background-color 140ms ease-out,
+    border-color 140ms ease-out;
+}
+html:root .work-modal-panel.dialog-panel,
+html:root .work-modal-overlay.dialog-overlay {
+  animation: none;
+}
+html:root .car-browser[open],
+html:root .preview-dialog[open],
+html:root .all-controls-panel {
+  animation: studio-dialog-enter 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+html:root .car-browser::backdrop {
+  animation: studio-backdrop-enter 180ms ease-out both;
+  transition: opacity 160ms ease-out;
+}
+html:root .car-browser.is-exiting::backdrop {
+  opacity: 0;
+}
+@keyframes studio-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes studio-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+html:root .work-modal-panel {
+  width: min(1040px, calc(100vw - 64px));
+  max-width: 1040px;
+  max-height: calc(100dvh - 64px);
+}
+html:root .work-modal-heading {
+  padding: 22px 84px 22px 36px;
+}
+html:root .work-modal-title {
+  font-size: 24px;
+}
+html:root .work-modal-close {
+  top: 15px;
+  right: 15px;
+}
+html:root .work-modal-panel .story-scroll-area {
+  padding: 28px 36px 32px;
+}
+html:root .work-modal-summary {
+  font-size: 17px;
+  max-width: 65ch;
+  line-height: 1.65;
+}
+html:root .story-scroll-area p {
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 65ch;
+}
+html:root .story-scroll-area h3 {
+  font-size: 14px;
+}
+html:root .work-modal-footer {
+  padding-inline: 28px;
+}
+@media (max-width: 767px) {
+  html:root .work-modal-panel {
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+  html:root .work-modal-overlay {
+    padding: 8px;
+  }
+  html:root .work-modal-heading {
+    padding: 16px 62px 16px 20px;
+  }
+  html:root .work-modal-title {
+    font-size: 18px;
+  }
+  html:root .work-modal-close {
+    top: 12px;
+    right: 10px;
+  }
+  html:root .work-modal-panel .story-scroll-area {
+    padding: 22px 20px 24px;
+  }
+  html:root .work-modal-summary,
+  html:root .story-scroll-area p {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  html:root .work-modal-footer {
+    padding-inline: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:root *,
+  html:root *::before,
+  html:root *::after {
+    animation: none !important;
+    transition-duration: 70ms !important;
+  }
+  html:root .portfolio-scene {
+    transform: none;
+  }
+  html:root .project-gallery h3 button:hover svg {
+    transform: none;
+  }
+}

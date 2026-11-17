@@ -1,3 +1,6 @@
+import { InteractiveGlobe } from './showcase/InteractiveGlobe';
+import { IodineWalkthrough } from './showcase/IodineWalkthrough';
+import { BloomPreview } from './showcase/BloomPreview';
 import { copyText } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
 import { ScreenshotImage } from './ScreenshotImage';
@@ -11,7 +14,7 @@ import { ExpandIcon } from './ExpandIcon';
 
 type Props = { image: string; name: string; caption: string; states?: PreviewState[] };
 
-export function ProjectPreview({
+function ScreenshotProjectPreview({
   image: initialImage,
   name,
   caption: initialCaption,
@@ -113,5 +116,17 @@ export function ProjectPreview({
         />
       )}
     </>
+  );
+}
+
+export function ProjectPreview(props: Props) {
+  return props.name === 'everythingisfine' ? (
+    <InteractiveGlobe {...props} />
+  ) : props.name === 'iodine' ? (
+    <IodineWalkthrough {...props} />
+  ) : props.name === 'bloomnote' ? (
+    <BloomPreview {...props} />
+  ) : (
+    <ScreenshotProjectPreview {...props} />
   );
 }

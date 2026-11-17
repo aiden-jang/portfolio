@@ -93,7 +93,7 @@ for (const width of [1440, 390]) {
       project.getByRole('button', { name: 'Inspect screenshot: everythingisfine', exact: true }),
     ).toBeDisabled();
     const frame = await project.locator('.preview-thumbnail').boundingBox();
-    expect(frame!.width / frame!.height).toBeCloseTo(width < 768 ? 1.3 : 1.65, 1);
+    expect(frame!.width / frame!.height).toBeCloseTo(width < 768 ? 1.12 : 1.65, 1);
     await project
       .getByRole('button', { name: 'How I built it: everythingisfine', exact: true })
       .click();

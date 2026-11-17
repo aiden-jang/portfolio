@@ -1,3 +1,4 @@
+import { motionState } from './studioEntrance';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
@@ -86,7 +87,8 @@ export function Lights() {
     const sun = computeSunPosition(new Date());
     key.current.position.set(sun.x, Math.max(sun.y, 0.5), sun.z);
     const sunFactor = NIGHT_KEY_FLOOR + (1 - NIGHT_KEY_FLOOR) * sun.daylight;
-    key.current.intensity = c.key.intensity * sunFactor;
+    key.current.intensity =
+      c.key.intensity * sunFactor * (0.45 + 0.55 * (1 - Math.pow(1 - motionState.progress, 3)));
 
     c.fill.color = smoothColorHex(c.fill.color, target.fill.color, k);
     c.fill.intensity = smoothTowards(
@@ -95,7 +97,7 @@ export function Lights() {
       k,
     );
     fill.current.color.setHex(c.fill.color);
-    fill.current.intensity = c.fill.intensity;
+    fill.current.intensity = c.fill.intensity * (0.7 + 0.3 * motionState.progress);
 
     c.rim.color = smoothColorHex(c.rim.color, target.rim.color, k);
     c.rim.intensity = smoothTowards(
@@ -104,7 +106,7 @@ export function Lights() {
       k,
     );
     rim.current.color.setHex(c.rim.color);
-    rim.current.intensity = c.rim.intensity;
+    rim.current.intensity = c.rim.intensity * (0.7 + 0.3 * motionState.progress);
   });
 
   const init = current.current;

@@ -111,7 +111,7 @@ export function prepareModelFinish(model: Object3D, file: string): void {
     return;
   }
   if (file === 'ferrari-f120-f40.glb')
-    return prepareGlossPaint(model, roadPaint[file], 0.3, 0.18, 'none', 0.65);
+    return prepareGlossPaint(model, roadPaint[file], 0.34, 0.26, 'none', 0.55);
   if (file === 'lamborghini-countach-5000qv.glb') return prepareCountachFinish(model);
   if (Object.hasOwn(roadPaint, file))
     return prepareGlossPaint(model, roadPaint[file], 0.24, 0.06, 'both');

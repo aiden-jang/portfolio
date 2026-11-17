@@ -19,13 +19,14 @@ for (const width of [1440, 1024, 768, 390]) {
     await page.evaluate(() => document.fonts.ready);
     const cards = await page.locator('.project-gallery .garage-project').evaluateAll((items) =>
       items.map((item) => {
-        const img = item.querySelector('img')!;
+        const img = item.querySelector('.preview-thumbnail img')!;
         const box = img.getBoundingClientRect();
         return {
           name: item.id,
           top: item.getBoundingClientRect().top,
           links: item.querySelector('.garage-project-links')!.getBoundingClientRect().top,
-          stackEnd: item.querySelector('.garage-stack')!.getBoundingClientRect().bottom,
+          descriptionEnd: item.querySelector('.garage-project-copy > p')!.getBoundingClientRect()
+            .bottom,
           image: box.top,
           height: box.height,
           expectedHeight: box.width / 2,
@@ -42,7 +43,7 @@ for (const width of [1440, 1024, 768, 390]) {
           expect.soft(Math.abs(card.image - peer.image), `${card.name} image`).toBeLessThan(1);
         }
       } else {
-        expect.soft(card.links - card.stackEnd, `${card.name} links gap`).toBeLessThan(24);
+        expect.soft(card.links - card.descriptionEnd, `${card.name} links gap`).toBeLessThan(36);
       }
     }
     await expect(page.locator('.project-featured-group article h3')).toHaveText([

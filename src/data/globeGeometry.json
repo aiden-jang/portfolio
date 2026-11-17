@@ -1,0 +1,7 @@
+{
+  "land": { "offset": 0, "count": 69624 },
+  "index": { "offset": 278496, "count": 106731 },
+  "coast": { "offset": 705420, "count": 29982 },
+  "plates": { "offset": 825348, "count": 14874 },
+  "graticule": { "offset": 884844, "count": 16560 }
+}

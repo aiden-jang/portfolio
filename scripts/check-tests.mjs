@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const FLOOR = 221;
+const FLOOR = 227;
 
 const run = spawnSync('npx', ['vitest', 'run'], {
   cwd: ROOT,
