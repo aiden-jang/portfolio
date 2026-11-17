@@ -11,6 +11,12 @@ Geist, charcoal and ivory, the real garage, the existing factual copy and approv
 application captures. Give each section a clear focal point and reduce the surrounding
 visual noise. This extends the current visual world.
 
+Give the work the confidence of a product team proud of what it shipped. Each project
+should quickly communicate who it helps, show its strongest real interface, and surface
+one meaningful product or engineering decision. Use verified outcomes and specific
+evidence rather than invented metrics or generic claims. The portfolio should feel like
+a personal showroom with product-grade case studies, not a corporate landing page.
+
 The initial idea was to use the same split layout for both featured projects. That
 would make a long scroll feel repetitive. The mock reverses Iodine's desktop layout,
 while keeping a consistent text-first order on phones. Supporting projects use images
@@ -39,22 +45,29 @@ and Contact. Desktop sections have 112px vertical breathing room; mobile uses 11
 Controls keep 44px targets, 8px corners and visible focus. Screenshots use 12px corners, with no extra image mat or artificial browser frame.
 Featured images use deliberate globe and editor crops, with complete captures available through inspection. Supporting previews use uniform
 2:1 frames; crops can differ by app, and the screenshot viewer preserves every pixel.
+Use image composition to make each app recognizable at a glance; keep the globe legible
+for Everything Is Fine and frame Iodine around its most distinctive working state.
+Descriptions should lead with the user benefit, then use concise, verified engineering
+evidence to explain why the product is well made.
 
 ## Proposed work by surface
 
-| Surface           | Proposed polish                                                                                          | Reason                                                   |
-| ----------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| Opening           | Keep the existing camera and full car; slightly reduce the name and loosen its tracking                  | A composed opening with room for the silhouette          |
-| Garage            | Opaque dock, clearer grouping, larger chooser labels and consistent spacing                              | Easier to explore without adding scenery                 |
-| Experience        | Remove section numbering, enlarge outcomes and descriptions, align roles and evidence                    | Hiring teams can read the engineering proof quickly      |
-| Featured projects | Everythingisfine first, Iodine second; large image beside a narrow text column, alternating sides        | Each project gets a deliberate presentation              |
-| Iodine            | Keep contributor attribution and case study; omit the additional three-panel explainer from the overview | Avoid repeating detail before someone chooses to read it |
-| Other projects    | Seven image-led entries with consistent preview frames; two columns on desktop, one on phones            | Show the range without giving every app featured weight  |
-| Project browsing  | Quiet underline filters, remove sticky toolbar, retain jump selector                                     | Less fixed chrome around the work                        |
-| Case studies      | Wider reading surface, readable labels, simpler engineering diagrams                                     | Carry the same finish into the details                   |
-| About             | Heading and personal facts on the left, prose on the right                                               | A calm pause before Contact                              |
-| Contact           | Keep the newly approved fixed-car composition, Privacy and credits                                       | A clear closing action                                   |
-| Motion            | Keep the showroom interaction and case-study transition; remove repeated text entrances                  | Focus motion on the memorable artifact and user actions  |
+| Surface            | Proposed polish                                                                                          | Reason                                                   |
+| ------------------ | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Opening            | Keep the existing camera and full car; slightly reduce the name and loosen its tracking                  | A composed opening with room for the silhouette          |
+| Garage             | Opaque dock, clearer grouping, larger chooser labels and consistent spacing                              | Easier to explore without adding scenery                 |
+| Experience         | Remove section numbering, enlarge outcomes and descriptions, align roles and evidence                    | Hiring teams can read the engineering proof quickly      |
+| Featured projects  | Everythingisfine first, Iodine second; large image beside a narrow text column, alternating sides        | Each project gets a deliberate presentation              |
+| Iodine             | Keep contributor attribution and case study; omit the additional three-panel explainer from the overview | Avoid repeating detail before someone chooses to read it |
+| Other projects     | Seven image-led entries with consistent preview frames; two columns on desktop, one on phones            | Show the range without giving every app featured weight  |
+| Project browsing   | Quiet underline filters, remove sticky toolbar, retain jump selector                                     | Less fixed chrome around the work                        |
+| Case studies       | Wider reading surface, readable labels, simpler engineering diagrams                                     | Carry the same finish into the details                   |
+| About              | Heading and personal facts on the left, prose on the right                                               | A calm pause before Contact                              |
+| Contact            | Keep the newly approved fixed-car composition, Privacy and credits                                       | A clear closing action                                   |
+| Visual rhythm      | Align title, image and copy edges; remove redundant dividers and tighten image-to-title spacing          | Make the page feel composed rather than row-based        |
+| Interaction        | Give project images, links and controls one restrained hover and focus language                          | Make small interactions feel as considered as the layout |
+| Motion             | Keep the showroom interaction and case-study transition; remove repeated text entrances                  | Focus motion on the memorable artifact and user actions  |
+| Product confidence | Lead with user value, then a distinctive real screen and one verified product or engineering proof point | Show product judgment and shipping craft without hype    |
 
 Desktop structure:
 
@@ -117,6 +130,12 @@ helper to review the main app; those captures are saved under the `production` f
 4. Check keyboard flow, reduced motion, contrast, loading failures and responsive layouts;
    keep screenshot geometry, shared links, project filters and the garage functioning.
 5. Compare production before/after captures, then run the repository verification gates.
+
+Across the review, prioritize polish that improves clarity and product pride: the car
+remains the opening signature, while the projects demonstrate useful software, strong
+visual craft and credible engineering decisions. Keep the car still on initial load;
+let visitors choose when to orbit it. Motion should clarify transitions and feedback,
+not compete with the work.
 
 The prototype reuses the production React app and garage rather than recreating their
 behavior. It adds scoped styles only. No package, model asset or production entry point
