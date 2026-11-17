@@ -1,6 +1,7 @@
 import { Bean } from '../showcase/Bean';
 import '../project-gallery.css';
 import { PREVIEWS } from '../../data/projectPreviews';
+import { PROJECT_STORIES } from '../../data/projectStories';
 import { FEATURED_PROJECTS, visibleProjects } from '../../data/workBrowsing';
 import { workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
@@ -91,7 +92,11 @@ function Project({
         {featured && preview?.states && (
           <ProjectPreviewControls name={item.shortName!} states={preview.states} />
         )}
-        <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>
+        <p className={`garage-stack${featured ? ' project-evidence' : ''}`}>
+          {featured && PROJECT_STORIES[item.mark ?? '']?.evidence
+            ? PROJECT_STORIES[item.mark ?? ''].evidence
+            : item.stack.slice(0, 3).join(' · ')}
+        </p>
         <div className="garage-project-links">
           {featured && (
             <button

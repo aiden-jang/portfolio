@@ -8,6 +8,7 @@ export type EngineeringStory = {
 };
 
 type ProjectStory = {
+  evidence?: string;
   problem: string;
   result: string;
   decision?: string;
@@ -17,6 +18,8 @@ type ProjectStory = {
 
 export const PROJECT_STORIES: Record<string, ProjectStory> = {
   iodine: {
+    evidence:
+      'I scoped command matching to approved commands and paths, with local embeddings and snapshots for undoing agent edits.',
     built:
       'My changes covered command approval rules and the feedback loop between file edits and the agent.',
     problem:
@@ -62,6 +65,8 @@ export const PROJECT_STORIES: Record<string, ProjectStory> = {
     },
   },
   everythingisfine: {
+    evidence:
+      'I matched earthquake reports from USGS polling and EMSC WebSockets while preserving both agencies’ readings.',
     built: 'An interactive globe that brings natural-event feeds into one explorable view.',
     decision:
       'I kept each source’s readings visible when matching reports, and put the camera and filters in the URL.',

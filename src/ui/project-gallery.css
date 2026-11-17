@@ -91,3 +91,8 @@
     min-height: 44px;
   }
 }
+.garage-project .project-evidence {
+  font: 14px/1.6 var(--font-display);
+  max-width: 48ch;
+  color: var(--color-muted);
+}

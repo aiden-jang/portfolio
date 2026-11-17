@@ -8,8 +8,7 @@ export type ProductPreview = {
 export const PREVIEWS: Record<string, ProductPreview> = {
   everythingisfine: {
     image: '/projects/everythingisfine.jpg',
-    description:
-      'Explore earthquakes, storms and more on one globe. Matching USGS and EMSC reports keeps both sources’ readings intact.',
+    description: 'Explore earthquakes, storms, volcanoes and more on one interactive globe.',
     caption: 'Live globe: storm radar, surface wind and reported events explored together.',
   },
   worth: {
@@ -66,7 +65,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
   iodine: {
     image: '/projects/iodine.png',
     description:
-      'An open-source IDE where I contributed scoped approvals, local embedding suggestions, and file snapshots that keep the agent informed when edits are undone.',
+      'An open-source IDE with an AI agent. My contributions make command approvals reusable and agent edits reversible.',
     caption:
       'Editor overview. Approval and undo changes are documented in my GitHub contributions.',
   },
