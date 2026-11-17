@@ -139,3 +139,9 @@ Curated Front, Profile and Detail camera views are available through Garage on I
 They animate to the selected angle, use fitted framing for portrait screens, and
 switch immediately under reduced motion. Dragging interrupts a transition; Reset
 restores the opening angle and zoom. Contact keeps its authored fixed camera.
+
+Photo mode is available from Garage on Intro. It keeps the current car, paint,
+lighting and camera view, with framing controls and an Escape/Exit action. Captures
+read the completed renderer frame without enabling a permanently preserved drawing
+buffer. The exported PNG adds the car, finish and portfolio signature; preview,
+retake and download remain available when native file sharing is unsupported.

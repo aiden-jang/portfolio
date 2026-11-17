@@ -1,3 +1,4 @@
+import { usePhotoMode } from './photo/state';
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
@@ -83,6 +84,13 @@ export function buildCommands({
         if (!state.isCarLoading) state.prevCar();
       },
     },
+    {
+      id: 'photo-mode',
+      label: 'Photo mode',
+      hint: 'camera',
+      keywords: 'photo capture screenshot postcard save image',
+      run: () => usePhotoMode.getState().open(),
+    },
     ...Object.entries(CAMERA_VIEWS).map(([view, { label }]) => ({
       id: `view-${view}`,
       label,
@@ -166,6 +174,8 @@ export function buildCommands({
     .filter(({ id }) => {
       if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';
       if (id === 'retry-scene') return false;
+      if (id === 'photo-mode')
+        return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;
       if (id.startsWith('view-'))
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;
       if (id.startsWith('zoom-'))

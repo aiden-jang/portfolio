@@ -1,0 +1,87 @@
+.portfolio-chrome {
+  display: contents;
+}
+body[data-photo-mode='true'] .portfolio-chrome {
+  visibility: hidden;
+  pointer-events: none;
+}
+.photo-mode {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+}
+.photo-toolbar {
+  position: absolute;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  pointer-events: auto;
+  padding: 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  background: #141418f5;
+}
+.photo-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.photo-toolbar :is(button, select) {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  background: #202026;
+  color: var(--color-fg);
+  font: 13px/1.4 var(--font-display);
+  cursor: pointer;
+}
+.photo-toolbar :is(button, select):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}
+.photo-toolbar button:hover {
+  background: #303038;
+}
+.photo-toolbar button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.photo-toolbar p {
+  margin: 8px 4px 0;
+  font: 12px/1.5 var(--font-display);
+  color: #bcbcc5;
+  text-align: center;
+  max-width: 60ch;
+}
+.photo-preview {
+  position: absolute;
+  inset: 0;
+  background: #08080b;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px 16px 180px;
+  pointer-events: auto;
+}
+.photo-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+@media (max-width: 600px) {
+  .photo-toolbar {
+    width: calc(100vw - 32px);
+  }
+  .photo-actions {
+    gap: 4px;
+  }
+  .photo-toolbar :is(button, select) {
+    padding: 8px;
+  }
+}

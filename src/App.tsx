@@ -1,3 +1,5 @@
+import { PhotoMode } from './ui/photo/PhotoMode';
+import { usePhotoMode } from './ui/photo/state';
 import { publicAnalyticsUrl } from './analytics';
 import { lazy, Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
@@ -30,6 +32,7 @@ const isCleanMode =
 
 export function App() {
   const { getScrollT, scrollToSection } = useNavigation(isCleanMode);
+  const photoMode = usePhotoMode((state) => state.active);
   useSceneUrl();
   useShowroomTransition();
 
@@ -61,11 +64,19 @@ export function App() {
       </SceneBoundary>
       {!isCleanMode && (
         <>
-          <PortfolioHeader onLink={scrollToSection} />
-          <CarControls />
-          <Sections />
-          <CarLoadNotice />
-          <CommandMenu onSection={scrollToSection} />
+          <div
+            className="portfolio-chrome"
+            ref={(element) => {
+              if (element) element.inert = photoMode;
+            }}
+          >
+            <PortfolioHeader onLink={scrollToSection} />
+            <CarControls />
+            <Sections />
+            <CarLoadNotice />
+            <CommandMenu onSection={scrollToSection} />
+          </div>
+          <PhotoMode />
         </>
       )}
       <Analytics beforeSend={publicAnalyticsUrl} />
