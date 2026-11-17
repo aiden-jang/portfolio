@@ -21,7 +21,7 @@ export const PROJECT_STORIES: Record<string, ProjectStory> = {
     evidence:
       'I scoped command matching to approved commands and paths, with local embeddings and snapshots for undoing agent edits.',
     built:
-      'My changes covered command approval rules and the feedback loop between file edits and the agent.',
+      'I built scoped terminal approvals, file recovery with feedback to the agent, and editor links for file paths in agent output.',
     problem:
       'An IDE agent needs a useful way to reuse command approvals and undo edits without granting blanket permission.',
     decision:

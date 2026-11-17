@@ -32,15 +32,19 @@ export function AboutSection() {
             <dt>Open source</dt>
             <dd>
               <a
-                href="https://github.com/aiden-jang/iodine"
+                href="https://github.com/hyunwookshin/iodine/commits/main/?author=aiden-jang"
                 target="_blank"
                 aria-describedby="external-link-hint"
                 rel="noopener noreferrer"
                 className="about-contribution-link"
               >
-                <span>iodine · agent approvals and undo</span>
+                <span>iodine</span>
                 <span aria-hidden="true">↗</span>
               </a>
+              <span className="block">
+                Scoped terminal approvals, agent edit recovery, and clickable file paths in agent
+                replies.
+              </span>
             </dd>
           </div>
         </dl>

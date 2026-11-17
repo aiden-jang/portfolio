@@ -20,14 +20,15 @@ export function WorkStoryOpening({ item }: { item: WorkDetail }) {
   }
   if (item.mark === 'iodine') {
     return (
-      <section className="featured-story-opening" aria-label="Agent edit undo">
+      <section className="featured-story-opening" aria-label="Iodine contributions">
         <h4>
-          An agent edit <br />
-          you can undo.
+          Scoped approvals. <br />
+          Recoverable edits.
         </h4>
         <p>
-          I contributed file snapshots and revert feedback to Iodine, an open-source IDE with an AI
-          agent.
+          I built scoped terminal approvals and an undo system that restores files and tells the AI
+          agent what changed. I also made file paths in agent replies and tool results clickable, so
+          developers can jump straight to the relevant file and line.
         </p>
         <IodineContribution reader />
       </section>

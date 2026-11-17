@@ -265,10 +265,11 @@ export const WORK_ITEMS: WorkDetail[] = [
     categories: ['ai', 'systems'],
     context: 'Open source · Contributor',
     summary:
-      'I contributed reusable command approvals and a way to undo agent edits to an open-source TypeScript IDE.',
+      'I built scoped terminal approvals, agent edit recovery, and clickable file paths for Iodine, an open-source TypeScript IDE.',
     body: [
       'I built scoped command approvals, normalization and local embedding suggestions for similar commands. I also tightened rule matching around command signatures and hidden paths.',
-      'I added file snapshots and an undo flow that tells the agent when an edit is reverted. Other contributions covered file-path navigation, configuration and file-creation fixes.',
+      'I added file snapshots and an undo flow that warns if the file changed since the agent edited it. After reverting, Iodine tells the agent that its edit was undone.',
+      'I turned file paths in assistant replies and tool results into editor links. When a path includes a line number, the editor opens at that line.',
     ],
     stack: ['TypeScript', 'React', 'Node.js', 'Local embeddings', 'Open source'],
     link: {
