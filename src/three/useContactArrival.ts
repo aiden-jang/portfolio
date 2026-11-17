@@ -14,8 +14,12 @@ export function useContactArrival() {
     const contact = document.getElementById('sec-contact')?.getBoundingClientRect();
     if (!contact || contact.top >= size.height || contact.bottom <= 0) {
       state.progress = 0;
-      if (camera.view?.enabled) {
-        if (camera instanceof PerspectiveCamera) camera.aspect = size.width / size.height;
+      const aspect = size.width / size.height;
+      if (
+        camera.view?.enabled ||
+        (camera instanceof PerspectiveCamera && camera.aspect !== aspect)
+      ) {
+        if (camera instanceof PerspectiveCamera) camera.aspect = aspect;
         camera.clearViewOffset();
       }
       return;

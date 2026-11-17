@@ -33,8 +33,10 @@ thermal palette and depth holes; it does not bundle the full application.
 
 Iodine's local example records an actual snapshot, edit, revert and feedback queue
 using its snapshot service. The example file is synthetic. Undo and Replay switch
-between those recorded contents; no live agent runs or edits visitor files.
-The contributor label and screenshot remain available.
+between those recorded contents. Play recorded example shows the edited file and
+restores it after a short interval, preserving keyboard focus. Its timer stops
+when the component unmounts. No live agent runs or edits visitor files.
+The contributor label and inspectable editor screenshot remain available.
 
 Bean's small artwork frames come from mrrp's native sit/perk renderer and eye painter.
 The flower uses bloomnote's native Gerbera petal and seed geometry, with the meaning

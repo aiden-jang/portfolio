@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { IodineWalkthrough } from './IodineWalkthrough';
+import { IodineContribution } from './IodineContribution';
 import { ScreenshotImage } from '../ScreenshotImage';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 
@@ -29,10 +29,7 @@ export function IodinePresentation({ image, caption }: { image: string; caption:
           />
         </button>
         <p className="product-shot-caption">{caption}</p>
-        <details className="product-undo-disclosure">
-          <summary>Try an edit and its undo</summary>
-          <IodineWalkthrough image={image} caption={caption} />
-        </details>
+        <IodineContribution />
         {open && (
           <ScreenshotViewer
             image={image}

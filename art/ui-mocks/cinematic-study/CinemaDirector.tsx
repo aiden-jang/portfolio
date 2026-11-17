@@ -1,38 +1,11 @@
 import { useEffect } from 'react';
-import { KEYFRAMES } from '../../../src/config';
 import { useAppStore } from '../../../src/store';
 
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 export function CinemaDirector() {
   useEffect(() => {
-    const root = document.documentElement;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    let frame = 0,
-      playback = 0;
-    const paint = () => {
-      frame = 0;
-      KEYFRAMES[1].distance = innerWidth < 768 ? 12 : 8.6;
-      const h = innerHeight;
-      const exit = clamp((scrollY / h - 0.12) / 0.58);
-      const contact = document.getElementById('sec-contact')!.getBoundingClientRect().top < h;
-      const work = document.getElementById('sec-work')!.getBoundingClientRect().top;
-      const arrival = clamp((h * 0.95 - work) / (h * 0.9));
-      root.style.setProperty(
-        '--cinema-car-opacity',
-        String(contact || reduced.matches ? 1 : 1 - exit * exit),
-      );
-      root.style.setProperty(
-        '--cinema-title-shift',
-        `${reduced.matches ? 0 : 90 * (1 - arrival)}px`,
-      );
-      root.style.setProperty(
-        '--cinema-figure-scale',
-        String(reduced.matches ? 1 : 0.88 + 0.12 * arrival),
-      );
-    };
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(paint);
-    };
+    let playback = 0;
     const interrupt = () => cancelAnimationFrame(playback);
     const target = (moment: string) =>
       moment === 'hero'
@@ -68,24 +41,16 @@ export function CinemaDirector() {
         playback = requestAnimationFrame(tick);
       }
     };
-    addEventListener('scroll', schedule, { passive: true });
-    addEventListener('resize', schedule);
     addEventListener('wheel', interrupt, { passive: true });
     addEventListener('touchstart', interrupt, { passive: true });
     addEventListener('keydown', interrupt);
     addEventListener('message', receive);
-    reduced.addEventListener('change', schedule);
-    paint();
     return () => {
-      cancelAnimationFrame(frame);
       interrupt();
-      removeEventListener('scroll', schedule);
-      removeEventListener('resize', schedule);
       removeEventListener('wheel', interrupt);
       removeEventListener('touchstart', interrupt);
       removeEventListener('keydown', interrupt);
       removeEventListener('message', receive);
-      reduced.removeEventListener('change', schedule);
     };
   }, []);
   return null;

@@ -66,7 +66,7 @@ export function CameraRig({ getScrollT }: Props) {
     s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
 
     const kf = baseKf.current;
-    interpolateKeyframe(KEYFRAMES, scrollT, kf);
+    interpolateKeyframe(KEYFRAMES, scrollT, kf, three.size.width < 768 ? 12 : undefined);
     contactArrival(kf, dt, reduced);
 
     const az = isCleanMode

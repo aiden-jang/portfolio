@@ -25,12 +25,11 @@ for (const width of [1440, 390]) {
     await page.keyboard.press('Escape');
     await expect(page.getByRole('button', { name: 'Explore globe', exact: true })).toBeFocused();
     await expect(canvas).toHaveCount(0);
-    await page.getByText('Try an edit and its undo', { exact: true }).click();
     await page.getByRole('button', { name: 'Undo edit', exact: true }).click();
-    await expect(page.locator('.iodine-code')).not.toContainText('.trim()');
-    await expect(page.locator('.iodine-feedback')).toContainText('Feedback queued');
+    await expect(page.locator('.cinema-contribution code')).not.toContainText('.trim()');
+    await expect(page.locator('.cinema-result')).toContainText('Revert feedback');
     await page.getByRole('button', { name: 'Replay edit', exact: true }).click();
-    await expect(page.locator('.iodine-code')).toContainText('.trim()');
+    await expect(page.locator('.cinema-contribution code')).toContainText('.trim()');
     await page.getByRole('button', { name: 'Pet Bean', exact: true }).click();
     await expect(page.locator('.bean-response')).toHaveText('mrrp.');
     await expect(page.locator('.bean-cameo img')).toHaveJSProperty('complete', true);

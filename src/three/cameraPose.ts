@@ -8,7 +8,12 @@ export const FRAME_MAX_DIST_MUL = 1.85;
 const INTRO_WIDE_DIST_MUL = 1.055;
 const INTRO_WIDE_ELEVATION = 0.23;
 
-export function interpolateKeyframe(keyframes: Keyframe[], scrollT: number, out: Keyframe): void {
+export function interpolateKeyframe(
+  keyframes: Keyframe[],
+  scrollT: number,
+  out: Keyframe,
+  workDistance?: number,
+): void {
   const t = clamp(scrollT, 0, 1) * (keyframes.length - 1);
   const i = Math.floor(t);
   const f = t - i;
@@ -16,7 +21,11 @@ export function interpolateKeyframe(keyframes: Keyframe[], scrollT: number, out:
   const b = keyframes[Math.min(i + 1, keyframes.length - 1)];
   out.azimuth = lerpAngle(a.azimuth, b.azimuth, f);
   out.elevation = lerp(a.elevation, b.elevation, f);
-  out.distance = lerp(a.distance, b.distance, f);
+  out.distance = lerp(
+    i === 1 ? (workDistance ?? a.distance) : a.distance,
+    Math.min(i + 1, keyframes.length - 1) === 1 ? (workDistance ?? b.distance) : b.distance,
+    f,
+  );
   out.targetY = lerp(a.targetY, b.targetY, f);
 }
 

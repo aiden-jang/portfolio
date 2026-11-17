@@ -109,12 +109,9 @@ try {
       }
       if (version === 'after') {
         await page.locator('#project-iodine').scrollIntoViewIfNeeded();
-        await page.getByText('Try an edit and its undo', { exact: true }).click();
-        await page.locator('.product-undo-disclosure .example-action').click();
-        const restored = await page
-          .locator('.product-undo-disclosure .iodine-feedback strong')
-          .textContent();
-        if (restored !== 'File restored. Feedback queued.') throw Error('Undo failed');
+        await page.getByRole('button', { name: 'Undo edit', exact: true }).click();
+        const restored = await page.locator('.cinema-result strong').textContent();
+        if (restored !== 'Restored. The agent gets the message.') throw Error('Undo failed');
         await page
           .getByRole('button', { name: 'Inspect Iodine editor screenshot', exact: true })
           .click();

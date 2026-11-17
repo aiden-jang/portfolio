@@ -81,14 +81,17 @@ hierarchy; they do not replace the portfolio's identity.
 ## Current Direction
 
 The car-led showroom uses a brief, interruptible lighting and camera settle, then
-holds its angle until the visitor orbits. Keep the car centered with its full orbit
-area and the full garage. The page leads into everythingisfine and Iodine, then
+holds its angle until the visitor orbits. Softer studio lighting frames the larger
+name. The first scroll hands the car silhouette to a large work title and featured
+globe; phones use a wider handoff camera. Keep the full orbit area and full garage.
+The page leads into everythingisfine and Iodine, then
 Experience, the supporting collection, About and Contact.
 
 The featured globe uses an interactive, recorded USGS snapshot with native app
 geography and selectable event links. Desktop starts it when visible; touch screens
-use Explore and Done. Iodine leads with a crop of the original editor screenshot and keeps its recorded
-snapshot/revert example in a disclosure, with contributor attribution visible.
+use Explore and Done. Iodine pairs its original editor screenshot with a prominent
+recorded snapshot/revert example. Visitors can undo the edit directly or play the
+recorded sequence, with contributor attribution visible.
 
 Supporting preview frames share a 2:1 ratio, with two columns on wide desktops.
 Project titles open their case studies; full screenshot views and sharing stay in

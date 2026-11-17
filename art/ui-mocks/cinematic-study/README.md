@@ -1,8 +1,8 @@
 # Cinematic showroom motion study
 
-This isolated mock studies the opening, the first scroll into Everything Is Fine,
-and a more prominent Iodine contribution example. The production application does
-not import this entry point or these styles.
+The approved study is implemented in the production application for desktop and
+mobile. This review entry point reuses that application with replay and jump
+controls outside the portfolio; production does not import those review tools.
 
 Open `/art/ui-mocks/cinematic-study/review.html` on the development server. Use **Replay first
 scroll** to see the camera and type handoff, or the moment buttons to jump to Opening,
@@ -17,9 +17,8 @@ typography. The globe retains its existing recorded data, event links and intera
 Phones have separate title sizes, stacking, contribution framing and a more distant
 camera during the handoff to keep the side silhouette in view.
 
-Lighting adjustments apply only inside this mock's JavaScript page: a weaker key,
-stronger fill and rim, and a quieter reflection/bloom. They demonstrate a lighting
-direction, not a replacement car model or a new environment asset. Contact retains
+The production Dusk lighting uses a weaker key, stronger fill and rim, and a quieter
+reflection/bloom. It keeps the existing car model and environment. Contact retains
 its fixed camera. Existing project details, links, screenshots and garage controls
 are reused from the current application.
 

@@ -1,17 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import example from '../../../src/data/iodineExample.json';
+import example from '../../data/iodineExample.json';
 
-export function ContributionStage() {
-  const [target, setTarget] = useState<Element | null>(null);
+export function IodineContribution() {
   const [phase, setPhase] = useState<'edited' | 'restored'>('edited');
   const [replaying, setReplaying] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>();
-  useEffect(() => {
-    setTarget(document.querySelector('#project-iodine > figure'));
-    return () => clearTimeout(timer.current);
-  }, []);
+  useEffect(() => () => clearTimeout(timer.current), []);
   const replay = () => {
+    if (replaying) return;
     clearTimeout(timer.current);
     setPhase('edited');
     setReplaying(true);
@@ -20,25 +16,14 @@ export function ContributionStage() {
       setReplaying(false);
     }, 2400);
   };
-  if (!target) return null;
-  return createPortal(
+  return (
     <div className="cinema-contribution" data-phase={phase}>
       <div className="cinema-code-heading">
         <span>{example.file}</span>
         <span>{phase === 'edited' ? 'Agent edit' : 'File restored'}</span>
       </div>
       <pre>
-        <code>
-          <span>export function greeting(name: string) {'{'}</span>
-          {'\n'}
-          <span className="cinema-edited-line">
-            {' '}
-            return `Hello, ${'{'}name<span className="cinema-trim">.trim()</span>
-            {'}'}.`;
-          </span>
-          {'\n'}
-          <span>{'}'}</span>
-        </code>
+        <code>{phase === 'edited' ? example.after : example.restored}</code>
       </pre>
       <div className="cinema-result" aria-live="polite">
         <strong>
@@ -61,14 +46,13 @@ export function ContributionStage() {
         >
           {phase === 'edited' ? 'Undo edit' : 'Replay edit'}
         </button>
-        <button type="button" disabled={replaying} onClick={replay}>
+        <button type="button" aria-disabled={replaying} onClick={replay}>
           {replaying ? 'Playing example…' : 'Play recorded example'}
         </button>
       </div>
       <p className="cinema-example-note">
         Recorded file-restore example. No live agent is running.
       </p>
-    </div>,
-    target,
+    </div>
   );
 }

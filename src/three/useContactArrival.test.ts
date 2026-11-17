@@ -48,6 +48,11 @@ it('restores the viewport projection when Contact leaves the screen', async () =
     expect(camera.view?.enabled).toBe(false);
     expect(camera.aspect).toBeCloseTo(320 / 568);
     expect(untouched).toEqual(KEYFRAMES[0]);
+
+    Object.assign(size, { width: 390, height: 844 });
+    sectionTop = 1000;
+    applyArrival(untouched, 0, true);
+    expect(camera.aspect).toBeCloseTo(390 / 844);
   } finally {
     await act(() => root.unmount());
   }

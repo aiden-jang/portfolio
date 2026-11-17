@@ -24,6 +24,7 @@ import './ui/studio-motion.css';
 import './ui/showcase/showcase.css';
 import './ui/car-zoom.css';
 import './ui/product-confidence.css';
+import './ui/cinematic-presentation.css';
 
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 

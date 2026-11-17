@@ -19,6 +19,25 @@ import { clamp } from '../math';
 const blank = (): Keyframe => ({ azimuth: 0, elevation: 0, distance: 0, targetY: 0 });
 
 describe('interpolateKeyframe', () => {
+  it('pulls back through the phone work handoff and blends back into the following pose', () => {
+    const out = blank();
+    interpolateKeyframe(KEYFRAMES, 0.2, out, 12);
+    expect(out.distance).toBe(12);
+    interpolateKeyframe(KEYFRAMES, 0.1, out, 12);
+    expect(out.distance).toBeCloseTo((KEYFRAMES[0].distance + 12) / 2);
+    interpolateKeyframe(KEYFRAMES, 0.3, out, 12);
+    expect(out.distance).toBeCloseTo((12 + KEYFRAMES[2].distance) / 2);
+  });
+  it('keeps Intro and Contact poses and the shared keyframes intact when fitting a phone handoff', () => {
+    const original = structuredClone(KEYFRAMES);
+    const out = blank();
+    interpolateKeyframe(KEYFRAMES, 0, out, 12);
+    expect(out).toEqual(KEYFRAMES[0]);
+    interpolateKeyframe(KEYFRAMES, 1, out, 12);
+    expect(out).toEqual(KEYFRAMES.at(-1));
+    expect(KEYFRAMES).toEqual(original);
+  });
+
   it('lands exactly on the first and last pose at the ends of the page', () => {
     const out = blank();
     interpolateKeyframe(KEYFRAMES, 0, out);

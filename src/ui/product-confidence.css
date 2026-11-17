@@ -97,30 +97,6 @@ html:root .portfolio-chrome .product-iodine-presentation .product-shot-caption {
   max-width: 66ch;
   margin: 14px 0 0;
 }
-html:root .portfolio-chrome .product-undo-disclosure {
-  margin-top: 22px;
-}
-html:root .portfolio-chrome .product-undo-disclosure summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 44px;
-  font-size: 13px;
-  border-top: 1px solid #ffffff24;
-  cursor: pointer;
-  list-style: none;
-}
-html:root .portfolio-chrome .product-undo-disclosure summary::after {
-  content: '+';
-  font-size: 18px;
-  color: #aaaab3;
-}
-html:root .portfolio-chrome .product-undo-disclosure[open] summary::after {
-  content: '−';
-}
-html:root .portfolio-chrome .product-undo-disclosure .iodine-example {
-  margin-top: 14px;
-}
 html:root .portfolio-chrome #sec-experience {
   padding-block: var(--presentation-space);
 }
@@ -203,9 +179,7 @@ html:root .portfolio-chrome #sec-about .about-personal-line {
   font-weight: 450;
   letter-spacing: -0.025em;
 }
-html:root
-  .portfolio-chrome
-  :is(.product-iodine-shot, .product-undo-disclosure summary):focus-visible {
+html:root .portfolio-chrome .product-iodine-shot:focus-visible {
   outline: 2px solid #ececea;
   outline-offset: 5px;
 }

@@ -3,38 +3,29 @@ import { useEffect } from 'react';
 export function useShowroomTransition() {
   useEffect(() => {
     const media = matchMedia('(prefers-reduced-motion: reduce)');
-    const intro = document.getElementById('sec-intro')!;
-    const work = document.getElementById('sec-work')!;
+    const intro = document.getElementById('sec-intro');
+    const work = document.getElementById('sec-work');
     if (!intro || !work) return;
-    const figure = document.querySelector<HTMLElement>('#project-everythingisfine > figure');
+    const root = document.documentElement;
     let frame = 0;
     const paint = () => {
       frame = 0;
-      const scene = document.querySelector<HTMLElement>('.portfolio-scene');
-      const progress = Math.max(0, Math.min(1, scrollY / (intro.offsetHeight * 0.85)));
-      const contact =
-        document.getElementById('sec-contact')!.getBoundingClientRect().top < innerHeight;
-      scene?.style.setProperty(
-        '--stage-opacity',
-        String(contact || media.matches ? 1 : 1 - progress * progress),
-      );
-      scene?.style.setProperty(
-        '--stage-shift',
-        `${contact || media.matches ? 0 : -20 * progress}px`,
-      );
-      const incoming = Math.max(
+      const h = innerHeight;
+      const exit = Math.max(0, Math.min(1, (scrollY / h - 0.12) / 0.58));
+      const contact = document.getElementById('sec-contact')!.getBoundingClientRect().top < h;
+      const arrival = Math.max(
         0,
-        Math.min(
-          1,
-          1 - (work.getBoundingClientRect().top - innerHeight * 0.08) / (innerHeight * 0.85),
-        ),
+        Math.min(1, (h * 0.95 - work.getBoundingClientRect().top) / (h * 0.9)),
       );
-      if (figure) {
-        figure.style.transform = media.matches
-          ? ''
-          : `translateY(${22 * (1 - incoming)}px) scale(${0.978 + 0.022 * incoming})`;
-        figure.style.transformOrigin = '70% 50%';
-      }
+      root.style.setProperty(
+        '--stage-opacity',
+        String(contact || media.matches ? 1 : 1 - exit * exit),
+      );
+      root.style.setProperty('--work-title-shift', `${media.matches ? 0 : 90 * (1 - arrival)}px`);
+      root.style.setProperty(
+        '--work-figure-scale',
+        String(media.matches ? 1 : 0.88 + 0.12 * arrival),
+      );
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(paint);
@@ -48,9 +39,8 @@ export function useShowroomTransition() {
       removeEventListener('scroll', schedule);
       removeEventListener('resize', schedule);
       media.removeEventListener('change', schedule);
-      document
-        .querySelector<HTMLElement>('.portfolio-scene')
-        ?.style.removeProperty('--stage-opacity');
+      for (const name of ['--stage-opacity', '--work-title-shift', '--work-figure-scale'])
+        root.style.removeProperty(name);
     };
   }, []);
 }
