@@ -1,0 +1,21 @@
+[data-cinema-study] .garage-intro {
+  translate: 0 var(--car-type-shift, 0px);
+}
+
+.car-type-overlap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  pointer-events: none;
+}
+
+@media (width < 1100px), (height < 660px), (prefers-reduced-motion: reduce) {
+  [data-cinema-study] .garage-intro {
+    translate: none;
+  }
+
+  .car-type-overlap {
+    display: none;
+  }
+}

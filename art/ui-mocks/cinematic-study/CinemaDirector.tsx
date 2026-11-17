@@ -7,6 +7,7 @@ const clamp = (n: number) => Math.min(1, Math.max(0, n));
 export function CinemaDirector() {
   useEffect(() => {
     const stopObserving = observeOpeningOrbit((phase) => {
+      document.documentElement.dataset.openingOrbit = phase;
       if (window.parent !== window)
         window.parent.postMessage({ openingOrbit: phase }, location.origin);
     });

@@ -10,7 +10,9 @@ serve it with `npm run preview -- --config vite.opening-orbit.config.ts` and ope
 to replay the preview’s single sweep. The camera travels 26° on desktop and 20° on
 phones in about 2.4 seconds after the car is ready, then stops on the existing angle.
 Drag or scroll to take over sooner. Reduced motion starts at the settled angle.
-The preview uses the same opening motion as the portfolio and adds a replay control.
+During the desktop sweep, the preview brings the car silhouette in front of the
+lower edge of the name. The heading returns to its usual position as the car
+settles. Phone and reduced-motion layouts keep the full name visible throughout.
 
 Use **Replay first scroll** to see the camera and type handoff, or the moment buttons
 to jump to Opening, Handoff, Globe and Iodine. These are review tools.
