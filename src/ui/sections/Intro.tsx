@@ -6,7 +6,7 @@ export function IntroSection() {
       <div className="panel garage-intro pointer-events-auto">
         <h1>Aiden Jang</h1>
         <p className="intro-role">
-          Building publisher tools at Zeta. Making useful things after hours.
+          Software engineer in New York. Making useful things after hours.
         </p>
         <p>I build tools for publishers, and apps for notes, games and everyday decisions.</p>
         <a href="#sec-work" className="intro-work-cue">
