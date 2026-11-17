@@ -138,3 +138,58 @@ it('bounds intro zoom, resets its pose and leaves Contact fixed', async () => {
     }
   }
 });
+
+it('animates curated views, permits orbit afterwards and leaves Contact unchanged', async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  for (const width of [1440, 390]) {
+    useAppStore.setState({ ...useAppStore.getInitialState(), isCarLoading: false }, true);
+    const intro = document.createElement('section');
+    intro.id = 'sec-intro';
+    vi.spyOn(intro, 'getBoundingClientRect').mockReturnValue({ top: 0, bottom: 900 } as DOMRect);
+    const host = document.createElement('div');
+    document.body.append(intro, host);
+    const root = createRoot(host);
+    let scrollT = 0;
+    camera.aspect = width / 900;
+    camera.updateProjectionMatrix();
+    const tick = () => frame({ size: { width, height: 900 }, clock: { elapsedTime: 5 } }, 1 / 60);
+    try {
+      await act(() => root.render(createElement(CameraRig, { getScrollT: () => scrollT })));
+      await act(tick);
+      const original = camera.position.clone();
+      await act(() => useAppStore.getState().setCameraView('profile'));
+      await act(tick);
+      expect(camera.position.distanceTo(original)).toBeGreaterThan(0);
+      expect(Math.atan2(camera.position.x, camera.position.z)).toBeLessThan(Math.PI / 2);
+      await act(() => {
+        for (let i = 0; i < 60; i++) tick();
+      });
+      expect(Math.atan2(camera.position.x, camera.position.z)).toBeCloseTo(Math.PI / 2);
+      await act(() => {
+        pointer('pointerdown', 400, 400);
+        pointer('pointermove', 450, 400);
+        pointer('pointerup', 450, 400);
+      });
+      await act(tick);
+      expect(Math.atan2(camera.position.x, camera.position.z)).toBeCloseTo(Math.PI / 2 + 0.5);
+      await act(() => useAppStore.getState().resetCamera());
+      await act(tick);
+      expect(camera.position.distanceTo(original)).toBeLessThan(0.000001);
+      await act(() => useAppStore.getState().setCameraView('detail'));
+      await act(tick);
+      scrollT = 1;
+      await act(() => useAppStore.setState({ sectionIndex: 5, isContactVisible: true }));
+      await act(tick);
+      const contact = camera.position.clone();
+      await act(() => useAppStore.getState().setCameraView('front'));
+      await act(() => {
+        for (let i = 0; i < 60; i++) tick();
+      });
+      expect(camera.position.distanceTo(contact)).toBeLessThan(0.000001);
+    } finally {
+      await act(() => root.unmount());
+      intro.remove();
+      host.remove();
+    }
+  }
+});

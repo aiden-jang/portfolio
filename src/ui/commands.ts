@@ -1,6 +1,7 @@
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
+import { CAMERA_VIEWS, type CameraView } from '../three/cameraViews';
 import { CAR_ZOOM_MAX, CAR_ZOOM_MIN, CAR_ZOOM_STEP } from '../three/carZoom';
 
 export type Command = {
@@ -82,6 +83,13 @@ export function buildCommands({
         if (!state.isCarLoading) state.prevCar();
       },
     },
+    ...Object.entries(CAMERA_VIEWS).map(([view, { label }]) => ({
+      id: `view-${view}`,
+      label,
+      hint: 'camera',
+      keywords: 'camera curated view angle shot',
+      run: () => useAppStore.getState().setCameraView(view as CameraView),
+    })),
     {
       id: 'repaint',
       label: 'Change paint color',
@@ -158,6 +166,8 @@ export function buildCommands({
     .filter(({ id }) => {
       if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';
       if (id === 'retry-scene') return false;
+      if (id.startsWith('view-'))
+        return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;
       if (id.startsWith('zoom-'))
         return (
           state.sectionIndex === 0 &&

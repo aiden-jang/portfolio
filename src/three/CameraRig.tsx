@@ -1,6 +1,6 @@
 import { motionState, updateIntroFov } from './studioEntrance';
 import { useFrame, useThree } from '@react-three/fiber';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { KEYFRAMES } from '../config';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { clamp } from '../math';
@@ -19,6 +19,7 @@ import { useAppStore } from '../store';
 import { useContactArrival } from './useContactArrival';
 import type { Keyframe } from '../types';
 import { hitsCar } from './carHitTest';
+import { useCameraViews } from './useCameraViews';
 import { useCarZoom } from './useCarZoom';
 
 const INTRO_DURATION = 0.78;
@@ -36,7 +37,7 @@ type Props = {
 export function CameraRig({ getScrollT }: Props) {
   const { camera, gl } = useThree();
   const contactArrival = useContactArrival();
-  const cameraResetVersion = useAppStore((s) => s.cameraResetVersion);
+  const updateCameraView = useCameraViews();
 
   const state = useRef(createRigState());
   const baseKf = useRef<Keyframe>({ ...KEYFRAMES[0] });
@@ -52,21 +53,13 @@ export function CameraRig({ getScrollT }: Props) {
   );
   useOrbitGesture(state, onTap);
 
-  useEffect(() => {
-    const s = state.current;
-    s.dragAzimuth = 0;
-    s.dragElevation = 0;
-    s.idleSpin = 0;
-    s.dragMoved = false;
-    document.body.classList.remove('orbiting');
-  }, [cameraResetVersion]);
-
   useFrame((three, dt) => {
     const s = state.current;
     const refs = useAppStore.getState().refs;
     const reduced = prefersReducedMotion(),
       scrollT = getScrollT();
 
+    updateCameraView(s, dt, reduced, scrollT);
     if (s.isDown || scrollT > 0 || useAppStore.getState().hasManualView) s.introT = 1;
     motionState.progress = reduced ? 1 : s.introT;
     updateIntroFov(camera, three.size.width, scrollT);

@@ -43,6 +43,7 @@ export function useSceneActivity(): boolean {
         next.isCarLoading !== previous.isCarLoading ||
         next.cameraResetVersion !== previous.cameraResetVersion ||
         next.cameraZoom !== previous.cameraZoom ||
+        next.cameraViewVersion !== previous.cameraViewVersion ||
         next.sectionIndex !== previous.sectionIndex ||
         next.isContactVisible !== previous.isContactVisible
       )

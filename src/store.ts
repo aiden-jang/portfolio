@@ -3,6 +3,7 @@ import type * as THREE from 'three';
 import { CARS, GARAGE_INDICES, adjacentCar } from './config';
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
+import { CAMERA_VIEWS, type CameraView } from './three/cameraViews';
 import { clampCarZoom } from './three/carZoom';
 
 type Refs = {
@@ -25,6 +26,9 @@ type AppState = {
   cameraResetVersion: number;
   hasManualView: boolean;
   cameraZoom: number;
+  cameraView: CameraView;
+  cameraViewVersion: number;
+  setCameraView: (view: CameraView) => void;
   setCameraZoom: (value: number) => void;
   activeBodyColor: ActiveBodyColor;
   hasBodyMaterial: boolean;
@@ -69,6 +73,24 @@ export const useAppStore = create<AppState>((set, get) => ({
   isContactVisible: false,
   cameraResetVersion: 0,
   hasManualView: false,
+  cameraView: 'front',
+  cameraViewVersion: 0,
+  setCameraView: (view) => {
+    const state = get();
+    if (
+      state.sectionIndex !== 0 ||
+      state.isCarLoading ||
+      state.carLoadError ||
+      state.sceneUnavailable
+    )
+      return;
+    set({
+      cameraView: view,
+      cameraViewVersion: state.cameraViewVersion + 1,
+      cameraZoom: CAMERA_VIEWS[view].zoom,
+      hasManualView: true,
+    });
+  },
   cameraZoom: 1,
   setCameraZoom: (value) => {
     const state = get();

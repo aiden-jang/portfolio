@@ -225,3 +225,29 @@ it('guards DRS while loading or unavailable and resets it on car changes', () =>
   state.toggleDRS();
   expect(useAppStore.getState().drsOpen).toBe(false);
 });
+
+it('guards curated views outside a ready intro and resets their zoom with the camera', () => {
+  for (const blocked of [
+    { sectionIndex: 5 },
+    { isCarLoading: true },
+    { carLoadError: 'Failed' },
+    { sceneUnavailable: true },
+  ]) {
+    useAppStore.setState(
+      { ...useAppStore.getInitialState(), isCarLoading: false, ...blocked },
+      true,
+    );
+    useAppStore.getState().setCameraView('detail');
+    expect(useAppStore.getState().cameraViewVersion).toBe(0);
+  }
+  useAppStore.setState({ ...useAppStore.getInitialState(), isCarLoading: false }, true);
+  useAppStore.getState().setCameraView('detail');
+  expect(useAppStore.getState()).toMatchObject({
+    cameraView: 'detail',
+    cameraViewVersion: 1,
+    cameraZoom: 1.15,
+    hasManualView: true,
+  });
+  useAppStore.getState().resetCamera();
+  expect(useAppStore.getState()).toMatchObject({ cameraZoom: 1, hasManualView: false });
+});
