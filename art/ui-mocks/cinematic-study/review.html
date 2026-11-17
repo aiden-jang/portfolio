@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Cinematic showroom — Desktop and mobile mock</title>
+    <style>
+      @font-face {
+        font-family: Geist;
+        src: url('/fonts/geist.woff2');
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #242429;
+        color: #ececea;
+        font:
+          13px/1.4 Geist,
+          sans-serif;
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 28px;
+        align-items: center;
+        padding: 14px 20px;
+        background: #101014;
+        border-bottom: 1px solid #ffffff20;
+      }
+      header strong {
+        font-size: 16px;
+        font-weight: 500;
+      }
+      header p {
+        color: #aaaab3;
+        margin: 3px 0 0;
+      }
+      nav {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      button,
+      a {
+        font: inherit;
+        color: inherit;
+      }
+      button {
+        min-height: 44px;
+        border: 1px solid #ffffff30;
+        background: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #292930;
+      }
+      button[aria-pressed='true'] {
+        background: #ececea;
+        color: #101014;
+        border-color: #ececea;
+      }
+      a {
+        padding: 8px;
+        text-underline-offset: 4px;
+      }
+      main {
+        padding: 16px;
+        overflow: auto;
+      }
+      iframe {
+        display: block;
+        width: 100%;
+        height: 900px;
+        margin: auto;
+        border: 0;
+        background: #101014;
+      }
+      iframe[data-phone] {
+        width: 390px;
+        max-width: 100%;
+        height: 844px;
+      }
+      :focus-visible {
+        outline: 2px solid #ececea;
+        outline-offset: 3px;
+      }
+      @media (max-width: 767px) {
+        header {
+          padding: 12px;
+        }
+        main {
+          padding: 12px 0;
+        }
+        iframe {
+          height: 844px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <strong>Cinematic showroom</strong>
+        <p>Motion study. Review controls stay outside the design.</p>
+      </div>
+      <nav aria-label="Preview size">
+        <button data-size="desktop" aria-pressed="true">Desktop</button
+        ><button data-size="phone" aria-pressed="false">Mobile</button>
+      </nav>
+      <nav aria-label="Review moments">
+        <button data-play>Replay first scroll</button><button data-moment="hero">Opening</button
+        ><button data-moment="handoff">Handoff</button><button data-moment="globe">Globe</button
+        ><button data-moment="iodine">Iodine</button>
+      </nav>
+      <a href="./" target="_blank" rel="noopener">Open full preview</a>
+    </header>
+    <main><iframe title="Cinematic portfolio mock" src="./index.html"></iframe></main>
+    <script>
+      const frame = document.querySelector('iframe');
+      document
+        .querySelectorAll('[data-moment]')
+        .forEach((b) =>
+          b.addEventListener('click', () =>
+            frame.contentWindow.postMessage({ cinemaMoment: b.dataset.moment }, location.origin),
+          ),
+        );
+      document
+        .querySelector('[data-play]')
+        .addEventListener('click', () =>
+          frame.contentWindow.postMessage({ cinemaPlay: true }, location.origin),
+        );
+      document.querySelectorAll('[data-size]').forEach((b) =>
+        b.addEventListener('click', () => {
+          frame.toggleAttribute('data-phone', b.dataset.size === 'phone');
+          document
+            .querySelectorAll('[data-size]')
+            .forEach((p) => p.setAttribute('aria-pressed', String(p === b)));
+        }),
+      );
+    </script>
+  </body>
+</html>
