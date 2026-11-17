@@ -184,7 +184,8 @@ html:root[data-product-study] .project-gallery .garage-project-copy > p:first-of
   line-height: 1.65;
 }
 html:root[data-product-study] .project-gallery .garage-project-links {
-  margin-top: 10px;
+  margin-top: auto;
+  padding-top: 10px;
 }
 html:root[data-product-study] #sec-about {
   padding-block: var(--study-space);

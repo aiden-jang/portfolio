@@ -1,8 +1,8 @@
 # Product confidence mock
 
 This review extends the [showroom refinement plan](../showroom-refinement/PLAN.md)
-using the current application and approved captures. It is an isolated proposal;
-the main portfolio does not import these styles or additions.
+using the current application and approved captures. The approved presentation is now implemented in the main portfolio. This route
+retains the authored design reference; it reuses the production Iodine presentation.
 
 The opening keeps the full garage and stationary initial car angle. Its name and
 short introduction receive a smaller type adjustment and a more deliberate measure.

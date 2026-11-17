@@ -25,6 +25,7 @@ for (const width of [1440, 390]) {
     await page.keyboard.press('Escape');
     await expect(page.getByRole('button', { name: 'Explore globe', exact: true })).toBeFocused();
     await expect(canvas).toHaveCount(0);
+    await page.getByText('Try an edit and its undo', { exact: true }).click();
     await page.getByRole('button', { name: 'Undo edit', exact: true }).click();
     await expect(page.locator('.iodine-code')).not.toContainText('.trim()');
     await expect(page.locator('.iodine-feedback')).toContainText('Feedback queued');

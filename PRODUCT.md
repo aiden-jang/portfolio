@@ -87,10 +87,10 @@ Experience, the supporting collection, About and Contact.
 
 The featured globe uses an interactive, recorded USGS snapshot with native app
 geography and selectable event links. Desktop starts it when visible; touch screens
-use Explore and Done. Iodine presents a clearly labeled recorded snapshot/revert
-example alongside its contributor details and original screenshot.
+use Explore and Done. Iodine leads with a crop of the original editor screenshot and keeps its recorded
+snapshot/revert example in a disclosure, with contributor attribution visible.
 
-Supporting preview frames share a 2:1 ratio, with three columns on wide desktops.
+Supporting preview frames share a 2:1 ratio, with two columns on wide desktops.
 Project titles open their case studies; full screenshot views and sharing stay in
 the inspector and readers. Bean uses mrrp's own artwork, bloomnote exposes a sample
 flower meaning, and iguess includes an illustrated message flow. Platform closes

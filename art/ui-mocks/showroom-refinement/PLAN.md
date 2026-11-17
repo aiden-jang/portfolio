@@ -118,7 +118,8 @@ fixed car
 
 The [product confidence mock](../product-confidence/README.md) extends the current
 portfolio with the product presentation, visual rhythm and interaction refinements
-described above. It provides fresh desktop and phone comparisons for approval.
+described above. The approved desktop and phone presentation is implemented in the
+main portfolio; the mock route remains an authored design reference.
 
 The main portfolio uses the subsequent approved full-width featured project
 presentation, with Experience between the featured and supporting projects. This
