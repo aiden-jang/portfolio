@@ -576,7 +576,7 @@ html:root .project-gallery h3 button:hover svg {
     display: none;
   }
   html:root #sec-experience {
-    padding-block: 72px;
+    padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
   }
   html:root #sec-experience .panel {
     display: block;
@@ -613,7 +613,7 @@ html:root .project-gallery h3 button:hover svg {
     display: none;
   }
   html:root #sec-more-work {
-    padding-block: 64px 72px;
+    padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
   }
   html:root .project-gallery-heading h2 {
     font-size: 36px;
@@ -651,7 +651,7 @@ html:root .project-gallery h3 button:hover svg {
     margin-bottom: 0;
   }
   html:root #sec-about {
-    padding-block: 72px;
+    padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
   }
   html:root .about-copy {
     display: flex;

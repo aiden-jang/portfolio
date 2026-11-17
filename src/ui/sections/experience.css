@@ -216,37 +216,3 @@
     font-size: 22px;
   }
 }
-@media (min-width: 1024px) {
-  #sec-experience .panel {
-    max-width: 1180px;
-    margin-inline: auto;
-    display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.6fr);
-    column-gap: 64px;
-  }
-  #sec-experience .panel > :is(span, h2, ul) {
-    grid-column: 1;
-  }
-  #sec-experience h2 {
-    font-size: clamp(32px, 4vw, 44px);
-  }
-  #sec-experience .panel > p {
-    grid-column: 2;
-    grid-row: 2;
-    align-self: center;
-    margin: 0;
-  }
-  #sec-experience .panel > div {
-    grid-column: 2;
-    grid-row: 3;
-  }
-  #sec-experience .experience-more {
-    grid-column: 2;
-    grid-row: 4;
-  }
-  #sec-experience .experience-open-source {
-    grid-column: 1;
-    grid-row: 4;
-    align-self: start;
-  }
-}
