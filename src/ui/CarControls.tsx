@@ -10,6 +10,7 @@ import { Hint, AllControlsButton } from './Hint';
 import './car-controls.css';
 import { useEffect, useRef } from 'react';
 import { PaintPicker } from './PaintPicker';
+import { CarZoomControls } from './CarZoomControls';
 
 function CarActionSlot() {
   return (
@@ -53,7 +54,10 @@ export function CarControls() {
         {visible && (
           <div className="car-controls-row">
             {manualView && <CameraResetButton />}
-            <CarPicker mobile />
+            <div className="car-view-row">
+              <CarPicker mobile />
+              <CarZoomControls />
+            </div>
             <div className="car-control-buttons">
               <div className="car-paint-slot" data-fixed-livery={fixedLivery || undefined}>
                 {fixedLivery ? <span className="car-livery">Livery</span> : <MobileColorButton />}
@@ -88,6 +92,7 @@ export function CarControls() {
                 </>
               )}
             </div>
+            <CarZoomControls />
             <ThemeToggle />
             <AllControlsButton />
           </div>

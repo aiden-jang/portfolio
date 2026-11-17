@@ -42,6 +42,7 @@ export function useSceneActivity(): boolean {
         next.hasBodyMaterial !== previous.hasBodyMaterial ||
         next.isCarLoading !== previous.isCarLoading ||
         next.cameraResetVersion !== previous.cameraResetVersion ||
+        next.cameraZoom !== previous.cameraZoom ||
         next.sectionIndex !== previous.sectionIndex ||
         next.isContactVisible !== previous.isContactVisible
       )

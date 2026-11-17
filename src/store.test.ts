@@ -5,6 +5,43 @@ import { useAppStore } from './store';
 
 afterEach(() => useAppStore.setState(useAppStore.getInitialState(), true));
 
+it('bounds intro zoom, resets it with the camera and clears it for another car', () => {
+  useAppStore.setState({ isCarLoading: false });
+  const state = useAppStore.getState();
+  state.setCameraZoom(9);
+  expect(useAppStore.getState()).toMatchObject({ cameraZoom: 1.25, hasManualView: true });
+  state.setCameraZoom(1.099999999);
+  expect(useAppStore.getState().cameraZoom).toBe(1.1);
+  state.setCameraZoom(-1);
+  expect(useAppStore.getState().cameraZoom).toBe(0.85);
+  const resetVersion = useAppStore.getState().cameraResetVersion;
+  state.resetCamera();
+  expect(useAppStore.getState()).toMatchObject({
+    cameraZoom: 1,
+    hasManualView: false,
+    cameraResetVersion: resetVersion + 1,
+  });
+  state.setCameraZoom(1.1);
+  state.setCarIndex(1);
+  expect(useAppStore.getState().cameraZoom).toBe(1);
+  state.setCameraZoom(Number.NaN);
+  expect(useAppStore.getState().cameraZoom).toBe(1);
+});
+
+it('leaves contact, reading, loading and unavailable scenes untouched by zoom actions', () => {
+  for (const blocked of [
+    { sectionIndex: 5, isContactVisible: true },
+    { sectionIndex: 1 },
+    { isCarLoading: true },
+    { carLoadError: 'Failed' },
+    { sceneUnavailable: true },
+  ]) {
+    useAppStore.setState({ ...useAppStore.getInitialState(), isCarLoading: false, ...blocked });
+    useAppStore.getState().setCameraZoom(1.2);
+    expect(useAppStore.getState()).toMatchObject({ cameraZoom: 1, hasManualView: false });
+  }
+});
+
 it('only pulses existing lamps on a ready car in the intro or contact', () => {
   const state = useAppStore.getState();
   useAppStore.setState({ refs: { ...state.refs, lightPulseT: 0, lamps: [] }, isCarLoading: false });

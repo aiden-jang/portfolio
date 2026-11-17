@@ -62,6 +62,9 @@ describe('reduced-motion render activity', () => {
     await settle();
     await change(() => useAppStore.getState().setCarLoading(previous.isCarLoading));
     expect(host.textContent).toBe('true');
+    await settle();
+    await change(() => useAppStore.setState({ cameraZoom: 1.1 }));
+    expect(host.textContent).toBe('true');
   });
   it('keeps normal animation running and responds to motion-preference changes', async () => {
     await change(() => {

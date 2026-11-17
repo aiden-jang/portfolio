@@ -1,0 +1,81 @@
+.car-zoom-controls {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 88px;
+  width: 88px;
+  min-height: 44px;
+}
+.car-zoom-controls > button {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 8px;
+}
+.car-zoom-controls > button:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+.car-zoom-controls > button:disabled:hover {
+  background: transparent;
+  color: inherit;
+}
+@media (max-width: 767px) {
+  #mobile-bar .car-view-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-bottom: 1px solid var(--color-line);
+    padding-bottom: 6px;
+    min-width: 0;
+  }
+  #mobile-bar .car-view-row .car-choice-mobile {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  #mobile-bar .car-browse-trigger > :is(span, small) {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) and (min-height: 501px) {
+  html:root #desktop-dock .car-controls-row {
+    grid-template-columns: 80px minmax(0, 1fr) 88px 90px 82px;
+    gap: 4px;
+  }
+  html:root #desktop-dock .car-zoom-controls {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  html:root #desktop-dock button[aria-label^='Lighting:'] {
+    grid-column: 4;
+  }
+  html:root #desktop-dock .all-controls-trigger {
+    grid-column: 5;
+    width: 82px;
+  }
+  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) {
+    grid-template-columns: minmax(0, 1fr) 88px 90px 82px;
+  }
+  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .car-zoom-controls {
+    grid-column: 2;
+  }
+  html:root
+    #desktop-dock
+    .car-controls-row:has(.car-action-slot:empty)
+    button[aria-label^='Lighting:'] {
+    grid-column: 3;
+  }
+  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .all-controls-trigger {
+    grid-column: 4;
+  }
+}
+@media (min-width: 768px) and (max-height: 500px) {
+  html:root #desktop-dock .car-controls-row {
+    width: 732px;
+  }
+}

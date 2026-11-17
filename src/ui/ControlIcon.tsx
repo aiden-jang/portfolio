@@ -4,6 +4,7 @@ const paths = {
   check: 'm5 12 4 4L19 6',
   copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
   zoom: 'm16 16 5 5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0M7 10h6m-3-3v6',
+  zoomOut: 'm16 16 5 5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0M7 10h6',
   fit: 'M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5',
   close: 'm6 6 12 12M18 6 6 18',
   share: 'M12 16V3m-4 4 4-4 4 4M6 11H4v10h16V11h-2',

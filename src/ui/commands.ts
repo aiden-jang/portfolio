@@ -1,6 +1,7 @@
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { useAppStore } from '../store';
+import { CAR_ZOOM_MAX, CAR_ZOOM_MIN, CAR_ZOOM_STEP } from '../three/carZoom';
 
 export type Command = {
   id: string;
@@ -122,6 +123,16 @@ export function buildCommands({
       keywords: 'camera view orbit reset',
       run: () => useAppStore.getState().resetCamera(),
     },
+    ...([-1, 1] as const).map((direction) => ({
+      id: direction === 1 ? 'zoom-in' : 'zoom-out',
+      label: direction === 1 ? 'Zoom in' : 'Zoom out',
+      hint: 'camera',
+      keywords: 'camera zoom magnify closer farther',
+      run: () => {
+        const state = useAppStore.getState();
+        state.setCameraZoom(state.cameraZoom + direction * CAR_ZOOM_STEP);
+      },
+    })),
     {
       id: 'share-garage',
       label: 'Share this garage',
@@ -147,6 +158,13 @@ export function buildCommands({
     .filter(({ id }) => {
       if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';
       if (id === 'retry-scene') return false;
+      if (id.startsWith('zoom-'))
+        return (
+          state.sectionIndex === 0 &&
+          !state.isCarLoading &&
+          !state.carLoadError &&
+          (id === 'zoom-in' ? state.cameraZoom < CAR_ZOOM_MAX : state.cameraZoom > CAR_ZOOM_MIN)
+        );
       if (id === 'pulse-lights')
         return (
           !state.isCarLoading &&

@@ -89,3 +89,52 @@ it('holds the chosen camera angle after dragging until the view is reset', async
     model.material.dispose();
   }
 });
+
+it('bounds intro zoom, resets its pose and leaves Contact fixed', async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  for (const width of [1440, 390]) {
+    useAppStore.setState({ ...useAppStore.getInitialState(), isCarLoading: false }, true);
+    const host = document.createElement('div');
+    document.body.append(host);
+    const root = createRoot(host);
+    const model = new Mesh(new BoxGeometry(1.6, 1.2, 3.7), new MeshBasicMaterial());
+    model.position.y = 0.6;
+    useAppStore.getState().refs.carModel = model;
+    let scrollT = 0;
+    camera.aspect = width / 900;
+    camera.updateProjectionMatrix();
+    try {
+      await act(() => root.render(createElement(CameraRig, { getScrollT: () => scrollT })));
+      const tick = () => frame({ size: { width, height: 900 }, clock: { elapsedTime: 5 } }, 0.1);
+      await act(tick);
+      const original = camera.position.clone();
+      await act(() => useAppStore.getState().setCameraZoom(9));
+      await act(tick);
+      camera.updateMatrixWorld();
+      expect(camera.position.distanceTo(new Vector3(0, 0.55, 0))).toBeCloseTo(
+        original.distanceTo(new Vector3(0, 0.55, 0)) / 1.25,
+      );
+      expect(camera.position.y).toBeGreaterThanOrEqual(0.25);
+      await act(() => useAppStore.getState().resetCamera());
+      await act(tick);
+      expect(camera.position.distanceTo(original)).toBeLessThan(0.000001);
+      await act(() => useAppStore.getState().setCameraZoom(0.85));
+      await act(tick);
+      expect(camera.position.distanceTo(new Vector3(0, 0.55, 0))).toBeGreaterThan(
+        original.distanceTo(new Vector3(0, 0.55, 0)),
+      );
+      scrollT = 1;
+      await act(() => useAppStore.setState({ sectionIndex: 5, isContactVisible: true }));
+      await act(tick);
+      const contact = camera.position.clone();
+      await act(() => useAppStore.setState({ cameraZoom: 1.25 }));
+      await act(tick);
+      expect(camera.position.distanceTo(contact)).toBeLessThan(0.000001);
+    } finally {
+      await act(() => root.unmount());
+      host.remove();
+      model.geometry.dispose();
+      model.material.dispose();
+    }
+  }
+});

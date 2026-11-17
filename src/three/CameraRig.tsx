@@ -1,4 +1,4 @@
-import { motionState } from './studioEntrance';
+import { motionState, updateIntroFov } from './studioEntrance';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useEffect, useRef } from 'react';
 import { KEYFRAMES } from '../config';
@@ -19,7 +19,7 @@ import { useAppStore } from '../store';
 import { useContactArrival } from './useContactArrival';
 import type { Keyframe } from '../types';
 import { hitsCar } from './carHitTest';
-import { CarFraming } from './carFraming';
+import { useCarZoom } from './useCarZoom';
 
 const INTRO_DURATION = 0.78;
 
@@ -40,7 +40,7 @@ export function CameraRig({ getScrollT }: Props) {
 
   const state = useRef(createRigState());
   const baseKf = useRef<Keyframe>({ ...KEYFRAMES[0] });
-  const framing = useRef(new CarFraming());
+  const zoomDistance = useCarZoom();
 
   const onTap = useCallback(
     (x: number, y: number) => {
@@ -69,14 +69,7 @@ export function CameraRig({ getScrollT }: Props) {
 
     if (s.isDown || scrollT > 0 || useAppStore.getState().hasManualView) s.introT = 1;
     motionState.progress = reduced ? 1 : s.introT;
-    if ('fov' in camera) {
-      const startFov = three.size.width > 767 ? 32 : 34;
-      const nextFov = startFov + (35 - startFov) * Math.min(1, Math.max(0, scrollT * 5));
-      if (camera.fov !== nextFov) {
-        camera.fov = nextFov;
-        camera.updateProjectionMatrix();
-      }
-    }
+    updateIntroFov(camera, three.size.width, scrollT);
     s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
 
     const kf = baseKf.current;
@@ -96,17 +89,21 @@ export function CameraRig({ getScrollT }: Props) {
       MAX_ELEVATION,
     );
     if (s.isDown) s.dragElevation = el - kf.elevation;
-    if (scrollT === 0 && useAppStore.getState().hasManualView)
-      dist = framing.current.fit(
-        refs.carModel,
-        az,
-        el,
-        dist,
-        tgtY,
-        three.size.width,
-        three.size.height,
-        'fov' in camera ? (camera.fov as number) : 35,
-      );
+    dist = zoomDistance({
+      model: refs.carModel,
+      azimuth: az,
+      elevation: el,
+      distance: dist,
+      targetY: tgtY,
+      width: three.size.width,
+      height: three.size.height,
+      fov: 'fov' in camera ? (camera.fov as number) : 35,
+      scrollT,
+      dt,
+      reduced,
+      manualOrbit: s.dragMoved || s.dragAzimuth !== 0 || s.dragElevation !== 0,
+      clean: isCleanMode,
+    });
     let pose = orbitPosition(az, Math.max(el, floorElevation(dist, tgtY)), dist, tgtY);
 
     if (refs.introArmed && s.introT < 1 && !isCleanMode && !reduced) {

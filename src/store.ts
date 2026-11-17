@@ -3,6 +3,7 @@ import type * as THREE from 'three';
 import { CARS, GARAGE_INDICES, adjacentCar } from './config';
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
+import { clampCarZoom } from './three/carZoom';
 
 type Refs = {
   bodyMaterial: ColorMaterial | null;
@@ -23,6 +24,8 @@ type AppState = {
   // Incremented to ask CameraRig to drop any manual orbit offsets.
   cameraResetVersion: number;
   hasManualView: boolean;
+  cameraZoom: number;
+  setCameraZoom: (value: number) => void;
   activeBodyColor: ActiveBodyColor;
   hasBodyMaterial: boolean;
   isCarLoading: boolean;
@@ -66,6 +69,19 @@ export const useAppStore = create<AppState>((set, get) => ({
   isContactVisible: false,
   cameraResetVersion: 0,
   hasManualView: false,
+  cameraZoom: 1,
+  setCameraZoom: (value) => {
+    const state = get();
+    if (
+      state.sectionIndex !== 0 ||
+      state.isCarLoading ||
+      state.carLoadError ||
+      state.sceneUnavailable
+    )
+      return;
+    const cameraZoom = clampCarZoom(value);
+    if (cameraZoom !== state.cameraZoom) set({ cameraZoom, hasManualView: true });
+  },
   activeBodyColor: 'original',
   hasBodyMaterial: false,
   isCarLoading: true,
@@ -81,6 +97,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       hasBodyMaterial: false,
       carLoadError: null,
       hasManualView: false,
+      cameraZoom: 1,
     })),
   drsOpen: false,
   hasDRS: false,
@@ -116,6 +133,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       headlightsRaised: true,
       hasPopupHeadlights: false,
       carIndex: i,
+      cameraZoom: 1,
       activeBodyColor: 'original',
       hasBodyMaterial: false,
     });
@@ -132,6 +150,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     const colors = paintChoices(CARS[nextIndex]).map(({ value }) => value);
     set({
       carIndex: nextIndex,
+      cameraZoom: 1,
       drsOpen: false,
       hasDRS: false,
       headlightsRaised: true,
@@ -156,7 +175,11 @@ export const useAppStore = create<AppState>((set, get) => ({
       state.refs.lightPulseT = 1;
   },
   resetCamera: () =>
-    set((state) => ({ cameraResetVersion: state.cameraResetVersion + 1, hasManualView: false })),
+    set((state) => ({
+      cameraResetVersion: state.cameraResetVersion + 1,
+      hasManualView: false,
+      cameraZoom: 1,
+    })),
   armIntro: () => {
     get().refs.introArmed = true;
   },
