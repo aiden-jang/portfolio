@@ -5,6 +5,8 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { Box3, BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Vector3 } from 'three';
 import { CameraRig } from './CameraRig';
 import { useAppStore } from '../store';
+import { KEYFRAMES } from '../config';
+import { prefersReducedMotion } from '../hooks/reducedMotion';
 
 let frame: (
   state: { size: { width: number; height: number }; clock: { elapsedTime: number } },
@@ -18,11 +20,12 @@ vi.mock('@react-three/fiber', () => ({
   },
   useThree: () => ({ camera, gl: { domElement: canvas } }),
 }));
-vi.mock('../hooks/reducedMotion', () => ({ prefersReducedMotion: () => false }));
+vi.mock('../hooks/reducedMotion', () => ({ prefersReducedMotion: vi.fn(() => false) }));
 vi.mock('./useContactArrival', () => ({ useContactArrival: () => () => {} }));
 
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.mocked(prefersReducedMotion).mockReturnValue(false);
   useAppStore.setState(useAppStore.getInitialState(), true);
   document.body.replaceChildren();
 });
@@ -192,4 +195,120 @@ it('animates curated views, permits orbit afterwards and leaves Contact unchange
       host.remove();
     }
   }
+});
+
+async function withOpeningCamera(
+  width: number,
+  exercise: (view: {
+    tick: (count?: number) => void;
+    yaw: () => number;
+    scrollTo: (position: number) => void;
+    load: (ready?: boolean) => void;
+  }) => void,
+) {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+  const initial = useAppStore.getInitialState();
+  useAppStore.setState(
+    {
+      ...initial,
+      refs: { ...initial.refs, carModel: null, introArmed: false },
+    },
+    true,
+  );
+  const intro = document.createElement('section');
+  intro.id = 'sec-intro';
+  vi.spyOn(intro, 'getBoundingClientRect').mockReturnValue({ top: 0, bottom: 900 } as DOMRect);
+  const host = document.createElement('div');
+  document.body.append(intro, host);
+  const root = createRoot(host);
+  const model = new Mesh(new BoxGeometry(1.6, 1.2, 3.7), new MeshBasicMaterial());
+  let scrollT = 0;
+  const tick = (count = 1) => {
+    for (let index = 0; index < count; index++)
+      frame({ size: { width, height: 844 }, clock: { elapsedTime: 0 } }, 1 / 60);
+  };
+  try {
+    await act(() => root.render(createElement(CameraRig, { getScrollT: () => scrollT })));
+    exercise({
+      tick,
+      yaw: () => Math.atan2(camera.position.x, camera.position.z),
+      scrollTo: (position) => {
+        scrollT = position;
+      },
+      load: (ready = true) => {
+        useAppStore.getState().refs.carModel = model;
+        useAppStore.getState().armIntro();
+        useAppStore.getState().setCarLoading(!ready);
+      },
+    });
+  } finally {
+    await act(() => root.unmount());
+    intro.remove();
+    host.remove();
+    model.geometry.dispose();
+    model.material.dispose();
+  }
+}
+
+it('runs one opening sweep after the car loads and settles at the authored angle', async () => {
+  for (const [width, degrees] of [
+    [1440, 26],
+    [390, 20],
+  ]) {
+    await withOpeningCamera(width, ({ tick, yaw, load }) => {
+      tick(240);
+      load(false);
+      tick(240);
+      const start = KEYFRAMES[0].azimuth - (degrees * Math.PI) / 180;
+      expect(yaw()).toBeCloseTo(start, 5);
+      load();
+      tick(60);
+      expect(yaw()).toBeGreaterThan(start + 0.06);
+      expect(yaw()).toBeLessThan(KEYFRAMES[0].azimuth - 0.06);
+      tick(100);
+      expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
+      tick(240);
+      expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
+    });
+  }
+});
+
+it('hands the in-flight angle to a drag and does not resume the sweep', async () => {
+  await withOpeningCamera(1440, ({ tick, yaw, load }) => {
+    load();
+    tick(36);
+    const swept = yaw();
+    expect(swept).toBeLessThan(KEYFRAMES[0].azimuth - 0.1);
+    pointer('pointerdown', 400, 400);
+    tick();
+    expect(yaw()).toBeCloseTo(swept, 5);
+    pointer('pointermove', 430, 400);
+    pointer('pointerup', 430, 400);
+    tick(180);
+    expect(yaw()).toBeCloseTo(swept + 0.3, 5);
+  });
+});
+
+it('drops the opening offset by Work and starts settled under reduced motion', async () => {
+  await withOpeningCamera(390, ({ tick, yaw, load, scrollTo }) => {
+    load();
+    tick(36);
+    const swept = yaw();
+    expect(swept).toBeLessThan(KEYFRAMES[0].azimuth - 0.1);
+    scrollTo(0.2);
+    tick();
+    expect(yaw()).toBeCloseTo(KEYFRAMES[1].azimuth, 5);
+    scrollTo(0);
+    tick(180);
+    expect(yaw()).toBeCloseTo(swept, 5);
+  });
+  vi.mocked(prefersReducedMotion).mockReturnValue(true);
+  await withOpeningCamera(390, ({ tick, yaw, load }) => {
+    load();
+    tick();
+    expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
+    tick(60);
+    expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
+  });
 });

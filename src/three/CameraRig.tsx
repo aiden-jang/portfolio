@@ -21,6 +21,7 @@ import type { Keyframe } from '../types';
 import { hitsCar } from './carHitTest';
 import { useCameraViews } from './useCameraViews';
 import { useCarZoom } from './useCarZoom';
+import { useOpeningOrbit } from './useOpeningOrbit';
 
 const INTRO_DURATION = 0.78;
 
@@ -30,15 +31,11 @@ const isCleanMode =
   typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('clean');
 const CLEAN_AZIMUTH = 0.65;
 
-type Props = {
-  getScrollT: () => number;
-};
-
-export function CameraRig({ getScrollT }: Props) {
+export function CameraRig({ getScrollT }: { getScrollT: () => number }) {
   const { camera, gl } = useThree();
   const contactArrival = useContactArrival();
   const updateCameraView = useCameraViews();
-
+  const openingOrbit = useOpeningOrbit();
   const state = useRef(createRigState());
   const baseKf = useRef<Keyframe>({ ...KEYFRAMES[0] });
   const zoomDistance = useCarZoom();
@@ -59,6 +56,7 @@ export function CameraRig({ getScrollT }: Props) {
     const reduced = prefersReducedMotion(),
       scrollT = getScrollT();
 
+    const swing = isCleanMode ? 0 : openingOrbit(s, dt, reduced, scrollT, three.size.width);
     updateCameraView(s, dt, reduced, scrollT);
     if (s.isDown || scrollT > 0 || useAppStore.getState().hasManualView) s.introT = 1;
     motionState.progress = reduced ? 1 : s.introT;
@@ -71,7 +69,7 @@ export function CameraRig({ getScrollT }: Props) {
 
     const az = isCleanMode
       ? CLEAN_AZIMUTH
-      : kf.azimuth + s.dragAzimuth + s.idleSpin * (1 - clamp(scrollT, 0, 1));
+      : kf.azimuth + swing + s.dragAzimuth + s.idleSpin * (1 - clamp(scrollT, 0, 1));
     const aspect = three.size.height > 0 ? three.size.width / three.size.height : FRAME_BASE_ASPECT;
     let dist = kf.distance * framingDistanceMultiplier(aspect);
     const tgtY = kf.targetY;

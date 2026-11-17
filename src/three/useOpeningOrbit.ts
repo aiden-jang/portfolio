@@ -1,13 +1,22 @@
 import { useEffect, useRef } from 'react';
-import { clamp } from '../../../src/math';
-import { useAppStore } from '../../../src/store';
-import type { RigState } from '../../../src/three/useOrbitGesture';
+import { clamp } from '../math';
+import { useAppStore } from '../store';
+import type { RigState } from './useOrbitGesture';
 
 const HOLD_SECONDS = 0.18;
 const SWEEP_SECONDS = 2.25;
 type Phase = 'waiting' | 'playing' | 'settled' | 'interrupted' | 'reduced';
 
 let replayVersion = 0;
+let observer: ((phase: Phase) => void) | undefined;
+
+export function observeOpeningOrbit(listener: (phase: Phase) => void) {
+  observer = listener;
+  return () => {
+    if (observer === listener) observer = undefined;
+  };
+}
+
 export function replayOpeningOrbit() {
   replayVersion++;
   useAppStore.getState().resetCamera();
@@ -22,6 +31,7 @@ function openingState() {
     cameraResetVersion,
     elapsed: 0,
     offset: 0,
+    reportedPhase: undefined as Phase | undefined,
     wheel: false,
   };
 }
@@ -35,12 +45,10 @@ export function useOpeningOrbit() {
     window.addEventListener('wheel', wheel, { passive: true });
     return () => {
       window.removeEventListener('wheel', wheel);
-      delete document.documentElement.dataset.openingOrbit;
     };
   }, []);
 
   return (rig: RigState, dt: number, reduced: boolean, scroll: number, width: number) => {
-    if (!document.documentElement.hasAttribute('data-cinema-study')) return 0;
     if (!current.current || current.current.version !== replayVersion) {
       current.current = openingState();
       rig.introT = 0;
@@ -65,8 +73,9 @@ export function useOpeningOrbit() {
       rig.idleSpin += motion.offset;
       motion.offset = 0;
       motion.phase = 'interrupted';
-    } else if (unfinished) {
-      if (store.refs.introArmed && !store.isCarLoading && store.refs.carModel) {
+    } else if (unfinished && store.refs.introArmed && store.refs.carModel) {
+      // Frame the first visible paint at the start angle, then wait for the load signal.
+      if (!store.isCarLoading) {
         motion.phase = 'playing';
         if (!document.hidden) motion.elapsed += Math.min(dt, 0.05);
       }
@@ -76,11 +85,9 @@ export function useOpeningOrbit() {
       if (t === 1) motion.phase = 'settled';
     }
 
-    const root = document.documentElement;
-    if (root.dataset.openingOrbit !== motion.phase) {
-      root.dataset.openingOrbit = motion.phase;
-      if (window.parent !== window)
-        window.parent.postMessage({ openingOrbit: motion.phase }, location.origin);
+    if (observer && motion.reportedPhase !== motion.phase) {
+      motion.reportedPhase = motion.phase;
+      observer(motion.phase);
     }
     return motion.offset * (1 - clamp(scroll * 5, 0, 1));
   };

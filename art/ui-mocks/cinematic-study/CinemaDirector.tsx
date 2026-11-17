@@ -1,11 +1,15 @@
 import { useEffect } from 'react';
 import { useAppStore } from '../../../src/store';
 import { cancelSmoothScroll } from '../../../src/hooks/scrollNavigation';
-import { replayOpeningOrbit } from './useOpeningOrbit';
+import { observeOpeningOrbit, replayOpeningOrbit } from '../../../src/three/useOpeningOrbit';
 
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 export function CinemaDirector() {
   useEffect(() => {
+    const stopObserving = observeOpeningOrbit((phase) => {
+      if (window.parent !== window)
+        window.parent.postMessage({ openingOrbit: phase }, location.origin);
+    });
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     let playback = 0;
     const interrupt = () => cancelAnimationFrame(playback);
@@ -56,6 +60,7 @@ export function CinemaDirector() {
     addEventListener('message', receive);
     return () => {
       interrupt();
+      stopObserving();
       removeEventListener('wheel', interrupt);
       removeEventListener('touchstart', interrupt);
       removeEventListener('keydown', interrupt);

@@ -80,8 +80,9 @@ hierarchy; they do not replace the portfolio's identity.
 
 ## Current Direction
 
-The car-led showroom uses a brief, interruptible lighting and camera settle, then
-holds its angle until the visitor orbits. Softer studio lighting frames the larger
+The showroom opens with one brief camera sweep after the car loads, then holds
+the three-quarter angle. Dragging or scrolling interrupts the sweep. Reduced
+motion opens at the settled angle. Softer studio lighting frames the larger
 name. The first scroll hands the car silhouette to a large work title and featured
 globe; phones use a wider handoff camera. Keep the full orbit area and full garage.
 The page leads into everythingisfine and Iodine, then

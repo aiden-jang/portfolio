@@ -76,8 +76,10 @@ in reading sections and resumes for the visible Contact car.
 `CameraRig` combines section poses, pointer offsets and intro motion. Manual orbit
 holds the chosen angle until Reset view; `carFraming` caches visible model bounds
 and increases distance when needed to fit a resized manual view without changing
-its angle. Hidden export planes do not participate in that framing. Automatic intro rotation resumes after a
-reset. Reset appears outside the dock's layout so its arrival does not move the
+its angle. Hidden export planes do not participate in that framing. The opening
+sweep runs once when the first car loads. Dragging hands its current angle to
+manual orbit. Scrolling stops the sweep and blends its offset out by Selected
+work. Reset view returns to the settled angle. Reset appears outside the dock's layout so its arrival does not move the
 other controls. Share and randomization live in All controls alongside keyboard
 navigation. The primary dock keeps car selection, paint, lighting and available
 model-specific details. Film grain is static.
