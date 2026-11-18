@@ -161,12 +161,6 @@
   }
 }
 
-@media (max-width: 899px), (max-height: 699px) {
-  body[data-contact-view='visible'] .portfolio-header {
-    background: var(--color-bg);
-  }
-}
-
 @media (max-width: 899px) {
   .contact-email {
     margin-top: 26px;

@@ -13,10 +13,6 @@ body[data-car-view='reading'] .car-loading-progress,
 body[data-car-view='reading'] .scene-loading-note {
   visibility: hidden;
 }
-body[data-car-view='reading'] .portfolio-header {
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-line);
-}
 
 @media (prefers-reduced-motion: no-preference) {
   body:not([data-photo-mode], .modal-open)

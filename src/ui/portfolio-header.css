@@ -16,11 +16,8 @@
   justify-content: space-between;
   height: var(--portfolio-header-height);
   padding: 0 5vw;
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  transition:
-    background-color 180ms ease,
-    border-color 180ms ease;
+  background: rgb(16 16 20 / var(--header-scrim, 0));
+  border-bottom: 1px solid rgb(255 255 255 / calc(var(--header-scrim, 0) * 0.09));
   pointer-events: none;
 }
 .portfolio-header > header,
@@ -30,17 +27,13 @@
 .portfolio-header > * {
   pointer-events: auto;
 }
-.portfolio-header-reading {
-  background: #101014;
-  border-bottom: 1px solid var(--color-line);
-}
 .portfolio-mobile-header {
   display: none;
 }
 .portfolio-header #nav {
   gap: 24px;
 }
-.portfolio-menu summary:focus-visible {
+.portfolio-menu-trigger:focus-visible {
   outline: 2px solid #e8e8e6;
   outline-offset: 3px;
 }
@@ -67,7 +60,7 @@
     border-radius: var(--radius-control);
     text-transform: none;
   }
-  .portfolio-menu summary {
+  .portfolio-menu-trigger {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -75,23 +68,20 @@
     min-height: 44px;
     padding: 8px 12px;
     font-size: 13px;
-    border: 1px solid var(--color-control-line);
-    background: var(--color-panel);
+    border: 0;
+    background: transparent;
     border-radius: var(--radius-control);
-    list-style: none;
   }
-  .portfolio-menu summary::-webkit-details-marker {
-    display: none;
+  .portfolio-menu-trigger > span {
+    display: inline-flex;
+    transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  .portfolio-menu summary > span {
-    transition: transform 160ms ease;
-  }
-  .portfolio-menu[open] summary > span {
+  .portfolio-menu-trigger[aria-expanded='true'] > span {
     transform: rotate(45deg);
   }
   .portfolio-menu nav {
     position: absolute;
-    top: 76px;
+    top: calc(100% + 5px);
     left: 6vw;
     right: 6vw;
     padding: 8px 20px;
@@ -99,9 +89,24 @@
     border: 1px solid #64646e;
     border-radius: 8px;
     box-shadow: 0 20px 40px #0008;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition:
+      opacity 130ms ease-out,
+      transform 130ms ease-out,
+      visibility 0s 130ms;
   }
-  .portfolio-menu[open] nav {
-    animation: dialog-enter 160ms ease-out both;
+  .portfolio-menu[data-open='true'] nav {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition:
+      opacity 190ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 190ms cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s;
   }
   .portfolio-menu nav a {
     display: flex;
@@ -124,18 +129,6 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-.portfolio-menu summary {
-  transition:
-    color 180ms ease,
-    border-color 180ms ease,
-    background-color 180ms ease,
-    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-@media (prefers-reduced-motion: reduce) {
-  .portfolio-menu summary {
-    transition: none;
-  }
-}
 .portfolio-menu nav {
   scrollbar-width: thin;
   scrollbar-color: #55545a #101014;
@@ -149,4 +142,46 @@
   font: 13px/1.4 var(--font-display);
   letter-spacing: 0;
   text-transform: none;
+}
+
+.nav-motion-rail {
+  position: relative;
+}
+
+.nav-motion-rail a {
+  display: inline-flex;
+  align-items: center;
+  padding-block: 6px;
+  color: var(--color-muted);
+  transition: color 150ms ease-out;
+}
+
+.nav-motion-rail a:is(:hover, [aria-current]) {
+  color: var(--color-fg);
+}
+
+.nav-motion-marker {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  background: var(--color-neon);
+  transform-origin: left;
+  transform: translateX(var(--nav-marker-x, 0px)) scaleX(var(--nav-marker-width, 0));
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nav-motion-marker:not([data-ready]) {
+  visibility: hidden;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root .nav-motion-marker,
+  html:root .portfolio-menu-trigger > span,
+  html:root .portfolio-menu nav {
+    transition: none !important;
+  }
 }

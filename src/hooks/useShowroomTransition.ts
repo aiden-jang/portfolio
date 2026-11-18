@@ -60,6 +60,10 @@ export function useShowroomTransition() {
       const progress = scrollY / h;
       const reduced = media.matches;
       const phone = innerWidth < 768;
+      const headerTravel = phone ? 62 : 88;
+      const headerScrim = reduced
+        ? Number(scrollY >= headerTravel / 2)
+        : smoothProgress(scrollY, 0, headerTravel);
       const movingForward = scrollY >= lastScroll;
       lastScroll = scrollY;
       if (progress < 0.05) visitedIntro = true;
@@ -91,6 +95,7 @@ export function useShowroomTransition() {
       const rect = poster?.getBoundingClientRect();
       const globe = rect ? lerp(0.56, 1, smoothProgress((h - rect.top) / h, 0, 0.57)) : 1;
 
+      root.style.setProperty('--header-scrim', String(headerScrim));
       root.style.setProperty('--stage-opacity', String(stage));
       root.style.setProperty('--work-figure-scale', String(scale));
       root.style.setProperty('--work-poster-opacity', String(globe));
@@ -125,6 +130,7 @@ export function useShowroomTransition() {
       clearPulse();
       refs.floorReflection = 1;
       for (const name of [
+        '--header-scrim',
         '--stage-opacity',
         '--work-figure-scale',
         '--work-poster-opacity',

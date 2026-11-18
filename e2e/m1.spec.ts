@@ -105,7 +105,7 @@ test('retired M1 keeps shared identity, picker focus and model credits', async (
   await expect(browse).toHaveAccessibleName('Browse cars. Ferrari F40, F120');
   await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('0');
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-  await page.locator('.portfolio-menu summary').click();
+  await page.getByRole('button', { name: 'Menu', exact: true }).click();
   await page
     .getByRole('navigation', { name: 'Mobile navigation' })
     .getByRole('link', { name: 'Contact', exact: true })

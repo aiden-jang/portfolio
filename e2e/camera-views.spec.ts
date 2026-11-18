@@ -42,7 +42,7 @@ for (const width of [1440, 390]) {
         true,
       );
       if (width < 768) {
-        await page.locator('.portfolio-menu summary').click();
+        await page.getByRole('button', { name: 'Menu', exact: true }).click();
         await page
           .getByRole('navigation', { name: 'Mobile navigation' })
           .getByRole('link', { name: 'Contact', exact: true })

@@ -15,10 +15,6 @@ html:root .portfolio-header a[href$='.pdf'] {
   border: 0;
   background: transparent;
 }
-html:root .portfolio-menu summary {
-  border: 0;
-  background: transparent;
-}
 html:root nav[aria-label='Section progress'] {
   display: none;
 }

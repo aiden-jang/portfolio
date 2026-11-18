@@ -78,7 +78,9 @@ export function useNavigation(sceneOnly = false) {
     // frozen on the jump target once the user scrolls away from it.
     const yieldToUser = () => {
       cancelSmoothScroll();
+      if (!snapLockUntil.current) return;
       snapLockUntil.current = 0;
+      onScroll();
     };
     const onWheel = (e: WheelEvent) => {
       if (dialogIsOpen()) return;
@@ -115,7 +117,11 @@ export function useNavigation(sceneOnly = false) {
       document.body.dataset.carView = carIsVisibleAt(window.innerHeight * 0.15, bounds)
         ? 'visible'
         : 'reading';
-      if (performance.now() < snapLockUntil.current) return;
+      if (performance.now() < snapLockUntil.current) {
+        const target = bounds.find(({ id }) => id === SECTION_IDS[currentSection.current]);
+        if (!target || Math.abs(target.top) > 2) return;
+      }
+      snapLockUntil.current = 0;
       const idx = SECTION_IDS.reduce((active, id, index) => {
         const section = document.getElementById(id);
         return section && section.getBoundingClientRect().top <= window.innerHeight * 0.15
@@ -134,6 +140,7 @@ export function useNavigation(sceneOnly = false) {
       const section = document.getElementById(SECTION_IDS[index]);
       if (!section) return;
       cancelSmoothScroll();
+      snapLockUntil.current = 0;
       window.scrollTo({ top: section.offsetTop, behavior: 'instant' });
       currentSection.current = index;
       setSectionIndex(index);
@@ -163,6 +170,7 @@ export function useNavigation(sceneOnly = false) {
     return () => {
       active = false;
       cancelAnimationFrame(linkFrame);
+      cancelSmoothScroll();
       layoutObserver.disconnect();
       window.removeEventListener('hashchange', restoreSectionLink);
       window.removeEventListener('wheel', onWheel);
