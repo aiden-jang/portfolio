@@ -1,7 +1,7 @@
 import { usePhotoMode } from './photo/state';
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
-import { useAppStore } from '../store';
+import { canStudyRender, useAppStore } from '../store';
 import { CAMERA_VIEWS, type CameraView } from '../three/cameraViews';
 import { CAR_ZOOM_MAX, CAR_ZOOM_MIN, CAR_ZOOM_STEP } from '../three/carZoom';
 
@@ -83,6 +83,13 @@ export function buildCommands({
         const state = useAppStore.getState();
         if (!state.isCarLoading) state.prevCar();
       },
+    },
+    {
+      id: 'behind-the-render',
+      label: 'Behind the render',
+      hint: 'studio',
+      keywords: 'clay matte finish materials lighting Ferrari F40',
+      run: () => useAppStore.getState().setRenderFinish('studio'),
     },
     {
       id: 'photo-mode',
@@ -174,6 +181,7 @@ export function buildCommands({
     .filter(({ id }) => {
       if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';
       if (id === 'retry-scene') return false;
+      if (id === 'behind-the-render') return canStudyRender(state);
       if (id === 'photo-mode')
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;
       if (id.startsWith('view-'))

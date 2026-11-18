@@ -14,6 +14,8 @@ type Refs = {
   floorReflection: number;
   lightPulseT: number;
   carModel: THREE.Object3D | null;
+  holdOpeningPose: boolean;
+  onOpeningFrame: (() => void) | null;
   // Set once the first GLB has loaded, which is what releases the intro animation.
   introArmed: boolean;
 };
@@ -23,6 +25,8 @@ type AppState = {
   themeName: ThemeName;
   sectionIndex: number;
   isContactVisible: boolean;
+  renderFinish: RenderFinish | null;
+  setRenderFinish: (finish: RenderFinish | null) => void;
   // Incremented to ask CameraRig to drop any manual orbit offsets.
   cameraResetVersion: number;
   hasManualView: boolean;
@@ -67,11 +71,27 @@ type AppState = {
   cycleBodyColor: () => void;
 };
 
+export type RenderFinish = 'studio' | 'clay';
+
+export function canStudyRender(state: AppState): boolean {
+  return (
+    state.carIndex === 0 &&
+    state.sectionIndex === 0 &&
+    !state.isCarLoading &&
+    !state.carLoadError &&
+    !state.sceneUnavailable
+  );
+}
+
 export const useAppStore = create<AppState>((set, get) => ({
   carIndex: 0,
   themeName: 'dusk',
   sectionIndex: 0,
   isContactVisible: false,
+  renderFinish: null,
+  setRenderFinish: (finish) => {
+    if (finish === null || canStudyRender(get())) set({ renderFinish: finish });
+  },
   cameraResetVersion: 0,
   hasManualView: false,
   cameraView: 'front',
@@ -144,6 +164,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     floorReflection: 1,
     lightPulseT: 0,
     carModel: null,
+    holdOpeningPose: false,
+    onOpeningFrame: null,
     introArmed: false,
   },
   setCarIndex: (i) => {

@@ -13,6 +13,30 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#0a0a14" />
+    <link
+      rel="preload"
+      as="image"
+      href="/showroom/f40-mobile-opening.webp"
+      media="(width < 768px) and (prefers-reduced-motion: no-preference)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/showroom/f40-desktop-opening.webp"
+      media="(width >= 768px) and (prefers-reduced-motion: no-preference)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/showroom/f40-mobile-settled.webp"
+      media="(width < 768px) and (prefers-reduced-motion: reduce)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/showroom/f40-desktop-settled.webp"
+      media="(width >= 768px) and (prefers-reduced-motion: reduce)"
+    />
     <link rel="stylesheet" href="/src/index.css" />
 
     <!-- Open Graph (iMessage, Facebook, Slack, Discord, etc.) -->

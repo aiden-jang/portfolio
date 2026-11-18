@@ -45,7 +45,7 @@ export function Floor() {
   }, [scene, reflector]);
 
   useFrame((_state, dt) => {
-    const { themeName, refs } = useAppStore.getState();
+    const { themeName, refs, renderFinish } = useAppStore.getState();
     const target = THEMES[themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
 
@@ -71,7 +71,7 @@ export function Floor() {
       k,
     );
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
-    uniforms.reflectionStrength.value = refs.floorReflection;
+    uniforms.reflectionStrength.value = renderFinish === 'clay' ? 0 : refs.floorReflection;
     (uniforms.color.value as THREE.Color).setHex(currentReflectorColor.current);
   });
 

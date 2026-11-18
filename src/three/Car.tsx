@@ -13,6 +13,7 @@ import { canPrefetchModels } from './modelPrefetch';
 import { loadCarModel } from './loadCarModel';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
+import { useRenderFinish } from './useRenderFinish';
 import {
   autoFitToLength,
   prepareModelGlass,
@@ -69,6 +70,7 @@ export function Car() {
     m.position.y = 0.015;
     return m;
   }, [underglowMat]);
+  useRenderFinish(group, underglow);
   useEffect(() => {
     group.add(underglow);
     return () => {

@@ -70,7 +70,8 @@ export const Effects = memo(function Effects() {
   useFrame((state, dt) => {
     const graph = pipeline.current;
     if (!graph) return;
-    const target = THEMES[useAppStore.getState().themeName];
+    const { themeName, isCarLoading, refs } = useAppStore.getState();
+    const target = THEMES[themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
     currentStrength.current = smoothTowards(currentStrength.current, target.bloomStrength, k);
     currentThreshold.current = smoothTowards(currentThreshold.current, target.bloomThreshold, k);
@@ -84,6 +85,7 @@ export const Effects = memo(function Effects() {
     } finally {
       gl.autoClear = autoClear;
     }
+    if (!isCarLoading && refs.carModel) refs.onOpeningFrame?.();
   }, 1);
 
   return null;

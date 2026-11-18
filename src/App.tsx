@@ -13,6 +13,9 @@ import { CommandMenu } from './ui/CommandMenu';
 import { CarLoadNotice } from './ui/CarLoadNotice';
 import { SceneBoundary } from './ui/SceneBoundary';
 import { Sections } from './ui/Sections';
+import { useAppStore } from './store';
+import { RenderStudy } from './ui/RenderStudy';
+import { OpeningPoster } from './ui/OpeningPoster';
 import './ui/reading-flow.css';
 import './ui/dialog-motion.css';
 import './ui/showroom-layout.css';
@@ -37,6 +40,7 @@ const isCleanMode =
 export function App() {
   const { getScrollT, scrollToSection } = useNavigation(isCleanMode);
   const photoMode = usePhotoMode((state) => state.active);
+  const renderStudy = useAppStore((state) => state.renderFinish !== null);
   useSceneUrl();
   useShowroomTransition();
 
@@ -68,10 +72,11 @@ export function App() {
       </SceneBoundary>
       {!isCleanMode && (
         <>
+          <OpeningPoster />
           <div
             className="portfolio-chrome"
             ref={(element) => {
-              if (element) element.inert = photoMode;
+              if (element) element.inert = photoMode || renderStudy;
             }}
           >
             <PortfolioHeader onLink={scrollToSection} />
@@ -81,6 +86,7 @@ export function App() {
             <CommandMenu onSection={scrollToSection} />
           </div>
           <PhotoMode />
+          <RenderStudy />
         </>
       )}
       <Analytics beforeSend={publicAnalyticsUrl} />

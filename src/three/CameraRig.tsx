@@ -51,6 +51,7 @@ export function CameraRig({ getScrollT }: { getScrollT: () => number }) {
   useOrbitGesture(state, onTap);
 
   useFrame((three, dt) => {
+    if (useAppStore.getState().renderFinish) return;
     const s = state.current;
     const refs = useAppStore.getState().refs;
     const reduced = prefersReducedMotion(),
@@ -58,7 +59,8 @@ export function CameraRig({ getScrollT }: { getScrollT: () => number }) {
 
     const swing = isCleanMode ? 0 : openingOrbit(s, dt, reduced, scrollT, three.size.width);
     updateCameraView(s, dt, reduced, scrollT);
-    if (s.isDown || scrollT > 0 || useAppStore.getState().hasManualView) s.introT = 1;
+    if (refs.holdOpeningPose || s.isDown || scrollT > 0 || useAppStore.getState().hasManualView)
+      s.introT = 1;
     motionState.progress = reduced ? 1 : s.introT;
     updateIntroFov(camera, three.size.width, scrollT);
     s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);

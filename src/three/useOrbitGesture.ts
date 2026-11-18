@@ -60,6 +60,7 @@ export function useOrbitGesture(
       if (
         e.button !== 0 ||
         !e.isPrimary ||
+        useAppStore.getState().renderFinish !== null ||
         isNonDraggable(e.target) ||
         !canOrbitAt(e.clientY, pageSectionBounds())
       )

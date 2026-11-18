@@ -187,11 +187,12 @@ export function useCarTypeOverlap() {
 
     draw.current = ({ camera, gl, size }, composer, dt) => {
       const progress = motionState.openingOrbitProgress;
-      const { sectionIndex, refs } = useAppStore.getState();
+      const { sectionIndex, renderFinish, refs } = useAppStore.getState();
       const model = refs.carModel;
       if (
         !media.matches ||
         sectionIndex !== 0 ||
+        renderFinish !== null ||
         unavailable ||
         !model ||
         !(camera instanceof PerspectiveCamera) ||

@@ -87,7 +87,7 @@ export function useOpeningOrbit() {
       // Frame the first visible paint at the start angle, then wait for the load signal.
       if (!store.isCarLoading) {
         motion.phase = 'playing';
-        if (!document.hidden) motion.elapsed += Math.min(dt, 0.05);
+        if (!document.hidden && !store.refs.holdOpeningPose) motion.elapsed += Math.min(dt, 0.05);
       }
       const t = clamp((motion.elapsed - HOLD_SECONDS) / SWEEP_SECONDS, 0, 1);
       motion.offset = -arc * (1 - t * t * (3 - 2 * t));

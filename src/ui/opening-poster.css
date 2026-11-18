@@ -1,0 +1,36 @@
+.opening-poster {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 1;
+  overflow: clip;
+  transition: opacity 160ms ease-out;
+}
+body[data-opening-poster] .opening-poster {
+  background: linear-gradient(#040307 34%, #010102 42%);
+}
+.opening-poster[data-fading] {
+  opacity: 0;
+}
+.opening-poster img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  transform: translate(-50%, -50%) scale(var(--opening-poster-scale, 1));
+}
+body[data-opening-media] :is(#root, .portfolio-scene canvas) {
+  animation: none;
+}
+body[data-opening-poster] :is(.scene-loading-note, .car-loading-progress) {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .opening-poster {
+    transition: none;
+  }
+}
