@@ -180,3 +180,30 @@
     font-size: 20px;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  #sec-contact::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 27% 28% at 72% 68%,
+      rgb(161 22 19 / 27%) 0%,
+      rgb(133 14 15 / 14%) 44%,
+      transparent 100%
+    );
+    opacity: var(--contact-glow-opacity, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (max-width: 899px) {
+  #sec-contact::after {
+    background: radial-gradient(
+      ellipse 68% 27% at 50% 70%,
+      rgb(161 22 19 / 23%) 0%,
+      rgb(133 14 15 / 11%) 44%,
+      transparent 100%
+    );
+  }
+}

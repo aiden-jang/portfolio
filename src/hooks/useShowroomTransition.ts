@@ -56,18 +56,38 @@ export function useShowroomTransition() {
     };
     const paint = () => {
       frame = 0;
-      const h = innerHeight;
+      const h = Math.max(1, innerHeight);
       const progress = scrollY / h;
+      const reduced = media.matches;
+      const phone = innerWidth < 768;
       const movingForward = scrollY >= lastScroll;
       lastScroll = scrollY;
       if (progress < 0.05) visitedIntro = true;
 
-      const fixedScene = media.matches || contact.getBoundingClientRect().top < h;
-      refs.floorReflection = fixedScene ? 1 : lerp(1, 0.07, smoothProgress(progress, 0.08, 0.52));
-      const stage = fixedScene ? 1 : 1 - smoothProgress(progress, 0.25, 0.92);
+      const contactProgress = (h - contact.getBoundingClientRect().top) / h;
+      const inContact = contactProgress > 0;
+      refs.floorReflection =
+        reduced || inContact ? 1 : lerp(1, 0.07, smoothProgress(progress, 0.08, 0.52));
+
+      let stage = 1;
+      if (!reduced) {
+        stage = inContact
+          ? smoothProgress(contactProgress, 0.05, phone ? 0.48 : 0.44)
+          : 1 - smoothProgress(progress, phone ? 0.14 : 0.2, phone ? 0.72 : 0.84);
+        // Finish the fade where the dock stops fitting in the Intro viewport.
+        const dockEnd = Math.max(0.015, (intro.offsetHeight + 0.5) / h - 1);
+        const dock = 1 - smoothProgress(progress, 0.005, dockEnd);
+        const glow = smoothProgress(contactProgress, 0.32, 0.94);
+        root.style.setProperty('--garage-controls-opacity', String(dock));
+        root.style.setProperty('--contact-glow-opacity', String(glow));
+      } else {
+        root.style.removeProperty('--garage-controls-opacity');
+        root.style.removeProperty('--contact-glow-opacity');
+      }
+
       const arrival = clamp((h * 0.95 - work.getBoundingClientRect().top) / (h * 0.9), 0, 1);
-      const scale = media.matches ? 1 : lerp(0.965, 1, arrival);
-      const poster = media.matches ? null : work.querySelector<HTMLElement>(POSTER);
+      const scale = reduced ? 1 : lerp(0.965, 1, arrival);
+      const poster = reduced ? null : work.querySelector<HTMLElement>(POSTER);
       const rect = poster?.getBoundingClientRect();
       const globe = rect ? lerp(0.56, 1, smoothProgress((h - rect.top) / h, 0, 0.57)) : 1;
 
@@ -104,8 +124,15 @@ export function useShowroomTransition() {
       work.removeEventListener('animationcancel', endPulse);
       clearPulse();
       refs.floorReflection = 1;
-      for (const name of ['--stage-opacity', '--work-figure-scale', '--work-poster-opacity'])
+      for (const name of [
+        '--stage-opacity',
+        '--work-figure-scale',
+        '--work-poster-opacity',
+        '--garage-controls-opacity',
+        '--contact-glow-opacity',
+      ]) {
         root.style.removeProperty(name);
+      }
     };
   }, []);
 }
