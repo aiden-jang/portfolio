@@ -28,7 +28,7 @@ test('external destinations describe the new tab on the page and in dialogs', as
   await expectDestinations(cars);
   await page.keyboard.press('Escape');
 
-  await page.locator('#nav').getByRole('link', { name: 'Projects', exact: true }).click();
+  await page.locator('#nav').getByRole('link', { name: 'Featured work', exact: true }).click();
   await page.getByRole('button', { name: 'How I built it: bloomnote', exact: true }).click();
   const story = page.getByRole('dialog');
   await expect(story).toBeVisible();

@@ -17,6 +17,18 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     await page.evaluate(() => document.fonts.ready);
     const section = page.locator('#sec-experience');
     await section.getByRole('heading', { name: "Where I've worked" }).waitFor();
+    const nav = page.locator('#nav');
+    if (width >= 768) {
+      await expect(nav.locator('a[data-section]')).toHaveText([
+        'Intro',
+        'Featured work',
+        'Experience',
+        'More projects',
+        'About',
+        'Contact',
+      ]);
+      await expect(nav.locator('a[aria-current]')).toHaveText('Experience');
+    }
     await expect
       .poll(() => section.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
       .toBeLessThan(2);
@@ -70,6 +82,8 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await page.goto('/#' + id);
       await page.evaluate(() => document.fonts.ready);
       const target = page.locator('#' + id);
+      if (width >= 768)
+        await expect(nav.locator('a[aria-current]')).toHaveAttribute('href', '#' + id);
       await expect
         .poll(() => target.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
         .toBeLessThan(2);

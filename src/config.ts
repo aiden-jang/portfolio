@@ -67,7 +67,7 @@ export type SectionId = (typeof SECTION_IDS)[number];
 export const SECTION_LABELS: Record<SectionId, string> = {
   'sec-intro': 'Intro',
   'sec-experience': 'Experience',
-  'sec-work': 'Projects',
+  'sec-work': 'Featured work',
   'sec-more-work': 'More projects',
   'sec-about': 'About',
   'sec-contact': 'Contact',

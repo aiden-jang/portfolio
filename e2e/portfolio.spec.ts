@@ -178,10 +178,13 @@ for (const width of [1440, 390]) {
         await page.locator('.portfolio-menu summary').click();
         await page
           .getByRole('navigation', { name: 'Mobile navigation' })
-          .getByRole('link', { name: 'Projects', exact: true })
+          .getByRole('link', { name: 'Featured work', exact: true })
           .click();
       } else {
-        await page.locator('#nav').getByRole('link', { name: 'Projects', exact: true }).click();
+        await page
+          .locator('#nav')
+          .getByRole('link', { name: 'Featured work', exact: true })
+          .click();
       }
       await expect(page.locator('#sec-work h2')).toBeInViewport();
       const carBefore = new URL(page.url()).searchParams.get('car');

@@ -53,7 +53,7 @@ for (const [width, height] of [
       } else await page.locator('#nav').getByRole('link', { name, exact: true }).click();
     };
     if (width !== 320) {
-      await jump('Projects');
+      await jump('Featured work');
       await expect(page.locator('#sec-work h2')).toBeInViewport();
       await page.screenshot({ path: test.info().outputPath(`projects-${width}.png`) });
       await jump('About');

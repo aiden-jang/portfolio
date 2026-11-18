@@ -22,7 +22,7 @@ test('the desktop opening orbit overlaps a stationary intro title', async ({ pag
     () => {
       const heading = document.querySelector('#sec-intro h1');
       const layer = document.querySelector<HTMLCanvasElement>('.car-type-overlap:not([hidden])');
-      if (!heading || !layer || Number(layer.style.opacity) < 0.99) return;
+      if (!heading || !layer) return;
       const { x, y } = heading.getBoundingClientRect();
       return { x, y };
     },
@@ -32,4 +32,22 @@ test('the desktop opening orbit overlaps a stationary intro title', async ({ pag
   const position = await during.jsonValue();
   expect(position?.x).toBeCloseTo(before!.x, 0);
   expect(position?.y).toBeCloseTo(before!.y, 0);
+});
+
+test('the settled car stays in front of the stationary title on a short desktop', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1380, height: 614 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
+  await page.goto('/');
+  const title = page.getByRole('heading', { name: 'Aiden Jang', exact: true });
+  const before = await title.boundingBox();
+  await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+  const overlap = page.locator('.car-type-overlap');
+  await expect(overlap).toBeVisible();
+  expect(await title.boundingBox()).toEqual(before);
+
+  await page.locator('#nav a[href="#sec-experience"]').click();
+  await expect(overlap).toHaveCount(0);
 });

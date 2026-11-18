@@ -4,7 +4,7 @@ import { SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { ResumeButton } from './ResumeButton';
 
-const ITEMS = SECTION_IDS.filter((id) => id !== 'sec-more-work').map((id) => ({
+const ITEMS = SECTION_IDS.map((id) => ({
   id,
   label: SECTION_LABELS[id],
   key: id.slice(4),
@@ -16,8 +16,7 @@ type Props = {
 
 export function Nav({ onLink }: Props) {
   const sectionIndex = useAppStore((s) => s.sectionIndex);
-  const currentId = SECTION_IDS[sectionIndex];
-  const activeId = currentId === 'sec-more-work' ? 'sec-work' : currentId;
+  const activeId = SECTION_IDS[sectionIndex];
 
   return (
     <nav
