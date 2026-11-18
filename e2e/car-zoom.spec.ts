@@ -74,9 +74,13 @@ for (const width of [1440, 390, 320]) {
         true,
       );
       await page.mouse.move(width / 2, 450);
-      // Mobile WebKit has no automated wheel input; PageDown checks that scrolling stays unlocked.
-      if (width < 768 && browserName === 'webkit') await page.keyboard.press('PageDown');
-      else await page.mouse.wheel(0, 650);
+      // WebKit wheel synthesis varies by platform; exercise its keyboard scroll path.
+      if (browserName === 'webkit') {
+        await page.evaluate(() => {
+          if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+        });
+        await page.keyboard.press('PageDown');
+      } else await page.mouse.wheel(0, 650);
       await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(200);
       if (width < 768) {
         await page.locator('.portfolio-menu summary').click();

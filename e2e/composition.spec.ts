@@ -63,7 +63,11 @@ for (const [width, height] of [
     ).toHaveCount(0);
 
     await expect(async () => {
-      const bytes = await page.screenshot({ timeout: 5000 });
+      // Measure the scene pixels without counting colors from the page chrome.
+      const bytes = await page.screenshot({
+        timeout: 5000,
+        style: '.portfolio-chrome { opacity: 0 !important; }',
+      });
       const pixels = PNG.sync.read(bytes);
       let outside = 0;
       let carLeft = pixels.width;

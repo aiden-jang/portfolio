@@ -13,7 +13,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
+  browser:
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, webkit]
     runs-on: ubuntu-24.04
     container:
       # Keep the browser image aligned with @playwright/test in package-lock.json.
@@ -31,6 +35,15 @@ jobs:
       - run: npm run verify
         env:
           PORTFOLIO_CI_PICOMATCH_EXCEPTION: '1'
-      - run: npm run test:browser
+      - run: npm run test:browser -- --project "${{ matrix.project }}" --reporter=list
         env:
           PORTFOLIO_BUILD_READY: '1'
+
+  check:
+    runs-on: ubuntu-24.04
+    needs: browser
+    if: always()
+    steps:
+      - run: test "$BROWSER_RESULT" = success
+        env:
+          BROWSER_RESULT: ${{ needs.browser.result }}
