@@ -79,8 +79,8 @@ export const Effects = memo(function Effects() {
     const autoClear = gl.autoClear;
     gl.autoClear = true;
     try {
-      graph.composer.render(dt);
-      drawTypeOverlap.current?.(state);
+      if (drawTypeOverlap.current) drawTypeOverlap.current(state, graph.composer, dt);
+      else graph.composer.render(dt);
     } finally {
       gl.autoClear = autoClear;
     }

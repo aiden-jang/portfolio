@@ -1,4 +1,5 @@
 import type { RootState } from '@react-three/fiber';
+import type { EffectComposer } from 'postprocessing';
 import { useEffect, useRef } from 'react';
 import { Color, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderTarget } from 'three';
 import type { Object3D, WebGLRenderer } from 'three';
@@ -40,6 +41,25 @@ function createOverlay(model: Object3D) {
 
 type Overlay = NonNullable<ReturnType<typeof createOverlay>>;
 
+function renderRaisedShot(
+  camera: PerspectiveCamera,
+  lift: number,
+  composer: EffectComposer,
+  dt: number,
+) {
+  const projection = camera.projectionMatrix;
+  const centerY = projection.elements[9];
+  // Reframe the rendered shot while keeping the camera used by the garage controls intact.
+  projection.elements[9] -= lift;
+  camera.projectionMatrixInverse.copy(projection).invert();
+  try {
+    composer.render(dt);
+  } finally {
+    projection.elements[9] = centerY;
+    camera.projectionMatrixInverse.copy(projection).invert();
+  }
+}
+
 function paintMatte(gl: WebGLRenderer, overlay: Overlay, width: number, height: number) {
   const { camera, context, target, scene, clearColor } = overlay;
   if (target.width !== width || target.height !== height) {
@@ -75,21 +95,17 @@ function paintMatte(gl: WebGLRenderer, overlay: Overlay, width: number, height: 
 }
 
 export function useCarTypeOverlap() {
-  const draw = useRef<(state: RootState) => void>();
+  const draw = useRef<(state: RootState, composer: EffectComposer, dt: number) => void>();
   useEffect(() => {
     const heading = document.querySelector<HTMLElement>('#sec-intro .garage-intro h1');
-    const panel = heading?.parentElement;
-    if (!panel || !heading) return;
+    if (!heading) return;
     const title = document.createRange();
     title.selectNodeContents(heading);
     const media = matchMedia(desktop);
     let overlay: Overlay | undefined;
-    let shift = 0;
     let unavailable = false;
 
     function clear() {
-      if (shift) panel!.style.removeProperty('--car-type-shift');
-      shift = 0;
       if (!overlay) return;
       overlay.canvas.remove();
       overlay.target.dispose();
@@ -98,10 +114,10 @@ export function useCarTypeOverlap() {
     }
 
     function clearOnScroll() {
-      if ((shift || overlay) && window.scrollY > 0) clear();
+      if (overlay && window.scrollY > 0) clear();
     }
 
-    draw.current = ({ camera, gl, size }) => {
+    draw.current = ({ camera, gl, size }, composer, dt) => {
       const progress = motionState.openingOrbitProgress;
       if (
         !progress ||
@@ -112,50 +128,43 @@ export function useCarTypeOverlap() {
         usePhotoMode.getState().active
       ) {
         clear();
+        composer.render(dt);
         return;
       }
       const model = useAppStore.getState().refs.carModel;
       if (!model || gl.getContext().isContextLost()) {
         clear();
+        composer.render(dt);
         return;
       }
 
       const amount = Math.sin(Math.PI * progress) ** 2;
       const bounds = title.getBoundingClientRect();
-      const restingBottom = bounds.bottom - shift;
-      // On short windows the title can start below the wing, so it may need to rise.
-      const clearance = size.height * 0.345 + 47 - restingBottom;
+      // Leave enough room for the wing to pass only the bottom of the letters.
+      const clearance = size.height * 0.345 + 47 - bounds.bottom;
       const limit = Math.min(size.height * 0.094, 92);
-      const nextShift = Math.max(-limit, Math.min(limit, clearance)) * amount;
-      // Keep the foreground pass inside the title's lower right corner.
-      const top = restingBottom - bounds.height * 0.28 + nextShift;
-      if (nextShift) panel.style.setProperty('--car-type-shift', `0 ${nextShift}px`);
-      else if (shift) panel.style.removeProperty('--car-type-shift');
-      shift = nextShift;
-      if (amount < 0.32) {
-        if (overlay) overlay.canvas.hidden = true;
-        return;
-      }
+      const lift = Math.max(-limit, Math.min(limit, clearance)) * amount;
 
       const x = Math.max(0, Math.floor(bounds.left + bounds.width * 0.58));
-      const y = Math.max(0, Math.floor(top));
+      const y = Math.max(0, Math.floor(bounds.bottom - bounds.height * 0.28));
       const width = Math.min(Math.floor(size.width) - x, Math.ceil(bounds.width * 0.42));
       const height = Math.min(Math.floor(size.height) - y, Math.ceil(bounds.height * 0.28) + 1);
-      if (width <= 1 || height <= 1) {
-        if (overlay) overlay.canvas.hidden = true;
-        return;
-      }
 
       overlay ??= createOverlay(model);
       if (!overlay) {
         unavailable = true;
-        clear();
+        composer.render(dt);
+        return;
+      }
+      renderRaisedShot(camera, (2 * lift) / size.height, composer, dt);
+      if (amount < 0.32 || width <= 1 || height <= 1) {
+        overlay.canvas.hidden = true;
         return;
       }
       const { canvas, context } = overlay;
       overlay.silhouette.matrix.copy(model.matrixWorld);
       overlay.camera.copy(camera);
-      overlay.camera.setViewOffset(size.width, size.height, x, y, width, height);
+      overlay.camera.setViewOffset(size.width, size.height, x, y + lift, width, height);
       paintMatte(gl, overlay, width, height);
 
       const scaleX = gl.domElement.width / size.width;
