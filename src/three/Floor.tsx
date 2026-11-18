@@ -45,12 +45,12 @@ export function Floor() {
   }, [scene, reflector]);
 
   useFrame((_state, dt) => {
-    const target = THEMES[useAppStore.getState().themeName];
-    const exposureMul = useAppStore.getState().refs.exposureCurrent;
+    const { themeName, refs } = useAppStore.getState();
+    const target = THEMES[themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
 
     currentExposure.current = smoothTowards(currentExposure.current, target.exposure, k);
-    gl.toneMappingExposure = currentExposure.current * exposureMul;
+    gl.toneMappingExposure = currentExposure.current * refs.exposureCurrent;
 
     currentBg.current = smoothColorHex(currentBg.current, target.bg, k);
     gl.setClearColor(currentBg.current, 1);
@@ -71,6 +71,7 @@ export function Floor() {
       k,
     );
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
+    uniforms.reflectionStrength.value = refs.floorReflection;
     (uniforms.color.value as THREE.Color).setHex(currentReflectorColor.current);
   });
 

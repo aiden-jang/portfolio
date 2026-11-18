@@ -1,5 +1,54 @@
 import { expect, test } from '@playwright/test';
 
+for (const viewport of [
+  { width: 1440, height: 900 },
+  { width: 390, height: 844 },
+]) {
+  test(`the showroom handoff follows scroll and highlights Kamchatka once at ${viewport.width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/');
+    const poster = page.getByRole('img', { name: /Globe centered on the North Pacific/ });
+    await expect(poster).toBeAttached();
+    const thumbnail = page.locator('.orbit-feature .preview-thumbnail');
+    await thumbnail.evaluate((element) => {
+      let pulses = 0;
+      element.addEventListener('animationstart', (event) => {
+        if (event instanceof AnimationEvent && event.animationName === 'kamchatka-pulse') {
+          document.body.dataset.kamchatkaPulses = String(++pulses);
+        }
+      });
+    });
+    const scroll = (fraction: number) =>
+      page.evaluate((ratio) => {
+        const projects = document.getElementById('sec-work')!;
+        const top = scrollY + projects.getBoundingClientRect().top;
+        scrollTo({ top: top * ratio, behavior: 'instant' });
+      }, fraction);
+
+    await scroll(0.5);
+    await expect(poster).toHaveAttribute('aria-busy', 'false');
+    await expect(poster).not.toHaveCSS('opacity', '1');
+    await scroll(1);
+    await expect(poster).toHaveCSS('opacity', '1');
+    await expect(page.locator('body')).toHaveAttribute('data-kamchatka-pulses', '1');
+    await expect(thumbnail).not.toHaveAttribute('data-kamchatka-pulse');
+
+    await scroll(0);
+    await expect(poster).not.toHaveCSS('opacity', '1');
+    await scroll(1);
+    await expect(poster).toHaveCSS('opacity', '1');
+    await expect(thumbnail).not.toHaveAttribute('data-kamchatka-pulse');
+
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await scroll(0.5);
+    await expect(poster).toHaveCSS('opacity', '1');
+    await expect(thumbnail).not.toHaveAttribute('data-kamchatka-pulse');
+  });
+}
+
 for (const [width, height] of [
   [1440, 900],
   [390, 844],

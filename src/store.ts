@@ -11,6 +11,7 @@ type Refs = {
   bodyOriginalColor: THREE.Color | null;
   lamps: Lamp[];
   exposureCurrent: number;
+  floorReflection: number;
   lightPulseT: number;
   carModel: THREE.Object3D | null;
   // Set once the first GLB has loaded, which is what releases the intro animation.
@@ -140,6 +141,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     bodyOriginalColor: null,
     lamps: [],
     exposureCurrent: CARS[0]?.exposure ?? 1,
+    floorReflection: 1,
     lightPulseT: 0,
     carModel: null,
     introArmed: false,
