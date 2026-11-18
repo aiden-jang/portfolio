@@ -220,7 +220,7 @@ for (const width of [1440, 390]) {
       expect(await page.evaluate(() => document.documentElement.style.overflow)).not.toBe('hidden');
 
       const screenshot = page.getByRole('button', {
-        name: 'Inspect screenshot: bloomnote',
+        name: 'View full garden',
         exact: true,
       });
       await screenshot.click();

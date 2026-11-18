@@ -1,0 +1,190 @@
+@font-face {
+  font-family: Fraunces;
+  src: url('/fonts/fraunces.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+.project-gallery .bloom-spread {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: 0;
+  display: block;
+  margin-block: clamp(2px, 0.8vw, 14px);
+}
+.bloom-spread-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin-bottom: clamp(16px, 2vw, 26px);
+}
+.project-gallery .bloom-spread-heading h3 {
+  font-size: clamp(36px, 4.35vw, 57px);
+  line-height: 1.04;
+  font-weight: 460;
+  letter-spacing: -0.045em;
+}
+.project-gallery .bloom-spread-heading h3 button {
+  gap: 12px;
+}
+.project-gallery .bloom-spread-heading h3 svg {
+  width: 20px;
+  height: 20px;
+  align-self: center;
+}
+html:root .project-gallery .bloom-spread-heading p {
+  margin: 9px 0 0;
+  max-width: 62ch;
+  color: #c7c5cb;
+  font: 14px/1.5 var(--font-display);
+}
+.bloom-spread-heading .garage-project-links a {
+  color: #e8e6e8;
+}
+.bloom-spread-heading .garage-project-links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.bloom-spread-paper {
+  display: grid;
+  grid-template-columns: minmax(0, 1.95fr) minmax(0, 1fr);
+  margin: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f1f1e7;
+  color: #263f32;
+}
+.bloom-spread-garden {
+  min-width: 0;
+  display: grid;
+  align-items: center;
+}
+.bloom-spread-image-trigger {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 980 / 447;
+  overflow: hidden;
+  text-align: left;
+  cursor: zoom-in;
+}
+.bloom-spread-image-trigger .screenshot-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+}
+.bloom-spread-image-trigger .screenshot-unavailable {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  padding: 12px;
+  background: #f1f1e7;
+  color: #526354;
+}
+.bloom-spread-image-trigger .screenshot-unavailable strong {
+  color: #263f32;
+}
+.bloom-spread-inspect-label {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  top: 12px;
+  right: 13px;
+  padding: 5px 9px;
+  min-height: 27px;
+  background: #f7f5ec;
+  border: 1px solid #d7dbcd;
+  border-radius: 5px;
+  color: #263f32;
+  font: 500 11px/1.25 var(--font-display);
+  white-space: nowrap;
+}
+.bloom-spread-inspect-label svg {
+  width: 14px;
+  height: 14px;
+}
+.bloom-spread-image-trigger:hover .bloom-spread-inspect-label {
+  background: #fffdf7;
+}
+.bloom-spread-image-trigger:focus-visible {
+  outline: 2px solid #294b3a;
+  outline-offset: -5px;
+  z-index: 1;
+}
+html:root .project-gallery .bloom-spread-paper > figcaption {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(10px, 1.7vw, 20px);
+  padding: clamp(19px, 3.5vw, 50px) clamp(20px, 3.2vw, 46px);
+  min-width: 0;
+  text-align: center;
+  background: #fdfcf6;
+  color: #263f32;
+}
+.bloom-spread-gerbera {
+  width: clamp(85px, 9.65vw, 137px);
+  aspect-ratio: 1;
+  position: relative;
+  /* The 78px square crop starts at (148, 498) in the approved 980×820 capture. */
+  background: url('/projects/bloomnote-garden.jpg') 16.41% 67.12% / 1256.41% auto no-repeat;
+  mask-image: linear-gradient(#000 82%, transparent);
+}
+html:root .project-gallery .bloom-spread-detail .bloom-spread-species {
+  margin: 0 0 7px;
+  color: #526354;
+  font: 550 12px/1.4 var(--font-display);
+}
+.bloom-spread-detail blockquote {
+  margin: 0;
+  color: #263f32;
+  font:
+    400 clamp(20px, 2.05vw, 29px)/1.3 Fraunces,
+    Georgia,
+    serif;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
+  max-width: 24ch;
+}
+@media (max-width: 860px) {
+  .bloom-spread-paper {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html:root .project-gallery .bloom-spread-paper > figcaption {
+    padding: 23px 24px 29px;
+    gap: 10px;
+  }
+  .bloom-spread-gerbera {
+    width: 82px;
+  }
+  .bloom-spread-detail blockquote {
+    font-size: clamp(19px, 4.55vw, 24px);
+  }
+  .bloom-spread-inspect-label {
+    top: 6px;
+    right: 7px;
+    padding: 3px 6px;
+    min-height: 23px;
+    font-size: 10px;
+  }
+  .bloom-spread-inspect-label svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+@media (max-width: 767px) {
+  .bloom-spread-heading {
+    align-items: flex-start;
+    gap: 2px;
+    margin-bottom: 12px;
+  }
+  html:root .project-gallery .bloom-spread-heading p {
+    margin-top: 6px;
+  }
+}

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { GerberaHead as BotanicalHead } from './GerberaHead';
 import { ScreenshotImage } from '../ScreenshotImage';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import type { PreviewState } from '../../data/projectPreviews';
@@ -7,17 +6,9 @@ import { usePreviewSelection } from '../usePreviewSelection';
 import { previewIndex, previewLink } from '../previewLinks';
 import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
-const flower = {
-  artVersion: 2 as const,
-  name: 'Gerbera',
-  meaning: 'For that brilliant laugh that comes from deep inside, especially at your own jokes.',
-  petalColors: ['#ef7b76', '#ffba84', '#f7a3b8'] as [string, string, string],
-  centerColor: '#e7ba46',
-  stemColor: '#64845d',
-  petalShape: 'elongated' as const,
-  petalCount: 16,
-  stemHeight: 100,
-};
+import { ControlIcon } from '../ControlIcon';
+import './bloom-spread.css';
+
 export function BloomPreview({
   image: initialImage,
   caption: initialCaption,
@@ -49,85 +40,38 @@ export function BloomPreview({
   const { result, run } = useShareFeedback(`bloomnote:${selected}`);
   const image = states?.[selected]?.image ?? initialImage;
   const caption = states?.[selected]?.caption ?? initialCaption;
-  const [open, setOpen] = useState(false),
-    [viewer, setViewer] = useState(false);
-  const trigger = useRef<HTMLButtonElement>(null),
-    inspect = useRef<HTMLButtonElement>(null);
-  const close = () => {
-    setOpen(false);
-    requestAnimationFrame(() => trigger.current?.focus({ preventScroll: true }));
-  };
+  const [viewer, setViewer] = useState(false);
+  const inspect = useRef<HTMLButtonElement>(null);
   return (
     <>
-      <figure className="bloom-preview">
-        <div className="project-preview" data-project="bloomnote" data-view={selected}>
-          <div className="preview-thumbnail">
-            <ScreenshotImage src={image} alt="bloomnote example garden" lazy />
-          </div>
-          <button
-            ref={trigger}
-            type="button"
-            className="bloom-meaning-trigger"
-            aria-label="Open Gerbera’s meaning"
-            aria-expanded={open}
-            onClick={() => setOpen(true)}
-          >
-            <svg viewBox="-48 -48 96 96" aria-hidden="true">
-              <BotanicalHead flower={flower} />
-            </svg>
-            <span>Open a flower</span>
-          </button>
+      <figure className="bloom-spread-paper" data-project="bloomnote" data-view={selected}>
+        <div className="bloom-spread-garden">
           <button
             ref={inspect}
-            className="bloom-inspect"
             type="button"
-            aria-label="Inspect screenshot: bloomnote"
+            className="bloom-spread-image-trigger"
+            aria-label="View full garden"
             onClick={() => setViewer(true)}
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-            >
-              <path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" />
-            </svg>
+            <ScreenshotImage
+              src={initialImage}
+              alt="Sarah’s received garden in bloomnote, with three illustrated flowers."
+              lazy
+            />
+            <span className="bloom-spread-inspect-label">
+              View full garden <ControlIcon name="fit" />
+            </span>
           </button>
-          {open && (
-            <div
-              className="bloom-meaning"
-              role="region"
-              aria-label="Gerbera meaning"
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') {
-                  e.stopPropagation();
-                  close();
-                }
-              }}
-            >
-              <svg viewBox="-48 -48 96 96" aria-hidden="true">
-                <BotanicalHead flower={flower} />
-              </svg>
-              <div>
-                <h4>Gerbera</h4>
-                <p>{flower.meaning}</p>
-              </div>
-              <button type="button" onClick={close} autoFocus aria-label="Close flower meaning">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  aria-hidden="true"
-                >
-                  <path d="m6 6 12 12M18 6 6 18" />
-                </svg>
-              </button>
-            </div>
-          )}
         </div>
-        <figcaption>Example meaning from the approved garden.</figcaption>
+        <figcaption className="bloom-spread-detail">
+          <div className="bloom-spread-gerbera" aria-hidden="true" />
+          <div>
+            <p className="bloom-spread-species">Gerbera</p>
+            <blockquote>
+              “For that brilliant laugh that comes from deep inside, especially at your own jokes.”
+            </blockquote>
+          </div>
+        </figcaption>
       </figure>
       {viewer && (
         <ScreenshotViewer

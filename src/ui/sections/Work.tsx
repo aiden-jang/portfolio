@@ -62,50 +62,68 @@ export function MoreProjectsSection({ onOpen }: Props) {
 function Project({ item, onOpen }: { item: WorkDetail } & Props) {
   const name = item.shortName ?? item.title;
   const preview = PREVIEWS[item.mark ?? ''];
+  const description = preview?.description ?? item.summary;
+  const title = (
+    <div className="project-title">
+      <h3>
+        <button
+          type="button"
+          onClick={(event) => onOpen(item, event.currentTarget)}
+          aria-label={`How I built it: ${name}`}
+        >
+          {name}
+          <ControlIcon name="arrow" />
+        </button>
+      </h3>
+      {item.shortName === 'mrrp' && <Bean />}
+    </div>
+  );
+  const link = item.link && (
+    <div className="garage-project-links">
+      <a
+        href={item.link.url}
+        target="_blank"
+        aria-describedby="external-link-hint"
+        rel="noopener"
+        aria-label={item.contribution ? `View changes on GitHub: ${name}` : `Open app: ${name}`}
+      >
+        {item.contribution ? 'View changes on GitHub' : 'Open app'}
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  );
+  const media = preview && (
+    <ProjectPreview
+      image={preview.image}
+      name={name}
+      caption={preview.caption}
+      states={preview.states}
+    />
+  );
+  if (item.mark === 'bloomnote') {
+    return (
+      <article id={`project-${workId(item)}`} className="garage-project bloom-spread">
+        <header className="bloom-spread-heading">
+          <div>
+            {title}
+            <p>{description}</p>
+          </div>
+          {link}
+        </header>
+        {media}
+      </article>
+    );
+  }
   return (
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
-      {preview && (
-        <ProjectPreview
-          image={preview.image}
-          name={name}
-          caption={preview.caption}
-          states={preview.states}
-        />
-      )}
+      {media}
       <div className="garage-project-copy">
         <div className="project-card-heading">
-          <div className="project-title">
-            <h3>
-              <button
-                type="button"
-                onClick={(event) => onOpen(item, event.currentTarget)}
-                aria-label={`How I built it: ${name}`}
-              >
-                {name}
-                <ControlIcon name="arrow" />
-              </button>
-            </h3>
-            {item.shortName === 'mrrp' && <Bean />}
-          </div>
-          {item.link && (
-            <div className="garage-project-links">
-              <a
-                href={item.link.url}
-                target="_blank"
-                aria-describedby="external-link-hint"
-                rel="noopener"
-                aria-label={
-                  item.contribution ? `View changes on GitHub: ${name}` : `Open app: ${name}`
-                }
-              >
-                {item.contribution ? 'View changes on GitHub' : 'Open app'}
-                <span aria-hidden="true">↗</span>
-              </a>
-            </div>
-          )}
+          {title}
+          {link}
         </div>
         {item.contribution && <p className="project-role">Open-source contributor</p>}
-        <p>{preview?.description ?? item.summary}</p>
+        <p>{description}</p>
       </div>
     </article>
   );

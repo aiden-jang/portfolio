@@ -17,7 +17,7 @@ for (const width of [1440, 390]) {
     });
     await page.goto('/?preview=bloomnote:0#project-bloomnote');
     const inspect = page.getByRole('button', {
-      name: 'Inspect screenshot: bloomnote',
+      name: 'View full garden',
       exact: true,
     });
     await inspect.click();

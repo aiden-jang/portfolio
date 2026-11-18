@@ -225,16 +225,6 @@ html:root #sec-more-work .preview-thumbnail > img {
   --project-preview-origin: 100% 52%;
 }
 
-#project-bloomnote {
-  --project-preview-position: 50% 65%;
-}
-
-#project-bloomnote [data-view='1'] {
-  --project-preview-position: center;
-  --project-preview-fit: contain;
-  --project-preview-surface: #f6f4eb;
-}
-
 #project-owewell {
   --project-preview-position: 50% 22%;
 }
@@ -256,14 +246,6 @@ html:root #sec-more-work .preview-thumbnail > img {
 @media (min-width: 768px) {
   .project-gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .project-gallery #project-platform {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--project-column-gap);
-    align-items: center;
   }
 }
 

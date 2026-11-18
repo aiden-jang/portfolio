@@ -47,13 +47,12 @@ the current file. The original editor screenshot opens from its own link. The ca
 study opens with the same recorded edit and highlights the changed expression.
 
 Bean's small artwork frames come from mrrp's native sit/perk renderer and eye painter.
-The flower uses bloomnote's native Gerbera petal and seed geometry, with the meaning
-from the approved garden. These assets preserve the app artwork without depending
-on neighboring repositories at build time.
+The bloomnote spread crops the garden and Gerbera from the approved recipient screenshot and
+shows the flower’s original meaning. The full garden and note are available in the screenshot viewer.
 
 Sources: [mrrp artwork](https://github.com/aiden-jang/mrrp/tree/23fb567/packages/web/src),
-[bloomnote flower](https://github.com/aiden-jang/bloomnote/blob/9fccd54/packages/web/src/components/BotanicalFlower.tsx),
-and the contribution link in the Iodine example.
+the [bloomnote recipient screenshot](../public/projects/bloomnote-garden.jpg), and the contribution
+link in the Iodine example.
 
 The iguess reader illustrates Draw → Share → Guess. It describes the existing
 room socket, Durable Object and AI Worker architecture; it sends no drawing or

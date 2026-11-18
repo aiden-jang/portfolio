@@ -96,11 +96,11 @@ Iodine pairs its original editor screenshot with a prominent
 recorded snapshot/revert example. Visitors can undo the edit directly or play the
 recorded sequence, with contributor attribution visible.
 
-Supporting preview frames share a 2:1 ratio, with two columns on wide desktops.
-Project titles open their case studies; full screenshot views and sharing stay in
-the inspector and readers. Bean uses mrrp's own artwork, bloomnote exposes a sample
-flower meaning, and iguess includes an illustrated message flow. Platform closes
-the desktop collection with its explanation beside the preview.
+Compact previews share a 2:1 ratio, with two columns on wide desktops. bloomnote
+has a full-width spread pairing the received garden with a Gerbera close-up and
+its meaning. Project titles open their case studies. Full screenshot views and
+sharing stay in the inspector and readers. Bean uses mrrp's own artwork, and
+iguess includes an illustrated message flow.
 
 Contact leads with the email and keeps the
 stationary car alongside on desktop and below on phones. Reduced motion removes

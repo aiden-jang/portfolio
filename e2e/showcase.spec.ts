@@ -49,13 +49,13 @@ for (const width of [1440, 390]) {
     await page.getByRole('button', { name: 'Pet Bean', exact: true }).click();
     await expect(page.locator('.bean-response')).toHaveText('mrrp.');
     await expect(page.locator('.bean-cameo img')).toHaveJSProperty('complete', true);
-    await page.getByRole('button', { name: 'Open Gerbera’s meaning' }).click();
-    await expect(page.getByRole('region', { name: 'Gerbera meaning' })).toContainText(
-      'For that brilliant laugh',
-    );
-    await expect(page.getByRole('button', { name: 'Close flower meaning' })).toBeFocused();
+    const bloomnote = page.locator('#project-bloomnote');
+    await expect(bloomnote.getByRole('blockquote')).toContainText('For that brilliant laugh');
+    const garden = bloomnote.getByRole('button', { name: 'View full garden' });
+    await garden.click();
+    await expect(page.getByRole('dialog', { name: 'bloomnote screenshot' })).toBeVisible();
     await page.keyboard.press('Escape');
-    await expect(page.getByRole('button', { name: 'Open Gerbera’s meaning' })).toBeFocused();
+    await expect(garden).toBeFocused();
     await page.getByRole('button', { name: 'How I built it: iguess', exact: true }).click();
     await page.getByRole('button', { name: 'Follow the flow' }).click();
     await expect(page.locator('.flow-explanation')).toContainText('AI Worker');

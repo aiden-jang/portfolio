@@ -35,7 +35,23 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       await expect(worth.getByRole('button', { name: 'Inspect screenshot: worth' })).toBeDisabled();
       await expect(worth.locator('.garage-project-links a')).toHaveAttribute('target', '_blank');
     }
-    const cards = await gallery.locator('.garage-project').evaluateAll((items) =>
+    const bloom = gallery.locator('#project-bloomnote');
+    await expect(bloom.getByRole('blockquote')).toContainText('For that brilliant laugh');
+    const spread = await bloom.evaluate((item) => ({
+      card: item.getBoundingClientRect().toJSON(),
+      gallery: item.parentElement!.getBoundingClientRect().toJSON(),
+      garden: item.querySelector('.bloom-spread-garden')!.getBoundingClientRect().toJSON(),
+      detail: item.querySelector('figcaption')!.getBoundingClientRect().toJSON(),
+    }));
+    expect.soft(spread.card.width, 'bloomnote spans the gallery').toBeCloseTo(spread.gallery.width);
+    if (width > 860) {
+      expect
+        .soft(spread.detail.left, 'flower alongside the garden')
+        .toBeCloseTo(spread.garden.right);
+    } else {
+      expect.soft(spread.detail.top, 'flower below the garden').toBeCloseTo(spread.garden.bottom);
+    }
+    const cards = await gallery.locator('.garage-project-compact').evaluateAll((items) =>
       items.map((item) => ({
         name: item.id,
         frame: item.querySelector('.preview-thumbnail')!.getBoundingClientRect().toJSON(),
@@ -55,14 +71,17 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       expect
         .soft(description.top, `${name} description follows actions`)
         .toBeGreaterThanOrEqual(app.bottom - 1);
-      if (width >= 768 && name === 'project-platform') {
-        expect.soft(title.left, 'platform copy clears its image').toBeGreaterThan(frame.right);
-      } else {
-        expect.soft(title.top - frame.bottom, `${name} image-to-title gap`).toBeLessThan(16);
-        expect
-          .soft(title.top, `${name} image precedes title`)
-          .toBeGreaterThanOrEqual(frame.bottom - 1);
-      }
+      expect.soft(title.top - frame.bottom, `${name} image-to-title gap`).toBeLessThan(16);
+      expect
+        .soft(title.top, `${name} image precedes title`)
+        .toBeGreaterThanOrEqual(frame.bottom - 1);
+    }
+    if (width >= 768) {
+      const wherever = cards.find((card) => card.name === 'project-wherever')!;
+      const platform = cards.find((card) => card.name === 'project-platform')!;
+      expect
+        .soft(platform.frame.top, 'the last two projects share a row')
+        .toBeCloseTo(wherever.frame.top);
     }
     await expect(page.locator('.project-featured-group article h3')).toHaveText([
       'everythingisfine',
