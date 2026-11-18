@@ -184,47 +184,6 @@ html:root .garage-project-featured figcaption {
   color: #aaaab3;
   line-height: 1.65;
 }
-html:root #sec-about {
-  min-height: auto;
-  padding-block: 108px;
-}
-html:root .about-copy {
-  max-width: 1280px;
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  column-gap: 100px;
-  align-items: start;
-}
-html:root #sec-about h2 {
-  grid-column: 1;
-  grid-row: 1;
-  font-size: 48px;
-  line-height: 1.12;
-}
-html:root .about-story {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-}
-html:root .about-story > p {
-  font-size: 20px;
-  line-height: 1.65;
-  margin: 0;
-  max-width: 50ch;
-}
-html:root .about-story > div p {
-  color: #aaaab3;
-  font-size: 14px;
-  line-height: 1.8;
-  margin-top: 24px;
-}
-html:root .about-details {
-  grid-column: 1;
-  grid-row: 2;
-  margin-top: 32px;
-}
-html:root .about-details dd {
-  font-size: 13px;
-}
 html:root #sec-contact {
   --contact-gutter: var(--portfolio-gutter);
 }
@@ -254,9 +213,6 @@ html:root :is(a, button, summary):focus-visible {
   }
   html:root .garage-project-featured h3 {
     font-size: 32px;
-  }
-  html:root .about-copy {
-    column-gap: 48px;
   }
 }
 @media (max-width: 767px) {
@@ -357,28 +313,6 @@ html:root :is(a, button, summary):focus-visible {
   }
   html:root .garage-project-featured figcaption:not(.project-proof) {
     display: none;
-  }
-  html:root #sec-about {
-    padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
-  }
-  html:root .about-copy {
-    display: flex;
-    flex-direction: column;
-  }
-  html:root #sec-about h2 {
-    font-size: 36px;
-    margin-bottom: 28px;
-  }
-  html:root .about-story > p {
-    font-size: 18px;
-    line-height: 1.7;
-  }
-  html:root .about-story > div p {
-    font-size: 14px;
-  }
-  html:root .about-details {
-    width: 100%;
-    margin-top: 30px;
   }
   html:root #sec-contact {
     min-height: max(100svh, 780px);

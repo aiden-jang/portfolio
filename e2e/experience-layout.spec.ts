@@ -113,6 +113,18 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       expect(title!.y, id + ' clears the fixed header').toBeGreaterThanOrEqual(
         banner!.y + banner!.height,
       );
+      if (id === 'sec-about') {
+        await expect(target.locator('h2')).toHaveText('About', { timeout: 3000 });
+        const story = await target.locator('.about-story').boundingBox();
+        const details = await target.locator('.about-details').boundingBox();
+        if (width >= 900) expect(details!.x).toBeGreaterThan(story!.x + story!.width);
+        else expect(details!.y).toBeGreaterThan(story!.y + story!.height);
+        const contribution = target.getByRole('link', { name: 'iodine', exact: true });
+        await expect(contribution).toHaveAccessibleDescription('Opens in a new tab');
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+          true,
+        );
+      }
     }
   });
 }

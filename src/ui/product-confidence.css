@@ -53,18 +53,6 @@ html:root .portfolio-chrome #project-everythingisfine .orbit-feature figcaption 
   font-size: 11px;
 }
 
-html:root .portfolio-chrome #sec-about {
-  padding-block: var(--presentation-space);
-}
-html:root .portfolio-chrome #sec-about h2 {
-  font-size: 46px;
-  font-weight: 450;
-}
-html:root .portfolio-chrome #sec-about .about-story > p {
-  font-size: 21px;
-  line-height: 1.6;
-  font-weight: 450;
-}
 html:root .portfolio-chrome .project-preview:hover img {
   filter: brightness(1.035);
 }
@@ -94,12 +82,8 @@ html:root .portfolio-chrome .project-preview img {
     max-width: 34ch;
     margin-top: 18px;
   }
-  html:root .portfolio-chrome #sec-work,
-  html:root .portfolio-chrome #sec-about {
+  html:root .portfolio-chrome #sec-work {
     padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
-  }
-  html:root .portfolio-chrome #sec-about h2 {
-    font-size: 34px;
   }
   html:root .portfolio-chrome .project-featured-group {
     gap: 80px;
@@ -157,9 +141,6 @@ html:root .portfolio-chrome .project-preview img {
     display: block;
     margin-top: 12px;
     font-size: 11px;
-  }
-  html:root .portfolio-chrome #sec-about .about-story > p {
-    font-size: 19px;
   }
 }
 @media (max-width: 767px) and (max-height: 740px) {
