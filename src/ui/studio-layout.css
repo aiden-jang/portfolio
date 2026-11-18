@@ -184,90 +184,6 @@ html:root .garage-project-featured figcaption {
   color: #aaaab3;
   line-height: 1.65;
 }
-html:root #sec-more-work {
-  padding-block: 92px 100px;
-}
-html:root .project-gallery-heading {
-  margin-bottom: 40px;
-}
-html:root .project-gallery-heading h2 {
-  font-size: 48px;
-}
-html:root .project-gallery {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 44px 28px;
-}
-html:root .project-gallery .garage-project-compact {
-  gap: 18px;
-}
-html:root .project-gallery .garage-project-copy {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-html:root .project-gallery .project-title {
-  margin-bottom: 8px;
-}
-html:root .project-gallery h3 {
-  font-size: 25px;
-  line-height: 1.2;
-  margin: 0;
-}
-html:root .project-gallery h3 button {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  color: inherit;
-  background: transparent;
-  border: 0;
-  font: inherit;
-  padding: 0;
-  text-align: left;
-  min-height: 36px;
-}
-html:root .project-gallery h3 svg {
-  width: 17px;
-  height: 17px;
-  color: #aaaab3;
-}
-html:root .project-gallery .garage-project-copy > p {
-  font-size: 14px;
-  line-height: 1.7;
-  max-width: 44ch;
-  color: #b8b8c1;
-}
-html:root .project-gallery .garage-stack {
-  display: none;
-}
-html:root .project-gallery .garage-project-copy > [role='group'] {
-  display: none;
-}
-html:root .project-gallery .garage-project-links {
-  margin-top: auto;
-  padding-top: 12px;
-}
-html:root .project-gallery .garage-project-links a {
-  font-size: 12px;
-}
-html:root .project-gallery #project-platform {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 60px;
-  margin-top: 16px;
-}
-html:root .project-gallery #project-platform .garage-project-copy {
-  grid-column: 2;
-  padding-inline: 0 48px;
-  display: block;
-}
-html:root #project-platform h3 {
-  font-size: 32px;
-  margin-bottom: 14px;
-}
-html:root #project-platform .garage-project-links {
-  margin-top: 12px;
-}
 html:root #sec-about {
   min-height: auto;
   padding-block: 108px;
@@ -326,12 +242,6 @@ html:root :is(a, button, summary):focus-visible {
   outline: 2px solid var(--color-fg);
   outline-offset: 4px;
 }
-html:root .project-gallery h3 button:hover {
-  color: #fff;
-}
-html:root .project-gallery h3 button:hover svg {
-  transform: translateX(3px);
-}
 @media (max-width: 1050px) and (min-width: 768px) {
   html:root {
     --portfolio-gutter: 40px;
@@ -344,9 +254,6 @@ html:root .project-gallery h3 button:hover svg {
   }
   html:root .garage-project-featured h3 {
     font-size: 32px;
-  }
-  html:root .project-gallery {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   html:root .about-copy {
     column-gap: 48px;
@@ -450,44 +357,6 @@ html:root .project-gallery h3 button:hover svg {
   }
   html:root .garage-project-featured figcaption:not(.project-proof) {
     display: none;
-  }
-  html:root #sec-more-work {
-    padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
-  }
-  html:root .project-gallery-heading h2 {
-    font-size: 36px;
-  }
-  html:root .project-gallery-heading > span {
-    font-size: 12px;
-  }
-  html:root .project-gallery {
-    grid-template-columns: 1fr;
-    gap: 36px;
-  }
-  html:root .project-gallery .garage-project-compact {
-    gap: 14px;
-  }
-  html:root .project-gallery h3 {
-    font-size: 25px;
-  }
-  html:root .project-gallery .garage-project-copy > p {
-    font-size: 14px;
-  }
-  html:root .project-gallery .garage-project-links {
-    padding-top: 8px;
-  }
-  html:root .project-gallery #project-platform {
-    display: flex;
-    grid-column: 1;
-    gap: 14px;
-    margin-top: 0;
-  }
-  html:root .project-gallery #project-platform .garage-project-copy {
-    padding: 0;
-  }
-  html:root #project-platform h3 {
-    font-size: 25px;
-    margin-bottom: 0;
   }
   html:root #sec-about {
     padding-block: calc(var(--portfolio-header-height) + 24px) 72px;

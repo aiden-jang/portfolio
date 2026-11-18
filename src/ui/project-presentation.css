@@ -1,31 +1,10 @@
-html:root :is(#sec-work, #sec-more-work) {
+html:root #sec-work {
   min-height: auto;
   padding-block: 116px 0;
   align-items: flex-start;
   background: var(--color-bg);
   user-select: text;
   -webkit-user-select: text;
-}
-html:root #sec-more-work {
-  padding-block: 96px 100px;
-}
-html:root .project-gallery-heading {
-  margin-bottom: 44px;
-  padding: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 32px;
-}
-html:root .project-gallery-heading h2 {
-  font-size: 44px;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
-  font-weight: 500;
-}
-html:root .project-gallery-heading > span {
-  font: 13px/1.6 var(--font-display);
-  color: var(--color-muted);
 }
 html:root .garage-project-featured {
   display: block;
@@ -107,90 +86,6 @@ html:root #project-everythingisfine .project-preview img {
   height: auto;
   transform: translate(-32.63%, -12.2%);
 }
-html:root .project-gallery {
-  gap: 56px 48px;
-}
-html:root .project-gallery .preview-thumbnail {
-  aspect-ratio: 2 / 1;
-  background: var(--color-panel);
-}
-html:root .project-gallery .project-preview img {
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-html:root #project-worth .project-preview img {
-  object-position: right center;
-}
-html:root #project-owewell .project-preview img {
-  object-position: center 20%;
-}
-html:root #project-iguess .preview-thumbnail {
-  background: #202622;
-}
-html:root #project-wherever .preview-thumbnail {
-  background: #242329;
-}
-html:root #project-platform .preview-thumbnail {
-  background: #f4f3fa;
-}
-html:root :is(#project-iguess, #project-wherever, #project-platform) .project-preview img {
-  object-fit: contain;
-}
-html:root #project-bloomnote .project-preview[data-view='1'] .preview-thumbnail {
-  background: #f6f4eb;
-}
-html:root #project-bloomnote .project-preview[data-view='1'] img {
-  object-fit: contain;
-}
-html:root .project-gallery .garage-project-compact {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  gap: 18px;
-}
-html:root .project-gallery .garage-project-copy {
-  margin: 0;
-  flex: 1;
-}
-html:root .project-gallery .garage-project-compact > figure {
-  order: -1;
-}
-html:root .project-gallery .garage-project-compact h3 {
-  font-size: 27px;
-  margin: 0 0 10px;
-}
-html:root .project-gallery .garage-project-compact .garage-stack {
-  margin-top: 12px;
-  color: #a4a4ad;
-}
-html:root .project-gallery .garage-project-compact .garage-project-links {
-  margin-top: auto;
-  padding-top: 10px;
-}
-html:root .project-gallery .garage-project-compact figcaption {
-  display: none;
-}
-html:root .project-gallery #project-platform {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 48px;
-  align-items: center;
-  margin-top: 8px;
-}
-html:root .project-gallery #project-platform > figure {
-  grid-column: 1;
-  grid-row: 1;
-}
-html:root .project-gallery #project-platform .garage-project-copy {
-  grid-column: 2;
-  grid-row: 1;
-  padding-inline: 24px 48px;
-}
-html:root #project-platform .garage-project-links {
-  margin-top: 8px;
-}
 @media (min-width: 768px) and (max-width: 1023px) {
   html:root .garage-project-featured .garage-project-copy {
     grid-template-columns: 1fr;
@@ -202,22 +97,8 @@ html:root #project-platform .garage-project-links {
   }
 }
 @media (max-width: 767px) {
-  html:root :is(#sec-work, #sec-more-work) {
+  html:root #sec-work {
     padding-block: 108px 0;
-  }
-  html:root #sec-more-work {
-    padding-block: 100px 72px;
-  }
-  html:root .project-gallery-heading {
-    display: block;
-    margin-bottom: 28px;
-  }
-  html:root .project-gallery-heading h2 {
-    font-size: 36px;
-  }
-  html:root .project-gallery-heading > span {
-    display: block;
-    margin-top: 12px;
   }
   html:root .garage-project-featured {
     display: flex;
@@ -255,25 +136,6 @@ html:root #project-platform .garage-project-links {
   html:root #project-everythingisfine .project-preview img {
     width: 169.5%;
     transform: translate(-36.85%, -10.6%);
-  }
-  html:root .project-gallery {
-    gap: 40px;
-  }
-  html:root .project-gallery .garage-project-compact {
-    gap: 15px;
-  }
-  html:root .project-gallery .garage-project-compact h3 {
-    font-size: 25px;
-  }
-  html:root .project-gallery #project-platform {
-    grid-column: auto;
-    display: flex;
-    align-items: stretch;
-    gap: 18px;
-    margin-top: 6px;
-  }
-  html:root .project-gallery #project-platform .garage-project-copy {
-    padding: 0;
   }
 }
 

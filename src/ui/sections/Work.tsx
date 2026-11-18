@@ -8,6 +8,7 @@ import { workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
+import { ControlIcon } from '../ControlIcon';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
@@ -47,10 +48,7 @@ export function MoreProjectsSection({ onOpen }: Props) {
   return (
     <Section id="sec-more-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="garage-work pointer-events-auto">
-        <div className="project-gallery-heading">
-          <h2>More projects</h2>
-          <span>Seven more things I’ve built.</span>
-        </div>
+        <h2 className="project-gallery-heading">More projects</h2>
         <div className="garage-project-list project-gallery" aria-label="More projects">
           {collection.map((item) => (
             <Project key={item.title} item={item} onOpen={onOpen} />
@@ -62,60 +60,53 @@ export function MoreProjectsSection({ onOpen }: Props) {
 }
 
 function Project({ item, onOpen }: { item: WorkDetail } & Props) {
+  const name = item.shortName ?? item.title;
   const preview = PREVIEWS[item.mark ?? ''];
   return (
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
-      <div className="garage-project-copy">
-        <div className="project-title">
-          <h3>
-            <button
-              type="button"
-              onClick={(event) => onOpen(item, event.currentTarget)}
-              aria-label={'How I built it: ' + item.shortName}
-            >
-              {item.shortName}
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M4 12h15m-5-5 5 5-5 5" />
-              </svg>
-            </button>
-          </h3>
-          {item.shortName === 'mrrp' && <Bean />}
-          {item.contribution && <p className="project-role">Open-source contributor</p>}
-        </div>
-        <p>{preview?.description ?? item.summary}</p>
-        <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>
-        <div className="garage-project-links">
-          {item.link && (
-            <a
-              href={item.link.url}
-              target="_blank"
-              aria-describedby="external-link-hint"
-              rel="noopener"
-              aria-label={
-                item.contribution
-                  ? `View changes on GitHub: ${item.shortName}`
-                  : `Open ${item.shortName}`
-              }
-            >
-              {item.contribution ? 'View changes on GitHub ↗' : 'Open app ↗'}
-            </a>
-          )}
-        </div>
-      </div>
       {preview && (
         <ProjectPreview
           image={preview.image}
-          name={item.shortName ?? item.title}
+          name={name}
           caption={preview.caption}
           states={preview.states}
         />
       )}
+      <div className="garage-project-copy">
+        <div className="project-card-heading">
+          <div className="project-title">
+            <h3>
+              <button
+                type="button"
+                onClick={(event) => onOpen(item, event.currentTarget)}
+                aria-label={`How I built it: ${name}`}
+              >
+                {name}
+                <ControlIcon name="arrow" />
+              </button>
+            </h3>
+            {item.shortName === 'mrrp' && <Bean />}
+          </div>
+          {item.link && (
+            <div className="garage-project-links">
+              <a
+                href={item.link.url}
+                target="_blank"
+                aria-describedby="external-link-hint"
+                rel="noopener"
+                aria-label={
+                  item.contribution ? `View changes on GitHub: ${name}` : `Open app: ${name}`
+                }
+              >
+                {item.contribution ? 'View changes on GitHub' : 'Open app'}
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          )}
+        </div>
+        {item.contribution && <p className="project-role">Open-source contributor</p>}
+        <p>{preview?.description ?? item.summary}</p>
+      </div>
     </article>
   );
 }

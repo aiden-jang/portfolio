@@ -13,8 +13,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
   },
   worth: {
     image: '/projects/worth.jpg',
-    description:
-      'For keeping track of your own taste: rank what you try and remember what deserves another go.',
+    description: 'Rank what you try and remember what deserves another go.',
     caption:
       'A drinks collection with Favorite and Not again calls, and the selected item’s opinion.',
   },

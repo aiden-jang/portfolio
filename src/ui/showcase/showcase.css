@@ -111,15 +111,8 @@ html:root .orbit-screenshot svg {
 html:root .bean-cameo {
   position: relative;
   display: inline-flex;
-  margin-left: auto;
   flex-shrink: 0;
   align-self: center;
-}
-html:root .project-gallery .project-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
 }
 html:root .bean-cameo > button {
   width: 48px;
@@ -145,8 +138,8 @@ html:root .bean-response {
 }
 html:root .bloom-meaning-trigger {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
+  top: 8px;
+  left: 8px;
   z-index: 3;
   display: flex;
   align-items: center;
@@ -167,8 +160,8 @@ html:root .bloom-meaning-trigger > svg {
 }
 html:root .bloom-inspect {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
+  top: 8px;
+  right: 8px;
   width: 44px;
   height: 44px;
   display: grid;

@@ -16,16 +16,6 @@ html:root .portfolio-chrome .garage-intro .intro-role {
 html:root .portfolio-chrome .intro-work-cue {
   margin-top: 16px;
 }
-html:root .portfolio-chrome .project-gallery-heading {
-  align-items: baseline;
-  margin-bottom: 44px;
-}
-html:root .portfolio-chrome .project-gallery-heading h2 {
-  font-size: 48px;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  font-weight: 450;
-}
 html:root .portfolio-chrome #sec-work {
   padding-block: 112px 88px;
 }
@@ -63,32 +53,6 @@ html:root .portfolio-chrome #project-everythingisfine .orbit-feature figcaption 
   font-size: 11px;
 }
 
-html:root .portfolio-chrome #sec-more-work {
-  padding-block: var(--presentation-space);
-}
-html:root .portfolio-chrome .project-gallery {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 64px 32px;
-}
-html:root .portfolio-chrome .project-gallery .garage-project-compact {
-  gap: 18px;
-  border: 0;
-  padding: 0;
-}
-html:root .portfolio-chrome .project-gallery h3 {
-  font-size: 30px;
-  font-weight: 450;
-  letter-spacing: -0.025em;
-}
-html:root .portfolio-chrome .project-gallery .garage-project-copy > p:first-of-type {
-  font-size: 15px;
-  max-width: 49ch;
-  line-height: 1.65;
-}
-html:root .portfolio-chrome .project-gallery .garage-project-links {
-  margin-top: auto;
-  padding-top: 10px;
-}
 html:root .portfolio-chrome #sec-about {
   padding-block: var(--presentation-space);
 }
@@ -131,15 +95,9 @@ html:root .portfolio-chrome .project-preview img {
     margin-top: 18px;
   }
   html:root .portfolio-chrome #sec-work,
-  html:root .portfolio-chrome #sec-more-work,
   html:root .portfolio-chrome #sec-about {
     padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
   }
-  html:root .portfolio-chrome .project-gallery-heading {
-    display: block;
-    margin-bottom: 38px;
-  }
-  html:root .portfolio-chrome .project-gallery-heading h2,
   html:root .portfolio-chrome #sec-about h2 {
     font-size: 34px;
   }
@@ -199,13 +157,6 @@ html:root .portfolio-chrome .project-preview img {
     display: block;
     margin-top: 12px;
     font-size: 11px;
-  }
-  html:root .portfolio-chrome .project-gallery {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 48px;
-  }
-  html:root .portfolio-chrome .project-gallery h3 {
-    font-size: 27px;
   }
   html:root .portfolio-chrome #sec-about .about-story > p {
     font-size: 19px;
