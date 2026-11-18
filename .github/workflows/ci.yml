@@ -35,7 +35,7 @@ jobs:
       - run: npm run verify
         env:
           PORTFOLIO_CI_PICOMATCH_EXCEPTION: '1'
-      - run: npm run test:browser -- --project "${{ matrix.project }}" --reporter=list
+      - run: npm run test:browser -- --project "${{ matrix.project }}" --reporter=list --max-failures=1
         env:
           PORTFOLIO_BUILD_READY: '1'
 

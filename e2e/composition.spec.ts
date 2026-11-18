@@ -1,5 +1,34 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { PNG } from 'pngjs';
+import { CAPTURE_EVENT } from '../src/ui/photo/capture';
+
+async function captureShowroom(page: Page) {
+  const frame = await page.evaluate(
+    (eventName) =>
+      new Promise<string>((resolve, reject) => {
+        const timeout = window.setTimeout(() => reject(new Error('No showroom frame')), 8000);
+        window.dispatchEvent(
+          new CustomEvent(eventName, {
+            detail: {
+              resolve(blob: Blob) {
+                window.clearTimeout(timeout);
+                const reader = new FileReader();
+                reader.onload = () => resolve(String(reader.result));
+                reader.onerror = () => reject(reader.error);
+                reader.readAsDataURL(blob);
+              },
+              reject(error: Error) {
+                window.clearTimeout(timeout);
+                reject(error);
+              },
+            },
+          }),
+        );
+      }),
+    CAPTURE_EVENT,
+  );
+  return PNG.sync.read(Buffer.from(frame.slice(frame.indexOf(',') + 1), 'base64'));
+}
 
 for (const [width, height] of [
   [1440, 900],
@@ -63,15 +92,12 @@ for (const [width, height] of [
     ).toHaveCount(0);
 
     await expect(async () => {
-      // Measure the scene pixels without counting colors from the page chrome.
-      const bytes = await page.screenshot({
-        timeout: 5000,
-        style: '.portfolio-chrome { opacity: 0 !important; }',
-      });
-      const pixels = PNG.sync.read(bytes);
+      // Use a fresh renderer frame so page chrome cannot affect the pixel measurements.
+      const frame = await page.locator('.portfolio-scene canvas').boundingBox();
+      const pixels = await captureShowroom(page);
       let outside = 0;
-      let carLeft = pixels.width;
-      let carTop = pixels.height;
+      let carLeft = Infinity;
+      let carTop = Infinity;
       for (let y = 0; y < pixels.height; y += 2) {
         for (let x = 0; x < pixels.width; x += 2) {
           const i = (y * pixels.width + x) * 4;
@@ -80,13 +106,15 @@ for (const [width, height] of [
             pixels.data[i] > pixels.data[i + 1] * 1.4 &&
             pixels.data[i] > pixels.data[i + 2] * 1.4
           ) {
-            carLeft = Math.min(carLeft, x);
-            carTop = Math.min(carTop, y);
+            const pageX = frame!.x + (x * frame!.width) / pixels.width;
+            const pageY = frame!.y + (y * frame!.height) / pixels.height;
+            carLeft = Math.min(carLeft, pageX);
+            carTop = Math.min(carTop, pageY);
             if (
-              x < copy!.x ||
-              x > copy!.x + copy!.width ||
-              y < copy!.y ||
-              y > copy!.y + copy!.height
+              pageX < copy!.x ||
+              pageX > copy!.x + copy!.width ||
+              pageY < copy!.y ||
+              pageY > copy!.y + copy!.height
             )
               outside++;
           }
