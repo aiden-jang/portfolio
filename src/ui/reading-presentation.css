@@ -1,65 +1,13 @@
-html:root :is(#sec-experience, #sec-about) {
+html:root #sec-about {
   padding-block: 100px;
   border: 0;
 }
 
-html:root :is(#sec-experience, #sec-about) h2 {
+html:root #sec-about h2 {
   margin-top: 0;
   font-size: clamp(36px, 3.5vw, 48px);
   letter-spacing: -0.035em;
   text-wrap: balance;
-}
-
-html:root .experience-role {
-  padding-block: 0 24px;
-  border: 0;
-}
-
-html:root .experience-company {
-  font-size: 14px;
-  margin-top: 6px;
-}
-
-html:root .experience-role > span:last-child {
-  font: 12px/1.6 var(--font-display);
-  letter-spacing: 0;
-  font-variant-numeric: tabular-nums;
-}
-
-html:root #sec-experience .panel > p {
-  font: 14px/1.5 var(--font-display);
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-html:root .experience-outcome {
-  padding-block: 19px;
-  border: 0;
-  grid-template-columns: 145px minmax(0, 1fr) 18px;
-  gap: 24px;
-}
-
-html:root .experience-figure strong {
-  font-size: 29px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-html:root .experience-figure span {
-  font: 12px/1.5 var(--font-display);
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-html:root .experience-story strong {
-  font-size: 16px;
-  line-height: 1.45;
-}
-
-html:root .experience-story span {
-  font-size: 14px;
-  line-height: 1.65;
-  max-width: 60ch;
 }
 
 html:root .about-copy :is(p, dd) {
@@ -146,36 +94,8 @@ html:root .engineering-flow li {
 }
 
 @media (max-width: 767px) {
-  html:root :is(#sec-experience, #sec-about) {
+  html:root #sec-about {
     padding-block: 100px 72px;
-  }
-
-  html:root #sec-experience .panel > p {
-    margin-block: 36px 8px;
-  }
-
-  html:root .experience-outcome {
-    grid-template-columns: minmax(0, 1fr) 18px;
-    gap: 10px;
-    padding-block: 20px;
-  }
-
-  html:root .experience-figure {
-    grid-column: 1;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px 12px;
-  }
-
-  html:root .experience-story {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  html:root .experience-arrow {
-    grid-column: 2;
-    grid-row: 1;
   }
 
   html:root .about-copy :is(p, dd) {
@@ -196,26 +116,6 @@ html:root .engineering-flow li {
   }
 }
 
-html:root .experience-outcome:last-child {
-  border: 0;
-}
-html:root .experience-story > .experience-context {
-  font: 11px/1.4 var(--font-display);
-  color: #a5a5ae;
-  margin-top: 3px;
-}
-html:root .experience-more summary {
-  border: 0;
-  margin-top: 12px;
-  color: #b9b9c0;
-}
-html:root .experience-outcome:hover {
-  background: #ffffff05;
-}
-html:root #sec-experience .panel > p {
-  font-size: 13px;
-  color: #a8a8b1;
-}
 html:root .about-details {
   border: 0;
 }
@@ -228,47 +128,14 @@ html:root .about-copy > :is(div, p) {
   gap: 6px;
 }
 @media (max-width: 767px) {
-  html:root .experience-role {
-    padding-block: 0 22px;
-  }
-  html:root .experience-outcome .experience-figure strong {
-    font-size: 28px;
-  }
   html:root .about-details > div {
     padding-block: 12px;
   }
 }
 
-html:root .experience-outcome .experience-figure strong {
-  font-size: 26px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-}
-html:root .experience-outcome-qualitative .experience-figure strong {
-  font-size: 16px;
-  line-height: 1.4;
-}
-html:root .experience-figure span {
-  font: 12px/1.45 var(--font-display);
-  letter-spacing: 0;
-  text-transform: none;
-}
-html:root .experience-arrow {
-  display: grid;
-  place-items: center;
-}
-html:root .experience-story span,
 html:root .about-copy p {
   text-wrap: pretty;
 }
 html:root .about-contribution-link > span:first-child {
   text-wrap: balance;
-}
-@media (max-width: 767px) {
-  html:root .experience-outcome .experience-figure strong {
-    font-size: 22px;
-  }
-  html:root .experience-outcome-qualitative .experience-figure strong {
-    font-size: 14px;
-  }
 }

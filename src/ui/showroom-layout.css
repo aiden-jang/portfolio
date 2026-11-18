@@ -14,7 +14,7 @@ html:root :is(#sec-intro, #sec-experience, #sec-work, #sec-more-work, #sec-about
   padding-inline: var(--portfolio-gutter);
 }
 
-html:root :is(.garage-intro, .garage-work, #sec-experience .panel, .about-copy) {
+html:root :is(.garage-intro, .garage-work, .experience-content, .about-copy) {
   width: 100%;
   max-width: var(--portfolio-width);
   margin-inline: auto;

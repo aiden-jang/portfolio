@@ -63,44 +63,6 @@ html:root .portfolio-chrome #project-everythingisfine .orbit-feature figcaption 
   font-size: 11px;
 }
 
-html:root .portfolio-chrome #sec-experience {
-  padding-block: var(--presentation-space);
-}
-html:root .portfolio-chrome #sec-experience .panel {
-  grid-template-columns: 320px minmax(0, 1fr);
-  gap: 104px;
-}
-html:root .portfolio-chrome #sec-experience h2 {
-  font-size: 46px;
-  font-weight: 450;
-  letter-spacing: -0.03em;
-  margin-bottom: 40px;
-}
-html:root .portfolio-chrome .experience-outcome {
-  grid-template-columns: 150px minmax(0, 1fr) 18px;
-  padding-block: 26px;
-  gap: 24px;
-}
-html:root .portfolio-chrome .experience-figure strong {
-  font-size: 36px;
-  font-weight: 450;
-  font-variant-numeric: tabular-nums;
-}
-html:root .portfolio-chrome .experience-story strong {
-  font-size: 18px;
-  font-weight: 500;
-}
-html:root .portfolio-chrome .experience-story > span:not(.experience-context) {
-  font-size: 15px;
-  line-height: 1.65;
-}
-html:root .portfolio-chrome .experience-figure > span,
-html:root .portfolio-chrome .experience-story .experience-context {
-  font-size: 12px;
-}
-html:root .portfolio-chrome .experience-outcome-qualitative .experience-figure strong {
-  font-size: 18px;
-}
 html:root .portfolio-chrome #sec-more-work {
   padding-block: var(--presentation-space);
 }
@@ -155,17 +117,6 @@ html:root .portfolio-chrome .project-preview img {
   html:root .portfolio-chrome .garage-project-featured h3 {
     font-size: 32px;
   }
-  html:root .portfolio-chrome #sec-experience .panel {
-    grid-template-columns: 250px minmax(0, 1fr);
-    gap: 40px;
-  }
-  html:root .portfolio-chrome .experience-outcome {
-    grid-template-columns: 110px minmax(0, 1fr) 16px;
-    gap: 16px;
-  }
-  html:root .portfolio-chrome .experience-figure strong {
-    font-size: 30px;
-  }
 }
 @media (max-width: 767px) {
   html:root {
@@ -181,7 +132,6 @@ html:root .portfolio-chrome .project-preview img {
   }
   html:root .portfolio-chrome #sec-work,
   html:root .portfolio-chrome #sec-more-work,
-  html:root .portfolio-chrome #sec-experience,
   html:root .portfolio-chrome #sec-about {
     padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
   }
@@ -190,7 +140,6 @@ html:root .portfolio-chrome .project-preview img {
     margin-bottom: 38px;
   }
   html:root .portfolio-chrome .project-gallery-heading h2,
-  html:root .portfolio-chrome #sec-experience h2,
   html:root .portfolio-chrome #sec-about h2 {
     font-size: 34px;
   }
@@ -250,23 +199,6 @@ html:root .portfolio-chrome .project-preview img {
     display: block;
     margin-top: 12px;
     font-size: 11px;
-  }
-  html:root .portfolio-chrome #sec-experience .panel {
-    display: block;
-  }
-  html:root .portfolio-chrome #sec-experience .experience-proof {
-    margin-top: 42px;
-  }
-  html:root .portfolio-chrome .experience-outcome {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-    padding-block: 26px;
-  }
-  html:root .portfolio-chrome .experience-figure strong {
-    font-size: 34px;
-  }
-  html:root .portfolio-chrome .experience-story strong {
-    font-size: 17px;
   }
   html:root .portfolio-chrome .project-gallery {
     grid-template-columns: minmax(0, 1fr);

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 for (const width of [2560, 1440, 1024, 768, 390, 320]) {
   test(`experience history and outcomes do not overlap at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 1000 });
+    await page.setViewportSize({ width, height: width === 320 ? 568 : 1000 });
     await page.addInitScript(() => {
       const get = HTMLCanvasElement.prototype.getContext;
       HTMLCanvasElement.prototype.getContext = function (
@@ -16,7 +16,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     await page.goto('/#sec-experience');
     await page.evaluate(() => document.fonts.ready);
     const section = page.locator('#sec-experience');
-    await section.getByRole('heading', { name: "Where I've worked" }).waitFor();
+    await expect(section.locator('h2')).toHaveText('Experience', { timeout: 3000 });
     const nav = page.locator('#nav');
     if (width >= 768) {
       await expect(nav.locator('a[data-section]')).toHaveText([
@@ -37,6 +37,8 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     expect(heading!.y, 'section heading clears the fixed header').toBeGreaterThanOrEqual(
       header!.y + header!.height,
     );
+    const lead = section.getByRole('button', { name: 'Read the case study', exact: true });
+    await expect(lead).toBeInViewport({ ratio: 1 });
     const assertLayout = async () => {
       const boxes = await section.evaluate((el) => {
         const box = (node: Element) => {
@@ -61,10 +63,8 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         };
       });
       const { history, proof, rows } = boxes;
-      expect(
-        history.right <= proof.x + 1 || history.bottom <= proof.y + 1,
-        'career history clears the outcome list',
-      ).toBe(true);
+      if (width > 900) expect(history.x).toBeGreaterThanOrEqual(proof.right - 1);
+      else expect(history.y).toBeGreaterThanOrEqual(proof.bottom - 1);
       for (let i = 1; i < rows.length; i++)
         expect(rows[i].y).toBeGreaterThanOrEqual(rows[i - 1].bottom - 1);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
@@ -72,11 +72,32 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       );
     };
     await assertLayout();
+    if (width === 1440 || width === 390) {
+      for (const [trigger, title] of [
+        [lead, 'Ad Slot Details: 120 → 1 API call'],
+        [
+          section.getByRole('button', { name: /Replaced a live PHP backend/ }),
+          'Replacing a live publisher backend',
+        ],
+      ] as const) {
+        await trigger.evaluate((button) => {
+          button.scrollIntoView({ block: 'center', behavior: 'instant' });
+          button.focus({ preventScroll: true });
+        });
+        const readingPosition = await page.evaluate(() => scrollY);
+        await page.keyboard.press('Enter');
+        await expect(page.getByRole('dialog').getByRole('heading', { name: title })).toBeVisible();
+        await page.keyboard.press('Escape');
+        await expect(trigger).toBeFocused();
+        await expect
+          .poll(() => page.evaluate((position) => Math.abs(scrollY - position), readingPosition))
+          .toBeLessThan(2);
+      }
+    }
     await section.locator('.experience-more summary').click();
     await assertLayout();
-    await page.screenshot({
+    await section.screenshot({
       path: test.info().outputPath(`experience-${width}.png`),
-      fullPage: true,
     });
     for (const id of ['sec-more-work', 'sec-about']) {
       await page.goto('/#' + id);

@@ -2,7 +2,7 @@ import { workId, WORK_ITEMS } from '../../data/workItems';
 import { isPortfolioProject } from '../../data/workBrowsing';
 import './experience.css';
 import type { WorkDetail } from '../../types';
-import { H2, P_LI, Section } from './shared';
+import { Section } from './shared';
 import { ControlIcon } from '../ControlIcon';
 
 const OUTCOMES: Record<string, { figure: string; label: string; title: string; detail: string }> = {
@@ -10,19 +10,13 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
     figure: '30,000+',
     label: 'newsletters served',
     title: 'Replaced a live PHP backend',
-    detail: 'Two engineers, six months. PostgreSQL + Django REST, with a React interface.',
+    detail: 'Two engineers, six months. Django REST and PostgreSQL, with a React interface.',
   },
   'agentic-ai-playwright-framework': {
     figure: 'Playwright',
-    label: 'introduced automated coverage',
+    label: 'first automated coverage',
     title: 'Tests that keep up with a rewrite',
     detail: 'Playwright agents plan, generate and repair tests during the UI rewrite.',
-  },
-  'ad-slot-details-120-1-api-call': {
-    figure: '60s → 2s',
-    label: 'page load',
-    title: '120 API calls became one',
-    detail: 'Batched the joined data instead of fetching each line item separately.',
   },
   'sponsorships-audience-extension-blackout-periods': {
     figure: '100M+',
@@ -49,12 +43,6 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
     detail:
       'ACID-safe inventory, campaign and permission migrations, including BuzzFeed and Dotdash Meredith.',
   },
-  iodine: {
-    figure: 'Open source',
-    label: 'contributor',
-    title: 'iodine',
-    detail: 'Scoped command approvals, local embedding suggestions and reversible agent edits.',
-  },
 };
 
 const ROLES = [
@@ -67,68 +55,106 @@ type Props = {
   onOpen: (item: WorkDetail, el: HTMLElement) => void;
 };
 
-export function ExperienceSection({ onOpen }: Props) {
-  const priority = [
-    'monolith-django-rest-react-rewrite',
-    'ad-slot-details-120-1-api-call',
-    'sponsorships-audience-extension-blackout-periods',
-    'agentic-ai-playwright-framework',
-  ];
-  const highlights = WORK_ITEMS.filter((i) => !isPortfolioProject(i)).sort(
-    (a, b) =>
-      (priority.indexOf(workId(a)) < 0 ? priority.length : priority.indexOf(workId(a))) -
-      (priority.indexOf(workId(b)) < 0 ? priority.length : priority.indexOf(workId(b))),
-  );
+const leadId = 'ad-slot-details-120-1-api-call';
+const loadTime = { before: 60, after: 2 };
+const supportingIds = [
+  'monolith-django-rest-react-rewrite',
+  'sponsorships-audience-extension-blackout-periods',
+  'agentic-ai-playwright-framework',
+];
+const work = WORK_ITEMS.filter((item) => !isPortfolioProject(item));
+const lead = work.find((item) => workId(item) === leadId);
+const supporting = supportingIds
+  .map((id) => work.find((item) => workId(item) === id))
+  .filter((item) => item !== undefined);
+const additional = work.filter(
+  (item) => workId(item) !== leadId && !supportingIds.includes(workId(item)),
+);
 
+export function ExperienceSection({ onOpen }: Props) {
   return (
     <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">
-      <div data-nosnippet className="panel pointer-events-auto w-full max-w-[650px]">
-        <div className="experience-history">
-          <h2 className={H2}>Where I&apos;ve worked</h2>
-          <ul className={`list-none p-0 mt-4 ${P_LI}`}>
-            {ROLES.map((r) => (
-              <li
-                key={`${r.company}-${r.period}`}
-                className="experience-role flex items-baseline justify-between gap-4"
-              >
-                <span>
-                  <span className="text-[var(--color-fg)]">{r.title}</span>
-                  <span className="experience-company text-[var(--color-muted)]">{r.company}</span>
-                </span>
-                <span className="shrink-0 font-[var(--font-mono)] text-[0.62rem] tracking-[0.08em] text-[var(--color-muted)]">
-                  {r.period}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="experience-proof">
-          <div>
-            {highlights.slice(0, 4).map((item) => (
-              <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
-            ))}
+      <div data-nosnippet className="experience-content pointer-events-auto">
+        <h2>Experience</h2>
+        <div className="experience-grid">
+          <div className="experience-proof">
+            {lead && <LeadOutcome item={lead} onOpen={onOpen} />}
+            <div>
+              {supporting.map((item) => (
+                <HighlightRow key={item.title} item={item} onOpen={onOpen} />
+              ))}
+            </div>
+            {additional.length > 0 && (
+              <details className="experience-more">
+                <summary>
+                  More engineering work <span aria-hidden="true">+</span>
+                </summary>
+                {additional.map((item) => (
+                  <HighlightRow key={item.title} item={item} onOpen={onOpen} />
+                ))}
+              </details>
+            )}
           </div>
-          <details className="experience-more">
-            <summary>
-              More engineering work <span aria-hidden="true">+</span>
-            </summary>
-            {highlights.slice(4).map((item) => (
-              <HighlightRow key={item.title} item={item} onOpen={(el) => onOpen(item, el)} />
-            ))}
-          </details>
+          <div className="experience-history">
+            <h3>Where I&apos;ve worked</h3>
+            <ol role="list">
+              {ROLES.map(({ company, title, period }) => (
+                <li key={`${company}-${period}`} className="experience-role">
+                  <strong>{company}</strong>
+                  <span className="experience-period">{period}</span>
+                  <span className="experience-role-title">{title}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </div>
     </Section>
   );
 }
 
-function HighlightRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLElement) => void }) {
-  const outcome = OUTCOMES[workId(item)];
+function LeadOutcome({ item, onOpen }: { item: WorkDetail } & Props) {
+  return (
+    <article className="experience-lead">
+      <p className="experience-measure">
+        <span className="sr-only">
+          Page load went from {loadTime.before} seconds to {loadTime.after} seconds.
+        </span>
+        <span className="experience-from" aria-hidden="true">
+          {loadTime.before}s
+        </span>
+        <span className="experience-change" aria-hidden="true">
+          →
+        </span>
+        <span aria-hidden="true">{loadTime.after}s</span>
+      </p>
+      <div className="experience-lead-story">
+        <h3 id="experience-lead-title">120 API calls became one</h3>
+        <p>I combined the linked line items into one API response, cutting page load time.</p>
+        <div className="experience-lead-actions">
+          <button
+            type="button"
+            className="experience-case"
+            aria-describedby="experience-lead-title"
+            onClick={(event) => onOpen(item, event.currentTarget)}
+          >
+            Read the case study <ControlIcon name="arrow" />
+          </button>
+          <span>{item.context}</span>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function HighlightRow({ item, onOpen }: { item: WorkDetail } & Props) {
+  const id = workId(item);
+  const outcome = OUTCOMES[id];
   return (
     <button
       type="button"
-      onClick={(e) => onOpen(e.currentTarget)}
-      className={`experience-outcome${workId(item) === 'agentic-ai-playwright-framework' ? ' experience-outcome-qualitative' : ''}`}
+      onClick={(event) => onOpen(item, event.currentTarget)}
+      className={`experience-outcome${id === 'agentic-ai-playwright-framework' ? ' experience-outcome-qualitative' : ''}`}
     >
       {outcome ? (
         <>
@@ -139,15 +165,12 @@ function HighlightRow({ item, onOpen }: { item: WorkDetail; onOpen: (el: HTMLEle
           <span className="experience-story">
             <strong>{outcome.title}</strong>
             <span>{outcome.detail}</span>
-            <span className="experience-context">{item.context}</span>
           </span>
         </>
       ) : (
-        <span>{item.summary}</span>
+        <span className="experience-story">{item.summary}</span>
       )}
-      <span className="experience-arrow" aria-hidden="true">
-        <ControlIcon name="arrow" />
-      </span>
+      <ControlIcon name="arrow" className="experience-arrow" />
     </button>
   );
 }

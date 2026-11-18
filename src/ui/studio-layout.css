@@ -184,78 +184,6 @@ html:root .garage-project-featured figcaption {
   color: #aaaab3;
   line-height: 1.65;
 }
-html:root #sec-experience {
-  min-height: auto;
-  padding-block: 100px;
-}
-html:root #sec-experience .panel {
-  max-width: 1280px;
-  display: grid;
-  grid-template-columns: 340px minmax(0, 1fr);
-  gap: 92px;
-}
-html:root #sec-experience .experience-history {
-  grid-column: 1;
-  grid-row: 1;
-  margin: 0;
-}
-html:root #sec-experience .experience-proof {
-  grid-column: 2;
-  grid-row: 1;
-  margin: 0;
-}
-html:root #sec-experience h2 {
-  font-size: 48px;
-  max-width: 10ch;
-  line-height: 1.08;
-  margin-bottom: 36px;
-}
-html:root .experience-history ul {
-  margin-top: 0;
-}
-html:root .experience-role {
-  padding-bottom: 24px;
-  gap: 16px;
-}
-html:root .experience-role > span:first-child {
-  font-size: 15px;
-}
-html:root .experience-role > span:last-child {
-  font-size: 11px;
-}
-html:root .experience-company {
-  font-size: 13px;
-  margin-top: 4px;
-}
-html:root .experience-outcome {
-  grid-template-columns: 142px minmax(0, 1fr) 18px;
-  gap: 22px;
-  padding-block: 20px;
-}
-html:root .experience-outcome:first-child {
-  padding-top: 0;
-}
-html:root .experience-figure strong {
-  font-size: 32px;
-  letter-spacing: -0.025em;
-}
-html:root .experience-figure span {
-  font-size: 11px;
-}
-html:root .experience-story strong {
-  font-size: 16px;
-}
-html:root .experience-story span {
-  font-size: 14px;
-  max-width: 51ch;
-}
-html:root .experience-outcome-qualitative .experience-figure strong {
-  font-size: 14px;
-  letter-spacing: 0;
-}
-html:root .experience-more {
-  margin-top: 14px;
-}
 html:root #sec-more-work {
   padding-block: 92px 100px;
 }
@@ -417,14 +345,6 @@ html:root .project-gallery h3 button:hover svg {
   html:root .garage-project-featured h3 {
     font-size: 32px;
   }
-  html:root #sec-experience .panel {
-    grid-template-columns: 250px minmax(0, 1fr);
-    gap: 44px;
-  }
-  html:root .experience-outcome {
-    grid-template-columns: 110px minmax(0, 1fr) 16px;
-    gap: 16px;
-  }
   html:root .project-gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -529,43 +449,6 @@ html:root .project-gallery h3 button:hover svg {
     line-height: 1.65;
   }
   html:root .garage-project-featured figcaption:not(.project-proof) {
-    display: none;
-  }
-  html:root #sec-experience {
-    padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
-  }
-  html:root #sec-experience .panel {
-    display: block;
-  }
-  html:root #sec-experience h2 {
-    max-width: none;
-    font-size: 36px;
-    margin-bottom: 28px;
-  }
-  html:root .experience-role {
-    padding-bottom: 22px;
-  }
-  html:root #sec-experience .experience-proof {
-    margin-top: 44px;
-  }
-  html:root .experience-outcome {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding-block: 22px;
-  }
-  html:root .experience-figure {
-    flex-wrap: wrap;
-  }
-  html:root .experience-figure strong {
-    font-size: 28px;
-  }
-  html:root .experience-story strong {
-    font-size: 16px;
-  }
-  html:root .experience-story span {
-    font-size: 14px;
-  }
-  html:root .experience-arrow {
     display: none;
   }
   html:root #sec-more-work {
