@@ -16,12 +16,14 @@ import { THEMES } from '../config';
 import { SCENE_ACTIVITY_EVENT } from './useSceneActivity';
 import { smoothTowards } from '../math';
 import { useAppStore } from '../store';
+import { useCarTypeOverlap } from './useCarTypeOverlap';
 
 const TRANSITION_RATE = 2.5;
 const BLOOM_RADIUS = 0.6;
 
 // Reuse the existing renderer; a second context probe can block startup on slower devices.
 export const Effects = memo(function Effects() {
+  const drawTypeOverlap = useCarTypeOverlap();
   const { gl, scene, camera, size, invalidate } = useThree();
   const pipeline = useRef<{ composer: EffectComposer; bloom: BloomEffect } | null>(null);
   const currentStrength = useRef(THEMES.dusk.bloomStrength);
@@ -65,7 +67,7 @@ export const Effects = memo(function Effects() {
     invalidate();
   }, [size.width, size.height, gl, scene, camera, invalidate]);
 
-  useFrame((_state, dt) => {
+  useFrame((state, dt) => {
     const graph = pipeline.current;
     if (!graph) return;
     const target = THEMES[useAppStore.getState().themeName];
@@ -78,6 +80,7 @@ export const Effects = memo(function Effects() {
     gl.autoClear = true;
     try {
       graph.composer.render(dt);
+      drawTypeOverlap.current?.(state);
     } finally {
       gl.autoClear = autoClear;
     }

@@ -1,4 +1,4 @@
-export const motionState = { progress: 1 };
+export const motionState = { progress: 1, openingOrbitProgress: 0 };
 
 export function updateIntroFov(
   camera: { fov?: number; updateProjectionMatrix: () => void },

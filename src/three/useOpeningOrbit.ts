@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { clamp } from '../math';
 import { useAppStore } from '../store';
+import { motionState } from './studioEntrance';
 import type { RigState } from './useOrbitGesture';
 
 const HOLD_SECONDS = 0.18;
@@ -32,19 +33,27 @@ function openingState() {
     elapsed: 0,
     offset: 0,
     reportedPhase: undefined as Phase | undefined,
-    wheel: false,
+    scrolled: false,
   };
 }
 
 export function useOpeningOrbit() {
   const current = useRef<ReturnType<typeof openingState>>();
   useEffect(() => {
+    const interrupt = () => {
+      if (current.current) current.current.scrolled = true;
+    };
     const wheel = (event: WheelEvent) => {
-      if (current.current && event.deltaY && !event.ctrlKey) current.current.wheel = true;
+      if (event.deltaY && !event.ctrlKey) interrupt();
+    };
+    const scroll = () => {
+      if (window.scrollY > 0) interrupt();
     };
     window.addEventListener('wheel', wheel, { passive: true });
+    window.addEventListener('scroll', scroll, { passive: true });
     return () => {
       window.removeEventListener('wheel', wheel);
+      window.removeEventListener('scroll', scroll);
     };
   }, []);
 
@@ -55,6 +64,7 @@ export function useOpeningOrbit() {
     }
     const motion = current.current;
     const store = useAppStore.getState();
+    const arc = ((width < 768 ? 20 : 26) * Math.PI) / 180;
     const unfinished = motion.phase === 'waiting' || motion.phase === 'playing';
 
     if (reduced) {
@@ -63,7 +73,7 @@ export function useOpeningOrbit() {
     } else if (store.isContactVisible || store.cameraResetVersion !== motion.cameraResetVersion) {
       if (unfinished) motion.phase = 'interrupted';
       motion.offset = 0;
-    } else if (unfinished && (motion.wheel || scroll > 0)) {
+    } else if (unfinished && (motion.scrolled || scroll > 0)) {
       motion.phase = 'interrupted';
     } else if (
       (unfinished || motion.offset !== 0) &&
@@ -80,11 +90,12 @@ export function useOpeningOrbit() {
         if (!document.hidden) motion.elapsed += Math.min(dt, 0.05);
       }
       const t = clamp((motion.elapsed - HOLD_SECONDS) / SWEEP_SECONDS, 0, 1);
-      const arc = ((width < 768 ? 20 : 26) * Math.PI) / 180;
       motion.offset = -arc * (1 - t * t * (3 - 2 * t));
       if (t === 1) motion.phase = 'settled';
     }
 
+    motionState.openingOrbitProgress =
+      motion.phase === 'playing' ? clamp(1 + motion.offset / arc, 0, 1) : 0;
     if (observer && motion.reportedPhase !== motion.phase) {
       motion.reportedPhase = motion.phase;
       observer(motion.phase);
