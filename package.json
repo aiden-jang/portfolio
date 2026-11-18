@@ -21,7 +21,7 @@
     "format:check": "prettier --check .",
     "test:browser": "playwright test",
     "check-content": "node scripts/check-content.mjs",
-    "security:check": "npm audit --audit-level=low",
+    "security:check": "node scripts/check-dependency-audit.mjs",
     "generate:glow": "node scripts/generate-glow.mjs"
   },
   "devDependencies": {
