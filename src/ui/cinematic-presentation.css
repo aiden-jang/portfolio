@@ -41,31 +41,7 @@ html:root .portfolio-chrome #project-everythingisfine .garage-project-copy > p:f
   font-size: 21px;
   line-height: 1.5;
 }
-html:root .portfolio-chrome #project-iodine {
-  padding-top: 60px;
-  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
-}
-html:root #project-iodine > figure {
-  position: relative;
-  padding-top: 70px;
-}
-html:root .portfolio-chrome .product-iodine-shot {
-  aspect-ratio: 1.7;
-  opacity: 0.65;
-}
-html:root #project-iodine .product-shot-caption {
-  display: none;
-}
 
-html:root .cinema-contribution {
-  position: relative;
-  margin: -180px 0 0 -84px;
-  background: #1c1c22;
-  color: #ececea;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 24px 70px #00000048;
-}
 .cinema-code-heading {
   display: flex;
   justify-content: space-between;
@@ -74,12 +50,6 @@ html:root .cinema-contribution {
   font: 12px/1.5 var(--font-mono);
   color: #bdbdc8;
   border-bottom: 1px solid #ffffff15;
-}
-.cinema-contribution pre {
-  padding: 32px 26px;
-  margin: 0;
-  font: 14px/2.1 var(--font-mono);
-  overflow: auto;
 }
 .cinema-result {
   padding: 0 26px 24px;
@@ -117,12 +87,6 @@ html:root .cinema-result p {
   cursor: progress;
   opacity: 0.7;
 }
-html:root .cinema-example-note {
-  padding: 0 26px 22px;
-  margin: 0;
-  font-size: 11px;
-  color: #bdbdc8;
-}
 .cinema-code-actions :focus-visible {
   outline: 2px solid #ececea;
   outline-offset: 4px;
@@ -152,28 +116,9 @@ html:root .cinema-example-note {
   html:root .portfolio-chrome #project-everythingisfine .preview-thumbnail {
     aspect-ratio: 0.95;
   }
-  html:root .portfolio-chrome #project-iodine {
-    grid-template-columns: minmax(0, 1fr);
-    padding-top: 16px;
-  }
-  html:root #project-iodine > figure {
-    padding-top: 0;
-  }
-  html:root .portfolio-chrome .product-iodine-shot {
-    aspect-ratio: 1.35;
-  }
-  html:root .cinema-contribution {
-    margin: -64px 8px 0;
-  }
   .cinema-code-heading {
     padding: 16px;
     font-size: 11px;
-  }
-  .cinema-contribution pre {
-    padding: 24px 16px;
-    font-size: 12px;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
   }
   .cinema-result {
     padding: 0 16px 20px;
@@ -187,10 +132,6 @@ html:root .cinema-example-note {
   .cinema-code-actions {
     padding-inline: 16px;
   }
-  html:root .cinema-example-note {
-    padding-inline: 16px;
-    font-size: 10px;
-  }
 }
 @media (max-width: 767px) and (max-height: 740px) {
   html:root .portfolio-chrome .garage-intro .intro-role {
@@ -199,23 +140,7 @@ html:root .cinema-example-note {
   }
 }
 
-.cinema-contribution[data-phase='restored'] pre {
-  animation: restore-code 500ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-@keyframes restore-code {
-  from {
-    background: #d9e7cc16;
-  }
-  to {
-    background: transparent;
-  }
-}
 .cinema-code-actions button[aria-disabled='true'] {
   cursor: progress;
   opacity: 0.7;
-}
-@media (prefers-reduced-motion: reduce) {
-  .cinema-contribution[data-phase='restored'] pre {
-    animation: none;
-  }
 }

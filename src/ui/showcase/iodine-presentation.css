@@ -1,0 +1,241 @@
+.garage-project.iodine-feature {
+  padding-block: 0 clamp(48px, 7vw, 96px);
+}
+.iodine-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 24px 44px;
+  margin-bottom: clamp(24px, 3vw, 42px);
+}
+.garage-project .iodine-intro h3 {
+  font-size: clamp(66px, 9.5vw, 138px);
+  font-weight: 440;
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+  margin: 0;
+}
+.garage-project .iodine-summary {
+  max-width: 29ch;
+  font-size: clamp(19px, 2.1vw, 30px);
+  line-height: 1.24;
+  font-weight: 450;
+  letter-spacing: -0.025em;
+  color: var(--color-fg);
+}
+.garage-project .iodine-role {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.iodine-feature .cinema-contribution {
+  border: 1px solid #39373f;
+  border-radius: 12px;
+  overflow: hidden;
+  color: var(--color-fg);
+  background: #18181d;
+}
+.iodine-feature .cinema-code-heading {
+  align-items: center;
+  gap: 12px;
+  padding: 16px clamp(14px, 2vw, 24px);
+  background: #202026;
+}
+.iodine-feature .cinema-code-heading span:first-child {
+  color: var(--color-fg);
+}
+.iodine-feature .cinema-code-heading span:last-child {
+  font: 12px/1.4 var(--font-display);
+}
+.iodine-diff {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.iodine-code-panel {
+  --iodine-change-bg: #332528;
+  --iodine-change-fg: #f2c6bc;
+  --iodine-indicator: #cf8b81;
+  min-width: 0;
+  padding-block: 20px 24px;
+}
+.iodine-code-panel + .iodine-code-panel {
+  --iodine-change-bg: #22252e;
+  --iodine-change-fg: #d4d7e6;
+  --iodine-indicator: #a5aac3;
+  border-inline-start: 1px solid #39373f;
+}
+.iodine-code-panel + .iodine-code-panel[data-current='true'] {
+  --iodine-change-bg: #23322b;
+  --iodine-change-fg: #c9e3cf;
+  --iodine-indicator: #94ba9e;
+}
+.iodine-code-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-inline: clamp(14px, 2vw, 24px);
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 550;
+  color: #d0cdd6;
+}
+.iodine-code-label::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--iodine-indicator);
+}
+.iodine-code-panel pre {
+  margin: 0;
+  font: clamp(11px, 1.15vw, 16px)/1.8 var(--font-mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #e2dee8;
+}
+.iodine-code-line {
+  position: relative;
+  display: block;
+  min-height: 32px;
+  padding: 4px 12px 4px clamp(36px, 3.4vw, 48px);
+}
+.iodine-code-line::before {
+  content: attr(data-line) / '';
+  position: absolute;
+  left: clamp(14px, 2vw, 24px);
+  color: #a6a2b0;
+  font-variant-numeric: tabular-nums;
+}
+.iodine-code-line[data-changed='true'] {
+  background: var(--iodine-change-bg);
+  color: var(--iodine-change-fg);
+}
+.iodine-editor-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 12px clamp(14px, 2vw, 24px);
+  border-top: 1px solid #39373f;
+}
+.iodine-feature .cinema-result {
+  padding: 0;
+}
+.iodine-feature .cinema-result strong {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+html:root .iodine-feature .cinema-result p {
+  color: #c9c5d0;
+  margin-top: 2px;
+  max-width: 57ch;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.iodine-feature .cinema-code-actions {
+  flex: none;
+  align-items: center;
+  padding: 0;
+  gap: 6px;
+}
+.iodine-feature .cinema-code-actions button:hover:not(:disabled, [aria-disabled='true']) {
+  background: #3a3943;
+}
+.iodine-feature .cinema-code-actions .cinema-undo:hover:not(:disabled) {
+  background: #fff;
+}
+.iodine-evidence {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: 6px 44px;
+  align-items: baseline;
+  margin-top: clamp(24px, 3vw, 40px);
+}
+.iodine-evidence h4 {
+  font-size: clamp(18px, 1.55vw, 22px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.iodine-feature .iodine-evidence p {
+  font-size: 14px;
+  line-height: 1.55;
+}
+.iodine-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin-top: 12px;
+}
+.iodine-links > * {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 13px;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+.iodine-links > :first-child,
+.iodine-links > :hover {
+  color: var(--color-fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.iodine-links > :focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .iodine-intro,
+  .iodine-evidence {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .iodine-intro {
+    gap: 18px;
+  }
+  .garage-project .iodine-intro h3 {
+    font-size: clamp(60px, 19.7vw, 92px);
+  }
+  .iodine-diff {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .iodine-code-panel[data-current='false'] {
+    display: none;
+  }
+  .iodine-code-panel + .iodine-code-panel {
+    border-inline-start: 0;
+  }
+  .iodine-code-panel {
+    padding-block: 14px 12px;
+  }
+  .iodine-code-label {
+    margin-bottom: 8px;
+  }
+  .iodine-editor-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .iodine-feature .cinema-code-actions button {
+    padding-inline: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .iodine-intro {
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .iodine-code-line[data-changed='false'] {
+    display: none;
+  }
+  .iodine-code-line {
+    padding-right: 8px;
+  }
+  .iodine-feature .cinema-code-actions button {
+    font-size: 12px;
+    padding-inline: 9px;
+  }
+}

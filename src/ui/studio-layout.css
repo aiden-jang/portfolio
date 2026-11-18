@@ -139,17 +139,6 @@ html:root #project-everythingisfine .project-preview::after {
 html:root #project-everythingisfine .project-preview > span {
   z-index: 4;
 }
-html:root #project-iodine {
-  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.32fr);
-}
-html:root #project-iodine > figure {
-  grid-column: 2;
-  grid-row: 1;
-}
-html:root #project-iodine > .garage-project-copy {
-  grid-column: 1;
-  grid-row: 1;
-}
 html:root .garage-project-featured .garage-project-copy {
   display: block;
   margin: 0;
@@ -188,16 +177,6 @@ html:root #project-everythingisfine .project-preview img {
   max-width: none;
   height: auto;
   transform: translate(-22.7%, -18.4%);
-}
-html:root #project-iodine .preview-thumbnail {
-  aspect-ratio: 1.75;
-  border-radius: 14px;
-}
-html:root #project-iodine .project-preview img {
-  width: 160%;
-  max-width: none;
-  height: auto;
-  transform: translate(-22%, -4%);
 }
 html:root .garage-project-featured figcaption {
   font-size: 11px;
@@ -542,13 +521,6 @@ html:root .project-gallery h3 button:hover svg {
   html:root #project-everythingisfine .project-preview img {
     width: 230%;
     transform: translate(-43.5%, -12%);
-  }
-  html:root #project-iodine .preview-thumbnail {
-    aspect-ratio: 1.25;
-  }
-  html:root #project-iodine .project-preview img {
-    width: 300%;
-    transform: translate(-59.1%, 0);
   }
   html:root .garage-project-featured .project-proof {
     display: block;

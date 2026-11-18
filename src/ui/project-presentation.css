@@ -107,16 +107,6 @@ html:root #project-everythingisfine .project-preview img {
   height: auto;
   transform: translate(-32.63%, -12.2%);
 }
-html:root #project-iodine .preview-thumbnail {
-  aspect-ratio: 2.35;
-  background: #202020;
-}
-html:root #project-iodine .project-preview img {
-  width: 118%;
-  max-width: none;
-  height: auto;
-  transform: translate(-15%, -3.2%);
-}
 html:root .project-gallery {
   gap: 56px 48px;
 }
@@ -265,13 +255,6 @@ html:root #project-platform .garage-project-links {
   html:root #project-everythingisfine .project-preview img {
     width: 169.5%;
     transform: translate(-36.85%, -10.6%);
-  }
-  html:root #project-iodine .preview-thumbnail {
-    aspect-ratio: 1.4;
-  }
-  html:root #project-iodine .project-preview img {
-    width: 300%;
-    transform: translate(-59.17%, -15.4%);
   }
   html:root .project-gallery {
     gap: 40px;

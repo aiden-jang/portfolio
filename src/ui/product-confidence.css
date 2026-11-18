@@ -62,41 +62,7 @@ html:root .portfolio-chrome #project-everythingisfine .orbit-feature figcaption 
   max-width: 70ch;
   font-size: 11px;
 }
-html:root .portfolio-chrome #project-iodine {
-  grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
-  gap: 64px;
-  align-items: start;
-}
-html:root .portfolio-chrome #project-iodine > .garage-project-copy {
-  padding-top: 48px;
-}
 
-html:root .portfolio-chrome .product-iodine-shot {
-  display: block;
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 1.5;
-  width: 100%;
-  background: #242424;
-  border: 0;
-  padding: 0;
-  border-radius: 14px;
-  cursor: zoom-in;
-}
-html:root .portfolio-chrome #project-iodine .product-iodine-shot img {
-  display: block;
-  width: 140%;
-  max-width: none;
-  height: auto;
-  transform: translate(-16%, -3%);
-}
-html:root .portfolio-chrome .product-iodine-presentation .product-shot-caption {
-  font-size: 11px;
-  line-height: 1.6;
-  color: #aaaab3;
-  max-width: 66ch;
-  margin: 14px 0 0;
-}
 html:root .portfolio-chrome #sec-experience {
   padding-block: var(--presentation-space);
 }
@@ -173,18 +139,11 @@ html:root .portfolio-chrome #sec-about .about-story > p {
   line-height: 1.6;
   font-weight: 450;
 }
-html:root .portfolio-chrome .product-iodine-shot:focus-visible {
-  outline: 2px solid #ececea;
-  outline-offset: 5px;
-}
 html:root .portfolio-chrome .project-preview:hover img {
   filter: brightness(1.035);
 }
-html:root .portfolio-chrome :is(.project-preview img, .product-iodine-shot img) {
+html:root .portfolio-chrome .project-preview img {
   transition: filter 180ms ease-out;
-}
-html:root .portfolio-chrome .product-iodine-shot:hover img {
-  filter: brightness(1.035);
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   html:root .portfolio-chrome .garage-intro h1 {
@@ -195,9 +154,6 @@ html:root .portfolio-chrome .product-iodine-shot:hover img {
   }
   html:root .portfolio-chrome .garage-project-featured h3 {
     font-size: 32px;
-  }
-  html:root .portfolio-chrome #project-iodine {
-    gap: 36px;
   }
   html:root .portfolio-chrome #sec-experience .panel {
     grid-template-columns: 250px minmax(0, 1fr);
@@ -242,7 +198,6 @@ html:root .portfolio-chrome .product-iodine-shot:hover img {
     gap: 80px;
   }
   html:root .portfolio-chrome .garage-project-featured,
-  html:root .portfolio-chrome #project-iodine,
   html:root .portfolio-chrome #project-everythingisfine {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -274,8 +229,7 @@ html:root .portfolio-chrome .product-iodine-shot:hover img {
     line-height: 1.6;
     max-width: none;
   }
-  html:root .portfolio-chrome .garage-project-featured > figure,
-  html:root .portfolio-chrome #project-iodine > figure {
+  html:root .portfolio-chrome .garage-project-featured > figure {
     grid-column: 1;
     grid-row: 3;
   }
@@ -296,13 +250,6 @@ html:root .portfolio-chrome .product-iodine-shot:hover img {
     display: block;
     margin-top: 12px;
     font-size: 11px;
-  }
-  html:root .portfolio-chrome .product-iodine-shot {
-    aspect-ratio: 1.08;
-  }
-  html:root .portfolio-chrome #project-iodine .product-iodine-shot img {
-    width: 300%;
-    transform: translate(-58%, -4%);
   }
   html:root .portfolio-chrome #sec-experience .panel {
     display: block;
@@ -351,7 +298,7 @@ html:root .portfolio-chrome .product-iodine-shot:hover img {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  html:root .portfolio-chrome :is(.project-preview img, .product-iodine-shot img) {
+  html:root .portfolio-chrome .project-preview img {
     transition: none;
   }
 }

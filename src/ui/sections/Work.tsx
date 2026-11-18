@@ -1,14 +1,13 @@
 import { Bean } from '../showcase/Bean';
 import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
+import { IodinePresentation } from '../showcase/IodinePresentation';
 import '../project-gallery.css';
 import { PREVIEWS } from '../../data/projectPreviews';
-import { PROJECT_STORIES } from '../../data/projectStories';
 import { FEATURED_PROJECTS, visibleProjects } from '../../data/workBrowsing';
 import { workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
-import { ProjectPreviewControls } from '../ProjectPreviewControls';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
@@ -30,7 +29,12 @@ export function WorkSection({ onOpen }: Props) {
                 onOpen={onOpen}
               />
             ) : (
-              <Project key={item.title} item={item} onOpen={onOpen} featured />
+              <IodinePresentation
+                key={item.title}
+                item={item}
+                preview={PREVIEWS.iodine}
+                onOpen={onOpen}
+              />
             ),
           )}
         </div>
@@ -57,67 +61,36 @@ export function MoreProjectsSection({ onOpen }: Props) {
   );
 }
 
-function Project({
-  item,
-  onOpen,
-  featured = false,
-}: { item: WorkDetail; featured?: boolean } & Props) {
+function Project({ item, onOpen }: { item: WorkDetail } & Props) {
   const preview = PREVIEWS[item.mark ?? ''];
   return (
-    <article
-      id={`project-${workId(item)}`}
-      className={`garage-project ${featured ? 'garage-project-featured' : 'garage-project-compact'}`}
-    >
+    <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
       <div className="garage-project-copy">
         <div className="project-title">
           <h3>
-            {featured ? (
-              item.shortName
-            ) : (
-              <button
-                type="button"
-                onClick={(event) => onOpen(item, event.currentTarget)}
-                aria-label={'How I built it: ' + item.shortName}
+            <button
+              type="button"
+              onClick={(event) => onOpen(item, event.currentTarget)}
+              aria-label={'How I built it: ' + item.shortName}
+            >
+              {item.shortName}
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
               >
-                {item.shortName}
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path d="M4 12h15m-5-5 5 5-5 5" />
-                </svg>
-              </button>
-            )}
+                <path d="M4 12h15m-5-5 5 5-5 5" />
+              </svg>
+            </button>
           </h3>
           {item.shortName === 'mrrp' && <Bean />}
           {item.contribution && <p className="project-role">Open-source contributor</p>}
         </div>
         <p>{preview?.description ?? item.summary}</p>
-        {featured && preview?.states && (
-          <ProjectPreviewControls name={item.shortName!} states={preview.states} />
-        )}
-        <p className={`garage-stack${featured ? ' project-evidence' : ''}`}>
-          {featured && PROJECT_STORIES[item.mark ?? '']?.evidence
-            ? PROJECT_STORIES[item.mark ?? ''].evidence
-            : item.stack.slice(0, 3).join(' · ')}
-        </p>
+        <p className="garage-stack">{item.stack.slice(0, 3).join(' · ')}</p>
         <div className="garage-project-links">
-          {featured && (
-            <button
-              type="button"
-              onClick={(event) => onOpen(item, event.currentTarget)}
-              aria-label={
-                item.contribution
-                  ? `Read my contribution to ${item.shortName}`
-                  : `How I built it: ${item.shortName}`
-              }
-            >
-              {item.contribution ? 'Read my contribution' : 'How I built it'}
-            </button>
-          )}
           {item.link && (
             <a
               href={item.link.url}

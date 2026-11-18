@@ -1,45 +1,75 @@
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import type { ProductPreview } from '../../data/projectPreviews';
+import type { WorkDetail } from '../../types';
 import { IodineContribution } from './IodineContribution';
-import { ScreenshotImage } from '../ScreenshotImage';
 import { ScreenshotViewer } from '../ScreenshotViewer';
+import './iodine-presentation.css';
 
-export function IodinePresentation({ image, caption }: { image: string; caption: string }) {
+type Props = {
+  item: WorkDetail;
+  preview: ProductPreview;
+  onOpen: (item: WorkDetail, el: HTMLElement) => void;
+};
+
+export function IodinePresentation({ item, preview, onOpen }: Props) {
   const [open, setOpen] = useState(false);
-  const [unavailable, setUnavailable] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
-  const onUnavailable = useCallback(() => setUnavailable(true), []);
-  const onReady = useCallback(() => setUnavailable(false), []);
   return (
-    <figure className="iodine-example">
-      <div className="product-iodine-presentation">
+    <article id="project-iodine" className="garage-project iodine-feature">
+      <div className="iodine-intro">
+        <h3>{item.shortName}</h3>
+        <div>
+          <p className="iodine-summary">
+            Scoped terminal approvals and agent edit recovery for an open-source IDE.
+          </p>
+          <p className="iodine-role">Open-source contributor</p>
+        </div>
+      </div>
+      <IodineContribution />
+      <div className="iodine-evidence">
+        <h4>Scoped terminal approvals</h4>
+        <p>
+          Reusable approvals stay within approved command signatures and paths. Local embeddings
+          suggest similar commands.
+        </p>
+      </div>
+      <div className="iodine-links">
         <button
-          className="product-iodine-shot"
+          type="button"
+          aria-label="Read my contribution to iodine"
+          onClick={(event) => onOpen(item, event.currentTarget)}
+        >
+          Read my contribution
+        </button>
+        <button
           type="button"
           ref={trigger}
-          disabled={unavailable}
-          aria-label="Inspect Iodine editor screenshot"
+          aria-label="View editor screenshot for iodine"
           onClick={() => setOpen(true)}
         >
-          <ScreenshotImage
-            src={image}
-            alt="Iodine editor with code and the coding assistant side by side"
-            lazy
-            onUnavailable={onUnavailable}
-            onReady={onReady}
-          />
+          View editor screenshot
         </button>
-        <p className="product-shot-caption">{caption}</p>
-        <IodineContribution />
-        {open && (
-          <ScreenshotViewer
-            image={image}
-            name="iodine"
-            caption={caption}
-            returnFocus={trigger.current}
-            onClose={() => setOpen(false)}
-          />
+        {item.link && (
+          <a
+            href={item.link.url}
+            target="_blank"
+            aria-describedby="external-link-hint"
+            aria-label="View changes on GitHub: iodine"
+            rel="noopener"
+          >
+            View changes on GitHub <span aria-hidden="true">↗</span>
+          </a>
         )}
       </div>
-    </figure>
+      {open && (
+        <ScreenshotViewer
+          image={preview.image}
+          name="iodine"
+          caption={preview.caption}
+          returnFocus={trigger.current}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </article>
   );
 }

@@ -21,12 +21,12 @@ afterEach(async () => {
 });
 it('restores the recorded file and lets the visitor replay the edit', async () => {
   await act(() => root.render(createElement(IodineContribution)));
-  expect(host.querySelector('code')!.textContent).toBe(example.after);
+  expect(host.querySelector('[data-current="true"] code')!.textContent).toBe(example.after);
   const undo = host.querySelector<HTMLButtonElement>('.cinema-undo')!;
   await act(() => undo.click());
-  expect(host.querySelector('code')!.textContent).toBe(example.restored);
+  expect(host.querySelector('[data-current="true"] code')!.textContent).toBe(example.restored);
   await act(() => undo.click());
-  expect(host.querySelector('code')!.textContent).toBe(example.after);
+  expect(host.querySelector('[data-current="true"] code')!.textContent).toBe(example.after);
 });
 it('completes a recorded replay without losing focus and cancels its pending timer on unmount', async () => {
   await act(() => root.render(createElement(IodineContribution)));
@@ -35,9 +35,9 @@ it('completes a recorded replay without losing focus and cancels its pending tim
   await act(() => play.click());
   expect(play.getAttribute('aria-disabled')).toBe('true');
   await act(() => vi.advanceTimersByTime(2399));
-  expect(host.querySelector('code')!.textContent).toBe(example.after);
+  expect(host.querySelector('[data-current="true"] code')!.textContent).toBe(example.after);
   await act(() => vi.advanceTimersByTime(1));
-  expect(host.querySelector('code')!.textContent).toBe(example.restored);
+  expect(host.querySelector('[data-current="true"] code')!.textContent).toBe(example.restored);
   expect(document.activeElement).toBe(play);
   expect(play.getAttribute('aria-disabled')).toBe('false');
   await act(() => play.click());

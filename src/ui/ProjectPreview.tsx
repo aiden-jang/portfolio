@@ -1,4 +1,3 @@
-import { IodinePresentation } from './showcase/IodinePresentation';
 import { BloomPreview } from './showcase/BloomPreview';
 import { copyText } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
@@ -88,9 +87,7 @@ function ScreenshotProjectPreview({
               <a href="#sec-intro">Back to portfolio ↑</a>
             </div>
           )}
-        <figcaption className={name === 'iodine' ? 'project-proof' : undefined} aria-live="polite">
-          {caption}
-        </figcaption>
+        <figcaption aria-live="polite">{caption}</figcaption>
       </figure>
       {open && (
         <ScreenshotViewer
@@ -119,9 +116,7 @@ function ScreenshotProjectPreview({
 }
 
 export function ProjectPreview(props: Props) {
-  return props.name === 'iodine' ? (
-    <IodinePresentation {...props} />
-  ) : props.name === 'bloomnote' ? (
+  return props.name === 'bloomnote' ? (
     <BloomPreview {...props} />
   ) : (
     <ScreenshotProjectPreview {...props} />
