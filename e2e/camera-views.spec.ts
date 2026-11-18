@@ -15,6 +15,10 @@ for (const width of [1440, 390]) {
         .filter({ visible: true });
       const select = async (name: string) => {
         await garage.click();
+        await expect(page.getByRole('dialog', { name: 'Command menu' })).toHaveCSS(
+          '--garage-anchor-y',
+          '24px',
+        );
         await page.getByRole('option', { name: new RegExp(name) }).click();
         await expect(page.getByRole('dialog', { name: 'Command menu' })).toHaveCount(0);
         await expect(reset).toBeVisible();

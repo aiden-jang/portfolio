@@ -117,3 +117,58 @@
     display: none;
   }
 }
+
+.command-menu-overlay {
+  background: #06060bc2;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:root .command-menu-panel {
+    animation: garage-panel-in 210ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes garage-panel-in {
+    from {
+      opacity: 0;
+      transform: translate(var(--garage-anchor-x, 0px), var(--garage-anchor-y, 8px)) scale(0.955);
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+  }
+  :is(.all-controls-trigger, .mobile-color-button, [data-color-swatch]):active {
+    scale: 0.94;
+  }
+  [data-color-swatch][aria-pressed='true'] {
+    animation: garage-paint-selected 185ms ease-out;
+  }
+  @keyframes garage-paint-selected {
+    45% {
+      scale: 1.13;
+    }
+  }
+}
+.garage-feedback {
+  position: fixed;
+  z-index: 39;
+  bottom: 112px;
+  left: 50%;
+  translate: -50%;
+  padding: 7px 12px;
+  border: 1px solid #ffffff23;
+  border-radius: 7px;
+  background: #17171bf5;
+  color: var(--color-fg);
+  font: 13px/1.4 var(--font-display);
+  pointer-events: none;
+}
+.garage-feedback:empty {
+  opacity: 0;
+}
+@media (max-width: 767px) {
+  .garage-feedback {
+    bottom: 158px;
+  }
+}
+body:is([data-photo-mode], :not([data-car-controls='visible'])) .garage-feedback {
+  visibility: hidden;
+}

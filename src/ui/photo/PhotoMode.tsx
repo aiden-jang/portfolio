@@ -26,6 +26,7 @@ export function PhotoMode() {
   const region = useRef<HTMLElement>(null),
     exit = useRef<HTMLButtonElement>(null),
     generation = useRef({ version: 0 });
+  const chromeTimer = useRef(0);
   usePageScrollLock(active);
   useDialogFocus(active, region, exit);
   useEffect(() => {
@@ -35,6 +36,8 @@ export function PhotoMode() {
     if (!active) return;
     const session = generation.current;
     document.body.dataset.photoMode = 'true';
+    window.clearTimeout(chromeTimer.current);
+    delete document.body.dataset.garageReturning;
     window.dispatchEvent(new Event(SCENE_ACTIVITY_EVENT));
     const key = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -46,6 +49,10 @@ export function PhotoMode() {
     window.addEventListener('keydown', key, true);
     return () => {
       delete document.body.dataset.photoMode;
+      document.body.dataset.garageReturning = '';
+      chromeTimer.current = window.setTimeout(() => {
+        delete document.body.dataset.garageReturning;
+      }, 175);
       window.removeEventListener('keydown', key, true);
       session.version++;
       setFile(null);
@@ -58,6 +65,13 @@ export function PhotoMode() {
       );
     };
   }, [active, close]);
+  useEffect(
+    () => () => {
+      window.clearTimeout(chromeTimer.current);
+      delete document.body.dataset.garageReturning;
+    },
+    [],
+  );
   useEffect(() => {
     if (!file) {
       setPreview('');

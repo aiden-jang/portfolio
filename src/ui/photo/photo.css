@@ -85,3 +85,44 @@ body[data-photo-mode='true'] .portfolio-chrome {
     padding: 8px;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .photo-toolbar {
+    animation: garage-photo-enter 190ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes garage-photo-enter {
+    from {
+      opacity: 0;
+      translate: 0 8px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  body[data-photo-mode='true']
+    .portfolio-chrome
+    > :is(.portfolio-header, #desktop-dock, #mobile-bar),
+  body[data-photo-mode='true'] .portfolio-chrome .garage-intro {
+    animation: garage-chrome-leave 135ms ease-out both;
+  }
+  @keyframes garage-chrome-leave {
+    from {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: none;
+    }
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  body[data-garage-returning] :is(.portfolio-header, #desktop-dock, #mobile-bar, .garage-intro) {
+    animation: garage-chrome-return 175ms ease-out both;
+  }
+  @keyframes garage-chrome-return {
+    from {
+      opacity: 0;
+    }
+  }
+}

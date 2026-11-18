@@ -1,15 +1,19 @@
 import { useDialogFocus } from './useDialogFocus';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { createPortal, flushSync } from 'react-dom';
-import { type SectionId } from '../config';
+import { CARS, type SectionId } from '../config';
+import { paintFinish } from '../paint';
 import { buildCommands, matchCommands, type Command } from './commands';
 import { usePageScrollLock } from './usePageScrollLock';
 import { CommandResults } from './CommandResults';
+import { CommandSearch } from './CommandSearch';
 import { useAppStore } from '../store';
 import { useCommandMenuEvents } from './useCommandMenuEvents';
 
 export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void }) {
   const [open, setOpen] = useState(false);
+  const [origin, setOrigin] = useState<DOMRect | null>(null);
+  const [feedback, setFeedback] = useState<{ text: string } | null>(null);
   usePageScrollLock(open);
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState('');
@@ -30,7 +34,13 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
     activeResultRef.current?.scrollIntoView({ block: 'nearest' });
   }, [activeIndex, query]);
 
-  useCommandMenuEvents(open, setOpen, dialogRef);
+  useCommandMenuEvents(open, setOpen, dialogRef, setOrigin);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 1550);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
 
   useEffect(() => {
     if (!open) {
@@ -41,88 +51,73 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
 
   const select = async (command: Command) => {
     if (command.closeOnRun !== false) flushSync(() => setOpen(false));
+    const before = useAppStore.getState();
     await command.run();
+    const { cameraViewVersion, carIndex, activeBodyColor } = useAppStore.getState();
+    if (command.id.startsWith('view-') && cameraViewVersion !== before.cameraViewVersion)
+      setFeedback({ text: command.label });
+    if (command.id === 'repaint' && activeBodyColor !== before.activeBodyColor)
+      setFeedback({ text: paintFinish(CARS[carIndex], activeBodyColor).name });
   };
 
-  if (!open) return null;
+  const shift = origin
+    ? Math.max(-136, Math.min(136, (origin.left + origin.width / 2 - innerWidth / 2) * 0.28))
+    : 0;
+  const panelStyle = {
+    '--garage-anchor-x': shift + 'px',
+    '--garage-anchor-y': origin ? '24px' : '8px',
+  } as CSSProperties;
 
-  return createPortal(
-    <div
-      className="dialog-overlay fixed inset-0 z-50 flex items-start justify-center px-4 pt-[min(18vh,9rem)] bg-[#05050de6]"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) setOpen(false);
-      }}
-    >
-      <section
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Command menu"
-        className="dialog-panel w-full max-w-[490px] overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-line)] bg-[var(--color-panel)] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
-      >
-        <div className="command-menu-search">
-          <input
-            ref={inputRef}
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.nativeEvent.isComposing || event.keyCode === 229) return;
-              if (event.key === 'ArrowDown' && results.length) {
-                event.preventDefault();
-                setActiveIndex((index) => (index + 1) % results.length);
-              }
-              if (event.key === 'ArrowUp' && results.length) {
-                event.preventDefault();
-                setActiveIndex((index) => (index - 1 + results.length) % results.length);
-              }
-              if (event.key === 'Home' && results.length) {
-                event.preventDefault();
-                setActiveIndex(0);
-              }
-              if (event.key === 'End' && results.length) {
-                event.preventDefault();
-                setActiveIndex(results.length - 1);
-              }
-              if (event.key === 'Enter' && results[activeIndex]) {
-                event.preventDefault();
-                void select(results[activeIndex]);
-              }
-            }}
-            placeholder="Find a control…"
-            autoComplete="off"
-            spellCheck={false}
-            role="combobox"
-            aria-label="Search portfolio controls"
-            aria-autocomplete="list"
-            aria-expanded="true"
-            aria-haspopup="listbox"
-            aria-activedescendant={
-              results[activeIndex] ? `command-${results[activeIndex].id}` : undefined
-            }
-            aria-controls="command-results"
-            className="min-w-0 flex-1 bg-transparent font-[var(--font-display)] text-base text-[var(--color-fg)] outline-none placeholder:text-[var(--color-muted)]"
-          />
-          <button
-            type="button"
-            className="command-menu-close"
-            aria-label="Close controls"
-            onClick={() => setOpen(false)}
+  const overlay = open
+    ? createPortal(
+        <div
+          className="dialog-overlay fixed inset-0 z-50 flex items-start justify-center px-4 pt-[min(18vh,9rem)] command-menu-overlay"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setOpen(false);
+          }}
+        >
+          <section
+            ref={dialogRef}
+            style={panelStyle}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Command menu"
+            className="dialog-panel command-menu-panel w-full max-w-[490px] overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-line)] bg-[var(--color-panel)] shadow-[0_24px_80px_-22px_rgba(0,0,0,0.9)]"
           >
-            Close
-          </button>
-        </div>
-        <CommandResults
-          results={results}
-          activeIndex={activeIndex}
-          activeRef={activeResultRef}
-          onActive={setActiveIndex}
-          onSelect={select}
-        />
-        <div aria-live="polite" className="command-menu-footer">
-          {notice || <span className="keyboard-hint">↑ ↓ browse · Home End jump · Enter run</span>}
-        </div>
-      </section>
-    </div>,
-    document.body,
+            <CommandSearch
+              inputRef={inputRef}
+              query={query}
+              results={results}
+              activeIndex={activeIndex}
+              onQuery={setQuery}
+              onActive={setActiveIndex}
+              onSelect={select}
+              onClose={() => setOpen(false)}
+            />
+            <CommandResults
+              results={results}
+              activeIndex={activeIndex}
+              activeRef={activeResultRef}
+              onActive={setActiveIndex}
+              onSelect={select}
+            />
+            <div aria-live="polite" className="command-menu-footer">
+              {notice || (
+                <span className="keyboard-hint">↑ ↓ browse · Home End jump · Enter run</span>
+              )}
+            </div>
+          </section>
+        </div>,
+        document.body,
+      )
+    : null;
+
+  return (
+    <>
+      <div className="garage-feedback" aria-live="polite">
+        {feedback?.text}
+      </div>
+      {overlay}
+    </>
   );
 }

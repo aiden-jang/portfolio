@@ -6,6 +6,7 @@ export function useCommandMenuEvents(
   open: boolean,
   setOpen: Dispatch<SetStateAction<boolean>>,
   dialogRef: RefObject<HTMLElement>,
+  setOrigin: Dispatch<SetStateAction<DOMRect | null>>,
 ) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -18,24 +19,29 @@ export function useCommandMenuEvents(
         !!target?.isContentEditable;
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
+        setOrigin(null);
         setOpen((value) => !value);
         return;
       }
       if (!inField && event.key === '?') {
         event.preventDefault();
+        setOrigin(null);
         setOpen(true);
       }
       if (event.key === 'Escape') setOpen(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [dialogRef, setOpen]);
+  }, [dialogRef, setOpen, setOrigin]);
 
   useEffect(() => {
-    const openFromControl = () => setOpen(true);
+    const openFromControl = () => {
+      setOrigin(document.activeElement?.getBoundingClientRect() ?? null);
+      setOpen(true);
+    };
     window.addEventListener(COMMAND_MENU_EVENT, openFromControl);
     return () => window.removeEventListener(COMMAND_MENU_EVENT, openFromControl);
-  }, [setOpen]);
+  }, [setOpen, setOrigin]);
 
   useEffect(() => {
     if (open)

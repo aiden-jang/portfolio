@@ -34,7 +34,7 @@ export function useCameraViews() {
     if (rig.isDown || scrollT > 0 || state.carIndex !== animation.car) animation.elapsed = 1;
     animation.car = state.carIndex;
     if (animation.elapsed >= 1) return;
-    animation.elapsed = reduced ? 1 : Math.min(1, animation.elapsed + dt / 0.7);
+    animation.elapsed = reduced ? 1 : Math.min(1, animation.elapsed + dt / 0.58);
     const view = CAMERA_VIEWS[state.cameraView];
     const progress = easeOutCubic(animation.elapsed);
     rig.idleSpin = lerpAngle(animation.azimuth, view.azimuth - KEYFRAMES[0].azimuth, progress);
