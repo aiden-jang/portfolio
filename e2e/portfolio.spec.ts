@@ -310,9 +310,11 @@ for (const width of [1440, 390]) {
   });
 }
 
+type StartupGraphicsContexts = { webgl: number; canvas2d: HTMLCanvasElement[] };
+
 test('a delayed effects download does not block content or the model request', async ({ page }) => {
   await page.addInitScript(() => {
-    const contexts = { webgl: 0, canvas2d: 0 };
+    const contexts: StartupGraphicsContexts = { webgl: 0, canvas2d: [] };
     const seen = new WeakSet<HTMLCanvasElement>();
     const original = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function (
@@ -323,7 +325,7 @@ test('a delayed effects download does not block content or the model request', a
       const context = Reflect.apply(original, this, [type, ...args]);
       if (context && !seen.has(this)) {
         seen.add(this);
-        if (type === '2d') contexts.canvas2d++;
+        if (type === '2d') contexts.canvas2d.push(this);
         else if (type === 'webgl2' || type === 'webgl') contexts.webgl++;
       }
       return context;
@@ -358,13 +360,19 @@ test('a delayed effects download does not block content or the model request', a
       await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
   });
   expect(
-    await page.evaluate(
-      () =>
-        (window as Window & { portfolioGraphicsContexts?: { webgl: number; canvas2d: number } })
-          .portfolioGraphicsContexts,
-    ),
-    'startup reuses the scene context and the pre-rendered glow',
-  ).toEqual({ webgl: 1, canvas2d: 0 });
+    await page.evaluate(() => {
+      const contexts = (window as Window & { portfolioGraphicsContexts?: StartupGraphicsContexts })
+        .portfolioGraphicsContexts;
+      if (!contexts) return;
+      const { webgl, canvas2d } = contexts;
+      const titleOverlay = document.querySelector('canvas.car-type-overlap');
+      return {
+        webgl,
+        unexpectedCanvas2d: canvas2d.filter((canvas) => canvas !== titleOverlay).length,
+      };
+    }),
+    'startup uses one WebGL context and reserves canvas drawing for the desktop title overlap',
+  ).toEqual({ webgl: 1, unexpectedCanvas2d: 0 });
 });
 
 test('clean capture mode frames a visible car without page chrome', async ({ page }) => {
