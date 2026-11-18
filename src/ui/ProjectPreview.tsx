@@ -1,4 +1,5 @@
 import { BloomPreview } from './showcase/BloomPreview';
+import { OwewellPreview } from './showcase/OwewellPreview';
 import { copyText } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
 import { ScreenshotImage } from './ScreenshotImage';
@@ -116,9 +117,12 @@ function ScreenshotProjectPreview({
 }
 
 export function ProjectPreview(props: Props) {
-  return props.name === 'bloomnote' ? (
-    <BloomPreview {...props} />
-  ) : (
-    <ScreenshotProjectPreview {...props} />
-  );
+  if (props.name === 'bloomnote') return <BloomPreview {...props} />;
+  if (
+    props.name === 'owewell' &&
+    previewIndex(new URLSearchParams(location.search).get('preview'), props.name, 1) === null
+  ) {
+    return <OwewellPreview image={props.image} caption={props.caption} />;
+  }
+  return <ScreenshotProjectPreview {...props} />;
 }

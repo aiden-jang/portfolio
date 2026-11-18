@@ -54,7 +54,10 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     const cards = await gallery.locator('.garage-project-compact').evaluateAll((items) =>
       items.map((item) => ({
         name: item.id,
-        frame: item.querySelector('.preview-thumbnail')!.getBoundingClientRect().toJSON(),
+        frame: item
+          .querySelector('.preview-thumbnail, .owewell-demo')!
+          .getBoundingClientRect()
+          .toJSON(),
         title: item.querySelector('h3 button')!.getBoundingClientRect().toJSON(),
         app: item.querySelector('.garage-project-links a')!.getBoundingClientRect().toJSON(),
         description: item
@@ -64,7 +67,9 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       })),
     );
     for (const { name, frame, title, app, description } of cards) {
-      expect.soft(Math.abs(frame.height - frame.width / 2), name).toBeLessThan(1);
+      const expectedHeight =
+        name === 'project-owewell' ? Math.max(frame.width / 2, 204) : frame.width / 2;
+      expect.soft(Math.abs(frame.height - expectedHeight), name).toBeLessThan(1);
       expect.soft(Math.abs(frame.width - cards[0].frame.width), name).toBeLessThan(1);
       expect.soft(Math.abs(title.top - app.top), `${name} actions share a row`).toBeLessThan(1);
       expect.soft(app.left, `${name} action clears the title`).toBeGreaterThanOrEqual(title.right);

@@ -1,0 +1,172 @@
+.owewell-demo {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  align-items: center;
+  aspect-ratio: 2 / 1;
+  min-height: 204px;
+  padding: clamp(14px, 2vw, 28px);
+  border: 1px solid #344541;
+  border-radius: 11px;
+  color: #edf3f0;
+  background: #182522;
+  color-scheme: dark;
+}
+
+.owewell-demo-inner {
+  display: grid;
+  gap: clamp(10px, 1.1vw, 16px);
+  width: 100%;
+  max-width: 29rem;
+  margin-inline: auto;
+}
+
+.owewell-demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 8px;
+}
+
+.owewell-demo-meal {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: clamp(18px, 1.65vw, 24px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  font-weight: 580;
+}
+
+.owewell-demo-meal strong {
+  color: #c4dbd4;
+  font-size: 0.66em;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.owewell-demo-muted {
+  display: block;
+  margin-top: 4px;
+  color: #aec5bc;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.owewell-demo-inspect {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #3b5350;
+  border-radius: 8px;
+  background: transparent;
+  color: #c2ded5;
+  cursor: pointer;
+}
+
+.owewell-demo-inspect .image-expand {
+  position: static;
+  display: grid;
+  place-items: center;
+  width: auto;
+  height: auto;
+  padding: 0;
+  opacity: 1;
+  color: inherit;
+  background: none;
+  border: 0;
+  transform: none;
+  pointer-events: none;
+}
+
+.owewell-demo-inspect svg {
+  width: 17px;
+  height: 17px;
+}
+
+.owewell-demo-payer {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+}
+
+.owewell-demo-payer legend {
+  padding: 0;
+  margin-bottom: 4px;
+  color: #c4dbd4;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.owewell-demo-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.owewell-demo-choices label {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  border-radius: 7px;
+  border: 1px solid #405752;
+  color: #dae9e3;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.owewell-demo-choices input {
+  margin: 0;
+  accent-color: #98cec9;
+}
+
+.owewell-demo-choices label:has(:checked) {
+  color: #edf9f3;
+  background: #26443e;
+  border-color: #6ca097;
+}
+
+.owewell-demo-inspect:focus-visible,
+.owewell-demo-choices label:has(:focus-visible) {
+  outline: 2px solid #b0ddd7;
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .owewell-demo-inspect:hover,
+  .owewell-demo-choices label:hover {
+    color: #fff;
+    border-color: #98cec9;
+  }
+}
+
+.owewell-demo-transfer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 7px;
+  background: #243f40;
+  color: #e9f6f3;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.2;
+}
+
+.owewell-demo-transfer strong {
+  color: #b0ddd7;
+  font-size: clamp(21px, 2.1vw, 30px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 560;
+}
