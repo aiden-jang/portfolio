@@ -1,6 +1,5 @@
 html:root {
   --stage-opacity: 1;
-  --work-title-shift: 90px;
   --work-figure-scale: 0.88;
 }
 html:root .portfolio-scene {
@@ -24,25 +23,9 @@ html:root .portfolio-chrome .garage-intro .intro-role {
   margin-top: 26px;
 }
 html:root .portfolio-chrome #sec-work {
-  margin-top: -22svh;
+  margin-top: -15svh;
   padding-top: 130px;
   background: transparent;
-}
-html:root .portfolio-chrome .garage-work-heading {
-  display: block;
-  margin-bottom: 68px;
-  transform: translateX(calc(var(--work-title-shift) * 0.35));
-}
-html:root .portfolio-chrome .garage-work-heading h2 {
-  font-size: clamp(76px, 10.6vw, 156px);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  font-weight: 430;
-}
-html:root .garage-work-heading > span {
-  display: block;
-  margin-top: 28px;
-  font-size: 14px;
 }
 html:root #project-everythingisfine > figure {
   transform: scale(var(--work-figure-scale));
@@ -157,20 +140,8 @@ html:root .cinema-example-note {
     min-height: 110svh;
   }
   html:root .portfolio-chrome #sec-work {
-    margin-top: -14svh;
+    margin-top: -10svh;
     padding-top: 100px;
-  }
-  html:root .portfolio-chrome .garage-work-heading h2 {
-    font-size: clamp(62px, 16vw, 96px);
-    max-width: 8ch;
-    line-height: 0.98;
-  }
-  html:root .garage-work-heading > span {
-    margin-top: 22px;
-    font-size: 12px;
-  }
-  html:root .portfolio-chrome .garage-work-heading {
-    margin-bottom: 40px;
   }
   html:root .portfolio-chrome #project-everythingisfine h3 {
     font-size: 30px;
@@ -225,14 +196,6 @@ html:root .cinema-example-note {
   html:root .portfolio-chrome .garage-intro .intro-role {
     font-size: 12px;
     margin-top: 12px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html:root .portfolio-scene {
-    transform: none;
-  }
-  html:root .garage-work-heading {
-    transform: none;
   }
 }
 

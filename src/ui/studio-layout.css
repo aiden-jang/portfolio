@@ -100,12 +100,6 @@ html:root :is(#sec-work, #sec-more-work, #sec-experience, #sec-about) {
 html:root #sec-work {
   padding-block: 100px 80px;
 }
-html:root .garage-work-heading {
-  margin-bottom: 52px;
-}
-html:root .garage-work-heading h2 {
-  font-size: 56px;
-}
 html:root .project-featured-group {
   display: grid;
   gap: 104px;
@@ -497,16 +491,6 @@ html:root .project-gallery h3 button:hover svg {
   }
   html:root #sec-work {
     padding-block: 76px 56px;
-  }
-  html:root .garage-work-heading {
-    margin-bottom: 32px;
-  }
-  html:root .garage-work-heading h2 {
-    font-size: 36px;
-  }
-  html:root .garage-work-heading > span {
-    font-size: 12px;
-    margin-top: 10px;
   }
   html:root .project-featured-group {
     gap: 72px;

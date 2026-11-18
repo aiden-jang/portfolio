@@ -16,11 +16,11 @@ html:root .portfolio-chrome .garage-intro .intro-role {
 html:root .portfolio-chrome .intro-work-cue {
   margin-top: 16px;
 }
-html:root .portfolio-chrome :is(.garage-work-heading, .project-gallery-heading) {
+html:root .portfolio-chrome .project-gallery-heading {
   align-items: baseline;
   margin-bottom: 44px;
 }
-html:root .portfolio-chrome :is(.garage-work-heading, .project-gallery-heading) h2 {
+html:root .portfolio-chrome .project-gallery-heading h2 {
   font-size: 48px;
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -229,11 +229,11 @@ html:root .portfolio-chrome .product-iodine-shot:hover img {
   html:root .portfolio-chrome #sec-about {
     padding-block: calc(var(--portfolio-header-height) + 24px) 72px;
   }
-  html:root .portfolio-chrome :is(.garage-work-heading, .project-gallery-heading) {
+  html:root .portfolio-chrome .project-gallery-heading {
     display: block;
     margin-bottom: 38px;
   }
-  html:root .portfolio-chrome :is(.garage-work-heading, .project-gallery-heading) h2,
+  html:root .portfolio-chrome .project-gallery-heading h2,
   html:root .portfolio-chrome #sec-experience h2,
   html:root .portfolio-chrome #sec-about h2 {
     font-size: 34px;

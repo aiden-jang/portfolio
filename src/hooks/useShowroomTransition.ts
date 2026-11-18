@@ -21,7 +21,6 @@ export function useShowroomTransition() {
         '--stage-opacity',
         String(contact || media.matches ? 1 : 1 - exit * exit),
       );
-      root.style.setProperty('--work-title-shift', `${media.matches ? 0 : 90 * (1 - arrival)}px`);
       root.style.setProperty(
         '--work-figure-scale',
         String(media.matches ? 1 : 0.88 + 0.12 * arrival),
@@ -39,7 +38,7 @@ export function useShowroomTransition() {
       removeEventListener('scroll', schedule);
       removeEventListener('resize', schedule);
       media.removeEventListener('change', schedule);
-      for (const name of ['--stage-opacity', '--work-title-shift', '--work-figure-scale'])
+      for (const name of ['--stage-opacity', '--work-figure-scale'])
         root.style.removeProperty(name);
     };
   }, []);

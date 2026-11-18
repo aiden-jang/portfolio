@@ -81,19 +81,24 @@ for (const width of [1440, 390]) {
     page,
   }) => {
     await page.setViewportSize({ width, height: 900 });
+    await page.goto('/#sec-work');
+    const project = page.locator('#project-everythingisfine');
+    const thumbnail = project.locator('.preview-thumbnail');
+    await expect(thumbnail.locator('img')).toHaveAttribute('aria-busy', 'false');
+    const originalFrame = (await thumbnail.boundingBox())!;
     await page.route(/\/projects\/(everythingisfine|kamchatka-globe)\.jpg$/, (route) =>
       route.fulfill({ status: 404, body: 'Not found' }),
     );
-    await page.goto('/#sec-work');
-    const project = page.locator('#project-everythingisfine');
+    await page.reload();
     await project.scrollIntoViewIfNeeded();
     await expect(project.getByRole('status')).toContainText('Screenshot unavailable');
     await expect(project.locator('[aria-busy="true"]')).toHaveCount(0);
     await expect(
       project.getByRole('button', { name: 'Inspect screenshot: everythingisfine', exact: true }),
     ).toBeDisabled();
-    const frame = await project.locator('.preview-thumbnail').boundingBox();
-    expect(frame!.width / frame!.height).toBeCloseTo(width < 768 ? 1.26 : 1.53, 1);
+    const failedFrame = (await thumbnail.boundingBox())!;
+    expect(failedFrame.width).toBeCloseTo(originalFrame.width, 0);
+    expect(failedFrame.height).toBeCloseTo(originalFrame.height, 0);
     await project
       .getByRole('button', { name: 'How I built it: everythingisfine', exact: true })
       .click();
@@ -107,14 +112,15 @@ test('reader keeps the current identity and named next project after scrolling',
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/#sec-work');
   const project = page.locator('#project-everythingisfine');
-  const inlineWidth = (await project.locator('.preview-thumbnail').boundingBox())!.width;
   await project
     .getByRole('button', { name: 'Inspect screenshot: everythingisfine', exact: true })
     .click();
   const viewer = page.getByRole('dialog', { name: 'everythingisfine screenshot', exact: true });
-  expect((await viewer.locator('.preview-image').boundingBox())!.width).toBeGreaterThan(
-    inlineWidth,
-  );
+  const image = viewer.getByRole('img', {
+    name: 'everythingisfine product interface, full screenshot',
+  });
+  await expect(image).toBeInViewport({ ratio: 0.99 });
+  await expect(image).toHaveAttribute('src', '/projects/everythingisfine.jpg');
   await page.keyboard.press('Escape');
   await project
     .getByRole('button', { name: 'How I built it: everythingisfine', exact: true })

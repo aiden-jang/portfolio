@@ -20,14 +20,13 @@ for (const [width, height] of [
     });
     await page.goto('/#sec-work');
     await page.evaluate(() => document.fonts.ready);
-    const inspect = page.getByRole('button', { name: 'Inspect an earthquake', exact: true });
+    const inspect = page.getByRole('button', { name: 'Inspect the earthquake', exact: true });
     const story = page.getByRole('button', {
       name: 'How I built it: everythingisfine',
       exact: true,
     });
     await expect(inspect).toHaveCount(1, { timeout: 5000 });
     await expect(inspect).toBeInViewport({ ratio: 1 });
-    await expect(story).toBeInViewport({ ratio: 1 });
     await inspect.press('Enter');
     await expect(
       page.getByRole('heading', { name: 'One earthquake. Two readings.' }),
@@ -43,6 +42,10 @@ for (const [width, height] of [
     await expect(read).toBeFocused();
     await page.getByRole('button', { name: 'Back to the globe preview' }).click();
     await expect(inspect).toBeFocused();
+    await story.click();
+    await expect(reader.getByText('One event on the globe', { exact: true })).toBeVisible();
+    await reader.getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(story).toBeFocused();
     await page.getByRole('button', { name: 'Read my contribution to iodine' }).click();
     await expect(reader.getByText('.trim()', { exact: true })).toBeVisible();
     const undo = reader.getByRole('button', { name: 'Undo edit', exact: true });

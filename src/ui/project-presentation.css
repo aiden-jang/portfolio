@@ -9,7 +9,7 @@ html:root :is(#sec-work, #sec-more-work) {
 html:root #sec-more-work {
   padding-block: 96px 100px;
 }
-html:root :is(.garage-work-heading, .project-gallery-heading) {
+html:root .project-gallery-heading {
   margin-bottom: 44px;
   padding: 0;
   display: flex;
@@ -17,17 +17,13 @@ html:root :is(.garage-work-heading, .project-gallery-heading) {
   align-items: baseline;
   gap: 32px;
 }
-html:root .garage-work-heading h2 {
-  font-size: 56px;
-  letter-spacing: -0.035em;
-}
 html:root .project-gallery-heading h2 {
   font-size: 44px;
   letter-spacing: -0.035em;
   line-height: 1.1;
   font-weight: 500;
 }
-html:root :is(.garage-work-heading, .project-gallery-heading) > span {
+html:root .project-gallery-heading > span {
   font: 13px/1.6 var(--font-display);
   color: var(--color-muted);
 }
@@ -222,17 +218,14 @@ html:root #project-platform .garage-project-links {
   html:root #sec-more-work {
     padding-block: 100px 72px;
   }
-  html:root :is(.garage-work-heading, .project-gallery-heading) {
+  html:root .project-gallery-heading {
     display: block;
     margin-bottom: 28px;
-  }
-  html:root .garage-work-heading h2 {
-    font-size: 38px;
   }
   html:root .project-gallery-heading h2 {
     font-size: 36px;
   }
-  html:root :is(.garage-work-heading, .project-gallery-heading) > span {
+  html:root .project-gallery-heading > span {
     display: block;
     margin-top: 12px;
   }

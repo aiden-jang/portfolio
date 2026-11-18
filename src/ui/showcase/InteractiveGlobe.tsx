@@ -122,7 +122,7 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
     <>
       <figure ref={figure} className="orbit-feature" data-globe-phase={phase}>
         <div className="project-preview orbit-preview" data-project="everythingisfine">
-          <div className="preview-thumbnail">
+          <div className="preview-thumbnail" data-poster={!posterUnavailable}>
             {posterUnavailable ? (
               <ScreenshotImage
                 src={image}
@@ -144,10 +144,10 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
                 />
               </div>
             )}
+            {!ready && !posterUnavailable && (
+              <span className="earthquake-map-label">Kamchatka · M5.8</span>
+            )}
           </div>
-          {!ready && !posterUnavailable && (
-            <span className="earthquake-map-label">Kamchatka · M5.8</span>
-          )}
           <div className="orbit-actions">
             {!ready && (
               <button
@@ -232,12 +232,14 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
             />
           )}
         </div>
-        <figcaption aria-live="polite">
+        <figcaption aria-live="polite" className={phase === 'idle' ? 'sr-only' : undefined}>
           {phase === 'error'
             ? 'The globe could not start. You can retry, view the screenshot or open the app.'
             : ready
               ? `${mobile ? 'Drag to rotate; tap a marker for details. Done returns to scrolling.' : 'Drag to rotate; select a marker for details.'} Recorded USGS events${captured ? ' · ' + captured + ' UTC' : ''}.`
-              : 'Recorded Kamchatka earthquake. Explore the globe to browse more recorded events.'}
+              : phase === 'loading'
+                ? 'Preparing globe…'
+                : 'Recorded Kamchatka earthquake. Explore the globe to browse more recorded events.'}
         </figcaption>
       </figure>
       {viewer && (

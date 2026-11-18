@@ -79,15 +79,19 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
             <div className="earthquake-intro">
               <h3>{item.shortName}</h3>
               <p>{preview.description ?? item.summary}</p>
-              <div className="earthquake-actions">
-                <button
-                  ref={open}
-                  type="button"
-                  className="featured-primary"
-                  onClick={() => setComparison(true)}
-                >
-                  Inspect an earthquake
-                </button>
+              <button
+                ref={open}
+                type="button"
+                className="featured-primary"
+                onClick={() => setComparison(true)}
+              >
+                Inspect the earthquake <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+            <InteractiveGlobe image={preview.image} caption={preview.caption} />
+            <div className="earthquake-footer">
+              <span className="earthquake-record">Recorded earthquake · North Pacific</span>
+              <div className="earthquake-links">
                 <button
                   type="button"
                   className="featured-text-action"
@@ -96,21 +100,20 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
                 >
                   How I built it <span aria-hidden="true">↗</span>
                 </button>
+                {item.link && (
+                  <a
+                    className="earthquake-app"
+                    href={item.link.url}
+                    target="_blank"
+                    aria-describedby="external-link-hint"
+                    aria-label="Open everythingisfine"
+                    rel="noopener"
+                  >
+                    Open app <span aria-hidden="true">↗</span>
+                  </a>
+                )}
               </div>
-              {item.link && (
-                <a
-                  className="earthquake-app"
-                  href={item.link.url}
-                  target="_blank"
-                  aria-describedby="external-link-hint"
-                  aria-label="Open everythingisfine"
-                  rel="noopener"
-                >
-                  Open app <span aria-hidden="true">↗</span>
-                </a>
-              )}
             </div>
-            <InteractiveGlobe image={preview.image} caption={preview.caption} />
           </>
         )}
       </div>

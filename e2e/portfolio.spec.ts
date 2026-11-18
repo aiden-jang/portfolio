@@ -186,7 +186,7 @@ for (const width of [1440, 390]) {
           .getByRole('link', { name: 'Featured work', exact: true })
           .click();
       }
-      await expect(page.locator('#sec-work h2')).toBeInViewport();
+      await expect(page.locator('#project-everythingisfine h3')).toBeInViewport();
       const carBefore = new URL(page.url()).searchParams.get('car');
       if (width !== 390) {
         await page.mouse.wheel(150, 0);

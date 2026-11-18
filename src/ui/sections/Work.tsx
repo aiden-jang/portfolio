@@ -19,9 +19,7 @@ export function WorkSection({ onOpen }: Props) {
   return (
     <Section id="sec-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="garage-work pointer-events-auto">
-        <div className="garage-work-heading">
-          <h2>Selected work</h2>
-        </div>
+        <h2 className="sr-only">Featured work</h2>
         <div className="garage-project-list project-featured-group" aria-label="Featured projects">
           {featured.map((item) =>
             item.mark === 'everythingisfine' ? (

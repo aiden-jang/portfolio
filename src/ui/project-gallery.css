@@ -4,10 +4,6 @@
   text-align: left;
   text-shadow: none;
 }
-.garage-work-heading h2 {
-  font-weight: 500;
-  line-height: 1.1;
-}
 .garage-project {
   padding: 24px 0;
   scroll-margin-top: calc(var(--portfolio-header-height) + 24px);

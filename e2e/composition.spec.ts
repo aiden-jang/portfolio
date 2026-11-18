@@ -54,7 +54,7 @@ for (const [width, height] of [
     };
     if (width !== 320) {
       await jump('Featured work');
-      await expect(page.locator('#sec-work h2')).toBeInViewport();
+      await expect(page.locator('#project-everythingisfine h3')).toBeInViewport();
       await page.screenshot({ path: test.info().outputPath(`projects-${width}.png`) });
       await jump('About');
       await expect(page.locator('#sec-about h2')).toBeInViewport();
