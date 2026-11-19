@@ -90,7 +90,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
             </div>
             <InteractiveGlobe image={preview.image} caption={preview.caption} />
             <div className="earthquake-footer">
-              <span className="earthquake-record">Recorded earthquake · North Pacific</span>
+              <span className="earthquake-record">Recorded USGS events · NOAA aurora</span>
               <div className="earthquake-links">
                 <button
                   type="button"

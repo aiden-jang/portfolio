@@ -12,28 +12,36 @@ The still renders the existing Natural Earth mesh, coastlines, and tectonic boun
 The app’s [recorded agency reports](https://github.com/aiden-jang/everythingisfine/blob/main/src/sources/fixtures/one-quake-both-feeds.json)
 include the source IDs, original precision and measured separation.
 
-Explore globe starts the interactive USGS snapshot on request. Done restores the
-Kamchatka still and ordinary page scrolling. Mouse wheel input scrolls the page. Dragging, arrow keys, reset and event
-selection stay inside the globe. Motion stops when the globe is idle, offscreen,
-behind a dialog or in a hidden tab. Reduced motion removes coasting.
+As Featured work comes into view, the still gives way to a slow orbit from the
+same camera position. Pause, drag, arrow keys and event selection stop the
+automatic orbit. Done restores the still. Vertical swipes and the mouse wheel
+scroll the page. The renderer pauses offscreen, behind a dialog and in a hidden
+tab. Reduced motion keeps the still until the visitor chooses Explore globe and
+turns off both automatic rotation and coasting.
 
-The recorded USGS snapshot in `public/projects/orbit-snapshot.json` supplies marker
-positions, magnitude, depth, event names and times. Its capture date is displayed;
-it does not poll or imply a live feed. Event links preserve the selected USGS event
-and camera in the actual application's permalink format. Older events can age out
-of that application's live catalogue.
+The public assets contain all data needed by the embedded globe. The
+[USGS snapshot](../public/projects/orbit-snapshot.json) holds 194 magnitude 5.0+
+earthquakes, and the featured Kamchatka event comes from the reconciliation
+fixture above. Event links carry the selected USGS ID and camera to the live app.
+Older events can age out of its catalogue.
 
-The geography asset uses everythingisfine's Natural Earth land mesh, coastlines,
-tectonic boundaries and graticule. Its indexed geometry uses the native adaptive
-edge cap, with fewer uniform subdivision passes for a small embedded globe. The
-layout of its compressed arrays is in `src/data/globeGeometry.json`. The loader
-handles hosts that automatically decompress gzip as well as hosts serving the stored
-bytes. The renderer reuses the portfolio's Three.js dependency and disposes of its
-context, observers, input listeners and materials when closed.
+The day–night boundary, stars and aurora use the same recorded sky time,
+17 November 2026 at 23:00 UTC. The aurora is a 2° grid sampled from a saved NOAA
+SWPC OVATION forecast. The stationary stars are projections of the Yale Bright
+Star Catalogue from Everything Is Fine's bundled table. The opening WebP files
+are lossless captures from the embedded scene at 1120 × 732 and 390 × 440. The
+poster and the canvas share a frame at each breakpoint.
 
-Source: [everythingisfine globe and geography](https://github.com/aiden-jang/everythingisfine/tree/b61b661/src).
-The embedded scene adapts its surface lighting, atmosphere, magnitude sizing,
-thermal palette and depth holes; it does not bundle the full application.
+The geography asset uses Everything Is Fine's Natural Earth land mesh,
+coastlines, tectonic boundaries and graticule. The layout of its compressed
+arrays is in `src/data/globeGeometry.json`. The loader supports hosts that
+automatically decompress gzip and hosts serving the stored bytes. The
+renderer uses the portfolio's Three.js dependency and disposes of its context,
+observers, input listeners, textures and materials when closed.
+
+Sources: [Everything Is Fine geography](https://github.com/aiden-jang/everythingisfine/tree/b61b661/src),
+[star catalogue](https://github.com/aiden-jang/everythingisfine/blob/main/src/geo/stars.json),
+and [NOAA SWPC aurora forecast](https://www.swpc.noaa.gov/products/aurora-30-minute-forecast).
 
 ## Recorded and illustrated examples
 

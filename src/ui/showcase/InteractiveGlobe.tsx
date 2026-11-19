@@ -1,11 +1,14 @@
+import { GlobeControls } from './GlobeControls';
 import { GlobeEventCard } from './GlobeEventCard';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import { ScreenshotImage } from '../ScreenshotImage';
 import { previewLink } from '../previewLinks';
-import { EarthquakeGlobeStill } from './EarthquakeEvidence';
 
 type Engine = ReturnType<(typeof import('./globe-engine'))['createOrbitGlobe']>;
+const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+const START_THRESHOLD = 0.12;
+
 export function InteractiveGlobe({ image, caption }: { image: string; caption: string }) {
   const figure = useRef<HTMLElement>(null),
     canvas = useRef<HTMLCanvasElement>(null),
@@ -13,36 +16,56 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
     inspect = useRef<HTMLButtonElement>(null);
   const handle = useRef<Engine | null>(null),
     visible = useRef(false),
+    mayAutoStart = useRef(true),
     requestedFocus = useRef(false);
-  const [active, setActive] = useState(false),
+  const [mode, setMode] = useState<'auto' | 'manual' | null>(null),
     [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
-  const [mobile, setMobile] = useState(
-    () => matchMedia('(max-width: 767px), (pointer: coarse)').matches,
-  );
+  const [inView, setInView] = useState(false);
+  const [reduced, setReduced] = useState(() => matchMedia(MOTION_QUERY).matches);
+  const [rotating, setRotating] = useState(false);
   const [selected, setSelected] = useState<import('./globe-engine').PickedEvent | null>(null);
   const show = useRef<HTMLButtonElement>(null);
+  const [posterReady, setPosterReady] = useState(false);
   const [posterUnavailable, setPosterUnavailable] = useState(false);
+  const onPosterReady = useCallback(() => setPosterReady(true), []);
+  const onPosterUnavailable = useCallback(() => setPosterUnavailable(true), []);
   const [screenshotUnavailable, setScreenshotUnavailable] = useState(false);
   const [viewer, setViewer] = useState(false),
     [captured, setCaptured] = useState('');
   const exitRef = useRef<() => void>(() => {});
   exitRef.current = () => {
-    setActive(false);
+    setMode(null);
+    setRotating(false);
     setSelected(null);
     setPhase('idle');
     requestAnimationFrame(() => launch.current?.focus({ preventScroll: true }));
   };
   useEffect(() => {
-    const media = matchMedia('(max-width: 767px), (pointer: coarse)');
-    const update = () => setMobile(media.matches);
+    const media = matchMedia(MOTION_QUERY);
+    const update = () => {
+      setReduced(media.matches);
+      if (media.matches) handle.current?.setRotating(false);
+    };
     media.addEventListener('change', update);
-    const observer = new IntersectionObserver(([entry]) => {
-      visible.current = entry!.isIntersecting;
-      handle.current?.sync();
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible.current = !!entry?.isIntersecting;
+        setInView(
+          visible.current && entry!.intersectionRatio >= START_THRESHOLD && !document.hidden,
+        );
+        handle.current?.sync();
+      },
+      { threshold: [0, START_THRESHOLD] },
+    );
     observer.observe(figure.current!);
     const sync = () => handle.current?.sync();
-    document.addEventListener('visibilitychange', sync);
+    const onVisibility = () => {
+      sync();
+      // Re-observe so a foreground tab can start when the figure was already in view.
+      observer.disconnect();
+      observer.observe(figure.current!);
+    };
+    document.addEventListener('visibilitychange', onVisibility);
     const dialogs = new MutationObserver(sync);
     dialogs.observe(document.body, {
       childList: true,
@@ -54,35 +77,57 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
       media.removeEventListener('change', update);
       observer.disconnect();
       dialogs.disconnect();
-      document.removeEventListener('visibilitychange', sync);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
   useEffect(() => {
-    if (!active || !canvas.current) return;
+    if (
+      mayAutoStart.current &&
+      inView &&
+      !reduced &&
+      !document.hidden &&
+      (posterReady || posterUnavailable)
+    ) {
+      mayAutoStart.current = false;
+      setMode('auto');
+    }
+  }, [inView, posterReady, posterUnavailable, reduced]);
+  useEffect(() => {
+    if (!mode || !canvas.current) return;
     const target = canvas.current;
     let disposed = false;
     const abort = new AbortController();
     setPhase('loading');
     const failed = () => {
       if (!disposed) {
+        const restoreFocus =
+          requestedFocus.current || !!figure.current?.contains(document.activeElement);
+        requestedFocus.current = false;
         setPhase('error');
-        setActive(false);
-        requestAnimationFrame(() => launch.current?.focus({ preventScroll: true }));
+        setMode(null);
+        setRotating(false);
+        if (restoreFocus)
+          requestAnimationFrame(() => launch.current?.focus({ preventScroll: true }));
       }
     };
     Promise.all([
-      import('./globe-engine').then(async (engine) => ({
-        engine,
-        geography: await engine.loadGeography(abort.signal),
-      })),
+      import('./globe-engine').then(async (engine) => {
+        const [geography, aurora] = await Promise.all([
+          engine.loadGeography(abort.signal),
+          engine.loadAurora(abort.signal),
+        ]);
+        return { engine, geography, aurora };
+      }),
       fetch('/projects/orbit-snapshot.json', { signal: abort.signal }).then((response) => {
         if (!response.ok) throw Error('Snapshot unavailable');
         return response.json();
       }),
     ])
-      .then(([{ engine, geography }, snapshot]) => {
+      .then(([{ engine, geography, aurora }, snapshot]) => {
         if (disposed) return;
-        handle.current = engine.createOrbitGlobe(target, snapshot, geography, {
+        handle.current = engine.createOrbitGlobe(target, snapshot, geography, aurora, {
+          autoRotate: mode === 'auto',
+          onRotation: setRotating,
           paused: () =>
             !visible.current ||
             document.hidden ||
@@ -102,10 +147,6 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
           }),
         );
         setPhase('ready');
-        if (requestedFocus.current) {
-          requestedFocus.current = false;
-          target.focus({ preventScroll: true });
-        }
       })
       .catch((error) => {
         if (error?.name !== 'AbortError') failed();
@@ -116,37 +157,49 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
       handle.current?.dispose();
       handle.current = null;
     };
-  }, [active]);
-  const ready = active && phase === 'ready';
+  }, [mode]);
+  const ready = !!mode && phase === 'ready';
+  useEffect(() => {
+    if (ready && requestedFocus.current) {
+      requestedFocus.current = false;
+      canvas.current?.focus({ preventScroll: true });
+    }
+  }, [ready]);
   return (
     <>
       <figure ref={figure} className="orbit-feature" data-globe-phase={phase}>
         <div className="project-preview orbit-preview" data-project="everythingisfine">
-          <div className="preview-thumbnail" data-poster={!posterUnavailable}>
-            {posterUnavailable ? (
-              <ScreenshotImage
-                src={image}
-                alt="everythingisfine product interface"
-                lazy
-                onUnavailable={() => setScreenshotUnavailable(true)}
-              />
-            ) : (
-              <EarthquakeGlobeStill onUnavailable={() => setPosterUnavailable(true)} />
-            )}
-            {active && (
-              <div className="orbit-viewport" aria-busy={phase === 'loading'}>
-                <canvas
-                  ref={canvas}
-                  id="globe-view"
-                  tabIndex={ready ? 0 : -1}
-                  role="img"
-                  aria-label="Interactive globe. Drag or use arrow keys to rotate. Press zero to reset, Escape to finish."
+          <div className="preview-thumbnail">
+            <div className="orbit-art" data-poster={!posterUnavailable}>
+              {posterUnavailable ? (
+                <ScreenshotImage
+                  src={image}
+                  alt="everythingisfine product interface"
+                  lazy
+                  onUnavailable={() => setScreenshotUnavailable(true)}
                 />
-              </div>
-            )}
-            {!ready && !posterUnavailable && (
-              <span className="earthquake-map-label">Kamchatka · M5.8</span>
-            )}
+              ) : (
+                <ScreenshotImage
+                  src="/projects/globe-opening-desktop.webp"
+                  narrowSrc="/projects/globe-opening-mobile.webp"
+                  alt="Globe centered on the North Pacific, with the Kamchatka earthquake marked"
+                  lazy
+                  onReady={onPosterReady}
+                  onUnavailable={onPosterUnavailable}
+                />
+              )}
+              {mode && (
+                <div className="orbit-viewport" aria-busy={phase === 'loading'}>
+                  <canvas
+                    ref={canvas}
+                    id="globe-view"
+                    tabIndex={ready ? 0 : -1}
+                    role="img"
+                    aria-label="Interactive globe. Drag or use arrow keys to rotate. Press zero to reset, Escape to finish."
+                  />
+                </div>
+              )}
+            </div>
           </div>
           <div className="orbit-actions">
             {!ready && (
@@ -156,8 +209,9 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
                 className="orbit-launch"
                 disabled={phase === 'loading'}
                 onClick={() => {
+                  mayAutoStart.current = false;
                   requestedFocus.current = true;
-                  setActive(true);
+                  setMode('manual');
                 }}
               >
                 {phase === 'loading'
@@ -168,39 +222,15 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
               </button>
             )}
             {ready && (
-              <>
-                <button
-                  ref={show}
-                  type="button"
-                  className="orbit-event-trigger"
-                  aria-label="Show an event"
-                  title="Show an event"
-                  onClick={() => handle.current?.showEvent()}
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    aria-hidden="true"
-                  >
-                    <circle cx="12" cy="12" r="7" />
-                    <circle cx="12" cy="12" r="2" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handle.current?.reset();
-                    setSelected(null);
-                  }}
-                >
-                  Reset globe
-                </button>
-                <button type="button" onClick={() => exitRef.current()}>
-                  Done
-                </button>
-              </>
+              <GlobeControls
+                reduced={reduced}
+                rotating={rotating}
+                showRef={show}
+                onRotate={() => handle.current?.setRotating(!rotating)}
+                onShow={() => handle.current?.showEvent()}
+                onReset={() => handle.current?.reset()}
+                onDone={() => exitRef.current()}
+              />
             )}
             <button
               ref={inspect}
@@ -232,11 +262,11 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
             />
           )}
         </div>
-        <figcaption aria-live="polite" className={phase === 'idle' ? 'sr-only' : undefined}>
+        <figcaption aria-live="polite" className="sr-only">
           {phase === 'error'
             ? 'The globe could not start. You can retry, view the screenshot or open the app.'
             : ready
-              ? `${mobile ? 'Drag to rotate; tap a marker for details. Done returns to scrolling.' : 'Drag to rotate; select a marker for details.'} Recorded USGS events${captured ? ' · ' + captured + ' UTC' : ''}.`
+              ? `Drag to rotate and select a marker for details. Recorded USGS events${captured ? ' · ' + captured + ' UTC' : ''}, with a recorded NOAA aurora.`
               : phase === 'loading'
                 ? 'Preparing globe…'
                 : 'Recorded Kamchatka earthquake. Explore the globe to browse more recorded events.'}

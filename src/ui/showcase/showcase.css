@@ -6,21 +6,48 @@ html:root .orbit-preview .preview-thumbnail {
   position: relative;
   background: #10141b;
 }
+html:root .orbit-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url('/projects/globe-stars-desktop.svg') center / 100% 100% no-repeat;
+  mask-image: linear-gradient(transparent, #000 12% 81%, transparent);
+  opacity: var(--work-poster-opacity, 1);
+}
+html:root .orbit-art {
+  position: absolute;
+  inset: 0;
+  opacity: var(--work-poster-opacity, 1);
+}
+html:root .orbit-art picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+html:root #project-everythingisfine .orbit-art .screenshot-image {
+  width: 100%;
+  height: 100%;
+  transform: none;
+  object-fit: fill;
+  animation: none;
+  filter: none;
+}
 html:root .orbit-viewport {
   position: absolute;
-  left: 22%;
-  top: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
-  opacity: 0;
+  visibility: hidden;
 }
 html:root .orbit-viewport canvas {
   display: block;
   width: 100%;
   height: 100%;
   cursor: grab;
-  touch-action: none;
+  touch-action: pan-y;
+  animation: none;
 }
 html:root .orbit-viewport canvas:active {
   cursor: grabbing;
@@ -34,10 +61,10 @@ html:root .orbit-preview:has(canvas:focus-visible) {
   border-radius: 14px;
 }
 html:root .orbit-feature[data-globe-phase='ready'] .orbit-viewport {
-  opacity: 1;
+  visibility: visible;
 }
-html:root .orbit-feature[data-globe-phase='ready'] .screenshot-image {
-  display: none;
+html:root .orbit-feature[data-globe-phase='ready'] .orbit-art > :is(picture, .screenshot-image) {
+  visibility: hidden;
 }
 html:root .orbit-actions {
   position: absolute;
@@ -77,17 +104,27 @@ html:root .orbit-actions button:disabled {
   opacity: 0.75;
   cursor: progress;
 }
-html:root .orbit-actions .orbit-screenshot {
+html:root .orbit-actions :is(.orbit-screenshot, .orbit-rotate) {
   width: 44px;
   padding: 12px;
 }
-html:root .orbit-screenshot svg {
+html:root :is(.orbit-screenshot, .orbit-rotate) svg {
   width: 18px;
   height: 18px;
 }
 @media (max-width: 767px) {
-  html:root .orbit-viewport {
-    left: 0;
+  html:root .orbit-preview::before {
+    background-image: url('/projects/globe-stars-mobile.svg');
+    opacity: calc(var(--work-poster-opacity, 1) * 0.85);
+  }
+  html:root .orbit-preview .preview-thumbnail {
+    container-type: size;
+  }
+  html:root .orbit-art {
+    inset: 50% auto auto 50%;
+    width: min(100%, calc(100cqh * 390 / 440));
+    aspect-ratio: 390 / 440;
+    transform: translate(-50%, -50%);
   }
   html:root .orbit-actions {
     top: auto;
@@ -98,10 +135,6 @@ html:root .orbit-screenshot svg {
   html:root .orbit-actions button {
     font-size: 12px;
     padding-inline: 11px;
-  }
-  html:root #project-everythingisfine .orbit-feature figcaption {
-    display: block;
-    margin-top: 12px;
   }
   html:root #sec-work {
     padding-top: 96px;

@@ -28,8 +28,6 @@ export const vector = (lon: number, lat: number, radius = 1) => {
     Math.cos(phi) * Math.cos(lam),
   ).multiplyScalar(radius);
 };
-export const markerRadius = (magnitude: number, scale: number) =>
-  (1 + 2.8 * Math.pow(Math.max(0, magnitude - 1), 0.7)) * scale;
 export function readEvents(snapshot: Snapshot): GlobeEvent[] {
   if (!Number.isFinite(snapshot.metadata?.generated) || !Array.isArray(snapshot.features))
     throw Error('Snapshot unavailable');

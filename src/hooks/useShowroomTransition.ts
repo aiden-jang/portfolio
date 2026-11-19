@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { clamp, lerp } from '../math';
 import { useAppStore } from '../store';
 
-const POSTER = ".orbit-feature[data-globe-phase='idle'] .preview-thumbnail[data-poster='true']";
+const ART = '.orbit-art[data-poster="true"]';
 const PULSE = 'data-kamchatka-pulse';
 
 function smoothProgress(value: number, start: number, end: number) {
@@ -16,14 +16,10 @@ function revealMarker(poster: HTMLElement, rect: DOMRect, viewport: number) {
 
   const { clientWidth: width, clientHeight: height } = poster;
   if (!height || !width) return false;
-  const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
-  const objectPosition = getComputedStyle(image).objectPosition;
-  const [focusX, focusY] = objectPosition.split(' ').map((value) => parseFloat(value) / 100);
-  // The point is baked into the globe poster. Follow its object-fit crop at each width.
-  const x =
-    (width - image.naturalWidth * scale) * focusX + (567 / 1080) * image.naturalWidth * scale;
-  const y =
-    (height - image.naturalHeight * scale) * focusY + (255 / 706) * image.naturalHeight * scale;
+  // The shared poster and canvas frame uses a different camera crop on phones.
+  const narrow = image.naturalWidth < image.naturalHeight;
+  const x = width * (narrow ? 177 / 390 : 585 / 1120);
+  const y = height * (narrow ? 159 / 440 : 287 / 732);
   const viewportY = rect.top + (y / height) * rect.height;
   if (viewportY < viewport * 0.22 || viewportY > viewport * 0.68) return false;
 
@@ -91,7 +87,7 @@ export function useShowroomTransition() {
 
       const arrival = clamp((h * 0.95 - work.getBoundingClientRect().top) / (h * 0.9), 0, 1);
       const scale = reduced ? 1 : lerp(0.965, 1, arrival);
-      const poster = reduced ? null : work.querySelector<HTMLElement>(POSTER);
+      const poster = reduced ? null : work.querySelector<HTMLElement>(ART);
       const rect = poster?.getBoundingClientRect();
       const globe = rect ? lerp(0.56, 1, smoothProgress((h - rect.top) / h, 0, 0.57)) : 1;
 
@@ -101,7 +97,15 @@ export function useShowroomTransition() {
       root.style.setProperty('--work-poster-opacity', String(globe));
 
       if (pulsingPoster && (pulsingPoster !== poster || !movingForward)) clearPulse();
-      if (!highlighted && visitedIntro && movingForward && poster && rect && rect.top < h) {
+      if (
+        !highlighted &&
+        visitedIntro &&
+        movingForward &&
+        poster &&
+        rect &&
+        rect.top < h &&
+        poster.closest('.orbit-feature')?.getAttribute('data-globe-phase') !== 'ready'
+      ) {
         highlighted = revealMarker(poster, rect, h);
         if (highlighted) pulsingPoster = poster;
       }

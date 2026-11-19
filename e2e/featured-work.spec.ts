@@ -9,11 +9,14 @@ for (const viewport of [
   }) => {
     await page.setViewportSize(viewport);
     await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.route('**/projects/globe-geography.bin.gz', (route) =>
+      route.fulfill({ status: 503, body: 'Unavailable' }),
+    );
     await page.goto('/');
     const poster = page.getByRole('img', { name: /Globe centered on the North Pacific/ });
     await expect(poster).toBeAttached();
-    const thumbnail = page.locator('.orbit-feature .preview-thumbnail');
-    await thumbnail.evaluate((element) => {
+    const art = page.locator('.orbit-art');
+    await art.evaluate((element) => {
       let pulses = 0;
       element.addEventListener('animationstart', (event) => {
         if (event instanceof AnimationEvent && event.animationName === 'kamchatka-pulse') {
@@ -30,22 +33,22 @@ for (const viewport of [
 
     await scroll(0.5);
     await expect(poster).toHaveAttribute('aria-busy', 'false');
-    await expect(poster).not.toHaveCSS('opacity', '1');
+    await expect(art).not.toHaveCSS('opacity', '1');
     await scroll(1);
-    await expect(poster).toHaveCSS('opacity', '1');
+    await expect(art).toHaveCSS('opacity', '1');
     await expect(page.locator('body')).toHaveAttribute('data-kamchatka-pulses', '1');
-    await expect(thumbnail).not.toHaveAttribute('data-kamchatka-pulse');
+    await expect(art).not.toHaveAttribute('data-kamchatka-pulse');
 
     await scroll(0);
-    await expect(poster).not.toHaveCSS('opacity', '1');
+    await expect(art).not.toHaveCSS('opacity', '1');
     await scroll(1);
-    await expect(poster).toHaveCSS('opacity', '1');
-    await expect(thumbnail).not.toHaveAttribute('data-kamchatka-pulse');
+    await expect(art).toHaveCSS('opacity', '1');
+    await expect(art).not.toHaveAttribute('data-kamchatka-pulse');
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await scroll(0.5);
-    await expect(poster).toHaveCSS('opacity', '1');
-    await expect(thumbnail).not.toHaveAttribute('data-kamchatka-pulse');
+    await expect(art).toHaveCSS('opacity', '1');
+    await expect(art).not.toHaveAttribute('data-kamchatka-pulse');
   });
 }
 
@@ -106,3 +109,53 @@ for (const [width, height] of [
     );
   });
 }
+
+test('the globe keeps the narrow-phone composition while WebGL loads', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  let releaseGeography!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    releaseGeography = resolve;
+  });
+  await page.route('**/projects/globe-geography.bin.gz', async (route) => {
+    await gate;
+    await route.continue();
+  });
+  try {
+    await page.goto('/#sec-work');
+    const globe = page.locator('.orbit-feature');
+    const art = globe.locator('.orbit-art');
+    const heading = page.getByRole('heading', { name: 'everythingisfine', exact: true });
+    const poster = globe.getByRole('img', { name: /Globe centered on the North Pacific/ });
+    await expect(globe).toHaveAttribute('data-globe-phase', 'loading');
+    await expect(poster).toBeVisible();
+    await expect(poster).toHaveAttribute('aria-busy', 'false');
+    await page.evaluate(() => document.fonts.ready);
+    const originalFrame = await art.boundingBox();
+    const originalHeading = await heading.boundingBox();
+    expect(await poster.boundingBox()).toEqual(originalFrame);
+
+    releaseGeography();
+    const pause = globe.getByRole('button', { name: 'Pause rotation' });
+    const resume = globe.getByRole('button', { name: 'Resume rotation' });
+    await expect(pause).toBeVisible();
+    expect(await art.boundingBox()).toEqual(originalFrame);
+    expect(await heading.boundingBox()).toEqual(originalHeading);
+    await expect(poster).toBeHidden();
+    const canvas = globe.getByRole('img', { name: /Interactive globe/ });
+    expect(await canvas.boundingBox()).toEqual(originalFrame);
+    await pause.click();
+    await expect(resume).toBeVisible();
+    await resume.click();
+    await expect(pause).toBeVisible();
+    await canvas.press('ArrowRight');
+    await expect(resume).toBeVisible();
+    await globe.getByRole('button', { name: 'Reset globe' }).click();
+    await globe.getByRole('button', { name: 'Show an event' }).press('Enter');
+    await expect(globe.getByRole('complementary', { name: 'Selected earthquake' })).toContainText(
+      'Kamchatka',
+    );
+  } finally {
+    releaseGeography();
+  }
+});

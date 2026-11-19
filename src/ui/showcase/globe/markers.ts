@@ -1,57 +1,62 @@
 import { BufferAttribute, BufferGeometry, Points, ShaderMaterial } from 'three';
 import { vector, type GlobeEvent } from './data';
 
-// Magnitude sizing, the thermal palette and depth holes follow everythingisfine's event layer.
-export function createMarkers(events: GlobeEvent[]) {
+export function createMarkers(events: GlobeEvent[], featured = false) {
   const positions = new Float32Array(events.length * 3),
-    mags = new Float32Array(events.length),
-    depths = new Float32Array(events.length);
+    mags = new Float32Array(events.length);
   events.forEach((event, i) => {
     vector(event.lon, event.lat, 1.006).toArray(positions, i * 3);
     mags[i] = event.magnitude;
-    depths[i] = event.depth;
   });
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new BufferAttribute(positions, 3));
   geometry.setAttribute('aMagnitude', new BufferAttribute(mags, 1));
-  geometry.setAttribute('aDepth', new BufferAttribute(depths, 1));
   const material = new ShaderMaterial({
     transparent: true,
     depthTest: false,
     depthWrite: false,
-    uniforms: { uPixelRatio: { value: 1 }, uScale: { value: 1 } },
+    uniforms: { uScale: { value: 1 }, uFeatured: { value: featured } },
     vertexShader: `
-    attribute float aMagnitude;attribute float aDepth;
-    uniform float uPixelRatio;uniform float uScale;
-    varying float vMagnitude;varying float vDepth;varying float vFacing;
-    void main(){
-      vec3 world=(modelMatrix*vec4(position,1.)).xyz;
-      vFacing=dot(normalize(position),normalize(cameraPosition-world));
-      vMagnitude=clamp((aMagnitude-1.)/6.5,0.,1.);vDepth=clamp((aDepth-70.)/230.,0.,1.);
-      gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);
-      gl_PointSize=2.*(1.+2.8*pow(max(0.,aMagnitude-1.),.7))*uScale*uPixelRatio;
+    attribute float aMagnitude;
+    uniform float uScale;
+    uniform bool uFeatured;
+    varying float vStrength;
+    varying float vFacing;
+    void main() {
+      vec3 world = (modelMatrix * vec4(position, 1.0)).xyz;
+      vFacing = dot(normalize(position), normalize(cameraPosition - world));
+      float magnitude = clamp((aMagnitude - 1.0) / 6.5, 0.0, 1.0);
+      vStrength = smoothstep(0.60, 0.94, magnitude);
+      gl_Position = projectionMatrix * viewMatrix * vec4(world, 1.0);
+      float size = uFeatured ? 32.0 : mix(4.5, 8.5, smoothstep(0.60, 1.0, magnitude));
+      gl_PointSize = size * uScale;
     }`,
     fragmentShader: `
-    varying float vMagnitude;varying float vDepth;varying float vFacing;
-    vec3 thermal(float t){
-      vec3 a=vec3(59.,42.,99.)/255.,b=vec3(138.,47.,85.)/255.,c=vec3(199.,69.,47.)/255.,d=vec3(232.,121.,27.)/255.,e=vec3(245.,194.,66.)/255.;
-      float x=t*4.;if(x<1.)return mix(a,b,x);if(x<2.)return mix(b,c,x-1.);if(x<3.)return mix(c,d,x-2.);return mix(d,e,x-3.);
-    }
-    void main(){
-      if(vFacing<=0.)discard;float dist=length(gl_PointCoord-vec2(.5));
-      float alpha=1.-smoothstep(.42,.5,dist);if(alpha<=0.)discard;
-      if(vDepth>.02)alpha*=smoothstep(.30*vDepth-.05,.30*vDepth+.02,dist);
-      alpha*=smoothstep(0.,.25,vFacing);
-      gl_FragColor=vec4(thermal(vMagnitude),alpha);
+    uniform bool uFeatured;
+    varying float vStrength;
+    varying float vFacing;
+    void main() {
+      if (vFacing <= 0.0) discard;
+      float dist = length(gl_PointCoord - vec2(0.5));
+      if (uFeatured) {
+        float core = 1.0 - smoothstep(0.125, 0.16, dist);
+        float ring = 1.0 - smoothstep(0.009, 0.024, abs(dist - 0.41));
+        float glow = (1.0 - smoothstep(0.12, 0.43, dist)) * 0.25;
+        vec3 warm = mix(vec3(1.0, 0.62, 0.36), vec3(1.0, 0.86, 0.68), core);
+        gl_FragColor = vec4(warm, (core + ring * 0.68 + glow) * smoothstep(0.0, 0.25, vFacing));
+      } else {
+        float dotAlpha = 1.0 - smoothstep(0.28, 0.47, dist);
+        vec3 color = mix(vec3(0.74, 0.57, 0.44), vec3(0.98, 0.73, 0.50), vStrength);
+        gl_FragColor = vec4(color, dotAlpha * mix(0.60, 0.78, vStrength) * smoothstep(0.0, 0.24, vFacing));
+      }
     }`,
   });
   const object = new Points(geometry, material);
-  object.renderOrder = 10;
+  object.renderOrder = featured ? 11 : 10;
   object.frustumCulled = false;
   return {
     object,
-    resize: (ratio: number, scale: number) => {
-      material.uniforms.uPixelRatio.value = ratio;
+    resize: (scale: number) => {
       material.uniforms.uScale.value = scale;
     },
     dispose: () => {

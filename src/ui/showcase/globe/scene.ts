@@ -4,12 +4,16 @@ import {
   BufferAttribute,
   BufferGeometry,
   Color,
+  DataTexture,
   DoubleSide,
   LineBasicMaterial,
   LineSegments,
+  LinearFilter,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
+  RedFormat,
+  RepeatWrapping,
   Scene,
   ShaderMaterial,
   SphereGeometry,
@@ -21,6 +25,17 @@ import { vector, type GlobeEvent, type GlobePose } from './data';
 import { createMarkers } from './markers';
 import { lightSurface } from './surfaceMaterial';
 import { ATMOSPHERE } from './surfaceLight';
+
+const AURORA_WIDTH = 180;
+const AURORA_HEIGHT = 91;
+
+export async function loadAurora(signal: AbortSignal) {
+  const response = await fetch('/projects/globe-aurora.bin', { signal });
+  if (!response.ok) throw Error('Recorded aurora unavailable');
+  const data = await response.arrayBuffer();
+  if (data.byteLength !== AURORA_WIDTH * AURORA_HEIGHT) throw Error('Invalid aurora grid');
+  return new Uint8Array(data);
+}
 
 export async function loadGeography(signal: AbortSignal) {
   const response = await fetch('/projects/globe-geography.bin.gz', { signal });
@@ -37,7 +52,9 @@ export function createGlobeScene(
   canvas: HTMLCanvasElement,
   data: ArrayBuffer,
   events: GlobeEvent[],
+  featured: GlobeEvent,
   sun: Vector3,
+  auroraGrid: Uint8Array<ArrayBuffer>,
 ) {
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setClearAlpha(0);
@@ -70,8 +87,12 @@ export function createGlobeScene(
   scene.add(land);
   geometries.push(landGeometry);
   materials.push(landMaterial);
-  lightSurface(oceanMaterial, sun, { value: 0 }, true, { value: 1 });
-  lightSurface(landMaterial, sun, { value: 0 }, false, { value: 1 });
+  const aurora = new DataTexture(auroraGrid, AURORA_WIDTH, AURORA_HEIGHT, RedFormat);
+  aurora.wrapS = RepeatWrapping;
+  aurora.magFilter = aurora.minFilter = LinearFilter;
+  aurora.needsUpdate = true;
+  lightSurface(oceanMaterial, sun, { value: 0 }, true, { value: 1 }, aurora);
+  lightSurface(landMaterial, sun, { value: 0 }, false, { value: 1 }, aurora);
   for (const [name, color, order] of [
     ['graticule', 0x1d3741, 0.5],
     ['plates', 0x92aeb4, 3],
@@ -108,23 +129,30 @@ export function createGlobeScene(
   geometries.push(atmosphereGeometry);
   materials.push(atmosphereMaterial);
   const markers = createMarkers(events);
-  scene.add(markers.object);
-  let fit = 4,
-    scale = 1;
+  const featuredMarker = createMarkers([featured], true);
+  scene.add(markers.object, featuredMarker.object);
+  let fit = 4;
+  let frameWidth = 0;
   const resize = () => {
-    const parent = canvas.parentElement!,
-      width = parent.clientWidth,
-      height = parent.clientHeight;
-    if (!width || !height) return;
-    const ratio = Math.min(devicePixelRatio, 2);
-    renderer.setPixelRatio(ratio);
+    const { clientWidth, clientHeight } = canvas.parentElement!;
+    if (!clientWidth || !clientHeight) return;
+    const mobile = clientWidth < clientHeight;
+    // Scale the rendered frame and its still together, including coastlines and marker strokes.
+    const width = mobile ? 390 : 1120;
+    const height = mobile ? 440 : 732;
+    if (frameWidth === width) return;
+    frameWidth = width;
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
+    if (width >= height)
+      camera.setViewOffset(width, height, -width * 0.05, -height * 0.04, width, height);
+    else camera.clearViewOffset();
     camera.updateProjectionMatrix();
     fit = 1 / (0.86 * Math.tan((16 * Math.PI) / 180)) / Math.min(1, camera.aspect);
     const radius = height / 2 / (fit * Math.tan((16 * Math.PI) / 180));
-    scale = Math.max(0.45, Math.min(1, radius / 300));
-    markers.resize(ratio, scale);
+    const scale = Math.max(0.45, Math.min(1, radius / 300));
+    markers.resize(scale);
+    featuredMarker.resize(scale);
   };
   const render = (pose: GlobePose) => {
     camera.position.copy(vector(pose.lon, pose.lat, fit / pose.zoom));
@@ -144,9 +172,10 @@ export function createGlobeScene(
     resize,
     render,
     project,
-    scale: () => scale,
     dispose: () => {
       markers.dispose();
+      featuredMarker.dispose();
+      aurora.dispose();
       geometries.forEach((g) => g.dispose());
       materials.forEach((m) => m.dispose());
       renderer.dispose();

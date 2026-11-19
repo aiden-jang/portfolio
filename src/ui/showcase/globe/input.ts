@@ -3,6 +3,7 @@ import type { GlobePose } from './data';
 type Options = {
   state: () => GlobePose;
   change: () => void;
+  takeControl: () => void;
   pick: (x: number, y: number, touch: boolean) => void;
   exit: () => void;
   reduced: () => boolean;
@@ -20,6 +21,7 @@ export function attachGlobeInput(canvas: HTMLCanvasElement, options: Options) {
   };
   const down = (e: PointerEvent) => {
     if (e.button !== 0) return;
+    options.takeControl();
     vx = vy = 0;
     canvas.focus({ preventScroll: true });
     canvas.setPointerCapture(e.pointerId);
@@ -86,6 +88,7 @@ export function attachGlobeInput(canvas: HTMLCanvasElement, options: Options) {
       return;
     }
     if (!(e.key in steps) && e.key !== '0') return;
+    options.takeControl();
     e.preventDefault();
     e.stopPropagation();
     vx = vy = 0;

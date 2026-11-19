@@ -33,11 +33,7 @@ html:root .portfolio-chrome #sec-work {
       var(--color-bg)
     );
   }
-  .orbit-feature[data-globe-phase='idle'] [data-poster='true'] > .screenshot-image {
-    animation: none;
-    opacity: var(--work-poster-opacity, 1);
-  }
-  .orbit-feature[data-globe-phase='idle'] [data-kamchatka-pulse][data-poster='true']::after {
+  .orbit-feature:not([data-globe-phase='ready']) [data-kamchatka-pulse]::after {
     content: '';
     position: absolute;
     left: var(--kamchatka-x);
@@ -178,15 +174,10 @@ html:root .portfolio-chrome #project-everythingisfine .orbit-feature {
     1250px,
     max(
       450px,
-      calc((100svh - var(--globe-top-space) - var(--globe-bottom-space) - 44px) * 1080 / 706)
+      calc((100svh - var(--globe-top-space) - var(--globe-bottom-space) - 44px) * 1120 / 732)
     )
   );
   margin-inline-end: calc(-0.6 * var(--portfolio-gutter));
-}
-@media (min-width: 768px) {
-  html:root .portfolio-chrome #project-everythingisfine .orbit-feature[data-globe-phase='ready'] {
-    max-width: min(66vw, 1050px);
-  }
 }
 html:root .portfolio-chrome #project-everythingisfine .orbit-preview {
   border: 0;
@@ -194,29 +185,19 @@ html:root .portfolio-chrome #project-everythingisfine .orbit-preview {
   background: transparent;
 }
 html:root .portfolio-chrome #project-everythingisfine .preview-thumbnail {
-  aspect-ratio: 1080 / 706;
+  aspect-ratio: 1120 / 732;
   border-radius: 0;
   background: transparent;
 }
-html:root .portfolio-chrome #project-everythingisfine .preview-thumbnail[data-poster='true'] {
+html:root .portfolio-chrome #project-everythingisfine .orbit-art[data-poster='true'] {
   mask-image:
     linear-gradient(transparent, #000 10% 83%, transparent),
     radial-gradient(ellipse farthest-side at 57% 49%, #000 35% 71%, transparent);
   mask-composite: intersect;
 }
-html:root .portfolio-chrome #project-everythingisfine [data-globe-phase='idle'] .preview-thumbnail {
+html:root .portfolio-chrome #project-everythingisfine .orbit-preview .preview-thumbnail {
   transform: scale(var(--work-figure-scale, 1));
   transform-origin: 72% 50%;
-}
-html:root .portfolio-chrome #project-everythingisfine .orbit-preview .screenshot-image {
-  width: 100%;
-  height: 100%;
-  transform: none;
-  object-fit: cover;
-}
-html:root #project-everythingisfine .orbit-viewport {
-  inset: 0;
-  background: var(--globe-background);
 }
 html:root #project-everythingisfine .orbit-actions {
   inset: auto calc(0.6 * var(--portfolio-gutter)) 12px auto;
@@ -230,33 +211,6 @@ html:root #project-everythingisfine [data-globe-phase='idle'] .orbit-actions but
 html:root #project-everythingisfine [data-globe-phase='idle'] .orbit-actions button:hover {
   border-color: #ffffff33;
   color: #fff;
-}
-html:root .portfolio-chrome #project-everythingisfine .orbit-feature figcaption:not(.sr-only) {
-  margin: 6px calc(0.6 * var(--portfolio-gutter)) 0 auto;
-  padding-inline: 12px;
-  max-width: 55ch;
-  text-align: right;
-  color: #b9c3cc;
-}
-.earthquake-map-label {
-  position: absolute;
-  top: 35%;
-  left: 55%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #f5e0c7;
-  text-shadow:
-    0 1px 6px #10151a,
-    0 1px 3px #10151a;
-  white-space: nowrap;
-  font: 11px/1.4 var(--font-mono);
-}
-.earthquake-map-label::before {
-  content: '';
-  width: 16px;
-  height: 1px;
-  background: #f5d2ac99;
 }
 html:root #project-everythingisfine .earthquake-still figcaption {
   display: block;
@@ -387,26 +341,13 @@ html:root .portfolio-chrome #project-everythingisfine .earthquake-heading h3 {
     height: clamp(226px, calc(100svh - 360px), 440px);
     aspect-ratio: auto;
   }
-  html:root .portfolio-chrome #project-everythingisfine .orbit-preview .screenshot-image {
-    object-position: 58% center;
-  }
-  html:root .portfolio-chrome #project-everythingisfine .preview-thumbnail[data-poster='true'] {
+  html:root .portfolio-chrome #project-everythingisfine .orbit-art[data-poster='true'] {
     mask-image:
       linear-gradient(transparent, #000 12% 80%, transparent),
       radial-gradient(ellipse farthest-side at 53% 44%, #000 40% 67%, transparent);
   }
-  .earthquake-map-label {
-    left: 53%;
-    font-size: 10px;
-  }
-  .earthquake-map-label::before {
-    width: 10px;
-  }
   html:root #project-everythingisfine .orbit-actions {
     inset: auto var(--portfolio-gutter) 0 auto;
-  }
-  html:root .portfolio-chrome #project-everythingisfine .orbit-feature figcaption:not(.sr-only) {
-    margin-inline-end: var(--portfolio-gutter);
   }
   .earthquake-feature[data-comparing='true'] {
     grid-template-columns: minmax(0, 1fr);

@@ -4,6 +4,7 @@ import './screenshot-image.css';
 
 type Props = {
   src: string;
+  narrowSrc?: string;
   alt: string;
   lazy?: boolean;
   onUnavailable?: () => void;
@@ -14,7 +15,7 @@ export function ScreenshotImage(props: Props) {
   return <ImageResource key={props.src} {...props} />;
 }
 
-function ImageResource({ src, alt, lazy = false, onUnavailable, onReady }: Props) {
+function ImageResource({ src, narrowSrc, alt, lazy = false, onUnavailable, onReady }: Props) {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'failed'>('loading');
   const image = useRef<HTMLImageElement>(null);
   const [width, height] = SCREENSHOT_SIZES[src] ?? [1600, 1000];
@@ -29,12 +30,15 @@ function ImageResource({ src, alt, lazy = false, onUnavailable, onReady }: Props
       onUnavailable?.();
     }
   }, [onUnavailable, onReady]);
-  return status === 'failed' ? (
-    <span className="screenshot-unavailable" role="status" aria-busy="false">
-      <strong>Screenshot unavailable</strong>{' '}
-      <span>The project details and app links are still available.</span>
-    </span>
-  ) : (
+  if (status === 'failed') {
+    return (
+      <span className="screenshot-unavailable" role="status" aria-busy="false">
+        <strong>Screenshot unavailable</strong>{' '}
+        <span>The project details and app links are still available.</span>
+      </span>
+    );
+  }
+  const picture = (
     <img
       ref={image}
       className={`screenshot-image ${status === 'loading' ? 'is-loading' : ''}`}
@@ -54,5 +58,13 @@ function ImageResource({ src, alt, lazy = false, onUnavailable, onReady }: Props
         onUnavailable?.();
       }}
     />
+  );
+  return narrowSrc ? (
+    <picture>
+      <source media="(max-width: 767px)" srcSet={narrowSrc} />
+      {picture}
+    </picture>
+  ) : (
+    picture
   );
 }

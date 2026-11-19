@@ -1,4 +1,4 @@
-import type { Material, Vector3 } from 'three';
+import type { Material, Texture, Vector3 } from 'three';
 
 // Shape comes from the surface normal and displayed sun, without fabricated terrain or extra textures.
 export function lightSurface(
@@ -7,6 +7,7 @@ export function lightSurface(
   morph: { value: number },
   ocean: boolean,
   reveal: { value: number },
+  aurora: Texture,
 ): void {
   const compile = material.onBeforeCompile;
   const key = material.customProgramCacheKey();
@@ -15,6 +16,7 @@ export function lightSurface(
     shader.uniforms['uSurfaceSun'] = { value: sun };
     shader.uniforms['uSurfaceMorph'] = morph;
     shader.uniforms['uSurfaceReveal'] = reveal;
+    shader.uniforms['uRecordedAurora'] = { value: aurora };
     shader.vertexShader = shader.vertexShader.replace(
       'void main() {',
       `
@@ -33,6 +35,7 @@ export function lightSurface(
       uniform vec3 uSurfaceSun;
       uniform float uSurfaceMorph;
       uniform float uSurfaceReveal;
+      uniform sampler2D uRecordedAurora;
       varying vec3 vSurfaceDirection;
       varying vec3 vSurfaceWorld;
       ${ocean ? 'varying float vSheetLongitude;' : ''}
@@ -52,6 +55,18 @@ export function lightSurface(
       float catchlight = 1.0 - smoothstep(0.015, 0.15, abs(n.y - mix(-1.2, 1.2, uSurfaceReveal)));
       body += catchlight * 0.35 * sin(3.14159265 * uSurfaceReveal);
       diffuseColor.rgb *= mix(body, 1.0, uSurfaceMorph);
+      float solar = dot(n, normalize(uSurfaceSun));
+      float night = 1.0 - smoothstep(-0.34, -0.035, solar);
+      vec2 auroraUV = vec2((atan(n.x, n.z) + radians(1.0)) / radians(360.0),
+        (degrees(asin(clamp(n.y, -1.0, 1.0))) + 91.0) / 182.0);
+      float detail = texture2D(uRecordedAurora, auroraUV).r;
+      float glow = smoothstep(0.037, 0.185, detail) * night * smoothstep(0.06, 0.70, facing);
+      diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.038, 0.29, 0.16), glow * 0.42);
+      float width = clamp(fwidth(solar) * 1.25, 0.001, 0.018);
+      float contour = 1.0 - smoothstep(width * 0.17, width, abs(solar));
+      float halo = 1.0 - smoothstep(width, width * 6.0, abs(solar));
+      float visibleLine = (contour * 0.37 + halo * 0.11) * smoothstep(0.04, 0.42, facing);
+      diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.28, 0.58, 0.70), visibleLine);
       ${
         ocean
           ? `

@@ -86,8 +86,9 @@ for (const width of [1440, 390]) {
     const thumbnail = project.locator('.preview-thumbnail');
     await expect(thumbnail.locator('img')).toHaveAttribute('aria-busy', 'false');
     const originalFrame = (await thumbnail.boundingBox())!;
-    await page.route(/\/projects\/(everythingisfine|kamchatka-globe)\.jpg$/, (route) =>
-      route.fulfill({ status: 404, body: 'Not found' }),
+    await page.route(
+      /\/projects\/(everythingisfine\.jpg|globe-opening-(desktop|mobile)\.webp)$/,
+      (route) => route.fulfill({ status: 404, body: 'Not found' }),
     );
     await page.reload();
     await project.scrollIntoViewIfNeeded();

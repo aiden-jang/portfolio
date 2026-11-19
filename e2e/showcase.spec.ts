@@ -70,7 +70,10 @@ for (const width of [1440, 390]) {
     await page.screenshot({ path: test.info().outputPath(`showcase-${width}.png`) });
   });
 }
-test('globe starts on request and a failed start keeps the preview and retry', async ({ page }) => {
+test('globe waits for featured work and a failed start keeps the preview and retry', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   const assets: string[] = [];
   page.on('request', (r) => {
     if (/globe-engine|globe-geography|orbit-snapshot/.test(r.url())) assets.push(r.url());
@@ -82,8 +85,6 @@ test('globe starts on request and a failed start keeps the preview and retry', a
     r.fulfill({ status: 503, body: 'Unavailable' }),
   );
   await page.locator('#sec-work').scrollIntoViewIfNeeded();
-  expect(assets).toEqual([]);
-  await page.getByRole('button', { name: 'Explore globe', exact: true }).click();
   await expect(page.locator('.orbit-feature')).toHaveAttribute('data-globe-phase', 'error', {
     timeout: 60000,
   });
@@ -94,4 +95,5 @@ test('globe starts on request and a failed start keeps the preview and retry', a
   await expect(page.locator('.orbit-feature')).toHaveAttribute('data-globe-phase', 'ready', {
     timeout: 60000,
   });
+  await expect(page.getByRole('button', { name: 'Resume rotation' })).toBeVisible();
 });
