@@ -21,18 +21,15 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   useDialogFocus(open, dialogRef, inputRef);
-  const activeResultRef = useRef<HTMLButtonElement>(null);
   const sceneUnavailable = useAppStore((state) => state.sceneUnavailable);
   const commands = buildCommands({ onSection, setNotice, sceneUnavailable });
 
   const results = matchCommands(commands, query);
   useEffect(() => {
     setActiveIndex(0);
+    const list = document.getElementById('command-results');
+    if (list) list.scrollTop = 0;
   }, [query, open]);
-
-  useEffect(() => {
-    activeResultRef.current?.scrollIntoView({ block: 'nearest' });
-  }, [activeIndex, query]);
 
   useCommandMenuEvents(open, setOpen, dialogRef, setOrigin);
 
@@ -97,7 +94,6 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
             <CommandResults
               results={results}
               activeIndex={activeIndex}
-              activeRef={activeResultRef}
               onActive={setActiveIndex}
               onSelect={select}
             />

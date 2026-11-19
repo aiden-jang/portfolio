@@ -1,4 +1,4 @@
-import type { Dispatch, RefObject, SetStateAction } from 'react';
+import type { RefObject } from 'react';
 import type { Command } from './commands';
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   results: Command[];
   activeIndex: number;
   onQuery: (query: string) => void;
-  onActive: Dispatch<SetStateAction<number>>;
+  onActive: (index: number) => void;
   onSelect: (command: Command) => void | Promise<void>;
   onClose: () => void;
 };
@@ -22,6 +22,12 @@ export function CommandSearch({
   onSelect,
   onClose,
 }: Props) {
+  const selectWithKeys = (index: number) => {
+    onActive(index);
+    const command = results[index];
+    if (command)
+      document.getElementById(`command-${command.id}`)?.scrollIntoView({ block: 'nearest' });
+  };
   return (
     <div className="command-menu-search">
       <input
@@ -32,19 +38,19 @@ export function CommandSearch({
           if (event.nativeEvent.isComposing || event.keyCode === 229) return;
           if (event.key === 'ArrowDown' && results.length) {
             event.preventDefault();
-            onActive((index) => (index + 1) % results.length);
+            selectWithKeys((activeIndex + 1) % results.length);
           }
           if (event.key === 'ArrowUp' && results.length) {
             event.preventDefault();
-            onActive((index) => (index - 1 + results.length) % results.length);
+            selectWithKeys((activeIndex - 1 + results.length) % results.length);
           }
           if (event.key === 'Home' && results.length) {
             event.preventDefault();
-            onActive(0);
+            selectWithKeys(0);
           }
           if (event.key === 'End' && results.length) {
             event.preventDefault();
-            onActive(results.length - 1);
+            selectWithKeys(results.length - 1);
           }
           if (event.key === 'Enter' && results[activeIndex]) {
             event.preventDefault();

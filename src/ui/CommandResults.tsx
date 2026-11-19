@@ -1,15 +1,13 @@
-import type { RefObject } from 'react';
 import { COMMAND_GROUPS, commandGroup, type Command } from './commands';
 
 type Props = {
   results: Command[];
   activeIndex: number;
-  activeRef: RefObject<HTMLButtonElement>;
   onActive: (index: number) => void;
   onSelect: (command: Command) => Promise<void>;
 };
 
-export function CommandResults({ results, activeIndex, activeRef, onActive, onSelect }: Props) {
+export function CommandResults({ results, activeIndex, onActive, onSelect }: Props) {
   return (
     <div id="command-results" role="listbox" className="command-results">
       {results.length ? (
@@ -25,7 +23,6 @@ export function CommandResults({ results, activeIndex, activeRef, onActive, onSe
               {entries.map(({ command, index }) => (
                 <button
                   key={command.id}
-                  ref={index === activeIndex ? activeRef : undefined}
                   id={`command-${command.id}`}
                   type="button"
                   role="option"
