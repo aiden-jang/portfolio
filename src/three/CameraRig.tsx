@@ -19,14 +19,14 @@ import { useAppStore } from '../store';
 import { useContactArrival } from './useContactArrival';
 import type { Keyframe } from '../types';
 import { hitsCar } from './carHitTest';
+import { placeCamera } from './studio/cameraFraming';
 import { useCameraViews } from './useCameraViews';
 import { useCarZoom } from './useCarZoom';
 import { useOpeningOrbit } from './useOpeningOrbit';
 
 const INTRO_DURATION = 0.78;
 
-// `?clean` freezes the camera for OG screenshots. It needs its own azimuth because KEYFRAMES[0]
-// sits near the nose, and the shot wants more flank.
+// Clean captures use a fixed three-quarter view.
 const isCleanMode =
   typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('clean');
 const CLEAN_AZIMUTH = 0.65;
@@ -58,7 +58,7 @@ export function CameraRig({ getScrollT }: { getScrollT: () => number }) {
       scrollT = getScrollT();
 
     const swing = isCleanMode ? 0 : openingOrbit(s, dt, reduced, scrollT, three.size.width);
-    updateCameraView(s, dt, reduced, scrollT);
+    const studioShot = updateCameraView(s, dt, reduced, scrollT, three.size.width);
     if (refs.holdOpeningPose || s.isDown || scrollT > 0 || useAppStore.getState().hasManualView)
       s.introT = 1;
     motionState.progress = reduced ? 1 : s.introT;
@@ -96,6 +96,7 @@ export function CameraRig({ getScrollT }: { getScrollT: () => number }) {
       reduced,
       manualOrbit: s.dragMoved || s.dragAzimuth !== 0 || s.dragElevation !== 0,
       clean: isCleanMode,
+      studioShot,
     });
     let pose = orbitPosition(az, Math.max(el, floorElevation(dist, tgtY)), dist, tgtY);
 
@@ -103,8 +104,7 @@ export function CameraRig({ getScrollT }: { getScrollT: () => number }) {
       s.introT = Math.min(1, s.introT + dt / INTRO_DURATION);
       pose = blendIntro(pose, az, dist, tgtY, easeOutCubic(s.introT));
     }
-    camera.position.set(pose.x, pose.y, pose.z);
-    camera.lookAt(0, tgtY, 0);
+    placeCamera(camera, pose, tgtY, refs.carModel, studioShot.wheel);
   });
   return null;
 }

@@ -12,6 +12,7 @@ import {
   WebGLRenderTarget,
 } from 'three';
 import type { Object3D, WebGLRenderer } from 'three';
+import { isFerrariCameraFocused } from './cameraViews';
 import { useAppStore } from '../store';
 import { usePhotoMode } from '../ui/photo/state';
 import { motionState } from './studioEntrance';
@@ -187,12 +188,14 @@ export function useCarTypeOverlap() {
 
     draw.current = ({ camera, gl, size }, composer, dt) => {
       const progress = motionState.openingOrbitProgress;
-      const { sectionIndex, renderFinish, refs } = useAppStore.getState();
+      const app = useAppStore.getState();
+      const { sectionIndex, renderFinish, refs } = app;
       const model = refs.carModel;
       if (
         !media.matches ||
         sectionIndex !== 0 ||
         renderFinish !== null ||
+        isFerrariCameraFocused(app) ||
         unavailable ||
         !model ||
         !(camera instanceof PerspectiveCamera) ||

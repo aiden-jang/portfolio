@@ -1,10 +1,11 @@
 import { useRef } from 'react';
 import type { Object3D } from 'three';
 import { useAppStore } from '../store';
-import { clamp, smoothTowards } from '../math';
+import { clamp, lerp, smoothTowards } from '../math';
 import { CarFraming } from './carFraming';
 import { isOpeningStudio, STUDIO_TALL_ASPECT } from '../lighting';
 import { studioMobileDistance } from './studio/carGrounding';
+import type { StudioFraming } from './studio/cameraFraming';
 import { zoomedIntroDistance } from './carZoom';
 
 type View = {
@@ -21,6 +22,7 @@ type View = {
   reduced: boolean;
   manualOrbit: boolean;
   clean: boolean;
+  studioShot: StudioFraming;
 };
 
 export function useCarZoom() {
@@ -38,12 +40,39 @@ export function useCarZoom() {
         : smoothTowards(current.current.zoom, state.cameraZoom, Math.min(1, view.dt * 12));
     if (Math.abs(current.current.zoom - state.cameraZoom) < 0.001)
       current.current.zoom = state.cameraZoom;
+    const { rear, wheel } = view.studioShot;
+    const mobile = width < 768;
+    const baseDistance = distance * (1 - 0.02 * rear);
     const base =
       scrollT === 0 && view.manualOrbit
-        ? framing.current.fit(model, azimuth, elevation, distance, targetY, width, height, fov)
-        : distance;
+        ? mobile && rear > 0
+          ? studioMobileDistance(
+              model,
+              azimuth,
+              elevation,
+              baseDistance,
+              targetY,
+              width,
+              height,
+              fov,
+            )
+          : framing.current.fit(
+              model,
+              azimuth,
+              elevation,
+              baseDistance,
+              targetY,
+              width,
+              height,
+              fov,
+            )
+        : baseDistance;
     const zoom = current.current.zoom;
     const aspect = width / height;
+    if (wheel > 0) {
+      const close = mobile ? 3.77 * Math.max(1, 0.43 / aspect) : 2.84;
+      return zoomedIntroDistance(lerp(base, close, wheel), zoom, scrollT);
+    }
     if (
       !isOpeningStudio(state) ||
       width >= 768 ||

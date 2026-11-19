@@ -60,5 +60,11 @@
       vec3 fixtureBounce = cornerLightTint()*.041*reflectedBar;
       vec3 reflection = (groundBounce*.37*(1.-.48*nearFixture)
         + softBounce*.58 + fixtureBounce)*reflectionStrength;
-      vec3 litFloor = (floorTone + reflection * mix(.89,1.10,relief)) * contact;
+      float cutPosition = room.z - 1.31 - (room.x-studioLightBarX)*.27;
+      float localCut = smoothstep(studioLightBarX-6.3,studioLightBarX-4.8,room.x)
+        * (1.-smoothstep(studioLightBarX-.15,studioLightBarX+.18,room.x));
+      float groove = exp(-pow(cutPosition*51.,2.))*localCut;
+      float cutLip = exp(-pow((cutPosition-.028)*67.,2.))*localCut;
+      floorTone *= 1.-groove*.28+cutLip*.10;
+      vec3 litFloor = (floorTone + reflection * mix(.89,1.10,relief)*(1.-groove*.30)) * contact;
       gl_FragColor.rgb = litFloor;

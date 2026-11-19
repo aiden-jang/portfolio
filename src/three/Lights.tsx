@@ -141,10 +141,12 @@ export function Lights() {
     c.rim.color = smoothColorHex(c.rim.color, target.rim.color, k);
     c.rim.intensity = smoothTowards(
       c.rim.intensity,
-      duskSeparation ? 1.08 : target.rim.intensity,
+      studio ? 0.355 : duskSeparation ? 1.08 : target.rim.intensity,
       k,
     );
     rim.current.color.setHex(c.rim.color);
+    if (studio) rim.current.position.set(3.35, 2.36, -6.15);
+    else rim.current.position.set(-3, 4.5, -6);
     rim.current.intensity =
       c.rim.intensity * (1 - 0.08 * weight) * (0.7 + 0.3 * motionState.progress);
   });

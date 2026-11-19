@@ -325,3 +325,30 @@ it('drops the opening offset by Work and starts settled under reduced motion', a
     expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
   });
 });
+
+it('holds the wheel composition through a short drag and returns to the whole car on a wider orbit', async () => {
+  await withOpeningCamera(1440, ({ tick, load }) => {
+    load();
+    tick(120);
+    useAppStore.getState().setCameraView('wheel');
+    tick(60);
+    const target = new Vector3();
+    camera.getWorldDirection(target);
+    target.multiplyScalar(2.84).add(camera.position);
+    expect(target.x).toBeGreaterThan(0.3);
+    expect(target.z).toBeGreaterThan(0.5);
+
+    pointer('pointerdown', 400, 400);
+    pointer('pointermove', 424, 400);
+    tick();
+    expect(camera.position.distanceTo(target)).toBeCloseTo(2.84, 3);
+
+    pointer('pointermove', 590, 400);
+    pointer('pointerup', 590, 400);
+    tick(120);
+    expect(camera.position.distanceTo(new Vector3(0, 0.55, 0))).toBeGreaterThan(8);
+    useAppStore.getState().resetCamera();
+    tick(60);
+    expect(Math.atan2(camera.position.x, camera.position.z)).toBeCloseTo(KEYFRAMES[0].azimuth);
+  });
+});

@@ -76,6 +76,13 @@ const photoWallFragment = /* glsl */ `
       wall = mix(wall,concreteTone,photoMix);
     }
     wall *= relief;
+    if (!corner && !ceiling) {
+      vec2 chipUv = vec2(joint+.018,room.y-1.38);
+      float irregular = .007*sin(room.y*319.) + .005*sin(room.y*97. + panelNumber*2.7);
+      float flake = exp(-pow(abs(chipUv.x+irregular)*32.,2.)-pow(chipUv.y*16.,2.));
+      float edge = exp(-pow(abs(chipUv.x-.014+irregular)*62.,2.)-pow(chipUv.y*17.,2.));
+      wall *= 1.+(edge*.103-flake*.24)*smoothstep(.20,.60,castTone)*grazingRelief;
+    }
 
     if (frontWall || returnWall || corner) {
       float distanceToFixture = frontWall ? abs(toCorner) : abs(room.z);
@@ -162,7 +169,12 @@ export function StudioRoom() {
   const frontWidth = cornerX - bevel - leftEdge;
   const returnDepth = backEdge - bevel;
   const wallRoom = [
-    { at: [leftEdge + frontWidth / 2, 4.45, 0], angle: 0, width: frontWidth, material: 1 },
+    {
+      at: [leftEdge + frontWidth / 2, 4.45, 0],
+      angle: 0,
+      width: frontWidth,
+      material: 1,
+    },
     {
       at: [cornerX, 4.45, bevel + returnDepth / 2],
       angle: -Math.PI / 2,
@@ -176,7 +188,12 @@ export function StudioRoom() {
       material: 3,
     },
     { at: [0, 4.45, -10.85], angle: 0, width: 26.64, material: 0 },
-    { at: [leftEdge, 4.45, 2.55], angle: Math.PI / 2, width: 26.83, material: 0 },
+    {
+      at: [leftEdge, 4.45, 2.55],
+      angle: Math.PI / 2,
+      width: 26.83,
+      material: 0,
+    },
     { at: [13.3, 4.45, 2.55], angle: -Math.PI / 2, width: 26.83, material: 0 },
     { at: [0, 4.45, backEdge], angle: Math.PI, width: 26.64, material: 0 },
   ] as const;

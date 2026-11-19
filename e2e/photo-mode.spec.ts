@@ -52,7 +52,10 @@ for (const width of [1440, 390, 320]) {
         (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
           .violations,
       ).toEqual([]);
-      await photo.getByRole('combobox', { name: 'Camera view' }).selectOption('profile');
+      const camera = photo.getByRole('combobox', { name: 'Camera view' });
+      await expect(camera.getByRole('option', { name: 'Rear three-quarter' })).toHaveCount(1);
+      await expect(camera.getByRole('option', { name: 'Front wheel close-up' })).toHaveCount(1);
+      await camera.selectOption('profile');
       await page.screenshot({ path: test.info().outputPath('photo-mode.png') });
       await photo.getByRole('button', { name: 'Capture photo', exact: true }).click();
       await expect(photo.getByRole('status')).toHaveText('Capture is unavailable. Try again.');

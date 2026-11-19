@@ -102,8 +102,10 @@ Studio opens on Intro. The room, floor and Ferrari finish share the recessed
 light's position so the concrete wash and paint and glass reflections agree
 through an orbit. `studioReflection` reuses the live reflection target for the
 satin floor, with contact shadows fitted to the current car's geometry.
-Dusk and Night remain selectable and shareable. Contact uses the original
-floor and its fixed camera.
+The Ferrari's Studio shots include a rear three-quarter and a front-wheel
+close-up in Garage and Photo mode. The close-up pivots around the loaded
+wheel and widens back to the full car on a long drag. Dusk and Night remain
+selectable and shareable. Contact uses the original floor and its fixed camera.
 The floor glow loads a lossless texture instead of creating another canvas.
 Regenerate it with `npm run generate:glow`; the generator verifies that encoding
 preserves every RGBA value from the original gradient.

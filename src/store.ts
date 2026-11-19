@@ -3,7 +3,7 @@ import type * as THREE from 'three';
 import { CARS, GARAGE_INDICES, adjacentCar } from './config';
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
-import { cameraViews, type CameraView } from './three/cameraViews';
+import { cameraViews, isFerrariView, type CameraView } from './three/cameraViews';
 import { DEFAULT_LIGHTING, LIGHTING_MODES, nextLighting, parseLighting } from './lighting';
 import { clampCarZoom } from './three/carZoom';
 
@@ -84,6 +84,16 @@ export function canStudyRender(state: AppState): boolean {
   );
 }
 
+function resetFerrariView(state: AppState) {
+  if (!isFerrariView(state.cameraView)) return {};
+  return {
+    cameraView: 'front' as const,
+    cameraResetVersion: state.cameraResetVersion + 1,
+    hasManualView: false,
+    cameraZoom: 1,
+  };
+}
+
 export const useAppStore = create<AppState>((set, get) => ({
   carIndex: 0,
   themeName:
@@ -109,10 +119,12 @@ export const useAppStore = create<AppState>((set, get) => ({
       state.sceneUnavailable
     )
       return;
+    const preset = cameraViews(state)[view];
+    if (!preset || state.isContactVisible) return;
     set({
       cameraView: view,
       cameraViewVersion: state.cameraViewVersion + 1,
-      cameraZoom: cameraViews(state.themeName, state.renderFinish)[view].zoom,
+      cameraZoom: preset.zoom,
       hasManualView: true,
     });
   },
@@ -138,6 +150,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   sceneRetryVersion: 0,
   retryScene: () =>
     set((state) => ({
+      ...resetFerrariView(state),
       sceneUnavailable: false,
       sceneRetryVersion: state.sceneRetryVersion + 1,
       isCarLoading: true,
@@ -184,6 +197,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       hasPopupHeadlights: false,
       carIndex: i,
       cameraZoom: 1,
+      ...resetFerrariView(get()),
       activeBodyColor: 'original',
       hasBodyMaterial: false,
     });
@@ -201,6 +215,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({
       carIndex: nextIndex,
       cameraZoom: 1,
+      ...resetFerrariView(get()),
       drsOpen: false,
       hasDRS: false,
       headlightsRaised: true,
@@ -210,8 +225,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       hasBodyMaterial: false,
     });
   },
-  setThemeName: (theme) => set({ themeName: theme }),
-  toggleTheme: () => set({ themeName: nextLighting(get().themeName) }),
+  setThemeName: (theme) =>
+    set((state) => ({ themeName: theme, ...(theme !== 'studio' && resetFerrariView(state)) })),
+  toggleTheme: () => get().setThemeName(nextLighting(get().themeName)),
   setSectionIndex: (i) => set({ sectionIndex: i }),
   setContactVisible: (isContactVisible) => set({ isContactVisible }),
   pulseCarLights: () => {
@@ -226,6 +242,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
   resetCamera: () =>
     set((state) => ({
+      cameraView: 'front',
       cameraResetVersion: state.cameraResetVersion + 1,
       hasManualView: false,
       cameraZoom: 1,

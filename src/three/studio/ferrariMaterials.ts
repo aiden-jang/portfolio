@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { ferrariDetailShader } from './ferrariDetailShaders';
 import type { getStudioProjection } from './projection';
 
 type Surface = THREE.MeshStandardMaterial & Partial<THREE.MeshPhysicalMaterial>;
@@ -36,15 +37,39 @@ const studioSurfaces: Record<string, StudioSurface> = {
     coat: 0.3,
     coatRoughness: 0.18,
     spec: 0.72,
-    emissiveIntensity: 0.76,
+    emissiveIntensity: 0.49,
   },
-  material_14: { metalness: 0.03, roughness: 0.2, spec: 0.85, emissiveIntensity: 0.88 },
-  material_20: { metalness: 0.05, roughness: 0.21, spec: 0.75, emissiveIntensity: 0.35 },
-  material_9: { tone: [0.73, 0.74, 0.75], metalness: 0.015, roughness: 0.91, spec: 0.34 },
+  material_14: {
+    metalness: 0.03,
+    roughness: 0.2,
+    spec: 0.85,
+    emissiveIntensity: 0.88,
+  },
+  material_20: {
+    metalness: 0.03,
+    roughness: 0.175,
+    spec: 0.83,
+    emissiveIntensity: 0.27,
+  },
+  material_16: { roughness: 0.37, metalness: 0.28 },
+  material_17: { roughness: 0.255, metalness: 0.33 },
+  material: {},
+  'Rim_-_Black_part': { roughness: 0.37, metalness: 0.37 },
+  material_9: {
+    tone: [0.73, 0.74, 0.75],
+    metalness: 0.015,
+    roughness: 0.785,
+    spec: 0.37,
+  },
   Rubber: { metalness: 0, roughness: 0.78, spec: 0.37 },
   'Plastic_-_Matte_Black': { metalness: 0, roughness: 0.71, spec: 0.3 },
   'Plastic_-_Glossy_Black': { metalness: 0, roughness: 0.24, spec: 0.62 },
-  'Fabric_-_Red': { tone: [0.61, 0.76, 0.8], metalness: 0, roughness: 0.87, spec: 0.29 },
+  'Fabric_-_Red': {
+    tone: [0.61, 0.76, 0.8],
+    metalness: 0,
+    roughness: 0.87,
+    spec: 0.29,
+  },
   material_3: { metalness: 0.025, roughness: 0.59, spec: 0.32 },
   material_5: { metalness: 0.05, roughness: 0.69, spec: 0.32 },
   material_8: { metalness: 0.19, roughness: 0.49, spec: 0.48 },
@@ -99,7 +124,8 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
       const isBody = material.name === 'Metallic';
       const isGlass = material.name === 'Translucent';
       const isFabric = material.name === 'Fabric_-_Red';
-      if (!tune.tone && !isBody && !isGlass) continue;
+      const detail = ferrariDetailShader(material.name);
+      if (!tune.tone && !isBody && !isGlass && !detail) continue;
       const prepare = material.onBeforeCompile.bind(material);
       const color = new THREE.Vector3(...(tune.tone ?? [1, 1, 1]));
       material.customProgramCacheKey = () => 'studio-f40-' + material.name;
@@ -122,6 +148,7 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
           uniform mat4 fixtureBasis;
           uniform float fixtureX;
           varying vec3 worldCarSurface;
+          ${detail?.declarations ?? ''}
           vec3 reflectedCornerLight(vec3 surface, vec3 eye, vec3 surfaceNormal, float softness) {
             if (photoMaterial<=.001) return vec3(0.);
             vec3 p=(fixtureBasis*vec4(surface,1.)).xyz;
@@ -148,6 +175,7 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
               `
             #include <color_fragment>
             diffuseColor.rgb *= mix(vec3(1.), photoTone, photoMaterial);
+            ${detail?.color ?? ''}
             ${
               isBody
                 ? `
@@ -172,6 +200,7 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
               '#include <lights_physical_fragment>',
               `
             #include <lights_physical_fragment>
+            ${detail?.physical ?? ''}
             ${
               isBody
                 ? `
@@ -180,9 +209,16 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
                 * (1.0 - smoothstep(1.91,2.185,worldCarSurface.z));
               float hoodHeight = smoothstep(.37,.46,worldCarSurface.y);
               float hoodFinish = photoMaterial * hoodCenter * hoodLength * hoodHeight;
-              material.roughness = mix(material.roughness,.34,hoodFinish);
+              material.roughness = mix(material.roughness,.31,hoodFinish);
+              float doorScope = smoothstep(.69,.94,abs(worldCarSurface.x))*
+                smoothstep(.30,.54,worldCarSurface.y)*(1.-smoothstep(.71,.89,worldCarSurface.y));
+              float deckScope = smoothstep(.85,1.49,-worldCarSurface.z)*
+                smoothstep(.58,.87,worldCarSurface.y);
+              material.roughness = mix(material.roughness,.186,photoMaterial*max(deckScope,doorScope*.67));
               #ifdef USE_CLEARCOAT
-                material.clearcoatRoughness = mix(material.clearcoatRoughness,.28,hoodFinish);
+                material.clearcoatRoughness = mix(material.clearcoatRoughness,.235,hoodFinish);
+                material.clearcoatRoughness = mix(material.clearcoatRoughness,.083,
+                  photoMaterial*max(deckScope,doorScope*.54));
               #endif
             `
                 : ''
@@ -223,6 +259,9 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
               float windshield = smoothstep(.39,.87,abs(glassNormal.z));
               float edgeTint = 1.-smoothstep(.68,.94,worldCarSurface.y);
               float glassOpacity = mix(.51,.39,windshield) + .36*edgeReflection + .045*edgeTint;
+              float downLook = smoothstep(.15,.44,worldEye.y);
+              float rearDeck = smoothstep(.45,1.29,-worldCarSurface.z);
+              glassOpacity -= .080*downLook*(1.-edgeReflection)*(1.-rearDeck*.25);
               vec3 surfaceTint = mix(vec3(.015,.020,.023),vec3(.020,.028,.034),windshield);
               vec3 filteredReflection = (reflectedLight.directSpecular + reflectedLight.indirectSpecular)
                 * mix(.55,.82,windshield);
@@ -235,6 +274,7 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
             `
                 : ''
             }
+            ${detail?.outgoing ?? ''}
             #include <opaque_fragment>
           `,
             );

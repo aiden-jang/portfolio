@@ -34,7 +34,7 @@ export function buildCommands({
   setNotice,
   sceneUnavailable = useAppStore.getState().sceneUnavailable,
 }: Deps): Command[] {
-  const { themeName, renderFinish } = useAppStore.getState();
+  const state = useAppStore.getState();
   const commands: Command[] = [
     {
       id: 'retry-scene',
@@ -99,7 +99,7 @@ export function buildCommands({
       keywords: 'photo capture screenshot postcard save image',
       run: () => usePhotoMode.getState().open(),
     },
-    ...Object.entries(cameraViews(themeName, renderFinish)).map(([view, { label }]) => ({
+    ...Object.entries(cameraViews(state)).map(([view, { label }]) => ({
       id: `view-${view}`,
       label,
       hint: 'camera',
@@ -177,7 +177,6 @@ export function buildCommands({
       },
     },
   ];
-  const state = useAppStore.getState();
   return commands
     .filter(({ id }) => {
       if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';

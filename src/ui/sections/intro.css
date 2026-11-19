@@ -177,3 +177,9 @@
     margin-top: 14px;
   }
 }
+
+#sec-intro .garage-intro[data-camera-focus] {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}

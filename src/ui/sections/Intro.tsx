@@ -1,9 +1,15 @@
+import { useAppStore } from '../../store';
+import { isFerrariCameraFocused } from '../../three/cameraViews';
 import { Section } from './shared';
 
 export function IntroSection() {
+  const cameraFocus = useAppStore(isFerrariCameraFocused);
   return (
     <Section id="sec-intro" side="left" desktopVertical="top" mobileVertical="top">
-      <div className="panel garage-intro pointer-events-auto">
+      <div
+        className="panel garage-intro pointer-events-auto"
+        data-camera-focus={cameraFocus || undefined}
+      >
         <h1>Aiden Jang</h1>
         <p className="intro-role">
           Software engineer in New York. Making useful things after hours.

@@ -37,9 +37,16 @@ export function createStudioEnvironment(generator: THREE.PMREMGenerator) {
     [-0.2, 4.05, -6.7],
     [0, 0.35, 0],
     new THREE.Color(0.91, 0.94, 1),
-    2.42,
+    2.02,
   );
   luminousPanel([4.8, 4.35], [2.15, 5.4, 5.2], [0, 0.55, 0], new THREE.Color(1, 0.965, 0.91), 0.92);
+  luminousPanel(
+    [4.85, 0.74],
+    [2.1, 2.75, -5.8],
+    [0, 0.73, -1.13],
+    new THREE.Color(1, 0.92, 0.81),
+    2.2,
+  );
   const result = generator.fromScene(studio, 0.021, 0.1, 35);
   studio.traverse((mesh) => {
     if (mesh instanceof THREE.Mesh) {

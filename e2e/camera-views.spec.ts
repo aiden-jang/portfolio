@@ -40,11 +40,20 @@ for (const width of [1440, 390]) {
       expect(changed).toBeGreaterThan(500);
       await select('Corner view');
       await page.screenshot({ path: test.info().outputPath('corner.png') });
+      const intro = page.getByRole('heading', { name: 'Aiden Jang', exact: true });
+      await select('Rear three-quarter');
+      await expect(intro).toBeHidden();
+      await page.screenshot({ path: test.info().outputPath('rear.png') });
+      await select('Front wheel close-up');
+      await expect(intro).toBeHidden();
+      await page.screenshot({ path: test.info().outputPath('wheel.png') });
       await reset.click();
       await expect(reset).toHaveCount(0);
+      await expect(intro).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,
       );
+      await select('Front wheel close-up');
       if (width < 768) {
         await page.getByRole('button', { name: 'Menu', exact: true }).click();
         await page
@@ -57,6 +66,9 @@ for (const width of [1440, 390]) {
       await page.getByRole('combobox', { name: 'Search portfolio controls' }).fill('view');
       await expect(page.getByRole('option', { name: /Profile view/ })).toHaveCount(0);
       await expect(page.getByRole('option', { name: /Corner view/ })).toHaveCount(0);
+      await expect(
+        page.getByRole('option', { name: /Rear three-quarter|Front wheel close-up/ }),
+      ).toHaveCount(0);
       await page.keyboard.press('Escape');
       await page.mouse.move(width / 2, 500);
       await page.mouse.down();
