@@ -20,6 +20,19 @@ const photoWallFragment = /* glsl */ `
   varying vec2 wallPlane;
   ${photoProjectionGlsl}
 
+  // Project the same light onto every wall in world space as the camera orbits.
+  float backdropWash(vec3 point) {
+    vec3 delta = point - vec3(2.55, 5.45, 2.4);
+    vec3 axis = normalize(vec3(-.46, -.39, .80));
+    vec3 right = normalize(cross(axis, vec3(0.,1.,0.)));
+    vec3 up = cross(right, axis);
+    float range = dot(delta, axis);
+    float distance = max(range, 0.);
+    vec2 spread = vec2(1.25, .35) + vec2(.28, .18) * distance;
+    vec2 offset = vec2(dot(delta, right), dot(delta, up)) / spread;
+    return exp(-dot(offset, offset)) * smoothstep(.1, 1.6, range) / (1. + .024 * distance);
+  }
+
   void main() {
     vec3 room = roomPoint(worldWallPoint);
     bool frontWall = wallSurface == 1.;
@@ -121,6 +134,11 @@ const photoWallFragment = /* glsl */ `
       wall = mix(wall*.81,channel,trim*.83);
       wall = mix(wall,vec3(.011,.010,.009),max(0.,capMask-trim)*.82);
       wall += core*vec3(1.39,1.20,.98);
+    }
+    if (!ceiling && !corner) {
+      float wash = backdropWash(worldWallPoint);
+      float bottomBounce = .28 + .72*smoothstep(0., .37, room.y);
+      wall += vec3(.169,.150,.127)*wash*bottomBounce*panel*relief*grazingRelief;
     }
     gl_FragColor = vec4(wall,1.);
     #include <tonemapping_fragment>

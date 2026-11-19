@@ -119,11 +119,11 @@ export function Lights() {
     key.current.color.setHex(c.key.color);
 
     const sun = computeSunPosition(new Date());
-    if (studio) key.current.position.set(5.6, 5.1, -1.6);
+    if (studio) key.current.position.set(4.7, 2.9, 0.8);
     else key.current.position.set(sun.x, Math.max(sun.y, 0.5), sun.z);
     const sunFactor = NIGHT_KEY_FLOOR + (1 - NIGHT_KEY_FLOOR) * sun.daylight;
     key.current.intensity =
-      c.key.intensity *
+      (studio ? 0.13 : c.key.intensity) *
       (studio ? 1 : sunFactor) *
       (1 - 0.25 * weight) *
       (0.45 + 0.55 * (1 - Math.pow(1 - motionState.progress, 3)));
@@ -141,11 +141,11 @@ export function Lights() {
     c.rim.color = smoothColorHex(c.rim.color, target.rim.color, k);
     c.rim.intensity = smoothTowards(
       c.rim.intensity,
-      studio ? 0.355 : duskSeparation ? 1.08 : target.rim.intensity,
+      studio ? 0.81 : duskSeparation ? 1.08 : target.rim.intensity,
       k,
     );
     rim.current.color.setHex(c.rim.color);
-    if (studio) rim.current.position.set(3.35, 2.36, -6.15);
+    if (studio) rim.current.position.set(-4.25, 3.5, 6.8);
     else rim.current.position.set(-3, 4.5, -6);
     rim.current.intensity =
       c.rim.intensity * (1 - 0.08 * weight) * (0.7 + 0.3 * motionState.progress);

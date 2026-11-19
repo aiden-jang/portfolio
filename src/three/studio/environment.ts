@@ -24,11 +24,19 @@ export function createStudioEnvironment(generator: THREE.PMREMGenerator) {
     panel.lookAt(new THREE.Vector3(...target));
     studio.add(panel);
   };
+  // Fixed fixtures give the moving camera a broad side reflection and a rear edge light.
   luminousPanel(
-    [10.7, 1.92],
-    [5.8, 2.75, -0.73],
-    [0, 0.59, 0.2],
-    new THREE.Color(1, 0.92, 0.82),
+    [7.4, 2.85],
+    [4.8, 2.38, 0.48],
+    [0, 0.62, -0.16],
+    new THREE.Color(1, 0.964, 0.918),
+    10.6,
+  );
+  luminousPanel(
+    [5.2, 2.12],
+    [-3.25, 3.36, 6.05],
+    [0, 0.48, 0],
+    new THREE.Color(0.83, 0.89, 1),
     4.15,
   );
   luminousPanel([9.2, 3.6], [-6, 5.3, 2.4], [0, 0, 0], new THREE.Color(0.87, 0.92, 1), 1.05);
