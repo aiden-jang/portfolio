@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ScreenshotImage } from './ScreenshotImage';
 import { ControlIcon } from './ControlIcon';
+import { prefersReducedMotion } from '../hooks/reducedMotion';
+import { frameFromTrigger } from './triggerMotion';
 import './screenshot-viewer.css';
 
 type Props = {
@@ -38,14 +40,25 @@ export function ScreenshotViewer({
     setZoomed(false);
   }, [image]);
   const dialog = useRef<HTMLDialogElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    dialog.current?.showModal();
+    const panel = dialog.current;
+    panel?.showModal();
+    closeButton.current?.focus({ preventScroll: true });
+    const from = !prefersReducedMotion() && frameFromTrigger(panel, returnFocus, 0.14, 48, 0.925);
+    const animation =
+      from &&
+      panel?.animate?.([from, { opacity: 1, transform: 'translate(0, 0) scale(1)' }], {
+        duration: 320,
+        easing: 'cubic-bezier(.16,1,.3,1)',
+      });
     const root = document.documentElement;
     const overflow = root.style.overflow;
     const ownsLock = overflow !== 'hidden';
     if (ownsLock) root.style.overflow = 'hidden';
     return () => {
+      if (animation) animation.cancel();
       if (ownsLock) root.style.overflow = overflow;
       if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
     };
@@ -108,7 +121,7 @@ export function ScreenshotViewer({
         <button
           type="button"
           className="preview-dialog-close"
-          autoFocus
+          ref={closeButton}
           onClick={onClose}
           aria-label="Close screenshot"
         >

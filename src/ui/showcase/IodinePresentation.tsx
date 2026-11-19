@@ -3,6 +3,7 @@ import type { ProductPreview } from '../../data/projectPreviews';
 import type { WorkDetail } from '../../types';
 import { IodineContribution } from './IodineContribution';
 import { ScreenshotViewer } from '../ScreenshotViewer';
+import { ScreenshotImage } from '../ScreenshotImage';
 import './iodine-presentation.css';
 
 type Props = {
@@ -25,7 +26,19 @@ export function IodinePresentation({ item, preview, onOpen }: Props) {
           <p className="iodine-role">Open-source contributor</p>
         </div>
       </div>
-      <IodineContribution />
+      <div className="iodine-preview-row">
+        <IodineContribution />
+        <button
+          type="button"
+          ref={trigger}
+          className="iodine-editor-tile"
+          aria-label="View editor screenshot for iodine"
+          onClick={() => setOpen(true)}
+        >
+          <ScreenshotImage src={preview.image} alt="" lazy />
+          <span className="iodine-editor-label">View editor screenshot</span>
+        </button>
+      </div>
       <div className="iodine-evidence">
         <h4>Scoped terminal approvals</h4>
         <p>
@@ -40,14 +53,6 @@ export function IodinePresentation({ item, preview, onOpen }: Props) {
           onClick={(event) => onOpen(item, event.currentTarget)}
         >
           Read my contribution
-        </button>
-        <button
-          type="button"
-          ref={trigger}
-          aria-label="View editor screenshot for iodine"
-          onClick={() => setOpen(true)}
-        >
-          View editor screenshot
         </button>
         {item.link && (
           <a

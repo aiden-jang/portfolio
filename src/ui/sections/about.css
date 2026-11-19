@@ -21,17 +21,17 @@ html:root #sec-about {
 }
 .about-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(250px, 315px);
+  grid-template-columns: minmax(0, 1fr) minmax(270px, 34%);
   align-items: start;
-  gap: clamp(40px, 7vw, 104px);
+  gap: clamp(34px, 6vw, 80px);
 }
 .about-lead {
   margin: 0;
-  max-width: 20ch;
+  max-width: 18ch;
   font-size: clamp(37px, 4.65vw, 66px);
   font-weight: 450;
   line-height: 1.06;
-  letter-spacing: -0.051em;
+  letter-spacing: -0.047em;
   text-wrap: balance;
 }
 .about-body {
@@ -48,6 +48,24 @@ html:root #sec-about {
 }
 .about-details {
   margin: 4px 0 0;
+}
+.about-garden {
+  max-width: 29rem;
+  margin: 4px 0 14px;
+}
+.about-garden img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2.75;
+  object-fit: cover;
+  object-position: center 41%;
+  border-radius: 7px;
+}
+.about-garden figcaption {
+  color: var(--color-muted);
+  font-size: 12px;
+  margin-top: 8px;
 }
 .about-details > div {
   padding: 15px 0;
@@ -89,7 +107,7 @@ html:root #sec-about {
 @media (max-width: 899px) {
   .about-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
+    gap: 24px;
   }
 }
 @media (max-width: 600px) {

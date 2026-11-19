@@ -17,6 +17,7 @@ import { SCENE_ACTIVITY_EVENT } from './useSceneActivity';
 import { smoothTowards } from '../math';
 import { useAppStore } from '../store';
 import { useCarTypeOverlap } from './useCarTypeOverlap';
+import { useCarSwapBlend } from './useCarSwapBlend';
 
 const TRANSITION_RATE = 2.5;
 const BLOOM_RADIUS = 0.6;
@@ -24,6 +25,7 @@ const BLOOM_RADIUS = 0.6;
 // Reuse the existing renderer; a second context probe can block startup on slower devices.
 export const Effects = memo(function Effects() {
   const drawTypeOverlap = useCarTypeOverlap();
+  const blendCarSwap = useCarSwapBlend();
   const { gl, scene, camera, size, invalidate } = useThree();
   const pipeline = useRef<{ composer: EffectComposer; bloom: BloomEffect } | null>(null);
   const currentStrength = useRef(THEMES.dusk.bloomStrength);
@@ -85,6 +87,7 @@ export const Effects = memo(function Effects() {
     } finally {
       gl.autoClear = autoClear;
     }
+    blendCarSwap(gl.domElement);
     if (!isCarLoading && refs.carModel) refs.onOpeningFrame?.();
   }, 1);
 

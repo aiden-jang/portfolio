@@ -7,6 +7,7 @@ import { CARS, THEMES } from '../config';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
+import { F40_PAINT, openingStudioWeight } from './openingStudio';
 
 const TRANSITION_RATE = 2.5;
 
@@ -49,6 +50,7 @@ export function Lights() {
   const key = useRef<THREE.DirectionalLight>(null!);
   const fill = useRef<THREE.DirectionalLight>(null!);
   const rim = useRef<THREE.DirectionalLight>(null!);
+  const studioWeight = useRef(openingStudioWeight());
 
   // Mutated in place each frame, so it deliberately holds no React state.
   const current = useRef<typeof THEMES.dusk>(JSON.parse(JSON.stringify(THEMES.dusk)));
@@ -60,9 +62,24 @@ export function Lights() {
       CARS[state.carIndex].file,
     );
     const duskSeparation = sculpted && state.themeName === 'dusk';
+    const weight = (studioWeight.current = smoothTowards(
+      studioWeight.current,
+      openingStudioWeight(),
+      Math.min(1, dt * 5),
+    ));
+    const paint = state.refs.bodyMaterial;
+    if (
+      state.carIndex === 0 &&
+      paint instanceof THREE.MeshPhysicalMaterial &&
+      paint.name === 'Metallic'
+    ) {
+      paint.roughness = F40_PAINT.roughness + 0.105 * weight;
+      paint.clearcoatRoughness = F40_PAINT.coatRoughness + 0.095 * weight;
+      paint.clearcoat = F40_PAINT.coat - 0.12 * weight;
+    }
     scene.environmentIntensity = smoothTowards(
       scene.environmentIntensity,
-      sculpted ? 0.29 : 0.22,
+      sculpted ? 0.29 : 0.22 - 0.048 * weight,
       Math.min(1, dt * TRANSITION_RATE),
     );
     const k = Math.min(1, dt * TRANSITION_RATE);
@@ -88,7 +105,10 @@ export function Lights() {
     key.current.position.set(sun.x, Math.max(sun.y, 0.5), sun.z);
     const sunFactor = NIGHT_KEY_FLOOR + (1 - NIGHT_KEY_FLOOR) * sun.daylight;
     key.current.intensity =
-      c.key.intensity * sunFactor * (0.45 + 0.55 * (1 - Math.pow(1 - motionState.progress, 3)));
+      c.key.intensity *
+      sunFactor *
+      (1 - 0.25 * weight) *
+      (0.45 + 0.55 * (1 - Math.pow(1 - motionState.progress, 3)));
 
     c.fill.color = smoothColorHex(c.fill.color, target.fill.color, k);
     c.fill.intensity = smoothTowards(
@@ -97,7 +117,8 @@ export function Lights() {
       k,
     );
     fill.current.color.setHex(c.fill.color);
-    fill.current.intensity = c.fill.intensity * (0.7 + 0.3 * motionState.progress);
+    fill.current.intensity =
+      c.fill.intensity * (1 - 0.13 * weight) * (0.7 + 0.3 * motionState.progress);
 
     c.rim.color = smoothColorHex(c.rim.color, target.rim.color, k);
     c.rim.intensity = smoothTowards(
@@ -106,7 +127,8 @@ export function Lights() {
       k,
     );
     rim.current.color.setHex(c.rim.color);
-    rim.current.intensity = c.rim.intensity * (0.7 + 0.3 * motionState.progress);
+    rim.current.intensity =
+      c.rim.intensity * (1 - 0.08 * weight) * (0.7 + 0.3 * motionState.progress);
   });
 
   const init = current.current;

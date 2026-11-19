@@ -88,7 +88,8 @@
 
 html:root #sec-more-work {
   min-height: auto;
-  padding-block: calc(var(--portfolio-header-height) + clamp(30px, 5svh, 48px)) 84px;
+  padding-block: calc(var(--portfolio-header-height) + clamp(30px, 5svh, 48px))
+    clamp(36px, 5vw, 68px);
   align-items: flex-start;
   background: var(--color-bg);
   user-select: text;
@@ -107,14 +108,14 @@ html:root #sec-more-work {
   --project-column-gap: 32px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(30px, 4vw, 56px) var(--project-column-gap);
+  gap: clamp(22px, 3.3vw, 42px) var(--project-column-gap);
 }
 
 .project-gallery .garage-project-compact {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  gap: 8px;
+  gap: 4px;
   padding: 0;
 }
 
@@ -216,17 +217,17 @@ html:root #sec-more-work .preview-thumbnail > img {
 }
 
 #project-mrrp {
-  --project-preview-zoom: 1.24;
-  --project-preview-origin: 50% 58%;
+  --project-preview-zoom: 1.22;
+  --project-preview-origin: 29% 57%;
 }
 
 #project-worth {
-  --project-preview-zoom: 1.16;
-  --project-preview-origin: 100% 52%;
+  --project-preview-zoom: 1.12;
+  --project-preview-origin: 90% 54%;
 }
 
 #project-owewell {
-  --project-preview-position: 50% 22%;
+  --project-preview-position: 50% 30%;
 }
 
 #project-iguess {
@@ -235,7 +236,7 @@ html:root #sec-more-work .preview-thumbnail > img {
 }
 
 #project-wherever {
-  --project-preview-position: 50% 70%;
+  --project-preview-position: 50% 58%;
 }
 
 #project-platform {

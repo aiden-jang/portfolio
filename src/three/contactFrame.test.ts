@@ -32,12 +32,12 @@ describe('Contact composition', () => {
       const stageDistance =
         KEYFRAMES.at(-1)!.distance *
         framingDistanceMultiplier(width / sectionHeight) *
-        (desktop ? 1 : 1.08);
+        (desktop ? 0.945 : 1.13);
       const reference = cameraAt(stageDistance, width / sectionHeight);
       reference.setViewOffset(
         width,
         sectionHeight,
-        desktop ? -width * 0.22 : 0,
+        desktop ? -width * 0.245 : 0,
         desktop ? 0 : -sectionHeight * 0.2 + 42,
         width,
         sectionHeight,
@@ -67,7 +67,7 @@ describe('Contact composition', () => {
           expect(rendered.y).toBeCloseTo(approved.y + sectionTop, 7);
         }
         const target = screen(new Vector3(0, 0.7, 0), actual, width, height);
-        expect(target.x).toBeCloseTo(width * (desktop ? 0.72 : 0.5), 7);
+        expect(target.x).toBeCloseTo(width * (desktop ? 0.745 : 0.5), 7);
         expect(target.y).toBeCloseTo(
           sectionHeight * (desktop ? 0.5 : 0.7) + sectionTop - (desktop ? 0 : 42),
           7,

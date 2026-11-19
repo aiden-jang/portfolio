@@ -1,10 +1,11 @@
 html:root #sec-experience {
   background: var(--color-bg);
-  min-height: 100svh;
+  min-height: auto;
   border: 0;
   user-select: text;
   -webkit-user-select: text;
-  padding-block: calc(var(--portfolio-header-height) + clamp(40px, 6vh, 66px)) 72px;
+  padding-block: calc(var(--portfolio-header-height) + clamp(32px, 5svh, 54px))
+    clamp(32px, 6vw, 76px);
 }
 
 .experience-content {
@@ -25,7 +26,7 @@ html:root #sec-experience {
 .experience-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(270px, 310px);
-  gap: clamp(44px, 6.2vw, 96px);
+  gap: clamp(30px, 5.5vw, 80px);
   align-items: start;
 }
 
@@ -44,10 +45,10 @@ html:root #sec-experience {
   margin: 0;
   white-space: nowrap;
   color: var(--color-fg);
-  font-size: clamp(64px, 9.25vw, 135px);
+  font-size: clamp(64px, 8.6vw, 124px);
   font-weight: 480;
   font-variant-numeric: lining-nums;
-  letter-spacing: -0.068em;
+  letter-spacing: -0.056em;
   line-height: 0.85;
 }
 
@@ -121,7 +122,7 @@ html:root #sec-experience {
   gap: 12px 25px;
   align-items: baseline;
   width: 100%;
-  padding-block: 20px;
+  padding-block: 17px;
   text-align: left;
   cursor: pointer;
   border-top: 1px solid var(--color-line);
@@ -221,7 +222,7 @@ html:root #sec-experience {
 
 .experience-history h3 {
   margin: 0 0 19px;
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 500;
   letter-spacing: -0.023em;
   line-height: 1.2;
@@ -259,7 +260,7 @@ html:root #sec-experience {
 @media (max-width: 900px) {
   .experience-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 38px;
+    gap: 34px;
   }
   .experience-history {
     max-width: 420px;
@@ -274,7 +275,6 @@ html:root #sec-experience {
     margin-bottom: 29px;
   }
   .experience-measure {
-    font-size: clamp(64px, 21vw, 110px);
     gap: 12px;
   }
   .experience-lead-story {
@@ -290,7 +290,7 @@ html:root #sec-experience {
   .experience-outcome {
     grid-template-columns: minmax(0, 1fr) 18px;
     row-gap: 7px;
-    padding-block: 16px;
+    padding-block: 14px;
   }
   .experience-figure {
     flex-direction: row;

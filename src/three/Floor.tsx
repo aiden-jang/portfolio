@@ -7,6 +7,7 @@ import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import { applyStudioReflection } from './studioReflection';
+import { openingStudioWeight } from './openingStudio';
 
 const FLOOR_RADIUS = 14;
 const REFLECTOR_RESOLUTION = 1024;
@@ -31,6 +32,7 @@ export function Floor() {
       color: new THREE.Color(THEMES.dusk.reflectorColor),
     });
     applyStudioReflection(r.material as THREE.ShaderMaterial);
+    (r.material as THREE.ShaderMaterial).uniforms.studioFinish.value = openingStudioWeight();
     r.rotation.x = -Math.PI / 2;
     return r;
   }, []);
@@ -71,6 +73,11 @@ export function Floor() {
       k,
     );
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
+    uniforms.studioFinish.value = smoothTowards(
+      uniforms.studioFinish.value,
+      openingStudioWeight(),
+      Math.min(1, dt * 5),
+    );
     uniforms.reflectionStrength.value = renderFinish === 'clay' ? 0 : refs.floorReflection;
     (uniforms.color.value as THREE.Color).setHex(currentReflectorColor.current);
   });

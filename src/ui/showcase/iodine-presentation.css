@@ -28,6 +28,39 @@
   font-size: 13px;
   color: var(--color-muted);
 }
+.iodine-preview-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 18px;
+}
+.iodine-editor-tile {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 150px;
+  border-radius: 12px;
+  text-align: left;
+  border: 1px solid #39373f;
+  background: #18191e;
+  cursor: zoom-in;
+}
+.iodine-preview-row .iodine-editor-tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 66% 46%;
+}
+.iodine-editor-label {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 26px 14px 12px;
+  font-size: 12px;
+  background: linear-gradient(transparent, #15161ce8 66%);
+  color: #ececea;
+}
 .iodine-feature .cinema-contribution {
   border: 1px solid #39373f;
   border-radius: 12px;
@@ -189,6 +222,14 @@ html:root .iodine-feature .cinema-result p {
 }
 
 @media (max-width: 767px) {
+  .iodine-preview-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .iodine-editor-tile {
+    aspect-ratio: 2.05;
+    min-height: 100px;
+  }
   .iodine-intro,
   .iodine-evidence {
     grid-template-columns: minmax(0, 1fr);

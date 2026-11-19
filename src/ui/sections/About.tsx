@@ -15,30 +15,42 @@ export function AboutSection() {
               and a pixel cat.
             </p>
           </div>
-          <dl className="about-details">
-            <div>
-              <dt>Background</dt>
-              <dd>Computer Engineering at Rutgers</dd>
-            </div>
-            <div>
-              <dt>Open source</dt>
-              <dd>
-                <a
-                  href="https://github.com/hyunwookshin/iodine/commits/main/?author=aiden-jang"
-                  target="_blank"
-                  aria-describedby="external-link-hint"
-                  rel="noopener noreferrer"
-                  className="about-contribution-link"
-                >
-                  iodine <span aria-hidden="true">↗</span>
-                </a>
-                <p>
-                  Scoped terminal approvals, agent edit recovery, and clickable file paths in agent
-                  replies.
-                </p>
-              </dd>
-            </div>
-          </dl>
+          <div>
+            <figure className="about-garden">
+              <img
+                src="/projects/bloomnote-garden.jpg"
+                alt="Three flowers from a bloomnote garden"
+                width="980"
+                height="820"
+                loading="lazy"
+              />
+              <figcaption>A garden from bloomnote</figcaption>
+            </figure>
+            <dl className="about-details">
+              <div>
+                <dt>Background</dt>
+                <dd>Computer Engineering at Rutgers</dd>
+              </div>
+              <div>
+                <dt>Open source</dt>
+                <dd>
+                  <a
+                    href="https://github.com/hyunwookshin/iodine/commits/main/?author=aiden-jang"
+                    target="_blank"
+                    aria-describedby="external-link-hint"
+                    rel="noopener noreferrer"
+                    className="about-contribution-link"
+                  >
+                    iodine <span aria-hidden="true">↗</span>
+                  </a>
+                  <p>
+                    Scoped terminal approvals, agent edit recovery, and clickable file paths in
+                    agent replies.
+                  </p>
+                </dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </div>
     </Section>

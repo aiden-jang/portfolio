@@ -1,4 +1,5 @@
 import { type Mesh, MeshPhysicalMaterial, MeshStandardMaterial, type Object3D } from 'three';
+import { F40_PAINT } from './openingStudio';
 
 const roadPaint: Record<string, string> = {
   'ferrari-f120-f40.glb': 'Metallic',
@@ -111,7 +112,14 @@ export function prepareModelFinish(model: Object3D, file: string): void {
     return;
   }
   if (file === 'ferrari-f120-f40.glb')
-    return prepareGlossPaint(model, roadPaint[file], 0.34, 0.26, 'none', 0.55);
+    return prepareGlossPaint(
+      model,
+      roadPaint[file],
+      F40_PAINT.roughness,
+      F40_PAINT.coatRoughness,
+      'none',
+      F40_PAINT.coat,
+    );
   if (file === 'lamborghini-countach-5000qv.glb') return prepareCountachFinish(model);
   if (Object.hasOwn(roadPaint, file))
     return prepareGlossPaint(model, roadPaint[file], 0.24, 0.06, 'both');

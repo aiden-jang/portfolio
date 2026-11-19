@@ -41,8 +41,10 @@ for (const width of [1440, 390]) {
     await replay.press('Enter');
     await expect(currentCode).toContainText('.trim()');
     const screenshot = iodine.getByRole('button', { name: 'View editor screenshot for iodine' });
-    await screenshot.click();
+    await expect(screenshot.locator('img')).toHaveAttribute('src', '/projects/iodine.png');
+    await screenshot.press('Enter');
     const editor = page.getByRole('dialog', { name: 'iodine screenshot', exact: true });
+    await expect(editor.getByRole('button', { name: 'Close screenshot' })).toBeFocused();
     await expect(editor.getByRole('img')).toHaveAttribute('src', '/projects/iodine.png');
     await page.keyboard.press('Escape');
     await expect(screenshot).toBeFocused();
