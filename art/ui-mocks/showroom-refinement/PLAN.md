@@ -46,7 +46,7 @@ Controls keep 44px targets, 8px corners and visible focus. Screenshots use 12px 
 Featured images use deliberate globe and editor crops, with complete captures available through inspection. Supporting previews use uniform
 2:1 frames; crops can differ by app, and the screenshot viewer preserves every pixel.
 Use image composition to make each app recognizable at a glance; keep the globe legible
-for Everything Is Fine and frame Iodine around its most distinctive working state.
+for meanwhile. and frame Iodine around its most distinctive working state.
 Descriptions should lead with the user benefit, then use concise, verified engineering
 evidence to explain why the product is well made.
 
@@ -57,7 +57,7 @@ evidence to explain why the product is well made.
 | Opening            | Keep the existing camera and full car; slightly reduce the name and loosen its tracking                  | A composed opening with room for the silhouette          |
 | Garage             | Opaque dock, clearer grouping, larger chooser labels and consistent spacing                              | Easier to explore without adding scenery                 |
 | Experience         | Remove section numbering, enlarge outcomes and descriptions, align roles and evidence                    | Hiring teams can read the engineering proof quickly      |
-| Featured projects  | Everythingisfine first, Iodine second; large image beside a narrow text column, alternating sides        | Each project gets a deliberate presentation              |
+| Featured projects  | meanwhile. first, Iodine second; large image beside a narrow text column, alternating sides              | Each project gets a deliberate presentation              |
 | Iodine             | Keep contributor attribution and case study; omit the additional three-panel explainer from the overview | Avoid repeating detail before someone chooses to read it |
 | Other projects     | Seven image-led entries with consistent preview frames; two columns on desktop, one on phones            | Show the range without giving every app featured weight  |
 | Project browsing   | Quiet underline filters, remove sticky toolbar, retain jump selector                                     | Less fixed chrome around the work                        |

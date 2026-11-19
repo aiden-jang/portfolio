@@ -6,7 +6,7 @@ retains the authored design reference; it reuses the production Iodine presentat
 
 The opening keeps the full garage and stationary initial car angle. Its name and
 short introduction receive a smaller type adjustment and a more deliberate measure.
-Projects carry the next focal point: Everything Is Fine keeps its orbiting globe,
+Projects carry the next focal point: the meanwhile. observatory keeps its orbiting globe,
 and Iodine leads with a crop of the actual editor. Its recorded undo example stays
 available in a disclosure below the screenshot. Contributor attribution is retained.
 

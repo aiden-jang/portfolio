@@ -6,7 +6,7 @@ The entire car garage remains separate from the project globe.
 ## Globe
 
 The featured still marks an August 2026 Kamchatka earthquake from real USGS and EMSC
-readings recorded in Everything Is Fine’s reconciliation fixture. Inspect an earthquake
+readings recorded in the meanwhile. reconciliation fixture. Inspect an earthquake
 shows both agencies’ readings without WebGL. The event case study uses the same evidence.
 The still renders the existing Natural Earth mesh, coastlines, and tectonic boundaries.
 The app’s [recorded agency reports](https://github.com/aiden-jang/meanwhile/blob/main/src/sources/fixtures/one-quake-both-feeds.json)
@@ -28,18 +28,18 @@ Older events can age out of its catalogue.
 The day–night boundary, stars and aurora use the same recorded sky time,
 17 November 2026 at 23:00 UTC. The aurora is a 2° grid sampled from a saved NOAA
 SWPC OVATION forecast. The stationary stars are projections of the Yale Bright
-Star Catalogue from Everything Is Fine's bundled table. The opening WebP files
+Star Catalogue from the table bundled with the meanwhile. observatory. The opening WebP files
 are lossless captures from the embedded scene at 1120 × 732 and 390 × 440. The
 poster and the canvas share a frame at each breakpoint.
 
-The geography asset uses Everything Is Fine's Natural Earth land mesh,
+The geography asset from meanwhile. includes the Natural Earth land mesh,
 coastlines, tectonic boundaries and graticule. The layout of its compressed
 arrays is in `src/data/globeGeometry.json`. The loader supports hosts that
 automatically decompress gzip and hosts serving the stored bytes. The
 renderer uses the portfolio's Three.js dependency and disposes of its context,
 observers, input listeners, textures and materials when closed.
 
-Sources: [Everything Is Fine geography](https://github.com/aiden-jang/meanwhile/tree/b61b661/src),
+Sources: [meanwhile. geography](https://github.com/aiden-jang/meanwhile/tree/b61b661/src),
 [star catalogue](https://github.com/aiden-jang/meanwhile/blob/main/src/geo/stars.json),
 and [NOAA SWPC aurora forecast](https://www.swpc.noaa.gov/products/aurora-30-minute-forecast).
 

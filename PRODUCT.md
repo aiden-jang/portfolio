@@ -38,7 +38,7 @@ built with React, TypeScript, Vite and Three.js and is hosted at aidenjang.com.
 - Preserve experience, project case studies, résumé, contact, credits and model
   attribution. Keep content available when the 3D scene cannot load.
 - Preserve keyboard access, reduced-motion support and responsive behavior.
-- Keep everythingisfine first and Iodine second in project order. These are the two
+- Keep meanwhile. first and Iodine second in project order. These are the two
   featured projects; mrrp and worth belong with the smaller projects.
 - Present Iodine as an open-source contribution, accurately distinguishing Aiden's
   contributions from ownership of the entire application.
@@ -85,7 +85,7 @@ the three-quarter angle. Dragging or scrolling interrupts the sweep. Reduced
 motion opens at the settled angle. Softer studio lighting frames the larger
 name. The first scroll hands the car silhouette to a large work title and featured
 globe; phones use a wider handoff camera. Keep the full orbit area and full garage.
-The page leads into everythingisfine and Iodine, then
+The page leads into meanwhile. and Iodine, then
 Experience, the supporting collection, About and Contact.
 
 The featured globe uses an interactive, recorded USGS snapshot with native app

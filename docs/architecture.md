@@ -168,13 +168,13 @@ to derive visibility from actual section positions.
 
 ## Projects and dialogs
 
-The featured projects are everythingisfine and Iodine, immediately after the
+The featured projects are meanwhile. and Iodine, immediately after the
 showroom. Experience separates them from the supporting collection. Moving a project between these groups
 keeps its screenshot states and existing preview links available. Supporting frames
 share a 2:1 ratio; Platform closes the desktop collection beside its explanation.
 Featured image crops emphasize the globe and editor while inspection shows the
 complete capture. Screenshot view controls share selection with the project reader.
-`EngineeringStory` renders the everythingisfine and Accounts flows, failure cases
+`EngineeringStory` renders the meanwhile. and Accounts flows, failure cases
 and tradeoffs from `projectStories.ts`. These descriptions follow the source
 implementations, and their case studies link to the public repositories.
 On phones, the reader places its screenshot before the longer explanation. Source
