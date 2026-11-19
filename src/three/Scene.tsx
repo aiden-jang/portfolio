@@ -11,6 +11,8 @@ import { Lights } from './Lights';
 import { useAppStore } from '../store';
 import { useScenePaused } from './useScenePaused';
 import { useSceneActivity } from './useSceneActivity';
+import { isOpeningStudio } from '../lighting';
+import { StudioRoom } from './studio/StudioRoom';
 import { SceneHealth } from './SceneHealth';
 
 const Effects = lazy(() => import('./Effects').then((module) => ({ default: module.Effects })));
@@ -24,6 +26,7 @@ export function Scene({ getScrollT }: Props) {
   const active = useSceneActivity();
   const contactVisible = useAppStore((state) => state.isContactVisible);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
+  const studio = useAppStore(isOpeningStudio);
   return (
     <>
       <Canvas
@@ -50,7 +53,8 @@ export function Scene({ getScrollT }: Props) {
         <SceneHealth />
         <PhotoCapture />
         <Lights />
-        <Floor />
+        {studio && <StudioRoom />}
+        <Floor studio={studio} />
         <Car />
         <CameraRig getScrollT={getScrollT} />
         <Suspense fallback={null}>

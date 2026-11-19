@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { LIGHTING_LABELS, nextLighting } from '../lighting';
 import { useAppStore } from '../store';
 
 function SunIcon() {
@@ -30,44 +31,43 @@ function MoonIcon() {
 // Owns the body[data-theme] sync, so CSS-only consumers stay in step whichever control flips it.
 export function ThemeToggle() {
   const themeName = useAppStore((s) => s.themeName);
-  const toggleTheme = useAppStore((s) => s.toggleTheme);
-  const isNight = themeName === 'night';
 
   useEffect(() => {
     document.body.dataset.theme = themeName;
   }, [themeName]);
 
-  return (
-    <button
-      type="button"
-      aria-label={`Lighting: ${isNight ? 'Night' : 'Dusk'}. Switch to ${isNight ? 'Dusk' : 'Night'}`}
-      aria-pressed={isNight}
-      title={`Lighting: ${isNight ? 'Night' : 'Dusk'}`}
-      onClick={toggleTheme}
-      className="scene-control-button"
-    >
-      {isNight ? <MoonIcon /> : <SunIcon />}
-      <span className="control-group-label">{isNight ? 'Night' : 'Dusk'}</span>
-    </button>
-  );
+  return <LightingButton />;
 }
 
 export function MobileThemeButton() {
-  const themeName = useAppStore((s) => s.themeName);
-  const toggleTheme = useAppStore((s) => s.toggleTheme);
-  const isNight = themeName === 'night';
+  return <LightingButton mobile />;
+}
 
+function LightingButton({ mobile = false }: { mobile?: boolean }) {
+  const theme = useAppStore((state) => state.themeName);
+  const toggle = useAppStore((state) => state.toggleTheme);
+  const label = LIGHTING_LABELS[theme];
+  const next = LIGHTING_LABELS[nextLighting(theme)];
+  const icon = theme === 'night' ? <MoonIcon /> : <SunIcon />;
   return (
     <button
       type="button"
-      aria-label={`Lighting: ${isNight ? 'Night' : 'Dusk'}. Switch to ${isNight ? 'Dusk' : 'Night'}`}
-      aria-pressed={isNight}
-      title={`Lighting: ${isNight ? 'Night' : 'Dusk'}`}
-      onClick={toggleTheme}
+      aria-label={`Lighting: ${label}. Switch to ${next}`}
+      title={`Lighting: ${label}`}
+      onClick={toggle}
       className="scene-control-button"
     >
-      <span className="mobile-light-name">{isNight ? 'Night' : 'Dusk'}</span>
-      {isNight ? <MoonIcon /> : <SunIcon />}
+      {mobile ? (
+        <>
+          <span className="mobile-light-name">{label}</span>
+          {icon}
+        </>
+      ) : (
+        <>
+          {icon}
+          <span className="control-group-label">{label}</span>
+        </>
+      )}
     </button>
   );
 }

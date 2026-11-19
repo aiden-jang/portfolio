@@ -313,3 +313,8 @@
   letter-spacing: 0;
   text-transform: none;
 }
+@media (pointer: coarse) {
+  body.orbiting .camera-reset-button {
+    visibility: hidden;
+  }
+}

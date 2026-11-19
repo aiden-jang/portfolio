@@ -1,8 +1,10 @@
 import { useRef } from 'react';
 import type { Object3D } from 'three';
 import { useAppStore } from '../store';
-import { smoothTowards } from '../math';
+import { clamp, smoothTowards } from '../math';
 import { CarFraming } from './carFraming';
+import { isOpeningStudio, STUDIO_TALL_ASPECT } from '../lighting';
+import { studioMobileDistance } from './studio/carGrounding';
 import { zoomedIntroDistance } from './carZoom';
 
 type View = {
@@ -40,6 +42,20 @@ export function useCarZoom() {
       scrollT === 0 && view.manualOrbit
         ? framing.current.fit(model, azimuth, elevation, distance, targetY, width, height, fov)
         : distance;
-    return zoomedIntroDistance(base, current.current.zoom, scrollT);
+    const zoom = current.current.zoom;
+    const aspect = width / height;
+    if (
+      !isOpeningStudio(state) ||
+      width >= 768 ||
+      scrollT !== 0 ||
+      (zoom <= 1 && aspect >= STUDIO_TALL_ASPECT)
+    )
+      return zoomedIntroDistance(base, zoom, scrollT);
+
+    const minimum = studioMobileDistance(model, azimuth, elevation, 0, targetY, width, height, fov);
+    // Leave room to zoom in when the settled shot already fills a tall screen.
+    const headroom = clamp((STUDIO_TALL_ASPECT - aspect) / 0.05, 0, 1) * 0.1;
+    const fitted = headroom > 0 ? Math.max(base, minimum * (1 + headroom)) : base;
+    return Math.max(zoomedIntroDistance(fitted, zoom, scrollT), minimum);
   };
 }

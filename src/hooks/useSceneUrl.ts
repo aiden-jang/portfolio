@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 import { parseScenePaint, type ActiveBodyColor } from '../paint';
-import type { ThemeName } from '../types';
+import { parseLighting } from '../lighting';
 
 export function useSceneUrl() {
   const setCarIndex = useAppStore((state) => state.setCarIndex);
@@ -22,7 +22,7 @@ export function useSceneUrl() {
       setCarIndex(carIndex);
 
     const light = params.get('light');
-    if (light === 'dusk' || light === 'night') setThemeName(light as ThemeName);
+    if (light !== null) setThemeName(parseLighting(light));
 
     scenePaintRef.current = parseScenePaint(params.get('paint'));
     if (scenePaintRef.current && !CARS[useAppStore.getState().carIndex].fixedLivery)

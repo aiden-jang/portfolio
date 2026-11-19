@@ -2,7 +2,7 @@ import { usePhotoMode } from './photo/state';
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { canStudyRender, useAppStore } from '../store';
-import { CAMERA_VIEWS, type CameraView } from '../three/cameraViews';
+import { cameraViews, type CameraView } from '../three/cameraViews';
 import { CAR_ZOOM_MAX, CAR_ZOOM_MIN, CAR_ZOOM_STEP } from '../three/carZoom';
 
 export type Command = {
@@ -34,6 +34,7 @@ export function buildCommands({
   setNotice,
   sceneUnavailable = useAppStore.getState().sceneUnavailable,
 }: Deps): Command[] {
+  const { themeName, renderFinish } = useAppStore.getState();
   const commands: Command[] = [
     {
       id: 'retry-scene',
@@ -98,7 +99,7 @@ export function buildCommands({
       keywords: 'photo capture screenshot postcard save image',
       run: () => usePhotoMode.getState().open(),
     },
-    ...Object.entries(CAMERA_VIEWS).map(([view, { label }]) => ({
+    ...Object.entries(cameraViews(themeName, renderFinish)).map(([view, { label }]) => ({
       id: `view-${view}`,
       label,
       hint: 'camera',
@@ -117,9 +118,9 @@ export function buildCommands({
     },
     {
       id: 'theme',
-      label: 'Toggle studio lighting',
+      label: 'Cycle showroom lighting',
       hint: 'B',
-      keywords: 'theme background night day lighting',
+      keywords: 'theme background studio dusk night lighting',
       run: () => useAppStore.getState().toggleTheme(),
     },
     {

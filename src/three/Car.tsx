@@ -24,6 +24,10 @@ import {
   makeRadialGlowTexture,
 } from './carHelpers';
 
+import { isOpeningStudio } from '../lighting';
+import { getStudioProjection } from './studio/projection';
+import { tuneStudioFerrari } from './studio/ferrariMaterials';
+
 const TRANSITION_RATE = 2.5;
 const EXPOSURE_RATE = 2.5;
 
@@ -43,6 +47,7 @@ export function Car() {
 
   const { attach: attachDetails, release: releaseDetails, update: updateDetails } = useCarDetails();
   const group = useMemo(() => new THREE.Group(), []);
+  const studioFinish = useRef<ReturnType<typeof tuneStudioFerrari> | null>(null);
   const displayedIndex = useRef(carIndex);
   const modelRef = useRef<THREE.Object3D | null>(null);
   const loader = useMemo(() => {
@@ -118,6 +123,8 @@ export function Car() {
         if (!spec.preserveFlatMeshes) hideBakedPlanes(model);
         prepareModelGlass(model);
         prepareModelFinish(model, spec.file);
+        studioFinish.current = carIndex === 0 ? tuneStudioFerrari(model) : null;
+        studioFinish.current?.(isOpeningStudio(useAppStore.getState()));
         headlights.current = createPopupHeadlights(model, gltf.animations, spec.popupHeadlights);
         headlights.current?.setRaised(useAppStore.getState().headlightsRaised, true);
         useAppStore.setState({ hasPopupHeadlights: !!headlights.current });
@@ -205,10 +212,16 @@ export function Car() {
   }, [scene, group, underglow, underglowMat, releaseDetails]);
 
   useFrame((state, dt) => {
+    const app = useAppStore.getState();
+    const studio = isOpeningStudio(app);
+    studioFinish.current?.(
+      studio,
+      studio ? getStudioProjection(state.size.width < 768) : undefined,
+    );
     headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
     headlights.current?.update(dt);
-    const refs = useAppStore.getState().refs;
-    const target = THEMES[useAppStore.getState().themeName];
+    const { refs } = app;
+    const target = THEMES[app.themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
 
     currentUnderglow.current = smoothColorHex(currentUnderglow.current, target.underglow, k);
@@ -227,11 +240,11 @@ export function Car() {
     const breath = reduced ? 0.5 : 0.5 + Math.sin(time * 0.7) * 0.5;
     refs.lightPulseT = Math.max(0, refs.lightPulseT - dt * 2);
     const pulse = reduced ? 0 : refs.lightPulseT;
-    underglowMat.opacity = 0.1 + breath * 0.04;
+    underglowMat.opacity = studio ? 0.012 : 0.1 + breath * 0.04;
 
     for (const l of refs.lamps) {
       const boost = 1 + pulse * 0.8;
-      l.light.intensity = l.baseIntensity * boost;
+      l.light.intensity = l.baseIntensity * boost * (studio ? (l.isHeadlight ? 0.035 : 0.14) : 1);
     }
     updateDetails(dt);
   });

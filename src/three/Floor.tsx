@@ -1,8 +1,10 @@
+import { paintFinish } from '../paint';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
-import { THEMES } from '../config';
+import { CARS, THEMES } from '../config';
+import { studioCarFootprint } from './studio/carGrounding';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
@@ -13,8 +15,10 @@ const FLOOR_RADIUS = 14;
 const REFLECTOR_RESOLUTION = 1024;
 const TRANSITION_RATE = 2.5;
 
-export function Floor() {
+export function Floor({ studio }: { studio: boolean }) {
   const { gl, scene } = useThree();
+  const mobile = useThree((state) => studio && state.size.width < 768);
+  const studioTint = useMemo(() => new THREE.Color(), []);
   const currentBg = useRef(THEMES.dusk.bg);
   const currentFogColor = useRef(THEMES.dusk.fogColor);
   const currentFogNear = useRef(THEMES.dusk.fogNear);
@@ -25,17 +29,25 @@ export function Floor() {
   // Built by hand because R3F's <reflector> intrinsic wraps a helper with a non-standard
   // constructor signature.
   const reflector = useMemo(() => {
-    const r = new Reflector(new THREE.CircleGeometry(FLOOR_RADIUS, 96), {
-      textureWidth: REFLECTOR_RESOLUTION,
-      textureHeight: REFLECTOR_RESOLUTION,
-      multisample: 0,
-      color: new THREE.Color(THEMES.dusk.reflectorColor),
-    });
-    applyStudioReflection(r.material as THREE.ShaderMaterial);
+    const r = new Reflector(
+      studio ? new THREE.PlaneGeometry(63, 63) : new THREE.CircleGeometry(FLOOR_RADIUS, 96),
+      {
+        textureWidth: REFLECTOR_RESOLUTION,
+        textureHeight: REFLECTOR_RESOLUTION,
+        multisample: 0,
+        color: new THREE.Color(THEMES.dusk.reflectorColor),
+      },
+    );
+    if (studio) {
+      const target = r.getRenderTarget().texture;
+      target.generateMipmaps = true;
+      target.minFilter = THREE.LinearMipmapLinearFilter;
+    }
+    applyStudioReflection(r.material as THREE.ShaderMaterial, studio, mobile);
     (r.material as THREE.ShaderMaterial).uniforms.studioFinish.value = openingStudioWeight();
     r.rotation.x = -Math.PI / 2;
     return r;
-  }, []);
+  }, [studio, mobile]);
 
   useEffect(() => {
     scene.fog = new THREE.Fog(THEMES.dusk.fogColor, THEMES.dusk.fogNear, THEMES.dusk.fogFar);
@@ -47,7 +59,8 @@ export function Floor() {
   }, [scene, reflector]);
 
   useFrame((_state, dt) => {
-    const { themeName, refs, renderFinish } = useAppStore.getState();
+    const state = useAppStore.getState();
+    const { themeName, refs, renderFinish } = state;
     const target = THEMES[themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
 
@@ -73,6 +86,18 @@ export function Floor() {
       k,
     );
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
+    if (studio) {
+      const footprint = refs.carModel ? studioCarFootprint(refs.carModel) : null;
+      if (footprint) {
+        uniforms.studioChassis.value.copy(footprint.chassis);
+        footprint.tires.forEach((tire, index) => uniforms.studioWheelTouch.value[index].copy(tire));
+      }
+      uniforms.studioCarReady.value = footprint ? 1 : 0;
+      if (!state.isCarLoading) {
+        studioTint.set(paintFinish(CARS[state.carIndex], state.activeBodyColor).hex);
+        uniforms.studioPaint.value.lerp(studioTint, Math.min(1, dt * 12));
+      }
+    }
     uniforms.studioFinish.value = smoothTowards(
       uniforms.studioFinish.value,
       openingStudioWeight(),

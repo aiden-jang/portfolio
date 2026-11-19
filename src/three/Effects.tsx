@@ -1,3 +1,5 @@
+import { isOpeningStudio } from '../lighting';
+import { studioSurfacesReady } from './studio/textures';
 import { useFrame, useThree } from '@react-three/fiber';
 import {
   BlendFunction,
@@ -88,7 +90,10 @@ export const Effects = memo(function Effects() {
       gl.autoClear = autoClear;
     }
     blendCarSwap(gl.domElement);
-    if (!isCarLoading && refs.carModel) refs.onOpeningFrame?.();
+    if (refs.onOpeningFrame && !isCarLoading && refs.carModel) {
+      const studio = isOpeningStudio(useAppStore.getState());
+      if (!studio || studioSurfacesReady(state.size.width < 768)) refs.onOpeningFrame();
+    }
   }, 1);
 
   return null;

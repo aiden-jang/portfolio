@@ -114,9 +114,22 @@ it('bounds intro zoom, resets its pose and leaves Contact fixed', async () => {
       await act(() => useAppStore.getState().setCameraZoom(9));
       await act(tick);
       camera.updateMatrixWorld();
-      expect(camera.position.distanceTo(new Vector3(0, 0.55, 0))).toBeCloseTo(
-        original.distanceTo(new Vector3(0, 0.55, 0)) / 1.25,
-      );
+      const target = new Vector3(0, 0.55, 0);
+      const distance = camera.position.distanceTo(target);
+      const desired = original.distanceTo(target) / 1.25;
+      if (width < 768) {
+        expect(distance).toBeGreaterThan(desired);
+        expect(distance).toBeLessThan(original.distanceTo(target));
+        model.updateMatrixWorld(true);
+        const vertices = model.geometry.attributes.position;
+        for (let i = 0; i < vertices.count; i++) {
+          const point = new Vector3()
+            .fromBufferAttribute(vertices, i)
+            .applyMatrix4(model.matrixWorld)
+            .project(camera);
+          expect(Math.abs(point.x)).toBeLessThanOrEqual(1 - 32 / width + 0.000001);
+        }
+      } else expect(distance).toBeCloseTo(desired);
       expect(camera.position.y).toBeGreaterThanOrEqual(0.25);
       await act(() => useAppStore.getState().resetCamera());
       await act(tick);

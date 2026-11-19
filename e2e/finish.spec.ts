@@ -72,7 +72,7 @@ for (const width of [1440, 390]) {
     expect(new URL(page.url()).searchParams.get('paint')).toBe('#3f464e');
     await expect(
       page
-        .getByRole('button', { name: 'Lighting: Night. Switch to Dusk', exact: true })
+        .getByRole('button', { name: 'Lighting: Night. Switch to Studio', exact: true })
         .filter({ visible: true }),
     ).toBeVisible();
   });
@@ -101,7 +101,7 @@ for (const width of [1440, 390]) {
     expect(failedFrame.width).toBeCloseTo(originalFrame.width, 0);
     expect(failedFrame.height).toBeCloseTo(originalFrame.height, 0);
     await project.getByRole('button', { name: 'How I built it: meanwhile.', exact: true }).click();
-    await expect(page.locator('#work-modal-title')).toContainText('everythingisfine');
+    await expect(page.locator('#work-modal-title')).toContainText('meanwhile.');
   });
 }
 

@@ -98,9 +98,12 @@ instead, including the reflection; DOM text is unaffected.
 `Effects` builds its pass graph directly on the scene renderer, avoiding a second
 WebGL context for capability detection. It keeps the HDR bloom and ACES pass before
 SMAA, resizes the buffers with the viewport, and disposes the graph on unmount.
-`studioReflection` fades the existing floor reflection with distance from the car
-without another render target. The default F40 finish and Dusk lights use a softer
-studio treatment; model selection, paint and lighting remain interactive.
+Studio opens on Intro. The room, floor and Ferrari finish share the recessed
+light's position so the concrete wash and paint and glass reflections agree
+through an orbit. `studioReflection` reuses the live reflection target for the
+satin floor, with contact shadows fitted to the current car's geometry.
+Dusk and Night remain selectable and shareable. Contact uses the original
+floor and its fixed camera.
 The floor glow loads a lossless texture instead of creating another canvas.
 Regenerate it with `npm run generate:glow`; the generator verifies that encoding
 preserves every RGBA value from the original gradient.

@@ -9,6 +9,9 @@ import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import { F40_PAINT, openingStudioWeight } from './openingStudio';
 
+import { isOpeningStudio } from '../lighting';
+import { createStudioEnvironment } from './studio/environment';
+
 const TRANSITION_RATE = 2.5;
 
 const SUN_RADIUS = 12;
@@ -29,10 +32,14 @@ function computeSunPosition(date: Date) {
 
 export function Lights() {
   const { gl, scene } = useThree();
+  const studioMap = useRef<THREE.WebGLRenderTarget | null>(null);
+  const defaultMap = useRef<THREE.Texture | null>(null);
   useEffect(() => {
     const room = new RoomEnvironment();
     const generator = new THREE.PMREMGenerator(gl);
     const environment = generator.fromScene(room, 0.04);
+    defaultMap.current = environment.texture;
+
     const previous = scene.environment;
     const previousIntensity = scene.environmentIntensity;
     scene.environment = environment.texture;
@@ -43,6 +50,8 @@ export function Lights() {
       scene.environment = previous;
       scene.environmentIntensity = previousIntensity;
       environment.dispose();
+      studioMap.current?.dispose();
+      studioMap.current = null;
     };
   }, [gl, scene]);
   const ambient = useRef<THREE.AmbientLight>(null!);
@@ -57,11 +66,19 @@ export function Lights() {
 
   useFrame((_state, dt) => {
     const state = useAppStore.getState();
-    const target = THEMES[state.themeName];
+    const studio = isOpeningStudio(state);
+    if (studio && !studioMap.current) {
+      const generator = new THREE.PMREMGenerator(gl);
+      studioMap.current = createStudioEnvironment(generator);
+      generator.dispose();
+    }
+    scene.environment = studio ? (studioMap.current?.texture ?? null) : defaultMap.current;
+    const lighting = state.themeName === 'studio' && !studio ? 'dusk' : state.themeName;
+    const target = THEMES[lighting];
     const sculpted = ['mercedes-benz-w198-300-sl.glb', 'red-bull-rb16b.glb'].includes(
       CARS[state.carIndex].file,
     );
-    const duskSeparation = sculpted && state.themeName === 'dusk';
+    const duskSeparation = sculpted && lighting === 'dusk';
     const weight = (studioWeight.current = smoothTowards(
       studioWeight.current,
       openingStudioWeight(),
@@ -73,13 +90,13 @@ export function Lights() {
       paint instanceof THREE.MeshPhysicalMaterial &&
       paint.name === 'Metallic'
     ) {
-      paint.roughness = F40_PAINT.roughness + 0.105 * weight;
-      paint.clearcoatRoughness = F40_PAINT.coatRoughness + 0.095 * weight;
-      paint.clearcoat = F40_PAINT.coat - 0.12 * weight;
+      paint.roughness = studio ? 0.222 : F40_PAINT.roughness + 0.105 * weight;
+      paint.clearcoatRoughness = studio ? 0.105 : F40_PAINT.coatRoughness + 0.095 * weight;
+      paint.clearcoat = studio ? 0.91 : F40_PAINT.coat - 0.12 * weight;
     }
     scene.environmentIntensity = smoothTowards(
       scene.environmentIntensity,
-      sculpted ? 0.29 : 0.22 - 0.048 * weight,
+      studio ? 0.48 : sculpted ? 0.29 : 0.22 - 0.048 * weight,
       Math.min(1, dt * TRANSITION_RATE),
     );
     const k = Math.min(1, dt * TRANSITION_RATE);
@@ -102,11 +119,12 @@ export function Lights() {
     key.current.color.setHex(c.key.color);
 
     const sun = computeSunPosition(new Date());
-    key.current.position.set(sun.x, Math.max(sun.y, 0.5), sun.z);
+    if (studio) key.current.position.set(5.6, 5.1, -1.6);
+    else key.current.position.set(sun.x, Math.max(sun.y, 0.5), sun.z);
     const sunFactor = NIGHT_KEY_FLOOR + (1 - NIGHT_KEY_FLOOR) * sun.daylight;
     key.current.intensity =
       c.key.intensity *
-      sunFactor *
+      (studio ? 1 : sunFactor) *
       (1 - 0.25 * weight) *
       (0.45 + 0.55 * (1 - Math.pow(1 - motionState.progress, 3)));
 

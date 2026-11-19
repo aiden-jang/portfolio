@@ -88,7 +88,9 @@ without requiring a resize or scroll to reveal the Intro controls.
 
 The retired M1 rendering check resizes one shared-link scene across desktop, tablet
 and phone layouts. Screenshot pixels require its red and blue Motorsport colors in
-both lighting modes. A separate flow checks picker exclusion, focus, reloads,
+Dusk and Night. The same flow checks that the lighting control cycles through
+Studio and serializes the selection in the share URL. A separate flow checks
+picker exclusion, focus, reloads,
 rejoining the curated garage and both creator credits, keeping repeated model loads
 within the existing test budgets.
 

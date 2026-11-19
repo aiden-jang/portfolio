@@ -3,7 +3,8 @@ import type * as THREE from 'three';
 import { CARS, GARAGE_INDICES, adjacentCar } from './config';
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
-import { CAMERA_VIEWS, type CameraView } from './three/cameraViews';
+import { cameraViews, type CameraView } from './three/cameraViews';
+import { DEFAULT_LIGHTING, LIGHTING_MODES, nextLighting, parseLighting } from './lighting';
 import { clampCarZoom } from './three/carZoom';
 
 type Refs = {
@@ -85,7 +86,10 @@ export function canStudyRender(state: AppState): boolean {
 
 export const useAppStore = create<AppState>((set, get) => ({
   carIndex: 0,
-  themeName: 'dusk',
+  themeName:
+    typeof location === 'undefined'
+      ? DEFAULT_LIGHTING
+      : parseLighting(new URLSearchParams(location.search).get('light')),
   sectionIndex: 0,
   isContactVisible: false,
   renderFinish: null,
@@ -108,7 +112,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({
       cameraView: view,
       cameraViewVersion: state.cameraViewVersion + 1,
-      cameraZoom: CAMERA_VIEWS[view].zoom,
+      cameraZoom: cameraViews(state.themeName, state.renderFinish)[view].zoom,
       hasManualView: true,
     });
   },
@@ -201,13 +205,13 @@ export const useAppStore = create<AppState>((set, get) => ({
       hasDRS: false,
       headlightsRaised: true,
       hasPopupHeadlights: false,
-      themeName: Math.random() > 0.5 ? 'dusk' : 'night',
+      themeName: LIGHTING_MODES[Math.floor(Math.random() * LIGHTING_MODES.length)],
       activeBodyColor: colors[Math.floor(Math.random() * colors.length)] ?? 'original',
       hasBodyMaterial: false,
     });
   },
   setThemeName: (theme) => set({ themeName: theme }),
-  toggleTheme: () => set({ themeName: get().themeName === 'dusk' ? 'night' : 'dusk' }),
+  toggleTheme: () => set({ themeName: nextLighting(get().themeName) }),
   setSectionIndex: (i) => set({ sectionIndex: i }),
   setContactVisible: (isContactVisible) => set({ isContactVisible }),
   pulseCarLights: () => {

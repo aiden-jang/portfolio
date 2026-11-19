@@ -11,7 +11,7 @@ type MarkKey =
   | 'everythingisfine'
   | 'iodine';
 
-export type ThemeName = 'dusk' | 'night';
+export type ThemeName = 'studio' | 'dusk' | 'night';
 
 export type Theme = {
   bg: number;

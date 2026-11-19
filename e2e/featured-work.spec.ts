@@ -125,7 +125,7 @@ test('the globe keeps the narrow-phone composition while WebGL loads', async ({ 
     await page.goto('/#sec-work');
     const globe = page.locator('.orbit-feature');
     const art = globe.locator('.orbit-art');
-    const heading = page.getByRole('heading', { name: 'everythingisfine', exact: true });
+    const heading = page.getByRole('heading', { name: 'meanwhile.', exact: true });
     const poster = globe.getByRole('img', { name: /Globe centered on the North Pacific/ });
     await expect(globe).toHaveAttribute('data-globe-phase', 'loading');
     await expect(poster).toBeVisible();

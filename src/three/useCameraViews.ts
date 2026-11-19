@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { KEYFRAMES } from '../config';
 import { lerp, lerpAngle } from '../math';
 import { useAppStore } from '../store';
-import { CAMERA_VIEWS } from './cameraViews';
+import { cameraViews } from './cameraViews';
 import { easeOutCubic } from './cameraPose';
 import type { RigState } from './useOrbitGesture';
 
@@ -35,7 +35,9 @@ export function useCameraViews() {
     animation.car = state.carIndex;
     if (animation.elapsed >= 1) return;
     animation.elapsed = reduced ? 1 : Math.min(1, animation.elapsed + dt / 0.58);
-    const view = CAMERA_VIEWS[state.cameraView];
+    const view = cameraViews(state.themeName, state.renderFinish, innerWidth < 768)[
+      state.cameraView
+    ];
     const progress = easeOutCubic(animation.elapsed);
     rig.idleSpin = lerpAngle(animation.azimuth, view.azimuth - KEYFRAMES[0].azimuth, progress);
     rig.dragElevation = lerp(

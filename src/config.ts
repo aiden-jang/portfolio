@@ -1,21 +1,31 @@
 import type { Keyframe, Theme, ThemeName } from './types';
 
+const DUSK: Theme = {
+  bg: 0x12121a,
+  fogColor: 0x12121a,
+  fogNear: 22,
+  fogFar: 80,
+  ambient: { color: 0xfff4e8, intensity: 0.4 },
+  hemi: { sky: 0xfff2e0, ground: 0x1c1612, intensity: 0.55 },
+  key: { color: 0xfff0d8, intensity: 0.55 },
+  fill: { color: 0xb8cce8, intensity: 0.95 },
+  rim: { color: 0xffd8b0, intensity: 1.02 },
+  reflectorColor: 0x41414b,
+  underglow: 0xff5a1c,
+  bloomStrength: 0.085,
+  bloomThreshold: 1.15,
+  exposure: 0.94,
+};
+
 export const THEMES: Record<ThemeName, Theme> = {
-  dusk: {
-    bg: 0x12121a,
-    fogColor: 0x12121a,
-    fogNear: 22,
-    fogFar: 80,
-    ambient: { color: 0xfff4e8, intensity: 0.4 },
-    hemi: { sky: 0xfff2e0, ground: 0x1c1612, intensity: 0.55 },
-    key: { color: 0xfff0d8, intensity: 0.55 },
-    fill: { color: 0xb8cce8, intensity: 0.95 },
-    rim: { color: 0xffd8b0, intensity: 1.02 },
-    reflectorColor: 0x41414b,
-    underglow: 0xff5a1c,
-    bloomStrength: 0.085,
-    bloomThreshold: 1.15,
-    exposure: 0.94,
+  dusk: DUSK,
+  studio: {
+    ...DUSK,
+    ambient: { color: 0xf5e9df, intensity: 0.28 },
+    hemi: { sky: 0xe8e5e1, ground: 0x302620, intensity: 0.57 },
+    key: { color: 0xf8e7d1, intensity: 0.025 },
+    fill: { color: 0xf3eae2, intensity: 0.34 },
+    rim: { color: 0xfbf2e8, intensity: 0.28 },
   },
   night: {
     bg: 0x080b12,

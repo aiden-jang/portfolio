@@ -70,7 +70,13 @@ test('retired M1 keeps its racing colors across layouts and lighting', async ({ 
     await expectRacingColors(page);
     await page.screenshot({ path: test.info().outputPath(`m1-night-${width}.png`) });
     await page
-      .getByRole('button', { name: 'Lighting: Night. Switch to Dusk', exact: true })
+      .getByRole('button', { name: 'Lighting: Night. Switch to Studio', exact: true })
+      .filter({ visible: true })
+      .click();
+    await expect(page.locator('body')).toHaveAttribute('data-theme', 'studio');
+    await expect.poll(() => new URL(page.url()).searchParams.get('light')).toBe('studio');
+    await page
+      .getByRole('button', { name: 'Lighting: Studio. Switch to Dusk', exact: true })
       .filter({ visible: true })
       .click();
   }

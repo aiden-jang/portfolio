@@ -1,28 +1,32 @@
 import { useLayoutEffect, useRef, useState } from 'react';
+import { parseLighting } from '../lighting';
+import { StudioPosterSources, STUDIO_POSTER } from './StudioPosterSources';
 import { useAppStore } from '../store';
 import { framingDistanceMultiplier } from '../three/cameraPose';
 import './opening-poster.css';
 
-function isDefaultOpening() {
+function openingPosterLighting() {
   const params = new URLSearchParams(location.search);
-  return (
-    scrollY <= 1 &&
+  const lighting = parseLighting(params.get('light'));
+  return scrollY <= 1 &&
     (!location.hash || location.hash === '#sec-intro') &&
     (params.get('car') ?? '0') === '0' &&
     (params.get('paint') ?? 'original') === 'original' &&
-    (params.get('light') ?? 'dusk') === 'dusk'
-  );
+    lighting !== 'night'
+    ? lighting
+    : null;
 }
 
 export function OpeningPoster() {
-  const [eligible] = useState(isDefaultOpening);
+  const [lighting] = useState(openingPosterLighting);
+  const studio = lighting === 'studio';
   const [phase, setPhase] = useState<'loading' | 'fading' | 'done'>('loading');
   const picture = useRef<HTMLPictureElement>(null);
   const photo = useRef<HTMLImageElement>(null);
   const finish = useRef<() => void>();
 
   useLayoutEffect(() => {
-    if (!eligible) return;
+    if (!lighting) return;
     const { body } = document;
     const { refs } = useAppStore.getState();
     let timer = 0;
@@ -31,6 +35,7 @@ export function OpeningPoster() {
     body.dataset.openingMedia = '';
     refs.holdOpeningPose = true;
     const fit = () => {
+      if (studio) return;
       const referenceAspect = innerWidth < 768 ? 390 / 844 : 1440 / 900;
       const scale =
         framingDistanceMultiplier(referenceAspect) /
@@ -73,7 +78,7 @@ export function OpeningPoster() {
         state.sceneUnavailable ||
         state.carLoadError ||
         state.carIndex !== 0 ||
-        state.themeName !== 'dusk' ||
+        state.themeName !== lighting ||
         state.activeBodyColor !== 'original' ||
         state.hasManualView
       )
@@ -95,32 +100,39 @@ export function OpeningPoster() {
       refs.holdOpeningPose = false;
       finish.current = undefined;
     };
-  }, [eligible]);
+  }, [lighting, studio]);
 
-  if (!eligible || phase === 'done') return null;
+  if (!lighting || phase === 'done') return null;
 
   return (
     <picture
       ref={picture}
-      className="opening-poster"
+      className={studio ? 'opening-poster studio-media' : 'opening-poster'}
       aria-hidden="true"
       data-fading={phase === 'fading' || undefined}
       onTransitionEnd={(event) => {
         if (event.propertyName === 'opacity') finish.current?.();
       }}
     >
-      <source
-        media="(width < 768px) and (prefers-reduced-motion: reduce)"
-        srcSet="/showroom/f40-mobile-settled.webp"
-      />
-      <source media="(width < 768px)" srcSet="/showroom/f40-mobile-opening.webp" />
-      <source
-        media="(prefers-reduced-motion: reduce)"
-        srcSet="/showroom/f40-desktop-settled.webp"
-      />
+      {studio ? (
+        <StudioPosterSources opening />
+      ) : (
+        <>
+          <source
+            media="(width < 768px) and (prefers-reduced-motion: reduce)"
+            srcSet="/showroom/f40-mobile-settled.webp"
+          />
+          <source media="(width < 768px)" srcSet="/showroom/f40-mobile-opening.webp" />
+          <source
+            media="(prefers-reduced-motion: reduce)"
+            srcSet="/showroom/f40-desktop-settled.webp"
+          />
+        </>
+      )}
       <img
         ref={photo}
-        src="/showroom/f40-desktop-opening.webp"
+        src={studio ? STUDIO_POSTER : '/showroom/f40-desktop-opening.webp'}
+        fetchPriority="high"
         width={1440}
         height={900}
         alt=""

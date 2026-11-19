@@ -73,3 +73,7 @@ body:not([data-car-controls='visible']) .scene-recovery {
     bottom: 12px;
   }
 }
+.scene-fallback-poster.studio-media img {
+  object-fit: cover;
+  transform: none;
+}

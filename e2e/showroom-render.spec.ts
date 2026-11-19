@@ -3,9 +3,12 @@ import { expect, test } from '@playwright/test';
 for (const viewport of [
   { width: 1440, height: 900 },
   { width: 390, height: 844 },
+  { width: 320, height: 844 },
 ]) {
   const phone = viewport.width < 768;
-  const device = phone ? 'mobile' : 'desktop';
+  const narrow = viewport.width === 320;
+  const device = narrow ? 'narrow mobile' : phone ? 'mobile' : 'desktop';
+  const poster = narrow ? 'phone-tall' : phone ? 'phone' : 'desktop-motion';
   test(`the ${device} Ferrari poster hands off to the live garage`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.emulateMedia({ reducedMotion: phone ? 'reduce' : 'no-preference' });
@@ -18,6 +21,14 @@ for (const viewport of [
       await gate;
       await route.continue();
     });
+    let resumeFloor!: () => void;
+    const floorGate = new Promise<void>((resolve) => {
+      resumeFloor = resolve;
+    });
+    await page.route('**/showroom/studio/floor.jpg', async (route) => {
+      await floorGate;
+      await route.continue();
+    });
     try {
       await page.goto('/', { waitUntil: 'domcontentloaded' });
       const title = page.getByRole('heading', { name: 'Aiden Jang', exact: true });
@@ -26,15 +37,19 @@ for (const viewport of [
       await expect(art).toBeVisible({ timeout: 8_000 });
       await expect
         .poll(() => art.evaluate((photo) => (photo as HTMLImageElement).currentSrc))
-        .toContain(`f40-${device}-${phone ? 'settled' : 'opening'}.webp`);
+        .toContain(`studio-${poster}.webp`);
       const firstPosition = await title.boundingBox();
       await expect(page.locator('.car-choice-status').first()).toContainText(/loading/i);
       resume();
+      await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+      await expect(art).toBeVisible();
+      resumeFloor();
       await expect(art).toHaveCount(0, { timeout: 60_000 });
       await expect(page.locator('.car-choice-status').first()).toHaveText('');
       expect(await title.boundingBox()).toEqual(firstPosition);
     } finally {
       resume();
+      resumeFloor();
     }
   });
 }

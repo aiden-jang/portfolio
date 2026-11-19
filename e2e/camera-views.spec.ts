@@ -38,8 +38,8 @@ for (const width of [1440, 390]) {
           if (Math.abs(front.data[i] - profile.data[i]) > 30) changed++;
         }
       expect(changed).toBeGreaterThan(500);
-      await select('Detail view');
-      await page.screenshot({ path: test.info().outputPath('detail.png') });
+      await select('Corner view');
+      await page.screenshot({ path: test.info().outputPath('corner.png') });
       await reset.click();
       await expect(reset).toHaveCount(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
@@ -56,7 +56,7 @@ for (const width of [1440, 390]) {
       await page.keyboard.press('Control+k');
       await page.getByRole('combobox', { name: 'Search portfolio controls' }).fill('view');
       await expect(page.getByRole('option', { name: /Profile view/ })).toHaveCount(0);
-      await expect(page.getByRole('option', { name: /Detail view/ })).toHaveCount(0);
+      await expect(page.getByRole('option', { name: /Corner view/ })).toHaveCount(0);
       await page.keyboard.press('Escape');
       await page.mouse.move(width / 2, 500);
       await page.mouse.down();

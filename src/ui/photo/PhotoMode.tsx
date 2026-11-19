@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { CARS } from '../../config';
+import { LIGHTING_LABELS } from '../../lighting';
 import { paintFinish } from '../../paint';
 import { useAppStore } from '../../store';
-import { CAMERA_VIEWS, type CameraView } from '../../three/cameraViews';
+import { cameraViews, type CameraView } from '../../three/cameraViews';
 import { CarZoomControls } from '../CarZoomControls';
 import { usePageScrollLock } from '../usePageScrollLock';
 import { useDialogFocus } from '../useDialogFocus';
@@ -19,6 +20,8 @@ export function PhotoMode() {
     unavailable = useAppStore((s) => s.sceneUnavailable),
     loading = useAppStore((s) => s.isCarLoading),
     error = useAppStore((s) => s.carLoadError);
+  const theme = useAppStore((s) => s.themeName);
+  const finish = useAppStore((s) => s.renderFinish);
   const [file, setFile] = useState<File | null>(null),
     [preview, setPreview] = useState(''),
     [busy, setBusy] = useState(false),
@@ -93,7 +96,7 @@ export function PhotoMode() {
       const result = await makePostcard(
         image,
         car.name,
-        `${paintFinish(car, state.activeBodyColor).name} · ${state.themeName === 'night' ? 'Night' : 'Dusk'}`,
+        `${paintFinish(car, state.activeBodyColor).name} · ${LIGHTING_LABELS[state.themeName]}`,
       );
       if (version === generation.current.version) setFile(result);
     } catch (e) {
@@ -141,7 +144,7 @@ export function PhotoMode() {
                 <option value="" disabled>
                   Camera view
                 </option>
-                {Object.entries(CAMERA_VIEWS).map(([id, view]) => (
+                {Object.entries(cameraViews(theme, finish)).map(([id, view]) => (
                   <option key={id} value={id}>
                     {view.label}
                   </option>

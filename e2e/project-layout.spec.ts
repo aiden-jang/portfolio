@@ -89,7 +89,7 @@ for (const width of [1440, 1024, 768, 390, 320]) {
         .toBeCloseTo(wherever.frame.top);
     }
     await expect(page.locator('.project-featured-group article h3')).toHaveText([
-      'everythingisfine',
+      'meanwhile.',
       'iodine',
     ]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
