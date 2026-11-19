@@ -71,19 +71,39 @@ test.describe('mobile navigation motion', () => {
     await expect(panel).toHaveJSProperty('inert', true);
 
     await menu.tap();
-    const stoppedAt = await page.evaluate(async () => {
-      document
-        .querySelector<HTMLAnchorElement>('#mobile-navigation a[href="#sec-contact"]')!
-        .click();
-      for (let frame = 0; frame < 20 && scrollY < 80; frame++) {
-        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-      }
-      const position = scrollY;
-      window.dispatchEvent(new Event('touchstart'));
-      return position;
+    const { stoppedAt, start, destination } = await page.evaluate(() => {
+      const link = document.querySelector<HTMLAnchorElement>(
+        '#mobile-navigation a[href="#sec-contact"]',
+      )!;
+      const start = scrollY;
+      const destination = Math.min(
+        document.getElementById('sec-contact')!.offsetTop,
+        document.documentElement.scrollHeight - innerHeight,
+      );
+      return new Promise<{ stoppedAt: number; start: number; destination: number }>(
+        (resolve, reject) => {
+          // The compositor can skip early animation frames under browser load.
+          const interrupt = () => {
+            if (scrollY === start) return;
+            window.removeEventListener('scroll', interrupt);
+            clearTimeout(timer);
+            const stoppedAt = scrollY;
+            window.dispatchEvent(new Event('touchstart'));
+            resolve({ stoppedAt, start, destination });
+          };
+          const timer = window.setTimeout(() => {
+            window.removeEventListener('scroll', interrupt);
+            reject(new Error('The section jump never started'));
+          }, 2500);
+          window.addEventListener('scroll', interrupt, { passive: true });
+          link.click();
+        },
+      );
     });
-    expect(stoppedAt).toBeGreaterThan(0);
-    expect(stoppedAt).toBeLessThan(600);
+    expect(stoppedAt).toBeGreaterThan(start);
+    expect(stoppedAt).toBeLessThan(destination);
+    await page.waitForTimeout(520);
+    expect(Math.abs((await page.evaluate(() => scrollY)) - stoppedAt)).toBeLessThan(2);
     await expect(menu).toHaveAttribute('aria-expanded', 'false');
     await menu.tap();
     const active = await page.evaluate(() => {
