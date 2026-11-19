@@ -1,28 +1,37 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { PNG } from 'pngjs';
+
+function cameraControls(page: Page) {
+  const garage = page
+    .getByRole('button', { name: 'All controls', exact: true })
+    .filter({ visible: true });
+  const reset = page
+    .getByRole('button', { name: 'Reset camera view', exact: true })
+    .filter({ visible: true });
+  const dialog = page.getByRole('dialog', { name: 'Command menu' });
+  return {
+    reset,
+    async select(name: string) {
+      await garage.click();
+      await expect(dialog).toHaveCSS('--garage-anchor-y', '24px');
+      await dialog.getByRole('option', { name: new RegExp(name) }).click();
+      await expect(dialog).toHaveCount(0);
+      await expect(reset).toBeVisible();
+    },
+  };
+}
+
 for (const width of [1440, 390]) {
   test.describe(`${width}px camera views`, () => {
     test.use({ viewport: { width, height: 844 }, isMobile: width < 768, hasTouch: width < 768 });
-    test('Garage offers camera shots and Contact stays fixed', async ({ page }) => {
+    test.beforeEach(async ({ page }) => {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
       await page.goto('/');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60000 });
-      const garage = page
-        .getByRole('button', { name: 'All controls', exact: true })
-        .filter({ visible: true });
-      const reset = page
-        .getByRole('button', { name: 'Reset camera view', exact: true })
-        .filter({ visible: true });
-      const select = async (name: string) => {
-        await garage.click();
-        await expect(page.getByRole('dialog', { name: 'Command menu' })).toHaveCSS(
-          '--garage-anchor-y',
-          '24px',
-        );
-        await page.getByRole('option', { name: new RegExp(name) }).click();
-        await expect(page.getByRole('dialog', { name: 'Command menu' })).toHaveCount(0);
-        await expect(reset).toBeVisible();
-      };
+    });
+
+    test('Garage offers front, profile, and corner shots with a reset', async ({ page }) => {
+      const { select, reset } = cameraControls(page);
       await select('Front view');
       const front = PNG.sync.read(
         await page.screenshot({ path: test.info().outputPath('front.png') }),
@@ -39,21 +48,22 @@ for (const width of [1440, 390]) {
         }
       expect(changed).toBeGreaterThan(500);
       await select('Corner view');
-      await page.screenshot({ path: test.info().outputPath('corner.png') });
-      const intro = page.getByRole('heading', { name: 'Aiden Jang', exact: true });
-      await select('Rear three-quarter');
-      await expect(intro).toBeHidden();
-      await page.screenshot({ path: test.info().outputPath('rear.png') });
-      await select('Front wheel close-up');
-      await expect(intro).toBeHidden();
-      await page.screenshot({ path: test.info().outputPath('wheel.png') });
       await reset.click();
       await expect(reset).toHaveCount(0);
-      await expect(intro).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,
       );
+    });
+
+    test('Ferrari Studio details frame the car and leave Contact fixed', async ({ page }) => {
+      const { select, reset } = cameraControls(page);
+      const intro = page.getByRole('heading', { name: 'Aiden Jang', exact: true });
+      await select('Rear three-quarter');
+      await expect(intro).toBeHidden();
+      await reset.click();
+      await expect(intro).toBeVisible();
       await select('Front wheel close-up');
+      await expect(intro).toBeHidden();
       if (width < 768) {
         await page.getByRole('button', { name: 'Menu', exact: true }).click();
         await page
@@ -62,12 +72,14 @@ for (const width of [1440, 390]) {
           .click();
       } else await page.locator('#nav').getByRole('link', { name: 'Contact', exact: true }).click();
       await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
-      await page.keyboard.press('Control+k');
-      await page.getByRole('combobox', { name: 'Search portfolio controls' }).fill('view');
-      await expect(page.getByRole('option', { name: /Profile view/ })).toHaveCount(0);
-      await expect(page.getByRole('option', { name: /Corner view/ })).toHaveCount(0);
+      await page.keyboard.press('?');
+      const dialog = page.getByRole('dialog', { name: 'Command menu' });
+      await expect(dialog).toBeVisible();
+      await dialog.getByRole('combobox', { name: 'Search portfolio controls' }).fill('view');
       await expect(
-        page.getByRole('option', { name: /Rear three-quarter|Front wheel close-up/ }),
+        dialog.getByRole('option', {
+          name: /Profile view|Corner view|Rear three-quarter|Front wheel close-up/,
+        }),
       ).toHaveCount(0);
       await page.keyboard.press('Escape');
       await page.mouse.move(width / 2, 500);
