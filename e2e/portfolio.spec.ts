@@ -200,7 +200,7 @@ for (const width of [1440, 390]) {
 
       await page.emulateMedia({ reducedMotion: 'no-preference' });
       const story = page.getByRole('button', {
-        name: 'How I built it: everythingisfine',
+        name: 'How I built it: meanwhile.',
         exact: true,
       });
       await story.click();

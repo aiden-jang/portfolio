@@ -95,7 +95,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
                 <button
                   type="button"
                   className="featured-text-action"
-                  aria-label="How I built it: everythingisfine"
+                  aria-label="How I built it: meanwhile."
                   onClick={(event) => onOpen(item, event.currentTarget)}
                 >
                   How I built it <span aria-hidden="true">↗</span>
@@ -106,7 +106,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
                     href={item.link.url}
                     target="_blank"
                     aria-describedby="external-link-hint"
-                    aria-label="Open everythingisfine"
+                    aria-label="Open meanwhile."
                     rel="noopener"
                   >
                     Open app <span aria-hidden="true">↗</span>

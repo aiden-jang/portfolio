@@ -74,7 +74,7 @@ for (const [width, height] of [
     await page.evaluate(() => document.fonts.ready);
     const inspect = page.getByRole('button', { name: 'Inspect the earthquake', exact: true });
     const story = page.getByRole('button', {
-      name: 'How I built it: everythingisfine',
+      name: 'How I built it: meanwhile.',
       exact: true,
     });
     await expect(inspect).toHaveCount(1, { timeout: 5000 });

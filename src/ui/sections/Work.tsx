@@ -12,8 +12,8 @@ import { ControlIcon } from '../ControlIcon';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
-const featured = projects.filter((item) => FEATURED_PROJECTS.includes(item.shortName!));
-const collection = projects.filter((item) => !FEATURED_PROJECTS.includes(item.shortName!));
+const featured = projects.filter((item) => FEATURED_PROJECTS.includes(workId(item)));
+const collection = projects.filter((item) => !FEATURED_PROJECTS.includes(workId(item)));
 
 export function WorkSection({ onOpen }: Props) {
   return (

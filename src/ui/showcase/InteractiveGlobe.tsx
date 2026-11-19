@@ -174,7 +174,7 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
               {posterUnavailable ? (
                 <ScreenshotImage
                   src={image}
-                  alt="everythingisfine product interface"
+                  alt="meanwhile. product interface"
                   lazy
                   onUnavailable={() => setScreenshotUnavailable(true)}
                 />
@@ -237,7 +237,7 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
               type="button"
               className="orbit-screenshot"
               disabled={screenshotUnavailable}
-              aria-label="Inspect screenshot: everythingisfine"
+              aria-label="Inspect screenshot: meanwhile."
               title="View full screenshot"
               onClick={() => setViewer(true)}
             >
@@ -275,7 +275,7 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
       {viewer && (
         <ScreenshotViewer
           image={image}
-          name="everythingisfine"
+          name="meanwhile."
           caption={caption}
           returnFocus={inspect.current}
           onClose={() => setViewer(false)}

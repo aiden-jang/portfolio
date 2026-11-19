@@ -2,7 +2,7 @@ import type { WorkDetail } from '../types';
 
 /** The `#work/...` fragment for an entry. Two entries sharing one would share a URL. */
 export function workId(item: WorkDetail): string {
-  return (item.shortName ?? item.title)
+  return (item.slug ?? item.shortName ?? item.title)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
@@ -36,7 +36,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     links: [{ label: 'Source code', url: 'https://github.com/aiden-jang/auth' }],
   },
   {
-    title: 'everythingisfine: the planet, live',
+    title: 'meanwhile. — the planet, live',
     context: 'Side project',
     summary:
       'I built a live globe for natural events, matching differing earthquake reports while keeping their source details visible.',
@@ -47,14 +47,21 @@ export const WORK_ITEMS: WorkDetail[] = [
     ],
     stack: ['Three.js', 'WebGL', 'TypeScript', 'React', 'WebSockets', 'Cloudflare'],
     mark: 'everythingisfine',
-    shortName: 'everythingisfine',
+    slug: 'everythingisfine',
+    shortName: 'meanwhile.',
     tagline: 'The planet, live.',
     categories: ['realtime', 'systems'],
     moment: 'wanting to know what the planet is up to without a news cycle attached',
     principle:
       'Keep source readings visible when agencies disagree. The globe is a way to explore the data, not smooth over its differences.',
-    link: { label: 'Open everythingisfine', url: 'https://everythingisfine.aidenjang.com' },
-    links: [{ label: 'Source code', url: 'https://github.com/aiden-jang/everythingisfine' }],
+    link: { label: 'Open meanwhile.', url: 'https://meanwhile.aidenjang.com' },
+    links: [
+      {
+        label: 'Open Float Dive',
+        url: 'https://meanwhile.aidenjang.com/#story=float&choice=recorded/6901932/268/1792482240000&chapter=317&v=observe',
+      },
+      { label: 'Source code', url: 'https://github.com/aiden-jang/everythingisfine' },
+    ],
   },
   {
     title: 'worth: keep your own taste',

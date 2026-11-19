@@ -5,7 +5,7 @@ import {
   isPortfolioProject,
   visibleProjects,
 } from './workBrowsing';
-import { WORK_ITEMS } from './workItems';
+import { WORK_ITEMS, workId } from './workItems';
 
 describe('case study browsing', () => {
   it('keeps a filtered case study in the visible project lane', () => {
@@ -24,12 +24,19 @@ describe('case study browsing', () => {
     expect(lane.every((item) => !isPortfolioProject(item))).toBe(true);
     expect(lane.some((item) => item.contribution)).toBe(false);
   });
-  it('leads with everythingisfine and iodine while keeping the other projects in order', () => {
+  it('keeps the renamed featured project first and preserves its case study link', () => {
     expect(FEATURED_PROJECTS).toEqual(['everythingisfine', 'iodine']);
-    expect(
-      visibleProjects('all')
-        .filter((item) => !FEATURED_PROJECTS.includes(item.shortName!))
-        .map((item) => item.shortName),
-    ).toEqual(['mrrp', 'worth', 'bloomnote', 'owewell', 'iguess', 'wherever', 'platform']);
+    const projects = visibleProjects('all');
+    expect(projects[0]?.shortName).toBe('meanwhile.');
+    expect(projects.map(workId)).toEqual([
+      ...FEATURED_PROJECTS,
+      'mrrp',
+      'worth',
+      'bloomnote',
+      'owewell',
+      'iguess',
+      'wherever',
+      'platform',
+    ]);
   });
 });

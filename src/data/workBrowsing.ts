@@ -1,4 +1,4 @@
-import { WORK_ITEMS } from './workItems';
+import { WORK_ITEMS, workId } from './workItems';
 import type { WorkDetail } from '../types';
 
 export type ProjectFilter = 'all' | 'realtime' | 'ai' | 'social' | 'systems';
@@ -21,7 +21,7 @@ export function isPortfolioProject(item: WorkDetail): boolean {
 export function visibleProjects(filter: ProjectFilter): WorkDetail[] {
   return WORK_ITEMS.filter(
     (item) => isPortfolioProject(item) && (filter === 'all' || item.categories?.includes(filter)),
-  ).sort((a, b) => PROJECT_ORDER.indexOf(a.shortName!) - PROJECT_ORDER.indexOf(b.shortName!));
+  ).sort((a, b) => PROJECT_ORDER.indexOf(workId(a)) - PROJECT_ORDER.indexOf(workId(b)));
 }
 
 export function caseStudyLane(item: WorkDetail, filter: ProjectFilter): WorkDetail[] {

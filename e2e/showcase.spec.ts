@@ -16,7 +16,7 @@ for (const width of [1440, 390]) {
     await expect(link).toBeVisible();
     await expect(link).toHaveAccessibleDescription('Opens in a new tab');
     const url = new URL((await link.getAttribute('href'))!);
-    expect(url.hostname).toBe('everythingisfine.aidenjang.com');
+    expect(url.hostname).toBe('meanwhile.aidenjang.com');
     expect(new URLSearchParams(url.hash.slice(1)).get('e')).toMatch(/^usgs:/);
     await page.getByRole('button', { name: 'Close event details' }).click();
     const canvas = page.locator('#globe-view');

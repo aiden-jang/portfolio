@@ -13,8 +13,8 @@ export function WorkStoryOpening({ item }: { item: WorkDetail }) {
           Keep both readings.
         </h4>
         <p>
-          I built the matching logic for Everything Is Fine so two agencies can report the same
-          quake without losing either source’s measurements.
+          I built the matching logic so two agencies can report the same quake without losing either
+          source’s measurements.
         </p>
         <EarthquakeMatch />
       </section>

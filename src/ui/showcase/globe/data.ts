@@ -58,5 +58,5 @@ export function readEvents(snapshot: Snapshot): GlobeEvent[] {
 export function eventLink(event: GlobeEvent, pose: GlobePose): string {
   const round = (n: number) => Number(n.toFixed(2));
   const lon = pose.lon - 360 * Math.floor((pose.lon + 180) / 360);
-  return `https://everythingisfine.aidenjang.com/#at=${round(lon)},${round(pose.lat)},${round(pose.zoom)}&m=2.5&w=720&s=usgs&r=thermal&v=explore&e=usgs:${encodeURIComponent(event.id)}`;
+  return `https://meanwhile.aidenjang.com/#at=${round(lon)},${round(pose.lat)},${round(pose.zoom)}&m=2.5&w=720&s=usgs&r=thermal&v=explore&e=usgs:${encodeURIComponent(event.id)}`;
 }

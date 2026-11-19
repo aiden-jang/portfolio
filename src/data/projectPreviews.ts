@@ -9,7 +9,7 @@ export const PREVIEWS: Record<string, ProductPreview> = {
   everythingisfine: {
     image: '/projects/everythingisfine.jpg',
     description: 'Explore earthquakes, storms, volcanoes and more on one interactive globe.',
-    caption: 'Live globe: storm radar, surface wind and reported events explored together.',
+    caption: 'Live globe: storm radar, aurora forecasts and reported events explored together.',
   },
   worth: {
     image: '/projects/worth.jpg',

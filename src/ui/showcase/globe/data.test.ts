@@ -33,7 +33,7 @@ it('opens the selected USGS event with the current camera and data filters', () 
   const event = readEvents({ metadata: { generated: 1794876959000 }, features: [feature] })[0];
   const url = new URL(eventLink(event, { lon: 505, lat: 24, zoom: 1.2 })),
     params = new URLSearchParams(url.hash.slice(1));
-  expect(url.origin).toBe('https://everythingisfine.aidenjang.com');
+  expect(url.origin).toBe('https://meanwhile.aidenjang.com');
   expect(params.get('at')).toBe('145,24,1.2');
   expect(params.get('e')).toBe('usgs:us123');
   expect(params.get('s')).toBe('usgs');

@@ -5,11 +5,11 @@ for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/#sec-work');
     const trigger = page.getByRole('button', {
-      name: 'Inspect screenshot: everythingisfine',
+      name: 'Inspect screenshot: meanwhile.',
       exact: true,
     });
     await trigger.click();
-    const viewer = page.getByRole('dialog', { name: 'everythingisfine screenshot', exact: true });
+    const viewer = page.getByRole('dialog', { name: 'meanwhile. screenshot', exact: true });
     const image = viewer.getByRole('img');
     await expect(image).toHaveAttribute('src', '/projects/everythingisfine.jpg');
     const fitted = (await image.boundingBox())!.width;
@@ -35,7 +35,7 @@ test('phone reader keeps source and sharing available with independent Escape di
   });
   await page.goto('/#sec-work');
   const trigger = page.getByRole('button', {
-    name: 'How I built it: everythingisfine',
+    name: 'How I built it: meanwhile.',
     exact: true,
   });
   await trigger.click();

@@ -95,14 +95,12 @@ for (const width of [1440, 390]) {
     await expect(project.getByRole('status')).toContainText('Screenshot unavailable');
     await expect(project.locator('[aria-busy="true"]')).toHaveCount(0);
     await expect(
-      project.getByRole('button', { name: 'Inspect screenshot: everythingisfine', exact: true }),
+      project.getByRole('button', { name: 'Inspect screenshot: meanwhile.', exact: true }),
     ).toBeDisabled();
     const failedFrame = (await thumbnail.boundingBox())!;
     expect(failedFrame.width).toBeCloseTo(originalFrame.width, 0);
     expect(failedFrame.height).toBeCloseTo(originalFrame.height, 0);
-    await project
-      .getByRole('button', { name: 'How I built it: everythingisfine', exact: true })
-      .click();
+    await project.getByRole('button', { name: 'How I built it: meanwhile.', exact: true }).click();
     await expect(page.locator('#work-modal-title')).toContainText('everythingisfine');
   });
 }
@@ -114,18 +112,16 @@ test('reader keeps the current identity and named next project after scrolling',
   await page.goto('/#sec-work');
   const project = page.locator('#project-everythingisfine');
   await project
-    .getByRole('button', { name: 'Inspect screenshot: everythingisfine', exact: true })
+    .getByRole('button', { name: 'Inspect screenshot: meanwhile.', exact: true })
     .click();
-  const viewer = page.getByRole('dialog', { name: 'everythingisfine screenshot', exact: true });
+  const viewer = page.getByRole('dialog', { name: 'meanwhile. screenshot', exact: true });
   const image = viewer.getByRole('img', {
-    name: 'everythingisfine product interface, full screenshot',
+    name: 'meanwhile. product interface, full screenshot',
   });
   await expect(image).toBeInViewport({ ratio: 0.99 });
   await expect(image).toHaveAttribute('src', '/projects/everythingisfine.jpg');
   await page.keyboard.press('Escape');
-  await project
-    .getByRole('button', { name: 'How I built it: everythingisfine', exact: true })
-    .click();
+  await project.getByRole('button', { name: 'How I built it: meanwhile.', exact: true }).click();
   const title = page.locator('#work-modal-title');
   const top = (await title.boundingBox())!.y;
   await page.locator('.story-scroll-area').evaluate((element) => {
@@ -133,7 +129,7 @@ test('reader keeps the current identity and named next project after scrolling',
   });
   expect((await title.boundingBox())!.y).toBeCloseTo(top, 1);
   await expect(
-    page.locator('.work-story-ending').getByRole('link', { name: /Open everythingisfine/ }),
+    page.locator('.work-story-ending').getByRole('link', { name: /Open meanwhile./ }),
   ).toBeVisible();
   await expect(page.getByRole('button', { name: 'Next case study', exact: true })).toHaveText(
     /Next: iodine/,
