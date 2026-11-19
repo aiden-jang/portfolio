@@ -9,7 +9,7 @@ The featured still marks an August 2026 Kamchatka earthquake from real USGS and 
 readings recorded in Everything Is Fine’s reconciliation fixture. Inspect an earthquake
 shows both agencies’ readings without WebGL. The event case study uses the same evidence.
 The still renders the existing Natural Earth mesh, coastlines, and tectonic boundaries.
-The app’s [recorded agency reports](https://github.com/aiden-jang/everythingisfine/blob/main/src/sources/fixtures/one-quake-both-feeds.json)
+The app’s [recorded agency reports](https://github.com/aiden-jang/meanwhile/blob/main/src/sources/fixtures/one-quake-both-feeds.json)
 include the source IDs, original precision and measured separation.
 
 As Featured work comes into view, the still gives way to a slow orbit from the
@@ -39,8 +39,8 @@ automatically decompress gzip and hosts serving the stored bytes. The
 renderer uses the portfolio's Three.js dependency and disposes of its context,
 observers, input listeners, textures and materials when closed.
 
-Sources: [Everything Is Fine geography](https://github.com/aiden-jang/everythingisfine/tree/b61b661/src),
-[star catalogue](https://github.com/aiden-jang/everythingisfine/blob/main/src/geo/stars.json),
+Sources: [Everything Is Fine geography](https://github.com/aiden-jang/meanwhile/tree/b61b661/src),
+[star catalogue](https://github.com/aiden-jang/meanwhile/blob/main/src/geo/stars.json),
 and [NOAA SWPC aurora forecast](https://www.swpc.noaa.gov/products/aurora-30-minute-forecast).
 
 ## Recorded and illustrated examples

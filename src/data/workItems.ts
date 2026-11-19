@@ -60,7 +60,7 @@ export const WORK_ITEMS: WorkDetail[] = [
         label: 'Open Float Dive',
         url: 'https://meanwhile.aidenjang.com/#story=float&choice=recorded/6901932/268/1792482240000&chapter=317&v=observe',
       },
-      { label: 'Source code', url: 'https://github.com/aiden-jang/everythingisfine' },
+      { label: 'Source code', url: 'https://github.com/aiden-jang/meanwhile' },
     ],
   },
   {
