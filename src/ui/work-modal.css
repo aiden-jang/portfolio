@@ -232,3 +232,37 @@
     font-size: 12px;
   }
 }
+
+.story-copy-case {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding-inline: 9px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-control);
+  white-space: nowrap;
+  font-size: 12px;
+  cursor: pointer;
+}
+.story-copy-case:hover {
+  border-color: var(--color-muted);
+}
+.story-direct-link {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  max-width: 70vw;
+  padding: 8px;
+  border: 1px solid var(--color-line);
+  background: var(--color-bg);
+}
+@media (max-width: 410px) {
+  .story-copy-case {
+    gap: 4px;
+    padding-inline: 6px;
+  }
+  .story-copy-case svg {
+    display: none;
+  }
+}

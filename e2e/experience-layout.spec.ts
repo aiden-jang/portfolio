@@ -13,6 +13,12 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         return Reflect.apply(get, this, [type, ...args]);
       } as typeof get;
     });
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: async (value: string) => sessionStorage.setItem('copied-case', value) },
+        configurable: true,
+      });
+    });
     await page.goto('/#sec-experience');
     await page.evaluate(() => document.fonts.ready);
     const section = page.locator('#sec-experience');
@@ -42,6 +48,9 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     const history = section.locator('.experience-history');
     await expect(history.getByText('LiveIntent', { exact: true })).toHaveCount(1);
     await expect(history).toContainText('Associate Software Engineer');
+    await expect(
+      section.getByText('weekly Sponsorships impressions', { exact: true }),
+    ).toBeVisible();
     const assertLayout = async () => {
       const boxes = await section.evaluate((el) => {
         const box = (node: Element) => {
@@ -93,7 +102,17 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         });
         const readingPosition = await page.evaluate(() => scrollY);
         await page.keyboard.press('Enter');
-        await expect(page.getByRole('dialog').getByRole('heading', { name: title })).toBeVisible();
+        const reader = page.getByRole('dialog');
+        await expect(reader.getByRole('heading', { name: title })).toBeVisible();
+        if (trigger === lead) {
+          await reader.getByRole('button', { name: 'Copy case link', exact: true }).click();
+          await expect(
+            reader.getByRole('button', { name: 'Link copied', exact: true }),
+          ).toBeVisible();
+          expect(await page.evaluate(() => sessionStorage.getItem('copied-case'))).toMatch(
+            /#work\/ad-slot-details-120-1-api-call$/,
+          );
+        }
         await page.keyboard.press('Escape');
         await expect(trigger).toBeFocused();
         await expect

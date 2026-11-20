@@ -81,6 +81,12 @@ for (const [width, height] of [
       exact: true,
     });
     await expect(inspect).toHaveCount(1, { timeout: 5000 });
+    const snapshot = await page.request.get('/projects/orbit-snapshot.json');
+    const { metadata } = await snapshot.json();
+    await expect(page.locator('.earthquake-record time')).toHaveAttribute(
+      'datetime',
+      new Date(metadata.generated).toISOString(),
+    );
     await expect(inspect).toBeInViewport({ ratio: 1 });
     await inspect.press('Enter');
     await expect(
@@ -103,8 +109,10 @@ for (const [width, height] of [
     await expect(story).toBeFocused();
     await page.getByRole('button', { name: 'Read my contribution to iodine' }).click();
     await expect(reader.getByText('.trim()', { exact: true })).toBeVisible();
-    const undo = reader.getByRole('button', { name: 'Undo edit', exact: true });
-    await undo.press('Enter');
+    await reader.getByRole('button', { name: 'Close', exact: true }).click();
+    const iodine = page.locator('#project-iodine');
+    await iodine.getByRole('button', { name: 'Undo edit', exact: true }).press('Enter');
+    await iodine.getByRole('button', { name: 'Read my contribution to iodine' }).click();
     await expect(reader.getByText('Revert feedback queued', { exact: true })).toBeVisible();
     await expect(
       reader.getByText('Do not assume the edit is still applied.', { exact: false }),
@@ -112,7 +120,15 @@ for (const [width, height] of [
     await expect(
       reader.getByRole('link', { name: 'View snapshot and revert code' }),
     ).toHaveAttribute('href', /editSnapshots\.ts$/);
-    await expect(reader.getByRole('button', { name: 'Replay edit', exact: true })).toBeFocused();
+    await reader.getByRole('button', { name: 'src/greeting.ts:2', exact: true }).click();
+    await expect(reader.locator('.iodine-evidence-line')).toBeFocused();
+    await expect(reader.getByRole('link', { name: 'View Iodine’s restore code' })).toHaveAttribute(
+      'href',
+      /editSnapshots\.ts#L92-L107$/,
+    );
+    const replay = reader.getByRole('button', { name: 'Replay edit', exact: true });
+    await replay.press('Enter');
+    await expect(reader.getByText('.trim()', { exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );

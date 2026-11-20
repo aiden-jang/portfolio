@@ -8,6 +8,7 @@ type Surface = THREE.MeshStandardMaterial & Partial<THREE.MeshPhysicalMaterial>;
 export function tuneStudioFerrari(model: THREE.Object3D) {
   const studio = { value: 0 };
   const closingReflection = { value: 0 };
+  const openingReflection = { value: 0 };
   const optics = { value: 0 };
   const fixtureBasis = { value: new THREE.Matrix4() };
   const fixtureX = { value: 0 };
@@ -61,6 +62,7 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
         prepare(program, renderer);
         program.uniforms.photoMaterial = studio;
         program.uniforms.closingReflection = closingReflection;
+        program.uniforms.openingReflection = openingReflection;
         program.uniforms.opticalFinish = optics;
         program.uniforms.photoTone = { value: color };
         program.uniforms.fixtureBasis = fixtureBasis;
@@ -75,6 +77,7 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
           `
           uniform float photoMaterial;
           uniform float closingReflection;
+          uniform float openingReflection;
           uniform float opticalFinish;
           uniform vec3 photoTone;
           uniform mat4 fixtureBasis;
@@ -179,6 +182,19 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
               vec3 cornerReflection = reflectedCornerLight(worldCarSurface,worldView,worldNormal,.024);
               float coatEnergy = .81 - .33*hoodFinish;
               outgoingLight += cornerReflection * coatEnergy * photoMaterial;
+              if (openingReflection > .0) {
+                // The lit section travels from the front wheel arch toward the side mirror.
+                float t = openingReflection;
+                float envelope = smoothstep(.02,.14,t)*(1.-smoothstep(.74,.98,t));
+                float travel = mix(1.91,.49,t);
+                float fenderX = mix(.66,.83,smoothstep(.55,1.83,worldCarSurface.z));
+                float across = (worldCarSurface.x-fenderX)/.075;
+                float stripe = exp(-across*across);
+                float height = smoothstep(.48,.66,worldCarSurface.y);
+                float length = (worldCarSurface.z-travel)/.40;
+                float glint = exp(-length*length)*stripe*height*envelope;
+                outgoingLight += vec3(1.,.77,.57)*glint*.59;
+              }
               // Reflect a ceiling strip along the shoulder in the fixed closing shot.
               if (closingReflection > .0) {
                 vec3 reflectedView = reflect(-worldView, worldNormal);
@@ -235,8 +251,10 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
     room?: ReturnType<typeof getStudioProjection>,
     refined = false,
     closing = false,
+    opening = 0,
   ) => {
     closingReflection.value = Number(closing);
+    openingReflection.value = opening;
     optics.value = Number(next && refined);
     if (room) {
       fixtureBasis.value = room.uniforms.studioRoomBasis.value;

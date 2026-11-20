@@ -3,9 +3,7 @@ import { ExpandIcon } from '../ExpandIcon';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import './owewell-preview.css';
 
-type Props = { image: string; caption: string };
-
-export function OwewellPreview({ image, caption }: Props) {
+export function OwewellPreview() {
   const [payer, setPayer] = useState<'you' | 'alex'>('you');
   const [open, setOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -64,9 +62,13 @@ export function OwewellPreview({ image, caption }: Props) {
       </div>
       {open && (
         <ScreenshotViewer
-          image={image}
+          image={payer === 'alex' ? '/projects/owewell-alex.webp' : '/projects/owewell-you.webp'}
           name="owewell"
-          caption={caption}
+          caption={
+            payer === 'alex'
+              ? 'Alex paid the $48 bill. Maya owes Alex $24.'
+              : 'Maya paid the $48 bill. Alex owes Maya $24.'
+          }
           returnFocus={trigger.current}
           onClose={() => setOpen(false)}
         />

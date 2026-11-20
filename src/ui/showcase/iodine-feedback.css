@@ -44,3 +44,35 @@
     animation: none;
   }
 }
+
+.iodine-line-link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #d1ddff;
+  cursor: pointer;
+}
+.iodine-evidence-line {
+  display: block;
+  background: #859df627;
+  color: #f1f3ff;
+}
+.iodine-evidence-line > span {
+  display: inline-block;
+  padding-inline: 3px 10px;
+  color: #bfc9e9;
+  user-select: none;
+}
+.iodine-evidence-line:focus {
+  outline: 1px solid #a5b9f8;
+  outline-offset: -1px;
+}
+.iodine-example-source {
+  padding: 0 14px;
+  margin-bottom: 10px;
+  color: #bfc5d9;
+  font: 12px/1.5 var(--font-display);
+}
+.iodine-example-source a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

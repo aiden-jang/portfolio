@@ -8,10 +8,12 @@ import { ExperienceSection } from './sections/Experience';
 import { IntroSection } from './sections/Intro';
 import { MoreProjectsSection, WorkSection } from './sections/Work';
 import { WorkModal } from './WorkModal';
+import { IodineSession, type IodinePhase } from './showcase/iodine-session';
 import type { WorkDetail } from '../types';
 
 export function Sections() {
   const [activeWork, setActiveWork] = useState<WorkDetail | null>(null);
+  const [phase, setPhase] = useState<IodinePhase>('edited');
   const originHash = useRef('#sec-work');
   const lastCard = useRef<HTMLElement | null>(null);
   const activeId = useRef<string | null>(null);
@@ -114,27 +116,29 @@ export function Sections() {
   const nextWork = useCallback(() => moveWork(1), [moveWork]);
 
   return (
-    <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
-      <IntroSection />
-      <WorkSection onOpen={openWork} />
-      <ExperienceSection onOpen={openWork} />
-      <MoreProjectsSection onOpen={openWork} />
-      <AboutSection onOpen={openWork} />
-      <ContactSection />
-      <WorkModal
-        item={activeWork}
-        onClose={closeWork}
-        onPrevious={previousWork}
-        onNext={nextWork}
-        position={
-          activeWork
-            ? {
-                current: caseStudyLane(activeWork, 'all').indexOf(activeWork) + 1,
-                total: caseStudyLane(activeWork, 'all').length,
-              }
-            : null
-        }
-      />
-    </main>
+    <IodineSession.Provider value={{ phase, setPhase }}>
+      <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
+        <IntroSection />
+        <WorkSection onOpen={openWork} />
+        <ExperienceSection onOpen={openWork} />
+        <MoreProjectsSection onOpen={openWork} />
+        <AboutSection onOpen={openWork} />
+        <ContactSection />
+        <WorkModal
+          item={activeWork}
+          onClose={closeWork}
+          onPrevious={previousWork}
+          onNext={nextWork}
+          position={
+            activeWork
+              ? {
+                  current: caseStudyLane(activeWork, 'all').indexOf(activeWork) + 1,
+                  total: caseStudyLane(activeWork, 'all').length,
+                }
+              : null
+          }
+        />
+      </main>
+    </IodineSession.Provider>
   );
 }

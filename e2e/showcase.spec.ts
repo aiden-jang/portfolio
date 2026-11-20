@@ -14,6 +14,9 @@ for (const width of [1440, 390]) {
     await page.getByRole('button', { name: 'Show an event', exact: true }).click();
     const link = page.getByRole('link', { name: 'Open this event' });
     await expect(link).toBeVisible();
+    await expect(page.getByRole('complementary', { name: 'Selected earthquake' })).toContainText(
+      /[A-Z][a-z]{2} \d{1,2}, 20\d{2}/,
+    );
     await expect(link).toHaveAccessibleDescription('Opens in a new tab');
     const url = new URL((await link.getAttribute('href'))!);
     expect(url.hostname).toBe('meanwhile.aidenjang.com');

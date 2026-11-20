@@ -24,7 +24,8 @@ for (const width of [1440, 390]) {
       const screenshot = owewell.getByRole('button', { name: 'Inspect screenshot: owewell' });
       await screenshot.click();
       const viewer = page.getByRole('dialog', { name: 'owewell screenshot' });
-      await expect(viewer.getByRole('img')).toHaveAttribute('src', '/projects/owewell.jpg');
+      await expect(viewer.getByRole('img')).toHaveAttribute('src', '/projects/owewell-alex.webp');
+      await expect(viewer).toContainText('Maya owes Alex $24');
       await viewer.getByRole('button', { name: 'Close screenshot' }).click();
       await expect(screenshot).toBeFocused();
       await expect(alex).toBeChecked();
@@ -33,6 +34,9 @@ for (const width of [1440, 390]) {
       else await alex.press('ArrowLeft');
       await expect(you).toBeChecked();
       await expect(result).toHaveText('Alex pays you $24.00');
+      await screenshot.click();
+      await expect(viewer.getByRole('img')).toHaveAttribute('src', '/projects/owewell-you.webp');
+      await expect(viewer).toContainText('Alex owes Maya $24');
     });
   });
 }

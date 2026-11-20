@@ -52,8 +52,9 @@ restores it after a short interval, preserving keyboard focus. Its timer stops
 when the component unmounts. No live agent runs or edits visitor files.
 Desktop shows the agent edit beside the saved snapshot or restored file. Phones show
 the current file. The editor screenshot opens on the highlighted symbolic-link
-check. Fit image shows the full editor and assistant. The case
-study opens with the same recorded edit and highlights the changed expression.
+check. Fit image shows the full editor and assistant. The case study carries the
+current edit or restored state into the reader. Its file reference focuses the
+highlighted line, and the source link opens the restore implementation.
 
 Bean's small artwork frames come from mrrp's native sit/perk renderer and eye painter.
 The bloomnote spread crops the garden and Gerbera from the approved recipient screenshot and
@@ -72,3 +73,8 @@ using sample restaurants and the app's teaser photo. Both participants voted
 for the restaurant shown on the result screen. The platform gallery captures
 the account hub and the signed-in worth archive from the same local test session.
 The hub capture masks the test email. Both galleries open the uncropped frames.
+
+Owewell's paired inspector captures come from the local calculator. Maya and Alex
+split a sample $48 bill equally. Selecting a payer opens the matching screenshot.
+In the screenshot viewer, selecting a point in the fitted image zooms around that
+detail. Fit image restores the full frame.

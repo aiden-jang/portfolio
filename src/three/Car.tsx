@@ -33,6 +33,7 @@ import {
 } from './carHelpers';
 
 import { isOpeningStudio } from '../lighting';
+import { motionState } from './studioEntrance';
 import { getStudioProjection } from './studio/projection';
 import { tuneStudioFerrari } from './studio/ferrariMaterials';
 
@@ -258,6 +259,7 @@ export function Car() {
       studio ? getStudioProjection(state.size.width < 768) : undefined,
       refinements,
       app.isContactVisible && !review.active && group.visible,
+      studio && !review.active && group.visible && !reduced ? motionState.openingOrbitProgress : 0,
     );
     headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
     headlights.current?.update(dt);

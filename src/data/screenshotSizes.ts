@@ -20,5 +20,7 @@ export const SCREENSHOT_SIZES: Record<string, [number, number]> = {
   '/projects/platform-app.webp': [810, 520],
   '/projects/platform-app-detail.webp': [625, 520],
   '/projects/owewell.jpg': [1440, 1150],
+  '/projects/owewell-you.webp': [1100, 900],
+  '/projects/owewell-alex.webp': [1100, 900],
   '/projects/iodine.png': [1920, 934],
 };

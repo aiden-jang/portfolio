@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import example from '../../data/iodineExample.json';
+import { IodineSession, type IodinePhase } from './iodine-session';
 import './iodine-feedback.css';
 
 function RestoredFeedback() {
@@ -55,7 +56,11 @@ function CodePanel({
 }
 
 export function IodineContribution({ reader = false }: { reader?: boolean } = {}) {
-  const [phase, setPhase] = useState<'edited' | 'restored'>('edited');
+  const session = useContext(IodineSession);
+  const [localPhase, setLocalPhase] = useState<IodinePhase>('edited');
+  const phase = session?.phase ?? localPhase;
+  const setPhase = session?.setPhase ?? setLocalPhase;
+  const activeLine = useRef<HTMLSpanElement>(null);
   const [replaying, setReplaying] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -83,26 +88,60 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
   );
 
   if (reader) {
-    const [beforeChange, afterChange] = example.after.split('.trim()');
+    const lines = (restored ? example.restored : example.after).trimEnd().split('\n');
+    const [beforeEdit, afterEdit] = lines[1].split('.trim()');
     return (
       <div className="iodine-story-example" data-phase={phase}>
         <div className="cinema-code-heading">
-          <span>{example.file}</span>
+          <button
+            type="button"
+            className="iodine-line-link"
+            onClick={() => {
+              activeLine.current?.focus({ preventScroll: true });
+              activeLine.current?.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+            }}
+          >
+            {example.file}:2
+          </button>
           <span>{restored ? 'File restored' : 'Agent edit'}</span>
         </div>
         <pre>
           <code>
-            {restored ? (
-              example.restored
-            ) : (
-              <>
-                {beforeChange}
-                <mark>.trim()</mark>
-                {afterChange}
-              </>
+            {lines.map((line, i) =>
+              i === 1 ? (
+                <span key={i} className="iodine-evidence-line" tabIndex={-1} ref={activeLine}>
+                  <span aria-hidden="true">2</span>
+                  {restored ? (
+                    line
+                  ) : (
+                    <>
+                      {beforeEdit}
+                      <mark>.trim()</mark>
+                      {afterEdit}
+                    </>
+                  )}
+                  {'\n'}
+                </span>
+              ) : (
+                <span key={i}>
+                  {line}
+                  {'\n'}
+                </span>
+              ),
             )}
           </code>
         </pre>
+        <p className="iodine-example-source">
+          Recorded example file.{' '}
+          <a
+            href={example.source + '#L92-L107'}
+            target="_blank"
+            rel="noopener"
+            aria-describedby="external-link-hint"
+          >
+            View Iodine’s restore code <span aria-hidden="true">↗</span>
+          </a>
+        </p>
         <div className="cinema-result" aria-live="polite">
           <strong>{restored ? 'Revert feedback queued' : 'Snapshot saved'}</strong>
           <p>

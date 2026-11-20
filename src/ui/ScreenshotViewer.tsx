@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ScreenshotImage } from './ScreenshotImage';
 import { ControlIcon } from './ControlIcon';
@@ -44,7 +44,32 @@ export function ScreenshotViewer({
   const dialog = useRef<HTMLDialogElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
-  useEffect(() => {
+  const zoomOrigin = useRef<{
+    x: number;
+    y: number;
+    before: DOMRect;
+    clientX: number;
+    clientY: number;
+  }>();
+  const zoomAnimation = useRef<Animation>();
+  const zoom = (point?: { clientX: number; clientY: number }) => {
+    if (failedImage === image) return;
+    zoomAnimation.current?.cancel();
+    const before = viewport.current?.querySelector('img')?.getBoundingClientRect();
+    if (!zoomed && before && !editorDetail) {
+      const clientX = point?.clientX ?? before.left + before.width / 2;
+      const clientY = point?.clientY ?? before.top + before.height / 2;
+      zoomOrigin.current = {
+        x: (clientX - before.left) / before.width,
+        y: (clientY - before.top) / before.height,
+        before,
+        clientX,
+        clientY,
+      };
+    } else zoomOrigin.current = undefined;
+    setZoomed(!zoomed);
+  };
+  useLayoutEffect(() => {
     const panel = dialog.current;
     panel?.showModal();
     closeButton.current?.focus({ preventScroll: true });
@@ -61,11 +86,13 @@ export function ScreenshotViewer({
     if (ownsLock) root.style.overflow = 'hidden';
     return () => {
       if (animation) animation.cancel();
+      zoomAnimation.current?.cancel();
+      if (panel?.open) panel.close();
       if (ownsLock) root.style.overflow = overflow;
       if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
     };
   }, [returnFocus]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const area = viewport.current;
     if (!area) return;
     if (editorDetail && zoomed) {
@@ -73,6 +100,33 @@ export function ScreenshotViewer({
         left: area.scrollWidth * (area.clientWidth < 510 ? 0.2 : 0.173),
         top: 0.416 * area.scrollHeight,
       });
+      return;
+    }
+    const origin = zoomOrigin.current;
+    const picture = area.querySelector('img');
+    if (zoomed && origin && picture) {
+      const range = area.getBoundingClientRect();
+      // Apply the new scale and pan in the same frame, then animate between the two image bounds.
+      area.scrollTo({
+        left: origin.x * picture.offsetWidth - (origin.clientX - range.left),
+        top: origin.y * picture.offsetHeight - (origin.clientY - range.top),
+        behavior: 'instant',
+      });
+      if (!prefersReducedMotion()) {
+        const after = picture.getBoundingClientRect();
+        const { before } = origin;
+        zoomAnimation.current = picture.animate(
+          [
+            {
+              transformOrigin: 'top left',
+              transform: `translate(${before.left - after.left}px,${before.top - after.top}px) scale(${before.width / after.width}, ${before.height / after.height})`,
+            },
+            { transformOrigin: 'top left', transform: 'none' },
+          ],
+          { duration: 290, easing: 'cubic-bezier(.2,.75,.23,1)' },
+        );
+      }
+      zoomOrigin.current = undefined;
       return;
     }
     area.scrollTo({ left: zoomed ? (area.scrollWidth - area.clientWidth) / 2 : 0, top: 0 });
@@ -121,7 +175,7 @@ export function ScreenshotViewer({
             type="button"
             disabled={failedImage === image}
             aria-pressed={zoomed}
-            onClick={() => setZoomed(!zoomed)}
+            onClick={() => zoom()}
           >
             <span className="preview-action-label">{zoomed ? 'Fit image' : 'Zoom in'}</span>
             <ControlIcon name={zoomed ? 'fit' : 'zoom'} className="preview-action-icon" />
@@ -164,6 +218,15 @@ export function ScreenshotViewer({
         tabIndex={0}
         role="region"
         aria-label={`${name} screenshot image`}
+        onClick={(event) => {
+          if (
+            !editorDetail &&
+            !zoomed &&
+            event.target instanceof HTMLImageElement &&
+            event.target.naturalWidth > 0
+          )
+            zoom(event);
+        }}
         className={`preview-image ${zoomed ? (editorDetail ? 'is-editor-detail' : 'is-zoomed') : ''}`}
       >
         <ScreenshotImage
@@ -177,6 +240,9 @@ export function ScreenshotViewer({
       <p>
         {zoomed && (
           <span className="preview-zoom-help">Scroll to explore · Fit image to return</span>
+        )}
+        {!zoomed && !editorDetail && (
+          <span className="preview-zoom-help">Select a detail in the image to zoom.</span>
         )}
         {caption}
       </p>

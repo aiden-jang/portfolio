@@ -31,6 +31,7 @@ export function GlobeEventCard({ event, onClose }: { event: PickedEvent; onClose
         {new Date(event.time).toLocaleString('en-US', {
           month: 'short',
           day: 'numeric',
+          year: 'numeric',
           hour: 'numeric',
           minute: '2-digit',
           timeZone: 'UTC',

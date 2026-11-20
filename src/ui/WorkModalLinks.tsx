@@ -1,4 +1,4 @@
-import { shareLink } from '../browserSharing';
+import { copyText, shareLink } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
 import { useState } from 'react';
 import type { WorkDetail } from '../types';
@@ -13,7 +13,8 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
   const { result, run } = useShareFeedback(item.title);
   const [fallbackUrl, setFallbackUrl] = useState('');
 
-  const share = async () => {
+  const hasSources = Boolean(item.link || item.links?.length || item.shortName);
+  const share = async (copy = false) => {
     const shared = new URL(
       preview?.states
         ? previewLink(window.location.href, item.shortName ?? '', selected)
@@ -22,12 +23,38 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
     shared.hash = window.location.hash;
     const url = shared.href;
     const next = await run(() =>
-      shareLink({ title: item.shortName ?? item.title, text: item.summary, url }),
+      copy
+        ? copyText(url)
+        : shareLink({ title: item.shortName ?? item.title, text: item.summary, url }),
     );
     if (next === 'failed') setFallbackUrl(url);
   };
 
-  if (!item.link && !item.links?.length && !item.shortName) return null;
+  if (!hasSources)
+    return (
+      <div className="work-modal-links">
+        <button type="button" className="story-copy-case" onClick={() => void share(true)}>
+          <ControlIcon name={result === 'copied' ? 'check' : 'copy'} />
+          {result === 'copied' ? 'Link copied' : 'Copy case link'}
+        </button>
+        <span className="sr-only" role="status">
+          {result === 'copied'
+            ? 'Case link copied.'
+            : result === 'failed'
+              ? 'Copy unavailable. Select the case study link.'
+              : ''}
+        </span>
+        {result === 'failed' && (
+          <input
+            className="story-direct-link"
+            aria-label="Case study link"
+            readOnly
+            value={fallbackUrl}
+            onFocus={(event) => event.currentTarget.select()}
+          />
+        )}
+      </div>
+    );
   const secondary = (
     <>
       {item.link && (

@@ -227,3 +227,7 @@
     display: none;
   }
 }
+
+.preview-dialog:not(.preview-dialog-editor) .preview-image:not(.is-zoomed) img:not(.is-loading) {
+  cursor: zoom-in;
+}

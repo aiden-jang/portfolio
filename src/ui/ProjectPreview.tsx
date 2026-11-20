@@ -150,7 +150,7 @@ export function ProjectPreview(props: Props) {
   }
   if (props.name === 'iguess') return <IguessReplay image={props.image} caption={props.caption} />;
   if (props.name === 'owewell') {
-    return <OwewellPreview image={props.image} caption={props.caption} />;
+    return <OwewellPreview />;
   }
   return <ScreenshotProjectPreview {...props} />;
 }

@@ -5,6 +5,10 @@ import { kamchatkaExample as example } from '../../data/kamchatkaExample';
 import { EarthquakeGlobeStill } from './EarthquakeEvidence';
 import { DepthSection } from './DepthSection';
 import { InteractiveGlobe } from './InteractiveGlobe';
+import { ControlIcon } from '../ControlIcon';
+
+// The visible date also applies to the snapshot poster before WebGL loads.
+const snapshotDate = '2026-11-17T00:55:59.000Z';
 
 type Props = {
   item: WorkDetail;
@@ -71,7 +75,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
                 className="featured-text-action"
                 onClick={(event) => onOpen(item, event.currentTarget)}
               >
-                See how I matched the reports <span aria-hidden="true">↗</span>
+                See how I matched the reports <ControlIcon name="arrow" />
               </button>
             </section>
           </>
@@ -86,12 +90,14 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
                 className="featured-primary"
                 onClick={() => setComparison(true)}
               >
-                Compare the Kamchatka reports <span aria-hidden="true">↗</span>
+                Compare the Kamchatka reports <ControlIcon name="arrow" />
               </button>
             </div>
             <InteractiveGlobe image={preview.image} caption={preview.caption} />
             <div className="earthquake-footer">
-              <span className="earthquake-record">Recorded USGS events · NOAA aurora</span>
+              <span className="earthquake-record">
+                USGS snapshot · <time dateTime={snapshotDate}>Nov 17, 2026</time> · NOAA aurora
+              </span>
               <div className="earthquake-links">
                 <button
                   type="button"
@@ -99,7 +105,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
                   aria-label="How I built it: meanwhile."
                   onClick={(event) => onOpen(item, event.currentTarget)}
                 >
-                  How I built it <span aria-hidden="true">↗</span>
+                  How I built it <ControlIcon name="arrow" />
                 </button>
                 {item.link && (
                   <a

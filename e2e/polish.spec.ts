@@ -17,6 +17,17 @@ for (const width of [1440, 390]) {
     await expect.poll(async () => (await image.boundingBox())!.width).toBeGreaterThan(fitted * 1.4);
     await viewer.getByRole('button', { name: 'Fit image', exact: true }).click();
     await expect.poll(async () => (await image.boundingBox())!.width).toBeCloseTo(fitted, 0);
+    const area = viewer.getByRole('region', { name: 'meanwhile. screenshot image' });
+    const horizontalScroll = () => area.evaluate((el) => el.scrollLeft);
+    const imageBox = (await image.boundingBox())!;
+    const areaBox = (await area.boundingBox())!;
+    const y = Math.floor(Math.min(imageBox.height, areaBox.height) / 2);
+    await image.click({ position: { x: Math.floor(imageBox.width * 0.82), y } });
+    await expect(viewer.getByRole('button', { name: 'Fit image', exact: true })).toBeVisible();
+    const right = await horizontalScroll();
+    await viewer.getByRole('button', { name: 'Fit image', exact: true }).click();
+    await image.click({ position: { x: Math.floor(imageBox.width * 0.18), y } });
+    await expect.poll(horizontalScroll).toBeLessThan(right - 30);
     await page.keyboard.press('Escape');
     await expect(trigger).toBeFocused();
   });
