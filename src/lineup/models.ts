@@ -1,10 +1,12 @@
+import { CARS } from '../config';
 import { tuneStudyMaterials } from '../garageStudy/materials';
-import { Box3, Group, Vector3, type Object3D } from 'three';
+import { Box3, Group, Mesh, Vector3, type Object3D } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import {
   autoFitToLength,
   disposeModel,
+  detectBodyMaterial,
   hideBakedPlanes,
   prepareModelGlass,
 } from '../three/carHelpers';
@@ -16,13 +18,15 @@ import { F40, F40_LENGTH, RB16B } from './vehicles';
 
 const PIRELLI_DIAMETER = 0.67;
 
-export async function loadLineup(signal: AbortSignal) {
+export async function loadLineup(signal: AbortSignal, porsche = false) {
   const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
   const pair = new AbortController();
   const downloads = AbortSignal.any([signal, pair.signal]);
   // Settle both downloads so the sibling's decoded textures can be released on failure.
+  const first = porsche ? CARS[7] : F40;
+  const second = porsche ? CARS[3] : RB16B;
   const [ferrari, redBull] = await Promise.allSettled(
-    [F40, RB16B].map(({ file }) =>
+    [first, second].map(({ file }) =>
       loadCarModel(loader, `/models/${file}`, downloads).catch((error: unknown) => {
         pair.abort(error);
         throw error;
@@ -35,18 +39,27 @@ export async function loadLineup(signal: AbortSignal) {
     if (redBull.status === 'rejected') throw redBull.reason;
     const f40 = ferrari.value.scene;
     const rb16b = redBull.value.scene;
-    prepare(f40, F40);
-    prepare(rb16b, RB16B);
+    prepare(f40, first);
+    prepare(rb16b, second);
+    if (porsche) {
+      detectBodyMaterial(f40, first.paintMaterial)?.color?.set(first.defaultPaint.hex);
+      detectBodyMaterial(rb16b, second.paintMaterial)?.color?.set(second.defaultPaint.hex);
+    }
     const ferrariLength = new Box3().setFromObject(f40, true).getSize(new Vector3()).z;
-    const cars = [
-      place(f40, F40_LENGTH / ferrariLength, -1.73, 1.38),
-      place(rb16b, PIRELLI_DIAMETER / measureFrontTires(rb16b), 1.44, -1.3),
-    ] as const;
+    const cars = porsche
+      ? ([
+          place(f40, 2.272 / turboAxles(f40), 1.34, 2.3),
+          place(rb16b, 2.272 / rwbAxles(rb16b), -1.34, -2.3),
+        ] as const)
+      : ([
+          place(f40, F40_LENGTH / ferrariLength, -1.73, 1.38),
+          place(rb16b, PIRELLI_DIAMETER / measureFrontTires(rb16b), 1.44, -1.3),
+        ] as const);
     return {
       cars,
       points: cars.flatMap(({ bounds }) => corners(bounds)),
-      tuneFerrari: tuneStudioFerrari(f40),
-      tuneRedBull: tuneStudyMaterials(rb16b, RB16B.file),
+      tuneFerrari: porsche ? undefined : tuneStudioFerrari(f40),
+      tuneRedBull: porsche ? undefined : tuneStudyMaterials(rb16b, RB16B.file),
       dispose: () => {
         disposeModel(f40);
         disposeModel(rb16b);
@@ -94,4 +107,32 @@ function corners({ min, max }: Box3) {
   return [min.x, max.x].flatMap((x) =>
     [min.y, max.y].flatMap((y) => [min.z, max.z].map((z) => new Vector3(x, y, z))),
   );
+}
+
+function turboAxles(model: Object3D) {
+  const front = model.getObjectByName('Circle001_16');
+  const rear = model.getObjectByName('Circle003_13');
+  if (!front || !rear) throw Error('The Turbo axle geometry could not be found.');
+  return Math.abs(
+    new Box3().setFromObject(front, true).getCenter(new Vector3()).z -
+      new Box3().setFromObject(rear, true).getCenter(new Vector3()).z,
+  );
+}
+
+function rwbAxles(model: Object3D) {
+  const axles = [new Box3(), new Box3()];
+  const vertex = new Vector3();
+  model.updateMatrixWorld(true);
+  model.traverse((part) => {
+    if (!(part instanceof Mesh) || Array.isArray(part.material) || part.material.name !== 'M_Tires')
+      return;
+    const position = part.geometry.attributes.position;
+    for (let i = 0; i < position.count; i++) {
+      vertex.fromBufferAttribute(position, i).applyMatrix4(part.matrixWorld);
+      axles[vertex.z < 0 ? 0 : 1].expandByPoint(vertex);
+    }
+  });
+  if (axles.some((bounds) => bounds.isEmpty()))
+    throw Error('The RWB tire geometry could not be found.');
+  return axles[1].getCenter(vertex).z - axles[0].getCenter(vertex).z;
 }

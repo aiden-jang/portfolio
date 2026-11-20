@@ -4,6 +4,7 @@ export function createStudioEnvironment(
   generator: THREE.PMREMGenerator,
   blackout = false,
   refined = false,
+  dusk = false,
 ) {
   const studio = new THREE.Scene();
   studio.background = new THREE.Color(0.073, 0.065, 0.059);
@@ -79,6 +80,38 @@ export function createStudioEnvironment(
       [-4.51, 2.17, 1.7],
       [0, 0.71, 0.56],
       new THREE.Color(0.86, 0.91, 1),
+      5.1,
+    );
+  }
+
+  if (dusk) {
+    for (const item of [...studio.children]) {
+      if (item instanceof THREE.Mesh) {
+        studio.remove(item);
+        item.geometry.dispose();
+        item.material.dispose();
+      }
+    }
+    studio.background = new THREE.Color(0.035, 0.027, 0.021);
+    luminousPanel(
+      [8.6, 1.22],
+      [6, 2.04, 3.7],
+      [0, 0.68, -1.05],
+      new THREE.Color(1, 0.68, 0.36),
+      9.6,
+    );
+    luminousPanel(
+      [5.5, 2.15],
+      [-3.7, 3.18, 4.3],
+      [0, 0.67, 0],
+      new THREE.Color(0.63, 0.76, 1),
+      2.4,
+    );
+    luminousPanel(
+      [4.7, 0.48],
+      [-2.3, 2.94, -5.2],
+      [0, 0.64, -0.4],
+      new THREE.Color(1, 0.69, 0.41),
       5.1,
     );
   }

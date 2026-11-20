@@ -1,3 +1,7 @@
+import { exhibitWheel } from '../garageExhibits/geometry';
+import { useGarageExhibit } from '../garageExhibits/state';
+import { prepareBrakePivot } from '../garageExhibits/parts';
+import { prepareRaceWear } from '../garageExhibits/wear';
 import { useGarageStudy } from '../garageStudy/state';
 import { tuneStudyMaterials } from '../garageStudy/materials';
 import { useFrame, useThree } from '@react-three/fiber';
@@ -53,6 +57,9 @@ export function Car() {
   const group = useMemo(() => new THREE.Group(), []);
   const studioFinish = useRef<ReturnType<typeof tuneStudioFerrari> | null>(null);
   const reviewFinish = useRef<ReturnType<typeof tuneStudyMaterials>>();
+  const brake = useRef<ReturnType<typeof prepareBrakePivot>>();
+  const wear = useRef<ReturnType<typeof prepareRaceWear>>();
+  const wearAmount = useRef(0);
   const displayedIndex = useRef(carIndex);
   const modelRef = useRef<THREE.Object3D | null>(null);
   const loader = useMemo(() => {
@@ -131,6 +138,10 @@ export function Car() {
         prepareModelGlass(model);
         prepareModelFinish(model, spec.file);
         reviewFinish.current = tuneStudyMaterials(model, spec.file);
+        exhibitWheel.point = null;
+        brake.current = carIndex === 20 ? prepareBrakePivot(model) : undefined;
+        wear.current = carIndex === 20 ? prepareRaceWear(model) : undefined;
+        wearAmount.current = 0;
         studioFinish.current = carIndex === 0 ? tuneStudioFerrari(model) : null;
         studioFinish.current?.(isOpeningStudio(useAppStore.getState()));
         headlights.current = createPopupHeadlights(model, gltf.animations, spec.popupHeadlights);
@@ -223,6 +234,19 @@ export function Car() {
     const app = useAppStore.getState();
     group.visible = !useLineup.getState().active;
     const review = useGarageStudio.getState();
+    const exhibit = useGarageExhibit.getState();
+    const onStage = review.active && review.chapter === 'walk' && displayedIndex.current === 20;
+    const reduced = prefersReducedMotion();
+    brake.current?.(
+      onStage && exhibit.exhibit === 'brakes' ? Number(exhibit.after) : 0,
+      dt,
+      reduced,
+    );
+    const worn = Number(onStage && exhibit.exhibit === 'wear' && exhibit.after);
+    wearAmount.current = reduced
+      ? worn
+      : THREE.MathUtils.lerp(wearAmount.current, worn, Math.min(dt * 8, 1));
+    wear.current?.(wearAmount.current);
     const refinements =
       review.active &&
       (!review.study || review.study === 'finished') &&
@@ -251,7 +275,6 @@ export function Car() {
     );
 
     // Purely decorative motion, so reduced motion pins both to a steady state.
-    const reduced = prefersReducedMotion();
     const time = state.clock.elapsedTime;
     const breath = reduced ? 0.5 : 0.5 + Math.sin(time * 0.7) * 0.5;
     refs.lightPulseT = Math.max(0, refs.lightPulseT - dt * 2);

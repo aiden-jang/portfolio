@@ -1,3 +1,4 @@
+import { openLinkedExhibit } from './garageExhibits/select';
 import { PhotoMode } from './ui/photo/PhotoMode';
 import { usePhotoMode } from './ui/photo/state';
 import { publicAnalyticsUrl } from './analytics';
@@ -52,8 +53,10 @@ export function App() {
   useSceneUrl();
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get('garage') === 'studio' && !location.hash && !useGarageStudio.getState().active)
+    if (params.get('garage') === 'studio' && !location.hash && !useGarageStudio.getState().active) {
       startFromLink(params);
+      openLinkedExhibit();
+    }
   }, []);
   useShowroomTransition();
 

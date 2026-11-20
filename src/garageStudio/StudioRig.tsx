@@ -1,3 +1,6 @@
+import { exhibitRadius, frameExhibit, positionWheelMarker } from '../garageExhibits/framing';
+import { pairFrame } from '../garageExhibits/geometry';
+import { useGarageExhibit } from '../garageExhibits/state';
 import { frameGlide } from '../garageStudy/glide';
 import { useGarageStudy } from '../garageStudy/state';
 import { useFrame } from '@react-three/fiber';
@@ -44,7 +47,12 @@ export function StudioRig() {
     const detail = chapter === 'detail';
     const f1 = id === 15 || id === 16;
     const detailPart = detail && proposed;
-    const bounds = pair ? pairBounds : localBounds(model);
+    const { exhibit, after } = useGarageExhibit.getState();
+    const bounds = pair
+      ? exhibit === 'porsche' && after && !pairFrame.bounds.isEmpty()
+        ? pairFrame.bounds
+        : pairBounds
+      : localBounds(model);
     const focusBounds = deck ? deckBounds : detailPart ? detailBounds(model, id, bounds) : bounds;
     const at = focusBounds.getCenter(center);
     const groundLift = f1 ? (mobile ? 0.78 : 0.7) : mobile ? 0.69 : 0.62;
@@ -113,6 +121,7 @@ export function StudioRig() {
     if (pair) at.set(0, 0.28, -0.22);
     if (deck) at.set(0, 0.88, -1.03);
     if (profile) at.y = 0.52;
+    const feature = frameExhibit(chapter, id, proposed, mobile, narrow, yaw, pitch, at, bounds);
     if (short > 0) at.y -= short * 0.26;
     const crop = photo ? photoRatio(photo) : aspect;
     const base = deck
@@ -142,7 +151,9 @@ export function StudioRig() {
               : mobile
                 ? 8.92
                 : 8.05;
-    const aim = pair && proposed ? yaw + (mobile ? 0.47 : 1.03) : yaw;
+    const aim = feature?.yaw ?? (pair && proposed ? yaw + (mobile ? 0.47 : 1.03) : yaw);
+    const lens = feature?.fov ?? fov;
+    const angle = feature?.elevation ?? elevation;
     const overhead = pair && proposed;
     if (overhead && !photo && !mobile) {
       const dockClearance = 0.42 * (1 - short);
@@ -150,25 +161,25 @@ export function StudioRig() {
       at.z += Math.cos(aim) * dockClearance;
     }
     const fit = fitDistance(
-      focusBounds,
+      feature?.bounds ?? focusBounds,
       at,
       aim,
-      elevation,
-      fov,
+      angle,
+      lens,
       aspect,
       crop,
       overhead ? 0.82 : 0.91,
     );
     const clearance =
       overhead && !photo ? 1 + narrow * 0.16 + short * 0.41 + (mobile ? 0 : 0.28 * (1 - short)) : 1;
-    const fittedBase = base * (1 + short * 0.18);
-    const radius = deck
-      ? Math.max(fittedBase, fit) * zoom
-      : Math.max(fittedBase * zoom, fit) * clearance;
+    const fittedBase = (feature?.base ?? base) * (1 + short * 0.18);
+    const radius =
+      exhibitRadius(feature?.mode, fittedBase, fit, zoom) ??
+      (deck ? Math.max(fittedBase, fit) * zoom : Math.max(fittedBase * zoom, fit) * clearance);
     const realLift =
-      chapter === 'walk' && proposed && !deck && !profile
+      chapter === 'walk' && proposed && !deck && !profile && !feature
         ? groundLift + Math.max(0, pitch) * 2.3
-        : at.y + radius * Math.sin(elevation);
+        : at.y + radius * Math.sin(angle);
     const targetLift = realLift - at.y;
     const k = !current.ready || readableMotion ? 1 : 1 - Math.exp(-Math.min(dt, 0.06) * 11);
     current.ready = true;
@@ -176,7 +187,7 @@ export function StudioRig() {
     orbit.shownYaw = current.yaw - (pair && proposed ? (mobile ? 0.47 : 1.03) : 0);
     current.lift = MathUtils.lerp(current.lift, targetLift, k);
     current.radius = MathUtils.lerp(current.radius, radius, k);
-    current.fov = MathUtils.lerp(current.fov, fov, k);
+    current.fov = MathUtils.lerp(current.fov, lens, k);
     current.target.lerp(at, k);
 
     const horizontal = Math.sqrt(Math.max(0.12, current.radius ** 2 - current.lift ** 2));
@@ -190,6 +201,7 @@ export function StudioRig() {
       camera.updateProjectionMatrix();
     }
     camera.lookAt(current.target);
+    if (feature?.mode === 'wheel') positionWheelMarker(camera, size.width, size.height);
   }, 0.5);
   return null;
 }

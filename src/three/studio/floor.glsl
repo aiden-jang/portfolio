@@ -115,6 +115,13 @@
       float pools = exp(-dot(lampDist,lampDist)) * smoothstep(1.95,2.39,ground.y);
       floorTone += vec3(.072,.064,.047) * garageStudioLamps * pools * relief;
       reflection *= mix(1., .76 + .12 * (1. - satinFalloff), garageStudioLow);
+      vec2 shaft = vec2(dot(ground,vec2(.83,.56)),dot(ground,vec2(-.56,.83)));
+      float duskSoftEdge = exp(-pow((shaft.y+.18)/.81,2.));
+      float duskDistance = smoothstep(-5.,-.25,shaft.x)*(1.-smoothstep(2.0,7.,shaft.x));
+      float duskSpill = duskSoftEdge * duskDistance * mix(.75,1.13,relief);
+      floorTone *= mix(vec3(1.),vec3(.79,.59,.48),studioDusk);
+      floorTone += vec3(.27,.125,.039) * duskSpill * studioDusk;
+      floorTone += vec3(.129,.05,.012) * reflectedBar * studioDusk;
       vec3 litFloor = (floorTone + reflection * mix(.89,1.10,relief)*(1.-groove*.30)) * contact;
       if (garageStudioPass > .9 && garageStudioPass < 1.1) {
         vec3 paper = vec3(.19,.18,.16);

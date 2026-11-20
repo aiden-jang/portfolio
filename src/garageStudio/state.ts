@@ -1,3 +1,4 @@
+import { resetExhibit } from '../garageExhibits/state';
 import { resetStudyCamera, track, useGarageStudy } from '../garageStudy/state';
 import { create } from 'zustand';
 import { useAppStore } from '../store';
@@ -105,6 +106,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
   },
   close: () => {
     const { saved } = get();
+    resetExhibit();
     resetStudyCamera();
     useLineup.getState().close();
     if (saved) restoreCameraAndCar(saved);
@@ -113,6 +115,11 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
       for (const name of [
         'garage',
         'scene',
+        'exhibit',
+        'look',
+        'focus',
+        'wheel',
+        'exhibitPaint',
         'variant',
         'yaw',
         'pitch',
@@ -131,6 +138,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
   select: (chapter) => {
     const { chapter: last, beforeDetail } = get();
     if (last === chapter) return;
+    resetExhibit();
     resetStudyCamera();
     if (last === 'detail' && beforeDetail) restoreCameraAndCar(beforeDetail);
     if (last === 'lineup') useLineup.getState().close();

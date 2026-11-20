@@ -1,3 +1,4 @@
+import { inStudioDusk } from '../../garageExhibits/state';
 import { useLayoutEffect, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -18,6 +19,7 @@ const photoWallFragment = /* glsl */ `
   uniform sampler2D concrete;
   uniform float wallSurface;
   uniform float roomDim;
+  uniform float studioDusk;
   varying vec3 worldWallPoint;
   varying vec2 wallPlane;
   ${photoProjectionGlsl}
@@ -143,6 +145,9 @@ const photoWallFragment = /* glsl */ `
       wall += vec3(.169,.150,.127)*wash*bottomBounce*panel*relief*grazingRelief;
     }
     wall *= corner ? mix(1.,0.79,roomDim) : mix(1.,0.27,roomDim);
+    float duskWash = exp(-pow((room.x-studioLightBarX+1.6)/2.9,2.))*(1.-smoothstep(.40,3.7,room.y));
+    wall *= mix(vec3(1.),vec3(.79,.60,.51),studioDusk);
+    wall += vec3(.16,.063,.022)*duskWash*studioDusk;
     gl_FragColor = vec4(wall,1.);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
@@ -152,9 +157,12 @@ export function StudioRoom() {
   const mobile = useThree((state) => state.size.width < 768);
   const aspect = useThree(({ size }) => (size.height > 0 ? size.width / size.height : 1.6));
   const invalidate = useThree(({ invalidate }) => invalidate);
+  const studioDusk = useMemo(() => ({ value: 0 }), []);
   const roomDim = useMemo(() => ({ value: 0 }), []);
   useFrame((_state, dt) => {
-    const { active, study } = useGarageStudio.getState();
+    const { active, study, chapter } = useGarageStudio.getState();
+    const dusk = inStudioDusk({ active, chapter });
+    studioDusk.value += (Number(dusk) - studioDusk.value) * Math.min(dt * 12, 1);
     const dim = inBlackout()
       ? 1
       : active && (study === 'shadows' || study === 'reflection')
@@ -181,11 +189,12 @@ export function StudioRoom() {
             concrete: { value: concrete },
             wallSurface: { value: wallSurface },
             roomDim,
+            studioDusk,
           },
         }),
     );
     return walls;
-  }, [room, roomDim]);
+  }, [room, roomDim, studioDusk]);
 
   useLayoutEffect(
     () => () => {

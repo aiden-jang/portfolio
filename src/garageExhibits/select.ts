@@ -1,0 +1,76 @@
+import { resetStudyCamera } from '../garageStudy/state';
+import { activeOrbit, repaintStudio, selectPose, useGarageStudio } from '../garageStudio/state';
+import { parseScenePaint } from '../paint';
+import { useAppStore } from '../store';
+import { exhibitNames, resetExhibit, useGarageExhibit, type Exhibit } from './state';
+
+export function selectExhibit(exhibit: Exhibit) {
+  const garage = useGarageStudio.getState();
+  if (exhibit === 'free') {
+    garage.close();
+    garage.open();
+    repaintStudio();
+    return;
+  }
+
+  const pair = exhibit === 'porsche';
+  const lighting = exhibit === 'dusk';
+  garage.select(pair ? 'lineup' : lighting ? 'light' : 'walk');
+  if (!pair) garage.selectCar(lighting ? 0 : exhibit === 'cockpit' ? 10 : 20);
+
+  resetStudyCamera();
+  resetExhibit();
+  useGarageExhibit.setState({ exhibit });
+  useGarageStudio.setState({ proposed: !pair && !lighting });
+  activeOrbit().zoom = 1;
+  selectPose(
+    pair ? Math.PI / 2 : exhibit === 'cockpit' ? 2.49 : exhibit === 'brakes' ? 0.71 : 0.82,
+  );
+}
+
+export function openLinkedExhibit() {
+  const params = new URLSearchParams(location.search);
+  const exhibit = params.get('exhibit');
+  if (!exhibit || exhibit === 'free' || !Object.hasOwn(exhibitNames, exhibit)) return;
+
+  const garage = useGarageStudio.getState();
+  const position = { ...activeOrbit(garage) };
+  selectExhibit(exhibit as Exhibit);
+  if (params.has('scene')) Object.assign(activeOrbit(), position);
+  const look = params.get('look');
+  const focus = Number(params.get('focus') ?? -1);
+  const lighting = look === 'studio' || look === 'blackout' ? look : 'dusk';
+  useGarageExhibit.setState({
+    after: look !== 'before',
+    lighting,
+    focus: focus === 0 || focus === 1 ? focus : -1,
+    wheelClose: params.get('wheel') === 'close',
+  });
+  if (exhibit === 'dusk') useGarageStudio.setState({ proposed: lighting === 'blackout' });
+  if (exhibit === 'porsche')
+    useGarageStudio.setState({ proposed: garage.chapter === 'lineup' && garage.proposed });
+  const paint = parseScenePaint(params.get('exhibitPaint'));
+  if (exhibit === 'dusk' && paint) useAppStore.setState({ activeBodyColor: paint });
+  repaintStudio();
+}
+
+export function exhibitLink(base: string) {
+  const { exhibit, lighting, after, focus, wheelClose } = useGarageExhibit.getState();
+  if (exhibit === 'free') return base;
+
+  const url = new URL(base);
+  url.searchParams.set('exhibit', exhibit);
+  url.searchParams.set('look', exhibit === 'dusk' ? lighting : after ? 'after' : 'before');
+  if (exhibit === 'porsche' && focus >= 0) url.searchParams.set('focus', String(focus));
+  if (exhibit === 'wear' && wheelClose) url.searchParams.set('wheel', 'close');
+  if (exhibit === 'dusk')
+    url.searchParams.set('exhibitPaint', useAppStore.getState().activeBodyColor);
+
+  const saved = useGarageStudio.getState().saved;
+  if (saved) {
+    url.searchParams.set('car', String(saved.carIndex));
+    url.searchParams.set('paint', saved.activeBodyColor);
+    url.searchParams.set('light', saved.themeName);
+  }
+  return url.toString();
+}

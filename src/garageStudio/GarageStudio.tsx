@@ -1,3 +1,7 @@
+import { StudioChapters } from './StudioChapters';
+import { exhibitNames, resetExhibit, useGarageExhibit } from '../garageExhibits/state';
+import { exhibitLink } from '../garageExhibits/select';
+import { StudioPhotoControls } from './StudioPhotoControls';
 import { StudyControls, StudioInvitation } from '../garageStudy/StudyControls';
 import { useGarageStudy } from '../garageStudy/state';
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
@@ -8,7 +12,6 @@ import { CarBrowser } from '../ui/CarBrowser';
 import { useDialogFocus } from '../ui/useDialogFocus';
 import { usePageScrollLock } from '../ui/usePageScrollLock';
 import { copyText } from '../browserSharing';
-import { downloadPhoto } from '../ui/photo/postcard';
 import { useLineup } from '../lineup/state';
 import {
   chapters,
@@ -46,6 +49,8 @@ export function GarageStudio() {
   const [busy, setBusy] = useState(false);
   const [image, setImage] = useState<{ src: string; file: File } | null>(null);
   const [link, setLink] = useState('');
+  const exhibit = useGarageExhibit((state) => state.exhibit);
+  const porsche = useGarageExhibit((state) => state.exhibit === 'porsche' && state.after);
   const pair = chapter === 'lineup';
   const car = CARS[id];
   const waiting = pair ? pairReady !== 'ready' : loading || !!error;
@@ -114,7 +119,7 @@ export function GarageStudio() {
   }
 
   async function share() {
-    const url = shotUrl();
+    const url = exhibitLink(shotUrl());
     const version = ++shareVersion.current;
     setLink(url);
     const result = await copyText(url);
@@ -143,8 +148,18 @@ export function GarageStudio() {
     }
   }
 
-  const title = photo ? 'Photo mode' : study ? 'Behind the render' : chapters[chapter];
-  const subtitle = pair ? 'Ferrari F40 & Red Bull RB16B' : car.name;
+  const title = photo
+    ? 'Photo mode'
+    : study
+      ? 'Behind the render'
+      : exhibit === 'free'
+        ? chapters[chapter]
+        : exhibitNames[exhibit];
+  const subtitle = pair
+    ? porsche
+      ? '911 Turbo (930) & 911 RWB'
+      : 'Ferrari F40 & Red Bull RB16B'
+    : car.name;
   return (
     <section
       ref={dialog}
@@ -154,6 +169,7 @@ export function GarageStudio() {
       role="dialog"
       data-live-scene
       data-chapter={chapter}
+      data-exhibit={exhibit}
       data-variant={proposed ? 'proposed' : 'current'}
       data-ready={!waiting}
       data-dragging={dragging}
@@ -205,46 +221,20 @@ export function GarageStudio() {
       <footer className="garage-studio-footer">
         {!photo && !study && <StudioInvitation dragging={dragging} />}
         <div className="garage-studio-dock">
-          <div className="garage-studio-row studio-chapters" aria-label="Garage views" role="group">
-            {(Object.keys(chapters) as Chapter[]).map((name) => (
-              <button
-                key={name}
-                aria-pressed={chapter === name}
-                onClick={() => selectChapter(name)}
-              >
-                {chapters[name]}
-              </button>
-            ))}
-          </div>
+          <StudioChapters chapter={chapter} onSelect={selectChapter} />
 
           {!photo && !study && <StudioViews waiting={waiting} />}
 
           {photo && (
-            <div className="garage-studio-row" aria-label="Photo controls" role="group">
-              {(['portrait', 'landscape'] as const).map((shape) => (
-                <button
-                  key={shape}
-                  aria-pressed={photo === shape}
-                  disabled={busy}
-                  onClick={() => {
-                    useGarageStudio.setState({ photo: shape });
-                    setImage(null);
-                    repaintStudio();
-                  }}
-                >
-                  {shape === 'portrait' ? 'Portrait 4:5' : 'Landscape 16:9'}
-                </button>
-              ))}
-              <button
-                className="studio-strong"
-                disabled={busy || waiting}
-                onClick={() => (image ? downloadPhoto(image.file) : void takePhoto())}
-              >
-                {image ? 'Save photo' : busy ? 'Capturing…' : 'Capture'}
-              </button>
-              {image && <button onClick={() => setImage(null)}>Retake</button>}
-              <button onClick={leaveTool}>Done</button>
-            </div>
+            <StudioPhotoControls
+              photo={photo}
+              busy={busy}
+              waiting={waiting}
+              file={image?.file}
+              onRetake={() => setImage(null)}
+              onCapture={takePhoto}
+              onDone={leaveTool}
+            />
           )}
 
           {study && <StudioStudy study={study} onSelect={setStudy} onDone={leaveTool} />}
@@ -284,6 +274,7 @@ export function GarageStudio() {
         <CarBrowser
           onChoose={(next) => {
             if (chapter === 'detail' && !supportsDetail(next)) selectChapter('walk');
+            resetExhibit();
             selectCar(next);
             repaintStudio();
           }}

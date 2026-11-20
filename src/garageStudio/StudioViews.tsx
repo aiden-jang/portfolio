@@ -1,3 +1,4 @@
+import { useGarageExhibit } from '../garageExhibits/state';
 import { resetStudyCamera, useGarageStudy } from '../garageStudy/state';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
@@ -22,6 +23,10 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
   const { chapter, proposed, guides, selectCar } = useGarageStudio();
   const id = useAppStore((s) => s.carIndex);
   const car = CARS[id];
+  const { exhibit, after } = useGarageExhibit();
+  const porsche = exhibit === 'porsche' && after;
+  const cockpit = chapter === 'walk' && exhibit === 'cockpit' && after && id === 10;
+  const wheel = chapter === 'walk' && exhibit === 'brakes' && id === 20;
   const pair = chapter === 'lineup';
   const drsOpen = useAppStore((s) => s.drsOpen);
   const raised = useAppStore((s) => s.headlightsRaised);
@@ -52,17 +57,19 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
 
   return (
     <>
-      <div className="garage-studio-row studio-compare" aria-label="View options" role="group">
-        {choices[chapter].map((name, index) => (
-          <button
-            key={name}
-            aria-pressed={proposed === Boolean(index)}
-            onClick={() => switchLook(Boolean(index))}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
+      {!cockpit && !wheel && !(chapter === 'light' && exhibit === 'dusk') && (
+        <div className="garage-studio-row studio-compare" aria-label="View options" role="group">
+          {choices[chapter].map((name, index) => (
+            <button
+              key={name}
+              aria-pressed={proposed === Boolean(index)}
+              onClick={() => switchLook(Boolean(index))}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+      )}
       {chapter === 'detail' ? (
         <div
           className="garage-studio-row studio-parts"
@@ -103,7 +110,9 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
         </div>
       ) : pair ? (
         <div className="garage-studio-row">
-          <span className="studio-scale">4.36 m / ≈ 5.64 m</span>
+          <span className="studio-scale">
+            {porsche ? 'Matched wheelbases' : '4.36 m / ≈ 5.64 m'}
+          </span>
           {proposed && (
             <button
               aria-pressed={guides}
@@ -118,22 +127,24 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
         </div>
       ) : (
         <div className="garage-studio-row studio-angles" aria-label="Camera angles" role="group">
-          {[
-            ['Front', 0.65],
-            ['Side', Math.PI / 2],
-            ['Rear', 2.61],
-          ].map(([name, yaw]) => (
-            <button
-              key={name}
-              disabled={waiting}
-              onClick={() => {
-                resetStudyCamera();
-                selectPose(yaw as number);
-              }}
-            >
-              {name}
-            </button>
-          ))}
+          {!cockpit &&
+            !wheel &&
+            [
+              ['Front', 0.65],
+              ['Side', Math.PI / 2],
+              ['Rear', 2.61],
+            ].map(([name, yaw]) => (
+              <button
+                key={name}
+                disabled={waiting}
+                onClick={() => {
+                  resetStudyCamera();
+                  selectPose(yaw as number);
+                }}
+              >
+                {name}
+              </button>
+            ))}
           {chapter === 'light' && !car.fixedLivery && (
             <button onClick={() => selectPaint(activePaint === '#3f464e' ? 'original' : '#3f464e')}>
               {activePaint === '#3f464e' ? 'Original paint' : 'Graphite paint'}

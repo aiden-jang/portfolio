@@ -27,6 +27,7 @@ export function useSceneUrl() {
     scenePaintRef.current = parseScenePaint(params.get('paint'));
     if (scenePaintRef.current && !CARS[useAppStore.getState().carIndex].fixedLivery)
       useAppStore.setState({ activeBodyColor: scenePaintRef.current });
+    if (params.has('exhibit')) scenePaintRef.current = null;
     setSceneReady(true);
   }, [setCarIndex, setThemeName]);
 

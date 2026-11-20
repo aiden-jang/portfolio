@@ -1,3 +1,4 @@
+import { inStudioDusk } from '../garageExhibits/state';
 import { inBlackout, useGarageStudio } from '../garageStudio/state';
 import { paintFinish } from '../paint';
 import { useFrame, useThree } from '@react-three/fiber';
@@ -94,6 +95,8 @@ export function Floor({ studio, lineup }: { studio: boolean; lineup?: LineupFoot
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
     if (studio) {
       const settle = Math.min(1, dt * 10);
+      const dusk = inStudioDusk(preview);
+      uniforms.studioDusk.value += (Number(dusk) - uniforms.studioDusk.value) * settle;
       uniforms.garageStudioDim.value +=
         (Number(inBlackout()) - uniforms.garageStudioDim.value) * settle;
       uniforms.garageStudioLamps.value +=

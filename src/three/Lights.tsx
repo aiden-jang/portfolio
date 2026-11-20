@@ -1,3 +1,4 @@
+import { inStudioDusk, useGarageExhibit } from '../garageExhibits/state';
 import { useGarageStudy } from '../garageStudy/state';
 import { motionState } from './studioEntrance';
 import { useFrame, useThree } from '@react-three/fiber';
@@ -36,6 +37,8 @@ function computeSunPosition(date: Date) {
 export function Lights() {
   const { gl, scene } = useThree();
   const studioMap = useRef<THREE.WebGLRenderTarget | null>(null);
+  const duskMap = useRef<THREE.WebGLRenderTarget | null>(null);
+  const duskMix = useRef(0);
   const opticsMap = useRef<THREE.WebGLRenderTarget | null>(null);
   const blackoutMap = useRef<THREE.WebGLRenderTarget | null>(null);
   const dim = useRef(0);
@@ -58,6 +61,8 @@ export function Lights() {
       environment.dispose();
       studioMap.current?.dispose();
       studioMap.current = null;
+      duskMap.current?.dispose();
+      duskMap.current = null;
       opticsMap.current?.dispose();
       opticsMap.current = null;
       blackoutMap.current?.dispose();
@@ -69,6 +74,7 @@ export function Lights() {
   const key = useRef<THREE.DirectionalLight>(null!);
   const fill = useRef<THREE.DirectionalLight>(null!);
   const rim = useRef<THREE.DirectionalLight>(null!);
+  const cabin = useRef<THREE.PointLight>(null!);
   const studioWeight = useRef(openingStudioWeight());
 
   // Mutated in place each frame, so it deliberately holds no React state.
@@ -79,6 +85,28 @@ export function Lights() {
     const lineup = useLineup.getState().active;
     const preview = useGarageStudio.getState();
     const dark = inBlackout();
+    const exhibit = useGarageExhibit.getState();
+    const dusk = inStudioDusk(preview);
+    duskMix.current += (Number(dusk) - duskMix.current) * Math.min(dt * 11, 1);
+    if (dusk && !duskMap.current) {
+      const generator = new THREE.PMREMGenerator(gl);
+      duskMap.current = createStudioEnvironment(generator, false, false, true);
+      generator.dispose();
+    }
+    const cabinTarget =
+      preview.active &&
+      preview.chapter === 'walk' &&
+      state.carIndex === 10 &&
+      exhibit.exhibit === 'cockpit' &&
+      exhibit.after
+        ? 2.3
+        : 0;
+    cabin.current.intensity = smoothTowards(
+      cabin.current.intensity,
+      cabinTarget,
+      Math.min(1, dt * 8),
+    );
+    cabin.current.visible = cabin.current.intensity > 0.002;
     const studio = lineup || preview.active || isOpeningStudio(state);
     if (dark && !blackoutMap.current) {
       const generator = new THREE.PMREMGenerator(gl);
@@ -103,11 +131,13 @@ export function Lights() {
       generator.dispose();
     }
     scene.environment = studio
-      ? ((dark
-          ? blackoutMap.current?.texture
-          : optics
-            ? opticsMap.current?.texture
-            : studioMap.current?.texture) ?? null)
+      ? ((dusk
+          ? duskMap.current?.texture
+          : dark
+            ? blackoutMap.current?.texture
+            : optics
+              ? opticsMap.current?.texture
+              : studioMap.current?.texture) ?? null)
       : defaultMap.current;
     const lighting = studio ? 'studio' : state.themeName === 'studio' ? 'dusk' : state.themeName;
     const target = THEMES[lighting];
@@ -184,6 +214,17 @@ export function Lights() {
     if (studio) rim.current.position.set(-4.25, 3.5, 6.8);
     else rim.current.position.set(-3, 4.5, -6);
     rim.current.intensity = c.rim.intensity * (1 - 0.08 * weight) * (0.7 + 0.3 * progress);
+    if (duskMix.current > 0.002) {
+      const d = duskMix.current;
+      key.current.position.set(5.6, 1.83, 3.42);
+      key.current.color.setRGB(1, 1 - 0.25 * d, 1 - 0.55 * d);
+      key.current.intensity += d * 0.68;
+      fill.current.intensity *= 1 - 0.48 * d;
+      ambient.current.intensity *= 1 - 0.53 * d;
+      hemi.current.intensity *= 1 - 0.39 * d;
+      rim.current.color.setRGB(1, 1 - 0.17 * d, 1 - 0.4 * d);
+      rim.current.intensity *= 1 - 0.13 * d;
+    }
     const spec = CARS[state.carIndex];
     const darkPaint = state.activeBodyColor === '#3f464e' || /(?:gtr|gt-r|e30)/.test(spec.file);
     const brightLivery = /(?:corvette|gt3-rs|296-gt3)/.test(spec.file);
@@ -204,6 +245,15 @@ export function Lights() {
   const init = current.current;
   return (
     <>
+      <pointLight
+        ref={cabin}
+        visible={false}
+        color="#ffe3c4"
+        intensity={0}
+        distance={3.05}
+        decay={2}
+        position={[0.25, 1.72, -0.12]}
+      />
       <ambientLight ref={ambient} color={init.ambient.color} intensity={init.ambient.intensity} />
       <hemisphereLight
         ref={hemi}

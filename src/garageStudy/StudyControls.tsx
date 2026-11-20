@@ -1,3 +1,5 @@
+import { useGarageExhibit } from '../garageExhibits/state';
+import { ExhibitControls, ExhibitPicker } from '../garageExhibits/Controls';
 import { useAppStore } from '../store';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { repaintStudio, selectPose, useGarageStudio } from '../garageStudio/state';
@@ -19,6 +21,7 @@ export function StudyControls({ waiting }: { waiting: boolean }) {
   const { refined, camera, playing } = useGarageStudy();
   const pair = chapter === 'lineup';
   const reduced = prefersReducedMotion();
+  const hasExhibit = useGarageExhibit((state) => state.exhibit !== 'free');
   function choose(view: StudyCamera) {
     const next = camera === view ? 'orbit' : view;
     useGarageStudy.setState({ camera: next, playing: false });
@@ -42,64 +45,75 @@ export function StudyControls({ waiting }: { waiting: boolean }) {
     repaintStudio();
   }
   return (
-    <div className="garage-study" aria-label="Studio finish and camera" role="group">
-      <div className="garage-study-finish" aria-label="Compare finishes" role="group">
-        {(
-          [
-            ['Current', false],
-            ['Refined', true],
-          ] as const
-        ).map(([label, value]) => (
-          <button
-            type="button"
-            key={label}
-            aria-pressed={refined === value}
-            onClick={() => {
-              useGarageStudy.setState({ refined: value });
-              repaintStudio();
-            }}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      <div className="garage-study-camera" role="group" aria-label="Studio cameras">
-        {chapter === 'walk' && (
-          <button
-            type="button"
-            disabled={waiting}
-            aria-pressed={camera === 'profile'}
-            onClick={() => choose('profile')}
-          >
-            Long lens
-          </button>
-        )}
-        {chapter === 'walk' && car === 0 && (
-          <button
-            type="button"
-            disabled={waiting}
-            aria-pressed={camera === 'deck'}
-            onClick={() => choose('deck')}
-          >
-            Rear deck
-          </button>
-        )}
-        {pair && (
-          <button
-            type="button"
-            disabled={waiting}
-            aria-pressed={reduced ? camera === 'glide' : playing}
-            onClick={glide}
-          >
-            {reduced ? 'Glide view' : playing ? 'Pause glide' : 'Play glide'}
-          </button>
-        )}
-        {pair && camera === 'glide' && (
-          <button type="button" onClick={() => choose('glide')}>
-            Free orbit
-          </button>
-        )}
-      </div>
+    <div
+      className={hasExhibit ? 'garage-exhibit' : 'garage-study'}
+      aria-label="Studio cameras and exhibits"
+      role="group"
+    >
+      <ExhibitPicker />
+      {hasExhibit ? (
+        <ExhibitControls waiting={waiting} />
+      ) : (
+        <>
+          <div className="garage-study-finish" aria-label="Compare finishes" role="group">
+            {(
+              [
+                ['Current', false],
+                ['Refined', true],
+              ] as const
+            ).map(([label, value]) => (
+              <button
+                type="button"
+                key={label}
+                aria-pressed={refined === value}
+                onClick={() => {
+                  useGarageStudy.setState({ refined: value });
+                  repaintStudio();
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="garage-study-camera" role="group" aria-label="Studio cameras">
+            {chapter === 'walk' && (
+              <button
+                type="button"
+                disabled={waiting}
+                aria-pressed={camera === 'profile'}
+                onClick={() => choose('profile')}
+              >
+                Long lens
+              </button>
+            )}
+            {chapter === 'walk' && car === 0 && (
+              <button
+                type="button"
+                disabled={waiting}
+                aria-pressed={camera === 'deck'}
+                onClick={() => choose('deck')}
+              >
+                Rear deck
+              </button>
+            )}
+            {pair && (
+              <button
+                type="button"
+                disabled={waiting}
+                aria-pressed={reduced ? camera === 'glide' : playing}
+                onClick={glide}
+              >
+                {reduced ? 'Glide view' : playing ? 'Pause glide' : 'Play glide'}
+              </button>
+            )}
+            {pair && camera === 'glide' && (
+              <button type="button" onClick={() => choose('glide')}>
+                Free orbit
+              </button>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { pairFrame } from '../garageExhibits/geometry';
+import { useGarageExhibit } from '../garageExhibits/state';
 import { useGarageStudy } from '../garageStudy/state';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
@@ -13,6 +15,9 @@ type Models = Awaited<ReturnType<typeof loadLineup>>;
 
 export function LineupScene() {
   const preview = useGarageStudio((state) => state.active);
+  const porsche = useGarageExhibit(
+    (state) => preview && state.exhibit === 'porsche' && state.after,
+  );
   const refined = useGarageStudy((state) => state.refined);
   const guides = useGarageStudio((state) => state.active && state.proposed && state.guides);
   const attempt = useLineup((state) => state.attempt);
@@ -23,13 +28,21 @@ export function LineupScene() {
   useEffect(() => {
     const controller = new AbortController();
     let loaded: Models | undefined;
-    void loadLineup(controller.signal).then(
+    setModels(null);
+    pairFrame.bounds.makeEmpty();
+    pairFrame.cars = [];
+    useLineup.setState({ status: 'loading' });
+    void loadLineup(controller.signal, porsche).then(
       (result) => {
         if (controller.signal.aborted) {
           result.dispose();
           return;
         }
         loaded = result;
+        if (porsche) {
+          pairFrame.cars = result.cars.map(({ bounds }) => bounds);
+          pairFrame.bounds.copy(pairFrame.cars[0]).union(pairFrame.cars[1]);
+        }
         setModels(result);
         invalidate();
       },
@@ -41,10 +54,10 @@ export function LineupScene() {
       controller.abort();
       loaded?.dispose();
     };
-  }, [attempt, invalidate]);
+  }, [attempt, invalidate, porsche]);
 
   useEffect(() => {
-    models?.tuneFerrari(true, getStudioProjection(mobile), preview && refined);
+    models?.tuneFerrari?.(true, getStudioProjection(mobile), preview && refined);
     models?.tuneRedBull?.(preview && refined);
     invalidate();
   }, [models, mobile, preview, refined, invalidate]);
