@@ -15,7 +15,7 @@ export function StudioLightControl({ waiting }: { waiting: boolean }) {
       value={look ?? (blackout ? 'blackout' : 'studio')}
       onChange={(event) => {
         const next = event.target.value as Lighting;
-        stopOrbitMotion(activeOrbit());
+        stopOrbitMotion(activeOrbit(), 'requested');
         useGarageStudy.setState({ playing: false });
         stageStudioCut(() => {
           useGarageStudy.setState({ look: next });

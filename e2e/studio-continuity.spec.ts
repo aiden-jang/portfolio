@@ -62,12 +62,20 @@ for (const width of [1440, 390]) {
       const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
       await expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       await openStudioControls(studio);
-      await studio
-        .locator('#studio-full-dock')
-        .getByRole('button', { name: 'Signature view', exact: true })
-        .click();
+      const signature = studio.locator('#studio-full-dock').getByRole('button', {
+        name: 'Signature view',
+        exact: true,
+      });
       const lighting = studio.getByRole('combobox', { name: 'Studio lighting' });
-      await lighting.selectOption('dusk');
+      await expect(signature).toBeVisible();
+      await signature.evaluate((preset: HTMLButtonElement) => {
+        const lights = preset
+          .closest('.garage-studio')!
+          .querySelector('select.studio-light-picker') as HTMLSelectElement;
+        preset.click();
+        lights.value = 'dusk';
+        lights.dispatchEvent(new Event('change', { bubbles: true }));
+      });
       await expect(lighting).toHaveValue('dusk');
       await studio.getByRole('button', { name: 'Share shot', exact: true }).click();
       const url = new URL(

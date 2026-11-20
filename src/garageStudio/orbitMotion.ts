@@ -7,10 +7,10 @@ const DECAY = 22;
 const dragged = new WeakSet<Orbit>();
 const motion = new WeakMap<Orbit, { velocity: number; replayAt?: number; origin?: number }>();
 
-export function stopOrbitMotion(orbit: Orbit) {
+export function stopOrbitMotion(orbit: Orbit, pose: 'shown' | 'requested' = 'shown') {
   dragged.delete(orbit);
   motion.delete(orbit);
-  orbit.yaw = orbit.shownYaw;
+  if (pose === 'shown') orbit.yaw = orbit.shownYaw;
 }
 
 export function startOrbitDrag(orbit: Orbit) {

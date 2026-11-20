@@ -16,13 +16,19 @@ body:has(.garage-studio .studio-matched-status) .car-loading-progress {
   visibility: hidden;
 }
 @media (max-width: 767px) {
-  .studio-scene-status.studio-matched-status {
+  .studio-scene-status.studio-matched-status:has(picture) {
+    bottom: clamp(205px, 28vh, 270px);
+  }
+  .studio-scene-status.studio-matched-status:not(:has(picture)) {
     top: clamp(154px, 22vh, 188px);
     bottom: auto;
   }
 }
 @media (max-height: 550px) and (orientation: landscape) {
-  .studio-scene-status.studio-matched-status {
+  .studio-scene-status.studio-matched-status:has(picture) {
+    bottom: 144px;
+  }
+  .studio-scene-status.studio-matched-status:not(:has(picture)) {
     top: 150px;
     bottom: auto;
   }
