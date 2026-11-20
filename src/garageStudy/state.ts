@@ -1,11 +1,13 @@
+import type { Lighting } from '../garageExhibits/state';
 import { create } from 'zustand';
 
-export type StudyCamera = 'orbit' | 'profile' | 'deck' | 'glide';
+export type StudyCamera = 'orbit' | 'profile' | 'deck' | 'glide' | 'wheel';
 
 export const useGarageStudy = create(() => ({
   refined: true,
   camera: 'orbit' as StudyCamera,
   playing: false,
+  look: null as Lighting | null,
 }));
 
 export const track = {

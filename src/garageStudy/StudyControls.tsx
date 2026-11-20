@@ -1,3 +1,5 @@
+import { StudioLightControl } from './StudioLightControl';
+import { showSignature } from './signature';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { ExhibitControls, ExhibitPicker } from '../garageExhibits/Controls';
 import { useAppStore } from '../store';
@@ -75,7 +77,13 @@ export function StudyControls({ waiting }: { waiting: boolean }) {
               </button>
             ))}
           </div>
+          <StudioLightControl waiting={waiting} />
           <div className="garage-study-camera" role="group" aria-label="Studio cameras">
+            {chapter === 'walk' && (
+              <button type="button" disabled={waiting} onClick={() => showSignature(car)}>
+                Signature view
+              </button>
+            )}
             {chapter === 'walk' && (
               <button
                 type="button"

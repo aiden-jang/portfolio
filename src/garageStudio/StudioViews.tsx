@@ -1,3 +1,4 @@
+import { matchedRearYaw } from './matchedSwap';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { resetStudyCamera, useGarageStudy } from '../garageStudy/state';
 import { CARS } from '../config';
@@ -39,6 +40,10 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
   const partReady = popups ? hasHeadlights : hasDRS;
   function switchLook(value: boolean) {
     if (pair) resetStudyCamera();
+    if (chapter === 'light') {
+      useGarageStudy.setState({ look: null });
+      repaintStudio();
+    }
     if (aligned && !value) useGarageExhibit.setState({ aligned: false });
     if (value === proposed) return;
     if (pair && !value) selectPose(window.innerWidth < 768 ? -0.58 : 0.72);
@@ -140,7 +145,11 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
                 disabled={waiting}
                 onClick={() => {
                   resetStudyCamera();
-                  selectPose(yaw as number);
+                  if (name === 'Rear' && chapter === 'walk' && exhibit === 'free') {
+                    useGarageStudy.setState({ camera: 'profile' });
+                    activeOrbit().zoom = 1;
+                    selectPose(matchedRearYaw);
+                  } else selectPose(yaw as number);
                 }}
               >
                 {name}

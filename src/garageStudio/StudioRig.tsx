@@ -14,6 +14,7 @@ import { KEYFRAMES, CARS } from '../config';
 import { activeOrbit, photoRatio, useGarageStudio } from './state';
 
 const pairBounds = new Box3(new Vector3(-2.75, 0, -4.18), new Vector3(2.53, 1.14, 3.57));
+const matchedBounds = new Box3(new Vector3(-1.19, 0, -2.3), new Vector3(1.19, 1.42, 2.3));
 const fallback = new Box3(new Vector3(-1, 0, -2.25), new Vector3(1, 1.2, 2.25));
 const modelBoxes = new WeakMap<Object3D, Box3>();
 const parts = new WeakMap<Object3D, Box3>();
@@ -55,7 +56,9 @@ export function StudioRig() {
       ? exhibit === 'porsche' && after && !pairFrame.bounds.isEmpty()
         ? pairFrame.bounds
         : pairBounds
-      : localBounds(model);
+      : chapter === 'walk' && exhibit === 'free' && !deck
+        ? matchedBounds
+        : localBounds(model);
     const focusBounds = deck ? deckBounds : detailPart ? detailBounds(model, id, bounds) : bounds;
     const at = focusBounds.getCenter(center);
     const groundLift = f1 ? (mobile ? 0.78 : 0.7) : mobile ? 0.69 : 0.62;
@@ -154,7 +157,15 @@ export function StudioRig() {
               : mobile
                 ? 8.92
                 : 8.05;
-    const mechanical = frameMechanical(chapter, yaw, pitch, aspect, mobile, short, at);
+    const signatureWheel = chapter === 'walk' && exhibit === 'free' && id === 3 && view === 'wheel';
+    if (signatureWheel) at.set(0.86, 0.36, 1.16);
+    const mechanical = signatureWheel
+      ? {
+          radius: (mobile ? 2.18 : 2.26) * zoom,
+          angle: MathUtils.clamp(0.12 + pitch, 0.03, 0.32),
+          fov: mobile ? 53 : 41,
+        }
+      : frameMechanical(chapter, yaw, pitch, aspect, mobile, short, at);
     const yawOffset = pair && proposed && !mechanical ? (mobile ? 0.47 : 1.03) : 0;
     const aim = feature?.yaw ?? yaw + yawOffset;
     const lens = mechanical?.fov ?? feature?.fov ?? fov;

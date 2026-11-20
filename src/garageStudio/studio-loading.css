@@ -1,0 +1,27 @@
+.studio-scene-status.studio-matched-status {
+  left: var(--edge);
+  top: auto;
+  bottom: clamp(185px, 24vh, 260px);
+  transform: none;
+  max-width: calc(100% - 2 * var(--edge));
+  z-index: 5;
+}
+.studio-matched-status img {
+  display: block;
+  width: clamp(70px, 8vw, 118px);
+  height: auto;
+  border-radius: 4px;
+}
+body:has(.garage-studio .studio-matched-status) .car-loading-progress {
+  visibility: hidden;
+}
+@media (max-width: 767px) {
+  .studio-scene-status.studio-matched-status {
+    bottom: clamp(205px, 28vh, 270px);
+  }
+}
+@media (max-height: 550px) and (orientation: landscape) {
+  .studio-scene-status.studio-matched-status {
+    bottom: 144px;
+  }
+}

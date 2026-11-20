@@ -1,3 +1,5 @@
+import { clearStudioCut } from './studioCut';
+import { useMatchedSwap } from './matchedSwap';
 import { stopOrbitMotion } from './orbitMotion';
 import { resetExhibit } from '../garageExhibits/state';
 import { resetStudyCamera, track, useGarageStudy } from '../garageStudy/state';
@@ -90,7 +92,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
   open: () => {
     if (get().active) return;
     resetStudyCamera();
-    useGarageStudy.setState({ refined: true });
+    useGarageStudy.setState({ refined: true, look: null });
     set({
       active: true,
       chapter: 'walk',
@@ -106,6 +108,9 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
     });
   },
   close: () => {
+    clearStudioCut();
+    useMatchedSwap.setState({ swap: null });
+    useGarageStudy.setState({ look: null });
     const { saved } = get();
     resetExhibit();
     resetStudyCamera();
@@ -118,6 +123,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
         'scene',
         'exhibit',
         'look',
+        'studioLook',
         'focus',
         'wheel',
         'exhibitPaint',
@@ -142,6 +148,9 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
   select: (chapter) => {
     const { chapter: last, beforeDetail } = get();
     if (last === chapter) return;
+    clearStudioCut();
+    useMatchedSwap.setState({ swap: null });
+    useGarageStudy.setState({ look: null });
     resetExhibit();
     resetStudyCamera();
     if (last === 'detail' && beforeDetail) restoreCameraAndCar(beforeDetail);
@@ -189,7 +198,12 @@ export function selectPose(yaw: number) {
 
 export const inBlackout = () => {
   const { active, chapter, proposed, study } = useGarageStudio.getState();
-  return active && chapter === 'light' && proposed && (!study || study === 'finished');
+  const look = useGarageStudy.getState().look;
+  return (
+    active &&
+    (look ? look === 'blackout' : chapter === 'light' && proposed) &&
+    (!study || study === 'finished')
+  );
 };
 
 export function shotUrl() {
@@ -216,6 +230,8 @@ export function shotUrl() {
   );
   const optics = useGarageStudy.getState();
   url.searchParams.set('finish', optics.refined ? 'refined' : 'current');
+  if (optics.look) url.searchParams.set('studioLook', optics.look);
+  else url.searchParams.delete('studioLook');
   if (optics.camera !== 'orbit') url.searchParams.set('camera', optics.camera);
   else url.searchParams.delete('camera');
   if (optics.camera === 'glide') url.searchParams.set('glide', track.position.toFixed(4));
@@ -237,8 +253,15 @@ export function startFromLink(params: URLSearchParams) {
   const camera = params.get('camera');
   const { chapter: view, proposed } = useGarageStudio.getState();
   const car = useAppStore.getState().carIndex;
-  useGarageStudy.setState({ refined: params.get('finish') !== 'current' });
-  if (view === 'walk' && (camera === 'profile' || (car === 0 && camera === 'deck'))) {
+  const look = params.get('studioLook');
+  useGarageStudy.setState({
+    refined: params.get('finish') !== 'current',
+    look: look === 'studio' || look === 'dusk' || look === 'blackout' ? look : null,
+  });
+  if (
+    view === 'walk' &&
+    (camera === 'profile' || (car === 0 && camera === 'deck') || (car === 3 && camera === 'wheel'))
+  ) {
     useGarageStudy.setState({ camera });
   } else if (view === 'lineup' && !proposed && camera === 'glide') {
     const position = Number(params.get('glide'));

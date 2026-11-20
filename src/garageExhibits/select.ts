@@ -1,3 +1,6 @@
+import { clearStudioCut } from '../garageStudio/studioCut';
+import { useMatchedSwap } from '../garageStudio/matchedSwap';
+import { useGarageStudy } from '../garageStudy/state';
 import { isMechanical, selectMechanical } from './mechanical';
 import { resetStudyCamera } from '../garageStudy/state';
 import { activeOrbit, repaintStudio, selectPose, useGarageStudio } from '../garageStudio/state';
@@ -6,6 +9,9 @@ import { useAppStore } from '../store';
 import { exhibitNames, resetExhibit, useGarageExhibit, type Exhibit } from './state';
 
 export function selectExhibit(exhibit: Exhibit) {
+  clearStudioCut();
+  useMatchedSwap.setState({ swap: null });
+  useGarageStudy.setState({ look: null });
   const garage = useGarageStudio.getState();
   if (exhibit === 'free') {
     garage.close();

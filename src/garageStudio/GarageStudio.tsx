@@ -1,6 +1,8 @@
+import { useMatchedCar } from './matchedSwap';
+import { StudioLoading } from './StudioLoading';
 import { isMechanical } from '../garageExhibits/mechanical';
 import { StudioChapters } from './StudioChapters';
-import { exhibitNames, resetExhibit, useGarageExhibit } from '../garageExhibits/state';
+import { exhibitNames, useGarageExhibit } from '../garageExhibits/state';
 import { exhibitLink } from '../garageExhibits/select';
 import { StudioPhotoControls } from './StudioPhotoControls';
 import { StudyControls, StudioInvitation } from '../garageStudy/StudyControls';
@@ -9,7 +11,7 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties } from 're
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 import { ControlIcon } from '../ui/ControlIcon';
-import { CarBrowser } from '../ui/CarBrowser';
+import { StudioCarPicker } from './StudioCarPicker';
 import { useDialogFocus } from '../ui/useDialogFocus';
 import { usePageScrollLock } from '../ui/usePageScrollLock';
 import { copyText } from '../browserSharing';
@@ -20,7 +22,6 @@ import {
   repaintStudio,
   shotUrl,
   useGarageStudio,
-  supportsDetail,
   type Chapter,
   type Study,
 } from './state';
@@ -33,11 +34,11 @@ import './garage-studio.css';
 import '../ui/car-picker.css';
 
 export function GarageStudio() {
-  const { chapter, proposed, photo, study, close, select, selectCar } = useGarageStudio();
+  const { chapter, proposed, photo, study, close, select } = useGarageStudio();
   const id = useAppStore((s) => s.carIndex);
   const loading = useAppStore((s) => s.isCarLoading);
   const error = useAppStore((s) => s.carLoadError);
-  const retryCar = useAppStore((s) => s.retryCar);
+  const swap = useMatchedCar(id, loading, error);
   const pairReady = useLineup((s) => s.status);
   const dialog = useRef<HTMLElement>(null);
   const exit = useRef<HTMLButtonElement>(null);
@@ -54,7 +55,9 @@ export function GarageStudio() {
   const porsche = useGarageExhibit((state) => state.exhibit === 'porsche' && state.after);
   const pair = chapter === 'lineup';
   const car = CARS[id];
-  const waiting = pair ? pairReady !== 'ready' : loading || !!error;
+  const waiting = pair
+    ? pairReady !== 'ready'
+    : loading || !!error || (swap !== null && swap.incoming !== id);
   usePageScrollLock(true);
   useDialogFocus(!picker, dialog, exit);
   const leaveTool = useCallback(() => {
@@ -162,7 +165,7 @@ export function GarageStudio() {
       : porsche
         ? '911 Turbo (930) & 911 RWB'
         : 'Ferrari F40 & Red Bull RB16B'
-    : car.name;
+    : CARS[swap?.outgoing ?? id].name;
   return (
     <section
       ref={dialog}
@@ -210,16 +213,14 @@ export function GarageStudio() {
         </div>
       )}
       {waiting && (
-        <div className="studio-scene-status" role="status">
-          {pair && pairReady === 'failed'
-            ? 'Lineup could not load.'
-            : error || (pair ? 'Bringing both cars into Studio…' : `Loading ${car.name}…`)}
-          {(error || (pairReady === 'failed' && pair)) && (
-            <button type="button" onClick={pair ? useLineup.getState().retry : retryCar}>
-              Retry
-            </button>
-          )}
-        </div>
+        <StudioLoading
+          car={swap?.incoming ?? id}
+          pair={pair}
+          pairFailed={pairReady === 'failed' && pair}
+          error={error}
+          matched={swap !== null}
+          still={swap?.still}
+        />
       )}
       <footer className="garage-studio-footer">
         {!photo && !study && <StudioInvitation dragging={dragging} />}
@@ -244,7 +245,11 @@ export function GarageStudio() {
 
           {!photo && !study && (
             <div className="garage-studio-row studio-tools" aria-label="Garage tools" role="group">
-              <button ref={choose} disabled={pair} onClick={() => setPicker(true)}>
+              <button
+                ref={choose}
+                disabled={pair || (swap !== null && !error)}
+                onClick={() => setPicker(true)}
+              >
                 Choose car
               </button>
               <button
@@ -273,22 +278,7 @@ export function GarageStudio() {
           {link && !photo && !study && <StudioShotLink value={link} onClose={dismissLink} />}
         </div>
       </footer>
-      {picker && (
-        <CarBrowser
-          onChoose={(next) => {
-            if (chapter === 'detail' && !supportsDetail(next)) selectChapter('walk');
-            resetExhibit();
-            selectCar(next);
-            repaintStudio();
-          }}
-          onClose={() => {
-            setPicker(false);
-            requestAnimationFrame(() => choose.current?.focus({ preventScroll: true }));
-            repaintStudio();
-          }}
-          returnFocus={choose.current}
-        />
-      )}
+      {picker && <StudioCarPicker onClose={() => setPicker(false)} returnFocus={choose.current} />}
     </section>
   );
 }

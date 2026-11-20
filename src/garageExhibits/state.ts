@@ -1,3 +1,4 @@
+import { useGarageStudy } from '../garageStudy/state';
 import { create } from 'zustand';
 
 export type Exhibit =
@@ -33,5 +34,11 @@ export const resetExhibit = () => useGarageExhibit.setState(initial);
 
 export function inStudioDusk(studio: { active: boolean; chapter: string }) {
   const { exhibit, lighting } = useGarageExhibit.getState();
-  return studio.active && studio.chapter === 'light' && exhibit === 'dusk' && lighting === 'dusk';
+  const look = useGarageStudy.getState().look;
+  return (
+    studio.active &&
+    (look
+      ? look === 'dusk'
+      : studio.chapter === 'light' && exhibit === 'dusk' && lighting === 'dusk')
+  );
 }

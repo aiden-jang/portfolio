@@ -1,3 +1,4 @@
+import { paintStudioCut } from '../garageStudio/studioCut';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
@@ -96,7 +97,7 @@ export const Effects = memo(function Effects() {
   useFrame((state, dt) => {
     const graph = pipeline.current;
     if (!graph) return;
-    const { themeName, isCarLoading, refs } = useAppStore.getState();
+    const { themeName, isCarLoading, carLoadError, refs } = useAppStore.getState();
     const target =
       THEMES[
         useLineup.getState().active || useGarageStudio.getState().active ? 'studio' : themeName
@@ -115,6 +116,7 @@ export const Effects = memo(function Effects() {
       gl.autoClear = autoClear;
     }
     blendCarSwap(gl.domElement);
+    if (studioActive) paintStudioCut(gl.domElement, isCarLoading, !!carLoadError);
     if (refs.onOpeningFrame && !isCarLoading && refs.carModel) {
       const studio = isOpeningStudio(useAppStore.getState());
       if (!studio || studioSurfacesReady(state.size.width < 768)) refs.onOpeningFrame();
