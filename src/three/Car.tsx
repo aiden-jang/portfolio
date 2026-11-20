@@ -13,6 +13,7 @@ import { canPrefetchModels } from './modelPrefetch';
 import { loadCarModel } from './loadCarModel';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
+import { useLineup } from '../lineup/state';
 import { useRenderFinish } from './useRenderFinish';
 import {
   autoFitToLength,
@@ -213,6 +214,7 @@ export function Car() {
 
   useFrame((state, dt) => {
     const app = useAppStore.getState();
+    group.visible = !useLineup.getState().active;
     const studio = isOpeningStudio(app);
     studioFinish.current?.(
       studio,

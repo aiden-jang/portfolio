@@ -15,7 +15,10 @@ const FLOOR_RADIUS = 14;
 const REFLECTOR_RESOLUTION = 1024;
 const TRANSITION_RATE = 2.5;
 
-export function Floor({ studio }: { studio: boolean }) {
+type Footprint = NonNullable<ReturnType<typeof studioCarFootprint>>;
+export type LineupFootprints = readonly [Footprint, Footprint];
+
+export function Floor({ studio, lineup }: { studio: boolean; lineup?: LineupFootprints | null }) {
   const { gl, scene } = useThree();
   const mobile = useThree((state) => studio && state.size.width < 768);
   const studioTint = useMemo(() => new THREE.Color(), []);
@@ -61,11 +64,12 @@ export function Floor({ studio }: { studio: boolean }) {
   useFrame((_state, dt) => {
     const state = useAppStore.getState();
     const { themeName, refs, renderFinish } = state;
-    const target = THEMES[themeName];
+    const inLineup = lineup !== undefined;
+    const target = THEMES[inLineup ? 'studio' : themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
 
     currentExposure.current = smoothTowards(currentExposure.current, target.exposure, k);
-    gl.toneMappingExposure = currentExposure.current * refs.exposureCurrent;
+    gl.toneMappingExposure = currentExposure.current * (inLineup ? 1 : refs.exposureCurrent);
 
     currentBg.current = smoothColorHex(currentBg.current, target.bg, k);
     gl.setClearColor(currentBg.current, 1);
@@ -87,14 +91,24 @@ export function Floor({ studio }: { studio: boolean }) {
     );
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
     if (studio) {
-      const footprint = refs.carModel ? studioCarFootprint(refs.carModel) : null;
+      const footprint = inLineup ? lineup?.[0] : refs.carModel && studioCarFootprint(refs.carModel);
+      const second = lineup?.[1];
+      uniforms.studioSecondReady.value = second ? 1 : 0;
+      if (second) {
+        uniforms.studioSecondChassis.value.copy(second.chassis);
+        second.tires.forEach((tire, index) => uniforms.studioSecondTouch.value[index].copy(tire));
+      }
       if (footprint) {
         uniforms.studioChassis.value.copy(footprint.chassis);
         footprint.tires.forEach((tire, index) => uniforms.studioWheelTouch.value[index].copy(tire));
       }
       uniforms.studioCarReady.value = footprint ? 1 : 0;
       if (!state.isCarLoading) {
-        studioTint.set(paintFinish(CARS[state.carIndex], state.activeBodyColor).hex);
+        studioTint.set(
+          inLineup
+            ? CARS[0].defaultPaint.hex
+            : paintFinish(CARS[state.carIndex], state.activeBodyColor).hex,
+        );
         uniforms.studioPaint.value.lerp(studioTint, Math.min(1, dt * 12));
       }
     }
@@ -103,7 +117,11 @@ export function Floor({ studio }: { studio: boolean }) {
       openingStudioWeight(),
       Math.min(1, dt * 5),
     );
-    uniforms.reflectionStrength.value = renderFinish === 'clay' ? 0 : refs.floorReflection;
+    uniforms.reflectionStrength.value = inLineup
+      ? 1
+      : renderFinish === 'clay'
+        ? 0
+        : refs.floorReflection;
     (uniforms.color.value as THREE.Color).setHex(currentReflectorColor.current);
   });
 

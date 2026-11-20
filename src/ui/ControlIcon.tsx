@@ -9,6 +9,8 @@ const paths = {
   close: 'm6 6 12 12M18 6 6 18',
   share: 'M12 16V3m-4 4 4-4 4 4M6 11H4v10h16V11h-2',
   reset: 'M4 10a8 8 0 1 1 1 8M4 4v6h6',
+  play: 'm9 6 10 6-10 6z',
+  pause: 'M9 6v12m6-12v12',
   wing: 'M4 9h16M5 15h14M6 9l2 6m10-6-2 6',
   headlights: 'M13 7a5 5 0 0 0 0 10V7Zm4 1h4m-4 4h4m-4 4h4',
 };

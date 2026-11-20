@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import type { Object3D } from 'three';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { useAppStore } from '../store';
+import { useLineup } from '../lineup/state';
 import { usePhotoMode } from '../ui/photo/state';
 
 type Still = { canvas: HTMLCanvasElement; index: number };
@@ -42,6 +43,7 @@ export function useCarSwapBlend() {
 
     if (
       sectionIndex !== 0 ||
+      useLineup.getState().active ||
       scrollY >= innerHeight * 0.15 ||
       renderFinish ||
       carLoadError ||

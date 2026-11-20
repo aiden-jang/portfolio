@@ -15,6 +15,8 @@ import { SceneBoundary } from './ui/SceneBoundary';
 import { Sections } from './ui/Sections';
 import { useAppStore } from './store';
 import { RenderStudy } from './ui/RenderStudy';
+import { Lineup } from './lineup/Lineup';
+import { useLineup } from './lineup/state';
 import { OpeningPoster } from './ui/OpeningPoster';
 import './ui/reading-flow.css';
 import './ui/dialog-motion.css';
@@ -41,6 +43,7 @@ export function App() {
   const { getScrollT, scrollToSection } = useNavigation(isCleanMode);
   const photoMode = usePhotoMode((state) => state.active);
   const renderStudy = useAppStore((state) => state.renderFinish !== null);
+  const lineup = useLineup((state) => state.active);
   useSceneUrl();
   useShowroomTransition();
 
@@ -48,6 +51,7 @@ export function App() {
     <>
       <a
         href="#scroll"
+        hidden={lineup}
         className="
           sr-only focus:not-sr-only
           focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:pointer-events-auto
@@ -76,7 +80,7 @@ export function App() {
           <div
             className="portfolio-chrome"
             ref={(element) => {
-              if (element) element.inert = photoMode || renderStudy;
+              if (element) element.inert = photoMode || renderStudy || lineup;
             }}
           >
             <PortfolioHeader onLink={scrollToSection} />
@@ -87,6 +91,7 @@ export function App() {
           </div>
           <PhotoMode />
           <RenderStudy />
+          {lineup && <Lineup />}
         </>
       )}
       <Analytics beforeSend={publicAnalyticsUrl} />

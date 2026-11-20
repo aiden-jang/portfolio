@@ -4,7 +4,7 @@ function snapshot(): boolean {
   return (
     document.hidden ||
     !!document.querySelector(
-      'dialog[open], [role="dialog"][aria-modal="true"]:not([aria-hidden="true"])',
+      'dialog[open], [role="dialog"][aria-modal="true"]:not([aria-hidden="true"], [data-live-scene])',
     )
   );
 }

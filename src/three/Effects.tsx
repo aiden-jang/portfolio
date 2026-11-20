@@ -1,3 +1,4 @@
+import { useLineup } from '../lineup/state';
 import { isOpeningStudio } from '../lighting';
 import { studioSurfacesReady } from './studio/textures';
 import { useFrame, useThree } from '@react-three/fiber';
@@ -75,7 +76,7 @@ export const Effects = memo(function Effects() {
     const graph = pipeline.current;
     if (!graph) return;
     const { themeName, isCarLoading, refs } = useAppStore.getState();
-    const target = THEMES[themeName];
+    const target = THEMES[useLineup.getState().active ? 'studio' : themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
     currentStrength.current = smoothTowards(currentStrength.current, target.bloomStrength, k);
     currentThreshold.current = smoothTowards(currentThreshold.current, target.bloomThreshold, k);

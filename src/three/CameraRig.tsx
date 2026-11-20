@@ -26,12 +26,11 @@ import { useOpeningOrbit } from './useOpeningOrbit';
 
 const INTRO_DURATION = 0.78;
 
-// Clean captures use a fixed three-quarter view.
 const isCleanMode =
   typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('clean');
 const CLEAN_AZIMUTH = 0.65;
 
-export function CameraRig({ getScrollT }: { getScrollT: () => number }) {
+export function CameraRig({ getScrollT, lineup }: { getScrollT: () => number; lineup?: boolean }) {
   const { camera, gl } = useThree();
   const contactArrival = useContactArrival();
   const updateCameraView = useCameraViews();
@@ -51,7 +50,8 @@ export function CameraRig({ getScrollT }: { getScrollT: () => number }) {
   useOrbitGesture(state, onTap);
 
   useFrame((three, dt) => {
-    if (useAppStore.getState().renderFinish) return;
+    // Keep the single-car pose while the Lineup rig owns the shared camera.
+    if (lineup || useAppStore.getState().renderFinish) return;
     const s = state.current;
     const refs = useAppStore.getState().refs;
     const reduced = prefersReducedMotion(),

@@ -12,6 +12,7 @@ import {
   WebGLRenderTarget,
 } from 'three';
 import type { Object3D, WebGLRenderer } from 'three';
+import { useLineup } from '../lineup/state';
 import { isFerrariCameraFocused } from './cameraViews';
 import { useAppStore } from '../store';
 import { usePhotoMode } from '../ui/photo/state';
@@ -193,6 +194,7 @@ export function useCarTypeOverlap() {
       const model = refs.carModel;
       if (
         !media.matches ||
+        useLineup.getState().active ||
         sectionIndex !== 0 ||
         renderFinish !== null ||
         isFerrariCameraFocused(app) ||

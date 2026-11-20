@@ -4,6 +4,11 @@
       vec2 fromBody = abs(ground - studioChassis.xy);
       vec2 underCar = studioChassis.zw * vec2(1.04, 1.18);
       float fromFootprint = length(max(fromBody - underCar, vec2(0.)));
+      if (studioSecondReady > 0.5) {
+        vec2 secondBody = abs(ground - studioSecondChassis.xy);
+        vec2 secondUnder = studioSecondChassis.zw * vec2(1.04, 1.18);
+        fromFootprint = min(fromFootprint, length(max(secondBody - secondUnder, vec2(0.))));
+      }
       float satinFalloff = smoothstep(.06,1.72,fromFootprint);
       vec2 concreteUv = ground / 3.15 + vec2(.16,.74);
       vec3 luma = vec3(.2126,.7152,.0722);
@@ -68,6 +73,21 @@
       }
       float contact = (1.-.72*bellyShade*studioCarReady)
         * (1.-min(.96,.89*tireCore+.34*tireAmbient)*studioCarReady);
+
+      if (studioSecondReady > 0.5) {
+        vec2 second = abs(ground - studioSecondChassis.xy) / studioSecondChassis.zw;
+        float secondBelly = exp(-1.90*(pow(second.x,4.)+pow(second.y,4.)));
+        float secondTireCore = 0.;
+        float secondTireAmbient = 0.;
+        for (int wheel=0;wheel<4;wheel++) {
+          vec2 tireOffset = ground - studioSecondTouch[wheel];
+          vec2 core = tireOffset/vec2(.137,.174);
+          vec2 broad = (tireOffset+vec2(.074,-.025))/vec2(.25,.32);
+          secondTireCore = max(secondTireCore,exp(-dot(core,core)));
+          secondTireAmbient = max(secondTireAmbient,exp(-dot(broad,broad)));
+        }
+        contact *= (1.-.72*secondBelly) * (1.-min(.96,.89*secondTireCore+.34*secondTireAmbient));
+      }
 
       // Keep the image of the lower body near its contact edge, then let the grain scatter it.
       float highlight = max(mirror.r,max(mirror.g,mirror.b));

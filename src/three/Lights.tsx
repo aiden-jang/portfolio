@@ -7,6 +7,7 @@ import { CARS, THEMES } from '../config';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
+import { useLineup } from '../lineup/state';
 import { F40_PAINT, openingStudioWeight } from './openingStudio';
 
 import { isOpeningStudio } from '../lighting';
@@ -66,22 +67,24 @@ export function Lights() {
 
   useFrame((_state, dt) => {
     const state = useAppStore.getState();
-    const studio = isOpeningStudio(state);
+    const lineup = useLineup.getState().active;
+    const studio = lineup || isOpeningStudio(state);
     if (studio && !studioMap.current) {
       const generator = new THREE.PMREMGenerator(gl);
       studioMap.current = createStudioEnvironment(generator);
       generator.dispose();
     }
     scene.environment = studio ? (studioMap.current?.texture ?? null) : defaultMap.current;
-    const lighting = state.themeName === 'studio' && !studio ? 'dusk' : state.themeName;
+    const lighting = studio ? 'studio' : state.themeName === 'studio' ? 'dusk' : state.themeName;
     const target = THEMES[lighting];
+    const progress = lineup ? 1 : motionState.progress;
     const sculpted = ['mercedes-benz-w198-300-sl.glb', 'red-bull-rb16b.glb'].includes(
       CARS[state.carIndex].file,
     );
     const duskSeparation = sculpted && lighting === 'dusk';
     const weight = (studioWeight.current = smoothTowards(
       studioWeight.current,
-      openingStudioWeight(),
+      lineup ? 1 : openingStudioWeight(),
       Math.min(1, dt * 5),
     ));
     const paint = state.refs.bodyMaterial;
@@ -126,7 +129,7 @@ export function Lights() {
       (studio ? 0.13 : c.key.intensity) *
       (studio ? 1 : sunFactor) *
       (1 - 0.25 * weight) *
-      (0.45 + 0.55 * (1 - Math.pow(1 - motionState.progress, 3)));
+      (0.45 + 0.55 * (1 - Math.pow(1 - progress, 3)));
 
     c.fill.color = smoothColorHex(c.fill.color, target.fill.color, k);
     c.fill.intensity = smoothTowards(
@@ -135,8 +138,7 @@ export function Lights() {
       k,
     );
     fill.current.color.setHex(c.fill.color);
-    fill.current.intensity =
-      c.fill.intensity * (1 - 0.13 * weight) * (0.7 + 0.3 * motionState.progress);
+    fill.current.intensity = c.fill.intensity * (1 - 0.13 * weight) * (0.7 + 0.3 * progress);
 
     c.rim.color = smoothColorHex(c.rim.color, target.rim.color, k);
     c.rim.intensity = smoothTowards(
@@ -147,8 +149,7 @@ export function Lights() {
     rim.current.color.setHex(c.rim.color);
     if (studio) rim.current.position.set(-4.25, 3.5, 6.8);
     else rim.current.position.set(-3, 4.5, -6);
-    rim.current.intensity =
-      c.rim.intensity * (1 - 0.08 * weight) * (0.7 + 0.3 * motionState.progress);
+    rim.current.intensity = c.rim.intensity * (1 - 0.08 * weight) * (0.7 + 0.3 * progress);
   });
 
   const init = current.current;

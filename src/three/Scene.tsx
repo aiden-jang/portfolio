@@ -14,8 +14,13 @@ import { useSceneActivity } from './useSceneActivity';
 import { isOpeningStudio } from '../lighting';
 import { StudioRoom } from './studio/StudioRoom';
 import { SceneHealth } from './SceneHealth';
+import { useLineup } from '../lineup/state';
 
 const Effects = lazy(() => import('./Effects').then((module) => ({ default: module.Effects })));
+
+const LineupScene = lazy(() =>
+  import('../lineup/LineupScene').then((module) => ({ default: module.LineupScene })),
+);
 
 type Props = {
   getScrollT: () => number;
@@ -26,7 +31,9 @@ export function Scene({ getScrollT }: Props) {
   const active = useSceneActivity();
   const contactVisible = useAppStore((state) => state.isContactVisible);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
-  const studio = useAppStore(isOpeningStudio);
+  const openingStudio = useAppStore(isOpeningStudio);
+  const lineup = useLineup((state) => state.active);
+  const studio = openingStudio || lineup;
   return (
     <>
       <Canvas
@@ -54,9 +61,15 @@ export function Scene({ getScrollT }: Props) {
         <PhotoCapture />
         <Lights />
         {studio && <StudioRoom />}
-        <Floor studio={studio} />
+        {lineup ? (
+          <Suspense fallback={<Floor studio lineup={null} />}>
+            <LineupScene />
+          </Suspense>
+        ) : (
+          <Floor studio={studio} />
+        )}
         <Car />
-        <CameraRig getScrollT={getScrollT} />
+        <CameraRig getScrollT={getScrollT} lineup={lineup} />
         <Suspense fallback={null}>
           <Effects />
         </Suspense>

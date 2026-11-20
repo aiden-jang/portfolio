@@ -1,4 +1,5 @@
 import { usePhotoMode } from './photo/state';
+import { useLineup } from '../lineup/state';
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { canStudyRender, useAppStore } from '../store';
@@ -84,6 +85,13 @@ export function buildCommands({
         const state = useAppStore.getState();
         if (!state.isCarLoading) state.prevCar();
       },
+    },
+    {
+      id: 'lineup',
+      label: 'Lineup',
+      hint: 'studio',
+      keywords: 'compare scale Ferrari F40 Red Bull RB16B pair cars',
+      run: () => useLineup.getState().open(),
     },
     {
       id: 'behind-the-render',
@@ -182,7 +190,7 @@ export function buildCommands({
       if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';
       if (id === 'retry-scene') return false;
       if (id === 'behind-the-render') return canStudyRender(state);
-      if (id === 'photo-mode')
+      if (id === 'lineup' || id === 'photo-mode')
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;
       if (id.startsWith('view-'))
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;
