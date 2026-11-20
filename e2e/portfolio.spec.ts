@@ -155,7 +155,9 @@ for (const width of [1440, 390]) {
       const results = page.getByRole('listbox').getByRole('option');
       await results.first().hover();
       await page.getByRole('combobox', { name: 'Search portfolio controls' }).press('ArrowDown');
-      await expect(results.nth(1)).toHaveAttribute('aria-selected', 'true');
+      const keyboardSelection = results.nth(1);
+      await expect(keyboardSelection).toHaveAttribute('aria-selected', 'true');
+      const selectedId = await keyboardSelection.getAttribute('id');
       await expect
         .poll(() =>
           results.evaluateAll((options) =>
@@ -167,7 +169,7 @@ for (const width of [1440, 390]) {
               .map((option) => option.id),
           ),
         )
-        .toEqual(['command-previous-car']);
+        .toEqual([selectedId]);
       for (const index of GARAGE_INDICES.slice(9)) {
         await expect(page.locator(`#command-car-${index}`)).toContainText('select');
       }
