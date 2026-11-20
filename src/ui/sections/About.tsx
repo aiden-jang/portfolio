@@ -16,15 +16,24 @@ export function AboutSection() {
             </p>
           </div>
           <div>
-            <figure className="about-garden">
-              <img
-                src="/projects/bloomnote-garden.jpg"
-                alt="Three flowers from a bloomnote garden"
-                width="980"
-                height="820"
-                loading="lazy"
-              />
-              <figcaption>A garden from bloomnote</figcaption>
+            <figure className="about-framing-study">
+              <div className="about-framing-image">
+                <img
+                  src="/projects/showroom-framing.webp"
+                  alt="Clay rendering of the Ferrari at the front three-quarter angle, with the front wheel and rear wing in frame"
+                  width="880"
+                  height="446"
+                  loading="lazy"
+                />
+                <span className="about-frame-lines" aria-hidden="true" />
+              </div>
+              <figcaption>
+                <strong>Framing the showroom</strong>
+                <span>
+                  The low camera fits the front wheel and rear wing in one shot, with room below for
+                  the reflection.
+                </span>
+              </figcaption>
             </figure>
             <dl className="about-details">
               <div>

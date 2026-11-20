@@ -179,22 +179,78 @@ html:root .iodine-feature .cinema-result p {
 .iodine-feature .cinema-code-actions .cinema-undo:hover:not(:disabled) {
   background: #fff;
 }
-.iodine-evidence {
+.scope-study {
+  margin-top: clamp(19px, 3vw, 34px);
+  border-top: 1px solid #39373f;
+  padding-top: clamp(16px, 2.3vw, 27px);
+}
+.scope-study > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+  align-items: start;
+  margin-bottom: 16px;
+}
+html:root .iodine-feature .scope-study h4 {
+  margin: 0 0 4px;
+  font-weight: 560;
+  font-size: clamp(21px, 2.4vw, 31px);
+  letter-spacing: -0.03em;
+}
+.scope-study header > span {
+  color: #b1afba;
+  font-size: 12px;
+  padding-block: 6px;
+}
+.scope-study code {
+  font: 500 0.93em/1.5 var(--font-mono);
+}
+.scope-cases {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
-  gap: 6px 44px;
-  align-items: baseline;
-  margin-top: clamp(24px, 3vw, 40px);
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
-.iodine-evidence h4 {
-  font-size: clamp(18px, 1.55vw, 22px);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+.scope-cases > div {
+  display: grid;
+  gap: 6px;
+  padding: clamp(13px, 2vw, 21px);
+  border-radius: 9px;
+  background: #1c2420;
+  border: 1px solid #3b5044;
 }
-.iodine-feature .iodine-evidence p {
-  font-size: 14px;
-  line-height: 1.55;
+.scope-cases > div + div {
+  background: #28221c;
+  border-color: #554536;
 }
+.scope-cases > div > code {
+  font-size: clamp(14px, 1.7vw, 24px);
+  margin-bottom: 7px;
+  color: #f3ece7;
+}
+.scope-cases mark {
+  background: #335040;
+  color: #e0f4e6;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+.scope-cases > div + div mark {
+  background: #4c3823;
+  color: #fae3bb;
+}
+.scope-cases strong {
+  font-weight: 620;
+  font-size: 15px;
+}
+html:root .iodine-feature .scope-study p {
+  color: #c8c3c2;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.scope-study + .iodine-links {
+  margin-top: 20px;
+}
+
 .iodine-links {
   display: flex;
   flex-wrap: wrap;
@@ -230,8 +286,7 @@ html:root .iodine-feature .cinema-result p {
     aspect-ratio: 2.05;
     min-height: 100px;
   }
-  .iodine-intro,
-  .iodine-evidence {
+  .iodine-intro {
     grid-template-columns: minmax(0, 1fr);
   }
   .iodine-intro {
@@ -278,5 +333,18 @@ html:root .iodine-feature .cinema-result p {
   .iodine-feature .cinema-code-actions button {
     font-size: 12px;
     padding-inline: 9px;
+  }
+}
+
+@media (max-width: 590px) {
+  .scope-cases {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .scope-study > header {
+    gap: 3px;
+  }
+  .scope-study > header > span {
+    padding-block: 0;
   }
 }

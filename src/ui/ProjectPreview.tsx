@@ -1,3 +1,4 @@
+import { IguessReplay } from './showcase/IguessReplay';
 import { BloomPreview } from './showcase/BloomPreview';
 import { OwewellPreview } from './showcase/OwewellPreview';
 import { copyText } from '../browserSharing';
@@ -25,6 +26,9 @@ function ScreenshotProjectPreview({
   const image = states?.[selected]?.image ?? initialImage;
   const caption = states?.[selected]?.caption ?? initialCaption;
   const [open, setOpen] = useState(false);
+  const [cropUnavailable, setCropUnavailable] = useState(false);
+  const showWorthCrop = name === 'worth' && !cropUnavailable;
+  const onCropUnavailable = useCallback(() => setCropUnavailable(true), []);
   const [failedImage, setFailedImage] = useState<string | null>(null);
   const unavailable = failedImage === image;
   const onUnavailable = useCallback(() => setFailedImage(image), [image]);
@@ -70,15 +74,35 @@ function ScreenshotProjectPreview({
           }}
           aria-label={`Inspect screenshot: ${name}`}
         >
-          <div className="preview-thumbnail">
-            <ScreenshotImage
-              src={image}
-              alt={`${name} product interface`}
-              lazy
-              onUnavailable={onUnavailable}
-              onReady={onReady}
-            />
-          </div>
+          {showWorthCrop ? (
+            <div className="worth-focus" aria-hidden="true">
+              <div className="worth-list-crop">
+                <strong>Drinks</strong>
+                <ScreenshotImage
+                  src="/projects/worth-list.webp"
+                  alt=""
+                  lazy
+                  onUnavailable={onCropUnavailable}
+                />
+              </div>
+              <ScreenshotImage
+                src="/projects/worth-verdict.webp"
+                alt=""
+                lazy
+                onUnavailable={onCropUnavailable}
+              />
+            </div>
+          ) : (
+            <div className="preview-thumbnail">
+              <ScreenshotImage
+                src={image}
+                alt={`${name} product interface`}
+                lazy
+                onUnavailable={onUnavailable}
+                onReady={onReady}
+              />
+            </div>
+          )}
           {!unavailable && <ExpandIcon />}
         </button>
         {states &&
@@ -117,6 +141,12 @@ function ScreenshotProjectPreview({
 }
 
 export function ProjectPreview(props: Props) {
+  if (
+    props.name === 'iguess' &&
+    previewIndex(new URLSearchParams(location.search).get('preview'), props.name, 1) === null
+  ) {
+    return <IguessReplay image={props.image} caption={props.caption} />;
+  }
   if (props.name === 'bloomnote') return <BloomPreview {...props} />;
   if (
     props.name === 'owewell' &&

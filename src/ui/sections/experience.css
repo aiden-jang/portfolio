@@ -25,17 +25,69 @@ html:root #sec-experience {
 
 .experience-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(270px, 310px);
-  gap: clamp(30px, 5.5vw, 80px);
   align-items: start;
+  grid-template-areas: 'lead history' 'proof history';
+  grid-template-columns: minmax(0, 1fr) minmax(270px, 34%);
+  column-gap: clamp(30px, 5.5vw, 80px);
+  row-gap: clamp(20px, 3vw, 31px);
 }
-
+.experience-grid > .experience-lead {
+  grid-area: lead;
+  padding-bottom: 0;
+}
 .experience-proof {
+  grid-area: proof;
   min-width: 0;
 }
-
-.experience-lead {
-  padding-bottom: clamp(27px, 3vw, 40px);
+.experience-grid > .experience-history {
+  grid-area: history;
+  max-width: none;
+}
+.experience-employer {
+  border-top: 1px solid var(--color-line);
+  padding: 15px 0 19px;
+}
+.experience-employer > strong {
+  font-size: clamp(17px, 1.45vw, 20px);
+  font-weight: 570;
+}
+.experience-history .experience-roles {
+  position: relative;
+  margin-top: 11px;
+}
+.experience-roles::before {
+  content: '';
+  position: absolute;
+  inset: 11px auto 11px 3px;
+  width: 1px;
+  background: #4f4956;
+}
+.experience-roles li {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 9px;
+  align-items: baseline;
+  padding: 5px 0 5px 17px;
+  color: #dad8dc;
+  font-size: 14px;
+}
+.experience-roles li::before {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #bcb4a5;
+  border: 1px solid #bcb4a5;
+}
+.experience-roles li + li::before {
+  background: #1b191e;
+}
+.experience-roles li + li span:first-child {
+  color: #bdb9c1;
 }
 
 .experience-measure {
@@ -234,24 +286,6 @@ html:root #sec-experience {
   list-style: none;
 }
 
-.experience-role {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 3px 9px;
-  align-items: baseline;
-  padding-block: 15px;
-  border-top: 1px solid var(--color-line);
-}
-
-.experience-role strong {
-  font-size: 15px;
-  font-weight: 550;
-}
-
-.experience-role-title {
-  grid-column: 1 / -1;
-}
-
 .experience-period {
   color: #adacb8;
   font: 11px/1.5 var(--font-mono);
@@ -260,10 +294,10 @@ html:root #sec-experience {
 @media (max-width: 900px) {
   .experience-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 34px;
+    grid-template-areas: 'lead' 'history' 'proof';
   }
-  .experience-history {
-    max-width: 420px;
+  .experience-grid > .experience-history {
+    width: min(100%, 520px);
   }
 }
 

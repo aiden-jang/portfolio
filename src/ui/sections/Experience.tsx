@@ -46,9 +46,17 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
 };
 
 const ROLES = [
-  { title: 'Software Engineer', company: 'Zeta Global', period: '2024–present' },
-  { title: 'Software Engineer', company: 'LiveIntent', period: '2023–2024' },
-  { title: 'Associate Software Engineer', company: 'LiveIntent', period: '2022–2023' },
+  {
+    company: 'Zeta Global',
+    roles: [{ title: 'Software Engineer', period: '2024–present' }],
+  },
+  {
+    company: 'LiveIntent',
+    roles: [
+      { title: 'Software Engineer', period: '2023–2024' },
+      { title: 'Associate Software Engineer', period: '2022–2023' },
+    ],
+  },
 ];
 
 type Props = {
@@ -77,8 +85,26 @@ export function ExperienceSection({ onOpen }: Props) {
       <div data-nosnippet className="experience-content pointer-events-auto">
         <h2>Experience</h2>
         <div className="experience-grid">
+          {lead && <LeadOutcome item={lead} onOpen={onOpen} />}
+          <div className="experience-history">
+            <h3>Where I&apos;ve worked</h3>
+            <ol role="list">
+              {ROLES.map(({ company, roles }) => (
+                <li key={company} className="experience-employer">
+                  <strong>{company}</strong>
+                  <ol className="experience-roles" role="list">
+                    {roles.map(({ title, period }) => (
+                      <li key={period}>
+                        <span>{title}</span>
+                        <span className="experience-period">{period}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </li>
+              ))}
+            </ol>
+          </div>
           <div className="experience-proof">
-            {lead && <LeadOutcome item={lead} onOpen={onOpen} />}
             <div>
               {supporting.map((item) => (
                 <HighlightRow key={item.title} item={item} onOpen={onOpen} />
@@ -94,18 +120,6 @@ export function ExperienceSection({ onOpen }: Props) {
                 ))}
               </details>
             )}
-          </div>
-          <div className="experience-history">
-            <h3>Where I&apos;ve worked</h3>
-            <ol role="list">
-              {ROLES.map(({ company, title, period }) => (
-                <li key={`${company}-${period}`} className="experience-role">
-                  <strong>{company}</strong>
-                  <span className="experience-period">{period}</span>
-                  <span className="experience-role-title">{title}</span>
-                </li>
-              ))}
-            </ol>
           </div>
         </div>
       </div>

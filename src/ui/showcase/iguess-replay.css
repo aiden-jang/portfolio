@@ -1,0 +1,86 @@
+.iguess-replay {
+  display: grid;
+  aspect-ratio: 2;
+  min-height: 204px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 1px solid #414937;
+  border-radius: 9px;
+  background: #24281f;
+  color: #f0f0e8;
+}
+.iguess-replay-content {
+  display: grid;
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.75fr);
+  gap: clamp(10px, 1.4vw, 22px);
+  align-items: center;
+  padding: 13px 14px 11px;
+}
+.iguess-replay canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+  border-radius: 5px;
+  background: #eeeede;
+}
+.iguess-replay-chat {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+.iguess-replay-chat > span {
+  font-size: 12px;
+  font-weight: 550;
+  color: #dae597;
+}
+html:root .garage-project .iguess-replay-chat p {
+  color: #f0f0e8;
+  font-size: clamp(12px, 1.3vw, 17px);
+  line-height: 1.35;
+  min-height: 2.7em;
+}
+.iguess-answer {
+  color: #d8e893;
+  font-size: 13px;
+}
+.iguess-answer strong {
+  font-size: 16px;
+  font-weight: 660;
+}
+.iguess-replay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  align-items: center;
+  padding: 0 12px 8px;
+  color: #f0f0e8;
+}
+.iguess-replay-actions button {
+  min-height: 44px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+.iguess-replay-actions button svg {
+  width: 14px;
+}
+.iguess-replay-actions .iguess-replay-play {
+  background: #dbe98f;
+  color: #242817;
+  border-radius: 6px;
+  font-weight: 650;
+}
+.iguess-replay-actions .iguess-replay-play[aria-disabled='true'] {
+  opacity: 0.8;
+}
+.iguess-replay-inspect {
+  margin-left: auto;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

@@ -39,6 +39,9 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     );
     const lead = section.getByRole('button', { name: 'Read the case study', exact: true });
     await expect(lead).toBeInViewport({ ratio: 1 });
+    const history = section.locator('.experience-history');
+    await expect(history.getByText('LiveIntent', { exact: true })).toHaveCount(1);
+    await expect(history).toContainText('Associate Software Engineer');
     const assertLayout = async () => {
       const boxes = await section.evaluate((el) => {
         const box = (node: Element) => {
@@ -56,15 +59,19 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
           proof = el.querySelector('.experience-proof')!;
         return {
           history: box(history),
+          lead: box(el.querySelector('.experience-lead')!),
           proof: box(proof),
           rows: [...el.querySelectorAll('.experience-outcome')]
             .filter((e) => e.getClientRects().length)
             .map(box),
         };
       });
-      const { history, proof, rows } = boxes;
+      const { history, lead, proof, rows } = boxes;
       if (width > 900) expect(history.x).toBeGreaterThanOrEqual(proof.right - 1);
-      else expect(history.y).toBeGreaterThanOrEqual(proof.bottom - 1);
+      else {
+        expect(history.y).toBeGreaterThanOrEqual(lead.bottom - 1);
+        expect(proof.y).toBeGreaterThanOrEqual(history.bottom - 1);
+      }
       for (let i = 1; i < rows.length; i++)
         expect(rows[i].y).toBeGreaterThanOrEqual(rows[i - 1].bottom - 1);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
@@ -115,6 +122,8 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       );
       if (id === 'sec-about') {
         await expect(target.locator('h2')).toHaveText('About', { timeout: 3000 });
+        const study = target.getByRole('img', { name: /^Clay rendering of the Ferrari/ });
+        await expect(study).toHaveAttribute('src', '/projects/showroom-framing.webp');
         const story = await target.locator('.about-story').boundingBox();
         const details = await target.locator('.about-details').boundingBox();
         if (width >= 900) expect(details!.x).toBeGreaterThan(story!.x + story!.width);

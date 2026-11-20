@@ -5,6 +5,8 @@ export const SCREENSHOT_SIZES: Record<string, [number, number]> = {
   '/projects/bloomnote-full.jpg': [1440, 1918],
   '/projects/mrrp-room.jpg': [1440, 665],
   '/projects/everythingisfine.jpg': [1440, 721],
+  '/projects/worth-list.webp': [445, 169],
+  '/projects/worth-verdict.webp': [302, 299],
   '/projects/worth.jpg': [1440, 721],
   '/projects/iguess.jpg': [1440, 665],
   '/projects/platform.jpg': [760, 520],

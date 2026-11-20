@@ -71,3 +71,38 @@
     transition: none;
   }
 }
+
+.worth-focus {
+  display: grid;
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.99fr);
+  gap: 5%;
+  aspect-ratio: 2;
+  padding: clamp(12px, 1.5vw, 21px);
+  overflow: hidden;
+  border-radius: 9px;
+  border: 1px solid #494435;
+  background: #20201c;
+}
+.worth-list-crop {
+  min-width: 0;
+}
+.worth-list-crop strong {
+  display: block;
+  margin: 0 0 clamp(7px, 1.3vw, 17px);
+  color: #d5ccaa;
+  font-weight: 550;
+  font-size: clamp(13px, 2vw, 23px);
+  letter-spacing: -0.015em;
+}
+.worth-focus img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.worth-focus > img {
+  border-radius: 11px;
+}
+.worth-focus .worth-list-crop img {
+  border-block: 1px solid #504d3f;
+}

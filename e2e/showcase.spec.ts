@@ -40,6 +40,11 @@ for (const width of [1440, 390]) {
     await expect(replay).toBeFocused();
     await replay.press('Enter');
     await expect(currentCode).toContainText('.trim()');
+    const approvals = iodine.getByRole('region', { name: 'What an approval covers' });
+    await expect(approvals).toContainText('ls src/components');
+    await expect(approvals).toContainText('Approval reused');
+    await expect(approvals).toContainText('ls docs');
+    await expect(approvals).toContainText('Fresh approval needed');
     const screenshot = iodine.getByRole('button', { name: 'View editor screenshot for iodine' });
     await expect(screenshot.locator('img')).toHaveAttribute('src', '/projects/iodine.png');
     await screenshot.press('Enter');
@@ -58,6 +63,39 @@ for (const width of [1440, 390]) {
     await expect(page.getByRole('dialog', { name: 'bloomnote screenshot' })).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(garden).toBeFocused();
+    const worth = page.getByRole('button', { name: 'Inspect screenshot: worth', exact: true });
+    await expect(worth.locator('img').last()).toHaveAttribute(
+      'src',
+      '/projects/worth-verdict.webp',
+    );
+    await worth.click();
+    await expect(
+      page.getByRole('dialog', { name: 'worth screenshot' }).getByRole('img'),
+    ).toHaveAttribute('src', '/projects/worth.jpg');
+    await page.keyboard.press('Escape');
+    await expect(worth).toBeFocused();
+
+    const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
+    const play = drawing.getByRole('button', { name: 'Play round' });
+    const canvasBefore = drawing.locator('canvas');
+    const startingFrame = await canvasBefore.evaluate((canvas) =>
+      (canvas as HTMLCanvasElement).toDataURL(),
+    );
+    await play.click();
+    await expect(drawing.getByText('Local test guesser')).toBeVisible();
+    await expect(drawing.getByText('A rocket. With reservations.', { exact: false })).toBeVisible();
+    await expect
+      .poll(() => canvasBefore.evaluate((canvas) => (canvas as HTMLCanvasElement).toDataURL()))
+      .not.toBe(startingFrame);
+    const reveal = drawing.getByRole('button', { name: 'Reveal word' });
+    await expect(drawing.getByText('guitar', { exact: true })).toBeHidden();
+    await reveal.click();
+    await expect(drawing.getByText('guitar', { exact: true })).toBeVisible();
+    const drawingScreenshot = drawing.getByRole('button', { name: 'Inspect screenshot: iguess' });
+    await drawingScreenshot.click();
+    await expect(page.getByRole('dialog', { name: 'iguess screenshot' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(drawingScreenshot).toBeFocused();
     await page.getByRole('button', { name: 'How I built it: iguess', exact: true }).click();
     await page.getByRole('button', { name: 'Follow the flow' }).click();
     await expect(page.locator('.flow-explanation')).toContainText('AI Worker');

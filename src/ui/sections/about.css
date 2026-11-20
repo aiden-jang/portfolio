@@ -49,23 +49,55 @@ html:root #sec-about {
 .about-details {
   margin: 4px 0 0;
 }
-.about-garden {
-  max-width: 29rem;
-  margin: 4px 0 14px;
+.about-framing-study {
+  margin: 0 0 18px;
 }
-.about-garden img {
+.about-framing-image {
+  position: relative;
+  border: 1px solid #504838;
+  border-radius: 9px;
+  overflow: hidden;
+  background: #0a0909;
+}
+.about-framing-image img {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 2.75;
-  object-fit: cover;
-  object-position: center 41%;
-  border-radius: 7px;
 }
-.about-garden figcaption {
+.about-frame-lines {
+  position: absolute;
+  inset: 12% 8% 9%;
+  border: 1px solid #bdad8b90;
+  background:
+    linear-gradient(
+      90deg,
+      transparent calc(33.33% - 0.5px),
+      #bdad8b4d 33.33%,
+      transparent calc(33.33% + 0.7px),
+      transparent calc(66.66% - 0.5px),
+      #bdad8b4d 66.66%,
+      transparent calc(66.66% + 0.7px)
+    ),
+    linear-gradient(
+      0deg,
+      transparent calc(33.33% - 0.5px),
+      #bdad8b4d 33.33%,
+      transparent calc(33.33% + 0.7px)
+    );
+  pointer-events: none;
+}
+.about-framing-study figcaption {
+  display: grid;
+  gap: 3px;
+  padding-top: 10px;
   color: var(--color-muted);
-  font-size: 12px;
-  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.about-framing-study figcaption strong {
+  color: var(--color-fg);
+  font-size: 15px;
+  font-weight: 570;
 }
 .about-details > div {
   padding: 15px 0;

@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "0b0f737",
+  "rule": {
+    "program": "ls",
+    "target": "src",
+    "descendants": true
+  },
+  "setup": {
+    "command": "ls src",
+    "decision": "asked"
+  },
+  "inside": {
+    "command": "ls src/components",
+    "target": "src/components",
+    "decision": "auto-approved"
+  },
+  "outside": {
+    "command": "ls docs",
+    "target": "docs",
+    "decision": "asked"
+  }
+}

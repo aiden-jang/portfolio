@@ -15,6 +15,7 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       } as typeof get;
     });
     if (width === 320) {
+      await page.route('**/projects/worth-verdict.webp', (route) => route.fulfill({ status: 404 }));
       await page.route('**/projects/worth.jpg', (route) => route.fulfill({ status: 404 }));
     }
     await page.goto('/#sec-more-work');
@@ -55,7 +56,7 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       items.map((item) => ({
         name: item.id,
         frame: item
-          .querySelector('.preview-thumbnail, .owewell-demo')!
+          .querySelector('.preview-thumbnail, .owewell-demo, .worth-focus, .iguess-replay')!
           .getBoundingClientRect()
           .toJSON(),
         title: item.querySelector('h3 button')!.getBoundingClientRect().toJSON(),
@@ -67,8 +68,9 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       })),
     );
     for (const { name, frame, title, app, description } of cards) {
-      const expectedHeight =
-        name === 'project-owewell' ? Math.max(frame.width / 2, 204) : frame.width / 2;
+      const expectedHeight = ['project-owewell', 'project-iguess'].includes(name)
+        ? Math.max(frame.width / 2, 204)
+        : frame.width / 2;
       expect.soft(Math.abs(frame.height - expectedHeight), name).toBeLessThan(1);
       expect.soft(Math.abs(frame.width - cards[0].frame.width), name).toBeLessThan(1);
       expect.soft(Math.abs(title.top - app.top), `${name} actions share a row`).toBeLessThan(1);

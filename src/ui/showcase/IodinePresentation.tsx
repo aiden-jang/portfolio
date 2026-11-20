@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import type { ProductPreview } from '../../data/projectPreviews';
 import type { WorkDetail } from '../../types';
+import { ScopedApprovals } from './ScopedApprovals';
 import { IodineContribution } from './IodineContribution';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import { ScreenshotImage } from '../ScreenshotImage';
@@ -39,13 +40,7 @@ export function IodinePresentation({ item, preview, onOpen }: Props) {
           <span className="iodine-editor-label">View editor screenshot</span>
         </button>
       </div>
-      <div className="iodine-evidence">
-        <h4>Scoped terminal approvals</h4>
-        <p>
-          Reusable approvals stay within approved command signatures and paths. Local embeddings
-          suggest similar commands.
-        </p>
-      </div>
+      <ScopedApprovals />
       <div className="iodine-links">
         <button
           type="button"
