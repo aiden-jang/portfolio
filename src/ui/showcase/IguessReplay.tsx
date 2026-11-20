@@ -37,6 +37,18 @@ export function IguessReplay({ image, caption }: { image: string; caption: strin
   useEffect(() => {
     const element = canvas.current;
     if (!element) return;
+    if (phase === 'ready' && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry?.isIntersecting) return;
+          paint(element, firstLook);
+          observer.disconnect();
+        },
+        { rootMargin: '200px' },
+      );
+      observer.observe(element);
+      return () => observer.disconnect();
+    }
     if (phase !== 'drawing') {
       paint(element, phase === 'ready' ? firstLook : pointCount);
       return;

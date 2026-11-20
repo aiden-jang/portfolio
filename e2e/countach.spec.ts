@@ -36,5 +36,5 @@ test('Countach shared paint and selection work across phone and desktop layouts'
   await bordeaux.click();
   await expect.poll(() => new URL(page.url()).searchParams.get('paint')).toBe('#702c43');
   expect(new URL(page.url()).searchParams.get('car')).toBe('19');
-  await expect(page.locator('canvas')).toBeVisible();
+  await expect(page.locator('.portfolio-scene canvas')).toBeVisible();
 });

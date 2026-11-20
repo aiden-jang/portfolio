@@ -380,7 +380,7 @@ test('a delayed effects download does not block content or the model request', a
 test('clean capture mode frames a visible car without page chrome', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/?clean&car=0&paint=original');
-  await expect(page.locator('canvas')).toBeVisible();
+  await expect(page.locator('.portfolio-scene canvas')).toBeVisible();
   await expect(page.locator('body')).toHaveAttribute('data-car-view', 'visible');
   await expect(page.getByRole('heading')).toHaveCount(0);
   await expectVisibleCar(page, 60_000);

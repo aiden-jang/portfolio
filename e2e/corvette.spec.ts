@@ -14,7 +14,7 @@ for (const width of [1440, 390]) {
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await expect.poll(() => new URL(page.url()).searchParams.get('paint')).toBe('original');
     await expect(page.getByRole('button', { name: /^Paint:/ })).toHaveCount(0);
-    await expect(page.locator('canvas')).toBeVisible();
+    await expect(page.locator('.portfolio-scene canvas')).toBeVisible();
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
     const corvette = picker.getByRole('button', {
