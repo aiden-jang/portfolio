@@ -298,7 +298,11 @@ for (const width of [1440, 390]) {
       await expect(page.getByRole('link', { name: 'me@aidenjang.com', exact: true })).toBeVisible();
       const credits = page.getByRole('button', { name: /3D model credits/ });
       await credits.click();
-      await expect(page.getByRole('dialog', { name: '3D model credits' })).toBeVisible();
+      const creditsDialog = page.getByRole('dialog', { name: '3D model credits' });
+      await expect(
+        creditsDialog.getByRole('region', { name: 'Car in the closing frame' }),
+      ).toContainText('Ferrari F40');
+      await expect(creditsDialog.getByRole('list', { name: 'Full model catalogue' })).toBeVisible();
       await accessible(page);
       expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('hidden');
       await page.keyboard.press('Escape');

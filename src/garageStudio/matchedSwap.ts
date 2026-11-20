@@ -33,7 +33,7 @@ function swapStudioCar(incoming: number) {
     if (!studio.active || useMatchedSwap.getState().swap?.incoming !== incoming) return;
     studio.selectCar(incoming);
     useAppStore.setState({ isCarLoading: true });
-    if (camera === 'profile') useGarageStudy.setState({ camera });
+    useGarageStudy.setState({ camera, look });
     repaintStudio();
   }, true);
   repaintStudio();
@@ -63,12 +63,7 @@ export function useMatchedCar(id: number, loading: boolean, error: string | null
     if (swap?.incoming === id && !loading && !error) useMatchedSwap.setState({ swap: null });
   }, [swap, id, loading, error]);
   useEffect(() => {
-    const clear = () => clearStudioCut(false);
-    window.addEventListener('resize', clear);
-    return () => {
-      window.removeEventListener('resize', clear);
-      clearStudioCut();
-    };
+    return () => clearStudioCut();
   }, []);
   return swap;
 }

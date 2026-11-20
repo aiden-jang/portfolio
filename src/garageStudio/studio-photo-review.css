@@ -1,0 +1,95 @@
+.garage-studio[data-photo-review]
+  > :is(.garage-studio-header, .garage-studio-title, .garage-studio-footer, .garage-studio-stage) {
+  display: none;
+}
+.studio-photo-review {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(10px, 2vh, 24px);
+  padding: max(16px, env(safe-area-inset-top)) var(--edge) max(14px, env(safe-area-inset-bottom));
+  background: #11100e;
+}
+.studio-photo-review > header,
+.studio-photo-review > footer,
+.studio-photo-review > footer > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.studio-photo-review > :is(header, footer) {
+  justify-content: space-between;
+}
+.studio-photo-review > footer {
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--rim);
+}
+.studio-photo-review h3 {
+  margin: 0;
+  font-size: clamp(19px, 2.1vw, 32px);
+  font-weight: 520;
+  letter-spacing: -0.03em;
+}
+.studio-photo-review p {
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.studio-photo-review button {
+  padding: 0 12px;
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--ivory);
+  white-space: nowrap;
+  font-size: 13px;
+  cursor: pointer;
+}
+.studio-photo-review button:hover {
+  border-color: var(--rim);
+}
+.studio-photo-review button[aria-pressed='true'],
+.studio-photo-review .photo-save {
+  background: #e8decb;
+  color: #231b14;
+}
+.studio-photo-review :focus-visible {
+  outline: 2px solid #e8decb;
+  outline-offset: 3px;
+}
+.studio-photo-mat {
+  container-type: size;
+  display: grid;
+  place-items: center;
+}
+.studio-photo-crop {
+  width: min(100cqw, calc(100cqh * var(--crop-ratio)));
+  aspect-ratio: var(--crop-ratio);
+  overflow: hidden;
+  background: #080807;
+  outline: 1px solid #796d60;
+  cursor: grab;
+  touch-action: none;
+}
+.studio-photo-crop:active {
+  cursor: grabbing;
+}
+.studio-photo-crop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+  display: block;
+}
+@media (max-width: 600px) {
+  .studio-photo-review {
+    padding-inline: max(12px, 4vw);
+  }
+  .studio-photo-review > footer > div:last-of-type {
+    margin-left: auto;
+  }
+}

@@ -40,7 +40,7 @@ export function Hint() {
         <p className="orbit-invitation">
           <span className="orbit-hint-desktop hidden md:inline">Drag to look around.</span>
           <span className="orbit-hint-mobile md:hidden">
-            Hold the car, then drag to look around.
+            Swipe the car sideways to look around.
           </span>
         </p>
       )}

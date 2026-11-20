@@ -33,7 +33,8 @@ import {
   type Chapter,
   type Study,
 } from './state';
-import { captureFramedPhoto } from './photo';
+import { captureScene } from '../ui/photo/capture';
+import { StudioPhotoReview } from './StudioPhotoReview';
 import { StudioOrbit } from './StudioOrbit';
 import { StudioViews } from './StudioViews';
 import { StudioStudy } from './StudioStudy';
@@ -58,7 +59,7 @@ export function GarageStudio() {
   const [notice, setNotice] = useState('');
   const captureVersion = useRef(0);
   const [busy, setBusy] = useState(false);
-  const [image, setImage] = useState<{ src: string; file: File } | null>(null);
+  const [image, setImage] = useState<{ src: string; frame: Blob } | null>(null);
   const [link, setLink] = useState('');
   const exhibit = useGarageExhibit((state) => state.exhibit);
   const louvers = useGarageExhibit((state) => state.louvers);
@@ -150,14 +151,9 @@ export function GarageStudio() {
     setBusy(true);
     setNotice('');
     try {
-      const blob = await captureFramedPhoto(photo);
+      const frame = await captureScene();
       if (version !== captureVersion.current) return;
-      const file = new File(
-        [blob],
-        `studio-${pair ? 'lineup' : car.file.replace('.glb', '')}-${photo}.png`,
-        { type: 'image/png' },
-      );
-      setImage({ src: URL.createObjectURL(file), file });
+      setImage({ src: URL.createObjectURL(frame), frame });
     } catch {
       if (version === captureVersion.current) setNotice('Photo could not be captured. Try again.');
     } finally {
@@ -196,6 +192,7 @@ export function GarageStudio() {
       data-controls-open={controlsOpen}
       data-studio-tool={photo || study ? 'active' : undefined}
       data-dragging={dragging}
+      data-photo-review={image ? 'true' : undefined}
     >
       <StudioOrbit enabled={!waiting && !image} onDrag={setDragging} />
       <StudioHeading
@@ -215,11 +212,7 @@ export function GarageStudio() {
           aria-hidden="true"
         />
       )}
-      {image && (
-        <div className="studio-photo-result">
-          <img src={image.src} alt="Captured studio photograph" />
-        </div>
-      )}
+
       {waiting && (
         <StudioLoading
           car={swap?.incoming ?? id}
@@ -227,6 +220,7 @@ export function GarageStudio() {
           pairFailed={pairReady === 'failed' && pair}
           error={error}
           matched={swap !== null}
+          outgoing={swap ? CARS[swap.outgoing].name : undefined}
           still={swap?.still}
         />
       )}
@@ -239,7 +233,7 @@ export function GarageStudio() {
               <StudioInvitation dragging={dragging} />
             )}
             <StudioCompactDock
-              car={id}
+              car={swap?.outgoing ?? id}
               hasSignature={exhibit === 'free' && chapter === 'walk'}
               waiting={waiting}
               canChoose={canChoose}
@@ -251,24 +245,19 @@ export function GarageStudio() {
         )}
         <div className="garage-studio-dock" id="studio-full-dock">
           {!photo && !study && <StudyControls waiting={waiting} />}
-          <StudioChapters chapter={chapter} onSelect={selectChapter} />
-
+          {!image && <StudioChapters chapter={chapter} onSelect={selectChapter} />}
           {!photo && !study && !isMechanical(exhibit) && <StudioViews waiting={waiting} />}
-
-          {photo && (
+          {photo && !image && (
             <StudioPhotoControls
               photo={photo}
               busy={busy}
               waiting={waiting}
-              file={image?.file}
-              onRetake={() => setImage(null)}
               onCapture={takePhoto}
               onDone={leaveTool}
             />
           )}
 
           {study && <StudioStudy study={study} onSelect={setStudy} onDone={leaveTool} />}
-
           {!photo && !study && (
             <StudioTools
               waiting={waiting}
@@ -292,6 +281,16 @@ export function GarageStudio() {
           {link && !photo && !study && <StudioShotLink value={link} onClose={dismissLink} />}
         </div>
       </footer>
+      {photo && image && (
+        <StudioPhotoReview
+          image={image}
+          shape={photo}
+          name={pair ? 'lineup' : car.file.replace('.glb', '')}
+          onShape={(shape) => useGarageStudio.setState({ photo: shape })}
+          onRetake={() => setImage(null)}
+          onDone={leaveTool}
+        />
+      )}
       {pickerTrigger && (
         <StudioCarPicker onClose={() => setPickerTrigger(null)} returnFocus={pickerTrigger} />
       )}

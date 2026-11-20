@@ -1,15 +1,16 @@
 import { useEffect, type MutableRefObject } from 'react';
 import { clamp } from '../math';
 import { useAppStore } from '../store';
+import { usePhotoMode } from '../ui/photo/state';
 import { canOrbitAt, pageSectionBounds } from './orbitRegion';
 
 const TAP_THRESHOLD_PX = 3;
 // Fingers jitter far more than a mouse, so the 3px threshold reads a normal tap as a drag.
 const TOUCH_TAP_THRESHOLD_PX = 12;
-// Hold-to-orbit: a press that stays put this long switches touch from scrolling the page to
-// orbiting the car. Moving further than the tolerance first means it was a scroll.
+// Photo mode keeps the long press so it can still frame along both touch axes.
 const HOLD_MS = 300;
 const HOLD_MOVE_TOLERANCE = 10;
+const SWIPE_DIRECTION_RATIO = 1.3;
 const DRAG_YAW_SENSITIVITY = 0.01;
 const DRAG_PITCH_SENSITIVITY = 0.006;
 const MIN_ELEVATION_FREE = -0.4;
@@ -44,6 +45,7 @@ export function useOrbitGesture(
       !!(target as HTMLElement | null)?.closest?.(NON_DRAGGABLE_SELECTOR);
 
     let holdTimer = 0;
+    let startsWithHold = false;
     let activePointer: number | null = null;
     const endGesture = (s: RigState) => {
       window.clearTimeout(holdTimer);
@@ -53,9 +55,7 @@ export function useOrbitGesture(
 
     const onPointerDown = (e: PointerEvent) => {
       if (activePointer !== null && activePointer !== e.pointerId) {
-        state.current.isDown = false;
-        activePointer = null;
-        endGesture(state.current);
+        onPointerCancel();
         return;
       }
       if (
@@ -76,7 +76,8 @@ export function useOrbitGesture(
       s.startY = e.clientY;
       s.lastX = e.clientX;
       s.lastY = e.clientY;
-      if (s.isTouch) {
+      startsWithHold = usePhotoMode.getState().active;
+      if (s.isTouch && startsWithHold) {
         window.clearTimeout(holdTimer);
         holdTimer = window.setTimeout(() => {
           if (s.isDown && !s.dragMoved) {
@@ -91,24 +92,43 @@ export function useOrbitGesture(
       const s = state.current;
       if (!s.isDown || activePointer !== e.pointerId) return;
       if (!canOrbitAt(e.clientY, pageSectionBounds())) {
-        s.isDown = false;
-        activePointer = null;
-        endGesture(s);
+        onPointerCancel();
         return;
       }
-      const dx = e.clientX - s.lastX;
-      const dy = e.clientY - s.lastY;
+      let dx = e.clientX - s.lastX;
+      let dy = e.clientY - s.lastY;
       s.lastX = e.clientX;
       s.lastY = e.clientY;
       const tapThreshold = s.isTouch ? TOUCH_TAP_THRESHOLD_PX : TAP_THRESHOLD_PX;
       const totalMovement = Math.abs(e.clientX - s.startX) + Math.abs(e.clientY - s.startY);
       if (totalMovement > tapThreshold) s.dragMoved = true;
-      if (s.isTouch && !s.orbitHold) {
+      if (s.isTouch && !s.orbitHold && startsWithHold) {
         if (totalMovement > HOLD_MOVE_TOLERANCE) {
           window.clearTimeout(holdTimer);
           s.dragMoved = true;
         }
         return;
+      }
+      if (s.isTouch && !s.orbitHold) {
+        const horizontal = e.clientX - s.startX;
+        const vertical = e.clientY - s.startY;
+        if (
+          Math.abs(vertical) >= TOUCH_TAP_THRESHOLD_PX &&
+          Math.abs(vertical) >= Math.abs(horizontal)
+        ) {
+          s.isDown = false;
+          activePointer = null;
+          return;
+        }
+        if (
+          Math.abs(horizontal) < TOUCH_TAP_THRESHOLD_PX ||
+          Math.abs(horizontal) < Math.abs(vertical) * SWIPE_DIRECTION_RATIO
+        )
+          return;
+        s.orbitHold = true;
+        s.dragMoved = true;
+        dx = horizontal;
+        dy = vertical;
       }
       if (!s.dragMoved) return;
       // The class is what fades the DOM text out, so the car reads clean while you orbit.
@@ -124,7 +144,7 @@ export function useOrbitGesture(
     };
     // Registered non-passive below, so an engaged hold can suppress the page scroll.
     const onTouchMove = (e: TouchEvent) => {
-      if (state.current.orbitHold) e.preventDefault();
+      if (startsWithHold && state.current.orbitHold && e.cancelable) e.preventDefault();
     };
     const onPointerUp = (e: PointerEvent) => {
       if (activePointer !== e.pointerId) return;

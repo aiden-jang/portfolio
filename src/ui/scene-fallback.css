@@ -77,3 +77,24 @@ body:not([data-car-controls='visible']) .scene-recovery {
   object-fit: cover;
   transform: none;
 }
+
+.scene-recovery .scene-recovery-angles {
+  gap: 2px;
+  margin: 0 auto 8px;
+  padding: 2px;
+  border: 1px solid #4b443b;
+  border-radius: 8px;
+  background: #171615;
+  width: fit-content;
+  max-width: 100%;
+}
+.scene-recovery-angles button {
+  padding: 0 clamp(6px, 2.6vw, 16px);
+  border-color: transparent;
+  background: transparent;
+  white-space: nowrap;
+}
+.scene-recovery-angles button[aria-pressed='true'] {
+  color: #231b14;
+  background: #e8decb;
+}

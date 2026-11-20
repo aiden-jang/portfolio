@@ -1,8 +1,10 @@
-import { captureScene } from '../ui/photo/capture';
 import { photoRatio, type PhotoShape } from './state';
 
-export async function captureFramedPhoto(shape: PhotoShape): Promise<Blob> {
-  const frame = await captureScene();
+export async function cropStudioPhoto(
+  frame: Blob,
+  shape: PhotoShape,
+  position: { x: number; y: number },
+): Promise<Blob> {
   const source = await createImageBitmap(frame);
   try {
     const ratio = photoRatio(shape);
@@ -17,8 +19,8 @@ export async function captureFramedPhoto(shape: PhotoShape): Promise<Blob> {
     context.imageSmoothingQuality = 'high';
     context.drawImage(
       source,
-      (source.width - width) / 2,
-      (source.height - height) / 2,
+      (source.width - width) * position.x,
+      (source.height - height) * position.y,
       width,
       height,
       0,

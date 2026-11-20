@@ -11,9 +11,10 @@ type Props = {
   error: string | null;
   still?: string | null;
   matched: boolean;
+  outgoing?: string;
 };
 
-export function StudioLoading({ car, pair, pairFailed, error, still, matched }: Props) {
+export function StudioLoading({ car, pair, pairFailed, error, still, matched, outgoing }: Props) {
   const retry = pair ? useLineup.getState().retry : useAppStore.getState().retryCar;
   const status = pairFailed
     ? 'Lineup could not load.'
@@ -29,7 +30,10 @@ export function StudioLoading({ car, pair, pairFailed, error, still, matched }: 
           <img src={`/showroom/matched/1440-${still}.webp`} alt="" />
         </picture>
       )}
-      <span>{status}</span>
+      <span>
+        {status}
+        {outgoing && !still && <small>Holding the {outgoing} in view</small>}
+      </span>
       {(error || pairFailed) && (
         <button
           type="button"

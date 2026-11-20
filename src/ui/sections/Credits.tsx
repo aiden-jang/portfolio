@@ -3,9 +3,16 @@ import { usePageScrollLock } from '../usePageScrollLock';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CARS } from '../../config';
+import { useAppStore } from '../../store';
 import './credits.css';
 
 export function Credits() {
+  const current = useAppStore((state) =>
+    state.sceneUnavailable || state.isCarLoading || state.carLoadError
+      ? null
+      : CARS[state.carIndex],
+  );
+  const credit = current?.credit;
   const credited = CARS.filter((car) => !!car.credit);
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -67,7 +74,34 @@ export function Credits() {
                 Models adapted for web display with compressed textures and geometry. Full mesh
                 detail retained. Interactive paint and lighting added.
               </p>
-              <ul className="model-credits-list">
+              {current && credit && (
+                <section className="model-credit-feature" aria-label="Car in the closing frame">
+                  <div>
+                    <p>In the closing frame</p>
+                    <h3>{current.name}</h3>
+                  </div>
+                  <p>
+                    <a
+                      href={credit.url}
+                      target="_blank"
+                      rel="noopener"
+                      aria-describedby="external-link-hint"
+                    >
+                      {credit.author}
+                    </a>
+                    {' · '}
+                    <a
+                      href={credit.licenseUrl}
+                      target="_blank"
+                      rel="noopener"
+                      aria-describedby="external-link-hint"
+                    >
+                      {credit.license}
+                    </a>
+                  </p>
+                </section>
+              )}
+              <ul className="model-credits-list" aria-label="Full model catalogue">
                 {credited.map((car) => {
                   const credit = car.credit!;
                   return (

@@ -183,3 +183,9 @@
   pointer-events: none;
   visibility: hidden;
 }
+
+@media (pointer: coarse) {
+  body[data-car-controls='visible']:not([data-photo-mode]) {
+    touch-action: pan-y pinch-zoom;
+  }
+}

@@ -17,11 +17,20 @@ body:has(.garage-studio .studio-matched-status) .car-loading-progress {
 }
 @media (max-width: 767px) {
   .studio-scene-status.studio-matched-status {
-    bottom: clamp(205px, 28vh, 270px);
+    top: clamp(154px, 22vh, 188px);
+    bottom: auto;
   }
 }
 @media (max-height: 550px) and (orientation: landscape) {
   .studio-scene-status.studio-matched-status {
-    bottom: 144px;
+    top: 150px;
+    bottom: auto;
   }
+}
+
+.studio-matched-status small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
 }

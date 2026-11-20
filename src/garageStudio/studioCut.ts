@@ -22,7 +22,7 @@ export function clearStudioCut(cancelPending = true) {
 
 export function stageStudioCut(run: () => void, waitForCar: boolean) {
   clearStudioCut();
-  if (prefersReducedMotion()) {
+  if (!waitForCar && prefersReducedMotion()) {
     run();
     return;
   }
@@ -50,7 +50,7 @@ function reveal(duration: number) {
 }
 
 export function paintStudioCut(canvas: HTMLCanvasElement, loading: boolean, error: boolean) {
-  if (previous && waiting && (!loading || error)) reveal(340);
+  if (previous && waiting && !loading && !error) clearStudioCut(false);
   const cut = next;
   if (!cut) return;
   clearTimeout(cut.timer);
@@ -66,7 +66,7 @@ export function paintStudioCut(canvas: HTMLCanvasElement, loading: boolean, erro
     canvas.parentElement.append(plate);
     previous = plate;
     waiting = cut.waitForCar;
-    expiry = window.setTimeout(clearStudioCut, 10000);
+    if (!waiting) expiry = window.setTimeout(clearStudioCut, 10000);
   }
   queueMicrotask(() => {
     cut.run();

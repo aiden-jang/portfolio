@@ -131,7 +131,7 @@ it('keeps the portfolio readable when the scene fails', async () => {
     ),
   );
   expect(host.textContent).toContain('Selected work');
-  expect(host.querySelector('[role="status"]')?.textContent).toContain('couldn’t start');
+  expect(host.querySelector('[role="status"]')?.textContent).toContain('3D is unavailable');
 });
 
 it('keeps the latest story sharing feedback when an earlier copy finishes later', async () => {

@@ -89,15 +89,27 @@ for (const width of [1440, 390]) {
       await button('Photo').click();
       if (!phone) await button('Landscape 16:9').click();
       await button('Capture').click();
-      await expect(studio.getByRole('img', { name: 'Captured studio photograph' })).toBeVisible();
+      const photograph = studio.getByRole('img', { name: 'Captured studio photograph' });
+      await expect(photograph).toBeVisible();
+      const captured = await photograph.getAttribute('src');
+      const crop = studio.getByRole('group', { name: 'Photo crop. Use arrows to reframe.' });
+      await expect(crop).toBeFocused();
+      await expect(button('Lineup')).toBeHidden();
+      await crop.press('ArrowDown');
+      await expect(photograph).toHaveCSS('object-position', '50% 45%');
+      await button(phone ? 'Wide 16:9' : 'Portrait 4:5').click();
+      await expect(photograph).toHaveAttribute('src', captured!);
+      await button('Center').click();
+      await expect(photograph).toHaveCSS('object-position', '50% 50%');
       const download = page.waitForEvent('download');
       await button('Save photo').click();
       const saved = await download;
       const { width: photoWidth, height: photoHeight } = PNG.sync.read(
         await readFile((await saved.path())!),
       );
-      expect(photoWidth / photoHeight).toBeCloseTo(phone ? 4 / 5 : 16 / 9, 2);
+      expect(photoWidth / photoHeight).toBeCloseTo(phone ? 16 / 9 : 4 / 5, 2);
 
+      await button('Done').click();
       await button('Back to Garage').click();
       await expect(studio).toHaveCount(0);
       await expect(garage).toBeFocused();

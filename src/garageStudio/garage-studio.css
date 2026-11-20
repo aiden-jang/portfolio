@@ -227,20 +227,6 @@ button.studio-strong:not([aria-pressed='true']) {
   box-shadow: 0 0 0 100vmax #04040375;
   z-index: -1;
 }
-.studio-photo-result {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  background: #0c0b09ed;
-  pointer-events: none;
-}
-.studio-photo-result img {
-  max-height: 52svh;
-  max-width: min(90vw, 1000px);
-  object-fit: contain;
-}
 .garage-studio[data-chapter='lineup'] .garage-studio-title h2 {
   font-size: clamp(42px, 6.4vw, 87px);
 }

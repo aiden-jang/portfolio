@@ -53,11 +53,17 @@ for (const width of [1440, 390]) {
       } as typeof get;
     });
     await page.goto('/?car=1&paint=%233f464e&light=night');
-    await expect(page.getByText('Static preview · Your browser couldn’t start 3D.')).toBeVisible();
+    await expect(page.getByText('Studio photographs · 3D is unavailable.')).toBeVisible();
     await expect(page.getByRole('button', { name: /Browse cars\./ })).toBeHidden();
-    await expect(
-      page.getByRole('img', { name: 'Static Ferrari F40 showroom preview' }),
-    ).toBeVisible();
+    await expect(page.getByRole('img', { name: 'Ferrari F40 · Opening angle' })).toBeVisible();
+    const angles = page.getByRole('group', { name: 'F40 photographs' });
+    for (const angle of ['Side profile', 'Rear deck']) {
+      await angles.getByRole('button', { name: angle, exact: true }).click();
+      const image = page.getByRole('img', { name: `Ferrari F40 · ${angle}` });
+      await expect
+        .poll(() => image.evaluate((node: HTMLImageElement) => node.naturalWidth))
+        .toBe(width === 390 ? 390 : 1440);
+    }
     expect(new URL(page.url()).searchParams.get('paint')).toBe('#3f464e');
     await page.evaluate(() =>
       (window as unknown as { enableTestWebGL: () => void }).enableTestWebGL(),
