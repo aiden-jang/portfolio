@@ -103,3 +103,89 @@ for (const width of [1440, 390]) {
     });
   });
 }
+
+for (const width of [1440, 390]) {
+  const phone = width < 768;
+  test.describe(`Studio materials and cameras at ${width}px`, () => {
+    test.use({ viewport: { width, height: 844 }, isMobile: phone, hasTouch: phone });
+
+    test('compares finishes, zooms into the F40 deck, and shares the camera', async ({ page }) => {
+      await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
+      await page.goto('/?garage=studio');
+      const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
+      const button = (name: string) => studio.getByRole('button', { name, exact: true });
+      const ready = () => expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+      await ready();
+
+      const clip = { x: 0, y: 248, width, height: 342 };
+      const capture = async () => {
+        await page.evaluate(
+          () =>
+            new Promise<void>((resolve) => {
+              requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+            }),
+        );
+        return PNG.sync.read(await page.screenshot({ clip, timeout: 10_000 }));
+      };
+      const visuallyDiffers = async (before: PNG) => {
+        const after = await capture();
+        let changed = 0;
+        for (let i = 0; i < before.data.length; i += 4)
+          if (Math.abs(before.data[i] - after.data[i]) > 12) changed++;
+        return changed;
+      };
+      const refined = await capture();
+      await button('Current').click();
+      await expect.poll(() => visuallyDiffers(refined)).toBeGreaterThan(200);
+      const current = await capture();
+      await button('Refined').click();
+      await expect.poll(() => visuallyDiffers(current)).toBeGreaterThan(200);
+
+      await button('Long lens').click();
+      await expect(button('Long lens')).toHaveAttribute('aria-pressed', 'true');
+      await button('Rear deck').click();
+      await expect(button('Rear deck')).toHaveAttribute('aria-pressed', 'true');
+      const deck = await capture();
+      await button('Zoom in').click();
+      await expect.poll(() => visuallyDiffers(deck)).toBeGreaterThan(500);
+
+      await button('Current').click();
+      await button('Share shot').click();
+      const field = studio.getByRole('textbox', { name: 'Exact shot link' });
+      const url = new URL(await field.inputValue());
+      expect(url.searchParams.get('camera')).toBe('deck');
+      expect(url.searchParams.get('finish')).toBe('current');
+      expect(Number(url.searchParams.get('zoom'))).toBeLessThan(1);
+      const linked = await page.context().newPage();
+      await linked.goto(url.toString());
+      await expect(linked.getByRole('button', { name: 'Rear deck', exact: true })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+      await expect(linked.getByRole('button', { name: 'Current', exact: true })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+      await linked.close();
+
+      await button('Lineup').click();
+      await ready();
+      await button('Glide view').click();
+      const stage = studio.getByRole('region', { name: 'Drag to orbit' });
+      await stage.focus();
+      await stage.press('ArrowRight');
+      await stage.press('ArrowRight');
+      await button('Share shot').click();
+      const glide = new URL(await field.inputValue());
+      expect(glide.searchParams.get('camera')).toBe('glide');
+      expect(Number(glide.searchParams.get('glide'))).toBeGreaterThan(0);
+      await button('Free orbit').click();
+      await button('Overhead').click();
+      await expect(button('Overhead')).toHaveAttribute('aria-pressed', 'true');
+      await expect(button('Axle guides')).toBeVisible();
+      await button('Back to Garage').click();
+      await expect(studio).toHaveCount(0);
+      await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();
+    });
+  });
+}

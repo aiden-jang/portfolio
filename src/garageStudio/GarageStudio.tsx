@@ -1,3 +1,5 @@
+import { StudyControls, StudioInvitation } from '../garageStudy/StudyControls';
+import { useGarageStudy } from '../garageStudy/state';
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
@@ -175,6 +177,7 @@ export function GarageStudio() {
         <h2>{title}</h2>
         <p>{subtitle}</p>
       </div>
+      {!photo && !study && <StudyControls waiting={waiting} />}
       {photo && !image && (
         <div
           className="studio-photo-guide"
@@ -200,9 +203,7 @@ export function GarageStudio() {
         </div>
       )}
       <footer className="garage-studio-footer">
-        {!photo && !study && (
-          <div className="studio-invitation">{dragging ? 'Orbiting' : 'Drag to orbit'}</div>
-        )}
+        {!photo && !study && <StudioInvitation dragging={dragging} />}
         <div className="garage-studio-dock">
           <div className="garage-studio-row studio-chapters" aria-label="Garage views" role="group">
             {(Object.keys(chapters) as Chapter[]).map((name) => (
@@ -256,6 +257,7 @@ export function GarageStudio() {
               <button
                 disabled={waiting}
                 onClick={() => {
+                  useGarageStudy.setState({ playing: false });
                   useGarageStudio.setState({ photo: 'portrait' });
                   repaintStudio();
                 }}

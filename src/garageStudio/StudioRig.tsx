@@ -1,3 +1,5 @@
+import { frameGlide } from '../garageStudy/glide';
+import { useGarageStudy } from '../garageStudy/state';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import { Box3, MathUtils, PerspectiveCamera, Vector3, type Object3D } from 'three';
@@ -11,8 +13,10 @@ const fallback = new Box3(new Vector3(-1, 0, -2.25), new Vector3(1, 1.2, 2.25));
 const modelBoxes = new WeakMap<Object3D, Box3>();
 const parts = new WeakMap<Object3D, Box3>();
 const center = new Vector3();
+const deckBounds = new Box3(new Vector3(-0.63, 0.66, -1.78), new Vector3(0.63, 1.13, -0.34));
 
 export function StudioRig() {
+  const offset = useRef(new Vector3());
   const frame = useRef({
     ready: false,
     yaw: 0,
@@ -31,16 +35,30 @@ export function StudioRig() {
     const model = app.refs.carModel;
     const id = app.carIndex;
     const pair = chapter === 'lineup';
+    const { camera: view } = useGarageStudy.getState();
+    const readableMotion = prefersReducedMotion();
+    const deck = chapter === 'walk' && id === 0 && view === 'deck';
+    const profile = chapter === 'walk' && view === 'profile';
     const orbit = activeOrbit(state);
     const { yaw, pitch, zoom } = orbit;
     const detail = chapter === 'detail';
     const f1 = id === 15 || id === 16;
     const detailPart = detail && proposed;
     const bounds = pair ? pairBounds : localBounds(model);
-    const focusBounds = detailPart ? detailBounds(model, id, bounds) : bounds;
+    const focusBounds = deck ? deckBounds : detailPart ? detailBounds(model, id, bounds) : bounds;
     const at = focusBounds.getCenter(center);
     const groundLift = f1 ? (mobile ? 0.78 : 0.7) : mobile ? 0.69 : 0.62;
     const current = frame.current;
+    if (pair && !proposed && view === 'glide') {
+      frameGlide(camera, current.target, mobile, dt, readableMotion);
+      const delta = offset.current.copy(camera.position).sub(current.target);
+      current.yaw = Math.atan2(delta.x, delta.z);
+      current.lift = delta.y;
+      current.radius = delta.length();
+      current.fov = camera.fov;
+      current.ready = true;
+      return;
+    }
     const short = MathUtils.clamp((520 - size.height) / 190, 0, 1);
     const narrow = MathUtils.clamp((390 - size.width) / 70, 0, 1);
     const verticalBias = detailPart
@@ -50,58 +68,80 @@ export function StudioRig() {
       : chapter === 'walk' && proposed
         ? 0.012
         : 0.19;
-    const elevation = pair
-      ? proposed
-        ? 1.49
-        : mobile
-          ? 0.39
-          : 0.24
-      : MathUtils.clamp(verticalBias + pitch, 0.005, 0.6);
-    const fov = pair
-      ? proposed
+    const elevation = deck
+      ? MathUtils.clamp(0.43 + pitch, 0.26, 0.65)
+      : profile
+        ? MathUtils.clamp(0.073 + pitch, 0.018, 0.35)
+        : pair
+          ? proposed
+            ? 1.49
+            : mobile
+              ? 0.39
+              : 0.24
+          : MathUtils.clamp(verticalBias + pitch, 0.005, 0.6);
+    const fov = deck
+      ? mobile
+        ? 43
+        : 36
+      : profile
         ? mobile
-          ? 69
-          : 52
-        : mobile
-          ? 49
-          : 34
-      : detailPart
-        ? mobile
-          ? 37
-          : 32
-        : chapter === 'walk' && proposed
-          ? mobile
-            ? 43
-            : 34
-          : mobile
-            ? 34
-            : 32;
-    if (!pair && !detailPart)
+          ? 31
+          : 24
+        : pair
+          ? proposed
+            ? mobile
+              ? 69
+              : 52
+            : mobile
+              ? 49
+              : 34
+          : detailPart
+            ? mobile
+              ? 37
+              : 32
+            : chapter === 'walk' && proposed
+              ? mobile
+                ? 43
+                : 34
+              : mobile
+                ? 34
+                : 32;
+    if (!pair && !detailPart && !deck)
       at.setX(0)
         .setZ(0)
         .setY(chapter === 'walk' && proposed ? groundLift / 2 + 0.08 : KEYFRAMES[0].targetY);
     if (pair) at.set(0, 0.28, -0.22);
+    if (deck) at.set(0, 0.88, -1.03);
+    if (profile) at.y = 0.52;
     if (short > 0) at.y -= short * 0.26;
     const crop = photo ? photoRatio(photo) : aspect;
-    const base = pair
-      ? proposed
-        ? 7.5
-        : 10.6
-      : detailPart
-        ? f1
-          ? mobile
-            ? 3.34
-            : 3.05
-          : mobile
-            ? 3.85
-            : 3.55
-        : chapter === 'walk' && proposed
-          ? mobile
-            ? 7.75
-            : 6.55
-          : mobile
-            ? 8.92
-            : 8.05;
+    const base = deck
+      ? mobile
+        ? 4.45
+        : 3.48
+      : profile
+        ? mobile
+          ? 12.8
+          : 10.5
+        : pair
+          ? proposed
+            ? 7.5
+            : 10.6
+          : detailPart
+            ? f1
+              ? mobile
+                ? 3.34
+                : 3.05
+              : mobile
+                ? 3.85
+                : 3.55
+            : chapter === 'walk' && proposed
+              ? mobile
+                ? 7.75
+                : 6.55
+              : mobile
+                ? 8.92
+                : 8.05;
     const aim = pair && proposed ? yaw + (mobile ? 0.47 : 1.03) : yaw;
     const overhead = pair && proposed;
     if (overhead && !photo && !mobile) {
@@ -121,13 +161,16 @@ export function StudioRig() {
     );
     const clearance =
       overhead && !photo ? 1 + narrow * 0.16 + short * 0.41 + (mobile ? 0 : 0.28 * (1 - short)) : 1;
-    const radius = Math.max(base * zoom * (1 + short * 0.18), fit) * clearance;
+    const fittedBase = base * (1 + short * 0.18);
+    const radius = deck
+      ? Math.max(fittedBase, fit) * zoom
+      : Math.max(fittedBase * zoom, fit) * clearance;
     const realLift =
-      chapter === 'walk' && proposed
+      chapter === 'walk' && proposed && !deck && !profile
         ? groundLift + Math.max(0, pitch) * 2.3
         : at.y + radius * Math.sin(elevation);
     const targetLift = realLift - at.y;
-    const k = !current.ready || prefersReducedMotion() ? 1 : 1 - Math.exp(-Math.min(dt, 0.06) * 11);
+    const k = !current.ready || readableMotion ? 1 : 1 - Math.exp(-Math.min(dt, 0.06) * 11);
     current.ready = true;
     current.yaw += Math.atan2(Math.sin(aim - current.yaw), Math.cos(aim - current.yaw)) * k;
     orbit.shownYaw = current.yaw - (pair && proposed ? (mobile ? 0.47 : 1.03) : 0);

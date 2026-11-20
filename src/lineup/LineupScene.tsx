@@ -1,3 +1,4 @@
+import { useGarageStudy } from '../garageStudy/state';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import { Floor } from '../three/Floor';
@@ -12,6 +13,7 @@ type Models = Awaited<ReturnType<typeof loadLineup>>;
 
 export function LineupScene() {
   const preview = useGarageStudio((state) => state.active);
+  const refined = useGarageStudy((state) => state.refined);
   const guides = useGarageStudio((state) => state.active && state.proposed && state.guides);
   const attempt = useLineup((state) => state.attempt);
   const [models, setModels] = useState<Models | null>(null);
@@ -42,8 +44,10 @@ export function LineupScene() {
   }, [attempt, invalidate]);
 
   useEffect(() => {
-    models?.tuneFerrari(true, getStudioProjection(mobile));
-  }, [models, mobile]);
+    models?.tuneFerrari(true, getStudioProjection(mobile), preview && refined);
+    models?.tuneRedBull?.(preview && refined);
+    invalidate();
+  }, [models, mobile, preview, refined, invalidate]);
 
   useFrame(() => {
     const { status, ready } = useLineup.getState();

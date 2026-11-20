@@ -1,3 +1,4 @@
+import { useGarageStudy } from '../garageStudy/state';
 import { motionState } from './studioEntrance';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
@@ -35,6 +36,7 @@ function computeSunPosition(date: Date) {
 export function Lights() {
   const { gl, scene } = useThree();
   const studioMap = useRef<THREE.WebGLRenderTarget | null>(null);
+  const opticsMap = useRef<THREE.WebGLRenderTarget | null>(null);
   const blackoutMap = useRef<THREE.WebGLRenderTarget | null>(null);
   const dim = useRef(0);
   const defaultMap = useRef<THREE.Texture | null>(null);
@@ -56,6 +58,8 @@ export function Lights() {
       environment.dispose();
       studioMap.current?.dispose();
       studioMap.current = null;
+      opticsMap.current?.dispose();
+      opticsMap.current = null;
       blackoutMap.current?.dispose();
       blackoutMap.current = null;
     };
@@ -88,8 +92,22 @@ export function Lights() {
       studioMap.current = createStudioEnvironment(generator);
       generator.dispose();
     }
+    const optics =
+      preview.active &&
+      !dark &&
+      (!preview.study || preview.study === 'finished') &&
+      useGarageStudy.getState().refined;
+    if (optics && !opticsMap.current) {
+      const generator = new THREE.PMREMGenerator(gl);
+      opticsMap.current = createStudioEnvironment(generator, false, true);
+      generator.dispose();
+    }
     scene.environment = studio
-      ? ((dark ? blackoutMap.current?.texture : studioMap.current?.texture) ?? null)
+      ? ((dark
+          ? blackoutMap.current?.texture
+          : optics
+            ? opticsMap.current?.texture
+            : studioMap.current?.texture) ?? null)
       : defaultMap.current;
     const lighting = studio ? 'studio' : state.themeName === 'studio' ? 'dusk' : state.themeName;
     const target = THEMES[lighting];

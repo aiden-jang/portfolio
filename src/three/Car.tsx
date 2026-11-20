@@ -1,3 +1,5 @@
+import { useGarageStudy } from '../garageStudy/state';
+import { tuneStudyMaterials } from '../garageStudy/materials';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
@@ -50,6 +52,7 @@ export function Car() {
   const { attach: attachDetails, release: releaseDetails, update: updateDetails } = useCarDetails();
   const group = useMemo(() => new THREE.Group(), []);
   const studioFinish = useRef<ReturnType<typeof tuneStudioFerrari> | null>(null);
+  const reviewFinish = useRef<ReturnType<typeof tuneStudyMaterials>>();
   const displayedIndex = useRef(carIndex);
   const modelRef = useRef<THREE.Object3D | null>(null);
   const loader = useMemo(() => {
@@ -127,6 +130,7 @@ export function Car() {
         if (!spec.preserveFlatMeshes) hideBakedPlanes(model);
         prepareModelGlass(model);
         prepareModelFinish(model, spec.file);
+        reviewFinish.current = tuneStudyMaterials(model, spec.file);
         studioFinish.current = carIndex === 0 ? tuneStudioFerrari(model) : null;
         studioFinish.current?.(isOpeningStudio(useAppStore.getState()));
         headlights.current = createPopupHeadlights(model, gltf.animations, spec.popupHeadlights);
@@ -218,10 +222,17 @@ export function Car() {
   useFrame((state, dt) => {
     const app = useAppStore.getState();
     group.visible = !useLineup.getState().active;
-    const studio = useGarageStudio.getState().active || isOpeningStudio(app);
+    const review = useGarageStudio.getState();
+    const refinements =
+      review.active &&
+      (!review.study || review.study === 'finished') &&
+      useGarageStudy.getState().refined;
+    reviewFinish.current?.(refinements);
+    const studio = review.active || isOpeningStudio(app);
     studioFinish.current?.(
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,
+      refinements,
     );
     headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
     headlights.current?.update(dt);

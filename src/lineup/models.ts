@@ -1,3 +1,4 @@
+import { tuneStudyMaterials } from '../garageStudy/materials';
 import { Box3, Group, Vector3, type Object3D } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
@@ -45,6 +46,7 @@ export async function loadLineup(signal: AbortSignal) {
       cars,
       points: cars.flatMap(({ bounds }) => corners(bounds)),
       tuneFerrari: tuneStudioFerrari(f40),
+      tuneRedBull: tuneStudyMaterials(rb16b, RB16B.file),
       dispose: () => {
         disposeModel(f40);
         disposeModel(rb16b);

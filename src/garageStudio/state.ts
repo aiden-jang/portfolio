@@ -1,3 +1,4 @@
+import { resetStudyCamera, track, useGarageStudy } from '../garageStudy/state';
 import { create } from 'zustand';
 import { useAppStore } from '../store';
 import { useLineup } from '../lineup/state';
@@ -86,6 +87,8 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
   beforeDetail: null,
   open: () => {
     if (get().active) return;
+    resetStudyCamera();
+    useGarageStudy.setState({ refined: true });
     set({
       active: true,
       chapter: 'walk',
@@ -102,11 +105,24 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
   },
   close: () => {
     const { saved } = get();
+    resetStudyCamera();
     useLineup.getState().close();
     if (saved) restoreCameraAndCar(saved);
     const url = new URL(window.location.href);
     if (url.searchParams.get('garage') === 'studio') {
-      for (const name of ['garage', 'scene', 'variant', 'yaw', 'pitch', 'zoom', 'part', 'guides'])
+      for (const name of [
+        'garage',
+        'scene',
+        'variant',
+        'yaw',
+        'pitch',
+        'zoom',
+        'part',
+        'guides',
+        'finish',
+        'camera',
+        'glide',
+      ])
         url.searchParams.delete(name);
       window.history.replaceState(window.history.state, '', url);
     }
@@ -115,6 +131,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
   select: (chapter) => {
     const { chapter: last, beforeDetail } = get();
     if (last === chapter) return;
+    resetStudyCamera();
     if (last === 'detail' && beforeDetail) restoreCameraAndCar(beforeDetail);
     if (last === 'lineup') useLineup.getState().close();
     if (chapter === 'lineup') useLineup.getState().open();
@@ -127,7 +144,10 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
   },
   selectCar: (id) => {
     const app = useAppStore.getState();
-    if (app.carIndex !== id) app.setCarIndex(id);
+    if (app.carIndex !== id) {
+      resetStudyCamera();
+      app.setCarIndex(id);
+    }
     const { detailOrbit } = get();
     if (supportsDetail(id)) Object.assign(detailOrbit, pose(detailYaw(id)));
   },
@@ -180,6 +200,12 @@ export function shotUrl() {
     'part',
     (CARS[app.carIndex].drs ? app.drsOpen : app.headlightsRaised) ? 'up' : 'down',
   );
+  const optics = useGarageStudy.getState();
+  url.searchParams.set('finish', optics.refined ? 'refined' : 'current');
+  if (optics.camera !== 'orbit') url.searchParams.set('camera', optics.camera);
+  else url.searchParams.delete('camera');
+  if (optics.camera === 'glide') url.searchParams.set('glide', track.position.toFixed(4));
+  else url.searchParams.delete('glide');
   if (state.guides) url.searchParams.set('guides', '1');
   else url.searchParams.delete('guides');
   return url.toString();
@@ -194,6 +220,18 @@ export function startFromLink(params: URLSearchParams) {
     proposed: params.get('variant') !== 'current',
     guides: params.get('guides') === '1',
   });
+  const camera = params.get('camera');
+  const { chapter: view, proposed } = useGarageStudio.getState();
+  const car = useAppStore.getState().carIndex;
+  useGarageStudy.setState({ refined: params.get('finish') !== 'current' });
+  if (view === 'walk' && (camera === 'profile' || (car === 0 && camera === 'deck'))) {
+    useGarageStudy.setState({ camera });
+  } else if (view === 'lineup' && !proposed && camera === 'glide') {
+    const position = Number(params.get('glide'));
+    track.position = Number.isFinite(position) ? clamp(position, 0, 1) : 0;
+    track.entry = 1;
+    useGarageStudy.setState({ camera, playing: false });
+  }
   const current = activeOrbit();
   for (const key of ['yaw', 'pitch', 'zoom'] as const) {
     if (!params.has(key)) continue;
@@ -201,7 +239,7 @@ export function startFromLink(params: URLSearchParams) {
     if (Number.isFinite(n))
       current[key] =
         key === 'zoom'
-          ? clamp(n, 0.8, 1.65)
+          ? clamp(n, useGarageStudy.getState().camera === 'deck' ? 0.64 : 0.8, 1.65)
           : key === 'pitch'
             ? clamp(n, -0.18, 0.22)
             : Math.atan2(Math.sin(n), Math.cos(n));

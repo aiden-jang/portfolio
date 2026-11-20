@@ -1,3 +1,4 @@
+import { track, useGarageStudy } from '../garageStudy/state';
 import { useRef, type KeyboardEvent, type PointerEvent } from 'react';
 import { clamp } from '../math';
 import { activeOrbit, repaintStudio } from './state';
@@ -9,11 +10,42 @@ export function StudioOrbit({
   enabled: boolean;
   onDrag: (active: boolean) => void;
 }) {
-  const drag = useRef<{ pointer: number; x: number; y: number; yaw: number; pitch: number } | null>(
-    null,
-  );
+  const drag = useRef<{
+    pointer: number;
+    x: number;
+    y: number;
+    yaw: number;
+    pitch: number;
+  } | null>(null);
+  const points = useRef(new Map<number, { x: number; y: number }>());
+  const pinch = useRef<{ distance: number; zoom: number } | null>(null);
+  const glideStart = useRef(0);
+
+  function distance() {
+    const [a, b] = points.current.values();
+    return a && b ? Math.hypot(a.x - b.x, a.y - b.y) : 0;
+  }
+
   function begin(event: PointerEvent<HTMLDivElement>) {
-    if (!event.isPrimary || event.button !== 0 || !enabled) return;
+    if (event.button !== 0 || !enabled) return;
+    const { camera, playing } = useGarageStudy.getState();
+    if (camera === 'deck' && event.pointerType === 'touch') {
+      points.current.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY,
+      });
+      event.currentTarget.setPointerCapture(event.pointerId);
+      if (points.current.size === 2)
+        pinch.current = {
+          zoom: activeOrbit().zoom,
+          distance: Math.max(1, distance()),
+        };
+    }
+    if (!event.isPrimary) return;
+    if (camera === 'glide') {
+      glideStart.current = track.position;
+      if (playing) useGarageStudy.setState({ playing: false });
+    }
     const orbit = activeOrbit();
     orbit.yaw = orbit.shownYaw;
     drag.current = {
@@ -28,8 +60,33 @@ export function StudioOrbit({
   }
 
   function move(event: PointerEvent<HTMLDivElement>) {
+    if (points.current.has(event.pointerId)) {
+      points.current.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY,
+      });
+      if (pinch.current) {
+        activeOrbit().zoom = clamp(
+          (pinch.current.zoom * pinch.current.distance) / Math.max(1, distance()),
+          0.64,
+          1.65,
+        );
+        repaintStudio();
+        return;
+      }
+    }
     const start = drag.current;
     if (!start || start.pointer !== event.pointerId) return;
+    if (useGarageStudy.getState().camera === 'glide') {
+      track.position = clamp(
+        glideStart.current +
+          (event.clientX - start.x) / Math.min(event.currentTarget.clientWidth * 0.72, 400),
+        0,
+        1,
+      );
+      repaintStudio();
+      return;
+    }
     const orbit = activeOrbit();
     orbit.yaw = start.yaw + (event.clientX - start.x) * 0.012;
     orbit.pitch = clamp(start.pitch - (event.clientY - start.y) * 0.0023, -0.18, 0.22);
@@ -37,6 +94,13 @@ export function StudioOrbit({
   }
 
   function end(event: PointerEvent<HTMLDivElement>) {
+    points.current.delete(event.pointerId);
+    if (pinch.current) {
+      if (!points.current.size) pinch.current = null;
+      drag.current = null;
+      onDrag(false);
+      return;
+    }
     if (drag.current?.pointer !== event.pointerId) return;
     drag.current = null;
     onDrag(false);
@@ -45,6 +109,12 @@ export function StudioOrbit({
   function arrow(event: KeyboardEvent<HTMLDivElement>) {
     if (!enabled || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
     event.preventDefault();
+    if (useGarageStudy.getState().camera === 'glide') {
+      useGarageStudy.setState({ playing: false });
+      track.position = clamp(track.position + (event.key === 'ArrowRight' ? 0.075 : -0.075), 0, 1);
+      repaintStudio();
+      return;
+    }
     activeOrbit().yaw += ((event.key === 'ArrowRight' ? 1 : -1) * Math.PI) / 18;
     repaintStudio();
   }
@@ -61,6 +131,12 @@ export function StudioOrbit({
       onPointerCancel={end}
       onLostPointerCapture={end}
       onKeyDown={arrow}
+      onWheel={(event) => {
+        if (!enabled || useGarageStudy.getState().camera !== 'deck') return;
+        const orbit = activeOrbit();
+        orbit.zoom = clamp(orbit.zoom + event.deltaY * 0.0011, 0.64, 1.65);
+        repaintStudio();
+      }}
     />
   );
 }

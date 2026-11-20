@@ -1,0 +1,67 @@
+.garage-study {
+  position: absolute;
+  z-index: 3;
+  top: clamp(72px, 12vh, 132px);
+  right: var(--edge);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: calc(100% - 2 * var(--edge));
+  color: var(--ivory);
+}
+.garage-study-finish,
+.garage-study-camera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  border: 1px solid var(--rim);
+  border-radius: 9px;
+  background: var(--shell);
+  padding: 3px;
+}
+.garage-study-camera:empty {
+  display: none;
+}
+.garage-study button {
+  min-height: 44px;
+  padding: 0 11px;
+  font-size: 13px;
+  font-weight: 550;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+.garage-study button[aria-pressed='true'] {
+  background: #e8decb;
+  color: #231b14;
+}
+.garage-study button:hover:enabled {
+  box-shadow: inset 0 0 0 1px #aa9a84;
+}
+.garage-study button:focus-visible {
+  outline: 2px solid #f4dfba;
+  outline-offset: 1px;
+}
+.garage-study button:disabled {
+  opacity: 0.55;
+}
+@media (max-width: 767px) {
+  .garage-study {
+    top: clamp(143px, 21vh, 178px);
+    left: var(--edge);
+    right: auto;
+    justify-content: flex-start;
+  }
+  .garage-study button {
+    padding-inline: 7px;
+    font-size: 11px;
+  }
+}
+@media (max-height: 550px) and (orientation: landscape) {
+  .garage-study {
+    top: 52px;
+  }
+  .garage-study button {
+    min-height: 38px;
+  }
+}

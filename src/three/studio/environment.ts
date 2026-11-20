@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 
-export function createStudioEnvironment(generator: THREE.PMREMGenerator, blackout = false) {
+export function createStudioEnvironment(
+  generator: THREE.PMREMGenerator,
+  blackout = false,
+  refined = false,
+) {
   const studio = new THREE.Scene();
   studio.background = new THREE.Color(0.073, 0.065, 0.059);
   const luminousPanel = (
@@ -30,14 +34,14 @@ export function createStudioEnvironment(generator: THREE.PMREMGenerator, blackou
     [4.8, 2.38, 0.48],
     [0, 0.62, -0.16],
     new THREE.Color(1, 0.964, 0.918),
-    10.6,
+    refined ? 5.7 : 10.6,
   );
   luminousPanel(
     [5.2, 2.12],
     [-3.25, 3.36, 6.05],
     [0, 0.48, 0],
     new THREE.Color(0.83, 0.89, 1),
-    4.15,
+    refined ? 2.6 : 4.15,
   );
   luminousPanel([9.2, 3.6], [-6, 5.3, 2.4], [0, 0, 0], new THREE.Color(0.87, 0.92, 1), 1.05);
   luminousPanel(
@@ -55,6 +59,29 @@ export function createStudioEnvironment(generator: THREE.PMREMGenerator, blackou
     new THREE.Color(1, 0.92, 0.81),
     2.2,
   );
+  if (refined) {
+    luminousPanel(
+      [8.7, 0.78],
+      [0.08, 5.02, 0.9],
+      [0, 0.7, 0.1],
+      new THREE.Color(1, 0.96, 0.9),
+      11.2,
+    );
+    luminousPanel(
+      [7.4, 0.43],
+      [-2.15, 4.78, -1.3],
+      [0, 0.72, -0.6],
+      new THREE.Color(0.82, 0.88, 1),
+      7.9,
+    );
+    luminousPanel(
+      [0.74, 3.75],
+      [-4.51, 2.17, 1.7],
+      [0, 0.71, 0.56],
+      new THREE.Color(0.86, 0.91, 1),
+      5.1,
+    );
+  }
   if (blackout) {
     for (const item of [...studio.children]) {
       if (item instanceof THREE.Mesh) {

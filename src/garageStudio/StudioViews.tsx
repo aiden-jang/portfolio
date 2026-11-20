@@ -1,3 +1,4 @@
+import { resetStudyCamera, useGarageStudy } from '../garageStudy/state';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 import { ControlIcon } from '../ui/ControlIcon';
@@ -32,6 +33,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
   const partActive = popups ? raised : drsOpen;
   const partReady = popups ? hasHeadlights : hasDRS;
   function switchLook(value: boolean) {
+    if (pair) resetStudyCamera();
     if (value === proposed) return;
     if (pair && !value) selectPose(window.innerWidth < 768 ? -0.58 : 0.72);
     useGarageStudio.setState({ proposed: value });
@@ -40,7 +42,11 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
 
   function zoom(by: number) {
     const orbit = activeOrbit();
-    orbit.zoom = clamp(orbit.zoom + by, 0.8, 1.65);
+    orbit.zoom = clamp(
+      orbit.zoom + by,
+      useGarageStudy.getState().camera === 'deck' ? 0.64 : 0.8,
+      1.65,
+    );
     repaintStudio();
   }
 
@@ -117,7 +123,14 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
             ['Side', Math.PI / 2],
             ['Rear', 2.61],
           ].map(([name, yaw]) => (
-            <button key={name} disabled={waiting} onClick={() => selectPose(yaw as number)}>
+            <button
+              key={name}
+              disabled={waiting}
+              onClick={() => {
+                resetStudyCamera();
+                selectPose(yaw as number);
+              }}
+            >
               {name}
             </button>
           ))}
