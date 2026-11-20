@@ -1,3 +1,4 @@
+import { stopOrbitMotion } from './orbitMotion';
 import { resetExhibit } from '../garageExhibits/state';
 import { resetStudyCamera, track, useGarageStudy } from '../garageStudy/state';
 import { create } from 'zustand';
@@ -120,6 +121,9 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
         'focus',
         'wheel',
         'exhibitPaint',
+        'aligned',
+        'shot',
+        'edges',
         'variant',
         'yaw',
         'pitch',
@@ -176,8 +180,10 @@ export function repaintStudio() {
 }
 
 export function selectPose(yaw: number) {
-  activeOrbit().yaw = yaw;
-  activeOrbit().pitch = 0;
+  const orbit = activeOrbit();
+  stopOrbitMotion(orbit);
+  orbit.yaw = yaw;
+  orbit.pitch = 0;
   repaintStudio();
 }
 

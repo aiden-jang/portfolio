@@ -1,3 +1,4 @@
+import { createDRS } from '../three/carDetails';
 import { CARS } from '../config';
 import { tuneStudyMaterials } from '../garageStudy/materials';
 import { Box3, Group, Mesh, Vector3, type Object3D } from 'three';
@@ -18,13 +19,18 @@ import { F40, F40_LENGTH, RB16B } from './vehicles';
 
 const PIRELLI_DIAMETER = 0.67;
 
-export async function loadLineup(signal: AbortSignal, porsche = false) {
+export const ALIGNED_FRONT_AXLE = 1.2;
+export type LineupKind = 'original' | 'porsche' | 'aligned' | 'race';
+
+export async function loadLineup(signal: AbortSignal, kind: LineupKind) {
+  const porsche = kind === 'porsche' || kind === 'aligned';
+  const race = kind === 'race';
   const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
   const pair = new AbortController();
   const downloads = AbortSignal.any([signal, pair.signal]);
   // Settle both downloads so the sibling's decoded textures can be released on failure.
-  const first = porsche ? CARS[7] : F40;
-  const second = porsche ? CARS[3] : RB16B;
+  const first = porsche ? CARS[7] : race ? RB16B : F40;
+  const second = porsche ? CARS[3] : race ? CARS[16] : RB16B;
   const [ferrari, redBull] = await Promise.allSettled(
     [first, second].map(({ file }) =>
       loadCarModel(loader, `/models/${file}`, downloads).catch((error: unknown) => {
@@ -45,21 +51,13 @@ export async function loadLineup(signal: AbortSignal, porsche = false) {
       detectBodyMaterial(f40, first.paintMaterial)?.color?.set(first.defaultPaint.hex);
       detectBodyMaterial(rb16b, second.paintMaterial)?.color?.set(second.defaultPaint.hex);
     }
-    const ferrariLength = new Box3().setFromObject(f40, true).getSize(new Vector3()).z;
-    const cars = porsche
-      ? ([
-          place(f40, 2.272 / turboAxles(f40), 1.34, 2.3),
-          place(rb16b, 2.272 / rwbAxles(rb16b), -1.34, -2.3),
-        ] as const)
-      : ([
-          place(f40, F40_LENGTH / ferrariLength, -1.73, 1.38),
-          place(rb16b, PIRELLI_DIAMETER / measureFrontTires(rb16b), 1.44, -1.3),
-        ] as const);
+    const cars = stageCars(f40, rb16b, kind);
     return {
       cars,
       points: cars.flatMap(({ bounds }) => corners(bounds)),
-      tuneFerrari: porsche ? undefined : tuneStudioFerrari(f40),
-      tuneRedBull: porsche ? undefined : tuneStudyMaterials(rb16b, RB16B.file),
+      wings: race ? [createDRS(f40, first.drs), createDRS(rb16b, second.drs)] : [],
+      tuneFerrari: kind === 'original' ? tuneStudioFerrari(f40) : undefined,
+      tuneRedBull: kind === 'original' ? tuneStudyMaterials(rb16b, RB16B.file) : undefined,
       dispose: () => {
         disposeModel(f40);
         disposeModel(rb16b);
@@ -79,14 +77,48 @@ function prepare(model: Object3D, car: typeof F40) {
   prepareModelFinish(model, car.file);
 }
 
-function measureFrontTires(model: Object3D) {
-  const diameters = ['TYRE_RF_540', 'TYRE_LF_554'].map((name) => {
+function stageCars(first: Object3D, second: Object3D, kind: LineupKind) {
+  if (kind === 'race') {
+    return [
+      place(first, PIRELLI_DIAMETER / measureFrontTires(first), -1.26, 0.1),
+      place(second, 0.72 / measureFrontTires(second, ['TYRE_LF_248', 'TYRE_RF_280']), 1.26, 0.1),
+    ] as const;
+  }
+  if (kind === 'porsche' || kind === 'aligned') {
+    const turbo = turboAxles(first);
+    const rwb = rwbAxles(second);
+    const turboScale = 2.272 / (turbo.front - turbo.rear);
+    const rwbScale = 2.272 / (rwb.front - rwb.rear);
+    return [
+      place(
+        first,
+        turboScale,
+        1.34,
+        kind === 'aligned' ? ALIGNED_FRONT_AXLE - turbo.front * turboScale : 2.3,
+      ),
+      place(
+        second,
+        rwbScale,
+        -1.34,
+        kind === 'aligned' ? ALIGNED_FRONT_AXLE - rwb.front * rwbScale : -2.3,
+      ),
+    ] as const;
+  }
+  const length = new Box3().setFromObject(first, true).getSize(new Vector3()).z;
+  return [
+    place(first, F40_LENGTH / length, -1.73, 1.38),
+    place(second, PIRELLI_DIAMETER / measureFrontTires(second), 1.44, -1.3),
+  ] as const;
+}
+
+function measureFrontTires(model: Object3D, names = ['TYRE_RF_540', 'TYRE_LF_554']) {
+  const diameters = names.map((name) => {
     const tyre = model.getObjectByName(name);
-    if (!tyre) throw new Error('Missing RB16B front tire.');
+    if (!tyre) throw new Error('Missing race car front tire.');
     return new Box3().setFromObject(tyre, true).getSize(new Vector3()).z;
   });
   const diameter = (diameters[0] + diameters[1]) / 2;
-  if (!(diameter > 0)) throw new Error('Invalid RB16B front tire diameter.');
+  if (!(diameter > 0)) throw new Error('Invalid race car front tire diameter.');
   return diameter;
 }
 
@@ -113,10 +145,12 @@ function turboAxles(model: Object3D) {
   const front = model.getObjectByName('Circle001_16');
   const rear = model.getObjectByName('Circle003_13');
   if (!front || !rear) throw Error('The Turbo axle geometry could not be found.');
-  return Math.abs(
-    new Box3().setFromObject(front, true).getCenter(new Vector3()).z -
-      new Box3().setFromObject(rear, true).getCenter(new Vector3()).z,
-  );
+  const center = new Vector3();
+  const bounds = new Box3();
+  return {
+    front: bounds.setFromObject(front, true).getCenter(center).z,
+    rear: bounds.setFromObject(rear, true).getCenter(center).z,
+  };
 }
 
 function rwbAxles(model: Object3D) {
@@ -134,5 +168,5 @@ function rwbAxles(model: Object3D) {
   });
   if (axles.some((bounds) => bounds.isEmpty()))
     throw Error('The RWB tire geometry could not be found.');
-  return axles[1].getCenter(vertex).z - axles[0].getCenter(vertex).z;
+  return { front: axles[1].getCenter(vertex).z, rear: axles[0].getCenter(vertex).z };
 }

@@ -13,6 +13,7 @@ const roomUniforms = `
   uniform float garageStudioLow;
   uniform float garageStudioPass;
   uniform float garageStudioLamps;
+  uniform float extendedLamp;
   uniform vec4 studioChassis;
   uniform vec2 studioWheelTouch[4];
   uniform vec3 studioPaint;
@@ -48,6 +49,7 @@ export function applyStudioReflection(
       garageStudioLow: { value: 0 },
       garageStudioPass: { value: 0 },
       garageStudioLamps: { value: 0 },
+      extendedLamp: { value: 0 },
       studioPaint: { value: new THREE.Color('#cf2428') },
       studioSecondReady: { value: 0 },
       studioSecondChassis: { value: new THREE.Vector4(0, 0, 1, 2) },

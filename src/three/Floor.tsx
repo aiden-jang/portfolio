@@ -1,3 +1,4 @@
+import { useGarageExhibit } from '../garageExhibits/state';
 import { inStudioDusk } from '../garageExhibits/state';
 import { inBlackout, useGarageStudio } from '../garageStudio/state';
 import { paintFinish } from '../paint';
@@ -99,6 +100,8 @@ export function Floor({ studio, lineup }: { studio: boolean; lineup?: LineupFoot
       uniforms.studioDusk.value += (Number(dusk) - uniforms.studioDusk.value) * settle;
       uniforms.garageStudioDim.value +=
         (Number(inBlackout()) - uniforms.garageStudioDim.value) * settle;
+      const extendedLamp = preview.active && useGarageExhibit.getState().exhibit === 'lamps';
+      uniforms.extendedLamp.value = Number(extendedLamp);
       uniforms.garageStudioLamps.value +=
         (Number(
           preview.active &&

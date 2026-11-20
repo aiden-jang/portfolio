@@ -1,3 +1,5 @@
+import { alignPorsches, isMechanical } from './mechanical';
+import { MechanicalControls } from './MechanicalControls';
 import { exhibitWheel } from './geometry';
 import { useAppStore } from '../store';
 import { repaintStudio, selectPose, useGarageStudio } from '../garageStudio/state';
@@ -7,6 +9,7 @@ import './exhibits.css';
 
 export function ExhibitControls({ waiting }: { waiting: boolean }) {
   const { exhibit, after, lighting, focus, wheelClose } = useGarageExhibit();
+  const aligned = useGarageExhibit((s) => s.aligned);
   const chapter = useGarageStudio((s) => s.chapter);
   const car = useAppStore((s) => s.carIndex);
   const canUse =
@@ -15,7 +18,7 @@ export function ExhibitControls({ waiting }: { waiting: boolean }) {
     (exhibit === 'cockpit' && chapter === 'walk' && car === 10) ||
     ((exhibit === 'brakes' || exhibit === 'wear') && chapter === 'walk' && car === 20);
   function setAfter(value: boolean) {
-    useGarageExhibit.setState({ after: value, focus: -1 });
+    useGarageExhibit.setState({ after: value, focus: -1, aligned: false });
     repaintStudio();
   }
   function setLight(value: Lighting) {
@@ -31,6 +34,7 @@ export function ExhibitControls({ waiting }: { waiting: boolean }) {
         : exhibit === 'brakes'
           ? ['Straight', 'Turned']
           : ['Clean', 'Race wear'];
+  if (isMechanical(exhibit)) return <MechanicalControls waiting={waiting} />;
   return (
     <>
       {canUse && exhibit === 'dusk' && (
@@ -64,6 +68,11 @@ export function ExhibitControls({ waiting }: { waiting: boolean }) {
         </div>
       )}
       {canUse && exhibit === 'porsche' && after && (
+        <button disabled={waiting} aria-pressed={aligned} onClick={() => alignPorsches(!aligned)}>
+          Align front axles
+        </button>
+      )}
+      {canUse && exhibit === 'porsche' && after && !aligned && (
         <div className="garage-exhibit-set" role="group" aria-label="Focus at the same angle">
           {['Both', '930 Turbo', '911 RWB'].map((label, index) => (
             <button

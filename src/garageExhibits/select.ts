@@ -1,3 +1,4 @@
+import { isMechanical, selectMechanical } from './mechanical';
 import { resetStudyCamera } from '../garageStudy/state';
 import { activeOrbit, repaintStudio, selectPose, useGarageStudio } from '../garageStudio/state';
 import { parseScenePaint } from '../paint';
@@ -10,6 +11,11 @@ export function selectExhibit(exhibit: Exhibit) {
     garage.close();
     garage.open();
     repaintStudio();
+    return;
+  }
+
+  if (isMechanical(exhibit)) {
+    selectMechanical(exhibit);
     return;
   }
 
@@ -35,27 +41,41 @@ export function openLinkedExhibit() {
 
   const garage = useGarageStudio.getState();
   const position = { ...activeOrbit(garage) };
-  selectExhibit(exhibit as Exhibit);
+  const name = exhibit as Exhibit;
+  const shot = Number(params.get('shot'));
+  const aligned = name === 'porsche' && params.get('aligned') === '1';
+  if (isMechanical(name)) {
+    selectMechanical(name, name !== 'lamps' && (shot === 1 || shot === 2) ? shot : 0);
+    if (name === 'lamps') useAppStore.setState({ headlightsRaised: params.get('part') === 'up' });
+    if (name === 'wings' && shot === 1)
+      useAppStore.setState({ drsOpen: params.get('part') === 'up' });
+  } else selectExhibit(name);
   if (params.has('scene')) Object.assign(activeOrbit(), position);
   const look = params.get('look');
   const focus = Number(params.get('focus') ?? -1);
   const lighting = look === 'studio' || look === 'blackout' ? look : 'dusk';
   useGarageExhibit.setState({
-    after: look !== 'before',
+    after: aligned || look !== 'before',
+    aligned,
+    smoothEdges: params.get('edges') !== 'standard',
+    pairWingOpen: name === 'wings' && shot === 2 && params.get('part') === 'up',
     lighting,
     focus: focus === 0 || focus === 1 ? focus : -1,
     wheelClose: params.get('wheel') === 'close',
   });
   if (exhibit === 'dusk') useGarageStudio.setState({ proposed: lighting === 'blackout' });
   if (exhibit === 'porsche')
-    useGarageStudio.setState({ proposed: garage.chapter === 'lineup' && garage.proposed });
+    useGarageStudio.setState({
+      proposed: aligned || (garage.chapter === 'lineup' && garage.proposed),
+    });
   const paint = parseScenePaint(params.get('exhibitPaint'));
   if (exhibit === 'dusk' && paint) useAppStore.setState({ activeBodyColor: paint });
   repaintStudio();
 }
 
 export function exhibitLink(base: string) {
-  const { exhibit, lighting, after, focus, wheelClose } = useGarageExhibit.getState();
+  const { exhibit, lighting, after, focus, wheelClose, shot, aligned, smoothEdges, pairWingOpen } =
+    useGarageExhibit.getState();
   if (exhibit === 'free') return base;
 
   const url = new URL(base);
@@ -65,6 +85,14 @@ export function exhibitLink(base: string) {
   if (exhibit === 'wear' && wheelClose) url.searchParams.set('wheel', 'close');
   if (exhibit === 'dusk')
     url.searchParams.set('exhibitPaint', useAppStore.getState().activeBodyColor);
+
+  if (aligned) url.searchParams.set('aligned', '1');
+  else url.searchParams.delete('aligned');
+  if (isMechanical(exhibit)) url.searchParams.set('shot', String(shot));
+  else url.searchParams.delete('shot');
+  if (exhibit === 'clarity') url.searchParams.set('edges', smoothEdges ? 'smooth' : 'standard');
+  else url.searchParams.delete('edges');
+  if (exhibit === 'wings' && shot === 2) url.searchParams.set('part', pairWingOpen ? 'up' : 'down');
 
   const saved = useGarageStudio.getState().saved;
   if (saved) {

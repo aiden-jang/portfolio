@@ -1,3 +1,4 @@
+import { isMechanical } from '../garageExhibits/mechanical';
 import { StudioChapters } from './StudioChapters';
 import { exhibitNames, resetExhibit, useGarageExhibit } from '../garageExhibits/state';
 import { exhibitLink } from '../garageExhibits/select';
@@ -156,9 +157,11 @@ export function GarageStudio() {
         ? chapters[chapter]
         : exhibitNames[exhibit];
   const subtitle = pair
-    ? porsche
-      ? '911 Turbo (930) & 911 RWB'
-      : 'Ferrari F40 & Red Bull RB16B'
+    ? exhibit === 'wings'
+      ? 'Red Bull RB16B & Ferrari F1-75'
+      : porsche
+        ? '911 Turbo (930) & 911 RWB'
+        : 'Ferrari F40 & Red Bull RB16B'
     : car.name;
   return (
     <section
@@ -223,7 +226,7 @@ export function GarageStudio() {
         <div className="garage-studio-dock">
           <StudioChapters chapter={chapter} onSelect={selectChapter} />
 
-          {!photo && !study && <StudioViews waiting={waiting} />}
+          {!photo && !study && !isMechanical(exhibit) && <StudioViews waiting={waiting} />}
 
           {photo && (
             <StudioPhotoControls

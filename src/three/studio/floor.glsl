@@ -114,6 +114,13 @@
       vec2 lampDist = vec2((abs(ground.x) - .64)/.52,(ground.y - 3.22)/1.25);
       float pools = exp(-dot(lampDist,lampDist)) * smoothstep(1.95,2.39,ground.y);
       floorTone += vec3(.072,.064,.047) * garageStudioLamps * pools * relief;
+      float reach = ground.y - 1.64;
+      float spread = .19 + .105 * max(reach, 0.);
+      float lateral = (abs(ground.x) - (.65 + .055 * reach)) / spread;
+      float beam = exp(-1.8 * lateral * lateral) * smoothstep(.12, 1.05, reach)
+        * (1. - smoothstep(1.9, 4.8, reach));
+      floorTone += vec3(.46,.35,.195) * beam * extendedLamp * garageStudioLamps
+        * clamp(relief,.62,1.32);
       reflection *= mix(1., .76 + .12 * (1. - satinFalloff), garageStudioLow);
       vec2 shaft = vec2(dot(ground,vec2(.83,.56)),dot(ground,vec2(-.56,.83)));
       float duskSoftEdge = exp(-pow((shaft.y+.18)/.81,2.));

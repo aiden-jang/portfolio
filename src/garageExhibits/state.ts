@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
-export type Exhibit = 'free' | 'porsche' | 'dusk' | 'cockpit' | 'brakes' | 'wear';
+export type Exhibit =
+  'free' | 'porsche' | 'dusk' | 'cockpit' | 'brakes' | 'wear' | 'wings' | 'lamps' | 'clarity';
 export type Lighting = 'studio' | 'dusk' | 'blackout';
 
 export const exhibitNames: Record<Exhibit, string> = {
@@ -10,6 +11,9 @@ export const exhibitNames: Record<Exhibit, string> = {
   cockpit: 'Miata cockpit',
   brakes: 'Brake reveal',
   wear: 'Corvette race wear',
+  wings: 'Rear wings',
+  lamps: 'Pop-up headlights',
+  clarity: 'Fine detail',
 };
 
 const initial = {
@@ -18,6 +22,10 @@ const initial = {
   lighting: 'dusk' as Lighting,
   focus: -1,
   wheelClose: false,
+  shot: 0,
+  smoothEdges: true,
+  pairWingOpen: false,
+  aligned: false,
 };
 
 export const useGarageExhibit = create(() => initial);

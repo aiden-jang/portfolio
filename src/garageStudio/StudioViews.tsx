@@ -23,7 +23,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
   const { chapter, proposed, guides, selectCar } = useGarageStudio();
   const id = useAppStore((s) => s.carIndex);
   const car = CARS[id];
-  const { exhibit, after } = useGarageExhibit();
+  const { exhibit, after, aligned } = useGarageExhibit();
   const porsche = exhibit === 'porsche' && after;
   const cockpit = chapter === 'walk' && exhibit === 'cockpit' && after && id === 10;
   const wheel = chapter === 'walk' && exhibit === 'brakes' && id === 20;
@@ -39,6 +39,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
   const partReady = popups ? hasHeadlights : hasDRS;
   function switchLook(value: boolean) {
     if (pair) resetStudyCamera();
+    if (aligned && !value) useGarageExhibit.setState({ aligned: false });
     if (value === proposed) return;
     if (pair && !value) selectPose(window.innerWidth < 768 ? -0.58 : 0.72);
     useGarageStudio.setState({ proposed: value });
@@ -121,7 +122,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
                 repaintStudio();
               }}
             >
-              Axle guides
+              {aligned ? 'Front axle guide' : 'Axle guides'}
             </button>
           )}
         </div>

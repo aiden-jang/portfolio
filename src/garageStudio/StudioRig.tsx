@@ -1,3 +1,5 @@
+import { frameMechanical } from '../garageExhibits/mechanicalFraming';
+import { advanceOrbit } from './orbitMotion';
 import { exhibitRadius, frameExhibit, positionWheelMarker } from '../garageExhibits/framing';
 import { pairFrame } from '../garageExhibits/geometry';
 import { useGarageExhibit } from '../garageExhibits/state';
@@ -43,6 +45,7 @@ export function StudioRig() {
     const deck = chapter === 'walk' && id === 0 && view === 'deck';
     const profile = chapter === 'walk' && view === 'profile';
     const orbit = activeOrbit(state);
+    const direct = view !== 'glide' && advanceOrbit(orbit, dt);
     const { yaw, pitch, zoom } = orbit;
     const detail = chapter === 'detail';
     const f1 = id === 15 || id === 16;
@@ -151,10 +154,12 @@ export function StudioRig() {
               : mobile
                 ? 8.92
                 : 8.05;
-    const aim = feature?.yaw ?? (pair && proposed ? yaw + (mobile ? 0.47 : 1.03) : yaw);
-    const lens = feature?.fov ?? fov;
-    const angle = feature?.elevation ?? elevation;
-    const overhead = pair && proposed;
+    const mechanical = frameMechanical(chapter, yaw, pitch, aspect, mobile, short, at);
+    const yawOffset = pair && proposed && !mechanical ? (mobile ? 0.47 : 1.03) : 0;
+    const aim = feature?.yaw ?? yaw + yawOffset;
+    const lens = mechanical?.fov ?? feature?.fov ?? fov;
+    const angle = mechanical?.angle ?? feature?.elevation ?? elevation;
+    const overhead = pair && proposed && !mechanical;
     if (overhead && !photo && !mobile) {
       const dockClearance = 0.42 * (1 - short);
       at.x += Math.sin(aim) * dockClearance;
@@ -174,17 +179,19 @@ export function StudioRig() {
       overhead && !photo ? 1 + narrow * 0.16 + short * 0.41 + (mobile ? 0 : 0.28 * (1 - short)) : 1;
     const fittedBase = (feature?.base ?? base) * (1 + short * 0.18);
     const radius =
+      (mechanical ? (photo ? Math.max(mechanical.radius, fit) : mechanical.radius) : undefined) ??
       exhibitRadius(feature?.mode, fittedBase, fit, zoom) ??
       (deck ? Math.max(fittedBase, fit) * zoom : Math.max(fittedBase * zoom, fit) * clearance);
     const realLift =
-      chapter === 'walk' && proposed && !deck && !profile && !feature
+      chapter === 'walk' && proposed && !deck && !profile && !feature && !mechanical
         ? groundLift + Math.max(0, pitch) * 2.3
         : at.y + radius * Math.sin(angle);
     const targetLift = realLift - at.y;
     const k = !current.ready || readableMotion ? 1 : 1 - Math.exp(-Math.min(dt, 0.06) * 11);
+    const deltaYaw = Math.atan2(Math.sin(aim - current.yaw), Math.cos(aim - current.yaw));
+    current.yaw = direct || !current.ready ? aim : current.yaw + deltaYaw * k;
     current.ready = true;
-    current.yaw += Math.atan2(Math.sin(aim - current.yaw), Math.cos(aim - current.yaw)) * k;
-    orbit.shownYaw = current.yaw - (pair && proposed ? (mobile ? 0.47 : 1.03) : 0);
+    orbit.shownYaw = current.yaw - yawOffset;
     current.lift = MathUtils.lerp(current.lift, targetLift, k);
     current.radius = MathUtils.lerp(current.radius, radius, k);
     current.fov = MathUtils.lerp(current.fov, lens, k);

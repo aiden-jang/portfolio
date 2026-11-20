@@ -1,3 +1,4 @@
+import { useGarageExhibit } from '../garageExhibits/state';
 import { useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { isOpeningStudio } from '../lighting';
@@ -31,6 +32,8 @@ export const Effects = memo(function Effects() {
   const drawTypeOverlap = useCarTypeOverlap();
   const blendCarSwap = useCarSwapBlend();
   const { gl, scene, camera, size, invalidate } = useThree();
+  const studioActive = useGarageStudio((s) => s.active);
+  const smoothDetail = useGarageExhibit((s) => s.exhibit === 'clarity' && s.smoothEdges);
   const pipeline = useRef<{ composer: EffectComposer; bloom: BloomEffect } | null>(null);
   const currentStrength = useRef(THEMES.dusk.bloomStrength);
   const currentThreshold = useRef(THEMES.dusk.bloomThreshold);
@@ -72,6 +75,23 @@ export const Effects = memo(function Effects() {
     pipeline.current?.composer.setSize(size.width, size.height);
     invalidate();
   }, [size.width, size.height, gl, scene, camera, invalidate]);
+
+  useLayoutEffect(() => {
+    const graph = pipeline.current;
+    if (!graph) return;
+    const context = gl.getContext();
+    let samples = 0;
+    if (studioActive && smoothDetail && 'getInternalformatParameter' in context) {
+      const supported = context.getInternalformatParameter(
+        context.RENDERBUFFER,
+        context.RGBA16F,
+        context.SAMPLES,
+      ) as Int32Array | null;
+      samples = supported?.find((value) => value <= 4 && value > 1) ?? 0;
+    }
+    graph.composer.multisampling = samples;
+    invalidate();
+  }, [studioActive, smoothDetail, gl, scene, camera, invalidate]);
 
   useFrame((state, dt) => {
     const graph = pipeline.current;

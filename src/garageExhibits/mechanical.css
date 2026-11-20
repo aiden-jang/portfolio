@@ -1,0 +1,40 @@
+.mechanical-views {
+  flex-wrap: wrap;
+}
+.studio-lamp-comparison {
+  width: min(calc(100% - 24px), 1060px);
+  max-height: calc(100% - 24px);
+  margin: auto;
+  padding: clamp(10px, 2vw, 18px);
+  color: var(--ivory);
+  background: var(--shell);
+  border: 1px solid var(--rim);
+  border-radius: 8px;
+}
+.studio-lamp-comparison::backdrop {
+  background: #090807d9;
+}
+.studio-lamp-comparison header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+.studio-lamp-comparison h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+.studio-lamp-labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 10px 0 5px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.studio-lamp-comparison img {
+  display: block;
+  width: 100%;
+  max-height: 68svh;
+  object-fit: contain;
+}

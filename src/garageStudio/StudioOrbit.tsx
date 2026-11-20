@@ -1,3 +1,5 @@
+import { orbitDragYaw, releaseOrbit, startOrbitDrag, stopOrbitMotion } from './orbitMotion';
+import type { Orbit } from './state';
 import { track, useGarageStudy } from '../garageStudy/state';
 import { useRef, type KeyboardEvent, type PointerEvent } from 'react';
 import { clamp } from '../math';
@@ -12,6 +14,10 @@ export function StudioOrbit({
 }) {
   const drag = useRef<{
     pointer: number;
+    orbit: Orbit;
+    lastX: number;
+    lastAt: number;
+    speed: number;
     x: number;
     y: number;
     yaw: number;
@@ -47,9 +53,13 @@ export function StudioOrbit({
       if (playing) useGarageStudy.setState({ playing: false });
     }
     const orbit = activeOrbit();
-    orbit.yaw = orbit.shownYaw;
+    startOrbitDrag(orbit);
     drag.current = {
       pointer: event.pointerId,
+      orbit,
+      lastX: event.clientX,
+      lastAt: event.timeStamp,
+      speed: 0,
       x: event.clientX,
       y: event.clientY,
       yaw: orbit.yaw,
@@ -76,7 +86,8 @@ export function StudioOrbit({
       }
     }
     const start = drag.current;
-    if (!start || start.pointer !== event.pointerId) return;
+    if (!enabled || !start || start.pointer !== event.pointerId || start.orbit !== activeOrbit())
+      return;
     if (useGarageStudy.getState().camera === 'glide') {
       track.position = clamp(
         glideStart.current +
@@ -88,7 +99,11 @@ export function StudioOrbit({
       return;
     }
     const orbit = activeOrbit();
-    orbit.yaw = start.yaw + (event.clientX - start.x) * 0.012;
+    start.speed =
+      ((event.clientX - start.lastX) * 1000) / Math.max(8, event.timeStamp - start.lastAt);
+    start.lastX = event.clientX;
+    start.lastAt = event.timeStamp;
+    orbit.yaw = orbitDragYaw(start.yaw, event.clientX - start.x);
     orbit.pitch = clamp(start.pitch - (event.clientY - start.y) * 0.0023, -0.18, 0.22);
     repaintStudio();
   }
@@ -97,12 +112,21 @@ export function StudioOrbit({
     points.current.delete(event.pointerId);
     if (pinch.current) {
       if (!points.current.size) pinch.current = null;
+      if (drag.current) releaseOrbit(drag.current.orbit, 0);
       drag.current = null;
       onDrag(false);
       return;
     }
-    if (drag.current?.pointer !== event.pointerId) return;
+    const start = drag.current;
+    if (start?.pointer !== event.pointerId) return;
     drag.current = null;
+    const flick =
+      enabled &&
+      event.type === 'pointerup' &&
+      event.timeStamp - start.lastAt < 85 &&
+      activeOrbit() === start.orbit &&
+      useGarageStudy.getState().camera !== 'glide';
+    releaseOrbit(start.orbit, flick ? start.speed : 0);
     onDrag(false);
   }
 
@@ -115,7 +139,9 @@ export function StudioOrbit({
       repaintStudio();
       return;
     }
-    activeOrbit().yaw += ((event.key === 'ArrowRight' ? 1 : -1) * Math.PI) / 18;
+    const orbit = activeOrbit();
+    stopOrbitMotion(orbit);
+    orbit.yaw += ((event.key === 'ArrowRight' ? 1 : -1) * Math.PI) / 18;
     repaintStudio();
   }
 
