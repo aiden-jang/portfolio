@@ -119,7 +119,7 @@ export function Sections() {
       <WorkSection onOpen={openWork} />
       <ExperienceSection onOpen={openWork} />
       <MoreProjectsSection onOpen={openWork} />
-      <AboutSection />
+      <AboutSection onOpen={openWork} />
       <ContactSection />
       <WorkModal
         item={activeWork}

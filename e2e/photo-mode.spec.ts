@@ -40,7 +40,7 @@ for (const width of [1440, 390, 320]) {
       await page.goto('/');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60000 });
       const garage = page
-        .getByRole('button', { name: 'All controls', exact: true })
+        .getByRole('button', { name: 'Garage controls', exact: true })
         .filter({ visible: true });
       await garage.click();
       await page.getByRole('option', { name: /Photo mode/ }).click();

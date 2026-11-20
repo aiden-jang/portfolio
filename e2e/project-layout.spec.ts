@@ -56,7 +56,9 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       items.map((item) => ({
         name: item.id,
         frame: item
-          .querySelector('.preview-thumbnail, .owewell-demo, .worth-focus, .iguess-replay')!
+          .querySelector(
+            '.preview-thumbnail, .owewell-demo, .worth-focus, .iguess-replay, .project-pair',
+          )!
           .getBoundingClientRect()
           .toJSON(),
         title: item.querySelector('h3 button')!.getBoundingClientRect().toJSON(),
@@ -68,9 +70,13 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       })),
     );
     for (const { name, frame, title, app, description } of cards) {
-      const expectedHeight = ['project-owewell', 'project-iguess'].includes(name)
-        ? Math.max(frame.width / 2, 204)
-        : frame.width / 2;
+      const minimum = {
+        'project-owewell': 204,
+        'project-iguess': 204,
+        'project-wherever': 174,
+        'project-platform': 174,
+      } as Record<string, number>;
+      const expectedHeight = Math.max(frame.width / 2, minimum[name] ?? 0);
       expect.soft(Math.abs(frame.height - expectedHeight), name).toBeLessThan(1);
       expect.soft(Math.abs(frame.width - cards[0].frame.width), name).toBeLessThan(1);
       expect.soft(Math.abs(title.top - app.top), `${name} actions share a row`).toBeLessThan(1);

@@ -15,7 +15,7 @@ for (const viewport of [
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await expect(dock.getByRole('button', { name: /Browse cars\./ })).toBeVisible();
     await expect(dock.getByRole('button', { name: /Lighting:/ })).toBeVisible();
-    await expect(dock.getByRole('button', { name: 'All controls', exact: true })).toBeVisible();
+    await expect(dock.getByRole('button', { name: 'Garage controls', exact: true })).toBeVisible();
     await dock.getByRole('button', { name: /Choose paint/ }).click();
     const paints = page.getByRole('group', { name: 'Paint colors', exact: true });
     await expect(paints).toBeVisible();

@@ -109,12 +109,11 @@
   }
 }
 @media (max-width: 767px) {
-  .all-controls-trigger {
-    flex: 0 0 44px;
+  #mobile-bar .all-controls-trigger {
+    flex: 0 0 auto;
+    padding-inline: 5px;
+    gap: 4px;
     pointer-events: auto;
-  }
-  .all-controls-trigger > span:last-child {
-    display: none;
   }
 }
 

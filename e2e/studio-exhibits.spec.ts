@@ -11,7 +11,7 @@ for (const width of [1440, 390]) {
       await page.goto('/');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
       await page
-        .getByRole('button', { name: 'All controls', exact: true })
+        .getByRole('button', { name: 'Garage controls', exact: true })
         .filter({ visible: true })
         .click();
       await page.getByRole('option', { name: /^Explore Studio/ }).click();

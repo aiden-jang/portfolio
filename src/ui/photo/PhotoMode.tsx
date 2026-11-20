@@ -63,7 +63,7 @@ export function PhotoMode() {
       setBusy(false);
       setNotice('');
       queueMicrotask(() =>
-        Array.from(document.querySelectorAll<HTMLButtonElement>('[aria-label="All controls"]'))
+        Array.from(document.querySelectorAll<HTMLButtonElement>('.all-controls-trigger'))
           .find((button) => button.getClientRects().length)
           ?.focus({ preventScroll: true }),
       );

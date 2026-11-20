@@ -3,7 +3,7 @@ import { PNG } from 'pngjs';
 
 function cameraControls(page: Page) {
   const garage = page
-    .getByRole('button', { name: 'All controls', exact: true })
+    .getByRole('button', { name: 'Garage controls', exact: true })
     .filter({ visible: true });
   const reset = page
     .getByRole('button', { name: 'Reset camera view', exact: true })

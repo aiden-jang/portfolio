@@ -15,6 +15,7 @@ type Props = {
   onShare?: () => void;
   shareStatus?: 'idle' | 'copied' | 'failed';
   viewLink?: string;
+  editorDetail?: boolean;
   navigation?: { index: number; count: number; label: string; onSelect: (index: number) => void };
 };
 
@@ -27,9 +28,10 @@ export function ScreenshotViewer({
   onShare,
   shareStatus,
   viewLink,
+  editorDetail = false,
   navigation,
 }: Props) {
-  const [zoomed, setZoomed] = useState(false);
+  const [zoomed, setZoomed] = useState(editorDetail);
   const [failedImage, setFailedImage] = useState<string | null>(null);
   const onReady = useCallback(
     () => setFailedImage((current) => (current === image ? null : current)),
@@ -65,13 +67,20 @@ export function ScreenshotViewer({
   }, [returnFocus]);
   useEffect(() => {
     const area = viewport.current;
-    if (area)
-      area.scrollTo({ left: zoomed ? (area.scrollWidth - area.clientWidth) / 2 : 0, top: 0 });
-  }, [zoomed, image]);
+    if (!area) return;
+    if (editorDetail && zoomed) {
+      area.scrollTo({
+        left: area.scrollWidth * (area.clientWidth < 510 ? 0.2 : 0.173),
+        top: 0.416 * area.scrollHeight,
+      });
+      return;
+    }
+    area.scrollTo({ left: zoomed ? (area.scrollWidth - area.clientWidth) / 2 : 0, top: 0 });
+  }, [zoomed, image, editorDetail]);
   return createPortal(
     <dialog
       ref={dialog}
-      className="preview-dialog"
+      className={`preview-dialog${editorDetail ? ' preview-dialog-editor' : ''}`}
       aria-label={`${name} screenshot`}
       onKeyDown={(event) => {
         event.stopPropagation();
@@ -155,7 +164,7 @@ export function ScreenshotViewer({
         tabIndex={0}
         role="region"
         aria-label={`${name} screenshot image`}
-        className={`preview-image ${zoomed ? 'is-zoomed' : ''}`}
+        className={`preview-image ${zoomed ? (editorDetail ? 'is-editor-detail' : 'is-zoomed') : ''}`}
       >
         <ScreenshotImage
           key={image}

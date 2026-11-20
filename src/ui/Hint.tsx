@@ -8,8 +8,8 @@ export function AllControlsButton() {
     <button
       type="button"
       className="all-controls-trigger"
-      aria-label="All controls"
-      title="All controls"
+      aria-label="Garage controls"
+      title="Garage controls"
       onClick={(event) => {
         event.currentTarget.focus({ preventScroll: true });
         window.dispatchEvent(new Event(COMMAND_MENU_EVENT));

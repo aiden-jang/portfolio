@@ -46,7 +46,7 @@ for (const width of [1440, 390]) {
       });
       await page.goto('/?car=0&paint=%23702c43&light=night');
       const garage = page
-        .getByRole('button', { name: 'All controls', exact: true })
+        .getByRole('button', { name: 'Garage controls', exact: true })
         .filter({ visible: true });
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();

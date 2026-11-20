@@ -24,7 +24,7 @@ which do not necessarily trigger a section resize.
 Phones use the persistent header menu for section navigation; the progress-dot rail
 is desktop-only. Model-loading feedback sits below the shared header height, clear
 of Menu and Résumé. Keyboard hints appear only in wide layouts with a fine primary
-pointer; shortcuts still work with an attached keyboard. All controls has a visible
+pointer; shortcuts still work with an attached keyboard. Garage controls has a visible
 Close button on every screen, and sharing feedback stays visible on touch screens.
 
 Scene visibility, section selection and control visibility have different rules.
@@ -78,9 +78,9 @@ holds the chosen angle until Reset view; `carFraming` caches visible model bound
 and increases distance when needed to fit a resized manual view without changing
 its angle. Hidden export planes do not participate in that framing. The opening
 sweep runs once when the first car loads. Dragging hands its current angle to
-manual orbit. Scrolling stops the sweep and blends its offset out by Selected
+manual orbit. Scrolling stops the sweep and blends its offset out by Featured
 work. Reset view returns to the settled angle. Reset appears outside the dock's layout so its arrival does not move the
-other controls. Share and randomization live in All controls alongside keyboard
+other controls. Share and randomization live in Garage controls alongside keyboard
 navigation. The primary dock keeps car selection, paint, lighting and available
 model-specific details. Film grain is static.
 `carHitTest` raycasts only the loaded model, excluding hidden meshes. A tap on the

@@ -33,7 +33,7 @@ export function RenderStudy() {
       window.removeEventListener('keydown', key, true);
       unsubscribe();
       queueMicrotask(() =>
-        Array.from(document.querySelectorAll<HTMLButtonElement>('[aria-label="All controls"]'))
+        Array.from(document.querySelectorAll<HTMLButtonElement>('.all-controls-trigger'))
           .find((button) => button.getClientRects().length)
           ?.focus({ preventScroll: true }),
       );

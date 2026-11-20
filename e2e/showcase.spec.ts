@@ -45,12 +45,17 @@ for (const width of [1440, 390]) {
     await expect(approvals).toContainText('Approval reused');
     await expect(approvals).toContainText('ls docs');
     await expect(approvals).toContainText('Fresh approval needed');
-    const screenshot = iodine.getByRole('button', { name: 'View editor screenshot for iodine' });
+    const screenshot = iodine.getByRole('button', { name: 'Inspect editor detail for iodine' });
     await expect(screenshot.locator('img')).toHaveAttribute('src', '/projects/iodine.png');
     await screenshot.press('Enter');
     const editor = page.getByRole('dialog', { name: 'iodine screenshot', exact: true });
     await expect(editor.getByRole('button', { name: 'Close screenshot' })).toBeFocused();
     await expect(editor.getByRole('img')).toHaveAttribute('src', '/projects/iodine.png');
+    const editorViewport = editor.getByRole('region', { name: 'iodine screenshot image' });
+    await expect.poll(() => editorViewport.evaluate((el) => el.scrollTop)).toBeGreaterThan(170);
+    await editor.getByRole('button', { name: 'Fit image', exact: true }).click();
+    await expect(editor.getByRole('button', { name: 'Zoom in', exact: true })).toBeVisible();
+    await expect.poll(() => editorViewport.evaluate((el) => el.scrollTop)).toBe(0);
     await page.keyboard.press('Escape');
     await expect(screenshot).toBeFocused();
     await page.getByRole('button', { name: 'Pet Bean', exact: true }).click();
@@ -104,6 +109,24 @@ for (const width of [1440, 390]) {
     expect(new URL(page.url()).hash).toBe(hash);
     await page.keyboard.press('Escape');
     await expect(page.locator('.work-modal-panel')).toHaveCount(0);
+    for (const [project, first, second, asset] of [
+      ['wherever', 'Cast a vote', 'Dinner is handled', 'wherever-winner'],
+      ['platform', 'Choose an app', 'Already signed in', 'platform-app'],
+    ] as const) {
+      const card = page.locator(`#project-${project}`);
+      const trigger = card.getByRole('button', { name: `Inspect screenshot: ${second}` });
+      await trigger.click();
+      const dialog = page.getByRole('dialog', { name: `${project} screenshot` });
+      const image = dialog.getByRole('img');
+      await expect(image).toHaveAttribute('src', `/projects/${asset}.webp`);
+      await expect
+        .poll(() => image.evaluate((el: HTMLImageElement) => el.naturalWidth))
+        .toBeGreaterThan(0);
+      await dialog.getByRole('button', { name: 'Previous', exact: false }).click();
+      await expect(dialog.getByText(`1 / 2 · ${first}`)).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(trigger).toBeFocused();
+    }
     expect(await page.locator('.garage-project').count()).toBe(9);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
     expect(errors).toEqual([]);

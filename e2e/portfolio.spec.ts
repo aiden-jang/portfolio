@@ -65,7 +65,7 @@ for (const width of [1440, 390]) {
       await expectVisibleCar(page);
       await expect(page.getByRole('button', { name: 'Rev engine', exact: true })).toHaveCount(0);
       const controls = page
-        .getByRole('button', { name: 'All controls', exact: true })
+        .getByRole('button', { name: 'Garage controls', exact: true })
         .filter({ visible: true });
       const controlsPosition = await controls.boundingBox();
       await expect(
@@ -286,7 +286,9 @@ for (const width of [1440, 390]) {
       await expect(page.getByRole('heading', { name: 'Let’s talk.', exact: true })).toBeAttached();
       await expect(page.locator('#desktop-dock')).toBeHidden();
       await expect(page.locator('#mobile-bar')).toBeHidden();
-      await expect(page.getByRole('button', { name: 'All controls', exact: true })).toHaveCount(0);
+      await expect(page.getByRole('button', { name: 'Garage controls', exact: true })).toHaveCount(
+        0,
+      );
       await expect(page.locator('.portfolio-scene')).toBeVisible();
       await page.mouse.move(8, 450);
       await page.mouse.down();

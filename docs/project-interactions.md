@@ -51,7 +51,8 @@ between those recorded contents. Play recorded example shows the edited file and
 restores it after a short interval, preserving keyboard focus. Its timer stops
 when the component unmounts. No live agent runs or edits visitor files.
 Desktop shows the agent edit beside the saved snapshot or restored file. Phones show
-the current file. The original editor screenshot opens from its own link. The case
+the current file. The editor screenshot opens on the highlighted symbolic-link
+check. Fit image shows the full editor and assistant. The case
 study opens with the same recorded edit and highlights the changed expression.
 
 Bean's small artwork frames come from mrrp's native sit/perk renderer and eye painter.
@@ -65,3 +66,9 @@ link in the Iodine example.
 The iguess reader illustrates Draw → Share → Guess. It describes the existing
 room socket, Durable Object and AI Worker architecture; it sends no drawing or
 AI request. Controls remain usable with reduced motion.
+
+The wherever gallery pairs two browser captures from a local two-person room
+using sample restaurants and the app's teaser photo. Both participants voted
+for the restaurant shown on the result screen. The platform gallery captures
+the account hub and the signed-in worth archive from the same local test session.
+The hub capture masks the test email. Both galleries open the uncropped frames.

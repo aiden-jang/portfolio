@@ -257,6 +257,7 @@ export function Car() {
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,
       refinements,
+      app.isContactVisible && !review.active && group.visible,
     );
     headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
     headlights.current?.update(dt);

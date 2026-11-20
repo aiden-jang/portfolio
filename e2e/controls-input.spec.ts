@@ -6,7 +6,7 @@ test('control search leaves composition keys to the input before running a comma
   await page.clock.setFixedTime(new Date('2026-10-13T18:00:00Z'));
   await page.goto('/');
   await page
-    .getByRole('button', { name: 'All controls', exact: true })
+    .getByRole('button', { name: 'Garage controls', exact: true })
     .filter({ visible: true })
     .click();
   const dialog = page.getByRole('dialog', { name: 'Command menu', exact: true });

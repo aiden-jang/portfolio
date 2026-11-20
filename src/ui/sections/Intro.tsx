@@ -16,7 +16,7 @@ export function IntroSection() {
         </p>
         <p>I build tools for publishers, and apps for notes, games and everyday decisions.</p>
         <a href="#sec-work" className="intro-work-cue">
-          Selected work
+          Featured work
           <svg
             aria-hidden="true"
             viewBox="0 0 24 24"

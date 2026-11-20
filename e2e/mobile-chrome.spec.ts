@@ -13,6 +13,10 @@ test('phone navigation uses the persistent menu without intro-only section dots'
 }) => {
   await page.goto('/');
   await expect(page.locator('#mobile-bar')).toBeVisible();
+  await expect(page.locator('#mobile-bar').getByText('Garage', { exact: true })).toBeVisible();
+  await expect(
+    page.locator('#sec-intro').getByRole('link', { name: 'Featured work' }),
+  ).toHaveAttribute('href', '#sec-work');
   await expect(
     page.getByRole('navigation', { name: 'Section progress' }).filter({ visible: true }),
   ).toHaveCount(0);
@@ -37,7 +41,7 @@ test('phone controls have a touch close action and omit keyboard instructions', 
   });
   await page.goto('/');
   const controls = page
-    .getByRole('button', { name: 'All controls', exact: true })
+    .getByRole('button', { name: 'Garage controls', exact: true })
     .filter({ visible: true });
   await controls.click();
   const dialog = page.getByRole('dialog', { name: 'Command menu' });

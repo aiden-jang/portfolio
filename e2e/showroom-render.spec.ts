@@ -58,7 +58,7 @@ test('Behind the render switches finishes and returns focus to Garage', async ({
   await page.setViewportSize({ width: 390, height: 844 });
   await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
   await page.goto('/');
-  const garage = page.getByRole('button', { name: 'All controls', exact: true }).filter({
+  const garage = page.getByRole('button', { name: 'Garage controls', exact: true }).filter({
     visible: true,
   });
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });

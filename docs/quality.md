@@ -52,7 +52,7 @@ navigation, screenshot inspection, case studies, credits, keyboard focus and
 scroll restoration, cold shared links, and a delayed effects download. Phone
 checks enable touch input. The navigation cases exercise normal-motion case studies
 and screenshot viewers as well as reduced-motion page navigation. They also check
-the compact All controls entry, contextual camera reset, stable dock placement and
+the compact Garage controls entry, contextual camera reset, stable dock placement and
 access to setup sharing. Unit checks cover a held manual camera angle and model
 hit testing that rejects empty space and hidden geometry. Phone chrome checks cover
 menu-only section navigation, touch dismissal without keyboard hints, visible

@@ -155,3 +155,15 @@ html:root #sec-about {
     margin-top: 15px;
   }
 }
+
+.about-story-link {
+  color: var(--color-fg);
+  font-weight: 575;
+  text-decoration: underline;
+  text-decoration-color: #777780;
+  text-underline-offset: 0.26em;
+  cursor: pointer;
+}
+.about-story-link:is(:hover, :focus-visible) {
+  text-decoration-color: currentColor;
+}

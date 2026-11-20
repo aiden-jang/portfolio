@@ -33,11 +33,11 @@ export function IodinePresentation({ item, preview, onOpen }: Props) {
           type="button"
           ref={trigger}
           className="iodine-editor-tile"
-          aria-label="View editor screenshot for iodine"
+          aria-label="Inspect editor detail for iodine"
           onClick={() => setOpen(true)}
         >
           <ScreenshotImage src={preview.image} alt="" lazy />
-          <span className="iodine-editor-label">View editor screenshot</span>
+          <span className="iodine-editor-label">Inspect editor detail</span>
         </button>
       </div>
       <ScopedApprovals />
@@ -65,7 +65,8 @@ export function IodinePresentation({ item, preview, onOpen }: Props) {
         <ScreenshotViewer
           image={preview.image}
           name="iodine"
-          caption={preview.caption}
+          editorDetail
+          caption="fileSystem.ts highlights the symbolic-link check. Fit image shows the full editor and assistant."
           returnFocus={trigger.current}
           onClose={() => setOpen(false)}
         />

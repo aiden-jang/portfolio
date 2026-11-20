@@ -1,3 +1,4 @@
+import { ProjectPair } from './showcase/ProjectPair';
 import { IguessReplay } from './showcase/IguessReplay';
 import { BloomPreview } from './showcase/BloomPreview';
 import { OwewellPreview } from './showcase/OwewellPreview';
@@ -141,17 +142,14 @@ function ScreenshotProjectPreview({
 }
 
 export function ProjectPreview(props: Props) {
-  if (
-    props.name === 'iguess' &&
-    previewIndex(new URLSearchParams(location.search).get('preview'), props.name, 1) === null
-  ) {
-    return <IguessReplay image={props.image} caption={props.caption} />;
-  }
   if (props.name === 'bloomnote') return <BloomPreview {...props} />;
-  if (
-    props.name === 'owewell' &&
-    previewIndex(new URLSearchParams(location.search).get('preview'), props.name, 1) === null
-  ) {
+  const linked = previewIndex(new URLSearchParams(location.search).get('preview'), props.name, 1);
+  if (linked !== null) return <ScreenshotProjectPreview {...props} />;
+  if (props.name === 'wherever' || props.name === 'platform') {
+    return <ProjectPair name={props.name} />;
+  }
+  if (props.name === 'iguess') return <IguessReplay image={props.image} caption={props.caption} />;
+  if (props.name === 'owewell') {
     return <OwewellPreview image={props.image} caption={props.caption} />;
   }
   return <ScreenshotProjectPreview {...props} />;

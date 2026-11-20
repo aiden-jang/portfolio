@@ -1,7 +1,15 @@
+import { WORK_ITEMS } from '../../data/workItems';
+import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import './about.css';
 
-export function AboutSection() {
+const wherever = WORK_ITEMS.find((item) => item.mark === 'wherever');
+
+export function AboutSection({
+  onOpen,
+}: {
+  onOpen: (item: WorkDetail, trigger: HTMLElement) => void;
+}) {
   return (
     <Section id="sec-about" side="left" desktopVertical="top" mobileVertical="top">
       <div className="about-copy pointer-events-auto">
@@ -10,9 +18,21 @@ export function AboutSection() {
           <div className="about-story">
             <p className="about-lead">Most of my side projects start with something ordinary.</p>
             <p className="about-body">
-              Picking dinner with friends became <strong>wherever</strong>. A note for someone
-              became <strong>bloomnote</strong>. Then there’s <strong>mrrp</strong>, a room for two
-              and a pixel cat.
+              Picking dinner with friends became{' '}
+              {wherever ? (
+                <button
+                  type="button"
+                  className="about-story-link"
+                  aria-label="Read the wherever case study"
+                  onClick={(event) => onOpen(wherever, event.currentTarget)}
+                >
+                  wherever
+                </button>
+              ) : (
+                <strong>wherever</strong>
+              )}
+              . A note for someone became <strong>bloomnote</strong>. Then there’s{' '}
+              <strong>mrrp</strong>, a room for two and a pixel cat.
             </p>
           </div>
           <div>

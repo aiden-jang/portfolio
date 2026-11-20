@@ -8,7 +8,7 @@ export function CameraResetButton({ className = '' }: { className?: string }) {
     <button
       type="button"
       onClick={() => {
-        Array.from(document.querySelectorAll<HTMLButtonElement>('[aria-label="All controls"]'))
+        Array.from(document.querySelectorAll<HTMLButtonElement>('.all-controls-trigger'))
           .find((element) => element.getClientRects().length)
           ?.focus({ preventScroll: true });
         resetCamera();
