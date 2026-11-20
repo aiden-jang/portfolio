@@ -1,7 +1,8 @@
 import { StudioLightControl } from './StudioLightControl';
 import { showSignature } from './signature';
 import { useGarageExhibit } from '../garageExhibits/state';
-import { ExhibitControls, ExhibitPicker } from '../garageExhibits/Controls';
+import { ExhibitGallery } from '../garageExhibits/ExhibitGallery';
+import { ExhibitControls } from '../garageExhibits/Controls';
 import { useAppStore } from '../store';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { repaintStudio, selectPose, useGarageStudio } from '../garageStudio/state';
@@ -52,7 +53,7 @@ export function StudyControls({ waiting }: { waiting: boolean }) {
       aria-label="Studio cameras and exhibits"
       role="group"
     >
-      <ExhibitPicker />
+      <ExhibitGallery />
       {hasExhibit ? (
         <ExhibitControls waiting={waiting} />
       ) : (

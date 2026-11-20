@@ -2,7 +2,8 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import type { WorkDetail } from '../../types';
 import type { ProductPreview } from '../../data/projectPreviews';
 import { kamchatkaExample as example } from '../../data/kamchatkaExample';
-import { EarthquakeGlobeStill, EarthquakeReadings } from './EarthquakeEvidence';
+import { EarthquakeGlobeStill } from './EarthquakeEvidence';
+import { DepthSection } from './DepthSection';
 import { InteractiveGlobe } from './InteractiveGlobe';
 
 type Props = {
@@ -61,7 +62,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
                 </time>
                 {' · Recorded event'}
               </p>
-              <EarthquakeReadings />
+              <DepthSection />
               <p className="earthquake-interpretation">
                 Both agencies agreed on magnitude. Their depth estimates differed by about 16 km.
               </p>
@@ -85,7 +86,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
                 className="featured-primary"
                 onClick={() => setComparison(true)}
               >
-                Inspect the earthquake <span aria-hidden="true">↗</span>
+                Compare the Kamchatka reports <span aria-hidden="true">↗</span>
               </button>
             </div>
             <InteractiveGlobe image={preview.image} caption={preview.caption} />

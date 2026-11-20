@@ -1,0 +1,46 @@
+.iodine-feedback {
+  display: grid;
+  gap: 7px;
+  padding: 12px 16px 14px;
+  background: #18221f;
+  color: #e1eee8;
+  border-top: 1px solid #405348;
+  font-size: 13px;
+  animation: iodine-feedback-in 260ms ease-out;
+}
+.iodine-feedback > div {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.iodine-feedback strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.iodine-feedback code {
+  color: #acd8bd;
+  font-size: 11px;
+}
+.iodine-feedback blockquote {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.iodine-feedback a {
+  width: fit-content;
+  color: #baddc9;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@keyframes iodine-feedback-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iodine-feedback {
+    animation: none;
+  }
+}

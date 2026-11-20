@@ -1,5 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import example from '../../data/iodineExample.json';
+import './iodine-feedback.css';
+
+function RestoredFeedback() {
+  return (
+    <div className="iodine-feedback" aria-live="polite">
+      <div>
+        <code>{example.feedback.type}</code>
+        <strong>Feedback sent to the agent</strong>
+      </div>
+      <blockquote>{example.feedback.guidance}</blockquote>
+      <a href={example.source} target="_blank" rel="noopener noreferrer">
+        View snapshot and revert code
+      </a>
+    </div>
+  );
+}
 
 const editedLines = example.after.trimEnd().split('\n');
 const originalLines = example.before.trimEnd().split('\n');
@@ -95,6 +111,7 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
               : 'A snapshot preserves the previous file contents.'}
           </p>
         </div>
+        {restored && <RestoredFeedback />}
         <div className="cinema-code-actions">
           {undo}
           <span className="iodine-archive-label">Recorded example</span>
@@ -133,6 +150,7 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
           </button>
         </div>
       </div>
+      {restored && <RestoredFeedback />}
     </div>
   );
 }

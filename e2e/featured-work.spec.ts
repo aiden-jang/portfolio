@@ -72,7 +72,10 @@ for (const [width, height] of [
     });
     await page.goto('/#sec-work');
     await page.evaluate(() => document.fonts.ready);
-    const inspect = page.getByRole('button', { name: 'Inspect the earthquake', exact: true });
+    const inspect = page.getByRole('button', {
+      name: 'Compare the Kamchatka reports',
+      exact: true,
+    });
     const story = page.getByRole('button', {
       name: 'How I built it: meanwhile.',
       exact: true,
@@ -84,8 +87,8 @@ for (const [width, height] of [
       page.getByRole('heading', { name: 'One earthquake. Two readings.' }),
     ).toBeFocused();
     const evidence = page.getByRole('region', { name: 'Off the east coast of Kamchatka' });
-    await expect(evidence).toContainText('54.7 km deep');
-    await expect(evidence).toContainText('71.0 km deep');
+    await expect(evidence).toContainText('54.7 km');
+    await expect(evidence).toContainText('71.0 km');
     const read = page.getByRole('button', { name: 'See how I matched the reports' });
     await read.click();
     const reader = page.getByRole('dialog');
@@ -103,6 +106,12 @@ for (const [width, height] of [
     const undo = reader.getByRole('button', { name: 'Undo edit', exact: true });
     await undo.press('Enter');
     await expect(reader.getByText('Revert feedback queued', { exact: true })).toBeVisible();
+    await expect(
+      reader.getByText('Do not assume the edit is still applied.', { exact: false }),
+    ).toBeVisible();
+    await expect(
+      reader.getByRole('link', { name: 'View snapshot and revert code' }),
+    ).toHaveAttribute('href', /editSnapshots\.ts$/);
     await expect(reader.getByRole('button', { name: 'Replay edit', exact: true })).toBeFocused();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,

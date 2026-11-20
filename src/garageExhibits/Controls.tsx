@@ -3,8 +3,7 @@ import { MechanicalControls } from './MechanicalControls';
 import { exhibitWheel } from './geometry';
 import { useAppStore } from '../store';
 import { repaintStudio, selectPose, useGarageStudio } from '../garageStudio/state';
-import { selectExhibit } from './select';
-import { exhibitNames, useGarageExhibit, type Lighting, type Exhibit } from './state';
+import { useGarageExhibit, type Lighting } from './state';
 import './exhibits.css';
 
 export function ExhibitControls({ waiting }: { waiting: boolean }) {
@@ -118,23 +117,5 @@ export function ExhibitControls({ waiting }: { waiting: boolean }) {
         </button>
       )}
     </>
-  );
-}
-
-export function ExhibitPicker() {
-  const exhibit = useGarageExhibit((state) => state.exhibit);
-  return (
-    <select
-      className="studio-exhibit-picker"
-      value={exhibit}
-      onChange={(event) => selectExhibit(event.target.value as Exhibit)}
-      aria-label="Studio exhibits"
-    >
-      {Object.entries(exhibitNames).map(([id, name]) => (
-        <option key={id} value={id}>
-          {name}
-        </option>
-      ))}
-    </select>
   );
 }

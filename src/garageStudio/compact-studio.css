@@ -1,0 +1,82 @@
+.studio-compact-dock,
+.studio-compact-title {
+  display: none;
+}
+.garage-studio-dock > :is(.garage-study, .garage-exhibit) {
+  position: fixed;
+}
+@media (max-width: 767px), (max-height: 550px) and (orientation: landscape) {
+  .studio-original-title {
+    display: none;
+  }
+  .studio-compact-title {
+    display: block;
+  }
+  .garage-studio-title h2 {
+    max-width: calc(100vw - 2 * var(--edge));
+    font-size: clamp(30px, 10vw, 46px);
+    text-wrap: balance;
+  }
+  .studio-compact-dock {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 3px;
+    padding: 5px;
+    border: 1px solid var(--rim);
+    border-radius: 12px;
+    background: var(--shell);
+    pointer-events: auto;
+  }
+  .studio-compact-dock > button {
+    flex: 1 1 auto;
+    min-height: 44px;
+    padding: 3px 5px;
+    font-size: clamp(10px, 2.9vw, 13px);
+    font-weight: 570;
+    line-height: 1.17;
+    border-radius: 7px;
+  }
+  .studio-compact-dock > button.studio-signature-action:not(:disabled),
+  .studio-compact-dock > button[aria-expanded='true'] {
+    color: #271c11;
+    background: #eadcc6;
+  }
+  .studio-compact-dock > button:disabled {
+    opacity: 0.55;
+  }
+  .garage-studio:not([data-studio-tool])[data-controls-open='false'] .garage-studio-dock {
+    display: none;
+  }
+  #studio-full-dock .studio-choose-full,
+  .garage-studio-dock > :is(.garage-study, .garage-exhibit) > .studio-gallery-trigger {
+    display: none;
+  }
+  .garage-studio-dock > :is(.garage-study, .garage-exhibit) {
+    position: static;
+    justify-content: center;
+    max-width: 100%;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .garage-studio-dock > .garage-exhibit .mechanical-views {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .garage-studio:not([data-studio-tool]) .garage-studio-dock {
+    margin-top: 5px;
+    max-height: min(44dvh, 380px);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+}
+@media (max-height: 550px) and (orientation: landscape) {
+  .garage-studio-title h2 {
+    font-size: 31px;
+  }
+  .studio-compact-dock {
+    width: min(380px, 100%);
+    margin-inline: auto;
+  }
+}

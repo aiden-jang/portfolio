@@ -14,6 +14,9 @@ export function useDialogFocus(
     initialFocus.current?.focus({ preventScroll: true });
     const trap = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
+      const nativeDialog = document.activeElement?.closest('dialog[open]');
+      if (nativeDialog && nativeDialog !== dialog.current && dialog.current?.contains(nativeDialog))
+        return;
       const elements = Array.from(
         dialog.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [],
       ).filter((element) => element.getClientRects().length > 0);

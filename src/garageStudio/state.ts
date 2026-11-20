@@ -122,6 +122,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
         'garage',
         'scene',
         'exhibit',
+        'louvers',
         'look',
         'studioLook',
         'focus',
@@ -214,11 +215,9 @@ export function shotUrl() {
   url.hash = '';
   url.searchParams.set('garage', 'studio');
   url.searchParams.set('scene', state.chapter);
+  url.searchParams.delete('louvers');
   url.searchParams.set('variant', state.proposed ? 'proposed' : 'current');
-  url.searchParams.set(
-    'yaw',
-    Math.atan2(Math.sin(current.shownYaw), Math.cos(current.shownYaw)).toFixed(5),
-  );
+  url.searchParams.set('yaw', Math.atan2(Math.sin(current.yaw), Math.cos(current.yaw)).toFixed(5));
   url.searchParams.set('pitch', current.pitch.toFixed(4));
   url.searchParams.set('zoom', current.zoom.toFixed(4));
   url.searchParams.set('car', String(app.carIndex));

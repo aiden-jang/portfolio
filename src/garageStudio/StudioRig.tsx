@@ -51,7 +51,7 @@ export function StudioRig() {
     const detail = chapter === 'detail';
     const f1 = id === 15 || id === 16;
     const detailPart = detail && proposed;
-    const { exhibit, after } = useGarageExhibit.getState();
+    const { exhibit, after, louvers } = useGarageExhibit.getState();
     const bounds = pair
       ? exhibit === 'porsche' && after && !pairFrame.bounds.isEmpty()
         ? pairFrame.bounds
@@ -126,6 +126,7 @@ export function StudioRig() {
         .setY(chapter === 'walk' && proposed ? groundLift / 2 + 0.08 : KEYFRAMES[0].targetY);
     if (pair) at.set(0, 0.28, -0.22);
     if (deck) at.set(0, 0.88, -1.03);
+    if (deck && louvers) at.set(0, 0.94, -1.18);
     if (profile) at.y = 0.52;
     const feature = frameExhibit(chapter, id, proposed, mobile, narrow, yaw, pitch, at, bounds);
     if (short > 0) at.y -= short * 0.26;
@@ -152,7 +153,9 @@ export function StudioRig() {
                 : 3.55
             : chapter === 'walk' && proposed
               ? mobile
-                ? 7.75
+                ? exhibit === 'free' && !photo
+                  ? 6.83
+                  : 7.75
                 : 6.55
               : mobile
                 ? 8.92

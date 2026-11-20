@@ -2,12 +2,13 @@ import { useRef } from 'react';
 import { activeOrbit, repaintStudio } from '../garageStudio/state';
 import { replayOrbit } from '../garageStudio/orbitMotion';
 import { useAppStore } from '../store';
+import { openRearLouvers } from './select';
 import { clarityViews, isMechanical, selectMechanical, wingViews } from './mechanical';
 import { useGarageExhibit } from './state';
 import './mechanical.css';
 
 export function MechanicalControls({ waiting }: { waiting: boolean }) {
-  const { exhibit, shot, smoothEdges, pairWingOpen } = useGarageExhibit();
+  const { exhibit, shot, smoothEdges, pairWingOpen, louvers } = useGarageExhibit();
   const lightsRaised = useAppStore((s) => s.headlightsRaised);
   const soloWingOpen = useAppStore((s) => s.drsOpen);
   const available = useAppStore((s) => (exhibit === 'lamps' ? s.hasPopupHeadlights : s.hasDRS));
@@ -21,7 +22,7 @@ export function MechanicalControls({ waiting }: { waiting: boolean }) {
       {views.map((label, index) => (
         <button
           key={label}
-          aria-pressed={index === shot}
+          aria-pressed={index === shot && !louvers}
           onClick={() => selectMechanical(exhibit, index)}
         >
           {label}
@@ -38,6 +39,11 @@ export function MechanicalControls({ waiting }: { waiting: boolean }) {
           }}
         >
           {wingOpen ? 'Close DRS' : 'Open DRS'}
+        </button>
+      )}
+      {exhibit === 'wings' && shot === 0 && (
+        <button disabled={waiting} aria-pressed={louvers} onClick={openRearLouvers}>
+          Rear louvers
         </button>
       )}
       {exhibit === 'wings' && (

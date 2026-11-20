@@ -40,9 +40,17 @@ export function selectExhibit(exhibit: Exhibit) {
   );
 }
 
+export function openRearLouvers() {
+  selectExhibit('wings');
+  useGarageExhibit.setState({ louvers: true });
+  activeOrbit().zoom = 0.87;
+  selectPose(3.07);
+}
+
 export function openLinkedExhibit() {
   const params = new URLSearchParams(location.search);
-  const exhibit = params.get('exhibit');
+  const louvers = params.get('louvers') === '1';
+  const exhibit = params.get('exhibit') ?? (louvers ? 'wings' : null);
   if (!exhibit || exhibit === 'free' || !Object.hasOwn(exhibitNames, exhibit)) return;
 
   const garage = useGarageStudio.getState();
@@ -50,7 +58,8 @@ export function openLinkedExhibit() {
   const name = exhibit as Exhibit;
   const shot = Number(params.get('shot'));
   const aligned = name === 'porsche' && params.get('aligned') === '1';
-  if (isMechanical(name)) {
+  if (name === 'wings' && louvers && !shot) openRearLouvers();
+  else if (isMechanical(name)) {
     selectMechanical(name, name !== 'lamps' && (shot === 1 || shot === 2) ? shot : 0);
     if (name === 'lamps') useAppStore.setState({ headlightsRaised: params.get('part') === 'up' });
     if (name === 'wings' && shot === 1)
@@ -80,11 +89,22 @@ export function openLinkedExhibit() {
 }
 
 export function exhibitLink(base: string) {
-  const { exhibit, lighting, after, focus, wheelClose, shot, aligned, smoothEdges, pairWingOpen } =
-    useGarageExhibit.getState();
+  const {
+    exhibit,
+    lighting,
+    after,
+    focus,
+    wheelClose,
+    shot,
+    aligned,
+    smoothEdges,
+    pairWingOpen,
+    louvers,
+  } = useGarageExhibit.getState();
   if (exhibit === 'free') return base;
 
   const url = new URL(base);
+  if (louvers) url.searchParams.set('louvers', '1');
   url.searchParams.set('exhibit', exhibit);
   url.searchParams.set('look', exhibit === 'dusk' ? lighting : after ? 'after' : 'before');
   if (exhibit === 'porsche' && focus >= 0) url.searchParams.set('focus', String(focus));

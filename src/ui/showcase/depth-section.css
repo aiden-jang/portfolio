@@ -1,0 +1,85 @@
+.earth-depth {
+  margin: 14px 0;
+  padding: 13px 14px 16px;
+  color: #ebf2f5;
+  background: #142229;
+  border: 1px solid #36505b;
+  border-radius: 12px;
+}
+.earth-depth figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: 12px;
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+.earth-depth figcaption strong {
+  color: #edf5f5;
+  font-weight: 640;
+}
+.earth-depth figcaption span {
+  color: #b0c6ce;
+}
+.earth-depth-plot {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  min-height: 166px;
+}
+.earth-depth-ticks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #b0c6ce;
+  font: 11px/1 var(--font-mono);
+}
+.earth-depth dl {
+  position: relative;
+  margin: 5px 0;
+  border-top: 1px solid #6c8388;
+  border-left: 1px solid #6c8388;
+  background: repeating-linear-gradient(180deg, #3d58656b 0 1px, transparent 1px 25%);
+}
+.earth-depth dl > div {
+  position: absolute;
+  top: var(--depth);
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 16px;
+  transform: translateY(-50%);
+  border-block: 1px solid #4d8492;
+  background: #1d343d;
+  font-size: 12px;
+}
+.earth-depth dl > div::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9de3e7;
+}
+.earth-depth dl > div + div {
+  background: #382b25;
+  border-color: #93664c;
+}
+.earth-depth dl > div + div::before {
+  background: #ffc29e;
+}
+.earth-depth dd {
+  margin-left: auto;
+  font: 600 13px/1 var(--font-mono);
+}
+@media (max-width: 767px) {
+  html:root #project-everythingisfine .earthquake-still {
+    aspect-ratio: 2.2;
+  }
+  .earth-depth {
+    margin-block: 10px;
+  }
+}

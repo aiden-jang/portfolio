@@ -19,7 +19,13 @@ export function selectMechanical(exhibit: MechanicalExhibit, shot = 0) {
   if (!rearPair) {
     garage.selectCar(exhibit === 'lamps' ? 10 : singleWing ? 15 : [0, 3, 20][shot]);
   }
-  useGarageExhibit.setState({ exhibit, shot, smoothEdges: true, pairWingOpen: false });
+  useGarageExhibit.setState({
+    exhibit,
+    shot,
+    louvers: false,
+    smoothEdges: true,
+    pairWingOpen: false,
+  });
   useGarageStudy.setState({
     camera: chapter === 'walk' && shot === 0 ? 'deck' : 'orbit',
     playing: false,

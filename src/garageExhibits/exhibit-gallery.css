@@ -1,0 +1,119 @@
+.studio-gallery-trigger {
+  min-height: 44px;
+  padding-inline: 12px;
+  border: 1px solid #70604b;
+  border-radius: 7px;
+  background: #211d18;
+  font-weight: 600;
+  color: #ffedd3;
+}
+.studio-gallery {
+  width: min(960px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: clamp(16px, 3vw, 34px);
+  border: 1px solid #54483b;
+  border-radius: 14px;
+  color: #f5eadd;
+  background: #151310;
+  overflow: auto;
+}
+.studio-gallery::backdrop {
+  background: #0d0b09cc;
+}
+.studio-gallery header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: clamp(14px, 2vw, 24px);
+}
+.studio-gallery h2 {
+  font-size: clamp(24px, 4vw, 38px);
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  font-weight: 530;
+}
+.studio-gallery header button,
+.studio-gallery-all button {
+  min-height: 44px;
+  padding-inline: 10px;
+  text-align: left;
+  font-size: 13px;
+}
+.studio-gallery-shots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.studio-gallery-shots button {
+  display: grid;
+  align-content: start;
+  background: #211d18;
+  text-align: left;
+  border: 1px solid #4b4033;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.studio-gallery-shots button:hover {
+  border-color: #cfa875;
+}
+.studio-gallery-shots img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+.studio-gallery-shots span {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+}
+.studio-gallery-shots strong {
+  font-weight: 620;
+  font-size: 15px;
+}
+.studio-gallery-shots small {
+  color: #cdbfae;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.studio-gallery-all {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid #4b4033;
+}
+.studio-gallery-all button[aria-pressed='true'] {
+  color: #f5d39f;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 600px) {
+  .studio-gallery-shots {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .studio-gallery-shots button {
+    grid-template-columns: 41% 1fr;
+    align-items: center;
+  }
+  .studio-gallery-shots img {
+    height: 100%;
+    object-fit: cover;
+  }
+  .studio-gallery-all {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.studio-gallery .studio-gallery-shots button {
+  padding: 0;
+  white-space: normal;
+  min-width: 0;
+}
+.studio-gallery .studio-gallery-shots img {
+  display: block;
+}

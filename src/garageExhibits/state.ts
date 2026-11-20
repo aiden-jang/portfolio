@@ -24,6 +24,7 @@ const initial = {
   focus: -1,
   wheelClose: false,
   shot: 0,
+  louvers: false,
   smoothEdges: true,
   pairWingOpen: false,
   aligned: false,

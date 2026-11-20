@@ -5,12 +5,20 @@ import { StudioChapters } from './StudioChapters';
 import { exhibitNames, useGarageExhibit } from '../garageExhibits/state';
 import { exhibitLink } from '../garageExhibits/select';
 import { StudioPhotoControls } from './StudioPhotoControls';
+import { StudioCompactDock, StudioTools } from './StudioCompactDock';
 import { StudyControls, StudioInvitation } from '../garageStudy/StudyControls';
 import { useGarageStudy } from '../garageStudy/state';
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEventHandler,
+} from 'react';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
-import { ControlIcon } from '../ui/ControlIcon';
+import { StudioHeading } from './StudioHeading';
 import { StudioCarPicker } from './StudioCarPicker';
 import { useDialogFocus } from '../ui/useDialogFocus';
 import { usePageScrollLock } from '../ui/usePageScrollLock';
@@ -31,6 +39,7 @@ import { StudioViews } from './StudioViews';
 import { StudioStudy } from './StudioStudy';
 import { StudioShotLink } from './StudioShotLink';
 import './garage-studio.css';
+import './compact-studio.css';
 import '../ui/car-picker.css';
 
 export function GarageStudio() {
@@ -42,8 +51,8 @@ export function GarageStudio() {
   const pairReady = useLineup((s) => s.status);
   const dialog = useRef<HTMLElement>(null);
   const exit = useRef<HTMLButtonElement>(null);
-  const choose = useRef<HTMLButtonElement>(null);
-  const [picker, setPicker] = useState(false);
+  const [controlsOpen, setControlsOpen] = useState(false);
+  const [pickerTrigger, setPickerTrigger] = useState<HTMLButtonElement | null>(null);
   const [dragging, setDragging] = useState(false);
   const shareVersion = useRef(0);
   const [notice, setNotice] = useState('');
@@ -52,14 +61,18 @@ export function GarageStudio() {
   const [image, setImage] = useState<{ src: string; file: File } | null>(null);
   const [link, setLink] = useState('');
   const exhibit = useGarageExhibit((state) => state.exhibit);
+  const louvers = useGarageExhibit((state) => state.louvers);
   const porsche = useGarageExhibit((state) => state.exhibit === 'porsche' && state.after);
   const pair = chapter === 'lineup';
   const car = CARS[id];
   const waiting = pair
     ? pairReady !== 'ready'
     : loading || !!error || (swap !== null && swap.incoming !== id);
+  const canChoose = !pair && (swap === null || !!error);
+  const openPicker: MouseEventHandler<HTMLButtonElement> = (event) =>
+    setPickerTrigger(event.currentTarget);
   usePageScrollLock(true);
-  useDialogFocus(!picker, dialog, exit);
+  useDialogFocus(!pickerTrigger, dialog, exit);
   const leaveTool = useCallback(() => {
     useGarageStudio.setState({ photo: null, study: null });
     useAppStore.setState({ renderFinish: null });
@@ -156,9 +169,11 @@ export function GarageStudio() {
     ? 'Photo mode'
     : study
       ? 'Behind the render'
-      : exhibit === 'free'
-        ? chapters[chapter]
-        : exhibitNames[exhibit];
+      : louvers
+        ? 'Rear louvers'
+        : exhibit === 'free'
+          ? chapters[chapter]
+          : exhibitNames[exhibit];
   const subtitle = pair
     ? exhibit === 'wings'
       ? 'Red Bull RB16B & Ferrari F1-75'
@@ -178,28 +193,21 @@ export function GarageStudio() {
       data-exhibit={exhibit}
       data-variant={proposed ? 'proposed' : 'current'}
       data-ready={!waiting}
+      data-controls-open={controlsOpen}
+      data-studio-tool={photo || study ? 'active' : undefined}
       data-dragging={dragging}
     >
       <StudioOrbit enabled={!waiting && !image} onDrag={setDragging} />
-      <header className="garage-studio-header">
-        <span>AJ / Studio</span>
-        <button
-          ref={exit}
-          type="button"
-          className="studio-return"
-          onClick={() => {
-            leaveTool();
-            close();
-          }}
-        >
-          <ControlIcon name="arrow" /> Back to Garage
-        </button>
-      </header>
-      <div className="garage-studio-title">
-        <h2>{title}</h2>
-        <p>{subtitle}</p>
-      </div>
-      {!photo && !study && <StudyControls waiting={waiting} />}
+      <StudioHeading
+        title={title}
+        car={subtitle}
+        leadWithCar={exhibit === 'free' && !photo && !study}
+        exit={exit}
+        onExit={() => {
+          leaveTool();
+          close();
+        }}
+      />
       {photo && !image && (
         <div
           className="studio-photo-guide"
@@ -223,8 +231,26 @@ export function GarageStudio() {
         />
       )}
       <footer className="garage-studio-footer">
-        {!photo && !study && <StudioInvitation dragging={dragging} />}
-        <div className="garage-studio-dock">
+        {!photo && !study && (
+          <>
+            {louvers ? (
+              <p className="studio-invitation">Drag sideways to look through the slats</p>
+            ) : (
+              <StudioInvitation dragging={dragging} />
+            )}
+            <StudioCompactDock
+              car={id}
+              hasSignature={exhibit === 'free' && chapter === 'walk'}
+              waiting={waiting}
+              canChoose={canChoose}
+              expanded={controlsOpen}
+              onChoose={openPicker}
+              onToggle={() => setControlsOpen((open) => !open)}
+            />
+          </>
+        )}
+        <div className="garage-studio-dock" id="studio-full-dock">
+          {!photo && !study && <StudyControls waiting={waiting} />}
           <StudioChapters chapter={chapter} onSelect={selectChapter} />
 
           {!photo && !study && !isMechanical(exhibit) && <StudioViews waiting={waiting} />}
@@ -244,31 +270,19 @@ export function GarageStudio() {
           {study && <StudioStudy study={study} onSelect={setStudy} onDone={leaveTool} />}
 
           {!photo && !study && (
-            <div className="garage-studio-row studio-tools" aria-label="Garage tools" role="group">
-              <button
-                ref={choose}
-                disabled={pair || (swap !== null && !error)}
-                onClick={() => setPicker(true)}
-              >
-                Choose car
-              </button>
-              <button
-                disabled={waiting}
-                onClick={() => {
-                  useGarageStudy.setState({ playing: false });
-                  useGarageStudio.setState({ photo: 'portrait' });
-                  repaintStudio();
-                }}
-              >
-                Photo
-              </button>
-              <button disabled={waiting} onClick={() => void share()}>
-                Share shot
-              </button>
-              <button disabled={waiting || pair} onClick={() => setStudy('finished')}>
-                Render study
-              </button>
-            </div>
+            <StudioTools
+              waiting={waiting}
+              pair={pair}
+              canChoose={canChoose}
+              onChoose={openPicker}
+              onPhoto={() => {
+                useGarageStudy.setState({ playing: false });
+                useGarageStudio.setState({ photo: 'portrait' });
+                repaintStudio();
+              }}
+              onShare={() => void share()}
+              onStudy={() => setStudy('finished')}
+            />
           )}
           {notice && (
             <p className="studio-tool-note" role="status">
@@ -278,7 +292,9 @@ export function GarageStudio() {
           {link && !photo && !study && <StudioShotLink value={link} onClose={dismissLink} />}
         </div>
       </footer>
-      {picker && <StudioCarPicker onClose={() => setPicker(false)} returnFocus={choose.current} />}
+      {pickerTrigger && (
+        <StudioCarPicker onClose={() => setPickerTrigger(null)} returnFocus={pickerTrigger} />
+      )}
     </section>
   );
 }

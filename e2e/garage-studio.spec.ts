@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { openStudioControls } from './studioControls';
 import { readFile } from 'node:fs/promises';
 import { PNG } from 'pngjs';
 
@@ -19,9 +20,11 @@ for (const width of [1440, 390]) {
       await garage.click();
       await page.getByRole('option', { name: /^Explore Studio/ }).click();
       const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
-      const button = (name: string) => studio.getByRole('button', { name, exact: true });
+      const button = (name: string) =>
+        studio.getByRole('button', { name, exact: true }).filter({ visible: true });
       const ready = () => expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       await ready();
+      await openStudioControls(studio);
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeHidden();
 
       await expect(button('Wheel height')).toHaveAttribute('aria-pressed', 'true');
@@ -70,6 +73,7 @@ for (const width of [1440, 390]) {
       await shared.goto(link.toString());
       const sharedStudio = shared.getByRole('dialog', { name: 'Garage Studio' });
       await expect(sharedStudio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+      await openStudioControls(sharedStudio);
       await expect(sharedStudio.getByRole('button', { name: 'Close DRS' })).toHaveAttribute(
         'aria-pressed',
         'true',
@@ -113,9 +117,11 @@ for (const width of [1440, 390]) {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
       await page.goto('/?garage=studio');
       const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
-      const button = (name: string) => studio.getByRole('button', { name, exact: true });
+      const button = (name: string) =>
+        studio.getByRole('button', { name, exact: true }).filter({ visible: true });
       const ready = () => expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       await ready();
+      await openStudioControls(studio);
 
       const clip = { x: 0, y: 248, width, height: 342 };
       const capture = async () => {
@@ -158,6 +164,9 @@ for (const width of [1440, 390]) {
       expect(Number(url.searchParams.get('zoom'))).toBeLessThan(1);
       const linked = await page.context().newPage();
       await linked.goto(url.toString());
+      const linkedStudio = linked.getByRole('dialog', { name: 'Garage Studio', exact: true });
+      await expect(linkedStudio).toBeVisible();
+      await openStudioControls(linkedStudio);
       await expect(linked.getByRole('button', { name: 'Rear deck', exact: true })).toHaveAttribute(
         'aria-pressed',
         'true',
