@@ -1,0 +1,356 @@
+#root:has(.garage-studio) .portfolio-chrome {
+  visibility: hidden;
+}
+html:root #root:has(.garage-studio) .portfolio-scene {
+  opacity: 1;
+  transform: none;
+}
+.garage-studio {
+  position: fixed;
+  inset: 0;
+  z-index: 52;
+  isolation: isolate;
+  --edge: clamp(20px, 5.15vw, 88px);
+  --shell: #171615;
+  --rim: #4b443b;
+  --ivory: #eee6d7;
+  --muted: #c9c0b3;
+  color: var(--ivory);
+  background: linear-gradient(
+    180deg,
+    #090807b9 0%,
+    transparent 31%,
+    transparent 68%,
+    #090807d9 98%
+  );
+}
+.garage-studio-stage {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: none;
+}
+.garage-studio[data-dragging='true'] .garage-studio-stage {
+  cursor: grabbing;
+}
+.garage-studio-stage:focus-visible {
+  outline-offset: -4px;
+}
+.garage-studio-header {
+  z-index: 2;
+  position: absolute;
+  inset: max(18px, env(safe-area-inset-top)) var(--edge) auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  pointer-events: none;
+}
+.garage-studio-header > span {
+  color: var(--muted);
+}
+.studio-return {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  pointer-events: auto;
+}
+.studio-return svg {
+  transform: rotate(180deg);
+  width: 15px;
+}
+.studio-return:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.garage-studio-title {
+  z-index: 2;
+  position: absolute;
+  inset: clamp(77px, 12vh, 127px) auto auto var(--edge);
+  text-shadow: 0 2px 25px #09070594;
+  pointer-events: none;
+}
+.garage-studio-title h2 {
+  margin: 0;
+  font-size: clamp(46px, 7.25vw, 102px);
+  line-height: 0.96;
+  font-weight: 470;
+  letter-spacing: -0.04em;
+}
+.garage-studio-title p {
+  margin: 12px 0 0;
+  color: #ded5c7;
+  font-size: clamp(14px, 1.4vw, 19px);
+}
+.garage-studio-footer {
+  z-index: 3;
+  position: absolute;
+  inset: auto 0 max(18px, calc(env(safe-area-inset-bottom) + 4px));
+  width: min(670px, calc(100% - 28px));
+  margin-inline: auto;
+  pointer-events: none;
+}
+.studio-invitation {
+  color: #e4dccf;
+  text-align: center;
+  font-size: 12px;
+  margin: 0 0 7px;
+  text-shadow: 0 1px 6px #0e0c0b;
+}
+.garage-studio-dock {
+  pointer-events: auto;
+  padding: 7px 10px;
+  border: 1px solid var(--rim);
+  border-radius: 13px;
+  background: var(--shell);
+}
+.garage-studio-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.garage-studio-row + .garage-studio-row {
+  margin-top: 4px;
+}
+.garage-studio-row button,
+.studio-link button,
+.studio-scene-status button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 525;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.garage-studio-row button svg {
+  flex-shrink: 0;
+  width: 15px;
+}
+.garage-studio-row button:hover:enabled {
+  background: #302b25;
+}
+.garage-studio-row button[aria-pressed='true'] {
+  background: #e8decb;
+  color: #231b14;
+}
+.garage-studio-row button[aria-pressed='true']:hover:enabled {
+  background: #fff0d8;
+}
+.garage-studio-row button:disabled {
+  color: #a2998b;
+  cursor: default;
+}
+button.studio-strong:not([aria-pressed='true']) {
+  border-color: #76654d;
+  color: #f2dfba;
+}
+.studio-chapters {
+  border-bottom: 1px solid #423a32;
+  padding-bottom: 5px;
+}
+.studio-chapters button {
+  min-width: 110px;
+}
+.studio-compare button {
+  min-width: 110px;
+}
+.studio-tools {
+  border-top: 1px solid #423a32;
+  padding-top: 4px;
+}
+.studio-tools button {
+  color: #ded3c2;
+}
+.studio-scale,
+.studio-tool-note {
+  font-size: 12px;
+  color: var(--muted);
+}
+.studio-tool-note {
+  margin: 4px 0 2px;
+  text-align: center;
+}
+.studio-link {
+  display: flex;
+  gap: 5px;
+  margin: 2px 6px;
+}
+.studio-link input {
+  min-width: 0;
+  flex: 1;
+  margin-block: 3px;
+  padding: 6px 9px;
+  border-radius: 5px;
+  border: 1px solid var(--rim);
+  background: #100f0d;
+  color: var(--ivory);
+  font: inherit;
+  font-size: 12px;
+}
+.studio-link button {
+  padding-inline: 8px;
+  min-height: 39px;
+}
+.studio-scene-status {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  transform: translate(-50%, -50%);
+  background: var(--shell);
+  border: 1px solid var(--rim);
+  border-radius: 8px;
+  padding: 9px 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.studio-photo-guide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  width: min(100vw, calc(100svh * var(--photo-ratio)));
+  aspect-ratio: var(--photo-ratio);
+  translate: -50% -50%;
+  border: 1px solid #ffead384;
+  box-shadow: 0 0 0 100vmax #04040375;
+  z-index: -1;
+}
+.studio-photo-result {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  background: #0c0b09ed;
+  pointer-events: none;
+}
+.studio-photo-result img {
+  max-height: 52svh;
+  max-width: min(90vw, 1000px);
+  object-fit: contain;
+}
+.garage-studio[data-chapter='lineup'] .garage-studio-title h2 {
+  font-size: clamp(42px, 6.4vw, 87px);
+}
+@media (max-width: 767px) {
+  .garage-studio-title {
+    inset: clamp(70px, 10.8vh, 99px) auto auto var(--edge);
+  }
+  .garage-studio-title h2,
+  .garage-studio[data-chapter='lineup'] .garage-studio-title h2 {
+    font-size: clamp(41px, 11vw, 61px);
+  }
+  .garage-studio-title p {
+    margin-top: 9px;
+  }
+  .garage-studio-header {
+    font-size: 12px;
+  }
+  .garage-studio-footer {
+    bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .garage-studio-dock {
+    padding: 4px 5px;
+  }
+  .garage-studio-row {
+    gap: 2px;
+  }
+  .garage-studio-row + .garage-studio-row {
+    margin-top: 1px;
+  }
+  .garage-studio-row button {
+    min-width: 0;
+    padding-inline: 6px;
+    font-size: 11.5px;
+  }
+  .studio-chapters,
+  .studio-tools {
+    flex-wrap: nowrap;
+  }
+  .studio-chapters button {
+    flex: 1;
+  }
+  .studio-tools {
+    justify-content: space-evenly;
+  }
+  .studio-compare button {
+    min-width: 92px;
+  }
+  .studio-chapters {
+    padding-bottom: 2px;
+  }
+  .studio-tools {
+    padding-top: 2px;
+  }
+  .studio-invitation {
+    margin-bottom: 5px;
+  }
+  .studio-parts button {
+    flex-grow: 1;
+  }
+  .studio-parts button svg {
+    width: 14px;
+  }
+}
+@media (max-height: 550px) and (orientation: landscape) {
+  .garage-studio-header {
+    top: 4px;
+  }
+  .garage-studio-title {
+    top: 58px;
+  }
+  .garage-studio-title h2,
+  .garage-studio[data-chapter='lineup'] .garage-studio-title h2 {
+    font-size: 34px;
+  }
+  .garage-studio-title p {
+    margin-top: 5px;
+  }
+  .garage-studio-footer {
+    bottom: 4px;
+    width: min(710px, calc(100% - 24px));
+  }
+  .garage-studio-dock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 5px;
+    flex-wrap: wrap;
+    gap: 0 8px;
+  }
+  .garage-studio-row + .garage-studio-row {
+    margin-top: 0;
+  }
+  .garage-studio-row button {
+    min-height: 34px;
+    padding-inline: 6px;
+    font-size: 11px;
+  }
+  .studio-chapters,
+  .studio-tools {
+    padding-block: 0;
+    border: 0;
+  }
+  .studio-chapters button,
+  .studio-compare button {
+    min-width: 0;
+  }
+  .studio-invitation {
+    margin-bottom: 3px;
+  }
+  .studio-tool-note {
+    width: 100%;
+  }
+}

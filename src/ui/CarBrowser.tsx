@@ -5,9 +5,13 @@ import { useAppStore } from '../store';
 import { usePageScrollLock } from './usePageScrollLock';
 import { ControlIcon } from './ControlIcon';
 
-type Props = { onClose: () => void; returnFocus: HTMLElement | null };
+type Props = {
+  onClose: () => void;
+  returnFocus: HTMLElement | null;
+  onChoose?: (id: number) => void;
+};
 
-export function CarBrowser({ onClose: finishClose, returnFocus }: Props) {
+export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Props) {
   const index = useAppStore((state) => state.carIndex);
   const choose = useAppStore((state) => state.setCarIndex);
   const loading = useAppStore((state) => state.isCarLoading);
@@ -122,7 +126,7 @@ export function CarBrowser({ onClose: finishClose, returnFocus }: Props) {
                 aria-disabled={loading}
                 onClick={() => {
                   if (loading) return;
-                  if (carIndex !== index) choose(carIndex);
+                  if (carIndex !== index) (onChoose ?? choose)(carIndex);
                   else if (error) retry();
                   onClose();
                 }}

@@ -1,3 +1,4 @@
+import { useGarageStudio } from '../garageStudio/state';
 import { usePhotoMode } from './photo/state';
 import { useLineup } from '../lineup/state';
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
@@ -37,6 +38,13 @@ export function buildCommands({
 }: Deps): Command[] {
   const state = useAppStore.getState();
   const commands: Command[] = [
+    {
+      id: 'garage-studio',
+      label: 'Explore Studio',
+      hint: 'garage',
+      keywords: 'walkaround details blackout studio overhead lineup photo',
+      run: () => useGarageStudio.getState().open(),
+    },
     {
       id: 'retry-scene',
       label: 'Retry 3D',
@@ -190,7 +198,7 @@ export function buildCommands({
       if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';
       if (id === 'retry-scene') return false;
       if (id === 'behind-the-render') return canStudyRender(state);
-      if (id === 'lineup' || id === 'photo-mode')
+      if (id === 'lineup' || id === 'photo-mode' || id === 'garage-studio')
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;
       if (id.startsWith('view-'))
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;

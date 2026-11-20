@@ -1,7 +1,7 @@
 import { PhotoMode } from './ui/photo/PhotoMode';
 import { usePhotoMode } from './ui/photo/state';
 import { publicAnalyticsUrl } from './analytics';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useNavigation } from './hooks/useNavigation';
@@ -17,6 +17,7 @@ import { useAppStore } from './store';
 import { RenderStudy } from './ui/RenderStudy';
 import { Lineup } from './lineup/Lineup';
 import { useLineup } from './lineup/state';
+import { useGarageStudio, startFromLink } from './garageStudio/state';
 import { OpeningPoster } from './ui/OpeningPoster';
 import './ui/reading-flow.css';
 import './ui/dialog-motion.css';
@@ -33,6 +34,9 @@ import './ui/cinematic-presentation.css';
 import './ui/featured-work.css';
 import './ui/featured-story.css';
 
+const GarageStudio = lazy(() =>
+  import('./garageStudio/GarageStudio').then((m) => ({ default: m.GarageStudio })),
+);
 const Scene = lazy(() => import('./three/Scene').then((m) => ({ default: m.Scene })));
 
 // `?clean` strips the DOM chrome, for capturing the OG image against a bare canvas.
@@ -44,14 +48,20 @@ export function App() {
   const photoMode = usePhotoMode((state) => state.active);
   const renderStudy = useAppStore((state) => state.renderFinish !== null);
   const lineup = useLineup((state) => state.active);
+  const garageStudio = useGarageStudio((state) => state.active);
   useSceneUrl();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('garage') === 'studio' && !location.hash && !useGarageStudio.getState().active)
+      startFromLink(params);
+  }, []);
   useShowroomTransition();
 
   return (
     <>
       <a
         href="#scroll"
-        hidden={lineup}
+        hidden={lineup || garageStudio}
         className="
           sr-only focus:not-sr-only
           focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:pointer-events-auto
@@ -76,11 +86,11 @@ export function App() {
       </SceneBoundary>
       {!isCleanMode && (
         <>
-          <OpeningPoster />
+          {!garageStudio && <OpeningPoster />}
           <div
             className="portfolio-chrome"
             ref={(element) => {
-              if (element) element.inert = photoMode || renderStudy || lineup;
+              if (element) element.inert = photoMode || renderStudy || lineup || garageStudio;
             }}
           >
             <PortfolioHeader onLink={scrollToSection} />
@@ -90,8 +100,13 @@ export function App() {
             <CommandMenu onSection={scrollToSection} />
           </div>
           <PhotoMode />
-          <RenderStudy />
-          {lineup && <Lineup />}
+          {!garageStudio && <RenderStudy />}
+          {lineup && !garageStudio && <Lineup />}
+          {garageStudio && (
+            <Suspense fallback={null}>
+              <GarageStudio />
+            </Suspense>
+          )}
         </>
       )}
       <Analytics beforeSend={publicAnalyticsUrl} />

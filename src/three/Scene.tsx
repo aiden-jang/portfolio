@@ -14,6 +14,8 @@ import { useSceneActivity } from './useSceneActivity';
 import { isOpeningStudio } from '../lighting';
 import { StudioRoom } from './studio/StudioRoom';
 import { SceneHealth } from './SceneHealth';
+import { useGarageStudio } from '../garageStudio/state';
+import { StudioRig } from '../garageStudio/StudioRig';
 import { useLineup } from '../lineup/state';
 
 const Effects = lazy(() => import('./Effects').then((module) => ({ default: module.Effects })));
@@ -33,7 +35,8 @@ export function Scene({ getScrollT }: Props) {
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const openingStudio = useAppStore(isOpeningStudio);
   const lineup = useLineup((state) => state.active);
-  const studio = openingStudio || lineup;
+  const garageStudio = useGarageStudio((state) => state.active);
+  const studio = openingStudio || lineup || garageStudio;
   return (
     <>
       <Canvas
@@ -69,7 +72,8 @@ export function Scene({ getScrollT }: Props) {
           <Floor studio={studio} />
         )}
         <Car />
-        <CameraRig getScrollT={getScrollT} lineup={lineup} />
+        <CameraRig getScrollT={getScrollT} lineup={lineup || garageStudio} />
+        {garageStudio && <StudioRig />}
         <Suspense fallback={null}>
           <Effects />
         </Suspense>

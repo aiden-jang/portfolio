@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function createStudioEnvironment(generator: THREE.PMREMGenerator) {
+export function createStudioEnvironment(generator: THREE.PMREMGenerator, blackout = false) {
   const studio = new THREE.Scene();
   studio.background = new THREE.Color(0.073, 0.065, 0.059);
   const luminousPanel = (
@@ -55,6 +55,32 @@ export function createStudioEnvironment(generator: THREE.PMREMGenerator) {
     new THREE.Color(1, 0.92, 0.81),
     2.2,
   );
+  if (blackout) {
+    for (const item of [...studio.children]) {
+      if (item instanceof THREE.Mesh) {
+        studio.remove(item);
+        item.geometry.dispose();
+        item.material.dispose();
+      }
+    }
+    studio.background = new THREE.Color(0.024, 0.022, 0.02);
+    luminousPanel(
+      [8.0, 0.54],
+      [3.7, 2.62, 0.64],
+      [0, 0.62, 0],
+      new THREE.Color(1, 0.91, 0.79),
+      9.8,
+    );
+    luminousPanel(
+      [0.42, 3.45],
+      [-3.2, 2.15, -3.0],
+      [0, 0.55, -0.4],
+      new THREE.Color(0.83, 0.91, 1),
+      6.2,
+    );
+    luminousPanel([7.6, 1.0], [0.0, 4.1, -5.9], [0, 0.5, 0], new THREE.Color(1, 0.89, 0.76), 4.8);
+    luminousPanel([4.0, 1.6], [-3.9, 2.1, 4.2], [0, 0.43, 0], new THREE.Color(0.81, 0.88, 1), 1.4);
+  }
   const result = generator.fromScene(studio, 0.021, 0.1, 35);
   studio.traverse((mesh) => {
     if (mesh instanceof THREE.Mesh) {

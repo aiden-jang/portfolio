@@ -13,6 +13,7 @@ import { canPrefetchModels } from './modelPrefetch';
 import { loadCarModel } from './loadCarModel';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
+import { useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { useRenderFinish } from './useRenderFinish';
 import {
@@ -94,7 +95,9 @@ export function Car() {
     const setCarLoading = useAppStore.getState().setCarLoading;
     setHasBodyMaterial(false);
     useAppStore.setState({ hasPopupHeadlights: false });
+    const requestedWing = useAppStore.getState().drsOpen;
     setCarLoading(true);
+    if (spec.drs && requestedWing) useAppStore.setState({ drsOpen: true });
     useAppStore.getState().setCarLoadError(null);
     let cancelled = false;
     const controller = new AbortController();
@@ -215,7 +218,7 @@ export function Car() {
   useFrame((state, dt) => {
     const app = useAppStore.getState();
     group.visible = !useLineup.getState().active;
-    const studio = isOpeningStudio(app);
+    const studio = useGarageStudio.getState().active || isOpeningStudio(app);
     studioFinish.current?.(
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,

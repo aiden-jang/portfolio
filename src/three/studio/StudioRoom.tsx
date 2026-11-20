@@ -1,7 +1,8 @@
 import { useLayoutEffect, useMemo } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getStudioProjection, photoProjectionGlsl } from './projection';
+import { inBlackout, useGarageStudio } from '../../garageStudio/state';
 import { studioTexture } from './textures';
 
 const photoWallVertex = /* glsl */ `
@@ -16,6 +17,7 @@ const photoWallVertex = /* glsl */ `
 const photoWallFragment = /* glsl */ `
   uniform sampler2D concrete;
   uniform float wallSurface;
+  uniform float roomDim;
   varying vec3 worldWallPoint;
   varying vec2 wallPlane;
   ${photoProjectionGlsl}
@@ -140,6 +142,7 @@ const photoWallFragment = /* glsl */ `
       float bottomBounce = .28 + .72*smoothstep(0., .37, room.y);
       wall += vec3(.169,.150,.127)*wash*bottomBounce*panel*relief*grazingRelief;
     }
+    wall *= corner ? mix(1.,0.79,roomDim) : mix(1.,0.27,roomDim);
     gl_FragColor = vec4(wall,1.);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
@@ -149,6 +152,16 @@ export function StudioRoom() {
   const mobile = useThree((state) => state.size.width < 768);
   const aspect = useThree(({ size }) => (size.height > 0 ? size.width / size.height : 1.6));
   const invalidate = useThree(({ invalidate }) => invalidate);
+  const roomDim = useMemo(() => ({ value: 0 }), []);
+  useFrame((_state, dt) => {
+    const { active, study } = useGarageStudio.getState();
+    const dim = inBlackout()
+      ? 1
+      : active && (study === 'shadows' || study === 'reflection')
+        ? 0.94
+        : 0;
+    roomDim.value = THREE.MathUtils.lerp(roomDim.value, dim, Math.min(1, dt * 12));
+  });
   const room = getStudioProjection(mobile);
   const framing = useMemo(() => room.roomFraming(aspect), [room, aspect]);
   useLayoutEffect(() => {
@@ -167,11 +180,12 @@ export function StudioRoom() {
             ...room.uniforms,
             concrete: { value: concrete },
             wallSurface: { value: wallSurface },
+            roomDim,
           },
         }),
     );
     return walls;
-  }, [room]);
+  }, [room, roomDim]);
 
   useLayoutEffect(
     () => () => {

@@ -8,6 +8,10 @@ const varying = 'varying vec4 vUv; varying vec3 vFloorPosition;';
 const roomUniforms = `
   uniform sampler2D studioConcrete;
   uniform float studioCarReady;
+  uniform float garageStudioDim;
+  uniform float garageStudioLow;
+  uniform float garageStudioPass;
+  uniform float garageStudioLamps;
   uniform vec4 studioChassis;
   uniform vec2 studioWheelTouch[4];
   uniform vec3 studioPaint;
@@ -36,6 +40,10 @@ export function applyStudioReflection(
       studioWheelTouch: { value: Array.from({ length: 4 }, () => new THREE.Vector2()) },
       studioChassis: { value: new THREE.Vector4(0, 0, 1, 2) },
       studioCarReady: { value: 0 },
+      garageStudioDim: { value: 0 },
+      garageStudioLow: { value: 0 },
+      garageStudioPass: { value: 0 },
+      garageStudioLamps: { value: 0 },
       studioPaint: { value: new THREE.Color('#cf2428') },
       studioSecondReady: { value: 0 },
       studioSecondChassis: { value: new THREE.Vector4(0, 0, 1, 2) },

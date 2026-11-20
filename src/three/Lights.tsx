@@ -7,6 +7,7 @@ import { CARS, THEMES } from '../config';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
+import { inBlackout, useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { F40_PAINT, openingStudioWeight } from './openingStudio';
 
@@ -34,6 +35,8 @@ function computeSunPosition(date: Date) {
 export function Lights() {
   const { gl, scene } = useThree();
   const studioMap = useRef<THREE.WebGLRenderTarget | null>(null);
+  const blackoutMap = useRef<THREE.WebGLRenderTarget | null>(null);
+  const dim = useRef(0);
   const defaultMap = useRef<THREE.Texture | null>(null);
   useEffect(() => {
     const room = new RoomEnvironment();
@@ -53,6 +56,8 @@ export function Lights() {
       environment.dispose();
       studioMap.current?.dispose();
       studioMap.current = null;
+      blackoutMap.current?.dispose();
+      blackoutMap.current = null;
     };
   }, [gl, scene]);
   const ambient = useRef<THREE.AmbientLight>(null!);
@@ -68,23 +73,34 @@ export function Lights() {
   useFrame((_state, dt) => {
     const state = useAppStore.getState();
     const lineup = useLineup.getState().active;
-    const studio = lineup || isOpeningStudio(state);
+    const preview = useGarageStudio.getState();
+    const dark = inBlackout();
+    const studio = lineup || preview.active || isOpeningStudio(state);
+    if (dark && !blackoutMap.current) {
+      const generator = new THREE.PMREMGenerator(gl);
+      blackoutMap.current = createStudioEnvironment(generator, true);
+      generator.dispose();
+    }
+    dim.current = THREE.MathUtils.lerp(dim.current, Number(dark), Math.min(1, dt * 12));
+    const amount = dim.current;
     if (studio && !studioMap.current) {
       const generator = new THREE.PMREMGenerator(gl);
       studioMap.current = createStudioEnvironment(generator);
       generator.dispose();
     }
-    scene.environment = studio ? (studioMap.current?.texture ?? null) : defaultMap.current;
+    scene.environment = studio
+      ? ((dark ? blackoutMap.current?.texture : studioMap.current?.texture) ?? null)
+      : defaultMap.current;
     const lighting = studio ? 'studio' : state.themeName === 'studio' ? 'dusk' : state.themeName;
     const target = THEMES[lighting];
-    const progress = lineup ? 1 : motionState.progress;
+    const progress = lineup || preview.active ? 1 : motionState.progress;
     const sculpted = ['mercedes-benz-w198-300-sl.glb', 'red-bull-rb16b.glb'].includes(
       CARS[state.carIndex].file,
     );
     const duskSeparation = sculpted && lighting === 'dusk';
     const weight = (studioWeight.current = smoothTowards(
       studioWeight.current,
-      lineup ? 1 : openingStudioWeight(),
+      lineup || preview.active ? 1 : openingStudioWeight(),
       Math.min(1, dt * 5),
     ));
     const paint = state.refs.bodyMaterial;
@@ -108,14 +124,14 @@ export function Lights() {
     c.ambient.color = smoothColorHex(c.ambient.color, target.ambient.color, k);
     c.ambient.intensity = smoothTowards(c.ambient.intensity, target.ambient.intensity, k);
     ambient.current.color.setHex(c.ambient.color);
-    ambient.current.intensity = c.ambient.intensity;
+    ambient.current.intensity = c.ambient.intensity * (1 - 0.56 * amount);
 
     c.hemi.sky = smoothColorHex(c.hemi.sky, target.hemi.sky, k);
     c.hemi.ground = smoothColorHex(c.hemi.ground, target.hemi.ground, k);
     c.hemi.intensity = smoothTowards(c.hemi.intensity, target.hemi.intensity, k);
     hemi.current.color.setHex(c.hemi.sky);
     hemi.current.groundColor.setHex(c.hemi.ground);
-    hemi.current.intensity = c.hemi.intensity;
+    hemi.current.intensity = c.hemi.intensity * (1 - 0.48 * amount);
 
     c.key.color = smoothColorHex(c.key.color, target.key.color, k);
     c.key.intensity = smoothTowards(c.key.intensity, target.key.intensity, k);
@@ -150,6 +166,21 @@ export function Lights() {
     if (studio) rim.current.position.set(-4.25, 3.5, 6.8);
     else rim.current.position.set(-3, 4.5, -6);
     rim.current.intensity = c.rim.intensity * (1 - 0.08 * weight) * (0.7 + 0.3 * progress);
+    const spec = CARS[state.carIndex];
+    const darkPaint = state.activeBodyColor === '#3f464e' || /(?:gtr|gt-r|e30)/.test(spec.file);
+    const brightLivery = /(?:corvette|gt3-rs|296-gt3)/.test(spec.file);
+    fill.current.intensity *= 1 - (darkPaint ? 0.53 : 0.78) * amount;
+    key.current.intensity *= 1 - 0.65 * amount;
+    rim.current.intensity *= 1 - (brightLivery ? 0.69 : 0.52) * amount;
+    if (
+      preview.active &&
+      preview.chapter === 'detail' &&
+      preview.proposed &&
+      state.carIndex !== 10
+    ) {
+      rim.current.position.set(-2.1, 2.0, -5.65);
+      rim.current.intensity *= 0.86;
+    }
   });
 
   const init = current.current;

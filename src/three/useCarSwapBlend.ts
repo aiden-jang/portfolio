@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import type { Object3D } from 'three';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { useAppStore } from '../store';
+import { useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { usePhotoMode } from '../ui/photo/state';
 
@@ -44,6 +45,7 @@ export function useCarSwapBlend() {
     if (
       sectionIndex !== 0 ||
       useLineup.getState().active ||
+      useGarageStudio.getState().active ||
       scrollY >= innerHeight * 0.15 ||
       renderFinish ||
       carLoadError ||

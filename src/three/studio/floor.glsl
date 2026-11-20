@@ -109,5 +109,18 @@
       float groove = exp(-pow(cutPosition*51.,2.))*localCut;
       float cutLip = exp(-pow((cutPosition-.028)*67.,2.))*localCut;
       floorTone *= 1.-groove*.28+cutLip*.10;
+      floorTone *= mix(1., .30, garageStudioDim);
+      floorTone += cornerLightTint() * .045 * reflectedBar * garageStudioDim;
+      vec2 lampDist = vec2((abs(ground.x) - .64)/.52,(ground.y - 3.22)/1.25);
+      float pools = exp(-dot(lampDist,lampDist)) * smoothstep(1.95,2.39,ground.y);
+      floorTone += vec3(.072,.064,.047) * garageStudioLamps * pools * relief;
+      reflection *= mix(1., .76 + .12 * (1. - satinFalloff), garageStudioLow);
       vec3 litFloor = (floorTone + reflection * mix(.89,1.10,relief)*(1.-groove*.30)) * contact;
+      if (garageStudioPass > .9 && garageStudioPass < 1.1) {
+        vec3 paper = vec3(.19,.18,.16);
+        litFloor = paper * mix(.57,1.,carArea) * (0.12 + .88 * contact);
+      }
+      if (garageStudioPass > 1.9) {
+        litFloor = vec3(.004,.004,.004) + satinMirror * rimFade * .87 * contact;
+      }
       gl_FragColor.rgb = litFloor;

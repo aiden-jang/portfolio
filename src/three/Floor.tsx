@@ -1,3 +1,4 @@
+import { inBlackout, useGarageStudio } from '../garageStudio/state';
 import { paintFinish } from '../paint';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
@@ -65,7 +66,8 @@ export function Floor({ studio, lineup }: { studio: boolean; lineup?: LineupFoot
     const state = useAppStore.getState();
     const { themeName, refs, renderFinish } = state;
     const inLineup = lineup !== undefined;
-    const target = THEMES[inLineup ? 'studio' : themeName];
+    const preview = useGarageStudio.getState();
+    const target = THEMES[inLineup || preview.active ? 'studio' : themeName];
     const k = Math.min(1, dt * TRANSITION_RATE);
 
     currentExposure.current = smoothTowards(currentExposure.current, target.exposure, k);
@@ -91,6 +93,28 @@ export function Floor({ studio, lineup }: { studio: boolean; lineup?: LineupFoot
     );
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
     if (studio) {
+      const settle = Math.min(1, dt * 10);
+      uniforms.garageStudioDim.value +=
+        (Number(inBlackout()) - uniforms.garageStudioDim.value) * settle;
+      uniforms.garageStudioLamps.value +=
+        (Number(
+          preview.active &&
+            preview.chapter === 'detail' &&
+            preview.proposed &&
+            state.carIndex === 10 &&
+            state.headlightsRaised,
+        ) -
+          uniforms.garageStudioLamps.value) *
+        settle;
+      uniforms.garageStudioLow.value = Number(
+        preview.active && preview.chapter === 'walk' && preview.proposed,
+      );
+      uniforms.garageStudioPass.value =
+        preview.active && preview.study === 'shadows'
+          ? 1
+          : preview.active && preview.study === 'reflection'
+            ? 2
+            : 0;
       const footprint = inLineup ? lineup?.[0] : refs.carModel && studioCarFootprint(refs.carModel);
       const second = lineup?.[1];
       uniforms.studioSecondReady.value = second ? 1 : 0;
