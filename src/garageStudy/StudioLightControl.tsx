@@ -1,4 +1,4 @@
-import type { Lighting } from '../garageExhibits/state';
+import { useGarageExhibit, type Lighting } from '../garageExhibits/state';
 import { activeOrbit, repaintStudio, useGarageStudio } from '../garageStudio/state';
 import { stopOrbitMotion } from '../garageStudio/orbitMotion';
 import { stageStudioCut } from '../garageStudio/studioCut';
@@ -7,18 +7,23 @@ import { useGarageStudy } from './state';
 export function StudioLightControl({ waiting }: { waiting: boolean }) {
   const look = useGarageStudy((s) => s.look);
   const blackout = useGarageStudio((s) => s.chapter === 'light' && s.proposed);
+  const exhibit = useGarageExhibit((s) => s.exhibit);
+  const exhibitLook = useGarageExhibit((s) => s.lighting);
   return (
     <select
       className="studio-light-picker"
       aria-label="Studio lighting"
       disabled={waiting}
-      value={look ?? (blackout ? 'blackout' : 'studio')}
+      value={look ?? (exhibit === 'dusk' ? exhibitLook : blackout ? 'blackout' : 'studio')}
       onChange={(event) => {
         const next = event.target.value as Lighting;
         stopOrbitMotion(activeOrbit(), 'requested');
         useGarageStudy.setState({ playing: false });
         stageStudioCut(() => {
-          useGarageStudy.setState({ look: next });
+          if (exhibit === 'dusk') {
+            useGarageExhibit.setState({ lighting: next });
+            useGarageStudio.setState({ proposed: next === 'blackout' });
+          } else useGarageStudy.setState({ look: next });
           repaintStudio();
         }, false);
         repaintStudio();

@@ -72,8 +72,9 @@ export function StudioRig() {
       !profile;
     const groundLift = f1 ? (mobile ? 0.78 : 0.7) : mobile ? 0.69 : 0.62;
     const current = frame.current;
-    if (pair && !proposed && view === 'glide') {
-      frameGlide(camera, current.target, mobile, dt, readableMotion);
+    const bumperGlide = chapter === 'walk' && id === 1;
+    if ((bumperGlide || (pair && !proposed)) && view === 'glide') {
+      frameGlide(camera, current.target, mobile, dt, readableMotion, bumperGlide);
       const delta = offset.current.copy(camera.position).sub(current.target);
       current.yaw = Math.atan2(delta.x, delta.z);
       current.lift = delta.y;

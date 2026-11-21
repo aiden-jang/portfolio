@@ -28,6 +28,7 @@ const initial = {
   smoothEdges: true,
   pairWingOpen: false,
   aligned: false,
+  overlay: -1 as -1 | 0 | 1,
 };
 
 export const useGarageExhibit = create(() => initial);

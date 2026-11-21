@@ -1,3 +1,5 @@
+import { prefersReducedMotion } from '../hooks/reducedMotion';
+import { repaintStudio } from '../garageStudio/state';
 import { CatmullRomCurve3, MathUtils, PerspectiveCamera, Vector3 } from 'three';
 import { track, useGarageStudy } from './state';
 
@@ -32,6 +34,13 @@ const subjects = path([
   [1.4, 0.58, -1.42],
   [1.42, 0.53, -1.28],
 ]);
+const bumper = path([
+  [2.25, 0.83, 4.7],
+  [1.3, 0.69, 3.7],
+  [0.1, 0.64, 3.44],
+  [-1.5, 0.72, 3.92],
+]);
+const bumperSubject = new Vector3(0, 0.37, 1.58);
 const eye = new Vector3();
 const look = new Vector3();
 
@@ -41,6 +50,7 @@ export function frameGlide(
   phoneSize: boolean,
   dt: number,
   reduced: boolean,
+  bumperGlide: boolean,
 ) {
   const { playing } = useGarageStudy.getState();
   const delta = Math.min(dt, 0.064);
@@ -55,15 +65,18 @@ export function frameGlide(
   }
   track.entry = reduced ? 1 : Math.min(1, track.entry + delta / 0.72);
   if (playing && track.entry >= 1) {
-    track.position = Math.min(1, track.position + delta / 6.2);
+    track.position = Math.min(1, track.position + delta / (bumperGlide ? 3.4 : 6.2));
     if (track.position === 1) useGarageStudy.setState({ playing: false });
   }
   const time = track.position;
   const t = time * time * (3 - 2 * time);
   const entry = track.entry * track.entry * (3 - 2 * track.entry);
-  (phoneSize ? phone : desktop).getPoint(t, eye);
-  subjects.getPoint(t, look);
-  if (phoneSize) {
+  (bumperGlide ? bumper : phoneSize ? phone : desktop).getPoint(t, eye);
+  if (bumperGlide) {
+    look.copy(bumperSubject);
+    if (phoneSize) eye.z += 0.9;
+  } else subjects.getPoint(t, look);
+  if (phoneSize && !bumperGlide) {
     const reveal = MathUtils.smoothstep(t, 0.6, 1);
     look.x -= 0.76 * reveal;
     look.y += 0.12;
@@ -79,8 +92,15 @@ export function frameGlide(
     MathUtils.lerp(track.targetY, look.y, entry),
     MathUtils.lerp(track.targetZ, look.z, entry),
   );
-  const fov = phoneSize ? 65 : 44;
+  const fov = bumperGlide ? (phoneSize ? 51 : 38) : phoneSize ? 65 : 44;
   camera.fov = MathUtils.lerp(track.fromFov, fov, entry);
   camera.updateProjectionMatrix();
   camera.lookAt(currentTarget);
+}
+
+export function startBumperGlide() {
+  track.position = 0;
+  track.entry = 0;
+  useGarageStudy.setState({ camera: 'glide', playing: !prefersReducedMotion() });
+  repaintStudio();
 }

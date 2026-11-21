@@ -1,7 +1,6 @@
 import type { MouseEventHandler } from 'react';
 import { ExhibitGallery } from '../garageExhibits/ExhibitGallery';
-import { openRearLouvers } from '../garageExhibits/select';
-import { showSignature } from '../garageStudy/signature';
+import { StudioSignature } from './StudioSignature';
 
 type Props = {
   car: number;
@@ -24,16 +23,7 @@ export function StudioCompactDock({
 }: Props) {
   return (
     <div className="studio-compact-dock">
-      {hasSignature && (
-        <button
-          className="studio-signature-action"
-          type="button"
-          disabled={waiting}
-          onClick={() => (car === 0 ? openRearLouvers() : showSignature(car))}
-        >
-          {car === 0 ? 'Rear louvers' : 'Signature view'}
-        </button>
-      )}
+      <StudioSignature car={car} available={hasSignature} waiting={waiting} />
       <ExhibitGallery />
       <button type="button" disabled={!canChoose} onClick={onChoose}>
         Choose car

@@ -40,3 +40,20 @@ body:has(.garage-studio .studio-matched-status) .car-loading-progress {
   color: var(--muted);
   font-size: 12px;
 }
+
+.studio-matched-status[data-load-failed='true'] {
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.studio-matched-status[data-load-failed='true'] > span {
+  flex-basis: 100%;
+}
+.studio-matched-status[data-load-failed='true'] > button {
+  min-height: 44px;
+}
+@media (max-width: 767px), (max-height: 550px) and (orientation: landscape) {
+  .studio-scene-status.studio-matched-status[data-load-failed='true'] {
+    top: 132px;
+    bottom: auto;
+  }
+}

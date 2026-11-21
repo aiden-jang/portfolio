@@ -275,9 +275,9 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
             />
           )}
         </div>
-        <figcaption aria-live="polite" className="sr-only">
+        <figcaption aria-live="polite" className={phase === 'error' ? 'orbit-fallback' : 'sr-only'}>
           {phase === 'error'
-            ? 'The globe could not start. You can retry, view the screenshot or open the app.'
+            ? 'The globe could not start. Retry it, view the screenshot, or open Compare agency reports.'
             : ready
               ? `Drag to rotate and select a marker for details. Recorded USGS events${captured ? ' · ' + captured + ' UTC' : ''}, with a recorded NOAA aurora.`
               : phase === 'loading'

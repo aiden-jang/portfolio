@@ -7,11 +7,11 @@ import { WorkStory } from '../WorkStory';
 import { WorkStoryEnding } from '../WorkStoryEnding';
 import { IodineSession, type IodinePhase } from '../showcase/iodine-session';
 import { DepthSection } from '../showcase/DepthSection';
-import { EarthquakeGlobeStill } from '../showcase/EarthquakeEvidence';
+import { EarthquakeGlobeStill, EarthquakeMatchSignals } from '../showcase/EarthquakeEvidence';
 import { ScopedApprovals } from '../showcase/ScopedApprovals';
 import { ControlIcon } from '../ControlIcon';
 import { ResumeButton } from '../ResumeButton';
-import { storyHref, type StoryId } from './storyRoutes';
+import { evidenceHref, portfolioPath, storyHref, type StoryId } from './storyRoutes';
 import './creative.css';
 
 const stories = {
@@ -47,7 +47,7 @@ const stories = {
 export function StoryPage({ id }: { id: StoryId }) {
   const item = WORK_ITEMS.find((candidate) => workId(candidate) === id)!;
   const story = stories[id];
-  const root = location.pathname;
+  const root = portfolioPath(location.pathname);
   const [phase, setPhase] = useState<IodinePhase>(() =>
     new URLSearchParams(location.search).get('edit') === 'restored' ? 'restored' : 'edited',
   );
@@ -55,20 +55,19 @@ export function StoryPage({ id }: { id: StoryId }) {
     new URLSearchParams(location.search).get('agency') === 'EMSC' ? 'EMSC' : 'USGS',
   );
   const [share, setShare] = useState<'idle' | 'copied' | 'failed'>('idle');
-  const shareUrl = new URL(
-    storyHref(id, {
-      edit: id === 'iodine' && phase === 'restored' ? 'restored' : undefined,
-      agency: id === 'everythingisfine' ? agency : undefined,
-    }),
-    location.origin,
-  ).href;
+  const evidenceState = {
+    edit: id === 'iodine' && phase === 'restored' ? ('restored' as const) : undefined,
+    agency: id === 'everythingisfine' ? agency : undefined,
+  };
+  const shareUrl = new URL(evidenceHref(id, evidenceState), location.origin).href;
+  const browserUrl = root === location.pathname ? storyHref(id, evidenceState) : shareUrl;
   useEffect(() => {
-    document.title = story.label + ' | Aiden Jang';
-  }, [story.label]);
+    document.title = story.title + ' | Aiden Jang';
+  }, [story.title]);
   useEffect(() => {
-    history.replaceState(history.state, '', shareUrl);
+    history.replaceState(history.state, '', browserUrl);
     setShare('idle');
-  }, [shareUrl]);
+  }, [browserUrl, shareUrl]);
   const next =
     story.next === 'publisher-account-migrations'
       ? root + '#work/' + story.next
@@ -102,6 +101,7 @@ export function StoryPage({ id }: { id: StoryId }) {
               </figure>
               <div>
                 <DepthSection selected={agency} onSelect={setAgency} />
+                <EarthquakeMatchSignals />
                 <p className="preview-inline-source">
                   <a
                     href={kamchatkaExample.report}

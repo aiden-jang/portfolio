@@ -80,7 +80,6 @@ function SwatchButton({
       type="button"
       data-color-swatch="true"
       data-paint-name={title}
-      title={title}
       aria-label={`Paint: ${title}`}
       aria-pressed={active}
       disabled={disabled}

@@ -54,6 +54,10 @@ const profiles: Record<string, Record<string, Layer>> = {
     },
     untitledBMW_M4CompetitionG82TNR3_2021Carbon1_Material_004: carbon,
   },
+  'ferrari-296-gt3.glb': {
+    mat_220: { roughness: 0.57, metalness: 0, coat: 0.085, smoothness: 0.22, spec: 0.7 },
+    Window: { roughness: 0.16, smoothness: 0.105 },
+  },
   'red-bull-rb16b.glb': {
     redbull_carbon1: carbon,
     redbull_carbon2: { ...carbon, roughness: 0.52 },

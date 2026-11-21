@@ -84,3 +84,9 @@ html:root .garage-project .iguess-replay-chat p {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+.iguess-answer {
+  display: grid;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}

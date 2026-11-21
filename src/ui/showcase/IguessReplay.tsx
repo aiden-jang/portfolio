@@ -71,7 +71,7 @@ export function IguessReplay({ image, caption }: { image: string; caption: strin
         <div className="iguess-replay-content">
           <canvas ref={canvas} width="560" height="420" aria-hidden="true" />
           <div className="iguess-replay-chat" aria-live="polite">
-            <span>Local test guesser</span>
+            <span>{ended ? 'Guess' : 'Local test guesser'}</span>
             <p>
               {ended
                 ? round.guess
@@ -81,7 +81,8 @@ export function IguessReplay({ image, caption }: { image: string; caption: strin
             </p>
             {phase === 'answer' && (
               <div className="iguess-answer">
-                The word was <strong>{round.word}</strong>.
+                <span>Word</span>
+                <strong>{round.word}</strong>
               </div>
             )}
           </div>

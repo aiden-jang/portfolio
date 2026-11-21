@@ -40,6 +40,7 @@ import { StudioPhotoReview } from './StudioPhotoReview';
 import { StudioOrbit } from './StudioOrbit';
 import { StudioViews } from './StudioViews';
 import { StudioStudy } from './StudioStudy';
+import { studioPrintDetails } from './printDetails';
 import { StudioShotLink } from './StudioShotLink';
 import './garage-studio.css';
 import './compact-studio.css';
@@ -71,7 +72,7 @@ export function GarageStudio() {
   const waiting = pair
     ? pairReady !== 'ready'
     : loading || !!error || (swap !== null && swap.incoming !== id);
-  const canChoose = !pair && (swap === null || !!error);
+  const canChoose = !pair;
   const openPicker: MouseEventHandler<HTMLButtonElement> = (event) =>
     setPickerTrigger(event.currentTarget);
   usePageScrollLock(true);
@@ -121,18 +122,15 @@ export function GarageStudio() {
     dismissLink();
     repaintStudio();
   }
-
   function selectChapter(next: Chapter) {
     leaveTool();
     select(next);
   }
-
   function dismissLink() {
     shareVersion.current++;
     setLink('');
     setNotice('');
   }
-
   async function share() {
     const url = exhibitLink(shotUrl());
     const version = ++shareVersion.current;
@@ -141,7 +139,6 @@ export function GarageStudio() {
     if (version === shareVersion.current)
       setNotice(result === 'copied' ? 'Shot link copied.' : 'Your shot link is ready to copy.');
   }
-
   async function takePhoto() {
     if (!photo || busy) return;
     const version = ++captureVersion.current;
@@ -157,7 +154,6 @@ export function GarageStudio() {
       if (version === captureVersion.current) setBusy(false);
     }
   }
-
   const title = photo
     ? 'Photo mode'
     : study
@@ -209,7 +205,6 @@ export function GarageStudio() {
           aria-hidden="true"
         />
       )}
-
       {waiting && (
         <StudioLoading
           car={swap?.incoming ?? id}
@@ -254,7 +249,6 @@ export function GarageStudio() {
               onDone={leaveTool}
             />
           )}
-
           {study && <StudioStudy study={study} onSelect={setStudy} onDone={leaveTool} />}
           {!photo && !study && (
             <StudioTools
@@ -284,13 +278,18 @@ export function GarageStudio() {
           image={image}
           shape={photo}
           name={pair ? 'lineup' : car.file.replace('.glb', '')}
+          print={studioPrintDetails(id, chapter, subtitle)}
           onShape={(shape) => useGarageStudio.setState({ photo: shape })}
           onRetake={() => setImage(null)}
           onDone={leaveTool}
         />
       )}
       {pickerTrigger && (
-        <StudioCarPicker onClose={() => setPickerTrigger(null)} returnFocus={pickerTrigger} />
+        <StudioCarPicker
+          matched={chapter === 'walk' && exhibit === 'free'}
+          onClose={() => setPickerTrigger(null)}
+          returnFocus={pickerTrigger}
+        />
       )}
     </section>
   );

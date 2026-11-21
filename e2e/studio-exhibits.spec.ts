@@ -45,11 +45,10 @@ for (const width of [1440, 390]) {
       ).toBeVisible();
 
       await open('Dusk lighting');
-      const looks = studio.getByRole('group', { name: 'Lighting comparison' });
-      for (const name of ['Studio', 'Blackout', 'Dusk']) {
-        const look = looks.getByRole('button', { name, exact: true });
-        await look.click();
-        await expect(look).toHaveAttribute('aria-pressed', 'true');
+      const looks = studio.getByRole('combobox', { name: 'Studio lighting' });
+      for (const name of ['studio', 'blackout', 'dusk']) {
+        await looks.selectOption(name);
+        await expect(looks).toHaveValue(name);
       }
 
       await open('Miata cockpit');

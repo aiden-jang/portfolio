@@ -63,7 +63,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
 
   return (
     <>
-      {!cockpit && !wheel && !(chapter === 'light' && exhibit === 'dusk') && (
+      {!cockpit && !wheel && chapter !== 'light' && (
         <div className="garage-studio-row studio-compare" aria-label="View options" role="group">
           {choices[chapter].map((name, index) => (
             <button
@@ -145,7 +145,10 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
                 disabled={waiting}
                 onClick={() => {
                   resetStudyCamera();
-                  if (name === 'Rear' && chapter === 'walk' && exhibit === 'free') {
+                  if (name === 'Rear' && chapter === 'walk' && exhibit === 'free' && id === 8) {
+                    selectPose(2.49);
+                    Object.assign(activeOrbit(), { pitch: 0.18, zoom: 0.94 });
+                  } else if (name === 'Rear' && chapter === 'walk' && exhibit === 'free') {
                     useGarageStudy.setState({ camera: 'profile' });
                     activeOrbit().zoom = 1;
                     selectPose(matchedRearYaw);

@@ -56,11 +56,11 @@ export function frameExhibit(
     if (exhibitWheel.point) target.copy(exhibitWheel.point).add(axleOffset);
     return {
       bounds: brakeBounds,
-      yaw: limitYaw(yaw, 0.71, 0.61),
+      yaw: limitYaw(yaw, after ? 0.91 : 0.71, 0.61),
       mode: 'wheel',
       elevation: MathUtils.clamp(0.18 + pitch, 0.06, 0.36),
       fov: mobile ? 46 : 35,
-      base: mobile ? 2.17 : 2.25,
+      base: exhibit === 'brakes' ? (mobile ? 1.91 : 2.03) : mobile ? 2.17 : 2.25,
     } as const;
   }
 }

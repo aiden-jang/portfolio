@@ -3,8 +3,8 @@ import { pairFrame } from '../garageExhibits/geometry';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { useGarageStudy } from '../garageStudy/state';
 import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useState } from 'react';
-import { Floor } from '../three/Floor';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { Floor, type LineupFootprints } from '../three/Floor';
 import { getStudioProjection } from '../three/studio/projection';
 import { studioSurfacesReady } from '../three/studio/textures';
 import { ALIGNED_FRONT_AXLE, loadLineup, type LineupKind } from './models';
@@ -22,6 +22,7 @@ export function LineupScene() {
     if (state.exhibit === 'porsche' && state.after) return state.aligned ? 'aligned' : 'porsche';
     return 'original';
   });
+  const overlay = useGarageExhibit((state) => state.overlay);
   const refined = useGarageStudy((state) => state.refined);
   const guides = useGarageStudio((state) => state.active && state.proposed && state.guides);
   const attempt = useLineup((state) => state.attempt);
@@ -80,13 +81,42 @@ export function LineupScene() {
   });
 
   const [ferrari, redBull] = models?.cars ?? [];
+  const isolated = kind === 'aligned' && overlay >= 0;
+  const grounds = useMemo<LineupFootprints | null>(() => {
+    if (!ferrari || !redBull) return null;
+    if (!isolated) return [ferrari.footprint, redBull.footprint];
+    const footprint = (overlay === 0 ? ferrari : redBull).footprint;
+    const shift = overlay === 0 ? -1.34 : 1.34;
+    const chassis = footprint.chassis.clone();
+    chassis.x += shift;
+    return [
+      {
+        chassis,
+        tires: footprint.tires.map((tire) => {
+          const point = tire.clone();
+          point.x += shift;
+          return point;
+        }),
+      },
+    ];
+  }, [ferrari, redBull, isolated, overlay]);
+  useLayoutEffect(() => {
+    if (!ferrari || !redBull || !isolated) return;
+    const car = overlay === 0 ? ferrari : redBull;
+    const x = car.group.position.x;
+    car.group.position.x += overlay === 0 ? -1.34 : 1.34;
+    invalidate();
+    return () => {
+      car.group.position.x = x;
+    };
+  }, [ferrari, redBull, isolated, overlay, invalidate]);
   return (
     <>
-      <Floor studio lineup={ferrari && redBull ? [ferrari.footprint, redBull.footprint] : null} />
+      <Floor studio lineup={grounds} />
       {ferrari && redBull && (
         <>
-          <primitive object={ferrari.group} />
-          <primitive object={redBull.group} />
+          <primitive object={ferrari.group} visible={!isolated || overlay === 0} />
+          <primitive object={redBull.group} visible={!isolated || overlay === 1} />
           {guides && kind === 'aligned' && (
             <mesh position={[0, 0.016, ALIGNED_FRONT_AXLE]} rotation-x={-Math.PI / 2}>
               <planeGeometry args={[5.5, 0.028]} />

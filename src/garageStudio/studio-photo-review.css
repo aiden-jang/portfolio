@@ -93,3 +93,25 @@
     margin-left: auto;
   }
 }
+.studio-print-caption {
+  display: grid;
+  gap: 3px;
+  padding: 8px 12px;
+  color: var(--ivory);
+  background: var(--shell);
+  font-size: 12px;
+}
+.studio-print-caption span {
+  color: var(--color-muted);
+}
+
+.studio-photo-sheet {
+  max-width: 100%;
+}
+.studio-photo-mat:has(.studio-print-caption) .studio-photo-crop {
+  width: min(100cqw, calc((100cqh - 52px) * var(--crop-ratio)));
+}
+.studio-photo-review > footer > div {
+  min-width: 0;
+  flex-wrap: wrap;
+}

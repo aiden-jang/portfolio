@@ -9,12 +9,20 @@ import { activeOrbit, repaintStudio, supportsDetail, useGarageStudio } from './s
 import { clearStudioCut, stageStudioCut } from './studioCut';
 
 export const matchedRearYaw = 2.53;
-type Swap = { outgoing: number; incoming: number; still: string | null };
+type Swap = {
+  outgoing: number;
+  incoming: number;
+  still: string | null;
+  paint: string;
+  headlightsRaised: boolean;
+  drsOpen: boolean;
+};
 export const useMatchedSwap = create(() => ({ swap: null as Swap | null }));
 
 function swapStudioCar(incoming: number) {
   const app = useAppStore.getState();
-  const outgoing = useMatchedSwap.getState().swap?.outgoing ?? app.carIndex;
+  const previous = useMatchedSwap.getState().swap;
+  const outgoing = previous?.outgoing ?? app.carIndex;
   if (app.carIndex === incoming) return;
   const orbit = activeOrbit();
   stopOrbitMotion(orbit);
@@ -27,7 +35,16 @@ function swapStudioCar(incoming: number) {
     Math.abs(orbit.zoom - 1) < 0.01;
   const still =
     atRear && GARAGE_INDICES.includes(incoming) ? CARS[incoming].file.replace('.glb', '') : null;
-  useMatchedSwap.setState({ swap: { outgoing, incoming, still } });
+  useMatchedSwap.setState({
+    swap: {
+      outgoing,
+      incoming,
+      still,
+      paint: previous?.paint ?? app.activeBodyColor,
+      headlightsRaised: previous?.headlightsRaised ?? app.headlightsRaised,
+      drsOpen: previous?.drsOpen ?? app.drsOpen,
+    },
+  });
   stageStudioCut(() => {
     const studio = useGarageStudio.getState();
     if (!studio.active || useMatchedSwap.getState().swap?.incoming !== incoming) return;
@@ -44,7 +61,7 @@ export function chooseStudioCar(incoming: number) {
   if (
     studio.chapter === 'walk' &&
     useGarageExhibit.getState().exhibit === 'free' &&
-    !useAppStore.getState().carLoadError
+    (useMatchedSwap.getState().swap || !useAppStore.getState().carLoadError)
   ) {
     swapStudioCar(incoming);
     return;
@@ -66,4 +83,22 @@ export function useMatchedCar(id: number, loading: boolean, error: string | null
     return () => clearStudioCut();
   }, []);
   return swap;
+}
+
+export function keepPreviousCar() {
+  const { swap } = useMatchedSwap.getState();
+  if (!swap) return;
+  const { camera, look } = useGarageStudy.getState();
+  clearStudioCut();
+  useMatchedSwap.setState({ swap: null });
+  const app = useAppStore.getState();
+  app.setCarIndex(swap.outgoing);
+  useAppStore.setState({
+    carLoadError: null,
+    headlightsRaised: swap.headlightsRaised,
+    drsOpen: swap.drsOpen,
+  });
+  app.applyBodyColor(swap.paint);
+  useGarageStudy.setState({ camera, look, playing: false });
+  repaintStudio();
 }

@@ -1,4 +1,5 @@
 import type { Ref } from 'react';
+import { ControlIcon } from '../ControlIcon';
 
 type Props = {
   reduced: boolean;
@@ -64,8 +65,14 @@ export function GlobeControls({
         </svg>
         {!eventSelected && <span>Kamchatka</span>}
       </button>
-      <button type="button" onClick={onReset}>
-        Reset globe
+      <button
+        type="button"
+        className="orbit-reset"
+        aria-label="Reset globe"
+        title="Reset globe"
+        onClick={onReset}
+      >
+        <ControlIcon name="reset" />
       </button>
       <button type="button" onClick={onDone}>
         Done

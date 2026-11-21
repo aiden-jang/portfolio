@@ -5,7 +5,12 @@ function fitText(context: CanvasRenderingContext2D, text: string, width: number)
     result = result.slice(0, -1);
   return result + '…';
 }
-export async function makePostcard(blob: Blob, car: string, finish: string): Promise<File> {
+export async function makePostcard(
+  blob: Blob,
+  car: string,
+  finish: string,
+  credit?: string,
+): Promise<File> {
   const image = new Image(),
     url = URL.createObjectURL(blob);
   try {
@@ -15,7 +20,7 @@ export async function makePostcard(blob: Blob, car: string, finish: string): Pro
     const scale = Math.min(1, 1920 / Math.max(image.naturalWidth, image.naturalHeight));
     const canvas = document.createElement('canvas');
     canvas.width = Math.round(image.naturalWidth * scale);
-    const density = canvas.width / Math.max(1, window.innerWidth);
+    const density = credit ? canvas.width / 560 : canvas.width / Math.max(1, window.innerWidth);
     const imageHeight = Math.round(image.naturalHeight * scale);
     canvas.height = imageHeight + Math.round(112 * density);
     const context = canvas.getContext('2d');
@@ -38,7 +43,11 @@ export async function makePostcard(blob: Blob, car: string, finish: string): Pro
       imageHeight + 64 * density,
     );
     context.font = `${12 * density}px Geist, sans-serif`;
-    context.fillText('AJ / aidenjang.com', 24 * density, imageHeight + 92 * density);
+    context.fillText(
+      fitText(context, credit ?? 'AJ / aidenjang.com', canvas.width - 48 * density),
+      24 * density,
+      imageHeight + 92 * density,
+    );
     const output = await new Promise<Blob>((resolve, reject) =>
       canvas.toBlob(
         (result) =>

@@ -1,5 +1,5 @@
 import { StudioLightControl } from './StudioLightControl';
-import { showSignature } from './signature';
+import { StudioSignature } from '../garageStudio/StudioSignature';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { ExhibitGallery } from '../garageExhibits/ExhibitGallery';
 import { ExhibitControls } from '../garageExhibits/Controls';
@@ -21,7 +21,7 @@ export function StudioInvitation({ dragging }: { dragging: boolean }) {
 export function StudyControls({ waiting }: { waiting: boolean }) {
   const car = useAppStore((state) => state.carIndex);
   const chapter = useGarageStudio((state) => state.chapter);
-  const { refined, camera, playing } = useGarageStudy();
+  const { camera, playing } = useGarageStudy();
   const pair = chapter === 'lineup';
   const reduced = prefersReducedMotion();
   const hasExhibit = useGarageExhibit((state) => state.exhibit !== 'free');
@@ -54,37 +54,13 @@ export function StudyControls({ waiting }: { waiting: boolean }) {
       role="group"
     >
       <ExhibitGallery />
+      <StudioLightControl waiting={waiting} />
+      <StudioSignature car={car} available={!hasExhibit && chapter === 'walk'} waiting={waiting} />
       {hasExhibit ? (
         <ExhibitControls waiting={waiting} />
       ) : (
         <>
-          <div className="garage-study-finish" aria-label="Compare finishes" role="group">
-            {(
-              [
-                ['Current', false],
-                ['Refined', true],
-              ] as const
-            ).map(([label, value]) => (
-              <button
-                type="button"
-                key={label}
-                aria-pressed={refined === value}
-                onClick={() => {
-                  useGarageStudy.setState({ refined: value });
-                  repaintStudio();
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          <StudioLightControl waiting={waiting} />
           <div className="garage-study-camera" role="group" aria-label="Studio cameras">
-            {chapter === 'walk' && (
-              <button type="button" disabled={waiting} onClick={() => showSignature(car)}>
-                Signature view
-              </button>
-            )}
             {chapter === 'walk' && (
               <button
                 type="button"

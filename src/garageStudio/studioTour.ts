@@ -6,7 +6,7 @@ import { alignPorsches } from '../garageExhibits/mechanical';
 import { useGarageStudy } from '../garageStudy/state';
 import { activeOrbit, repaintStudio, selectPose, useGarageStudio } from './state';
 
-function takeSnapshot() {
+export function takeStudioSnapshot() {
   const stage = useGarageStudio.getState();
   const { carIndex, activeBodyColor, headlightsRaised, drsOpen, renderFinish } =
     useAppStore.getState();
@@ -23,7 +23,15 @@ function takeSnapshot() {
     focus: document.activeElement instanceof HTMLElement ? document.activeElement : null,
   };
 }
-let saved: ReturnType<typeof takeSnapshot> | null = null;
+export const useSignatureBookmark = create(() => ({
+  snapshot: null as ReturnType<typeof takeStudioSnapshot> | null,
+}));
+
+export function clearSignatureBookmark() {
+  useSignatureBookmark.setState({ snapshot: null });
+}
+
+let saved: ReturnType<typeof takeStudioSnapshot> | null = null;
 export const useTour = create<{ index: number | null }>(() => ({ index: null }));
 
 export function visitTourStop(index: number) {
@@ -52,7 +60,7 @@ export function visitTourStop(index: number) {
 }
 
 export function startStudioTour() {
-  if (!saved) saved = takeSnapshot();
+  if (!saved) saved = takeStudioSnapshot();
   visitTourStop(0);
 }
 
@@ -65,6 +73,10 @@ export function finishStudioTour() {
   const snapshot = saved;
   cancelStudioTour();
   if (!snapshot) return;
+  restoreStudioSnapshot(snapshot);
+}
+
+export function restoreStudioSnapshot(snapshot: ReturnType<typeof takeStudioSnapshot>) {
   const studio = useGarageStudio.getState();
   studio.select(snapshot.stage.chapter);
   studio.selectCar(snapshot.scene.carIndex);

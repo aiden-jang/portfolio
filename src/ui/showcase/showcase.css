@@ -104,11 +104,11 @@ html:root .orbit-actions button:disabled {
   opacity: 0.75;
   cursor: progress;
 }
-html:root .orbit-actions :is(.orbit-screenshot, .orbit-rotate) {
+html:root .orbit-actions :is(.orbit-screenshot, .orbit-rotate, .orbit-reset) {
   width: 44px;
   padding: 12px;
 }
-html:root :is(.orbit-screenshot, .orbit-rotate) svg {
+html:root :is(.orbit-screenshot, .orbit-rotate, .orbit-reset) svg {
   width: 18px;
   height: 18px;
 }
@@ -427,4 +427,14 @@ html:root .bean-cameo > button {
   position: absolute;
   top: -4px;
   right: 0;
+}
+
+html:root #project-everythingisfine .orbit-actions button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+html:root .orbit-fallback {
+  padding: 10px 12px;
+  color: var(--color-muted);
+  font: 0.875rem/1.5 var(--font-display);
 }

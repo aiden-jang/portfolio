@@ -1,28 +1,22 @@
-import { alignPorsches, isMechanical } from './mechanical';
+import { alignPorsches, comparePorsche, isMechanical } from './mechanical';
 import { MechanicalControls } from './MechanicalControls';
 import { exhibitWheel } from './geometry';
 import { useAppStore } from '../store';
 import { repaintStudio, selectPose, useGarageStudio } from '../garageStudio/state';
-import { useGarageExhibit, type Lighting } from './state';
+import { useGarageExhibit } from './state';
 import './exhibits.css';
 
 export function ExhibitControls({ waiting }: { waiting: boolean }) {
-  const { exhibit, after, lighting, focus, wheelClose } = useGarageExhibit();
-  const aligned = useGarageExhibit((s) => s.aligned);
+  const { exhibit, after, focus, wheelClose } = useGarageExhibit();
+  const { aligned, overlay } = useGarageExhibit();
   const chapter = useGarageStudio((s) => s.chapter);
   const car = useAppStore((s) => s.carIndex);
   const canUse =
     (exhibit === 'porsche' && chapter === 'lineup') ||
-    (exhibit === 'dusk' && chapter === 'light') ||
     (exhibit === 'cockpit' && chapter === 'walk' && car === 10) ||
     ((exhibit === 'brakes' || exhibit === 'wear') && chapter === 'walk' && car === 20);
   function setAfter(value: boolean) {
-    useGarageExhibit.setState({ after: value, focus: -1, aligned: false });
-    repaintStudio();
-  }
-  function setLight(value: Lighting) {
-    useGarageExhibit.setState({ lighting: value });
-    useGarageStudio.setState({ proposed: value === 'blackout' });
+    useGarageExhibit.setState({ after: value, focus: -1, aligned: false, overlay: -1 });
     repaintStudio();
   }
   const choices =
@@ -36,22 +30,7 @@ export function ExhibitControls({ waiting }: { waiting: boolean }) {
   if (isMechanical(exhibit)) return <MechanicalControls waiting={waiting} />;
   return (
     <>
-      {canUse && exhibit === 'dusk' && (
-        <div className="garage-exhibit-set" role="group" aria-label="Lighting comparison">
-          {(['studio', 'dusk', 'blackout'] as const).map((id) => (
-            <button
-              key={id}
-              type="button"
-              disabled={waiting}
-              aria-pressed={lighting === id}
-              onClick={() => setLight(id)}
-            >
-              {id[0].toUpperCase() + id.slice(1)}
-            </button>
-          ))}
-        </div>
-      )}
-      {canUse && exhibit !== 'dusk' && (
+      {canUse && (
         <div className="garage-exhibit-set" role="group" aria-label="Exhibit options">
           {choices.map((label, index) => (
             <button
@@ -70,6 +49,21 @@ export function ExhibitControls({ waiting }: { waiting: boolean }) {
         <button disabled={waiting} aria-pressed={aligned} onClick={() => alignPorsches(!aligned)}>
           Align front axles
         </button>
+      )}
+      {canUse && exhibit === 'porsche' && aligned && (
+        <div className="garage-exhibit-set" role="group" aria-label="Matched Porsche silhouettes">
+          {(['Both cars', '930 Turbo', '911 RWB'] as const).map((name, index) => (
+            <button
+              type="button"
+              key={name}
+              disabled={waiting}
+              aria-pressed={overlay === index - 1}
+              onClick={() => comparePorsche(index === 0 ? -1 : index === 1 ? 0 : 1)}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
       )}
       {canUse && exhibit === 'porsche' && after && !aligned && (
         <div className="garage-exhibit-set" role="group" aria-label="Focus at the same angle">

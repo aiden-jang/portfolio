@@ -30,6 +30,7 @@ export function EarthquakeReadings({ merge = false }: { merge?: boolean }) {
       </dl>
       {merge && (
         <>
+          <EarthquakeMatchSignals />
           <span className="reading-connector" aria-hidden="true" />
           <div className="earthquake-merged">
             <strong>One event on the globe</strong>
@@ -38,6 +39,25 @@ export function EarthquakeReadings({ merge = false }: { merge?: boolean }) {
         </>
       )}
     </div>
+  );
+}
+
+export function EarthquakeMatchSignals() {
+  return (
+    <dl className="earthquake-match-signals" aria-label="Why the reports match">
+      <div>
+        <dt>Time apart</dt>
+        <dd>{example.difference.seconds} s</dd>
+      </div>
+      <div>
+        <dt>Distance apart</dt>
+        <dd>{example.difference.kilometres} km</dd>
+      </div>
+      <div>
+        <dt>Both magnitudes</dt>
+        <dd>M{example.sources[0].magnitude.toFixed(1)}</dd>
+      </div>
+    </dl>
   );
 }
 
@@ -50,9 +70,7 @@ export function EarthquakeMatch() {
       </div>
       <EarthquakeReadings merge />
       <figcaption>
-        The reports were {example.difference.seconds.toFixed(2)} seconds and{' '}
-        {example.difference.kilometres} km apart. Time, location, and magnitude help match likely
-        duplicates.{' '}
+        Time, location and magnitude help identify likely duplicates.{' '}
         <a
           href={example.report}
           target="_blank"

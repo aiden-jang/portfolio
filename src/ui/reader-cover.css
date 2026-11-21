@@ -149,3 +149,40 @@ html:root [data-story-cover='iodine'] .reader-cover-frame {
 .reader-gerbera figcaption span {
   font-family: Fraunces, serif;
 }
+
+.earthquake-match-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  margin-block: 16px;
+  padding-block: 12px;
+  border-block: 1px solid var(--color-line);
+}
+.earthquake-match-signals dt,
+.worth-revisit figcaption {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+.earthquake-match-signals dd {
+  margin: 2px 0 0;
+  font-variant-numeric: tabular-nums;
+}
+.worth-revisit {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+}
+.worth-revisit button {
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+}
+.reader-bean {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

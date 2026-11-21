@@ -1,4 +1,5 @@
-import { useId, useRef } from 'react';
+import { WedgeStudy } from './RecordedStudies';
+import { useId, useRef, useState } from 'react';
 import { openRearLouvers, selectExhibit } from './select';
 import { exhibitNames, useGarageExhibit, type Exhibit } from './state';
 import { repaintStudio } from '../garageStudio/state';
@@ -37,6 +38,7 @@ const featured = [
 
 export function ExhibitGallery() {
   const titleId = useId();
+  const [wedge, setWedge] = useState(false);
   const gallery = useRef<HTMLDialogElement>(null);
   const current = useGarageExhibit((s) => s.exhibit);
   const choose = (open: () => void) => {
@@ -51,6 +53,7 @@ export function ExhibitGallery() {
         aria-haspopup="dialog"
         onClick={(event) => {
           event.currentTarget.focus({ preventScroll: true });
+          setWedge(false);
           gallery.current?.showModal();
         }}
       >
@@ -70,6 +73,10 @@ export function ExhibitGallery() {
         >
           Take the four-stop Studio tour
         </button>
+        <button type="button" aria-expanded={wedge} onClick={() => setWedge(!wedge)}>
+          Wedge profiles
+        </button>
+        {wedge && <WedgeStudy />}
         <div className="studio-gallery-shots">
           {featured.map((shot) => (
             <button key={shot.image} type="button" onClick={() => choose(shot.open)}>

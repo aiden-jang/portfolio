@@ -320,3 +320,14 @@ html:root .car-browser .car-option-code {
 .car-browser-archive[open] > summary::after {
   content: '−';
 }
+
+.car-browser-studio-still {
+  display: block;
+  width: min(100%, 280px);
+  height: 82px;
+  margin: 0 0 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  object-fit: cover;
+  object-position: center;
+}

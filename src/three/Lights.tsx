@@ -1,3 +1,5 @@
+import { computeSunPosition } from './studio/sunPosition';
+import { applyStudioAccent, updateDetailAccent } from './studio/detailAccent';
 import { inStudioDusk, useGarageExhibit } from '../garageExhibits/state';
 import { useGarageStudy } from '../garageStudy/state';
 import { motionState } from './studioEntrance';
@@ -9,30 +11,16 @@ import { CARS, THEMES } from '../config';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
-import { inBlackout, useGarageStudio } from '../garageStudio/state';
+import { activeOrbit, inBlackout, useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { F40_PAINT, openingStudioWeight } from './openingStudio';
-
 import { isOpeningStudio } from '../lighting';
 import { createStudioEnvironment } from './studio/environment';
 
 const TRANSITION_RATE = 2.5;
 
-const SUN_RADIUS = 12;
-const SUN_Z = 5;
 // Never fully dark, or the car loses all specular shape once the sun is down.
 const NIGHT_KEY_FLOOR = 0.2;
-
-function computeSunPosition(date: Date) {
-  const hours = date.getHours() + date.getMinutes() / 60;
-  // Maps the clock onto [-π/2, 3π/2]: 6am is 0 at the east horizon, noon π/2 overhead,
-  // 6pm π in the west, midnight -π/2 below.
-  const angle = (hours - 6) * (Math.PI / 12);
-  const x = Math.cos(angle) * SUN_RADIUS;
-  const y = Math.sin(angle) * SUN_RADIUS;
-  const daylight = Math.max(0, Math.sin(angle));
-  return { x, y, z: SUN_Z, daylight };
-}
 
 export function Lights() {
   const { gl, scene } = useThree();
@@ -75,6 +63,7 @@ export function Lights() {
   const fill = useRef<THREE.DirectionalLight>(null!);
   const rim = useRef<THREE.DirectionalLight>(null!);
   const cabin = useRef<THREE.PointLight>(null!);
+  const detailAccent = useRef<THREE.PointLight>(null!);
   const studioWeight = useRef(openingStudioWeight());
 
   // Mutated in place each frame, so it deliberately holds no React state.
@@ -107,6 +96,17 @@ export function Lights() {
       Math.min(1, dt * 8),
     );
     cabin.current.visible = cabin.current.intensity > 0.002;
+    updateDetailAccent(
+      detailAccent.current,
+      preview.active && !dark && !dusk,
+      exhibit.exhibit,
+      exhibit.shot,
+      state.headlightsRaised,
+      state.carIndex === 8 && preview.chapter === 'walk'
+        ? THREE.MathUtils.smoothstep(-Math.cos(activeOrbit(preview).yaw), 0.28, 0.86)
+        : 0,
+      dt,
+    );
     const studio = lineup || preview.active || isOpeningStudio(state);
     if (dark && !blackoutMap.current) {
       const generator = new THREE.PMREMGenerator(gl);
@@ -214,17 +214,15 @@ export function Lights() {
     if (studio) rim.current.position.set(-4.25, 3.5, 6.8);
     else rim.current.position.set(-3, 4.5, -6);
     rim.current.intensity = c.rim.intensity * (1 - 0.08 * weight) * (0.7 + 0.3 * progress);
-    if (duskMix.current > 0.002) {
-      const d = duskMix.current;
-      key.current.position.set(5.6, 1.83, 3.42);
-      key.current.color.setRGB(1, 1 - 0.25 * d, 1 - 0.55 * d);
-      key.current.intensity += d * 0.68;
-      fill.current.intensity *= 1 - 0.48 * d;
-      ambient.current.intensity *= 1 - 0.53 * d;
-      hemi.current.intensity *= 1 - 0.39 * d;
-      rim.current.color.setRGB(1, 1 - 0.17 * d, 1 - 0.4 * d);
-      rim.current.intensity *= 1 - 0.13 * d;
-    }
+    applyStudioAccent(
+      preview.active && !lineup && state.carIndex === 14 && !dark && !dusk,
+      duskMix.current,
+      key.current,
+      fill.current,
+      rim.current,
+      ambient.current,
+      hemi.current,
+    );
     const spec = CARS[state.carIndex];
     const darkPaint = state.activeBodyColor === '#3f464e' || /(?:gtr|gt-r|e30)/.test(spec.file);
     const brightLivery = /(?:corvette|gt3-rs|296-gt3)/.test(spec.file);
@@ -263,6 +261,14 @@ export function Lights() {
         distance={3.05}
         decay={2}
         position={[0.25, 1.72, -0.12]}
+      />
+      <pointLight
+        ref={detailAccent}
+        visible={false}
+        color="#fff0de"
+        intensity={0}
+        distance={2.8}
+        decay={2}
       />
       <ambientLight ref={ambient} color={init.ambient.color} intensity={init.ambient.intensity} />
       <hemisphereLight

@@ -129,6 +129,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
         'wheel',
         'exhibitPaint',
         'aligned',
+        'silhouette',
         'shot',
         'edges',
         'variant',
@@ -216,6 +217,7 @@ export function shotUrl() {
   url.searchParams.set('garage', 'studio');
   url.searchParams.set('scene', state.chapter);
   url.searchParams.delete('louvers');
+  url.searchParams.delete('silhouette');
   url.searchParams.set('variant', state.proposed ? 'proposed' : 'current');
   url.searchParams.set('yaw', Math.atan2(Math.sin(current.yaw), Math.cos(current.yaw)).toFixed(5));
   url.searchParams.set('pitch', current.pitch.toFixed(4));

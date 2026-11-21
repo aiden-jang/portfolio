@@ -19,7 +19,7 @@ const REFLECTOR_RESOLUTION = 1024;
 const TRANSITION_RATE = 2.5;
 
 type Footprint = NonNullable<ReturnType<typeof studioCarFootprint>>;
-export type LineupFootprints = readonly [Footprint, Footprint];
+export type LineupFootprints = readonly [Footprint, Footprint?];
 
 export function Floor({ studio, lineup }: { studio: boolean; lineup?: LineupFootprints | null }) {
   const { gl, scene } = useThree();

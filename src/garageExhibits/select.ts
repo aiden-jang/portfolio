@@ -57,6 +57,8 @@ export function openLinkedExhibit() {
   const position = { ...activeOrbit(garage) };
   const name = exhibit as Exhibit;
   const shot = Number(params.get('shot'));
+  const requestedOverlay = params.get('silhouette');
+  const overlay = requestedOverlay === '0' ? 0 : requestedOverlay === '1' ? 1 : -1;
   const aligned = name === 'porsche' && params.get('aligned') === '1';
   if (name === 'wings' && louvers && !shot) openRearLouvers();
   else if (isMechanical(name)) {
@@ -72,6 +74,7 @@ export function openLinkedExhibit() {
   useGarageExhibit.setState({
     after: aligned || look !== 'before',
     aligned,
+    overlay: aligned ? overlay : -1,
     smoothEdges: params.get('edges') !== 'standard',
     pairWingOpen: name === 'wings' && shot === 2 && params.get('part') === 'up',
     lighting,
@@ -97,6 +100,7 @@ export function exhibitLink(base: string) {
     wheelClose,
     shot,
     aligned,
+    overlay,
     smoothEdges,
     pairWingOpen,
     louvers,
@@ -112,6 +116,7 @@ export function exhibitLink(base: string) {
   if (exhibit === 'dusk')
     url.searchParams.set('exhibitPaint', useAppStore.getState().activeBodyColor);
 
+  if (aligned && overlay !== -1) url.searchParams.set('silhouette', String(overlay));
   if (aligned) url.searchParams.set('aligned', '1');
   else url.searchParams.delete('aligned');
   if (isMechanical(exhibit)) url.searchParams.set('shot', String(shot));

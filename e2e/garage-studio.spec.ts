@@ -52,13 +52,9 @@ for (const width of [1440, 390]) {
       }
       await button('Done').click();
       await button('Blackout').first().click();
-      const looks = studio.getByRole('group', { name: 'View options' });
-      await expect(looks.getByRole('button', { name: 'Blackout' })).toBeVisible();
-      await looks.getByRole('button', { name: 'Blackout' }).click();
-      await expect(looks.getByRole('button', { name: 'Blackout' })).toHaveAttribute(
-        'aria-pressed',
-        'true',
-      );
+      const looks = studio.getByRole('combobox', { name: 'Studio lighting' });
+      await looks.selectOption('blackout');
+      await expect(looks).toHaveValue('blackout');
 
       await button('Details').click();
       await ready();
@@ -154,12 +150,14 @@ for (const width of [1440, 390]) {
           if (Math.abs(before.data[i] - after.data[i]) > 12) changed++;
         return changed;
       };
+      await button('Render study').click();
       const refined = await capture();
       await button('Current').click();
       await expect.poll(() => visuallyDiffers(refined)).toBeGreaterThan(200);
       const current = await capture();
       await button('Refined').click();
       await expect.poll(() => visuallyDiffers(current)).toBeGreaterThan(200);
+      await button('Done').click();
 
       await button('Long lens').click();
       await expect(button('Long lens')).toHaveAttribute('aria-pressed', 'true');
@@ -169,7 +167,9 @@ for (const width of [1440, 390]) {
       await button('Zoom in').click();
       await expect.poll(() => visuallyDiffers(deck)).toBeGreaterThan(500);
 
+      await button('Render study').click();
       await button('Current').click();
+      await button('Done').click();
       await button('Share shot').click();
       const field = studio.getByRole('textbox', { name: 'Exact shot link' });
       const url = new URL(await field.inputValue());
@@ -185,6 +185,7 @@ for (const width of [1440, 390]) {
         'aria-pressed',
         'true',
       );
+      await linkedStudio.getByRole('button', { name: 'Render study', exact: true }).click();
       await expect(linked.getByRole('button', { name: 'Current', exact: true })).toHaveAttribute(
         'aria-pressed',
         'true',

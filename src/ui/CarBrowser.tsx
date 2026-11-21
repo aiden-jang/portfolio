@@ -12,13 +12,16 @@ type Props = {
   onClose: () => void;
   returnFocus: HTMLElement | null;
   onChoose?: (id: number) => void;
+  matched?: boolean;
+  still?: string;
 };
 
-export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Props) {
+export function CarBrowser({ onClose: finishClose, returnFocus, onChoose, matched, still }: Props) {
   const index = useAppStore((state) => state.carIndex);
   const choose = useAppStore((state) => state.setCarIndex);
   const loading = useAppStore((state) => state.isCarLoading);
   const error = useAppStore((state) => state.carLoadError);
+  const locked = loading && !matched;
   const retry = useAppStore((state) => state.retryCar);
   const dialog = useRef<HTMLDialogElement>(null);
   const closing = useRef(false);
@@ -73,9 +76,9 @@ export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Prop
           className="car-option"
           aria-label={`${index === carIndex && error ? 'Retry' : 'Show'} ${car.name}, ${car.code}`}
           aria-pressed={index === carIndex}
-          aria-disabled={loading}
+          aria-disabled={locked}
           onClick={() => {
-            if (loading) return;
+            if (locked) return;
             if (carIndex !== index) (onChoose ?? choose)(carIndex);
             else if (error) retry();
             onClose();
@@ -153,12 +156,20 @@ export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Prop
       <header className="car-browser-heading">
         <div>
           <h2 id="car-browser-title">Pick your ride.</h2>
+          {matched && <p>Keep the angle. Change the car.</p>}
         </div>
         <button type="button" aria-label="Close car browser" onClick={onClose}>
           Close ×
         </button>
       </header>
       <div className="car-browser-content">
+        {still && (
+          <img
+            className="car-browser-studio-still"
+            src={still}
+            alt={CARS[index].name + ' from the current Studio camera'}
+          />
+        )}
         <div className="car-browser-grid" aria-label="Featured cars">
           {GARAGE_INDICES.map(carTile)}
         </div>

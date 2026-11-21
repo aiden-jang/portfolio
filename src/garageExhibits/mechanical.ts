@@ -46,10 +46,18 @@ export function selectMechanical(exhibit: MechanicalExhibit, shot = 0) {
 }
 
 export function alignPorsches(aligned: boolean) {
-  useGarageExhibit.setState({ aligned, after: true, focus: -1 });
+  useGarageExhibit.setState({ aligned, after: true, focus: -1, overlay: -1 });
   useGarageStudio.setState({ proposed: aligned, guides: aligned });
   if (aligned) {
     activeOrbit().zoom = 1;
     selectPose(0.04);
   } else repaintStudio();
+}
+
+export function comparePorsche(overlay: -1 | 0 | 1) {
+  const previous = useGarageExhibit.getState().overlay;
+  useGarageExhibit.setState({ overlay });
+  if (overlay === -1) selectPose(0.04);
+  else if (previous === -1) selectPose(Math.PI / 2);
+  else repaintStudio();
 }

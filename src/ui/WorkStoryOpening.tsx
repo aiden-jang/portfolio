@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Bean } from './showcase/Bean';
 import { workId } from '../data/workItems';
 import './request-comparison.css';
 import { RequestReplay } from './RequestReplay';
@@ -60,8 +62,41 @@ export function WorkStoryOpening({ item }: { item: WorkDetail }) {
         </>
       )}
       <p className="work-modal-summary">{item.summary}</p>
+      {item.mark === 'worth' && (
+        <>
+          <StoryScreenshot
+            image="/projects/worth-verdict.webp"
+            name="worth"
+            caption="Favorite verdict"
+          />
+          <WorthRevisit />
+        </>
+      )}
+      {item.mark === 'mrrp' && (
+        <div className="reader-bean">
+          <span>Pet Bean</span>
+          <Bean />
+        </div>
+      )}
       <CareerEvidence id={workId(item)} />
     </>
+  );
+}
+
+function WorthRevisit() {
+  const [revisited, setRevisited] = useState(false);
+  return (
+    <figure className="worth-revisit">
+      <figcaption>Sample revisit</figcaption>
+      <div role="status">
+        <strong>Oat flat white · #{revisited ? 2 : 4}</strong>
+        <p>First note · Creamy, with a short finish.</p>
+        {revisited && <p>Second visit · More balanced this time.</p>}
+      </div>
+      <button type="button" onClick={() => setRevisited(!revisited)}>
+        {revisited ? 'Reset example' : 'Revisit and move up'}
+      </button>
+    </figure>
   );
 }
 

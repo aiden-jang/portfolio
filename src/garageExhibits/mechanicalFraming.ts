@@ -10,8 +10,13 @@ export function frameMechanical(
   short: number,
   target: Vector3,
 ) {
-  const { exhibit, shot, aligned } = useGarageExhibit.getState();
+  const { exhibit, shot, aligned, overlay } = useGarageExhibit.getState();
   if (exhibit === 'porsche' && chapter === 'lineup' && aligned) {
+    if (overlay !== -1) {
+      const radius = Math.max(7.2, 3.3 / Math.max(0.42, aspect));
+      target.set(0, 0.65, -0.16);
+      return { radius, angle: 0.12 + MathUtils.clamp(pitch, -0.07, 0.18), fov: mobile ? 50 : 43 };
+    }
     const radius = 6.65;
     target.set(0, 0.04, 0.02);
     return {
