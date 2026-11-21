@@ -23,11 +23,11 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     const gallery = page.locator('.project-gallery');
     await expect(page.locator('#sec-more-work h3')).toHaveText([
       'bloomnote',
+      'iguess',
+      'wherever',
       'mrrp',
       'worth',
-      'wherever',
       'owewell',
-      'iguess',
       'platform',
     ]);
     if (width === 320) {
@@ -79,21 +79,32 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       expect
         .soft(description.top, `${name} description follows actions`)
         .toBeGreaterThanOrEqual(app.bottom - 1);
-      expect.soft(title.top - frame.bottom, `${name} image-to-title gap`).toBeLessThan(34);
-      expect
-        .soft(title.top, `${name} image precedes title`)
-        .toBeGreaterThanOrEqual(frame.bottom - 1);
+      if (name === 'project-iguess') {
+        expect
+          .soft(frame.top, 'the replay follows its introduction')
+          .toBeGreaterThan(description.bottom);
+      } else {
+        expect.soft(title.top - frame.bottom, `${name} image-to-title gap`).toBeLessThan(34);
+        expect
+          .soft(title.top, `${name} image precedes title`)
+          .toBeGreaterThanOrEqual(frame.bottom - 1);
+      }
     }
-    if (width >= 768) {
-      const frame = (name: string) => cards.find((card) => card.name === 'project-' + name)!.frame;
+    const frame = (name: string) => cards.find((card) => card.name === 'project-' + name)!.frame;
+    expect.soft(frame('iguess').width).toBeGreaterThanOrEqual(frame('wherever').width);
+    expect.soft(frame('iguess').bottom).toBeLessThan(frame('wherever').top);
+    if (width >= 740) {
       expect.soft(frame('mrrp').width).toBeCloseTo(frame('worth').width, 0);
-      expect.soft(frame('mrrp').width).toBeLessThan(frame('wherever').width);
       expect
-        .soft(frame('wherever').top, 'voting and settlement share a row')
-        .toBeCloseTo(frame('owewell').top, 0);
-      expect
-        .soft(frame('iguess').top, 'the last two projects share a row')
-        .toBeCloseTo(frame('platform').top, 0);
+        .soft(frame('mrrp').top, 'supporting previews align')
+        .toBeCloseTo(frame('worth').top, 0);
+      expect.soft(frame('owewell').top).toBeCloseTo(frame('platform').top, 0);
+    }
+    if (width >= 1050) {
+      expect.soft(frame('wherever').top).toBeCloseTo(frame('mrrp').top, 0);
+      expect.soft(frame('wherever').width).toBeGreaterThan(frame('mrrp').width * 2);
+    } else {
+      expect.soft(frame('wherever').bottom).toBeLessThan(frame('mrrp').top);
     }
     await expect(page.locator('.project-featured-group article h3')).toHaveText([
       'meanwhile.',

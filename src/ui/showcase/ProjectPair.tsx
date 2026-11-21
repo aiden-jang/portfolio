@@ -87,11 +87,24 @@ export function ProjectPair({ name }: { name: keyof typeof evidence }) {
           <div className="preview-sequence-track" data-step={step} ref={track}>
             {frames.map((frame, index) => (
               <div className="preview-sequence-frame" key={frame.key} aria-hidden={step !== index}>
-                <ScreenshotImage
-                  src={'/projects/' + frame.key + '-detail.webp'}
-                  alt={frame.title}
-                  lazy
-                />
+                {name === 'wherever' && index === 0 ? (
+                  <>
+                    <img
+                      src="/projects/wherever-tacos.jpg"
+                      alt="Tacos from the sample dinner round"
+                      width={700}
+                      height={467}
+                      loading="lazy"
+                    />
+                    <span className="wherever-exhibit-title">Probably Fine Tacos</span>
+                  </>
+                ) : (
+                  <ScreenshotImage
+                    src={'/projects/' + frame.key + '-detail.webp'}
+                    alt={frame.title}
+                    lazy
+                  />
+                )}
               </div>
             ))}
           </div>

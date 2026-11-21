@@ -72,12 +72,14 @@ Sources: [mrrp artwork](https://github.com/aiden-jang/mrrp/tree/23fb567/packages
 the [bloomnote recipient screenshot](../public/projects/bloomnote-garden.jpg), and the contribution
 link in the Iodine example.
 
-The iguess reader illustrates Draw → Share → Guess. It describes the existing
-room socket, Durable Object and AI Worker architecture; it sends no drawing or
-AI request. Controls remain usable with reduced motion.
+The iguess gallery replay draws a saved round stroke by stroke and displays the
+recorded guess. With reduced motion, Play round displays the finished drawing and
+guess immediately. The reader illustrates how the room socket, Durable Object and
+AI Worker share a round. The portfolio runs both examples locally.
 
-The wherever gallery pairs two browser captures from a local two-person room
-using sample restaurants and the app's teaser photo. Both participants voted
+The wherever gallery opens on the [app’s taco teaser photo](../public/projects/wherever-tacos.jpg)
+from its [sample deck](https://github.com/aiden-jang/wherever/blob/d5b10d2/packages/web/public/teaser-tacos.jpg).
+The screenshot inspector pairs two captures from a local two-person room using sample restaurants. Both participants voted
 for the restaurant shown on the result screen. The platform gallery captures
 the account hub and the signed-in worth archive from the same local test session.
 The hub capture masks the test email. Swipe or select a step to move between

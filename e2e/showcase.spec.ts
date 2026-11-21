@@ -96,7 +96,7 @@ for (const width of [1440, 390]) {
       (canvas as HTMLCanvasElement).toDataURL(),
     );
     await play.click();
-    await expect(drawing.getByText('Guess', { exact: true })).toBeVisible();
+    await expect(drawing.getByText('The guess', { exact: true })).toBeVisible();
     await expect(drawing.getByText('A rocket. With reservations.', { exact: false })).toBeVisible();
     await expect
       .poll(() => canvasBefore.evaluate((canvas) => (canvas as HTMLCanvasElement).toDataURL()))

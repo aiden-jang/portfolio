@@ -11,12 +11,12 @@ html:root #sec-more-work:has(.bloom-gallery) {
 .bloom-gallery {
   width: 100%;
 }
-.bloom-gallery .bloom-gallery-heading,
-.bloom-gallery .bloom-gallery-rest {
+.bloom-gallery .bloom-gallery-heading {
   width: calc(100% - var(--portfolio-gutter) * 2);
 }
-.bloom-gallery .bloom-gallery-rest {
-  padding-top: clamp(32px, 5vw, 76px);
+html:root .bloom-gallery .bloom-gallery-rest {
+  width: calc(100% - var(--portfolio-gutter) * 2);
+  padding-top: clamp(54px, 8.2vw, 112px);
 }
 
 .bloom-garden {
@@ -205,7 +205,7 @@ html:root #sec-more-work:has(.bloom-gallery) {
 }
 @media (max-width: 767px) {
   .bloom-gallery .bloom-gallery-heading,
-  .bloom-gallery .bloom-gallery-rest,
+  html:root .bloom-gallery .bloom-gallery-rest,
   .bloom-garden-inner {
     width: 88%;
   }

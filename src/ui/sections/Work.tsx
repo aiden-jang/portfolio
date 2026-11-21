@@ -51,7 +51,11 @@ export function WorkSection({ onOpen }: Props) {
 }
 
 const bloomnote = orderedCollection.find((item) => item.mark === 'bloomnote')!;
-const supportingProjects = orderedCollection.filter((item) => item !== bloomnote);
+const iguess = orderedCollection.find((item) => item.mark === 'iguess')!;
+const wherever = orderedCollection.find((item) => item.mark === 'wherever')!;
+const supportingProjects = orderedCollection.filter(
+  (item) => item !== bloomnote && item !== iguess && item !== wherever,
+);
 
 export function MoreProjectsSection({ onOpen }: Props) {
   return (
@@ -66,10 +70,16 @@ export function MoreProjectsSection({ onOpen }: Props) {
           onRead={(trigger) => onOpen(bloomnote, trigger)}
         />
         <div className="garage-work bloom-gallery-rest">
-          <div className="garage-project-list project-gallery" aria-label="More projects">
-            {supportingProjects.map((item) => (
-              <Project key={item.title} item={item} onOpen={onOpen} />
-            ))}
+          <div className="project-gallery gallery-replay">
+            <Project item={iguess} onOpen={onOpen} copyFirst />
+          </div>
+          <div className="project-gallery gallery-collection">
+            <Project item={wherever} onOpen={onOpen} />
+            <div className="gallery-companions">
+              {supportingProjects.map((item) => (
+                <Project key={item.title} item={item} onOpen={onOpen} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -77,7 +87,7 @@ export function MoreProjectsSection({ onOpen }: Props) {
   );
 }
 
-function Project({ item, onOpen }: { item: WorkDetail } & Props) {
+function Project({ item, onOpen, copyFirst }: { item: WorkDetail; copyFirst?: boolean } & Props) {
   const name = item.shortName ?? item.title;
   const preview = PREVIEWS[item.mark ?? ''];
   const description = preview?.description ?? item.summary;
@@ -118,17 +128,21 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
       states={preview.states}
     />
   );
+  const copy = (
+    <div className="garage-project-copy">
+      <div className="project-card-heading">
+        {title}
+        {link}
+      </div>
+      {item.contribution && <p className="project-role">Open-source contributor</p>}
+      <p>{description}</p>
+    </div>
+  );
   return (
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
+      {copyFirst && copy}
       <div className="project-card-media">{media}</div>
-      <div className="garage-project-copy">
-        <div className="project-card-heading">
-          {title}
-          {link}
-        </div>
-        {item.contribution && <p className="project-role">Open-source contributor</p>}
-        <p>{description}</p>
-      </div>
+      {!copyFirst && copy}
     </article>
   );
 }
