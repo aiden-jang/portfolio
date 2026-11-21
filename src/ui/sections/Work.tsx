@@ -1,3 +1,4 @@
+import { BloomPreview } from '../showcase/BloomPreview';
 import { Bean } from '../showcase/Bean';
 import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
 import { IodinePresentation } from '../showcase/IodinePresentation';
@@ -49,15 +50,27 @@ export function WorkSection({ onOpen }: Props) {
   );
 }
 
+const bloomnote = orderedCollection.find((item) => item.mark === 'bloomnote')!;
+const supportingProjects = orderedCollection.filter((item) => item !== bloomnote);
+
 export function MoreProjectsSection({ onOpen }: Props) {
   return (
     <Section id="sec-more-work" side="center" desktopVertical="top" mobileVertical="top">
-      <div className="garage-work pointer-events-auto">
-        <h2 className="project-gallery-heading">More projects</h2>
-        <div className="garage-project-list project-gallery" aria-label="More projects">
-          {orderedCollection.map((item) => (
-            <Project key={item.title} item={item} onOpen={onOpen} />
-          ))}
+      <div className="bloom-gallery pointer-events-auto">
+        <div className="garage-work bloom-gallery-heading">
+          <h2 className="project-gallery-heading">More projects</h2>
+        </div>
+        <BloomPreview
+          {...PREVIEWS.bloomnote}
+          url={bloomnote.link?.url}
+          onRead={(trigger) => onOpen(bloomnote, trigger)}
+        />
+        <div className="garage-work bloom-gallery-rest">
+          <div className="garage-project-list project-gallery" aria-label="More projects">
+            {supportingProjects.map((item) => (
+              <Project key={item.title} item={item} onOpen={onOpen} />
+            ))}
+          </div>
         </div>
       </div>
     </Section>
@@ -103,23 +116,8 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
       name={name}
       caption={preview.caption}
       states={preview.states}
-      onRead={item.mark === 'bloomnote' ? (element) => onOpen(item, element) : undefined}
     />
   );
-  if (item.mark === 'bloomnote') {
-    return (
-      <article id={`project-${workId(item)}`} className="garage-project bloom-spread">
-        <header className="bloom-spread-heading">
-          <div>
-            {title}
-            <p>{description}</p>
-          </div>
-          {link}
-        </header>
-        {media}
-      </article>
-    );
-  }
   return (
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
       <div className="project-card-media">{media}</div>

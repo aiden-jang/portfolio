@@ -1,0 +1,273 @@
+@font-face {
+  font-family: Fraunces;
+  src: url('/fonts/fraunces.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+html:root #sec-more-work:has(.bloom-gallery) {
+  padding-inline: 0;
+}
+.bloom-gallery {
+  width: 100%;
+}
+.bloom-gallery .bloom-gallery-heading,
+.bloom-gallery .bloom-gallery-rest {
+  width: calc(100% - var(--portfolio-gutter) * 2);
+}
+.bloom-gallery .bloom-gallery-rest {
+  padding-top: clamp(32px, 5vw, 76px);
+}
+
+.bloom-garden {
+  --garden-paper: #f1f2e7;
+  --garden-ink: #233b2f;
+  --garden-leaf: #536757;
+  --garden-rule: #bcc6b4;
+  --garden-accent: #79444c;
+  min-width: 0;
+  min-height: calc(100svh - var(--portfolio-header-height));
+  display: grid;
+  background-color: var(--garden-paper);
+  color: var(--garden-ink);
+  text-align: start;
+  text-shadow: none;
+  scroll-margin-top: var(--portfolio-header-height);
+  color-scheme: light;
+}
+.bloom-garden ::selection {
+  color: var(--garden-ink);
+  background: #dce2c8;
+}
+.bloom-garden-inner {
+  width: min(100% - var(--portfolio-gutter) * 2, var(--portfolio-width));
+  margin-inline: auto;
+  padding-block: clamp(30px, 5.4svh, 66px) clamp(20px, 4svh, 42px);
+  display: grid;
+  align-content: space-between;
+  grid-template-rows: auto minmax(auto, 1fr) auto;
+  gap: 24px;
+}
+.bloom-garden-heading h3 {
+  margin: 0;
+  font:
+    400 clamp(39px, 4vw, 56px)/0.95 Fraunces,
+    Georgia,
+    serif;
+  letter-spacing: -0.039em;
+}
+.bloom-garden-heading p {
+  margin: 11px 0 0;
+  max-width: 54ch;
+  color: var(--garden-leaf);
+  font: 450 0.9375rem/1.55 var(--font-display);
+}
+.bloom-garden-scene {
+  display: grid;
+  align-self: center;
+  align-items: center;
+  grid-template-columns: minmax(0, 0.87fr) minmax(0, 1.13fr);
+  gap: clamp(30px, 5vw, 80px);
+}
+.bloom-garden-letter {
+  margin: 0;
+  padding-inline: clamp(10px, 4.2vw, 62px) 0;
+}
+.bloom-garden-letter figcaption {
+  margin-bottom: 15px;
+  color: var(--garden-accent);
+  font: 550 0.875rem/1.35 var(--font-display);
+}
+.bloom-garden-letter blockquote {
+  margin: 0;
+  max-width: 22ch;
+  text-wrap: pretty;
+  font:
+    400 clamp(30px, 3.35vw, 55px)/1.12 Fraunces,
+    Georgia,
+    serif;
+  letter-spacing: -0.029em;
+  animation: bloom-ink-in 360ms ease-out both;
+}
+.bloom-garden-letter p {
+  margin: 20px 0 0;
+  color: var(--garden-leaf);
+  font: 450 0.875rem/1.5 var(--font-display);
+}
+.bloom-garden-plot {
+  display: grid;
+  grid-template-columns: 1fr 1.08fr 1fr;
+  align-items: end;
+  min-width: 0;
+  position: relative;
+  padding-inline: max(0px, 1vw);
+}
+.bloom-garden-plot::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 42px;
+  height: 1px;
+  background: var(--garden-rule);
+  pointer-events: none;
+}
+.bloom-garden-flower {
+  --plant-height: clamp(160px, 26svh, 275px);
+  display: grid;
+  grid-template-rows: auto 42px;
+  justify-items: center;
+  align-items: end;
+  color: var(--garden-leaf);
+  width: 100%;
+  min-width: 0;
+  cursor: pointer;
+  position: relative;
+}
+.bloom-garden-flower-1 {
+  --plant-height: clamp(256px, 48svh, 440px);
+}
+.bloom-garden-flower-2 {
+  --plant-height: clamp(150px, 22svh, 220px);
+}
+.bloom-garden-plant {
+  height: var(--plant-height);
+  width: 100%;
+  position: relative;
+  transform-origin: center bottom;
+  transition: transform 480ms cubic-bezier(0.2, 0.7, 0.18, 1);
+}
+.bloom-garden-plant img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+.bloom-garden-name {
+  align-self: center;
+  padding-block: 4px;
+  font: 450 0.75rem/1.25 var(--font-display);
+  text-underline-offset: 4px;
+}
+.bloom-garden-flower[aria-pressed='true'] .bloom-garden-name {
+  color: var(--garden-ink);
+  text-decoration: underline;
+  font-weight: 580;
+}
+@media (hover: hover) {
+  .bloom-garden-flower:hover .bloom-garden-plant {
+    transform: rotate(-2.5deg);
+  }
+}
+.bloom-garden-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 24px;
+  border-top: 1px solid var(--garden-rule);
+  padding-top: 8px;
+}
+.bloom-garden-actions :is(button, a) {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--garden-ink);
+  font: 540 0.875rem/1.3 var(--font-display);
+  cursor: pointer;
+}
+.bloom-garden-actions a {
+  margin-inline-start: auto;
+}
+.bloom-garden-actions svg {
+  width: 15px;
+  height: 15px;
+}
+.bloom-garden-actions :is(button, a):hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.bloom-garden :is(.bloom-garden-flower, .bloom-garden-actions :is(button, a)):focus-visible {
+  outline: 2px solid var(--garden-accent);
+  outline-offset: 3px;
+}
+
+@keyframes bloom-ink-in {
+  from {
+    opacity: 0.55;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 767px) {
+  .bloom-gallery .bloom-gallery-heading,
+  .bloom-gallery .bloom-gallery-rest,
+  .bloom-garden-inner {
+    width: 88%;
+  }
+  .bloom-garden-inner {
+    padding-block: 25px 12px;
+    gap: 16px;
+  }
+  .bloom-garden-heading h3 {
+    font-size: clamp(34px, 10vw, 46px);
+  }
+  .bloom-garden-heading p {
+    font-size: 0.875rem;
+    margin-block-start: 7px;
+  }
+  .bloom-garden-scene {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .bloom-garden-plot {
+    grid-row: 1;
+    padding-inline: 2%;
+  }
+  .bloom-garden-flower {
+    --plant-height: clamp(110px, 19svh, 164px);
+  }
+  .bloom-garden-flower-1 {
+    --plant-height: clamp(180px, 32svh, 270px);
+  }
+  .bloom-garden-flower-2 {
+    --plant-height: clamp(105px, 17svh, 148px);
+  }
+  .bloom-garden-letter {
+    padding-inline: 0;
+  }
+  .bloom-garden-letter figcaption {
+    margin-bottom: 6px;
+  }
+  .bloom-garden-letter blockquote {
+    font-size: clamp(25px, 7.4vw, 34px);
+    max-width: 27ch;
+  }
+  .bloom-garden-letter p {
+    margin-top: 11px;
+  }
+  .bloom-garden-actions {
+    gap: 0 13px;
+    padding-top: 3px;
+  }
+  .bloom-garden-actions :is(button, a) {
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+  .bloom-garden-actions svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bloom-garden-letter blockquote {
+    animation: none;
+  }
+  .bloom-garden-plant {
+    transition: none;
+  }
+}

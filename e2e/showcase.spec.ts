@@ -68,6 +68,10 @@ for (const width of [1440, 390]) {
     await expect(page.locator('.bean-cameo img')).toHaveJSProperty('complete', true);
     const bloomnote = page.locator('#project-bloomnote');
     await expect(bloomnote.getByRole('blockquote')).toContainText('For that brilliant laugh');
+    await bloomnote.getByRole('button', { name: 'Anemone' }).click();
+    await expect(bloomnote.getByRole('blockquote')).toContainText('tide journal');
+    await bloomnote.getByRole('button', { name: 'Gerbera' }).press('Enter');
+    await expect(bloomnote.getByRole('blockquote')).toContainText('For that brilliant laugh');
     const garden = bloomnote.getByRole('button', { name: 'View full garden' });
     await garden.click();
     await expect(page.getByRole('dialog', { name: 'bloomnote screenshot' })).toBeVisible();
@@ -135,7 +139,9 @@ for (const width of [1440, 390]) {
       await page.keyboard.press('Escape');
       await expect(trigger).toBeFocused();
     }
-    expect(await page.locator('.garage-project').count()).toBe(9);
+    await expect(
+      page.locator(':is(.project-featured-group, #sec-more-work) article[id^="project-"]'),
+    ).toHaveCount(9);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
     expect(errors).toEqual([]);
     await page.screenshot({ path: test.info().outputPath(`showcase-${width}.png`) });

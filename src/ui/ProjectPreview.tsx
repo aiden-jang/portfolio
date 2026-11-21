@@ -1,6 +1,5 @@
 import { ProjectPair } from './showcase/ProjectPair';
 import { IguessReplay } from './showcase/IguessReplay';
-import { BloomPreview } from './showcase/BloomPreview';
 import { OwewellPreview } from './showcase/OwewellPreview';
 import { copyText } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
@@ -18,7 +17,6 @@ type Props = {
   name: string;
   caption: string;
   states?: PreviewState[];
-  onRead?: (trigger: HTMLElement) => void;
 };
 
 function ScreenshotProjectPreview({
@@ -148,7 +146,6 @@ function ScreenshotProjectPreview({
 }
 
 export function ProjectPreview(props: Props) {
-  if (props.name === 'bloomnote') return <BloomPreview {...props} />;
   const linked = previewIndex(new URLSearchParams(location.search).get('preview'), props.name, 1);
   if (linked !== null) return <ScreenshotProjectPreview {...props} />;
   if (props.name === 'wherever' || props.name === 'platform') {

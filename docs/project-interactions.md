@@ -56,8 +56,9 @@ state, the file reference focuses the line, and the source link opens the restor
 implementation.
 
 Bean's small artwork frames come from mrrp's native sit/perk renderer and eye painter.
-The bloomnote spread crops the garden and Gerbera from the approved recipient screenshot and
-shows the flower’s original meaning. The full garden and note are available in the screenshot viewer.
+The bloomnote garden uses its own flower renderer to recompose the three blooms from the
+approved recipient capture. Selecting a flower shows its original meaning. The original
+garden and full recipient note are available in the screenshot viewer.
 
 Sources: [mrrp artwork](https://github.com/aiden-jang/mrrp/tree/23fb567/packages/web/src),
 the [bloomnote recipient screenshot](../public/projects/bloomnote-garden.jpg), and the contribution

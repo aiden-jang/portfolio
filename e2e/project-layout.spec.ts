@@ -21,7 +21,7 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     await page.goto('/#sec-more-work');
     await page.evaluate(() => document.fonts.ready);
     const gallery = page.locator('.project-gallery');
-    await expect(gallery.locator('h3')).toHaveText([
+    await expect(page.locator('#sec-more-work h3')).toHaveText([
       'bloomnote',
       'mrrp',
       'worth',
@@ -36,21 +36,24 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       await expect(worth.getByRole('button', { name: 'Inspect screenshot: worth' })).toBeDisabled();
       await expect(worth.locator('.garage-project-links a')).toHaveAttribute('target', '_blank');
     }
-    const bloom = gallery.locator('#project-bloomnote');
+    const bloom = page.locator('#project-bloomnote');
     await expect(bloom.getByRole('blockquote')).toContainText('For that brilliant laugh');
     const spread = await bloom.evaluate((item) => ({
       card: item.getBoundingClientRect().toJSON(),
-      gallery: item.parentElement!.getBoundingClientRect().toJSON(),
-      garden: item.querySelector('.bloom-spread-garden')!.getBoundingClientRect().toJSON(),
-      detail: item.querySelector('figcaption')!.getBoundingClientRect().toJSON(),
+      viewport: document.documentElement.clientWidth,
+      garden: item.querySelector('.bloom-garden-plot')!.getBoundingClientRect().toJSON(),
+      detail: item.querySelector('.bloom-garden-letter')!.getBoundingClientRect().toJSON(),
     }));
-    expect.soft(spread.card.width, 'bloomnote spans the gallery').toBeCloseTo(spread.gallery.width);
-    if (width > 860) {
+    expect.soft(spread.card.left, 'garden starts at the viewport edge').toBeCloseTo(0);
+    expect.soft(spread.card.width, 'garden spans the viewport').toBeCloseTo(spread.viewport);
+    if (width >= 768) {
       expect
-        .soft(spread.detail.left, 'flower alongside the garden')
-        .toBeCloseTo(spread.garden.right);
+        .soft(spread.detail.right, 'letter sits beside the flowers')
+        .toBeLessThan(spread.garden.left);
     } else {
-      expect.soft(spread.detail.top, 'flower below the garden').toBeCloseTo(spread.garden.bottom);
+      expect
+        .soft(spread.detail.top, 'letter sits below the flowers')
+        .toBeGreaterThan(spread.garden.bottom);
     }
     const cards = await gallery.locator('.garage-project-compact').evaluateAll((items) =>
       items.map((item) => ({

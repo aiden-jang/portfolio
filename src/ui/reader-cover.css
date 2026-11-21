@@ -63,20 +63,6 @@ html:root [data-story-cover='iodine'] .reader-cover-frame {
   color: #eeece9;
   font-size: 12px;
 }
-.bloom-spread-garden .bloom-spread-inspect-label {
-  min-height: 44px;
-}
-.story-photo-read {
-  position: absolute;
-  left: 12px;
-  bottom: 12px;
-  padding: 8px 10px;
-  border-radius: 5px;
-  background: #254537;
-  color: #fffaf0;
-  font-size: 12px;
-  line-height: 1.25;
-}
 @media (max-width: 767px) {
   html:root .reader-cover .reader-cover-frame {
     aspect-ratio: 1.68;
@@ -140,6 +126,9 @@ html:root [data-story-cover='iodine'] .reader-cover-frame {
 }
 .reader-gerbera .bloom-spread-gerbera {
   width: 100%;
+  aspect-ratio: 1;
+  background: url('/projects/bloomnote-garden.jpg') 16.41% 67.12% / 1256.41% auto no-repeat;
+  mask-image: linear-gradient(#000 82%, transparent);
 }
 .reader-gerbera figcaption {
   display: grid;

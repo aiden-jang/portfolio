@@ -97,8 +97,8 @@ recorded snapshot/revert example. Visitors can undo the edit directly or play th
 recorded sequence, with contributor attribution visible.
 
 Compact previews share a 2:1 ratio, with two columns on wide desktops. bloomnote
-has a full-width spread pairing the received garden with a Gerbera close-up and
-its meaning. Project titles open their case studies. Full screenshot views and
+opens into a full-viewport garden with the Gerbera selected. The flower meanings sit
+beside the garden on desktop and below it on phone. Project titles open their case studies. Full screenshot views and
 sharing stay in the inspector and readers. Bean uses mrrp's own artwork, and
 iguess includes an illustrated message flow.
 

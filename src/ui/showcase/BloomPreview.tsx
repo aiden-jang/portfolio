@@ -1,25 +1,48 @@
 import { useEffect, useRef, useState } from 'react';
-import { ScreenshotImage } from '../ScreenshotImage';
+import { ControlIcon } from '../ControlIcon';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import type { PreviewState } from '../../data/projectPreviews';
 import { usePreviewSelection } from '../usePreviewSelection';
 import { previewIndex, previewLink } from '../previewLinks';
 import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
-import { ControlIcon } from '../ControlIcon';
-import './bloom-spread.css';
+import './bloom-garden.css';
+
+const flowers = [
+  {
+    name: 'Anemone',
+    image: '/projects/bloomnote/anemone.svg',
+    meaning:
+      'For the thoughtful way you keep a tide journal, noticing the small, important rhythms.',
+  },
+  {
+    name: 'Gerbera',
+    image: '/projects/bloomnote/gerbera.svg',
+    meaning: 'For that brilliant laugh that comes from deep inside, especially at your own jokes.',
+  },
+  {
+    name: 'Ranunculus',
+    image: '/projects/bloomnote/ranunculus.svg',
+    meaning: 'For existing so wonderfully, no notes on anything you do or say.',
+  },
+] as const;
 
 export function BloomPreview({
   image: initialImage,
   caption: initialCaption,
   states,
+  description,
+  url,
   onRead,
 }: {
   image: string;
   caption: string;
   states?: PreviewState[];
-  onRead?: (trigger: HTMLElement) => void;
+  description: string;
+  url?: string;
+  onRead: (trigger: HTMLElement) => void;
 }) {
+  const [selected, select] = useState(1);
   useEffect(() => {
     const linked = previewIndex(
       new URLSearchParams(location.search).get('preview'),
@@ -38,86 +61,98 @@ export function BloomPreview({
       cancelled = true;
     };
   }, [states]);
-  const [selected, setSelected] = usePreviewSelection('bloomnote', states?.length ?? 1);
-  const { result, run } = useShareFeedback(`bloomnote:${selected}`);
-  const image = states?.[selected]?.image ?? initialImage;
-  const caption = states?.[selected]?.caption ?? initialCaption;
-  const [viewer, setViewer] = useState(false);
-  const inspect = useRef<HTMLButtonElement>(null);
+  const [view, setView] = usePreviewSelection('bloomnote', states?.length ?? 1);
+  const { result, run } = useShareFeedback(`bloomnote:${view}`);
+  const image = states?.[view]?.image ?? initialImage;
+  const caption = states?.[view]?.caption ?? initialCaption;
+  const [showGarden, setShowGarden] = useState(false);
+  const inspector = useRef<HTMLButtonElement>(null);
+  const flower = flowers[selected];
   return (
-    <>
-      <figure className="bloom-spread-paper" data-project="bloomnote" data-view={selected}>
-        <div className="bloom-spread-garden story-photo-card">
+    <article id="project-bloomnote" className="bloom-garden" aria-labelledby="bloom-garden-title">
+      <div className="bloom-garden-inner">
+        <header className="bloom-garden-heading">
+          <h3 id="bloom-garden-title">bloomnote</h3>
+          <p>{description}</p>
+        </header>
+
+        <div className="bloom-garden-scene">
+          <figure className="bloom-garden-letter" aria-live="polite" aria-atomic="true">
+            <figcaption>{flower.name}</figcaption>
+            <blockquote key={flower.name}>“{flower.meaning}”</blockquote>
+            <p>A garden from Maya to Sarah</p>
+          </figure>
+          <div className="bloom-garden-plot" role="group" aria-label="Flowers in Sarah’s garden">
+            {flowers.map((item, index) => (
+              <button
+                key={item.name}
+                type="button"
+                className={'bloom-garden-flower bloom-garden-flower-' + index}
+                aria-pressed={index === selected}
+                onClick={() => select(index)}
+              >
+                <span className="bloom-garden-plant">
+                  <img src={item.image} alt="" loading="lazy" decoding="async" />
+                </span>
+                <span className="bloom-garden-name">{item.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <footer className="bloom-garden-actions">
           <button
             type="button"
-            className="bloom-spread-image-trigger"
-            data-story-source="bloomnote"
-            aria-label="Read the bloomnote case study from the garden image"
-            onClick={(event) => (onRead ? onRead(event.currentTarget) : setViewer(true))}
+            aria-label="How I built it: bloomnote"
+            onClick={(event) => onRead(event.currentTarget)}
           >
-            <ScreenshotImage
-              src={initialImage}
-              alt="Sarah’s received garden in bloomnote, with three illustrated flowers."
-              lazy
-            />
-            <span className="story-photo-read">Read the case study</span>
+            How I built it <ControlIcon name="arrow" />
           </button>
-          <button
-            ref={inspect}
-            type="button"
-            className="bloom-spread-inspect-label"
-            onClick={() => setViewer(true)}
-          >
+          <button type="button" ref={inspector} onClick={() => setShowGarden(true)}>
             View full garden <ControlIcon name="fit" />
           </button>
-        </div>
-        <figcaption className="bloom-spread-detail">
-          {onRead ? (
-            <button
-              type="button"
-              className="bloom-spread-gerbera"
-              aria-label="Read about the Gerbera"
-              onClick={(event) => onRead(event.currentTarget)}
-            />
-          ) : (
-            <div className="bloom-spread-gerbera" aria-hidden="true" />
+          {url && (
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener"
+              aria-label="Open app: bloomnote"
+              aria-describedby="external-link-hint"
+            >
+              Open app <span aria-hidden="true">↗</span>
+            </a>
           )}
-          <div>
-            <p className="bloom-spread-species">Gerbera</p>
-            <blockquote>
-              “For that brilliant laugh that comes from deep inside, especially at your own jokes.”
-            </blockquote>
-          </div>
-        </figcaption>
-      </figure>
-      {viewer && (
+        </footer>
+      </div>
+
+      {showGarden && (
         <ScreenshotViewer
           image={image}
           name="bloomnote"
           caption={caption}
-          returnFocus={inspect.current}
-          onClose={() => setViewer(false)}
+          returnFocus={inspector.current}
+          onClose={() => setShowGarden(false)}
           onShare={
             states
               ? () => {
-                  void run(() => copyText(previewLink(location.href, 'bloomnote', selected)));
+                  void run(() => copyText(previewLink(location.href, 'bloomnote', view)));
                 }
               : undefined
           }
           shareStatus={result === 'copied' || result === 'failed' ? result : 'idle'}
-          viewLink={previewLink(location.href, 'bloomnote', selected)}
+          viewLink={previewLink(location.href, 'bloomnote', view)}
           navigation={
             states && states.length > 1
               ? {
-                  index: selected,
+                  index: view,
                   count: states.length,
-                  label: states[selected]!.label,
-                  onSelect: setSelected,
+                  label: states[view]!.label,
+                  onSelect: setView,
                 }
               : undefined
           }
         />
       )}
-    </>
+    </article>
   );
 }
