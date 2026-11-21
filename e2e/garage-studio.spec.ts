@@ -183,30 +183,29 @@ for (const width of [1440, 390]) {
       expect(url.searchParams.get('camera')).toBe('deck');
       expect(url.searchParams.get('finish')).toBe('current');
       expect(Number(url.searchParams.get('zoom'))).toBeLessThan(1);
-      const linked = await page.context().newPage();
-      await linked.goto(url.toString());
-      const linkedStudio = linked.getByRole('dialog', { name: 'Garage Studio', exact: true });
-      await expect(linkedStudio).toBeVisible();
-      await openStudioControls(linkedStudio);
-      await expect(linked.getByRole('button', { name: 'Rear deck', exact: true })).toHaveAttribute(
-        'aria-pressed',
-        'true',
-      );
-      await linkedStudio.getByRole('button', { name: 'Render study', exact: true }).click();
-      await expect(linked.getByRole('button', { name: 'Current', exact: true })).toHaveAttribute(
-        'aria-pressed',
-        'true',
-      );
-      await linked.close();
+      await page.goto(url.toString());
+      await expect(studio).toBeVisible();
+      await openStudioControls(studio);
+      await expect(button('Rear deck')).toHaveAttribute('aria-pressed', 'true');
+      await button('Render study').click();
+      await expect(button('Current')).toHaveAttribute('aria-pressed', 'true');
+    });
 
-      await button('Lineup').click();
-      await ready();
+    test('shares a Lineup glide position and returns to the portfolio', async ({ page }) => {
+      await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
+      await page.goto('/?garage=studio&scene=lineup');
+      const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
+      const button = (name: string) =>
+        studio.getByRole('button', { name, exact: true }).filter({ visible: true });
+      await expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+      await openStudioControls(studio);
       await button('Glide view').click();
       const stage = studio.getByRole('region', { name: 'Drag to orbit' });
       await stage.focus();
       await stage.press('ArrowRight');
       await stage.press('ArrowRight');
       await button('Share shot').click();
+      const field = studio.getByRole('textbox', { name: 'Exact shot link' });
       const glide = new URL(await field.inputValue());
       expect(glide.searchParams.get('camera')).toBe('glide');
       expect(Number(glide.searchParams.get('glide'))).toBeGreaterThan(0);
