@@ -80,7 +80,6 @@ for (const width of [1440, 390]) {
     });
 
     test('saves a framed Lineup photo and restores the showroom', async ({ page }) => {
-      test.setTimeout(240_000);
       const { studio, button, garage, ready } = await openStudio(page);
       await button('Lineup').click();
       await ready();

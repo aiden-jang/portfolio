@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { PNG } from 'pngjs';
+import type { PNG } from 'pngjs';
+import { captureShowroom } from './showroomFrame';
 import { GARAGE_INDICES } from '../src/config';
 
 async function accessible(page: Page) {
@@ -12,10 +13,8 @@ async function accessible(page: Page) {
   ).toEqual([]);
 }
 
-function carPixels(bytes: Buffer): number {
-  const { width, height, data } = PNG.sync.read(bytes);
+function carPixels({ width, height, data }: PNG): number {
   let red = 0;
-  // Exclude the paint buttons, so they cannot make a blank scene pass.
   for (let y = Math.floor(height * 0.3); y < height * 0.78; y += 2) {
     for (let x = 0; x < width; x += 2) {
       const offset = (y * width + x) * 4;
@@ -30,10 +29,10 @@ function carPixels(bytes: Buffer): number {
   return red;
 }
 
-async function expectVisibleCar(page: Page, timeout = 20_000) {
-  // Retry capture errors within the same budget as frames that have not drawn the car.
+async function expectVisibleCar(page: Page, timeout = process.env.CI ? 60_000 : 20_000) {
+  await expect(page.locator('.portfolio-scene canvas')).toBeVisible();
   await expect(async () => {
-    const pixels = carPixels(await page.screenshot({ timeout: 5_000 }));
+    const pixels = carPixels(await captureShowroom(page, process.env.CI ? 20_000 : 8_000));
     expect(pixels).toBeGreaterThan(1000);
   }).toPass({ timeout });
 }

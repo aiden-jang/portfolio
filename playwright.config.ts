@@ -5,8 +5,8 @@ const preview = 'npm run preview -- --host 127.0.0.1 --port 4175 --strictPort';
 export default defineConfig({
   testDir: './e2e',
   workers: 1,
-  // Allow for software-rendered 3D and accessibility scans on CI runners.
-  timeout: 180_000,
+  // CI software rendering can spend minutes on multi-scene flows and accessibility scans.
+  timeout: process.env.CI ? 360_000 : 180_000,
   expect: { timeout: 20_000 },
   forbidOnly: !!process.env.CI,
   retries: 0,
