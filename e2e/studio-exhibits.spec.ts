@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { openStudioControls, selectStudioExhibit } from './studioControls';
 
 for (const width of [1440, 390]) {
@@ -6,7 +6,7 @@ for (const width of [1440, 390]) {
   test.describe(`Studio exhibits at ${width}px`, () => {
     test.use({ viewport: { width, height: 844 }, isMobile: phone, hasTouch: phone });
 
-    test('opens the five exhibits and returns to the original Garage', async ({ page }) => {
+    async function openStudio(page: Page) {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
       await page.goto('/');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
@@ -29,6 +29,11 @@ for (const width of [1440, 390]) {
       await openStudioControls(studio);
       await expect(button('Long lens')).toBeVisible();
       await expect(picker).toBeVisible({ timeout: 6000 });
+      return { studio, button, picker, ready, open };
+    }
+
+    test('compares the Porsche Lineup and returns to the current pairing', async ({ page }) => {
+      const { studio, button, picker, ready, open } = await openStudio(page);
       await picker.focus();
       await open('Porsche Lineup');
       await expect(picker).toBeFocused();
@@ -43,7 +48,10 @@ for (const width of [1440, 390]) {
       await expect(
         studio.getByText('Ferrari F40 & Red Bull RB16B').filter({ visible: true }),
       ).toBeVisible();
+    });
 
+    test('explores Dusk lighting, the Miata cockpit and the brake reveal', async ({ page }) => {
+      const { studio, button, open } = await openStudio(page);
       await open('Dusk lighting');
       const looks = studio.getByRole('combobox', { name: 'Studio lighting' });
       for (const name of ['studio', 'blackout', 'dusk']) {
@@ -61,7 +69,10 @@ for (const width of [1440, 390]) {
       await expect(button('Straight')).toHaveAttribute('aria-pressed', 'true');
       await button('Turn front wheel').click();
       await expect(button('Turned')).toHaveAttribute('aria-pressed', 'true');
+    });
 
+    test('restores the Corvette wear shot and returns to the original Garage', async ({ page }) => {
+      const { studio, button, ready, open } = await openStudio(page);
       await open('Corvette race wear');
       await button('Wheel close-up').click();
       await button('Clean').click();
