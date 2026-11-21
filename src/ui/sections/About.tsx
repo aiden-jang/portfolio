@@ -3,6 +3,7 @@ import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import './about.css';
 import { AboutFraming } from './AboutFraming';
+import { AboutReel } from './AboutReel';
 
 const wherever = WORK_ITEMS.find((item) => item.mark === 'wherever');
 const bloomnote = WORK_ITEMS.find((item) => item.mark === 'bloomnote');
@@ -16,6 +17,7 @@ export function AboutSection({
     <Section id="sec-about" side="left" desktopVertical="top" mobileVertical="top">
       <div className="about-copy pointer-events-auto">
         <h2>About</h2>
+        <AboutReel />
         <div className="about-grid">
           <AboutFraming />
           <div className="about-profile">
