@@ -102,6 +102,24 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       if (width === 1440) await expect(batchedRequest).toBeVisible();
       else await expect(batchedRequest).toBeHidden();
       await page.emulateMedia({ reducedMotion: 'no-preference' });
+      const plot = comparison.locator('.batching-plots');
+      const scrollToPlot = (topRatio: number) =>
+        plot.evaluate((node, ratio) => {
+          const plotTop = node.getBoundingClientRect().top + scrollY;
+          scrollTo({ top: plotTop - ratio * innerHeight, behavior: 'instant' });
+        }, topRatio);
+      const marks = plot.locator('.batching-marks');
+      await scrollToPlot(width === 390 ? 0.68 : 0.54);
+      await expect(comparison).toHaveAttribute('data-scroll-stage', 'start', { timeout: 3500 });
+      await scrollToPlot(width === 390 ? 0.5 : 0.36);
+      await expect(comparison).toHaveAttribute('data-scroll-stage', 'middle');
+      await expect(marks).not.toHaveCSS('transform', 'none');
+      await scrollToPlot(width === 390 ? 0.32 : 0.15);
+      await expect(after).toHaveAttribute('aria-pressed', 'true');
+      await expect(comparison.locator('.batching-scroll-metric')).toBeVisible();
+      await scrollToPlot(width === 390 ? 0.68 : 0.54);
+      await expect(before).toHaveAttribute('aria-pressed', 'true');
+      await expect(marks).toHaveCSS('transform', 'none');
       const replay = comparison.getByRole('button', { name: 'Replay batching' });
       await replay.press('Enter');
       await expect(comparison.getByRole('button', { name: 'Batching…' })).toBeFocused();
@@ -111,6 +129,9 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await before.click();
       await expect(requestGrid).toBeVisible();
       await page.emulateMedia({ reducedMotion: 'reduce' });
+      await scrollToPlot(width === 390 ? 0.32 : 0.15);
+      await expect(before).toHaveAttribute('aria-pressed', 'true');
+      await expect(marks).toHaveCSS('animation-name', 'none');
       await replay.click();
       await expect(after).toHaveAttribute('aria-pressed', 'true');
       await lead.click();

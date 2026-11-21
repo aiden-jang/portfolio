@@ -262,3 +262,128 @@
     transition-duration: 1ms !important;
   }
 }
+
+.batching-scroll-metric {
+  display: none;
+}
+
+.batching-controls {
+  position: relative;
+}
+
+.batching-spread[data-metric-visible='false'] .batching-scroll-metric {
+  position: absolute;
+  left: 50%;
+  display: block;
+  transform: translateX(-50%);
+  color: #d6ecdf;
+  font-size: 14px;
+  font-weight: 520;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .batching-spread[data-metric-visible='false'] .batching-scroll-metric {
+    top: calc(100% + 19px);
+    right: 15px;
+    left: auto;
+    z-index: 1;
+    transform: none;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .batching-spread[data-driver='scroll'] .batching-marks {
+    animation: scroll-gather 960ms calc(0ms - var(--batch-scroll-time)) linear both paused;
+  }
+
+  .batching-spread[data-driver='scroll'] .batching-flight {
+    animation: request-travel 330ms calc(445ms - var(--batch-scroll-time))
+      cubic-bezier(0.35, 0.4, 0.6, 0.7) both paused;
+  }
+
+  .batching-spread[data-driver='scroll'] .batching-packet {
+    animation: request-arrive 320ms calc(640ms - var(--batch-scroll-time))
+      cubic-bezier(0.16, 1, 0.3, 1) both paused;
+  }
+
+  @media (max-width: 700px) {
+    .batching-spread[data-driver='scroll'] .batching-before {
+      display: grid;
+    }
+
+    .batching-spread[data-driver='scroll'] .batching-after {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      animation: batch-mobile-reveal 310ms calc(420ms - var(--batch-scroll-time)) ease both paused;
+    }
+
+    .batching-spread[data-driver='scroll'][data-scroll-stage='start'] .batching-after,
+    .batching-spread[data-driver='scroll'][data-scroll-stage='end'] .batching-before {
+      visibility: hidden;
+    }
+
+    .batching-spread[data-driver='scroll'] .batching-marks {
+      animation-name: scroll-gather-inline;
+    }
+
+    .batching-spread[data-driver='scroll'] .batching-packet {
+      animation-delay: calc(510ms - var(--batch-scroll-time));
+    }
+  }
+}
+
+@keyframes scroll-gather {
+  0%,
+  9% {
+    transform: none;
+    opacity: 1;
+  }
+
+  40% {
+    transform: translateX(19%) scale(0.44, 0.47);
+    opacity: 0.9;
+  }
+
+  54% {
+    transform: translateX(37%) scale(0.06);
+    opacity: 0.2;
+  }
+
+  60% {
+    transform: translateX(37%) scale(0.04);
+    opacity: 0;
+  }
+
+  76% {
+    transform: none;
+    opacity: 0;
+  }
+
+  100% {
+    transform: none;
+    opacity: 0.63;
+  }
+}
+
+@keyframes scroll-gather-inline {
+  0%,
+  9% {
+    transform: none;
+    opacity: 1;
+  }
+
+  36% {
+    transform: scale(0.52, 0.47);
+    opacity: 0.88;
+  }
+
+  55%,
+  100% {
+    transform: scale(0.05);
+    opacity: 0;
+  }
+}
