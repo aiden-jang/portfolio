@@ -1,15 +1,21 @@
+import { useRef } from 'react';
 import { useProgress } from '@react-three/drei';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
 import './loading-bar.css';
+import { useLoadingPlacement } from './useLoadingPlacement';
 
 export function LoadingBar() {
   const { progress, active } = useProgress();
   const carIndex = useAppStore((state) => state.carIndex);
+  const section = useAppStore((state) => state.sectionIndex);
+  const bar = useRef<HTMLDivElement>(null);
+  useLoadingPlacement(bar, active, section);
   const car = CARS[carIndex];
   const pct = Math.round(progress);
   return (
     <div
+      ref={bar}
       className={`
         car-loading-progress
         transition-opacity duration-300

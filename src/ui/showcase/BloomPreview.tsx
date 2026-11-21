@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ControlIcon } from '../ControlIcon';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import type { PreviewState } from '../../data/projectPreviews';
@@ -7,25 +7,9 @@ import { previewIndex, previewLink } from '../previewLinks';
 import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
 import './bloom-garden.css';
-
-const flowers = [
-  {
-    name: 'Anemone',
-    image: '/projects/bloomnote/anemone.svg',
-    meaning:
-      'For the thoughtful way you keep a tide journal, noticing the small, important rhythms.',
-  },
-  {
-    name: 'Gerbera',
-    image: '/projects/bloomnote/gerbera.svg',
-    meaning: 'For that brilliant laugh that comes from deep inside, especially at your own jokes.',
-  },
-  {
-    name: 'Ranunculus',
-    image: '/projects/bloomnote/ranunculus.svg',
-    meaning: 'For existing so wonderfully, no notes on anything you do or say.',
-  },
-] as const;
+import { BloomComposer } from './BloomComposer';
+import { BloomPlot } from './BloomPlot';
+import { bloomFlowers } from './bloomFlowers';
 
 export function BloomPreview({
   image: initialImage,
@@ -67,10 +51,25 @@ export function BloomPreview({
   const caption = states?.[view]?.caption ?? initialCaption;
   const [showGarden, setShowGarden] = useState(false);
   const inspector = useRef<HTMLButtonElement>(null);
-  const flower = flowers[selected];
+  const [composing, setComposing] = useState(false);
+  const [hasOpenedComposer, setHasOpenedComposer] = useState(false);
+  const article = useRef<HTMLElement>(null);
+  const write = useRef<HTMLButtonElement>(null);
+  const composerTitle = useRef<HTMLHeadingElement>(null);
+  useLayoutEffect(() => {
+    if (!hasOpenedComposer) return;
+    article.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    (composing ? composerTitle.current : write.current)?.focus({ preventScroll: true });
+  }, [composing, hasOpenedComposer]);
+  const flower = bloomFlowers[selected];
   return (
-    <article id="project-bloomnote" className="bloom-garden" aria-labelledby="bloom-garden-title">
-      <div className="bloom-garden-inner">
+    <article
+      ref={article}
+      id="project-bloomnote"
+      className="bloom-garden"
+      aria-labelledby={composing ? 'bloom-draft-title' : 'bloom-garden-title'}
+    >
+      <div className="bloom-garden-inner" hidden={composing}>
         <header className="bloom-garden-heading">
           <h3 id="bloom-garden-title">bloomnote</h3>
           <p>{description}</p>
@@ -82,25 +81,21 @@ export function BloomPreview({
             <blockquote key={flower.name}>“{flower.meaning}”</blockquote>
             <p>A garden from Maya to Sarah</p>
           </figure>
-          <div className="bloom-garden-plot" role="group" aria-label="Flowers in Sarah’s garden">
-            {flowers.map((item, index) => (
-              <button
-                key={item.name}
-                type="button"
-                className={'bloom-garden-flower bloom-garden-flower-' + index}
-                aria-pressed={index === selected}
-                onClick={() => select(index)}
-              >
-                <span className="bloom-garden-plant">
-                  <img src={item.image} alt="" loading="lazy" decoding="async" />
-                </span>
-                <span className="bloom-garden-name">{item.name}</span>
-              </button>
-            ))}
-          </div>
+          <BloomPlot label="Flowers in Sarah’s garden" selected={selected} onSelect={select} />
         </div>
 
         <footer className="bloom-garden-actions">
+          <button
+            ref={write}
+            type="button"
+            className="bloom-write"
+            onClick={() => {
+              setHasOpenedComposer(true);
+              setComposing(true);
+            }}
+          >
+            Write a note
+          </button>
           <button
             type="button"
             aria-label="How I built it: bloomnote"
@@ -124,6 +119,14 @@ export function BloomPreview({
           )}
         </footer>
       </div>
+
+      {hasOpenedComposer && (
+        <BloomComposer
+          titleRef={composerTitle}
+          hidden={!composing}
+          onBack={() => setComposing(false)}
+        />
+      )}
 
       {showGarden && (
         <ScreenshotViewer

@@ -16,3 +16,23 @@
   font: 11px/16px var(--font-display);
   text-align: center;
 }
+
+html:root body:has(.portfolio-chrome):not(:has(.garage-studio)) .car-loading-progress {
+  inset: var(--loading-anchor, var(--portfolio-header-height)) auto auto 50%;
+  translate: 0 var(--loading-offset, 0px);
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #141416;
+  text-align: center;
+}
+html:root body:has(.portfolio-chrome):not(:has(.garage-studio)) .car-loading-copy {
+  margin: 0;
+  background: transparent;
+  color: #e9e7e4;
+  font: 500 12px/17px var(--font-display);
+}
