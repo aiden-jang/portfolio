@@ -170,3 +170,25 @@
   font-variant-numeric: tabular-nums;
   font-weight: 560;
 }
+
+.owewell-result-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.owewell-direction {
+  display: inline-flex;
+  transform: scaleX(-1);
+  transition: transform 250ms cubic-bezier(0.2, 0.75, 0.1, 1);
+}
+.owewell-direction svg {
+  width: 13px;
+}
+.owewell-demo-transfer[data-payer='alex'] .owewell-direction {
+  transform: scaleX(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .owewell-direction {
+    transition: none;
+  }
+}

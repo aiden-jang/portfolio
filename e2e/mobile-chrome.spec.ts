@@ -20,15 +20,15 @@ test('phone navigation uses the persistent menu without intro-only section dots'
   await expect(
     page.getByRole('navigation', { name: 'Section progress' }).filter({ visible: true }),
   ).toHaveCount(0);
-  await page.getByRole('button', { name: 'Menu', exact: true }).click();
+  await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
   const navigation = page.getByRole('navigation', { name: 'Mobile navigation' });
   await expect(navigation.getByRole('link')).toHaveCount(6);
   await navigation.getByRole('link', { name: 'More projects', exact: true }).click();
   await expect(page.locator('#sec-more-work h2')).toBeInViewport();
-  await page.getByRole('button', { name: 'Menu', exact: true }).click();
+  await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
   await navigation.getByRole('link', { name: 'About', exact: true }).click();
   await expect(page.locator('#sec-about h2')).toBeInViewport();
-  await page.getByRole('button', { name: 'Menu', exact: true }).click();
+  await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
   await navigation.getByRole('link', { name: 'Intro', exact: true }).click();
   await expect(page.locator('#mobile-bar')).toBeVisible();
 });

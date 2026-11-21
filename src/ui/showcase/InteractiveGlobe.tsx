@@ -1,3 +1,4 @@
+import { useGlobeCardPosition } from './useGlobeCardPosition';
 import { GlobeControls } from './GlobeControls';
 import { GlobeEventCard } from './GlobeEventCard';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -9,7 +10,13 @@ type Engine = ReturnType<(typeof import('./globe-engine'))['createOrbitGlobe']>;
 const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const START_THRESHOLD = 0.12;
 
-export function InteractiveGlobe({ image, caption }: { image: string; caption: string }) {
+type GlobeProps = {
+  image: string;
+  caption: string;
+  onCompare?: (trigger: HTMLButtonElement) => void;
+};
+
+export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
   const figure = useRef<HTMLElement>(null),
     canvas = useRef<HTMLCanvasElement>(null),
     launch = useRef<HTMLButtonElement>(null),
@@ -159,6 +166,7 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
     };
   }, [mode]);
   const ready = !!mode && phase === 'ready';
+  useGlobeCardPosition(figure, ready && !!selected);
   useEffect(() => {
     if (ready && requestedFocus.current) {
       requestedFocus.current = false;
@@ -167,27 +175,30 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
   }, [ready]);
   return (
     <>
-      <figure ref={figure} className="orbit-feature" data-globe-phase={phase}>
+      <figure
+        ref={figure}
+        className="orbit-feature"
+        data-globe-phase={phase}
+        data-has-event={ready && !!selected}
+      >
         <div className="project-preview orbit-preview" data-project="everythingisfine">
           <div className="preview-thumbnail">
             <div className="orbit-art" data-poster={!posterUnavailable}>
-              {posterUnavailable ? (
-                <ScreenshotImage
-                  src={image}
-                  alt="meanwhile. product interface"
-                  lazy
-                  onUnavailable={() => setScreenshotUnavailable(true)}
-                />
-              ) : (
-                <ScreenshotImage
-                  src="/projects/globe-opening-desktop.webp"
-                  narrowSrc="/projects/globe-opening-mobile.webp"
-                  alt="Globe centered on the North Pacific, with the Kamchatka earthquake marked"
-                  lazy
-                  onReady={onPosterReady}
-                  onUnavailable={onPosterUnavailable}
-                />
-              )}
+              <ScreenshotImage
+                key={posterUnavailable ? 'screenshot' : 'poster'}
+                src={posterUnavailable ? image : '/projects/globe-opening-desktop.webp'}
+                narrowSrc={posterUnavailable ? undefined : '/projects/globe-opening-mobile.webp'}
+                alt={
+                  posterUnavailable
+                    ? 'meanwhile. product interface'
+                    : 'Globe centered on the North Pacific, with the Kamchatka earthquake marked'
+                }
+                lazy
+                onReady={posterUnavailable ? undefined : onPosterReady}
+                onUnavailable={
+                  posterUnavailable ? () => setScreenshotUnavailable(true) : onPosterUnavailable
+                }
+              />
               {mode && (
                 <div className="orbit-viewport" aria-busy={phase === 'loading'}>
                   <canvas
@@ -227,7 +238,8 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
                 rotating={rotating}
                 showRef={show}
                 onRotate={() => handle.current?.setRotating(!rotating)}
-                onShow={() => handle.current?.showEvent()}
+                eventSelected={!!selected}
+                onShow={() => handle.current?.[selected ? 'showEvent' : 'showFeatured']()}
                 onReset={() => handle.current?.reset()}
                 onDone={() => exitRef.current()}
               />
@@ -255,8 +267,9 @@ export function InteractiveGlobe({ image, caption }: { image: string; caption: s
           {ready && selected && (
             <GlobeEventCard
               event={selected}
+              onCompare={selected.id === 'usd0015edq' ? onCompare : undefined}
               onClose={() => {
-                setSelected(null);
+                handle.current?.clearSelection();
                 show.current?.focus({ preventScroll: true });
               }}
             />

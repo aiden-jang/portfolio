@@ -1,30 +1,76 @@
 import { kamchatkaExample } from '../../data/kamchatkaExample';
-import type { CSSProperties } from 'react';
+import { useState, type CSSProperties } from 'react';
 import './depth-section.css';
 
-const scaleKm = 80;
+type Agency = (typeof kamchatkaExample.sources)[number]['name'];
+const [usgs, emsc] = kamchatkaExample.sources;
+const range = 80;
+const gap = (emsc.depthKm - usgs.depthKm).toFixed(1);
 
-export function DepthSection() {
+export function DepthSection({
+  selected,
+  onSelect,
+}: {
+  selected?: Agency;
+  onSelect?: (agency: Agency) => void;
+} = {}) {
+  const [local, setLocal] = useState<Agency>('USGS');
+  const active = selected ?? local;
   return (
-    <figure className="earth-depth">
+    <figure className="earth-depth creative-depth">
       <figcaption>
         <strong>Depth below the surface</strong>
         <span>M5.8 from both agencies</span>
       </figcaption>
-      <div className="earth-depth-plot">
-        <div className="earth-depth-ticks" aria-hidden="true">
-          {[0, 20, 40, 60, 80].map((km) => (
-            <span key={km}>{km === 0 ? '0 km' : km}</span>
+      <div
+        className="creative-depth-scale"
+        style={
+          {
+            '--usgs-depth': (usgs.depthKm / range) * 100 + '%',
+            '--gap-depth': ((emsc.depthKm - usgs.depthKm) / range) * 100 + '%',
+          } as CSSProperties
+        }
+      >
+        <div className="creative-depth-ticks" aria-hidden="true">
+          {[0, 20, 40, 60, 80].map((label) => (
+            <span key={label}>
+              {label}
+              {label === 0 && ' km'}
+            </span>
           ))}
         </div>
-        <dl aria-label="Reported depths">
+        <div className="creative-depth-levels" aria-hidden="true">
           {kamchatkaExample.sources.map(({ name, depthKm }) => (
-            <div key={name} style={{ '--depth': (depthKm / scaleKm) * 100 + '%' } as CSSProperties}>
-              <dt>{name}</dt>
-              <dd>{depthKm.toFixed(1)} km</dd>
+            <div
+              key={name}
+              data-agency={name}
+              data-active={name === active}
+              style={{ top: (depthKm / range) * 100 + '%' }}
+            >
+              <span>{depthKm.toFixed(1)} km</span>
             </div>
           ))}
-        </dl>
+          <div className="creative-depth-gap">
+            <span>{gap} km</span>
+          </div>
+        </div>
+      </div>
+      <div className="creative-depth-actions" role="group" aria-label="Highlight a reported depth">
+        {kamchatkaExample.sources.map(({ name, depthKm }) => (
+          <button
+            key={name}
+            type="button"
+            aria-pressed={name === active}
+            data-agency={name}
+            onClick={() => {
+              setLocal(name);
+              onSelect?.(name);
+            }}
+          >
+            <span>{name}</span>
+            <strong>{depthKm.toFixed(1)} km</strong>
+          </button>
+        ))}
       </div>
     </figure>
   );

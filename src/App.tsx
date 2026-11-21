@@ -23,6 +23,7 @@ import { OpeningPoster } from './ui/OpeningPoster';
 import './ui/reading-flow.css';
 import './ui/dialog-motion.css';
 import './ui/showroom-layout.css';
+import './ui/creative/creative.css';
 import './ui/project-presentation.css';
 import './ui/reading-presentation.css';
 import './ui/garage-responsive.css';
@@ -96,8 +97,21 @@ export function App() {
               if (element) element.inert = photoMode || renderStudy || lineup || garageStudio;
             }}
           >
-            <PortfolioHeader onLink={scrollToSection} />
+            <PortfolioHeader
+              onLink={(id) => {
+                if (location.hash !== '#' + id) history.pushState(null, '', '#' + id);
+                scrollToSection(id);
+                const heading = document
+                  .getElementById(id)
+                  ?.querySelector<HTMLElement>('h1, h2:not(.sr-only), h3, .contact-email-link');
+                if (heading) {
+                  if (!heading.matches('a, button')) heading.tabIndex = -1;
+                  heading.focus({ preventScroll: true });
+                }
+              }}
+            />
             <CarControls />
+            <i className="creative-match-point" aria-hidden="true" />
             <Sections />
             <CarLoadNotice />
             <CommandMenu onSection={scrollToSection} />

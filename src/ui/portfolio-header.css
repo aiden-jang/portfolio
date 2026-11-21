@@ -76,7 +76,7 @@
     display: inline-flex;
     transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  .portfolio-menu-trigger[aria-expanded='true'] > span {
+  .portfolio-menu-trigger[aria-expanded='true'] > span[aria-hidden='true'] {
     transform: rotate(45deg);
   }
   .portfolio-menu nav {
@@ -183,5 +183,20 @@
   html:root .portfolio-menu-trigger > span,
   html:root .portfolio-menu nav {
     transition: none !important;
+  }
+}
+
+.portfolio-menu-trigger .portfolio-menu-label {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: inherit;
+}
+@media (max-width: 360px) {
+  .portfolio-menu-trigger .portfolio-menu-label {
+    max-width: 81px;
   }
 }

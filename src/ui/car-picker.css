@@ -250,3 +250,73 @@
 .car-option-name {
   min-height: 50px;
 }
+
+.car-browser-content {
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+html:root .car-browser .car-browser-grid {
+  padding-block: clamp(14px, 2.2vw, 24px);
+  gap: clamp(14px, 2vw, 26px) clamp(12px, 1.8vw, 23px);
+  overflow: visible;
+}
+.car-browser .car-browser-card .car-option {
+  flex: initial;
+  background: #19191f;
+  border-color: #38383f;
+}
+.car-browser .car-option[aria-pressed='true'] {
+  border-color: #c4b9a7;
+}
+.car-browser .car-option :is(img, .car-preview-placeholder) {
+  aspect-ratio: 1.64;
+  object-fit: cover;
+  background: #10100e;
+}
+html:root .car-browser .car-option-name {
+  min-height: auto;
+  padding: 8px 9px 1px;
+  font-weight: 560;
+}
+html:root .car-browser .car-option-code {
+  min-height: auto;
+  padding: 0 9px 7px;
+  font-size: 11px;
+}
+.car-browser .car-browser-card > a {
+  align-items: start;
+  min-height: 30px;
+  padding: 6px 3px 0;
+  color: #aeadb7;
+  font-size: 10px;
+  line-height: 1.35;
+  text-decoration: none;
+}
+.car-browser .car-browser-card > a:hover {
+  text-decoration: underline;
+}
+.car-browser-archive > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  margin: 0 clamp(16px, 2.4vw, 28px) 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-fg);
+  cursor: pointer;
+}
+.car-browser-archive > summary span {
+  font-size: 12px;
+  color: #bab9c0;
+}
+.car-browser-archive > summary::after {
+  content: '+';
+  font-size: 18px;
+  margin-left: 5px;
+}
+.car-browser-archive[open] > summary::after {
+  content: '−';
+}

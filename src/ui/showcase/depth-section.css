@@ -83,3 +83,15 @@
     margin-block: 10px;
   }
 }
+
+.earth-depth dt button {
+  min-height: 30px;
+  text-underline-offset: 4px;
+}
+.earth-depth dt button:is(:hover, [aria-pressed='true']) {
+  text-decoration: underline;
+}
+.earth-depth dd[data-highlight='true'] {
+  color: #ffe0b3;
+  font-weight: 650;
+}

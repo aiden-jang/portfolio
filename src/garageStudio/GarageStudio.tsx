@@ -1,3 +1,5 @@
+import { StudioTour } from './StudioTourPanel';
+import { restoreStudioFocus } from './restoreStudioFocus';
 import { useMatchedCar } from './matchedSwap';
 import { StudioLoading } from './StudioLoading';
 import { isMechanical } from '../garageExhibits/mechanical';
@@ -108,12 +110,7 @@ export function GarageStudio() {
       window.removeEventListener('keydown', onKey, true);
       unsubscribe();
       repaintStudio();
-      queueMicrotask(() => {
-        if (useGarageStudio.getState().active) return;
-        Array.from(document.querySelectorAll<HTMLButtonElement>('.all-controls-trigger'))
-          .find((button) => button.getClientRects().length)
-          ?.focus({ preventScroll: true });
-      });
+      queueMicrotask(restoreStudioFocus);
     };
   }, [close, leaveTool]);
   useEffect(() => (image ? () => URL.revokeObjectURL(image.src) : undefined), [image]);
@@ -225,6 +222,7 @@ export function GarageStudio() {
         />
       )}
       <footer className="garage-studio-footer">
+        <StudioTour waiting={waiting} />
         {!photo && !study && (
           <>
             {louvers ? (

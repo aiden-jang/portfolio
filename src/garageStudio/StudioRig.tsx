@@ -61,6 +61,15 @@ export function StudioRig() {
         : localBounds(model);
     const focusBounds = deck ? deckBounds : detailPart ? detailBounds(model, id, bounds) : bounds;
     const at = focusBounds.getCenter(center);
+    const racePortrait =
+      f1 &&
+      mobile &&
+      aspect < 0.65 &&
+      chapter === 'walk' &&
+      proposed &&
+      exhibit === 'free' &&
+      !photo &&
+      !profile;
     const groundLift = f1 ? (mobile ? 0.78 : 0.7) : mobile ? 0.69 : 0.62;
     const current = frame.current;
     if (pair && !proposed && view === 'glide') {
@@ -80,7 +89,9 @@ export function StudioRig() {
         ? 0.16
         : 0.085
       : chapter === 'walk' && proposed
-        ? 0.012
+        ? racePortrait
+          ? 0.17
+          : 0.012
         : 0.19;
     const elevation = deck
       ? MathUtils.clamp(0.43 + pitch, 0.26, 0.65)
@@ -198,7 +209,7 @@ export function StudioRig() {
       (deck ? Math.max(fittedBase, fit) * zoom : Math.max(fittedBase * zoom, fit) * clearance);
     const realLift =
       chapter === 'walk' && proposed && !deck && !profile && !feature && !mechanical
-        ? groundLift + Math.max(0, pitch) * 2.3
+        ? groundLift + (racePortrait ? 0.76 + pitch * 1.6 : Math.max(0, pitch) * 2.3)
         : at.y + radius * Math.sin(angle);
     const targetLift = realLift - at.y;
     const k = !current.ready || readableMotion ? 1 : 1 - Math.exp(-Math.min(dt, 0.06) * 11);

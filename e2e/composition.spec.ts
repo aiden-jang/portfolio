@@ -45,7 +45,7 @@ for (const [width, height] of [
     await page.screenshot({ path: test.info().outputPath(`intro-${width}.png`) });
     const jump = async (name: string) => {
       if (width < 768) {
-        await page.getByRole('button', { name: 'Menu', exact: true }).click();
+        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
         await page
           .getByRole('navigation', { name: 'Mobile navigation' })
           .getByRole('link', { name, exact: true })

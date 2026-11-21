@@ -36,7 +36,7 @@ export function WorkStory({ item }: { item: WorkDetail }) {
           </section>
         )}
       </div>
-      {preview && (
+      {preview && (item.mark !== 'bloomnote' || view?.image !== preview.image) && (
         <StoryScreenshot
           image={view?.image ?? preview.image}
           name={item.shortName ?? item.title}

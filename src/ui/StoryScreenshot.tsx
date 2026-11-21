@@ -7,10 +7,12 @@ export function StoryScreenshot({
   image,
   name,
   caption,
+  cover,
 }: {
   image: string;
   name: string;
   caption: string;
+  cover?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [failedImage, setFailedImage] = useState<string | null>(null);
@@ -22,7 +24,11 @@ export function StoryScreenshot({
   );
   const trigger = useRef<HTMLButtonElement>(null);
   return (
-    <figure className="story-screenshot" data-project={name}>
+    <figure
+      className={cover ? 'story-screenshot reader-cover' : 'story-screenshot'}
+      data-project={name}
+      data-story-cover={cover}
+    >
       <button
         ref={trigger}
         type="button"
@@ -31,7 +37,7 @@ export function StoryScreenshot({
         onClick={() => setOpen(true)}
         aria-label={`Inspect screenshot: ${name} case study`}
       >
-        <span className="story-image-crop">
+        <span className={cover ? 'story-image-crop reader-cover-frame' : 'story-image-crop'}>
           <ScreenshotImage
             src={image}
             alt={`${name} product interface`}

@@ -61,7 +61,7 @@ test.describe('mobile navigation motion', () => {
   test('closing the menu restores focus and touch interrupts a section jump', async ({ page }) => {
     await page.goto('/');
     await page.evaluate(() => document.fonts.ready);
-    const menu = page.getByRole('button', { name: 'Menu', exact: true });
+    const menu = page.getByRole('button', { name: /^Menu(?:$|: )/ });
     const panel = page.locator('#mobile-navigation');
     await menu.press('Enter');
     await panel.getByRole('link', { name: 'Featured work', exact: true }).focus();

@@ -5,6 +5,9 @@ import { useAppStore } from '../store';
 import { usePageScrollLock } from './usePageScrollLock';
 import { ControlIcon } from './ControlIcon';
 
+const archiveCars = CARS.map((_, id) => id).filter((id) => !GARAGE_INDICES.includes(id));
+const catalogueOrder = [...GARAGE_INDICES, ...archiveCars];
+
 type Props = {
   onClose: () => void;
   returnFocus: HTMLElement | null;
@@ -39,11 +42,12 @@ export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Prop
       .then(finishClose);
   };
   const options = useRef<(HTMLButtonElement | null)[]>([]);
+  const [archiveOpen, setArchiveOpen] = useState(archiveCars.includes(index));
   usePageScrollLock(true);
   useEffect(() => {
     dialog.current?.showModal();
-    options.current[Math.max(0, GARAGE_INDICES.indexOf(index))]?.focus({ preventScroll: true });
-    options.current[Math.max(0, GARAGE_INDICES.indexOf(index))]?.scrollIntoView({
+    options.current[catalogueOrder.indexOf(index)]?.focus({ preventScroll: true });
+    options.current[catalogueOrder.indexOf(index)]?.scrollIntoView({
       block: 'nearest',
     });
     return () => {
@@ -56,6 +60,50 @@ export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Prop
       target?.focus({ preventScroll: true });
     };
   }, [index, returnFocus]);
+  function carTile(carIndex: number) {
+    const car = CARS[carIndex];
+    const position = catalogueOrder.indexOf(carIndex);
+    return (
+      <div key={car.file} className="car-browser-card">
+        <button
+          ref={(element) => {
+            options.current[position] = element;
+          }}
+          type="button"
+          className="car-option"
+          aria-label={`${index === carIndex && error ? 'Retry' : 'Show'} ${car.name}, ${car.code}`}
+          aria-pressed={index === carIndex}
+          aria-disabled={loading}
+          onClick={() => {
+            if (loading) return;
+            if (carIndex !== index) (onChoose ?? choose)(carIndex);
+            else if (error) retry();
+            onClose();
+          }}
+        >
+          <CarThumbnail file={car.file} lazy={archiveCars.includes(carIndex)} />
+          <span className="car-option-name">
+            <span className="car-option-title">{car.name}</span>
+            <ControlIcon name={index === carIndex ? 'check' : 'chevron'} />
+          </span>
+          <span className="car-option-code">
+            {car.code}
+            {index === carIndex ? (error ? ' · Choose to retry' : ' · Selected') : ''}
+          </span>
+        </button>
+        {car.credit && (
+          <a
+            href={car.credit.url}
+            target="_blank"
+            aria-describedby="external-link-hint"
+            rel="noopener noreferrer"
+          >
+            {car.defaultPaint.name} · Model by {car.credit.author} ↗
+          </a>
+        )}
+      </div>
+    );
+  }
   return createPortal(
     <dialog
       ref={dialog}
@@ -70,7 +118,8 @@ export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Prop
       }}
       onKeyDown={(event) => {
         event.stopPropagation();
-        const position = options.current.indexOf(event.target as HTMLButtonElement);
+        const visible = options.current.filter((node) => node?.getClientRects().length);
+        const position = visible.indexOf(event.target as HTMLButtonElement);
         if (position < 0) return;
         const columns = window.matchMedia('(min-width: 1000px)').matches
           ? 4
@@ -88,73 +137,45 @@ export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Prop
           const next = position + steps[event.key];
           target =
             event.key === 'ArrowLeft' || event.key === 'ArrowRight'
-              ? (next + GARAGE_INDICES.length) % GARAGE_INDICES.length
-              : next >= 0 && next < GARAGE_INDICES.length
+              ? (next + visible.length) % visible.length
+              : next >= 0 && next < visible.length
                 ? next
                 : position;
         }
         if (event.key === 'Home') target = 0;
-        if (event.key === 'End') target = GARAGE_INDICES.length - 1;
+        if (event.key === 'End') target = visible.length - 1;
         if (target !== undefined) {
           event.preventDefault();
-          options.current[target]?.focus();
+          visible[target]?.focus();
         }
       }}
     >
       <header className="car-browser-heading">
         <div>
           <h2 id="car-browser-title">Pick your ride.</h2>
-          <p>No keys included.</p>
         </div>
         <button type="button" aria-label="Close car browser" onClick={onClose}>
           Close ×
         </button>
       </header>
-      <div className="car-browser-grid">
-        {GARAGE_INDICES.map((carIndex, position) => {
-          const car = CARS[carIndex];
-          return (
-            <div key={car.file} className="car-browser-card">
-              <button
-                ref={(element) => {
-                  options.current[position] = element;
-                }}
-                type="button"
-                className="car-option"
-                aria-label={`${index === carIndex && error ? 'Retry' : 'Show'} ${car.name}, ${car.code}`}
-                aria-pressed={index === carIndex}
-                aria-disabled={loading}
-                onClick={() => {
-                  if (loading) return;
-                  if (carIndex !== index) (onChoose ?? choose)(carIndex);
-                  else if (error) retry();
-                  onClose();
-                }}
-              >
-                <CarThumbnail file={car.file} />
-                <span className="car-option-name">
-                  <span className="car-option-title">{car.name}</span>
-                  <ControlIcon name={index === carIndex ? 'check' : 'chevron'} />
-                </span>
-                <span className="car-option-code">
-                  {car.code}
-                  {index === carIndex ? (error ? ' · Choose to retry' : ' · Selected') : ''}
-                  <span className="block">{car.defaultPaint.name}</span>
-                </span>
-              </button>
-              {car.credit && (
-                <a
-                  href={car.credit.url}
-                  target="_blank"
-                  aria-describedby="external-link-hint"
-                  rel="noopener noreferrer"
-                >
-                  Model by {car.credit.author} ↗
-                </a>
-              )}
+      <div className="car-browser-content">
+        <div className="car-browser-grid" aria-label="Featured cars">
+          {GARAGE_INDICES.map(carTile)}
+        </div>
+        <details
+          className="car-browser-archive"
+          open={archiveOpen}
+          onToggle={(event) => setArchiveOpen(event.currentTarget.open)}
+        >
+          <summary>
+            Archive cars <span>{archiveCars.length} cars</span>
+          </summary>
+          {archiveOpen && (
+            <div className="car-browser-grid" aria-label="Archive cars">
+              {archiveCars.map(carTile)}
             </div>
-          );
-        })}
+          )}
+        </details>
       </div>
       <footer className="car-browser-footer">
         <span>Individual model licenses apply. Credits in Contact.</span>
@@ -166,13 +187,14 @@ export function CarBrowser({ onClose: finishClose, returnFocus, onChoose }: Prop
   );
 }
 
-function CarThumbnail({ file }: { file: string }) {
+function CarThumbnail({ file, lazy }: { file: string; lazy: boolean }) {
   const [failed, setFailed] = useState(false);
   return failed ? (
     <span className="car-preview-placeholder">Preview unavailable</span>
   ) : (
     <img
       src={`/cars/${file.replace('.glb', '.jpg')}`}
+      loading={lazy ? 'lazy' : 'eager'}
       width="640"
       height="360"
       alt=""

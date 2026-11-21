@@ -43,7 +43,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     expect(heading!.y, 'section heading clears the fixed header').toBeGreaterThanOrEqual(
       header!.y + header!.height,
     );
-    const lead = section.getByRole('button', { name: 'Read the case study', exact: true });
+    const lead = section.getByRole('link', { name: 'Read the case study', exact: true });
     await expect(lead).toBeInViewport({ ratio: 1 });
     const history = section.locator('.experience-history');
     await expect(history.getByText('LiveIntent', { exact: true })).toHaveCount(1);
@@ -89,36 +89,32 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     };
     await assertLayout();
     if (width === 1440 || width === 390) {
-      for (const [trigger, title] of [
-        [lead, 'Ad Slot Details: 120 → 1 API call'],
-        [
-          section.getByRole('button', { name: /Replaced a live PHP backend/ }),
-          'Replacing a live publisher backend',
-        ],
-      ] as const) {
-        await trigger.evaluate((button) => {
-          button.scrollIntoView({ block: 'center', behavior: 'instant' });
-          button.focus({ preventScroll: true });
-        });
-        const readingPosition = await page.evaluate(() => scrollY);
-        await page.keyboard.press('Enter');
-        const reader = page.getByRole('dialog');
-        await expect(reader.getByRole('heading', { name: title })).toBeVisible();
-        if (trigger === lead) {
-          await reader.getByRole('button', { name: 'Copy case link', exact: true }).click();
-          await expect(
-            reader.getByRole('button', { name: 'Link copied', exact: true }),
-          ).toBeVisible();
-          expect(await page.evaluate(() => sessionStorage.getItem('copied-case'))).toMatch(
-            /#work\/ad-slot-details-120-1-api-call$/,
-          );
-        }
-        await page.keyboard.press('Escape');
-        await expect(trigger).toBeFocused();
-        await expect
-          .poll(() => page.evaluate((position) => Math.abs(scrollY - position), readingPosition))
-          .toBeLessThan(2);
-      }
+      await section.getByRole('button', { name: 'Show batching' }).click();
+      await expect(section.getByText('One response carries the joined data.')).toBeVisible();
+      await lead.click();
+      await expect(page.getByRole('heading', { name: '120 API calls became one.' })).toBeVisible();
+      await page.getByRole('button', { name: 'Copy evidence link' }).click();
+      await expect(page.getByRole('button', { name: 'Link copied', exact: true })).toBeVisible();
+      expect(await page.evaluate(() => sessionStorage.getItem('copied-case'))).toMatch(
+        /story=ad-slot-details-120-1-api-call$/,
+      );
+      await page.goBack();
+      const trigger = section.getByRole('button', { name: /Replaced a live PHP backend/ });
+      await trigger.evaluate((button) => {
+        button.scrollIntoView({ block: 'center', behavior: 'instant' });
+        button.focus({ preventScroll: true });
+      });
+      const readingPosition = await page.evaluate(() => scrollY);
+      await page.keyboard.press('Enter');
+      const reader = page.getByRole('dialog');
+      await expect(
+        reader.getByRole('heading', { name: 'Replacing a live publisher backend' }),
+      ).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(trigger).toBeFocused();
+      await expect
+        .poll(() => page.evaluate((position) => Math.abs(scrollY - position), readingPosition))
+        .toBeLessThan(2);
     }
     await section.locator('.experience-more summary').click();
     await assertLayout();
@@ -141,8 +137,8 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       );
       if (id === 'sec-about') {
         await expect(target.locator('h2')).toHaveText('About', { timeout: 3000 });
-        const study = target.getByRole('img', { name: /^Clay rendering of the Ferrari/ });
-        await expect(study).toHaveAttribute('src', '/projects/showroom-framing.webp');
+        const study = target.getByRole('img', { name: /^Finished Ferrari F40/ });
+        await expect(study).toHaveAttribute('src', '/projects/showroom-finished.webp');
         const story = await target.locator('.about-story').boundingBox();
         const details = await target.locator('.about-details').boundingBox();
         if (width >= 900) expect(details!.x).toBeGreaterThan(story!.x + story!.width);

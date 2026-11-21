@@ -112,7 +112,7 @@ for (const width of [1440, 390]) {
       ).toBeVisible();
       expect(new URL(page.url()).search).toBe(initialSetup);
       if (phone) {
-        await page.getByRole('button', { name: 'Menu', exact: true }).click();
+        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
         await page
           .getByRole('navigation', { name: 'Mobile navigation' })
           .getByRole('link', { name: 'Contact', exact: true })

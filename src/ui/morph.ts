@@ -1,6 +1,7 @@
 import { flushSync } from 'react-dom';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { frameFromTrigger } from './triggerMotion';
+import { moveStoryPhoto, storyDestination, storySource } from './storyPhotoMotion';
 let version = 0;
 let animations: Animation[] = [];
 function animate(element: Element | null, frames: Keyframe[], options: KeyframeAnimationOptions) {
@@ -11,23 +12,32 @@ function animate(element: Element | null, frames: Keyframe[], options: KeyframeA
 }
 export function runMorph(update: () => void, origin: HTMLElement | null, opening: boolean): void {
   const current = ++version;
+  const interrupted = animations.some((animation) => animation.playState === 'running');
   for (const animation of animations) animation.cancel();
   animations = [];
-  if (prefersReducedMotion() || !Element.prototype.animate) {
+  if (interrupted || prefersReducedMotion() || !Element.prototype.animate) {
     update();
     return;
   }
+  const source = storySource(origin);
   if (opening) {
-    flushSync(update);
+    document.documentElement.dataset.workTransition = 'opening';
+    try {
+      flushSync(update);
+    } finally {
+      delete document.documentElement.dataset.workTransition;
+    }
+    const flight = moveStoryPhoto(source, storyDestination(), 420);
+    if (flight) animations.push(flight);
     const panel = document.querySelector('.work-modal-panel');
     animate(
       panel,
       [
-        frameFromTrigger(panel, origin, 0.075, 28, 0.957) ?? {
+        (flight ? { opacity: 0 } : frameFromTrigger(panel, origin, 0.075, 28, 0.957)) ?? {
           opacity: 0,
           transform: 'translateY(14px) scale(.99)',
         },
-        { opacity: 1, transform: 'translateY(0) scale(1)' },
+        flight ? { opacity: 1 } : { opacity: 1, transform: 'translateY(0) scale(1)' },
       ],
       { duration: 300, easing: 'cubic-bezier(.16,1,.3,1)' },
     );
@@ -43,11 +53,13 @@ export function runMorph(update: () => void, origin: HTMLElement | null, opening
     update();
     return;
   }
+  const flight = moveStoryPhoto(storyDestination(), source, 330);
+  if (flight) animations.push(flight);
   animate(
     panel,
     [
-      { opacity: 1, transform: 'translateY(0) scale(1)' },
-      frameFromTrigger(panel, origin, 0.075, 28, 0.957) ?? {
+      flight ? { opacity: 1 } : { opacity: 1, transform: 'translateY(0) scale(1)' },
+      (flight ? { opacity: 0 } : frameFromTrigger(panel, origin, 0.075, 28, 0.957)) ?? {
         opacity: 0,
         transform: 'translateY(10px) scale(.99)',
       },

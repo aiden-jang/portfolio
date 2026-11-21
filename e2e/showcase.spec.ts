@@ -11,7 +11,7 @@ for (const width of [1440, 390]) {
     await page.getByRole('button', { name: 'Explore globe', exact: true }).click();
     await expect(globe).toHaveAttribute('data-globe-phase', 'ready', { timeout: 60000 });
     await page.locator('.orbit-preview').hover();
-    await page.getByRole('button', { name: 'Show an event', exact: true }).click();
+    await page.getByRole('button', { name: 'Show Kamchatka', exact: true }).click();
     const link = page.getByRole('link', { name: 'Open this event' });
     await expect(link).toBeVisible();
     await expect(page.getByRole('complementary', { name: 'Selected earthquake' })).toContainText(
@@ -29,27 +29,29 @@ for (const width of [1440, 390]) {
     await expect(page.getByRole('button', { name: 'Explore globe', exact: true })).toBeFocused();
     await expect(canvas).toHaveCount(0);
     const iodine = page.locator('#project-iodine');
-    const currentCode = iodine.locator('[data-current="true"] code');
-    const otherCode = iodine.locator('[data-current="false"] code');
-    await expect(currentCode).toContainText('.trim()');
-    if (width >= 768) await expect(otherCode).toBeVisible();
-    else await expect(otherCode).toBeHidden();
+    const code = iodine.locator('.iodine-evidence-line');
+    const editedLine = await code.boundingBox();
+    await expect(code).toContainText('.trim()');
     await iodine.getByRole('button', { name: 'Undo edit', exact: true }).press('Enter');
-    await expect(currentCode).not.toContainText('.trim()');
-    await expect(iodine.getByText('Snapshot restored', { exact: true })).toBeVisible();
-    if (width >= 768) await expect(otherCode).toBeVisible();
-    else await expect(otherCode).toBeHidden();
+    await expect(code).not.toContainText('.trim()');
+    await expect(iodine.getByText('Revert feedback queued', { exact: true })).toBeVisible();
+    const restoredLine = await code.boundingBox();
+    expect(restoredLine!.x).toBeCloseTo(editedLine!.x);
     const replay = iodine.getByRole('button', { name: 'Replay edit', exact: true });
     await expect(replay).toBeFocused();
     await replay.press('Enter');
-    await expect(currentCode).toContainText('.trim()');
+    await expect(code).toContainText('.trim()');
     const approvals = iodine.getByRole('region', { name: 'What an approval covers' });
     await expect(approvals).toContainText('ls src/components');
     await expect(approvals).toContainText('Approval reused');
+    await approvals.getByRole('button', { name: 'Outside scope' }).click();
     await expect(approvals).toContainText('ls docs');
     await expect(approvals).toContainText('Fresh approval needed');
     const screenshot = iodine.getByRole('button', { name: 'Inspect editor detail for iodine' });
-    await expect(screenshot.locator('img')).toHaveAttribute('src', '/projects/iodine.png');
+    await expect(iodine.locator('.iodine-editor-tile img')).toHaveAttribute(
+      'src',
+      '/projects/iodine.png',
+    );
     await screenshot.press('Enter');
     const editor = page.getByRole('dialog', { name: 'iodine screenshot', exact: true });
     await expect(editor.getByRole('button', { name: 'Close screenshot' })).toBeFocused();
@@ -150,7 +152,7 @@ test('globe waits for featured work and a failed start keeps the preview and ret
   await page.route('**/projects/globe-geography.bin.gz', (r) =>
     r.fulfill({ status: 503, body: 'Unavailable' }),
   );
-  await page.locator('#sec-work').scrollIntoViewIfNeeded();
+  await page.locator('.orbit-preview').scrollIntoViewIfNeeded();
   await expect(page.locator('.orbit-feature')).toHaveAttribute('data-globe-phase', 'error', {
     timeout: 60000,
   });

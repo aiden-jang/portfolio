@@ -1,3 +1,5 @@
+import { RequestReplay } from '../RequestReplay';
+import { storyHref } from '../creative/storyRoutes';
 import { workId, WORK_ITEMS } from '../../data/workItems';
 import { isPortfolioProject } from '../../data/workBrowsing';
 import './experience.css';
@@ -85,7 +87,7 @@ export function ExperienceSection({ onOpen }: Props) {
       <div data-nosnippet className="experience-content pointer-events-auto">
         <h2>Experience</h2>
         <div className="experience-grid">
-          {lead && <LeadOutcome item={lead} onOpen={onOpen} />}
+          {lead && <LeadOutcome item={lead} />}
           <div className="experience-history">
             <h3>Where I&apos;ve worked</h3>
             <ol role="list">
@@ -127,7 +129,7 @@ export function ExperienceSection({ onOpen }: Props) {
   );
 }
 
-function LeadOutcome({ item, onOpen }: { item: WorkDetail } & Props) {
+function LeadOutcome({ item }: { item: WorkDetail }) {
   return (
     <article className="experience-lead">
       <p className="experience-measure">
@@ -146,16 +148,16 @@ function LeadOutcome({ item, onOpen }: { item: WorkDetail } & Props) {
         <h3 id="experience-lead-title">120 API calls became one</h3>
         <p>I combined the linked line items into one API response, cutting page load time.</p>
         <div className="experience-lead-actions">
-          <button
-            type="button"
+          <a
+            href={storyHref('ad-slot-details-120-1-api-call')}
             className="experience-case"
             aria-describedby="experience-lead-title"
-            onClick={(event) => onOpen(item, event.currentTarget)}
           >
             Read the case study <ControlIcon name="arrow" />
-          </button>
+          </a>
           <span>{item.context}</span>
         </div>
+        <RequestReplay />
       </div>
     </article>
   );

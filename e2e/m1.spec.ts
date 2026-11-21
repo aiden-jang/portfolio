@@ -83,7 +83,7 @@ test('retired M1 keeps its racing colors across layouts and lighting', async ({ 
   expect(errors).toEqual([]);
 });
 
-test('retired M1 keeps shared identity, picker focus and model credits', async ({ page }) => {
+test('archived M1 keeps shared identity, picker focus and model credits', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.setViewportSize({ width: 390, height: 844 });
@@ -93,11 +93,10 @@ test('retired M1 keeps shared identity, picker focus and model credits', async (
   await expect(browse).toHaveAccessibleName('Browse cars. BMW M1 Turbo, Group 5');
   await browse.click();
   const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
-  await expect(
-    picker.getByRole('button', { name: 'Show BMW M1 Turbo, Group 5', exact: true }),
-  ).toHaveCount(0);
-  await expect(picker.locator('.car-option').first()).toBeFocused();
-  await expect(picker.locator('.car-option[aria-pressed="true"]')).toHaveCount(0);
+  const selected = picker.getByRole('button', { name: 'Show BMW M1 Turbo, Group 5', exact: true });
+  await expect(selected).toBeFocused();
+  await expect(selected).toHaveAttribute('aria-pressed', 'true');
+  await expect(picker.locator('.car-browser-archive')).toHaveAttribute('open', '');
   await page.keyboard.press('Escape');
   await expect(browse).toBeFocused();
   await page.reload();
@@ -111,7 +110,7 @@ test('retired M1 keeps shared identity, picker focus and model credits', async (
   await expect(browse).toHaveAccessibleName('Browse cars. Ferrari F40, F120');
   await expect.poll(() => new URL(page.url()).searchParams.get('car')).toBe('0');
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-  await page.getByRole('button', { name: 'Menu', exact: true }).click();
+  await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
   await page
     .getByRole('navigation', { name: 'Mobile navigation' })
     .getByRole('link', { name: 'Contact', exact: true })

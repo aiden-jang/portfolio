@@ -9,6 +9,7 @@ import { ControlIcon } from './ControlIcon';
 
 export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void }) {
   const active = useAppStore((state) => state.sectionIndex);
+  const activeSection = SECTION_IDS[active];
   const [open, setOpen] = useState(false);
   const menu = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
@@ -57,9 +58,19 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
             className="portfolio-menu-trigger"
             aria-controls="mobile-navigation"
             aria-expanded={open}
+            aria-label={active > 0 ? `Menu: ${SECTION_LABELS[SECTION_IDS[active]]}` : 'Menu'}
             onClick={() => setOpen((current) => !current)}
           >
-            Menu <span aria-hidden="true">+</span>
+            <span className="portfolio-menu-label">
+              {activeSection === 'sec-work'
+                ? 'Featured'
+                : activeSection === 'sec-more-work'
+                  ? 'Projects'
+                  : active > 0
+                    ? SECTION_LABELS[activeSection]
+                    : 'Menu'}
+            </span>
+            <span aria-hidden="true">+</span>
           </button>
           <nav
             ref={panel}
@@ -73,6 +84,7 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
                 href={'#' + id}
                 aria-current={active === index ? 'page' : undefined}
                 onClick={(event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
                   event.preventDefault();
                   closeAndFocus();
                   onLink(id);

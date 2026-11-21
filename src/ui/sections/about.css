@@ -167,3 +167,29 @@ html:root #sec-about {
 .about-story-link:is(:hover, :focus-visible) {
   text-decoration-color: currentColor;
 }
+
+.about-framing-image .about-frame-clay {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 0 0 var(--paint-reveal));
+}
+.about-frame-split {
+  position: absolute;
+  inset: 0 auto 0 var(--paint-reveal);
+  width: 2px;
+  background: #eadcc6;
+}
+.about-frame-scrub {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.about-frame-scrub input {
+  width: 100%;
+  min-height: 44px;
+  accent-color: #eadcc6;
+}

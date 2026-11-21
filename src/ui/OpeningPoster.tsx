@@ -71,7 +71,13 @@ export function OpeningPoster() {
       });
     };
     const onScroll = () => {
-      if (scrollY > 1) end();
+      const work = document.getElementById('sec-work');
+      if (work && work.getBoundingClientRect().top < innerHeight * 0.3) end();
+      else
+        picture.current?.style.setProperty(
+          '--opening-scroll',
+          String(Math.max(0, 1 - scrollY / innerHeight)),
+        );
     };
     const unsubscribe = useAppStore.subscribe((state) => {
       if (
@@ -111,7 +117,7 @@ export function OpeningPoster() {
       aria-hidden="true"
       data-fading={phase === 'fading' || undefined}
       onTransitionEnd={(event) => {
-        if (event.propertyName === 'opacity') finish.current?.();
+        if (phase === 'fading' && event.propertyName === 'opacity') finish.current?.();
       }}
     >
       {studio ? (

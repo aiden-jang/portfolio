@@ -20,8 +20,8 @@ export function StudioHeading({ title, car, leadWithCar, exit, onExit }: Props) 
         </button>
       </header>
       <div className="garage-studio-title">
-        <h2 className="studio-original-title">{title}</h2>
-        <p className="studio-original-title">{car}</p>
+        <h2 className="studio-original-title">{leadWithCar ? car : title}</h2>
+        {!leadWithCar && <p className="studio-original-title">{car}</p>}
         <h2 className="studio-compact-title">
           {leadWithCar ? car.replaceAll('-', '\u2011') : title}
         </h2>

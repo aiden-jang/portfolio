@@ -348,3 +348,35 @@ html:root .iodine-feature .scope-study p {
     padding-block: 0;
   }
 }
+
+.scope-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-block: 8px;
+}
+.scope-toggle button {
+  min-height: 44px;
+  padding-inline: 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  color: var(--color-muted);
+}
+.scope-toggle button[aria-pressed='true'] {
+  color: var(--color-fg);
+  border-color: #88868e;
+  background: #ffffff0b;
+}
+.scope-toggle button:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}
+.scope-cases.scope-cases-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+.scope-cases-single > div[data-decision] {
+  min-height: 115px;
+}
+.scope-cases-single code {
+  overflow-wrap: anywhere;
+}

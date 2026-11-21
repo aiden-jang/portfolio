@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import evidence from './approval-decisions.json';
 
 export function ScopedApprovals() {
   const { rule, inside, outside } = evidence;
+  const [folder, setFolder] = useState<'inside' | 'outside'>('inside');
+  const allowed = folder === 'inside';
+  const choice = allowed ? inside : outside;
   return (
     <section className="scope-study" aria-labelledby="scope-title">
       <header>
@@ -14,20 +18,25 @@ export function ScopedApprovals() {
         </div>
         <span>Recorded decisions</span>
       </header>
-      <div className="scope-cases">
-        <div data-decision={inside.decision}>
+      <div className="scope-toggle" role="group" aria-label="Choose command working folder">
+        <button type="button" aria-pressed={allowed} onClick={() => setFolder('inside')}>
+          Inside scope
+        </button>
+        <button type="button" aria-pressed={!allowed} onClick={() => setFolder('outside')}>
+          Outside scope
+        </button>
+      </div>
+      <div className="scope-cases scope-cases-single" aria-live="polite">
+        <div data-decision={choice.decision}>
           <code>
-            <span>{rule.program}</span> <mark>{inside.target}</mark>
+            <span>{rule.program}</span> <mark>{choice.target}</mark>
           </code>
-          <strong>Approval reused</strong>
-          <p>Same command. The path is inside the approved folder.</p>
-        </div>
-        <div data-decision={outside.decision}>
-          <code>
-            <span>{rule.program}</span> <mark>{outside.target}</mark>
-          </code>
-          <strong>Fresh approval needed</strong>
-          <p>Same command. The path falls outside the approved folder.</p>
+          <strong>{allowed ? 'Approval reused' : 'Fresh approval needed'}</strong>
+          <p>
+            {allowed
+              ? 'The path is inside the approved folder.'
+              : 'The path falls outside the approved folder.'}
+          </p>
         </div>
       </div>
     </section>

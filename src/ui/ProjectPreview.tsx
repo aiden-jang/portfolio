@@ -13,7 +13,13 @@ import { usePreviewSelection } from './usePreviewSelection';
 import { previewIndex, previewLink } from './previewLinks';
 import { ExpandIcon } from './ExpandIcon';
 
-type Props = { image: string; name: string; caption: string; states?: PreviewState[] };
+type Props = {
+  image: string;
+  name: string;
+  caption: string;
+  states?: PreviewState[];
+  onRead?: (trigger: HTMLElement) => void;
+};
 
 function ScreenshotProjectPreview({
   image: initialImage,

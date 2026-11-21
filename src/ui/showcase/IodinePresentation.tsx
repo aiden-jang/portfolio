@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import type { ProductPreview } from '../../data/projectPreviews';
 import type { WorkDetail } from '../../types';
 import { ScopedApprovals } from './ScopedApprovals';
@@ -6,6 +6,8 @@ import { IodineContribution } from './IodineContribution';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import { ScreenshotImage } from '../ScreenshotImage';
 import './iodine-presentation.css';
+import { storyHref } from '../creative/storyRoutes';
+import { IodineSession } from './iodine-session';
 
 type Props = {
   item: WorkDetail;
@@ -16,39 +18,48 @@ type Props = {
 export function IodinePresentation({ item, preview, onOpen }: Props) {
   const [open, setOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
+  const session = useContext(IodineSession);
+  const story = storyHref('iodine', {
+    edit: session?.phase === 'restored' ? 'restored' : undefined,
+  });
   return (
     <article id="project-iodine" className="garage-project iodine-feature">
       <div className="iodine-intro">
         <h3>{item.shortName}</h3>
         <div>
           <p className="iodine-summary">
-            Scoped terminal approvals and agent edit recovery for an open-source IDE.
+            I contributed scoped terminal approvals and agent edit recovery to the open-source IDE.
           </p>
-          <p className="iodine-role">Open-source contributor</p>
         </div>
       </div>
       <div className="iodine-preview-row">
-        <IodineContribution />
-        <button
-          type="button"
-          ref={trigger}
-          className="iodine-editor-tile"
-          aria-label="Inspect editor detail for iodine"
-          onClick={() => setOpen(true)}
-        >
-          <ScreenshotImage src={preview.image} alt="" lazy />
-          <span className="iodine-editor-label">Inspect editor detail</span>
-        </button>
+        <IodineContribution reader />
+        <div className="iodine-editor-tile story-photo-card">
+          <button
+            type="button"
+            data-story-source="iodine"
+            aria-label="Read the Iodine case study from the editor image"
+            onClick={(event) => onOpen(item, event.currentTarget)}
+          >
+            <ScreenshotImage src={preview.image} alt="" lazy />
+            <span className="iodine-editor-label">Read the case study</span>
+          </button>
+          <button
+            type="button"
+            ref={trigger}
+            className="story-photo-inspect"
+            aria-label="Inspect editor detail for iodine"
+            onClick={() => setOpen(true)}
+          >
+            Inspect editor
+          </button>
+        </div>
       </div>
       <ScopedApprovals />
       <div className="iodine-links">
-        <button
-          type="button"
-          aria-label="Read my contribution to iodine"
-          onClick={(event) => onOpen(item, event.currentTarget)}
-        >
+        <a href={story} aria-label="Read my contribution to iodine">
           Read my contribution
-        </button>
+        </a>
         {item.link && (
           <a
             href={item.link.url}

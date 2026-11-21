@@ -3,7 +3,8 @@ import { prefersReducedMotion } from '../hooks/reducedMotion';
 
 export function useStoryMotion(title: string | undefined, dialog: RefObject<HTMLElement>) {
   useEffect(() => {
-    if (prefersReducedMotion()) return;
+    if (!title || prefersReducedMotion() || dialog.current?.querySelector('[data-story-cover]'))
+      return;
     const content = dialog.current?.querySelector('.story-scroll-area');
     const animation = content?.animate(
       [

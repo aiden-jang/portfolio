@@ -95,40 +95,44 @@ for (const [width, height] of [
     const evidence = page.getByRole('region', { name: 'Off the east coast of Kamchatka' });
     await expect(evidence).toContainText('54.7 km');
     await expect(evidence).toContainText('71.0 km');
-    const read = page.getByRole('button', { name: 'See how I matched the reports' });
-    await read.click();
+    await page.getByRole('button', { name: /EMSC.*71.0 km/ }).click();
+    await expect(page).toHaveURL(/#quake\/kamchatka\/EMSC$/);
+    const casePath = await page
+      .getByRole('link', { name: 'See how I matched the reports' })
+      .getAttribute('href');
+    await page.goBack();
+    await expect(inspect).toBeFocused();
+    await page.goto(casePath!);
+    await expect(page.getByRole('heading', { name: 'One quake. Two depths.' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /EMSC.*71.0 km/ })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(page.locator('#globe-view, .garage-studio')).toHaveCount(0);
+    await page.goto('/#sec-work');
+    await story.click();
     const reader = page.getByRole('dialog');
     await expect(reader.getByText('One event on the globe', { exact: true })).toBeVisible();
     await reader.getByRole('button', { name: 'Close', exact: true }).click();
-    await expect(read).toBeFocused();
-    await page.getByRole('button', { name: 'Back to the globe preview' }).click();
-    await expect(inspect).toBeFocused();
-    await story.click();
-    await expect(reader.getByText('One event on the globe', { exact: true })).toBeVisible();
-    await reader.getByRole('button', { name: 'Close', exact: true }).click();
     await expect(story).toBeFocused();
-    await page.getByRole('button', { name: 'Read my contribution to iodine' }).click();
-    await expect(reader.getByText('.trim()', { exact: true })).toBeVisible();
-    await reader.getByRole('button', { name: 'Close', exact: true }).click();
     const iodine = page.locator('#project-iodine');
     await iodine.getByRole('button', { name: 'Undo edit', exact: true }).press('Enter');
-    await iodine.getByRole('button', { name: 'Read my contribution to iodine' }).click();
-    await expect(reader.getByText('Revert feedback queued', { exact: true })).toBeVisible();
+    await iodine.getByRole('link', { name: 'Read my contribution to iodine' }).click();
+    await expect(page.getByRole('heading', { name: 'An edit you can take back.' })).toBeVisible();
+    await expect(page).toHaveURL(/story=iodine&edit=restored$/);
+    await page.reload();
+    await expect(page.getByText('Revert feedback queued', { exact: true })).toBeVisible();
     await expect(
-      reader.getByText('Do not assume the edit is still applied.', { exact: false }),
+      page.getByText('Do not assume the edit is still applied.', { exact: false }),
     ).toBeVisible();
-    await expect(
-      reader.getByRole('link', { name: 'View snapshot and revert code' }),
-    ).toHaveAttribute('href', /editSnapshots\.ts$/);
-    await reader.getByRole('button', { name: 'src/greeting.ts:2', exact: true }).click();
-    await expect(reader.locator('.iodine-evidence-line')).toBeFocused();
-    await expect(reader.getByRole('link', { name: 'View Iodine’s restore code' })).toHaveAttribute(
+    await page.getByRole('button', { name: 'src/greeting.ts:2', exact: true }).first().click();
+    await expect(page.locator('.iodine-evidence-line')).toBeFocused();
+    await expect(page.getByRole('link', { name: 'View Iodine’s restore code' })).toHaveAttribute(
       'href',
       /editSnapshots\.ts#L92-L107$/,
     );
-    const replay = reader.getByRole('button', { name: 'Replay edit', exact: true });
-    await replay.press('Enter');
-    await expect(reader.getByText('.trim()', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Replay edit', exact: true }).press('Enter');
+    await expect(page.getByText('.trim()', { exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
@@ -176,7 +180,7 @@ test('the globe keeps the narrow-phone composition while WebGL loads', async ({ 
     await canvas.press('ArrowRight');
     await expect(resume).toBeVisible();
     await globe.getByRole('button', { name: 'Reset globe' }).click();
-    await globe.getByRole('button', { name: 'Show an event' }).press('Enter');
+    await globe.getByRole('button', { name: 'Show Kamchatka' }).press('Enter');
     await expect(globe.getByRole('complementary', { name: 'Selected earthquake' })).toContainText(
       'Kamchatka',
     );

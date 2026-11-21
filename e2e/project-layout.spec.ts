@@ -22,12 +22,12 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     await page.evaluate(() => document.fonts.ready);
     const gallery = page.locator('.project-gallery');
     await expect(gallery.locator('h3')).toHaveText([
+      'bloomnote',
       'mrrp',
       'worth',
-      'bloomnote',
+      'wherever',
       'owewell',
       'iguess',
-      'wherever',
       'platform',
     ]);
     if (width === 320) {
@@ -70,31 +70,27 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       })),
     );
     for (const { name, frame, title, app, description } of cards) {
-      const minimum = {
-        'project-owewell': 204,
-        'project-iguess': 204,
-        'project-wherever': 174,
-        'project-platform': 174,
-      } as Record<string, number>;
-      const expectedHeight = Math.max(frame.width / 2, minimum[name] ?? 0);
-      expect.soft(Math.abs(frame.height - expectedHeight), name).toBeLessThan(1);
-      expect.soft(Math.abs(frame.width - cards[0].frame.width), name).toBeLessThan(1);
-      expect.soft(Math.abs(title.top - app.top), `${name} actions share a row`).toBeLessThan(1);
+      expect.soft(frame.height, name + ' has a readable image').toBeGreaterThanOrEqual(105);
+      expect.soft(frame.width, name + ' media fits the viewport').toBeLessThanOrEqual(width);
       expect.soft(app.left, `${name} action clears the title`).toBeGreaterThanOrEqual(title.right);
       expect
         .soft(description.top, `${name} description follows actions`)
         .toBeGreaterThanOrEqual(app.bottom - 1);
-      expect.soft(title.top - frame.bottom, `${name} image-to-title gap`).toBeLessThan(16);
+      expect.soft(title.top - frame.bottom, `${name} image-to-title gap`).toBeLessThan(34);
       expect
         .soft(title.top, `${name} image precedes title`)
         .toBeGreaterThanOrEqual(frame.bottom - 1);
     }
     if (width >= 768) {
-      const wherever = cards.find((card) => card.name === 'project-wherever')!;
-      const platform = cards.find((card) => card.name === 'project-platform')!;
+      const frame = (name: string) => cards.find((card) => card.name === 'project-' + name)!.frame;
+      expect.soft(frame('mrrp').width).toBeCloseTo(frame('worth').width, 0);
+      expect.soft(frame('mrrp').width).toBeLessThan(frame('wherever').width);
       expect
-        .soft(platform.frame.top, 'the last two projects share a row')
-        .toBeCloseTo(wherever.frame.top);
+        .soft(frame('wherever').top, 'voting and settlement share a row')
+        .toBeCloseTo(frame('owewell').top, 0);
+      expect
+        .soft(frame('iguess').top, 'the last two projects share a row')
+        .toBeCloseTo(frame('platform').top, 0);
     }
     await expect(page.locator('.project-featured-group article h3')).toHaveText([
       'meanwhile.',

@@ -228,6 +228,16 @@ export function Lights() {
     const spec = CARS[state.carIndex];
     const darkPaint = state.activeBodyColor === '#3f464e' || /(?:gtr|gt-r|e30)/.test(spec.file);
     const brightLivery = /(?:corvette|gt3-rs|296-gt3)/.test(spec.file);
+    if (
+      studio &&
+      preview.active &&
+      preview.chapter === 'walk' &&
+      /(?:911-turbo|e30-m3|a80-supra)/.test(spec.file)
+    ) {
+      fill.current.intensity += 0.12;
+      rim.current.position.set(-4.6, 2.35, 5.6);
+      rim.current.intensity += 0.19;
+    }
     fill.current.intensity *= 1 - (darkPaint ? 0.53 : 0.78) * amount;
     key.current.intensity *= 1 - 0.65 * amount;
     rim.current.intensity *= 1 - (brightLivery ? 0.69 : 0.52) * amount;

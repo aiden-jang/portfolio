@@ -376,3 +376,59 @@ html:root .portfolio-chrome #project-everythingisfine .earthquake-heading h3 {
     font-size: 12px;
   }
 }
+
+.earthquake-orbit-slot:not([hidden]) {
+  display: contents;
+}
+html:root .orbit-event .orbit-compare-event {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  min-height: 44px;
+  margin-inline-end: 14px;
+  color: var(--color-fg);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 767px) {
+  html:root
+    .portfolio-chrome
+    #project-everythingisfine
+    .orbit-feature[data-has-event='true']
+    .preview-thumbnail {
+    height: clamp(204px, 32svh, 282px);
+  }
+  html:root .orbit-feature[data-has-event='true'] .orbit-preview {
+    padding-bottom: 0;
+  }
+  html:root #project-everythingisfine .orbit-feature[data-has-event='true'] .orbit-actions {
+    position: static;
+    justify-content: flex-end;
+    padding-inline: var(--portfolio-gutter);
+  }
+  html:root .orbit-event {
+    position: relative;
+    inset: auto;
+    width: auto;
+    max-width: none;
+    margin: 8px var(--portfolio-gutter) 0;
+  }
+  html:root #project-everythingisfine .earthquake-still {
+    aspect-ratio: 1.95;
+  }
+}
+
+html:root .orbit-event-trigger:has(span) {
+  width: auto;
+  gap: 5px;
+  padding-inline: 9px;
+}
+@media (max-width: 767px) {
+  html:root #project-everythingisfine .orbit-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: calc(100% - 2 * var(--portfolio-gutter));
+  }
+}

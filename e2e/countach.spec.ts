@@ -17,12 +17,12 @@ test('Countach shared paint and selection work across phone and desktop layouts'
   await expect(page.getByRole('button', { name: 'Pop-up headlights' })).toHaveCount(0);
   await browse.click();
   const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
-  await expect(
-    picker.getByRole('button', { name: 'Show Lamborghini Countach, 5000 QV', exact: true }),
-  ).toHaveCount(0);
-  await expect(
-    picker.getByRole('button', { name: 'Show Ferrari F40, F120', exact: true }),
-  ).toBeFocused();
+  const selected = picker.getByRole('button', {
+    name: 'Show Lamborghini Countach, 5000 QV',
+    exact: true,
+  });
+  await expect(selected).toBeFocused();
+  await expect(selected).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('Escape');
   await expect(browse).toBeFocused();
   await expect(browse).toHaveAccessibleName('Browse cars. Lamborghini Countach, 5000 QV');

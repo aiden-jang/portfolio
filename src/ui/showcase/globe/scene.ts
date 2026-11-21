@@ -131,6 +131,12 @@ export function createGlobeScene(
   const markers = createMarkers(events);
   const featuredMarker = createMarkers([featured], true);
   scene.add(markers.object, featuredMarker.object);
+  const markerPositions = featuredMarker.object.geometry.getAttribute('position');
+  const highlight = (event: GlobeEvent = featured) => {
+    const position = vector(event.lon, event.lat, 1.006);
+    markerPositions.setXYZ(0, position.x, position.y, position.z);
+    markerPositions.needsUpdate = true;
+  };
   let fit = 4;
   let frameWidth = 0;
   const resize = () => {
@@ -172,6 +178,7 @@ export function createGlobeScene(
     resize,
     render,
     project,
+    highlight,
     dispose: () => {
       markers.dispose();
       featuredMarker.dispose();

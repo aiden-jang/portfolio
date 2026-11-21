@@ -95,6 +95,18 @@ export function useShowroomTransition() {
       root.style.setProperty('--stage-opacity', String(stage));
       root.style.setProperty('--work-figure-scale', String(scale));
       root.style.setProperty('--work-poster-opacity', String(globe));
+      const cut = smoothProgress(progress, phone ? 0.57 : 0.61, phone ? 0.96 : 0.99);
+      const showPoint = !reduced && visitedIntro && rect && cut > 0 && cut < 1;
+      if (showPoint && rect) {
+        const endX = rect.left + rect.width * (phone ? 177 / 390 : 585 / 1120);
+        const endY = rect.top + rect.height * (phone ? 159 / 440 : 287 / 732);
+        root.style.setProperty(
+          '--creative-point-x',
+          lerp(innerWidth * (phone ? 0.53 : 0.44), endX, cut) + 'px',
+        );
+        root.style.setProperty('--creative-point-y', lerp(h * 0.69, endY, cut) + 'px');
+        root.style.setProperty('--creative-point-opacity', String(Math.sin(cut * Math.PI) * 0.83));
+      } else root.style.setProperty('--creative-point-opacity', '0');
 
       if (pulsingPoster && (pulsingPoster !== poster || !movingForward)) clearPulse();
       if (

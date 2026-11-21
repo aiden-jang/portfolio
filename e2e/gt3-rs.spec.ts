@@ -12,10 +12,10 @@ for (const width of [1440, 390]) {
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
-    await expect(picker.locator('.car-option')).toHaveCount(12);
-    await expect(
-      picker.getByRole('button', { name: 'Show Porsche 911 GT3, 992', exact: true }),
-    ).toHaveCount(0);
+    await expect(picker.locator('[aria-label="Featured cars"] .car-option')).toHaveCount(12);
+    const archived = picker.getByRole('button', { name: 'Show Porsche 911 GT3, 992', exact: true });
+    await expect(archived).toBeFocused();
+    await expect(archived).toHaveAttribute('aria-pressed', 'true');
     await picker.getByRole('button', { name: 'Show Porsche 911 GT3 RS, 992', exact: true }).click();
     await expect(browse).toHaveAccessibleName('Browse cars. Porsche 911 GT3 RS, 992');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });

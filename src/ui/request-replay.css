@@ -1,0 +1,108 @@
+.request-replay {
+  min-width: 0;
+  margin: 18px 0 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+}
+.request-replay-labels,
+.request-replay figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.request-replay-labels > span:first-child {
+  color: var(--color-fg);
+}
+.request-replay-labels > span:last-child {
+  color: #beddca;
+  text-align: end;
+}
+.request-replay-rail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) 20px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  overflow: hidden;
+  margin-block: 11px;
+}
+.request-replay-rail svg {
+  width: 17px;
+}
+.request-replay-dots {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 3px;
+  transform-origin: right center;
+}
+.request-replay-dots i {
+  height: 3px;
+  border-radius: 2px;
+  background: #a49bb3;
+}
+.request-replay-result i {
+  display: block;
+  height: 5px;
+  width: 75%;
+  border-radius: 3px;
+  background: #beddca;
+  opacity: 0.45;
+  transform: scaleX(0.28);
+  transform-origin: left;
+}
+.request-replay[data-phase='running'] .request-replay-dots {
+  animation: batch-gather 650ms cubic-bezier(0.36, 0.08, 0.16, 1) both;
+}
+.request-replay[data-phase='running'] .request-replay-dots i {
+  animation: batch-dim 400ms ease var(--offset) both;
+}
+.request-replay[data-phase='running'] .request-replay-result i {
+  animation: batch-arrive 295ms ease-out 360ms both;
+}
+.request-replay[data-phase='after'] .request-replay-dots {
+  opacity: 0.18;
+}
+.request-replay[data-phase='after'] .request-replay-result i {
+  opacity: 1;
+  transform: none;
+}
+.request-replay button {
+  flex: none;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  color: var(--color-fg);
+}
+.request-replay button:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 2px;
+}
+@keyframes batch-gather {
+  70%,
+  100% {
+    transform: translateX(23%) scale(0.035, 0.2);
+    opacity: 0;
+  }
+}
+@keyframes batch-dim {
+  to {
+    opacity: 0.3;
+  }
+}
+@keyframes batch-arrive {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .request-replay[data-phase='running']
+    :is(.request-replay-dots, .request-replay-dots i, .request-replay-result i) {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+}

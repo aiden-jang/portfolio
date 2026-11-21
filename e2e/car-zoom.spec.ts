@@ -83,7 +83,7 @@ for (const width of [1440, 390, 320]) {
       } else await page.mouse.wheel(0, 650);
       await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(200);
       if (width < 768) {
-        await page.getByRole('button', { name: 'Menu', exact: true }).click();
+        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
         await page
           .getByRole('navigation', { name: 'Mobile navigation' })
           .getByRole('link', { name: 'Contact', exact: true })

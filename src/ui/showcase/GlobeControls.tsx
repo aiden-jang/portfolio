@@ -6,6 +6,7 @@ type Props = {
   showRef: Ref<HTMLButtonElement>;
   onRotate: () => void;
   onShow: () => void;
+  eventSelected: boolean;
   onReset: () => void;
   onDone: () => void;
 };
@@ -16,6 +17,7 @@ export function GlobeControls({
   showRef,
   onRotate,
   onShow,
+  eventSelected,
   onReset,
   onDone,
 }: Props) {
@@ -46,8 +48,8 @@ export function GlobeControls({
         ref={showRef}
         type="button"
         className="orbit-event-trigger"
-        aria-label="Show an event"
-        title="Show an event"
+        aria-label={eventSelected ? 'Show another event' : 'Show Kamchatka'}
+        title={eventSelected ? 'Show another event' : 'Show Kamchatka'}
         onClick={onShow}
       >
         <svg
@@ -60,6 +62,7 @@ export function GlobeControls({
           <circle cx="12" cy="12" r="7" />
           <circle cx="12" cy="12" r="2" />
         </svg>
+        {!eventSelected && <span>Kamchatka</span>}
       </button>
       <button type="button" onClick={onReset}>
         Reset globe

@@ -1,3 +1,4 @@
+import { ControlIcon } from '../ControlIcon';
 import { useId, useRef, useState } from 'react';
 import { ExpandIcon } from '../ExpandIcon';
 import { ScreenshotViewer } from '../ScreenshotViewer';
@@ -54,8 +55,18 @@ export function OwewellPreview() {
               </label>
             </div>
           </fieldset>
-          <div className="owewell-demo-transfer" role="status" aria-atomic="true">
-            <span>{payer === 'you' ? 'Alex pays you' : 'You pay Alex'}</span>{' '}
+          <div
+            className="owewell-demo-transfer"
+            role="status"
+            aria-atomic="true"
+            data-payer={payer}
+          >
+            <span className="owewell-result-detail">
+              <span className="owewell-direction" aria-hidden="true">
+                <ControlIcon name="arrow" />
+              </span>
+              {payer === 'you' ? 'Alex pays you' : 'You pay Alex'}
+            </span>{' '}
             <strong>$24.00</strong>
           </div>
         </div>

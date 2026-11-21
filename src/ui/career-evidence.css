@@ -1,0 +1,67 @@
+.career-evidence {
+  margin: 0 0 26px;
+  padding: 12px 15px;
+  border: 1px solid var(--color-line);
+  border-radius: 9px;
+}
+.career-evidence figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 15px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.career-evidence figcaption strong {
+  color: var(--color-fg);
+}
+.career-evidence :is(.career-evidence-migration, .career-evidence-relation) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+.career-evidence .career-evidence-relation {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.career-evidence :is(.career-evidence-migration, .career-evidence-relation) > div,
+.career-evidence-code {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+  padding: 10px 11px;
+  background: #ffffff08;
+  border-radius: 5px;
+  font-size: 13px;
+}
+.career-evidence span {
+  color: var(--color-muted);
+}
+.career-evidence svg {
+  width: 16px;
+}
+.career-evidence-choices {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.career-evidence-choices button {
+  min-height: 44px;
+  padding-inline: 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 5px;
+}
+.career-evidence-choices button[aria-pressed='true'] {
+  color: #f1e4d0;
+  border-color: #c4ae89;
+}
+.career-evidence code {
+  overflow-wrap: anywhere;
+  color: #cce3d5;
+}
+html:root .career-evidence p {
+  color: var(--color-muted);
+  margin: 10px 0 0;
+  font-size: 13px;
+}

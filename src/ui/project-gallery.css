@@ -255,3 +255,53 @@ html:root #sec-more-work .preview-thumbnail > img {
     padding-block: calc(var(--portfolio-header-height) + 30px) 56px;
   }
 }
+
+.project-card-media {
+  min-width: 0;
+}
+.project-gallery {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 768px) {
+  .project-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.project-card-media .iguess-replay {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: auto;
+  height: auto;
+}
+.project-gallery .garage-project-compact {
+  gap: 0;
+}
+.project-gallery .garage-project-copy {
+  padding-top: 7px;
+  border-top: 1px solid var(--color-line);
+  margin-top: 11px;
+}
+.project-gallery .garage-project-copy .project-card-heading {
+  align-items: baseline;
+}
+.project-gallery .garage-project-copy h3 button {
+  min-height: 37px;
+}
+@media (min-width: 768px) {
+  .project-gallery {
+    column-gap: clamp(24px, 3.9vw, 54px);
+    row-gap: 24px;
+  }
+  .project-gallery .garage-project-compact {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
+  .project-gallery .project-card-media > :is(figure, .owewell-demo) {
+    min-height: 100%;
+  }
+  .project-gallery .garage-project-copy {
+    margin-top: 0;
+    padding-bottom: 12px;
+  }
+}

@@ -177,7 +177,7 @@ for (const width of [1440, 390]) {
       await page.keyboard.press('Escape');
 
       if (width === 390) {
-        await page.getByRole('button', { name: 'Menu', exact: true }).click();
+        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
         await page
           .getByRole('navigation', { name: 'Mobile navigation' })
           .getByRole('link', { name: 'Featured work', exact: true })
@@ -274,7 +274,7 @@ for (const width of [1440, 390]) {
       await page.emulateMedia({ reducedMotion: 'reduce' });
 
       if (width === 390) {
-        await page.getByRole('button', { name: 'Menu', exact: true }).click();
+        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
         await page
           .getByRole('navigation', { name: 'Mobile navigation' })
           .getByRole('link', { name: 'Contact' })

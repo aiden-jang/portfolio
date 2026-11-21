@@ -44,6 +44,7 @@ export function Nav({ onLink }: Props) {
             data-section={key}
             aria-current={id === activeId ? 'page' : undefined}
             onClick={(event) => {
+              if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
               event.preventDefault();
               onLink(id);
             }}

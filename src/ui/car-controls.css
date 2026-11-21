@@ -283,7 +283,7 @@
 .swatch[data-paint-name] {
   position: relative;
 }
-.swatch[data-paint-name]:focus-visible::after {
+.swatch[data-paint-name]:is(:hover, :focus-visible)::after {
   content: attr(data-paint-name);
   position: absolute;
   left: 50%;

@@ -14,6 +14,11 @@ type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
 const featured = projects.filter((item) => FEATURED_PROJECTS.includes(workId(item)));
 const collection = projects.filter((item) => !FEATURED_PROJECTS.includes(workId(item)));
+const editorialOrder = ['bloomnote', 'mrrp', 'worth', 'wherever', 'owewell', 'iguess', 'platform'];
+const orderedCollection = editorialOrder
+  .map((id) => collection.find((item) => workId(item) === id))
+  .filter((item): item is WorkDetail => !!item)
+  .concat(collection.filter((item) => !editorialOrder.includes(workId(item))));
 
 export function WorkSection({ onOpen }: Props) {
   return (
@@ -50,7 +55,7 @@ export function MoreProjectsSection({ onOpen }: Props) {
       <div className="garage-work pointer-events-auto">
         <h2 className="project-gallery-heading">More projects</h2>
         <div className="garage-project-list project-gallery" aria-label="More projects">
-          {collection.map((item) => (
+          {orderedCollection.map((item) => (
             <Project key={item.title} item={item} onOpen={onOpen} />
           ))}
         </div>
@@ -98,6 +103,7 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
       name={name}
       caption={preview.caption}
       states={preview.states}
+      onRead={item.mark === 'bloomnote' ? (element) => onOpen(item, element) : undefined}
     />
   );
   if (item.mark === 'bloomnote') {
@@ -116,7 +122,7 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
   }
   return (
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
-      {media}
+      <div className="project-card-media">{media}</div>
       <div className="garage-project-copy">
         <div className="project-card-heading">
           {title}

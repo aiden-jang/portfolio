@@ -345,3 +345,62 @@ html:root #sec-experience {
     grid-row: 1;
   }
 }
+
+.experience-request-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+  align-items: start;
+  gap: 9px 12px;
+  max-width: 430px;
+  margin: 20px 0 0;
+  padding: 13px 0 3px;
+  border-top: 1px solid var(--color-line);
+}
+.experience-request-flow strong {
+  color: var(--color-fg);
+  font-size: clamp(17px, 2vw, 24px);
+  font-weight: 520;
+  font-variant-numeric: tabular-nums;
+}
+.experience-request-flow span {
+  color: #c8c4ce;
+  font-size: clamp(11px, 1.4vw, 13px);
+  white-space: nowrap;
+}
+.experience-request-flow > svg {
+  width: 21px;
+  height: 21px;
+  margin-top: 27px;
+  color: #a5a2ab;
+}
+.experience-request-grid,
+.experience-request-single {
+  display: grid;
+  height: 46px;
+  margin-top: 5px;
+}
+.experience-request-grid {
+  grid-template: repeat(10, 1fr) / repeat(12, 1fr);
+  gap: 2px 3px;
+}
+.experience-request-grid i {
+  display: block;
+  border-radius: 1px;
+  background: #a49bae;
+}
+.experience-request-single {
+  place-items: center start;
+}
+.experience-request-single i {
+  display: block;
+  width: min(62%, 89px);
+  height: 7px;
+  border-radius: 1px;
+  background: #beddca;
+}
+.experience-request-flow figcaption {
+  grid-column: 1 / -1;
+  color: #bebbc6;
+  font-size: 12px;
+  line-height: 1.4;
+}

@@ -5,6 +5,7 @@ import { repaintStudio } from '../garageStudio/state';
 import { alignPorsches } from './mechanical';
 import { useAppStore } from '../store';
 import './exhibit-gallery.css';
+import { startStudioTour } from '../garageStudio/studioTour';
 
 const featured = [
   {
@@ -62,6 +63,13 @@ export function ExhibitGallery() {
             Close
           </button>
         </header>
+        <button
+          className="creative-tour-start"
+          type="button"
+          onClick={() => choose(startStudioTour)}
+        >
+          Take the four-stop Studio tour
+        </button>
         <div className="studio-gallery-shots">
           {featured.map((shot) => (
             <button key={shot.image} type="button" onClick={() => choose(shot.open)}>

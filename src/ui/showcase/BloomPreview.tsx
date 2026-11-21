@@ -13,10 +13,12 @@ export function BloomPreview({
   image: initialImage,
   caption: initialCaption,
   states,
+  onRead,
 }: {
   image: string;
   caption: string;
   states?: PreviewState[];
+  onRead?: (trigger: HTMLElement) => void;
 }) {
   useEffect(() => {
     const linked = previewIndex(
@@ -45,26 +47,41 @@ export function BloomPreview({
   return (
     <>
       <figure className="bloom-spread-paper" data-project="bloomnote" data-view={selected}>
-        <div className="bloom-spread-garden">
+        <div className="bloom-spread-garden story-photo-card">
           <button
-            ref={inspect}
             type="button"
             className="bloom-spread-image-trigger"
-            aria-label="View full garden"
-            onClick={() => setViewer(true)}
+            data-story-source="bloomnote"
+            aria-label="Read the bloomnote case study from the garden image"
+            onClick={(event) => (onRead ? onRead(event.currentTarget) : setViewer(true))}
           >
             <ScreenshotImage
               src={initialImage}
               alt="Sarah’s received garden in bloomnote, with three illustrated flowers."
               lazy
             />
-            <span className="bloom-spread-inspect-label">
-              View full garden <ControlIcon name="fit" />
-            </span>
+            <span className="story-photo-read">Read the case study</span>
+          </button>
+          <button
+            ref={inspect}
+            type="button"
+            className="bloom-spread-inspect-label"
+            onClick={() => setViewer(true)}
+          >
+            View full garden <ControlIcon name="fit" />
           </button>
         </div>
         <figcaption className="bloom-spread-detail">
-          <div className="bloom-spread-gerbera" aria-hidden="true" />
+          {onRead ? (
+            <button
+              type="button"
+              className="bloom-spread-gerbera"
+              aria-label="Read about the Gerbera"
+              onClick={(event) => onRead(event.currentTarget)}
+            />
+          ) : (
+            <div className="bloom-spread-gerbera" aria-hidden="true" />
+          )}
           <div>
             <p className="bloom-spread-species">Gerbera</p>
             <blockquote>

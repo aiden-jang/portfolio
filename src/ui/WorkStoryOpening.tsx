@@ -1,5 +1,10 @@
 import { workId } from '../data/workItems';
 import './request-comparison.css';
+import { RequestReplay } from './RequestReplay';
+import { CareerEvidence } from './CareerEvidence';
+import './reader-cover.css';
+import { PREVIEWS } from '../data/projectPreviews';
+import { StoryScreenshot } from './StoryScreenshot';
 import type { WorkDetail } from '../types';
 import { EarthquakeMatch } from './showcase/EarthquakeEvidence';
 import { IodineContribution } from './showcase/IodineContribution';
@@ -23,21 +28,52 @@ export function WorkStoryOpening({ item }: { item: WorkDetail }) {
   if (item.mark === 'iodine') {
     return (
       <section className="featured-story-opening" aria-label="Iodine contributions">
+        <StoryCover kind="iodine" />
         <h4>
           Scoped approvals. <br />
           Recoverable edits.
         </h4>
         <p>
-          I built scoped terminal approvals and an undo system that restores files and tells the AI
-          agent what changed. I also made file paths in agent replies and tool results clickable, so
-          developers can jump straight to the relevant file and line.
+          I built scoped terminal approvals and Undo that tells the agent what changed when a file
+          is restored. I also made file paths in agent replies and tool results clickable.
         </p>
         <IodineContribution reader />
       </section>
     );
   }
   if (workId(item) === 'ad-slot-details-120-1-api-call') return <RequestComparison />;
-  return <p className="work-modal-summary">{item.summary}</p>;
+  return (
+    <>
+      {item.mark === 'bloomnote' && (
+        <>
+          <StoryCover kind="bloomnote" />
+          <figure className="reader-gerbera">
+            <div className="bloom-spread-gerbera" aria-hidden="true" />
+            <figcaption>
+              <strong>Gerbera</strong>
+              <span>
+                “For that brilliant laugh that comes from deep inside, especially at your own
+                jokes.”
+              </span>
+            </figcaption>
+          </figure>
+        </>
+      )}
+      <p className="work-modal-summary">{item.summary}</p>
+      <CareerEvidence id={workId(item)} />
+    </>
+  );
+}
+
+function StoryCover({ kind }: { kind: 'iodine' | 'bloomnote' }) {
+  return (
+    <StoryScreenshot
+      image={PREVIEWS[kind].image}
+      name={kind}
+      caption={kind === 'iodine' ? 'Editor and agent' : 'The received garden'}
+      cover={kind}
+    />
+  );
 }
 
 function RequestComparison() {
@@ -59,42 +95,7 @@ function RequestComparison() {
       <p className="request-intro">
         Page load time after combining linked line items into one response.
       </p>
-      <figure className="request-figure">
-        <div className="request-panels">
-          <div className="request-panel">
-            <h5>
-              Before <span>120 calls</span>
-            </h5>
-            <div className="request-lanes" aria-hidden="true">
-              {Array.from({ length: 12 }, (_, lane) => (
-                <div
-                  className="request-lane"
-                  style={{ paddingInlineStart: `${lane * 2.1}%` }}
-                  key={lane}
-                >
-                  {Array.from({ length: 10 }, (_, call) => (
-                    <i key={call} />
-                  ))}
-                </div>
-              ))}
-            </div>
-            <p>One request per linked line item.</p>
-          </div>
-          <div className="request-panel request-panel-after">
-            <h5>
-              After <span>1 call</span>
-            </h5>
-            <div className="request-single" aria-hidden="true">
-              <i />
-            </div>
-            <p>One response with the joined data.</p>
-          </div>
-        </div>
-        <figcaption>
-          Request pattern reconstructed from the case study. Bar positions and lengths are
-          illustrative.
-        </figcaption>
-      </figure>
+      <RequestReplay />
     </section>
   );
 }

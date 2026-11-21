@@ -16,43 +16,30 @@ for (const width of [1440, 390]) {
     await expect(browse).toHaveAccessibleName('Browse cars. Audi R8, Widebody');
     await browse.click();
     const picker = page.getByRole('dialog', { name: 'Pick your ride.' });
-    const options = picker.locator('.car-option');
-    await expect(options).toHaveCount(12);
-    await expect
-      .poll(() =>
-        options.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('aria-label'))),
-      )
-      .toEqual(GARAGE_INDICES.map((index) => `Show ${CARS[index].name}, ${CARS[index].code}`));
-    await expect(options.first()).toBeFocused();
-    await expect(
-      picker.getByRole('button', { name: 'Show Audi R8, Widebody', exact: true }),
-    ).toHaveCount(0);
-    await expect(
-      picker.getByRole('button', { name: 'Show Porsche 917K, Le Mans', exact: true }),
-    ).toHaveCount(0);
-    await expect(
-      picker.getByRole('button', { name: 'Show Porsche 911 Turbo, 930', exact: true }),
-    ).toHaveCount(0);
-    await expect(
-      picker.getByRole('button', { name: 'Show Ferrari 296 GT3, GT3', exact: true }),
-    ).toHaveCount(0);
-    await expect(
-      picker.getByRole('button', { name: 'Show Ferrari F1-75, 2022 F1', exact: true }),
-    ).toBeVisible();
-    await expect(
-      picker.getByRole('button', { name: 'Show Toyota GR Supra, A90 Modified', exact: true }),
-    ).toHaveCount(0);
-    await expect(
-      picker.getByRole('button', { name: 'Show Nissan GT-R Aimgain, R35 Type 2', exact: true }),
-    ).toBeVisible();
-    for (const retired of [
-      'Show Lamborghini Countach, 5000 QV',
-      'Show Toyota Supra, A80',
-      'Show Lamborghini Aventador, SV',
-      'Show BMW M1 Turbo, Group 5',
-    ]) {
-      await expect(picker.getByRole('button', { name: retired, exact: true })).toHaveCount(0);
+    const options = picker.locator('[aria-label="Featured cars"] .car-option');
+    const archive = picker.locator('[aria-label="Archive cars"] .car-option');
+    const archiveIds = CARS.map((_, index) => index).filter(
+      (index) => !GARAGE_INDICES.includes(index),
+    );
+    const labels = (indices: readonly number[]) =>
+      indices.map((index) => 'Show ' + CARS[index].name + ', ' + CARS[index].code);
+    for (const [cards, expected] of [
+      [options, labels(GARAGE_INDICES)],
+      [archive, labels(archiveIds)],
+    ] as const) {
+      await expect(cards).toHaveCount(expected.length);
+      await expect
+        .poll(() =>
+          cards.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('aria-label'))),
+        )
+        .toEqual(expected);
     }
+    const active = picker.getByRole('button', { name: 'Show Audi R8, Widebody', exact: true });
+    await expect(active).toBeFocused();
+    await expect(active).toHaveAttribute('aria-pressed', 'true');
+    await picker.locator('summary').click();
+    await expect(archive).toHaveCount(0);
+    await options.first().focus();
     await page.screenshot({ path: test.info().outputPath(`garage-${width}.png`) });
     await page.keyboard.press('End');
     await expect(

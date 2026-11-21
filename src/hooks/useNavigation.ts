@@ -133,8 +133,8 @@ export function useNavigation(sceneOnly = false) {
     };
 
     const restoreSectionLink = (event?: HashChangeEvent) => {
-      // A case-study close restores its saved reading position through browser history.
-      if (event?.oldURL && new URL(event.oldURL).hash.startsWith('#work/')) return;
+      // Readers restore their own scroll position when closed through history.
+      if (event?.oldURL && /^#(?:work|quake)\//.test(new URL(event.oldURL).hash)) return;
       const index = SECTION_IDS.indexOf(window.location.hash.slice(1) as SectionId);
       if (index < 0) return;
       const section = document.getElementById(SECTION_IDS[index]);

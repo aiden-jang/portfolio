@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   gap: clamp(8px, 1.3vw, 16px);
+  width: 100%;
   aspect-ratio: 2;
   min-height: 174px;
   padding: clamp(9px, 1.3vw, 17px);

@@ -6,8 +6,9 @@ The entire car garage remains separate from the project globe.
 ## Globe
 
 The featured still marks an August 2026 Kamchatka earthquake from real USGS and EMSC
-readings recorded in the meanwhile. reconciliation fixture. Inspect an earthquake
-shows both agencies’ readings without WebGL. The event case study uses the same evidence.
+readings recorded in the meanwhile. reconciliation fixture. Compare the Kamchatka
+reports shows both depths without WebGL. Selecting an agency carries that reading
+into the shareable case study. Back returns to the globe and the comparison control.
 The still renders the existing Natural Earth mesh, coastlines, and tectonic boundaries.
 The app’s [recorded agency reports](https://github.com/aiden-jang/meanwhile/blob/main/src/sources/fixtures/one-quake-both-feeds.json)
 include the source IDs, original precision and measured separation.
@@ -46,15 +47,13 @@ and [NOAA SWPC aurora forecast](https://www.swpc.noaa.gov/products/aurora-30-min
 ## Recorded and illustrated examples
 
 Iodine's local example records an actual snapshot, edit, revert and feedback queue
-using its snapshot service. The example file is synthetic. Undo and Replay switch
-between those recorded contents. Play recorded example shows the edited file and
-restores it after a short interval, preserving keyboard focus. Its timer stops
-when the component unmounts. No live agent runs or edits visitor files.
-Desktop shows the agent edit beside the saved snapshot or restored file. Phones show
-the current file. The editor screenshot opens on the highlighted symbolic-link
-check. Fit image shows the full editor and assistant. The case study carries the
-current edit or restored state into the reader. Its file reference focuses the
-highlighted line, and the source link opens the restore implementation.
+using its snapshot service. The example file is synthetic. Undo and Replay
+switch the current file at the same line on desktop and phone. The scope control
+shows the recorded decisions for an approved folder and a folder outside it.
+The editor screenshot opens on the highlighted symbolic-link check. Fit image
+shows the full editor and assistant. The case URL carries the edited or restored
+state, the file reference focuses the line, and the source link opens the restore
+implementation.
 
 Bean's small artwork frames come from mrrp's native sit/perk renderer and eye painter.
 The bloomnote spread crops the garden and Gerbera from the approved recipient screenshot and
@@ -78,3 +77,13 @@ Owewell's paired inspector captures come from the local calculator. Maya and Ale
 split a sample $48 bill equally. Selecting a payer opens the matching screenshot.
 In the screenshot viewer, selecting a point in the fitted image zooms around that
 detail. Fit image restores the full frame.
+
+## Showroom study
+
+The [finished](../public/projects/showroom-finished.webp) and
+[clay](../public/projects/showroom-clay.webp) images are matching captures from
+the portfolio’s Studio renderer. Both use the Ferrari F40 by
+[vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95),
+licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+The About slider varies how much of the clay render is visible. Opening the
+shot in Studio and returning preserves the slider and the reading position.

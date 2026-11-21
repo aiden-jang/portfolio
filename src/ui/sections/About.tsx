@@ -2,8 +2,10 @@ import { WORK_ITEMS } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import './about.css';
+import { AboutFraming } from './AboutFraming';
 
 const wherever = WORK_ITEMS.find((item) => item.mark === 'wherever');
+const bloomnote = WORK_ITEMS.find((item) => item.mark === 'bloomnote');
 
 export function AboutSection({
   onOpen,
@@ -31,30 +33,24 @@ export function AboutSection({
               ) : (
                 <strong>wherever</strong>
               )}
-              . A note for someone became <strong>bloomnote</strong>. Then there’s{' '}
-              <strong>mrrp</strong>, a room for two and a pixel cat.
+              . A note for someone became{' '}
+              {bloomnote ? (
+                <button
+                  type="button"
+                  className="about-story-link"
+                  aria-label="Read the bloomnote case study"
+                  onClick={(event) => onOpen(bloomnote, event.currentTarget)}
+                >
+                  bloomnote
+                </button>
+              ) : (
+                <strong>bloomnote</strong>
+              )}
+              . Then there’s <strong>mrrp</strong>, a room for two and a pixel cat.
             </p>
           </div>
           <div>
-            <figure className="about-framing-study">
-              <div className="about-framing-image">
-                <img
-                  src="/projects/showroom-framing.webp"
-                  alt="Clay rendering of the Ferrari at the front three-quarter angle, with the front wheel and rear wing in frame"
-                  width="880"
-                  height="446"
-                  loading="lazy"
-                />
-                <span className="about-frame-lines" aria-hidden="true" />
-              </div>
-              <figcaption>
-                <strong>Framing the showroom</strong>
-                <span>
-                  The low camera fits the front wheel and rear wing in one shot, with room below for
-                  the reflection.
-                </span>
-              </figcaption>
-            </figure>
+            <AboutFraming />
             <dl className="about-details">
               <div>
                 <dt>Background</dt>

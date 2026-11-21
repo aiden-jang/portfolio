@@ -116,6 +116,8 @@ export function createOrbitGlobe(
   };
   const select = (event: GlobeEvent | undefined) => {
     lastShown = event?.id;
+    globe.highlight(event);
+    wake();
     options.select(event ? { ...event, url: eventLink(event, pose) } : null);
   };
   const setRotating = (enabled: boolean) => {
@@ -174,6 +176,14 @@ export function createOrbitGlobe(
   return {
     reset,
     setRotating,
+    clearSelection: () => select(undefined),
+    showFeatured: () => {
+      takeControl();
+      input.stop();
+      Object.assign(pose, initial);
+      select(featured);
+      wake();
+    },
     showEvent: () => {
       takeControl();
       const visible = visibleEvents();

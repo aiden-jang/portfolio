@@ -3,14 +3,26 @@ import example from '../../data/iodineExample.json';
 import { IodineSession, type IodinePhase } from './iodine-session';
 import './iodine-feedback.css';
 
-function RestoredFeedback() {
+function RestoredFeedback({ onFile }: { onFile?: () => void }) {
+  const [beforePath, afterPath] = example.feedback.summary.split(example.file);
   return (
     <div className="iodine-feedback" aria-live="polite">
       <div>
         <code>{example.feedback.type}</code>
         <strong>Feedback sent to the agent</strong>
       </div>
-      <blockquote>{example.feedback.guidance}</blockquote>
+      <blockquote>
+        {onFile && (
+          <p>
+            {beforePath}
+            <button type="button" className="iodine-line-link" onClick={onFile}>
+              {example.file}
+            </button>
+            {afterPath}
+          </p>
+        )}
+        {example.feedback.guidance}
+      </blockquote>
       <a href={example.source} target="_blank" rel="noopener noreferrer">
         View snapshot and revert code
       </a>
@@ -76,6 +88,10 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
   };
 
   const restored = phase === 'restored';
+  const revealLine = () => {
+    activeLine.current?.focus({ preventScroll: true });
+    activeLine.current?.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+  };
   const undo = (
     <button
       type="button"
@@ -93,14 +109,7 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
     return (
       <div className="iodine-story-example" data-phase={phase}>
         <div className="cinema-code-heading">
-          <button
-            type="button"
-            className="iodine-line-link"
-            onClick={() => {
-              activeLine.current?.focus({ preventScroll: true });
-              activeLine.current?.scrollIntoView({ block: 'nearest', behavior: 'instant' });
-            }}
-          >
+          <button type="button" className="iodine-line-link" onClick={revealLine}>
             {example.file}:2
           </button>
           <span>{restored ? 'File restored' : 'Agent edit'}</span>
@@ -131,6 +140,10 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
             )}
           </code>
         </pre>
+        <div className="cinema-code-actions">
+          {undo}
+          <span className="iodine-archive-label">Recorded example</span>
+        </div>
         <p className="iodine-example-source">
           Recorded example file.{' '}
           <a
@@ -150,11 +163,7 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
               : 'A snapshot preserves the previous file contents.'}
           </p>
         </div>
-        {restored && <RestoredFeedback />}
-        <div className="cinema-code-actions">
-          {undo}
-          <span className="iodine-archive-label">Recorded example</span>
-        </div>
+        {restored && <RestoredFeedback onFile={revealLine} />}
       </div>
     );
   }

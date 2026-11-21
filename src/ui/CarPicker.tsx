@@ -41,7 +41,8 @@ export function CarPicker({ mobile = false }: { mobile?: boolean }) {
       >
         <span>{car.name}</span>
         <small>
-          {car.code} · {loading ? 'Loading…' : 'Browse cars'}
+          {!mobile && <>{car.code} · </>}
+          {loading ? 'Loading…' : 'Browse cars'}
         </small>
       </button>
       <button

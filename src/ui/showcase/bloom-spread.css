@@ -188,3 +188,16 @@ html:root .project-gallery .bloom-spread-detail .bloom-spread-species {
     margin-top: 6px;
   }
 }
+
+button.bloom-spread-gerbera {
+  cursor: pointer;
+  mask-image: none;
+  border-radius: 50%;
+}
+button.bloom-spread-gerbera:hover {
+  box-shadow: 0 0 0 1px #51735b;
+}
+button.bloom-spread-gerbera:focus-visible {
+  outline: 2px solid #294b3a;
+  outline-offset: 4px;
+}
