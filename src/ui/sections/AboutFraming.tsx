@@ -1,6 +1,7 @@
 import { useId, useState, type CSSProperties } from 'react';
 import { openAboutShot } from '../../garageStudio/aboutShot';
 import { useAppStore } from '../../store';
+import { ControlIcon } from '../ControlIcon';
 
 export function AboutFraming() {
   const [amount, setAmount] = useState(50);
@@ -55,15 +56,20 @@ export function AboutFraming() {
           BY 4.0.
         </span>
       </figcaption>
-      {!sceneUnavailable && (
-        <button
-          className="creative-about-action"
-          type="button"
-          onClick={(event) => openAboutShot(event.currentTarget)}
-        >
-          Open this shot in Studio
-        </button>
-      )}
+      <div className="about-framing-actions">
+        {!sceneUnavailable && (
+          <button
+            className="creative-about-action"
+            type="button"
+            onClick={(event) => openAboutShot(event.currentTarget)}
+          >
+            Open this shot in Studio
+          </button>
+        )}
+        <a className="creative-about-action" href="/cases/showroom/">
+          How I built the showroom <ControlIcon name="arrow" />
+        </a>
+      </div>
     </figure>
   );
 }

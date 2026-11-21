@@ -193,3 +193,19 @@ html:root #sec-about {
   min-height: 44px;
   accent-color: #eadcc6;
 }
+
+.about-framing-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 16px;
+}
+.about-framing-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.about-framing-actions svg {
+  width: 15px;
+  height: 15px;
+}

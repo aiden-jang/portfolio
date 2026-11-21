@@ -11,6 +11,9 @@ export default defineConfig({
     alias: { '@': resolve(__dirname, 'src') },
   },
   build: {
+    rollupOptions: {
+      input: [resolve(__dirname, 'index.html'), resolve(__dirname, 'cases/showroom/index.html')],
+    },
     target: 'es2022',
     sourcemap: true,
   },
