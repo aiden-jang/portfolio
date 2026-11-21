@@ -156,3 +156,27 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     }
   });
 }
+
+test('a blocked clipboard leaves the case link and reading controls clear', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 660 });
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
+        writeText: async () => {
+          throw new DOMException('Denied', 'NotAllowedError');
+        },
+      },
+    });
+  });
+  await page.goto('/?car=0&paint=original&light=studio#work/ad-slot-details-120-1-api-call');
+  const reader = page.getByRole('dialog');
+  const copy = reader.getByRole('button', { name: 'Copy case link' });
+  await copy.click();
+  const url = reader.getByRole('textbox', { name: 'Case study link' });
+  await expect(url).toHaveValue(/\/#work\/ad-slot-details-120-1-api-call$/);
+  const cue = reader.getByText('Continue reading', { exact: false }).first();
+  expect((await url.boundingBox())!.y).toBeGreaterThan((await cue.boundingBox())!.y);
+  await reader.getByRole('button', { name: 'Done', exact: true }).click();
+  await expect(url).toBeHidden();
+  await expect(copy).toBeFocused();
+});

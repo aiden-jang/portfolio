@@ -68,7 +68,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         <div className="work-modal-footer">
           <WorkModalNav
             {...{ onPrevious, onNext, position }}
-            nextName={next.shortName ?? next.displayTitle ?? next.title}
+            nextName={next.navigationTitle ?? next.shortName ?? next.displayTitle ?? next.title}
           />
           <WorkModalLinks key={item.title} item={item} />
         </div>

@@ -1,3 +1,5 @@
+import { openRearLouvers } from '../garageExhibits/select';
+import { selectMechanical } from '../garageExhibits/mechanical';
 import { useGarageStudio } from '../garageStudio/state';
 import { usePhotoMode } from './photo/state';
 import { useLineup } from '../lineup/state';
@@ -44,6 +46,22 @@ export function buildCommands({
       hint: 'garage',
       keywords: 'walkaround details blackout studio overhead lineup photo',
       run: () => useGarageStudio.getState().open(),
+    },
+    {
+      id: 'rear-wing',
+      label:
+        state.carIndex === 0
+          ? 'Inspect rear deck'
+          : state.carIndex === 15
+            ? 'Inspect rear wing'
+            : 'Compare rear wings',
+      hint: 'studio',
+      keywords: 'wing rear aero spoiler deck louvers',
+      run: () => {
+        useGarageStudio.getState().open();
+        if (state.carIndex === 0) openRearLouvers();
+        else selectMechanical('wings', state.carIndex === 15 ? 1 : 2);
+      },
     },
     {
       id: 'retry-scene',
@@ -197,6 +215,13 @@ export function buildCommands({
     .filter(({ id }) => {
       if (sceneUnavailable) return id.startsWith('sec-') || id === 'retry-scene';
       if (id === 'retry-scene') return false;
+      if (id === 'rear-wing')
+        return (
+          [0, 15, 16].includes(state.carIndex) &&
+          state.sectionIndex === 0 &&
+          !state.isCarLoading &&
+          !state.carLoadError
+        );
       if (id === 'behind-the-render') return canStudyRender(state);
       if (id === 'lineup' || id === 'photo-mode' || id === 'garage-studio')
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;

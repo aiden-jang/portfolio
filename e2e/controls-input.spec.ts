@@ -14,6 +14,11 @@ test('control search leaves composition keys to the input before running a comma
   const active = await search.getAttribute('aria-activedescendant');
   await search.dispatchEvent('keydown', { key: 'ArrowDown', isComposing: true });
   await expect(search).toHaveAttribute('aria-activedescendant', active!);
+  await search.fill('unmatched query');
+  await expect(dialog.getByRole('status')).toHaveText('No matching controls.');
+  await dialog.getByRole('button', { name: 'Clear search' }).click();
+  await expect(search).toHaveValue('');
+  await expect(search).toBeFocused();
   await search.fill('about');
   await search.dispatchEvent('keydown', { key: 'Enter', isComposing: true });
   await expect(dialog).toBeVisible();

@@ -78,6 +78,8 @@ for (const width of [1440, 390]) {
         'aria-pressed',
         'true',
       );
+      await sharedStudio.getByRole('button', { name: 'Back to portfolio' }).click();
+      await expect(sharedStudio).toBeHidden();
       await shared.close();
 
       await button('Lineup').click();
@@ -204,7 +206,7 @@ for (const width of [1440, 390]) {
       await button('Overhead').click();
       await expect(button('Overhead')).toHaveAttribute('aria-pressed', 'true');
       await expect(button('Axle guides')).toBeVisible();
-      await button('Back to Garage').click();
+      await button('Back to portfolio').click();
       await expect(studio).toHaveCount(0);
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();
     });

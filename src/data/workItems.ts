@@ -191,6 +191,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Monolith → Django REST + React rewrite',
+    navigationTitle: 'PHP rewrite',
     displayTitle: 'Replacing a live publisher backend',
     context: 'Zeta Global · 2024–present',
     summary:
@@ -203,6 +204,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Agentic AI Playwright framework',
+    navigationTitle: 'UI tests',
     displayTitle: 'Tests that adapt to a changing UI',
     context: 'Zeta Global',
     summary:
@@ -215,6 +217,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Ad Slot Details: 120 → 1 API call',
+    navigationTitle: '120 → 1',
     context: 'Zeta Global',
     summary:
       'I reduced Ad Slot Details from 120 API calls to one, taking page load time from 60 seconds to two.',
@@ -226,6 +229,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Sponsorships, Audience Extension, Blackout Periods',
+    navigationTitle: 'Publisher tools',
     context: 'Zeta Global',
     summary:
       'I owned the data models, APIs and interfaces for three publisher tools. Sponsorships serves hundreds of millions of impressions a week.',
@@ -237,6 +241,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Creative Mapping v2',
+    navigationTitle: 'Creative mapping',
     context: 'LiveIntent · 2023–2024',
     summary: 'Owned Creative Mapping v2 end to end across MySQL, REST, and Angular.',
     body: [
@@ -247,6 +252,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Google Ad Manager native integration',
+    navigationTitle: 'Ad Manager',
     context: 'LiveIntent · 2022–2023',
     summary: 'Built the Google Ad Manager integration for Native Ad Slots from scratch.',
     body: [
@@ -256,6 +262,7 @@ export const WORK_ITEMS: WorkDetail[] = [
   },
   {
     title: 'Publisher account migrations',
+    navigationTitle: 'Migrations',
     context: 'LiveIntent · 2023–2024',
     summary: 'Ran 13 publisher migrations, including BuzzFeed and Dotdash Meredith.',
     body: [

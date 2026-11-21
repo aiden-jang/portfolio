@@ -1,10 +1,9 @@
 import { copyText, shareLink } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { WorkDetail } from '../types';
 import { PREVIEWS } from '../data/projectPreviews';
 import { usePreviewSelection } from './usePreviewSelection';
-import { previewLink } from './previewLinks';
 import { ControlIcon } from './ControlIcon';
 
 export function WorkModalLinks({ item }: { item: WorkDetail }) {
@@ -12,14 +11,14 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
   const [selected] = usePreviewSelection(item.shortName ?? '', preview?.states?.length ?? 1);
   const { result, run } = useShareFeedback(item.title);
   const [fallbackUrl, setFallbackUrl] = useState('');
+  const copyButton = useRef<HTMLButtonElement>(null);
 
   const hasSources = Boolean(item.link || item.links?.length || item.shortName);
   const share = async (copy = false) => {
-    const shared = new URL(
-      preview?.states
-        ? previewLink(window.location.href, item.shortName ?? '', selected)
-        : window.location.href,
-    );
+    const shared = new URL(window.location.pathname, window.location.origin);
+    if (preview?.states && item.shortName) {
+      shared.searchParams.set('preview', `${item.shortName}:${selected}`);
+    }
     shared.hash = window.location.hash;
     const url = shared.href;
     const next = await run(() =>
@@ -32,28 +31,47 @@ export function WorkModalLinks({ item }: { item: WorkDetail }) {
 
   if (!hasSources)
     return (
-      <div className="work-modal-links">
-        <button type="button" className="story-copy-case" onClick={() => void share(true)}>
-          <ControlIcon name={result === 'copied' ? 'check' : 'copy'} />
-          {result === 'copied' ? 'Link copied' : 'Copy case link'}
-        </button>
-        <span className="sr-only" role="status">
-          {result === 'copied'
-            ? 'Case link copied.'
-            : result === 'failed'
-              ? 'Copy unavailable. Select the case study link.'
-              : ''}
-        </span>
-        {result === 'failed' && (
-          <input
-            className="story-direct-link"
-            aria-label="Case study link"
-            readOnly
-            value={fallbackUrl}
-            onFocus={(event) => event.currentTarget.select()}
-          />
+      <>
+        <div className="work-modal-links">
+          <button
+            ref={copyButton}
+            type="button"
+            className="story-copy-case"
+            onClick={() => void share(true)}
+          >
+            <ControlIcon name={result === 'copied' ? 'check' : 'copy'} />
+            {result === 'copied' ? 'Link copied' : 'Copy case link'}
+          </button>
+          <span className="sr-only" role="status">
+            {result === 'copied'
+              ? 'Case link copied.'
+              : result === 'failed' && fallbackUrl
+                ? 'Copy unavailable. Select the case study link.'
+                : ''}
+          </span>
+        </div>
+        {result === 'failed' && fallbackUrl && (
+          <div className="story-direct-link">
+            <label>
+              Case study link
+              <input
+                readOnly
+                value={fallbackUrl}
+                onFocus={(event) => event.currentTarget.select()}
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => {
+                setFallbackUrl('');
+                copyButton.current?.focus();
+              }}
+            >
+              Done
+            </button>
+          </div>
         )}
-      </div>
+      </>
     );
   const secondary = (
     <>

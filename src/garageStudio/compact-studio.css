@@ -80,3 +80,31 @@
     margin-inline: auto;
   }
 }
+@media (max-height: 465px) and (orientation: landscape) {
+  .garage-studio:not([data-studio-tool])[data-controls-open='true'] .studio-invitation {
+    visibility: hidden;
+  }
+  .garage-studio:not([data-studio-tool]) .garage-studio-dock {
+    max-height: 84px;
+  }
+}
+@media (min-width: 740px) and (max-height: 465px) and (orientation: landscape) {
+  .garage-studio:not([data-studio-tool]) .garage-studio-footer {
+    width: auto;
+    inset-inline: 12px;
+  }
+  .garage-studio:not([data-studio-tool]) .garage-studio-dock {
+    position: absolute;
+    right: 0;
+    bottom: 58px;
+    width: 180px;
+    max-height: calc(100dvh - 116px);
+    align-content: start;
+    justify-content: stretch;
+    gap: 6px;
+    padding: 7px;
+  }
+  .garage-studio:not([data-studio-tool])[data-controls-open='true'] .garage-studio-dock {
+    display: grid;
+  }
+}
