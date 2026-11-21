@@ -76,9 +76,13 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         };
       });
       const { history, lead, proof, rows } = boxes;
-      if (width > 900) expect(history.x).toBeGreaterThanOrEqual(proof.right - 1);
-      else {
-        expect(history.y).toBeGreaterThanOrEqual(lead.bottom - 1);
+      expect(history.y).toBeGreaterThanOrEqual(lead.bottom - 1);
+      expect(proof.y).toBeGreaterThanOrEqual(lead.bottom - 1);
+      if (width > 900) {
+        expect(proof.x).toBeGreaterThanOrEqual(history.right - 1);
+        expect(lead.x).toBeCloseTo(history.x, 0);
+        expect(lead.right).toBeCloseTo(proof.right, 0);
+      } else {
         expect(proof.y).toBeGreaterThanOrEqual(history.bottom - 1);
       }
       for (let i = 1; i < rows.length; i++)
@@ -89,8 +93,26 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     };
     await assertLayout();
     if (width === 1440 || width === 390) {
-      await section.getByRole('button', { name: 'Show batching' }).click();
-      await expect(section.getByText('One response carries the joined data.')).toBeVisible();
+      const comparison = section.getByRole('figure', { name: 'Request batching comparison' });
+      const before = comparison.getByRole('button', { name: 'Before', exact: true });
+      const after = comparison.getByRole('button', { name: 'After', exact: true });
+      const requestGrid = comparison.getByRole('heading', { name: '120 separate requests' });
+      const batchedRequest = comparison.getByRole('heading', { name: '1 batched request' });
+      await expect(requestGrid).toBeVisible();
+      if (width === 1440) await expect(batchedRequest).toBeVisible();
+      else await expect(batchedRequest).toBeHidden();
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+      const replay = comparison.getByRole('button', { name: 'Replay batching' });
+      await replay.press('Enter');
+      await expect(comparison.getByRole('button', { name: 'Batching…' })).toBeFocused();
+      await expect(after).toHaveAttribute('aria-pressed', 'true');
+      await expect(batchedRequest).toBeVisible();
+      if (width === 390) await expect(requestGrid).toBeHidden();
+      await before.click();
+      await expect(requestGrid).toBeVisible();
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await replay.click();
+      await expect(after).toHaveAttribute('aria-pressed', 'true');
       await lead.click();
       await expect(page.getByRole('heading', { name: '120 API calls became one.' })).toBeVisible();
       await page.getByRole('button', { name: 'Copy evidence link' }).click();

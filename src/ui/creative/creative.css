@@ -180,20 +180,6 @@ html:root #project-iodine .scope-cases-single > div {
   min-height: 108px;
 }
 
-#sec-experience .experience-measure {
-  font-size: clamp(67px, 10vw, 157px);
-  letter-spacing: -0.054em;
-  font-variant-numeric: tabular-nums;
-}
-#sec-experience .experience-lead .request-replay {
-  border-inline: 0;
-  border-radius: 0;
-  padding-inline: 0;
-}
-#sec-experience .experience-lead .request-replay-dots {
-  max-width: 320px;
-}
-
 #sec-about .about-framing-study {
   margin-bottom: 24px;
 }
@@ -432,9 +418,6 @@ html:root #project-iodine .scope-cases-single > div {
   #project-iodine .iodine-preview-row .iodine-editor-tile {
     min-height: 118px;
     max-height: 136px;
-  }
-  #sec-experience .experience-measure {
-    font-size: clamp(60px, 17.4vw, 84px);
   }
   .creative-studio-tour {
     display: block;

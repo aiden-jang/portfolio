@@ -1,4 +1,4 @@
-import { RequestReplay } from '../RequestReplay';
+import { BatchingSpread } from './BatchingSpread';
 import { storyHref } from '../creative/storyRoutes';
 import { workId, WORK_ITEMS } from '../../data/workItems';
 import { isPortfolioProject } from '../../data/workBrowsing';
@@ -132,33 +132,35 @@ export function ExperienceSection({ onOpen }: Props) {
 function LeadOutcome({ item }: { item: WorkDetail }) {
   return (
     <article className="experience-lead">
-      <p className="experience-measure">
-        <span className="sr-only">
-          Page load went from {loadTime.before} seconds to {loadTime.after} seconds.
-        </span>
-        <span className="experience-from" aria-hidden="true">
-          {loadTime.before}s
-        </span>
-        <span className="experience-change" aria-hidden="true">
-          →
-        </span>
-        <span aria-hidden="true">{loadTime.after}s</span>
-      </p>
-      <div className="experience-lead-story">
-        <h3 id="experience-lead-title">120 API calls became one</h3>
-        <p>I combined the linked line items into one API response, cutting page load time.</p>
-        <div className="experience-lead-actions">
-          <a
-            href={storyHref('ad-slot-details-120-1-api-call')}
-            className="experience-case"
-            aria-describedby="experience-lead-title"
-          >
-            Read the case study <ControlIcon name="arrow" />
-          </a>
-          <span>{item.context}</span>
+      <div className="experience-spread-heading">
+        <p className="experience-measure">
+          <span className="sr-only">
+            Page load went from {loadTime.before} seconds to {loadTime.after} seconds.
+          </span>
+          <span className="experience-from" aria-hidden="true">
+            {loadTime.before}s
+          </span>
+          <span className="experience-change" aria-hidden="true">
+            →
+          </span>
+          <span aria-hidden="true">{loadTime.after}s</span>
+        </p>
+        <div className="experience-lead-story">
+          <h3 id="experience-lead-title">120 API calls became one</h3>
+          <p>I combined the linked line items into one API response, cutting page load time.</p>
+          <div className="experience-lead-actions">
+            <a
+              href={storyHref('ad-slot-details-120-1-api-call')}
+              className="experience-case"
+              aria-describedby="experience-lead-title"
+            >
+              Read the case study <ControlIcon name="arrow" />
+            </a>
+            <span>{item.context}</span>
+          </div>
         </div>
-        <RequestReplay />
       </div>
+      <BatchingSpread />
     </article>
   );
 }

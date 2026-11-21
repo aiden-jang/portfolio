@@ -15,7 +15,7 @@ html:root #sec-experience {
 }
 
 .experience-content > h2 {
-  margin: 0 0 clamp(28px, 4vw, 58px);
+  margin: 0 0 clamp(28px, 3.3vw, 46px);
   max-width: none;
   font-weight: 480;
   font-size: clamp(20px, 1.75vw, 26px);
@@ -26,10 +26,10 @@ html:root #sec-experience {
 .experience-grid {
   display: grid;
   align-items: start;
-  grid-template-areas: 'lead history' 'proof history';
-  grid-template-columns: minmax(0, 1fr) minmax(270px, 34%);
+  grid-template-areas: 'lead lead' 'history proof';
+  grid-template-columns: minmax(270px, 31%) minmax(0, 1fr);
   column-gap: clamp(30px, 5.5vw, 80px);
-  row-gap: clamp(20px, 3vw, 31px);
+  row-gap: clamp(36px, 4vw, 58px);
 }
 .experience-grid > .experience-lead {
   grid-area: lead;
@@ -90,18 +90,31 @@ html:root #sec-experience {
   color: #bdb9c1;
 }
 
+.experience-spread-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 20px 46px;
+  align-items: end;
+  margin-bottom: clamp(20px, 2.6vw, 36px);
+}
+
 .experience-measure {
   display: flex;
   align-items: baseline;
-  gap: clamp(10px, 1.55vw, 24px);
+  gap: clamp(10px, 1.75vw, 26px);
   margin: 0;
   white-space: nowrap;
   color: var(--color-fg);
-  font-size: clamp(64px, 8.6vw, 124px);
+  font-size: clamp(69px, 9vw, 132px);
   font-weight: 480;
-  font-variant-numeric: lining-nums;
-  letter-spacing: -0.056em;
-  line-height: 0.85;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.054em;
+  line-height: 0.94;
+  justify-self: start;
+}
+
+.experience-measure > span:last-child {
+  color: #d6ecdf;
 }
 
 .experience-from {
@@ -117,13 +130,13 @@ html:root #sec-experience {
 }
 
 .experience-lead-story {
-  margin-top: clamp(22px, 3vw, 36px);
+  margin: 0;
 }
 
 .experience-lead-story h3 {
   margin: 0;
   max-width: 26ch;
-  font-size: clamp(25px, 2.65vw, 39px);
+  font-size: clamp(31px, 3.35vw, 50px);
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.035em;
@@ -301,6 +314,23 @@ html:root #sec-experience {
   }
 }
 
+@media (max-width: 700px) {
+  .experience-spread-heading {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .experience-measure {
+    grid-row: 1;
+    font-size: clamp(53px, 16vw, 90px);
+  }
+  .experience-lead-story h3 {
+    font-size: clamp(25px, 6.8vw, 34px);
+  }
+  .experience-lead-story > p {
+    margin-block: 8px 3px;
+  }
+}
+
 @media (max-width: 600px) {
   html:root #sec-experience {
     padding-block: calc(var(--portfolio-header-height) + 34px) 56px;
@@ -308,14 +338,7 @@ html:root #sec-experience {
   .experience-content > h2 {
     margin-bottom: 29px;
   }
-  .experience-measure {
-    gap: 12px;
-  }
-  .experience-lead-story {
-    margin-top: 22px;
-  }
   .experience-lead-story h3 {
-    font-size: clamp(24px, 6.85vw, 31px);
     text-wrap: pretty;
   }
   .experience-lead-story > p {
