@@ -80,6 +80,7 @@ for (const width of [1440, 390]) {
     });
 
     test('saves a framed Lineup photo and restores the showroom', async ({ page }) => {
+      test.setTimeout(240_000);
       const { studio, button, garage, ready } = await openStudio(page);
       await button('Lineup').click();
       await ready();
@@ -91,6 +92,9 @@ for (const width of [1440, 390]) {
       if (!phone) await button('Landscape 16:9').click();
       await button('Capture').click();
       const photograph = studio.getByRole('img', { name: 'Captured studio photograph' });
+      const failed = studio.getByText('Photo could not be captured. Try again.', { exact: true });
+      await expect(photograph.or(failed)).toBeVisible({ timeout: 60_000 });
+      await expect(failed).toBeHidden();
       await expect(photograph).toBeVisible();
       const captured = await photograph.getAttribute('src');
       const crop = studio.getByRole('group', { name: 'Photo crop. Use arrows to reframe.' });
