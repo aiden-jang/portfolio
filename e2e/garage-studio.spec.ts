@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { openStudioControls } from './studioControls';
 import { readFile } from 'node:fs/promises';
 import { PNG } from 'pngjs';
@@ -8,9 +8,7 @@ for (const width of [1440, 390]) {
   test.describe(`Garage Studio at ${width}px`, () => {
     test.use({ viewport: { width, height: 844 }, isMobile: phone, hasTouch: phone });
 
-    test('opens all Studio views, restores a mechanical shot, and saves a framed photo', async ({
-      page,
-    }) => {
+    async function openStudio(page: Page) {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
       await page.goto('/?car=0&paint=%23702c43&light=night');
       const garage = page
@@ -26,7 +24,11 @@ for (const width of [1440, 390]) {
       await ready();
       await openStudioControls(studio);
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeHidden();
+      return { studio, button, garage, ready };
+    }
 
+    test('switches walkaround cameras, render passes and blackout lighting', async ({ page }) => {
+      const { studio, button } = await openStudio(page);
       await expect(button('Wheel height')).toHaveAttribute('aria-pressed', 'true');
       await button('Standard height').click();
       await expect(button('Standard height')).toHaveAttribute('aria-pressed', 'true');
@@ -55,7 +57,10 @@ for (const width of [1440, 390]) {
       const looks = studio.getByRole('combobox', { name: 'Studio lighting' });
       await looks.selectOption('blackout');
       await expect(looks).toHaveValue('blackout');
+    });
 
+    test('restores a shared mechanical shot and returns to the portfolio', async ({ page }) => {
+      const { studio, button, ready } = await openStudio(page);
       await button('Details').click();
       await ready();
       await button('Open DRS').click();
@@ -65,19 +70,17 @@ for (const width of [1440, 390]) {
       );
       expect(link.searchParams.get('part')).toBe('up');
       expect(link.searchParams.get('garage')).toBe('studio');
-      const shared = await page.context().newPage();
-      await shared.goto(link.toString());
-      const sharedStudio = shared.getByRole('dialog', { name: 'Garage Studio' });
-      await expect(sharedStudio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
-      await openStudioControls(sharedStudio);
-      await expect(sharedStudio.getByRole('button', { name: 'Close DRS' })).toHaveAttribute(
-        'aria-pressed',
-        'true',
-      );
-      await sharedStudio.getByRole('button', { name: 'Back to portfolio' }).click();
-      await expect(sharedStudio).toBeHidden();
-      await shared.close();
+      await page.goto(link.toString());
+      await ready();
+      await openStudioControls(studio);
+      await expect(button('Close DRS')).toHaveAttribute('aria-pressed', 'true');
+      await button('Back to portfolio').click();
+      await expect(studio).toBeHidden();
+      await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();
+    });
 
+    test('saves a framed Lineup photo and restores the showroom', async ({ page }) => {
+      const { studio, button, garage, ready } = await openStudio(page);
       await button('Lineup').click();
       await ready();
       await button('Overhead').click();
