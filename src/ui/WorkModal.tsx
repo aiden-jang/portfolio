@@ -1,4 +1,3 @@
-import { useStoryMotion } from './useStoryMotion';
 import { createPortal } from 'react-dom';
 import type { WorkDetail } from '../types';
 import { caseStudyLane } from '../data/workBrowsing';
@@ -18,12 +17,8 @@ type Props = {
   position: { current: number; total: number } | null;
 };
 export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props) {
-  const { dialogRef, closeRef, onTouchStart, onTouchEnd } = useWorkDialog(item, {
-    onClose,
-    onPrevious,
-    onNext,
-  });
-  useStoryMotion(item?.title, dialogRef);
+  const dialog = useWorkDialog(item, { onClose, onPrevious, onNext });
+  const { dialogRef, closeRef, onTouchStart, onTouchEnd, navigation } = dialog;
   if (!item) return null;
   const lane = caseStudyLane(item, 'all');
   const next = lane[(lane.indexOf(item) + 1) % lane.length];
@@ -67,7 +62,8 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         </ScrollBody>
         <div className="work-modal-footer">
           <WorkModalNav
-            {...{ onPrevious, onNext, position }}
+            {...navigation}
+            position={position}
             nextName={next.navigationTitle ?? next.shortName ?? next.displayTitle ?? next.title}
           />
           <WorkModalLinks key={item.title} item={item} />

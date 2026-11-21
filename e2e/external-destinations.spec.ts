@@ -43,7 +43,7 @@ test('external destinations describe the new tab on the page and in dialogs', as
   for (const car of CARS) {
     const credit = car.credit!;
     const entry = credits
-      .getByRole('listitem')
+      .locator('.model-credits-list li, .closing-car-credit')
       .filter({ has: page.getByRole('link', { name: credit.title, exact: true }) });
     await expect(entry.getByRole('link', { name: credit.title, exact: true })).toHaveAttribute(
       'href',

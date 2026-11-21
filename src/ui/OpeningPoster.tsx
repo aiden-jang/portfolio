@@ -1,3 +1,4 @@
+import { phoneOpeningFrame } from '../three/phoneOpeningFrame';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { parseLighting } from '../lighting';
 import { StudioPosterSources, STUDIO_POSTER } from './StudioPosterSources';
@@ -35,6 +36,10 @@ export function OpeningPoster() {
     body.dataset.openingMedia = '';
     refs.holdOpeningPose = true;
     const fit = () => {
+      const frame =
+        innerWidth < 768 ? phoneOpeningFrame(innerWidth, innerHeight) : { scale: 1, lift: 0 };
+      picture.current?.style.setProperty('--opening-reframe', String(frame.scale));
+      picture.current?.style.setProperty('--opening-lift', -frame.lift + 'px');
       if (studio) return;
       const referenceAspect = innerWidth < 768 ? 390 / 844 : 1440 / 900;
       const scale =

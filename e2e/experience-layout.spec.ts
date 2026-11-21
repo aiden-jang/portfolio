@@ -139,10 +139,12 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         await expect(target.locator('h2')).toHaveText('About', { timeout: 3000 });
         const study = target.getByRole('img', { name: /^Finished Ferrari F40/ });
         await expect(study).toHaveAttribute('src', '/projects/showroom-finished.webp');
+        const frame = await study.boundingBox();
         const story = await target.locator('.about-story').boundingBox();
         const details = await target.locator('.about-details').boundingBox();
-        if (width >= 900) expect(details!.x).toBeGreaterThan(story!.x + story!.width);
-        else expect(details!.y).toBeGreaterThan(story!.y + story!.height);
+        if (width >= 900) expect(story!.x).toBeGreaterThan(frame!.x + frame!.width);
+        else expect(story!.y).toBeGreaterThan(frame!.y + frame!.height);
+        expect(details!.y).toBeGreaterThan(story!.y + story!.height);
         const contribution = target.getByRole('link', { name: 'iodine', exact: true });
         await expect(contribution).toHaveAccessibleDescription('Opens in a new tab');
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
@@ -170,8 +172,9 @@ test('a blocked clipboard leaves the case link and reading controls clear', asyn
   await copy.click();
   const url = reader.getByRole('textbox', { name: 'Case study link' });
   await expect(url).toHaveValue(/\/#work\/ad-slot-details-120-1-api-call$/);
-  const cue = reader.getByText('Continue reading', { exact: false }).first();
-  expect((await url.boundingBox())!.y).toBeGreaterThan((await cue.boundingBox())!.y);
+  await expect(reader.getByRole('button', { name: 'Continue reading', exact: false })).toBeHidden();
+  await expect(reader.getByRole('button', { name: 'Next case study' })).toBeVisible();
+  await expect(url).toBeInViewport();
   await reader.getByRole('button', { name: 'Done', exact: true }).click();
   await expect(url).toBeHidden();
   await expect(copy).toBeFocused();

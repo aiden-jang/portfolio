@@ -1,18 +1,28 @@
-import { useEffect, type RefObject } from 'react';
+import { useLayoutEffect, useRef, type MutableRefObject, type RefObject } from 'react';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 
-export function useStoryMotion(title: string | undefined, dialog: RefObject<HTMLElement>) {
-  useEffect(() => {
-    if (!title || prefersReducedMotion() || dialog.current?.querySelector('[data-story-cover]'))
-      return;
-    const content = dialog.current?.querySelector('.story-scroll-area');
-    const animation = content?.animate(
-      [
-        { opacity: 0.75, transform: 'translateX(6px)' },
-        { opacity: 1, transform: 'translateX(0)' },
-      ],
-      { duration: 200, easing: 'cubic-bezier(.16,1,.3,1)' },
+export function useStoryMotion(
+  title: string | undefined,
+  dialog: RefObject<HTMLElement>,
+  direction: MutableRefObject<1 | -1 | 0>,
+) {
+  const previous = useRef(title);
+  useLayoutEffect(() => {
+    const travel = direction.current;
+    direction.current = 0;
+    const turning = title && previous.current && previous.current !== title && travel;
+    previous.current = title;
+    if (!turning || prefersReducedMotion() || !Element.prototype.animate) return;
+    const targets = dialog.current?.querySelectorAll('.work-modal-title, .story-scroll-shell');
+    const animations = Array.from(targets ?? []).map((element) =>
+      element.animate(
+        [
+          { opacity: 0.34, transform: 'translateX(' + 18 * travel + 'px)' },
+          { opacity: 1, transform: 'translateX(0)' },
+        ],
+        { duration: 275, easing: 'cubic-bezier(.17,.78,.18,1)' },
+      ),
     );
-    return () => animation?.cancel();
-  }, [title, dialog]);
+    return () => animations.forEach((animation) => animation.cancel());
+  }, [title, dialog, direction]);
 }

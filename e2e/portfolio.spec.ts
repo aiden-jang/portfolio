@@ -302,7 +302,7 @@ for (const width of [1440, 390]) {
       await expect(
         creditsDialog.getByRole('region', { name: 'Car in the closing frame' }),
       ).toContainText('Ferrari F40');
-      await expect(creditsDialog.getByRole('list', { name: 'Full model catalogue' })).toBeVisible();
+      await expect(creditsDialog.getByRole('list', { name: 'Model catalogue' })).toBeVisible();
       await accessible(page);
       expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('hidden');
       await page.keyboard.press('Escape');

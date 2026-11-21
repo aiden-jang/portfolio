@@ -1,3 +1,4 @@
+import { kamchatkaExample } from '../../data/kamchatkaExample';
 import { useEffect, useState } from 'react';
 import { WORK_ITEMS, workId } from '../../data/workItems';
 import { copyText } from '../../browserSharing';
@@ -99,7 +100,27 @@ export function StoryPage({ id }: { id: StoryId }) {
                 <EarthquakeGlobeStill />
                 <figcaption>Off the east coast of Kamchatka · 17 Aug 2026</figcaption>
               </figure>
-              <DepthSection selected={agency} onSelect={setAgency} />
+              <div>
+                <DepthSection selected={agency} onSelect={setAgency} />
+                <p className="preview-inline-source">
+                  <a
+                    href={kamchatkaExample.report}
+                    target="_blank"
+                    rel="noopener"
+                    aria-describedby="external-link-hint"
+                  >
+                    USGS event record
+                  </a>
+                  <a
+                    href="https://github.com/aiden-jang/meanwhile/blob/main/src/sources/fixtures/one-quake-both-feeds.json"
+                    target="_blank"
+                    rel="noopener"
+                    aria-describedby="external-link-hint"
+                  >
+                    Matching fixture
+                  </a>
+                </p>
+              </div>
             </div>
           ) : (
             <WorkStoryOpening item={item} />

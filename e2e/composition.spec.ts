@@ -74,7 +74,7 @@ for (const [width, height] of [
       } else {
         expect(Math.abs(copy!.x + copy!.width / 2 - layoutWidth / 2)).toBeLessThan(2);
         const contact = await page.locator('#sec-contact').boundingBox();
-        expect(copy!.y - contact!.y).toBeCloseTo(112, 0);
+        expect(copy!.y - contact!.y).toBeCloseTo(Math.max(128, height * 0.21), 0);
       }
     }).toPass({ timeout: 5000 });
     const copy = await page.locator('.contact-copy-block').boundingBox();

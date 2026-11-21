@@ -3,13 +3,12 @@ import { act, createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, expect, it, vi } from 'vitest';
 import { PerspectiveCamera } from 'three';
-import type { Keyframe } from '../types';
 import { KEYFRAMES } from '../config';
 import { useContactArrival } from './useContactArrival';
 
 const camera = new PerspectiveCamera(35, 1440 / 900, 0.1, 200);
 const size = { width: 1440, height: 900 };
-let applyArrival: (pose: Keyframe, dt: number, reduced: boolean) => void;
+let applyArrival: ReturnType<typeof useContactArrival>;
 vi.mock('@react-three/fiber', () => ({ useThree: () => ({ camera, size }) }));
 
 function Probe() {
@@ -48,6 +47,12 @@ it('restores the viewport projection when Contact leaves the screen', async () =
     expect(camera.view?.enabled).toBe(false);
     expect(camera.aspect).toBeCloseTo(320 / 568);
     expect(untouched).toEqual(KEYFRAMES[0]);
+
+    applyArrival(untouched, 0, true, 0);
+    expect(camera.view?.enabled).toBe(true);
+    applyArrival(null, 0, true);
+    expect(camera.view?.enabled).toBe(false);
+    expect(camera.aspect).toBeCloseTo(320 / 568);
 
     Object.assign(size, { width: 390, height: 844 });
     sectionTop = 1000;

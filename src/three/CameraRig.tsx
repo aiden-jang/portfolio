@@ -51,7 +51,7 @@ export function CameraRig({ getScrollT, lineup }: { getScrollT: () => number; li
 
   useFrame((three, dt) => {
     // Keep the single-car pose while the Lineup rig owns the shared camera.
-    if (lineup || useAppStore.getState().renderFinish) return;
+    if (lineup || useAppStore.getState().renderFinish) return contactArrival(null, dt, false);
     const s = state.current;
     const refs = useAppStore.getState().refs;
     const reduced = prefersReducedMotion(),
@@ -67,7 +67,7 @@ export function CameraRig({ getScrollT, lineup }: { getScrollT: () => number; li
 
     const kf = baseKf.current;
     interpolateKeyframe(KEYFRAMES, scrollT, kf, three.size.width < 768 ? 12 : undefined);
-    contactArrival(kf, dt, reduced);
+    contactArrival(kf, dt, reduced, isCleanMode ? 1 : scrollT);
 
     const az = isCleanMode
       ? CLEAN_AZIMUTH

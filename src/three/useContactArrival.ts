@@ -3,17 +3,20 @@ import { KEYFRAMES } from '../config';
 import type { Keyframe } from '../types';
 import { contactArrivalProgress, easeOutCubic } from './cameraPose';
 import { useThree } from '@react-three/fiber';
-import { PerspectiveCamera } from 'three';
+import { PerspectiveCamera, type Camera } from 'three';
 import { contactFrame } from './contactFrame';
+import { phoneOpeningFrame } from './phoneOpeningFrame';
+import { clamp } from '../math';
 
 export function useContactArrival() {
   const { camera, size } = useThree();
   const arrival = useRef({ progress: 0 });
-  return (pose: Keyframe, dt: number, reduced: boolean) => {
+  return (pose: Keyframe | null, dt: number, reduced: boolean, scroll = 1) => {
     const state = arrival.current;
-    const contact = document.getElementById('sec-contact')?.getBoundingClientRect();
-    if (!contact || contact.top >= size.height || contact.bottom <= 0) {
+    const contact = pose && document.getElementById('sec-contact')?.getBoundingClientRect();
+    if (!pose || !contact || contact.top >= size.height || contact.bottom <= 0) {
       state.progress = 0;
+      if (pose && applyPhoneOpeningView(camera, size.width, size.height, scroll)) return;
       const aspect = size.width / size.height;
       if (
         camera.view?.enabled ||
@@ -56,4 +59,28 @@ export function useContactArrival() {
     pose.elevation = 0.12 + (pose.elevation - 0.12) * t;
     pose.distance = (10 + (pose.distance - 10) * t) * view.distanceMultiplier;
   };
+}
+
+function applyPhoneOpeningView(camera: Camera, width: number, height: number, scroll: number) {
+  const end = 0.34;
+  if (!(camera instanceof PerspectiveCamera) || width >= 768 || height <= 0 || scroll >= end)
+    return false;
+  const { scale, lift } = phoneOpeningFrame(width, height, 1 - clamp(scroll / end, 0, 1));
+  const spanX = width / scale;
+  const spanY = height / scale;
+  const offsetX = (width - spanX) / 2;
+  const offsetY = (height - spanY) / 2 + lift / scale;
+  const view = camera.view;
+  if (
+    !view?.enabled ||
+    view.fullWidth !== width ||
+    view.fullHeight !== height ||
+    view.offsetX !== offsetX ||
+    view.offsetY !== offsetY ||
+    view.width !== spanX ||
+    view.height !== spanY
+  ) {
+    camera.setViewOffset(width, height, offsetX, offsetY, spanX, spanY);
+  }
+  return true;
 }

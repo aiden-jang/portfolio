@@ -17,40 +17,40 @@ export function AboutSection({
       <div className="about-copy pointer-events-auto">
         <h2>About</h2>
         <div className="about-grid">
-          <div className="about-story">
-            <p className="about-lead">Most of my side projects start with something ordinary.</p>
-            <p className="about-body">
-              Picking dinner with friends became{' '}
-              {wherever ? (
-                <button
-                  type="button"
-                  className="about-story-link"
-                  aria-label="Read the wherever case study"
-                  onClick={(event) => onOpen(wherever, event.currentTarget)}
-                >
-                  wherever
-                </button>
-              ) : (
-                <strong>wherever</strong>
-              )}
-              . A note for someone became{' '}
-              {bloomnote ? (
-                <button
-                  type="button"
-                  className="about-story-link"
-                  aria-label="Read the bloomnote case study"
-                  onClick={(event) => onOpen(bloomnote, event.currentTarget)}
-                >
-                  bloomnote
-                </button>
-              ) : (
-                <strong>bloomnote</strong>
-              )}
-              . Then there’s <strong>mrrp</strong>, a room for two and a pixel cat.
-            </p>
-          </div>
-          <div>
-            <AboutFraming />
+          <AboutFraming />
+          <div className="about-profile">
+            <div className="about-story">
+              <p className="about-lead">Most of my side projects start with something ordinary.</p>
+              <p className="about-body">
+                Picking dinner with friends became{' '}
+                {wherever ? (
+                  <button
+                    type="button"
+                    className="about-story-link"
+                    aria-label="Read the wherever case study"
+                    onClick={(event) => onOpen(wherever, event.currentTarget)}
+                  >
+                    wherever
+                  </button>
+                ) : (
+                  <strong>wherever</strong>
+                )}
+                . A note for someone became{' '}
+                {bloomnote ? (
+                  <button
+                    type="button"
+                    className="about-story-link"
+                    aria-label="Read the bloomnote case study"
+                    onClick={(event) => onOpen(bloomnote, event.currentTarget)}
+                  >
+                    bloomnote
+                  </button>
+                ) : (
+                  <strong>bloomnote</strong>
+                )}
+                . Then there’s <strong>mrrp</strong>, a room for two and a pixel cat.
+              </p>
+            </div>
             <dl className="about-details">
               <div>
                 <dt>Background</dt>

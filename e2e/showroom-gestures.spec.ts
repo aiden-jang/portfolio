@@ -32,7 +32,7 @@ test('a phone can orbit on the first sideways swipe and still scroll vertically'
   test.skip(browserName !== 'chromium', 'Native touch injection uses Chromium DevTools.');
   await page.goto('/');
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-  await expect(page.getByText('Swipe the car sideways to look around.')).toBeVisible();
+  await expect(page.getByText('Swipe sideways to orbit.')).toBeVisible();
   const input = await context.newCDPSession(page);
   await swipe(input, { x: 280, y: 480 }, { x: 116, y: 481 }, async () => {
     await expect(page.locator('body')).toHaveClass(/orbiting/);

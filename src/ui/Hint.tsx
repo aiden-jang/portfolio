@@ -31,17 +31,18 @@ export function Hint() {
     const observer = new MutationObserver(() => {
       if (document.body.classList.contains('orbiting')) setTriedOrbit(true);
     });
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
     return () => observer.disconnect();
   }, []);
   return (
     <>
       {sectionIndex === 0 && !loading && !error && !manual && !triedOrbit && (
         <p className="orbit-invitation">
-          <span className="orbit-hint-desktop hidden md:inline">Drag to look around.</span>
-          <span className="orbit-hint-mobile md:hidden">
-            Swipe the car sideways to look around.
-          </span>
+          <span className="orbit-hint-desktop hidden md:inline">Drag the car to orbit.</span>
+          <span className="orbit-hint-mobile md:hidden">Swipe sideways to orbit.</span>
         </p>
       )}
       <p className="orbit-status">Drag to orbit · release to scroll</p>

@@ -1,19 +1,30 @@
-import { useEffect, useLayoutEffect, useRef, type TouchEvent } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, type TouchEvent } from 'react';
 import type { WorkDetail } from '../types';
 import { useDialogFocus } from './useDialogFocus';
 import { usePageScrollLock } from './usePageScrollLock';
 import { dismissStoryActions } from './dismissStoryActions';
+import { useStoryMotion } from './useStoryMotion';
 
 export function useWorkDialog(
   item: WorkDetail | null,
   actions: { onClose: () => void; onPrevious: () => void; onNext: () => void },
 ) {
-  const { onClose, onPrevious, onNext } = actions;
+  const { onClose, onPrevious: previous, onNext: next } = actions;
+  const direction = useRef<1 | -1 | 0>(0);
+  const onPrevious = useCallback(() => {
+    direction.current = -1;
+    previous();
+  }, [previous]);
+  const onNext = useCallback(() => {
+    direction.current = 1;
+    next();
+  }, [next]);
   const open = !!item;
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   useDialogFocus(open, dialogRef, closeRef);
+  useStoryMotion(item?.title, dialogRef, direction);
   usePageScrollLock(open);
   useLayoutEffect(() => {
     const panel = dialogRef.current;
@@ -68,6 +79,7 @@ export function useWorkDialog(
   return {
     dialogRef,
     closeRef,
+    navigation: { onPrevious, onNext },
     onTouchStart(event: TouchEvent) {
       if (event.target instanceof Element && event.target.closest('dialog')) {
         touchStart.current = null;

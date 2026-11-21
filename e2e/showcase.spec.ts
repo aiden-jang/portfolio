@@ -119,6 +119,9 @@ for (const width of [1440, 390]) {
       ['platform', 'Choose an app', 'Already signed in', 'platform-app'],
     ] as const) {
       const card = page.locator(`#project-${project}`);
+      const step = card.getByRole('button', { name: second, exact: true });
+      await step.click();
+      await expect(step).toHaveAttribute('aria-pressed', 'true');
       const trigger = card.getByRole('button', { name: `Inspect screenshot: ${second}` });
       await trigger.click();
       const dialog = page.getByRole('dialog', { name: `${project} screenshot` });

@@ -1,4 +1,3 @@
-import { useAppStore } from '../../store';
 import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
 import { H2, P_LI, PANEL_BASE, Section } from './shared';
@@ -20,22 +19,22 @@ export function ContactSection() {
             Have a role, project or question in mind?
           </p>
           <EmailActions />
-          <div className="contact-social-links">
-            {SOCIAL_LINKS.map(({ label, url }) => (
-              <a
-                key={url}
-                href={url}
-                target="_blank"
-                aria-describedby="external-link-hint"
-                rel="noopener"
-              >
-                {label} <span aria-hidden="true">↗</span>
-              </a>
-            ))}
-          </div>
         </div>
       </div>
       <footer className="contact-footer">
+        <div className="contact-social-links">
+          {SOCIAL_LINKS.map(({ label, url }) => (
+            <a
+              key={url}
+              href={url}
+              target="_blank"
+              aria-describedby="external-link-hint"
+              rel="noopener"
+            >
+              {label} <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
         <Credits />
         <nav className="contact-policy-links" aria-label="Legal">
           <a href="https://accounts.aidenjang.com/privacy#legal-cookies-and-analytics">Privacy</a>
@@ -63,12 +62,7 @@ function EmailActions() {
         </a>
         <button
           type="button"
-          onClick={() =>
-            run(() => copyText(EMAIL)).then((result) => {
-              if (result === 'copied' && !matchMedia('(prefers-reduced-motion:reduce)').matches)
-                useAppStore.getState().pulseCarLights();
-            })
-          }
+          onClick={() => void run(() => copyText(EMAIL))}
           aria-label={copyLabel}
           aria-describedby="contact-copy-status"
           className="contact-copy"

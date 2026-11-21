@@ -75,99 +75,26 @@ export function Credits() {
                 detail retained. Interactive paint and lighting added.
               </p>
               {current && credit && (
-                <section className="model-credit-feature" aria-label="Car in the closing frame">
+                <section
+                  className="model-credit-feature closing-car-credit"
+                  aria-label="Car in the closing frame"
+                >
+                  <img src={'/cars/' + current.file.replace('.glb', '.jpg')} alt="" />
                   <div>
-                    <p>In the closing frame</p>
                     <h3>{current.name}</h3>
+                    <CreditDetails credit={credit} />
                   </div>
-                  <p>
-                    <a
-                      href={credit.url}
-                      target="_blank"
-                      rel="noopener"
-                      aria-describedby="external-link-hint"
-                    >
-                      {credit.author}
-                    </a>
-                    {' · '}
-                    <a
-                      href={credit.licenseUrl}
-                      target="_blank"
-                      rel="noopener"
-                      aria-describedby="external-link-hint"
-                    >
-                      {credit.license}
-                    </a>
-                  </p>
                 </section>
               )}
-              <ul className="model-credits-list" aria-label="Full model catalogue">
-                {credited.map((car) => {
-                  const credit = car.credit!;
-                  return (
+              <ul className="model-credits-list" aria-label="Model catalogue">
+                {credited
+                  .filter((car) => car !== current)
+                  .map((car) => (
                     <li key={car.name} className="min-w-0 text-[0.76rem] leading-[1.3]">
-                      <span className="block truncate text-[rgba(244,240,255,0.82)]">
-                        {car.name}
-                      </span>
-                      <a
-                        href={credit.url}
-                        target="_blank"
-                        aria-describedby="external-link-hint"
-                        rel="noopener"
-                        className="text-[0.68rem] text-[var(--color-muted)] no-underline border-b border-transparent hover:text-[var(--color-fg)] hover:border-[var(--color-neon)]"
-                      >
-                        {credit.title}
-                      </a>
-                      <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
-                        by {credit.author} ·{' '}
-                        <a
-                          href={credit.licenseUrl}
-                          target="_blank"
-                          aria-describedby="external-link-hint"
-                          rel="noopener"
-                        >
-                          {credit.license}
-                        </a>
-                      </span>
-                      {credit.upstream && (
-                        <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
-                          Credited source:{' '}
-                          <a
-                            href={credit.upstream.url}
-                            target="_blank"
-                            aria-describedby="external-link-hint"
-                            rel="noopener"
-                          >
-                            {credit.upstream.author}
-                          </a>
-                          {credit.upstream.license && credit.upstream.licenseUrl && (
-                            <>
-                              {' · '}
-                              <a
-                                href={credit.upstream.licenseUrl}
-                                target="_blank"
-                                aria-describedby="external-link-hint"
-                                rel="noopener"
-                              >
-                                {credit.upstream.license}
-                              </a>
-                            </>
-                          )}
-                        </span>
-                      )}
-                      {credit.notice && (
-                        <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
-                          {credit.notice}
-                        </span>
-                      )}
-                      {credit.copyright && (
-                        <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
-                          {credit.copyright}
-                        </span>
-                      )}
+                      <span className="block text-[rgba(244,240,255,0.82)]">{car.name}</span>
+                      <CreditDetails credit={car.credit!} />
                     </li>
-                  );
-                })}
+                  ))}
               </ul>
               <p className="model-credits-notice">
                 Vehicle designs and trademarks belong to their owners, including Porsche AG. No
@@ -178,5 +105,66 @@ export function Credits() {
           document.body,
         )}
     </>
+  );
+}
+
+function CreditDetails({ credit }: { credit: NonNullable<(typeof CARS)[number]['credit']> }) {
+  return (
+    <div className="model-credit-detail">
+      <a
+        href={credit.url}
+        target="_blank"
+        aria-describedby="external-link-hint"
+        rel="noopener"
+        className="text-[0.68rem] text-[var(--color-muted)] no-underline border-b border-transparent hover:text-[var(--color-fg)] hover:border-[var(--color-neon)]"
+      >
+        {credit.title}
+      </a>
+      <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
+        by {credit.author} ·{' '}
+        <a
+          href={credit.licenseUrl}
+          target="_blank"
+          aria-describedby="external-link-hint"
+          rel="noopener"
+        >
+          {credit.license}
+        </a>
+      </span>
+      {credit.upstream && (
+        <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
+          Credited source:{' '}
+          <a
+            href={credit.upstream.url}
+            target="_blank"
+            aria-describedby="external-link-hint"
+            rel="noopener"
+          >
+            {credit.upstream.author}
+          </a>
+          {credit.upstream.license && credit.upstream.licenseUrl && (
+            <>
+              {' · '}
+              <a
+                href={credit.upstream.licenseUrl}
+                target="_blank"
+                aria-describedby="external-link-hint"
+                rel="noopener"
+              >
+                {credit.upstream.license}
+              </a>
+            </>
+          )}
+        </span>
+      )}
+      {credit.notice && (
+        <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">{credit.notice}</span>
+      )}
+      {credit.copyright && (
+        <span className="block mt-1 text-[0.68rem] text-[var(--color-muted)]">
+          {credit.copyright}
+        </span>
+      )}
+    </div>
   );
 }

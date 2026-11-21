@@ -71,7 +71,8 @@ The wherever gallery pairs two browser captures from a local two-person room
 using sample restaurants and the app's teaser photo. Both participants voted
 for the restaurant shown on the result screen. The platform gallery captures
 the account hub and the signed-in worth archive from the same local test session.
-The hub capture masks the test email. Both galleries open the uncropped frames.
+The hub capture masks the test email. Swipe or select a step to move between
+the recorded states. The screenshot inspector opens the uncropped frames.
 
 Owewell's paired inspector captures come from the local calculator. Maya and Alex
 split a sample $48 bill equally. Selecting a payer opens the matching screenshot.
