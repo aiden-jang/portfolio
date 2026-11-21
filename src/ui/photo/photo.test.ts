@@ -42,7 +42,7 @@ it('allows an accepted capture to finish after the renderer lookup deadline', as
   let request: CaptureRequest | undefined;
   const accept = (event: Event) => {
     request = (event as CustomEvent<CaptureRequest>).detail;
-    request.accept();
+    request.accept?.();
   };
   window.addEventListener(CAPTURE_EVENT, accept, { once: true });
   const capture = captureScene();

@@ -1,6 +1,6 @@
 export const CAPTURE_EVENT = 'portfolio:capture-photo';
 export type CaptureRequest = {
-  accept: () => void;
+  accept?: () => void;
   resolve: (blob: Blob) => void;
   reject: (error: Error) => void;
 };

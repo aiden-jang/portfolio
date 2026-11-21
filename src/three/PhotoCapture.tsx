@@ -9,7 +9,7 @@ export function PhotoCapture() {
     const capture = (event: Event) => {
       request.current?.reject(new Error('A newer capture replaced this one.'));
       request.current = (event as CustomEvent<CaptureRequest>).detail;
-      request.current.accept();
+      request.current.accept?.();
       invalidate();
     };
     window.addEventListener(CAPTURE_EVENT, capture);
