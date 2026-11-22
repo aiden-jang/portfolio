@@ -88,7 +88,13 @@ export function StudyControls({ waiting }: { waiting: boolean }) {
                 aria-pressed={reduced ? camera === 'glide' : playing}
                 onClick={glide}
               >
-                {reduced ? 'Glide view' : playing ? 'Pause glide' : 'Play glide'}
+                {reduced
+                  ? 'Glide view'
+                  : playing
+                    ? 'Pause glide'
+                    : track.position === 1
+                      ? 'Replay glide'
+                      : 'Play glide'}
               </button>
             )}
             {pair && camera === 'glide' && (

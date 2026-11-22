@@ -10,6 +10,8 @@ import './bloom-garden.css';
 import { BloomComposer } from './BloomComposer';
 import { BloomPlot } from './BloomPlot';
 import { bloomFlowers } from './bloomFlowers';
+import { useScrollStudy } from '../../hooks/useScrollStudy';
+import { advanceGarden } from './gardenFocus';
 
 export function BloomPreview({
   image: initialImage,
@@ -55,6 +57,7 @@ export function BloomPreview({
   const [hasOpenedComposer, setHasOpenedComposer] = useState(false);
   const article = useRef<HTMLElement>(null);
   const write = useRef<HTMLButtonElement>(null);
+  useScrollStudy(article, !composing, advanceGarden);
   const composerTitle = useRef<HTMLHeadingElement>(null);
   useLayoutEffect(() => {
     if (!hasOpenedComposer) return;
@@ -66,10 +69,11 @@ export function BloomPreview({
     <article
       ref={article}
       id="project-bloomnote"
-      className="bloom-garden"
+      className="bloom-garden bloom-garden-study"
+      data-composing={composing || undefined}
       aria-labelledby={composing ? 'bloom-draft-title' : 'bloom-garden-title'}
     >
-      <div className="bloom-garden-inner" hidden={composing}>
+      <div className="bloom-garden-inner" data-study-pin hidden={composing}>
         <header className="bloom-garden-heading">
           <h2 id="bloom-garden-title">bloomnote</h2>
           <p>{description}</p>
@@ -81,7 +85,14 @@ export function BloomPreview({
             <blockquote key={flower.name}>“{flower.meaning}”</blockquote>
             <p>A garden from Maya to Sarah</p>
           </figure>
-          <BloomPlot label="Flowers in Sarah’s garden" selected={selected} onSelect={select} />
+          <BloomPlot
+            label="Flowers in Sarah’s garden"
+            selected={selected}
+            onSelect={(index) => {
+              if (article.current) article.current.dataset.manualFlower = '';
+              select(index);
+            }}
+          />
         </div>
 
         <footer className="bloom-garden-actions">

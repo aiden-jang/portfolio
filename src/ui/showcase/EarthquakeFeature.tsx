@@ -7,6 +7,9 @@ import { DepthSection } from './DepthSection';
 import { InteractiveGlobe } from './InteractiveGlobe';
 import { ControlIcon } from '../ControlIcon';
 import { storyHref } from '../creative/storyRoutes';
+import { useScrollStudy } from '../../hooks/useScrollStudy';
+import { QuakeReadings } from './quakeJourney';
+import { advanceQuake } from './quakeProgress';
 
 // The visible date also applies to the snapshot poster before WebGL loads.
 const snapshotDate = '2026-11-17T00:55:59.000Z';
@@ -27,6 +30,8 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
   const open = useRef<HTMLElement | null>(null);
   const compareButton = useRef<HTMLButtonElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
+  const journey = useRef<HTMLElement>(null);
+  useScrollStudy(journey, !comparing, advanceQuake);
   useLayoutEffect(() => {
     const sync = () => {
       setComparing(location.hash.startsWith(compareRoute));
@@ -69,8 +74,14 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
     }
   };
   return (
-    <article id="project-everythingisfine" className="garage-project garage-project-featured">
-      <div className="earthquake-feature" data-comparing={comparing}>
+    <article
+      ref={journey}
+      id="project-everythingisfine"
+      className={
+        'garage-project garage-project-featured' + (!comparing ? ' quake-journey-run' : '')
+      }
+    >
+      <div className="earthquake-feature" data-comparing={comparing} data-study-pin>
         {comparing ? (
           <>
             <div className="earthquake-heading">
@@ -112,10 +123,12 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
         ) : (
           <div className="earthquake-intro">
             <h3>{item.shortName}</h3>
-            <p className="creative-quake-hook">
-              Same quake, <strong>16.3 km apart.</strong>
-            </p>
-            <p className="creative-quake-role">I built the matching that keeps both reports.</p>
+            <div className="quake-journey-copy">
+              <p className="creative-quake-hook">
+                Same quake, <strong>16.3 km apart.</strong>
+              </p>
+              <QuakeReadings />
+            </div>
             <button
               ref={compareButton}
               type="button"
@@ -131,6 +144,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
             image={preview.image}
             caption={preview.caption}
             onCompare={launchComparison}
+            journey
           />
         </div>
         {!comparing && (

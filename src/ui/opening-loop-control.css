@@ -1,0 +1,31 @@
+.opening-loop-control {
+  position: fixed;
+  z-index: 12;
+  top: calc(var(--portfolio-header-height) + 14px);
+  right: max(var(--portfolio-gutter), env(safe-area-inset-right));
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: #f4f1eb;
+  background: #131316c9;
+  border: 1px solid #bbb8af4a;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.opening-loop-control svg {
+  width: 17px;
+  height: 17px;
+}
+.opening-loop-control:hover {
+  background: #222124;
+}
+.opening-loop-control:focus-visible {
+  outline: 2px solid #f3dec1;
+  outline-offset: 3px;
+}
+body:not([data-car-controls='visible']) .opening-loop-control {
+  visibility: hidden;
+  pointer-events: none;
+}

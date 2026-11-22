@@ -1,0 +1,152 @@
+@media (prefers-reduced-motion: no-preference) and (min-height: 620px) {
+  .quake-journey-run::after {
+    display: block;
+    content: '';
+    height: min(75svh, 680px);
+  }
+  html:root .quake-journey-run > .earthquake-feature {
+    position: sticky;
+    top: calc(var(--portfolio-header-height) + 12px);
+  }
+}
+.quake-journey-run {
+  --map-reveal: var(--directed-map-reveal, 0);
+  --depth-reveal: var(--directed-depth-reveal, 0);
+  --globe-dim: calc(1 - var(--map-reveal));
+  --map-scale: 1.16;
+}
+.quake-journey-run .quake-journey-copy {
+  display: grid;
+  max-width: 330px;
+}
+.quake-journey-copy > * {
+  grid-area: 1 / 1;
+}
+.quake-journey-copy > p {
+  opacity: calc(1 - var(--depth-reveal));
+  color: #d1d7dc;
+  font-size: clamp(16px, 1.5vw, 21px);
+  line-height: 1.5;
+  max-width: 25ch;
+}
+.quake-journey-run .quake-journey-readings {
+  color: #e9f0ec;
+  margin: 2px 0 14px;
+  opacity: var(--depth-reveal);
+  transform: translateY(calc((1 - var(--depth-reveal)) * 10px));
+  pointer-events: none;
+}
+.quake-journey-readings p {
+  color: #b0c3c4;
+  margin: 0;
+  font-size: 13px;
+}
+.quake-journey-readings dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 25px;
+  margin: 10px 0;
+  font-variant-numeric: tabular-nums;
+}
+.quake-journey-readings dt {
+  color: #c2cfcb;
+  font-size: 11px;
+}
+.quake-journey-readings dd {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 43px);
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+}
+.quake-journey-readings small {
+  color: #c6d7d1;
+  font-size: 0.46em;
+  letter-spacing: 0;
+}
+.quake-journey-run .orbit-viewport {
+  opacity: var(--globe-dim);
+}
+.quake-map {
+  --pin-x: 55%;
+  --pin-y: 54%;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: var(--map-reveal);
+  clip-path: circle(calc(85% * var(--map-reveal)) at var(--pin-x) var(--pin-y));
+}
+.quake-map-image {
+  position: absolute;
+  left: var(--pin-x);
+  top: var(--pin-y);
+  width: 122%;
+  height: 122%;
+  max-width: none;
+  background-position: center;
+  background-size: cover;
+  transform: translate(-50%, -50%) scale(var(--map-scale));
+  transform-origin: center;
+}
+.quake-map-pin {
+  position: absolute;
+  left: var(--pin-x);
+  top: var(--pin-y);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #efbc91;
+  box-shadow:
+    0 0 0 4px #df9c6152,
+    0 0 15px #e7ad75;
+}
+.quake-map-magnitude {
+  position: absolute;
+  top: var(--pin-y);
+  left: var(--pin-x);
+  margin: 11px 0 0 12px;
+  color: #f4d0a5;
+  font: 600 12px/1 var(--font-display);
+}
+@media (max-width: 767px) {
+  .quake-map {
+    --pin-x: 50%;
+    --pin-y: 50%;
+  }
+  .quake-map-image {
+    width: 150%;
+    height: 112%;
+  }
+  .quake-journey-run .quake-journey-copy {
+    max-width: 100%;
+  }
+  .quake-journey-readings dl {
+    margin: 6px 0;
+  }
+  html:root .quake-journey-run > .earthquake-feature {
+    top: calc(var(--portfolio-header-height) + 3px);
+  }
+}
+
+html:root .quake-journey-run[data-quake-view='map']:not([data-quake-manual]) .orbit-viewport {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:root
+    .quake-journey-run:not([data-quake-manual])
+    .orbit-feature[data-globe-phase='ready']
+    .orbit-actions {
+    opacity: var(--globe-dim);
+    transition: none;
+  }
+  .quake-journey-run[data-quake-view='map']:not([data-quake-manual])
+    .orbit-feature[data-globe-phase='ready']
+    .orbit-actions {
+    visibility: hidden;
+  }
+}
+.quake-journey-run[data-quake-manual] {
+  --map-reveal: 0;
+  --depth-reveal: 0;
+}

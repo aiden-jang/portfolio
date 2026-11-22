@@ -5,7 +5,8 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { Box3, BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Vector3 } from 'three';
 import { CameraRig } from './CameraRig';
 import { useAppStore } from '../store';
-import { KEYFRAMES } from '../config';
+import { F40_INDEX, KEYFRAMES } from '../config';
+import { useOpeningPlayback } from './openingPlayback';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 
 let frame: (
@@ -264,13 +265,13 @@ async function withOpeningCamera(
   }
 }
 
-it('runs one opening sweep after the car loads and settles at the authored angle', async () => {
+it('keeps the brief opening sweep for a shared F40', async () => {
   for (const [width, degrees] of [
     [1440, 26],
     [390, 20],
   ]) {
     await withOpeningCamera(width, ({ tick, yaw, load }) => {
-      tick(240);
+      useAppStore.setState({ carIndex: F40_INDEX });
       load(false);
       tick(240);
       const start = KEYFRAMES[0].azimuth - (degrees * Math.PI) / 180;
@@ -281,18 +282,40 @@ it('runs one opening sweep after the car loads and settles at the authored angle
       expect(yaw()).toBeLessThan(KEYFRAMES[0].azimuth - 0.06);
       tick(100);
       expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
-      tick(240);
-      expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
     });
   }
 });
 
-it('hands the in-flight angle to a drag and does not resume the sweep', async () => {
+it('loops distinct Corvette shots and holds the view during pause', async () => {
+  for (const width of [1440, 390]) {
+    await withOpeningCamera(width, ({ tick, yaw, load }) => {
+      load();
+      tick(60);
+      const wide = yaw();
+      const wideDistance = camera.position.length();
+      expect(wide).toBeGreaterThan(0.7);
+      useOpeningPlayback.getState().toggle();
+      tick(180);
+      expect(yaw()).toBeCloseTo(wide, 5);
+      useOpeningPlayback.getState().toggle();
+      tick(100);
+      expect(camera.position.length()).toBeLessThan(wideDistance * 0.55);
+      tick(80);
+      expect(yaw()).toBeLessThan(-2);
+      tick(100);
+      expect(camera.position.y).toBeGreaterThan(7);
+      tick(122);
+      expect(yaw()).toBeCloseTo(wide, 1);
+    });
+  }
+});
+
+it('hands the in-flight angle to a drag and does not resume the cuts', async () => {
   await withOpeningCamera(1440, ({ tick, yaw, load }) => {
     load();
-    tick(36);
+    tick(60);
     const swept = yaw();
-    expect(swept).toBeLessThan(KEYFRAMES[0].azimuth - 0.1);
+    expect(swept).toBeGreaterThan(KEYFRAMES[0].azimuth + 0.2);
     pointer('pointerdown', 400, 400);
     tick();
     expect(yaw()).toBeCloseTo(swept, 5);
@@ -300,21 +323,23 @@ it('hands the in-flight angle to a drag and does not resume the sweep', async ()
     pointer('pointerup', 430, 400);
     tick(180);
     expect(yaw()).toBeCloseTo(swept + 0.3, 5);
+    expect(useOpeningPlayback.getState().playback).toBe('off');
   });
 });
 
 it('drops the opening offset by Work and starts settled under reduced motion', async () => {
   await withOpeningCamera(390, ({ tick, yaw, load, scrollTo }) => {
     load();
-    tick(36);
+    tick(60);
     const swept = yaw();
-    expect(swept).toBeLessThan(KEYFRAMES[0].azimuth - 0.1);
+    expect(swept).toBeGreaterThan(KEYFRAMES[0].azimuth + 0.1);
     scrollTo(0.2);
     tick();
     expect(yaw()).toBeCloseTo(KEYFRAMES[1].azimuth, 5);
     scrollTo(0);
     tick(180);
     expect(yaw()).toBeCloseTo(swept, 5);
+    expect(useOpeningPlayback.getState().playback).toBe('off');
   });
   vi.mocked(prefersReducedMotion).mockReturnValue(true);
   await withOpeningCamera(390, ({ tick, yaw, load }) => {

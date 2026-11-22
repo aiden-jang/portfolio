@@ -50,29 +50,27 @@ export function CameraRig({ getScrollT, lineup }: { getScrollT: () => number; li
   useOrbitGesture(state, onTap);
 
   useFrame((three, dt) => {
-    // Keep the single-car pose while the Lineup rig owns the shared camera.
-    if (lineup || useAppStore.getState().renderFinish) return contactArrival(null, dt, false);
-    const s = state.current;
-    const refs = useAppStore.getState().refs;
+    const { refs, hasManualView, renderFinish } = useAppStore.getState();
+    if (lineup || renderFinish) return contactArrival(null, dt, false);
+    const s = state.current,
+      kf = baseKf.current;
+    const { width, height } = three.size;
     const reduced = prefersReducedMotion(),
       scrollT = getScrollT();
-
-    const swing = isCleanMode ? 0 : openingOrbit(s, dt, reduced, scrollT, three.size.width);
-    const studioShot = updateCameraView(s, dt, reduced, scrollT, three.size.width);
-    if (refs.holdOpeningPose || s.isDown || scrollT > 0 || useAppStore.getState().hasManualView)
-      s.introT = 1;
-    motionState.progress = reduced ? 1 : s.introT;
-    updateIntroFov(camera, three.size.width, scrollT);
-    s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
-
-    const kf = baseKf.current;
-    interpolateKeyframe(KEYFRAMES, scrollT, kf, three.size.width < 768 ? 12 : undefined);
+    const aspect = height > 0 ? width / height : FRAME_BASE_ASPECT;
+    interpolateKeyframe(KEYFRAMES, scrollT, kf, width < 768 ? 12 : undefined);
     contactArrival(kf, dt, reduced, isCleanMode ? 1 : scrollT);
+    updateIntroFov(camera, width, scrollT);
+    const swing = isCleanMode ? 0 : openingOrbit(s, camera, dt, reduced, scrollT, width, aspect);
+    const studioShot = updateCameraView(s, dt, reduced, scrollT, width);
+    if (refs.holdOpeningPose || s.isDown || scrollT > 0 || hasManualView) s.introT = 1;
+    motionState.progress = reduced ? 1 : s.introT;
+    s.scrollActiveTimer = Math.max(0, s.scrollActiveTimer - dt);
+    if (swing === null) return;
 
     const az = isCleanMode
       ? CLEAN_AZIMUTH
       : kf.azimuth + swing + s.dragAzimuth + s.idleSpin * (1 - clamp(scrollT, 0, 1));
-    const aspect = three.size.height > 0 ? three.size.width / three.size.height : FRAME_BASE_ASPECT;
     let dist = kf.distance * framingDistanceMultiplier(aspect);
     const tgtY = kf.targetY;
 
@@ -88,8 +86,8 @@ export function CameraRig({ getScrollT, lineup }: { getScrollT: () => number; li
       elevation: el,
       distance: dist,
       targetY: tgtY,
-      width: three.size.width,
-      height: three.size.height,
+      width,
+      height,
       fov: 'fov' in camera ? (camera.fov as number) : 35,
       scrollT,
       dt,

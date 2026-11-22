@@ -1,3 +1,4 @@
+import { useContactLight } from './useContactLight';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { inStudioDusk } from '../garageExhibits/state';
 import { inBlackout, useGarageStudio } from '../garageStudio/state';
@@ -39,6 +40,7 @@ export function Floor({
   const currentFogFar = useRef(THEMES.dusk.fogFar);
   const currentReflectorColor = useRef(THEMES.dusk.reflectorColor);
   const currentExposure = useRef(THEMES.dusk.exposure);
+  const contactLight = useContactLight();
 
   // Built by hand because R3F's <reflector> intrinsic wraps a helper with a non-standard
   // constructor signature.
@@ -104,6 +106,7 @@ export function Floor({
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
     if (studio) {
       uniforms.closingFloor.value = Number(closing);
+      uniforms.closingLight.value = contactLight(closing, dt);
       const settle = Math.min(1, dt * 10);
       const dusk = inStudioDusk(preview);
       uniforms.studioDusk.value += (Number(dusk) - uniforms.studioDusk.value) * settle;

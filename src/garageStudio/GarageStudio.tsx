@@ -191,7 +191,7 @@ export function GarageStudio() {
       <StudioHeading
         title={title}
         car={subtitle}
-        leadWithCar={exhibit === 'free' && !photo && !study}
+        leadWithCar={exhibit === 'free' && !photo && !study && !pair}
         exit={exit}
         onExit={() => {
           leaveTool();

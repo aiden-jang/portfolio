@@ -1,3 +1,4 @@
+import { lerp, lerpAngle } from '../../math';
 import { kamchatkaExample } from '../../data/kamchatkaExample';
 import { createGlobeScene, loadAurora, loadGeography } from './globe/scene';
 import {
@@ -33,6 +34,7 @@ const openingZoom = () => (matchMedia('(max-width: 767px)').matches ? 1.32 : 1.2
 type Options = {
   autoRotate: boolean;
   onRotation: (rotating: boolean) => void;
+  onManual?: () => void;
   paused: () => boolean;
   failed: () => void;
   exit: () => void;
@@ -69,6 +71,8 @@ export function createOrbitGlobe(
   const reduced = matchMedia('(prefers-reduced-motion:reduce)');
   let rotating = options.autoRotate && !reduced.matches;
   let lastShown: string | undefined;
+  let journey = 0;
+  let origin: GlobePose | undefined;
   options.onRotation(rotating);
   const draw = (time: number) => {
     frame = 0;
@@ -83,10 +87,11 @@ export function createOrbitGlobe(
       }
       const dt = previous ? Math.min(0.05, (time - previous) / 1000) : 1 / 60;
       previous = time;
-      const moving = input.step(dt);
-      if (rotating && time > holdUntil) pose.lon = (pose.lon + ROTATION_RATE * dt) % 360;
+      const moving = journey === 0 && input.step(dt);
+      if (journey === 0 && rotating && time > holdUntil)
+        pose.lon = (pose.lon + ROTATION_RATE * dt) % 360;
       globe.render(pose);
-      if (moving || rotating) frame = requestAnimationFrame(draw);
+      if (moving || (rotating && journey === 0)) frame = requestAnimationFrame(draw);
       else previous = 0;
     } catch {
       options.failed();
@@ -126,7 +131,13 @@ export function createOrbitGlobe(
     options.onRotation(rotating);
     wake();
   };
+  const undirect = () => {
+    journey = 0;
+    origin = undefined;
+    options.onManual?.();
+  };
   const takeControl = () => {
+    undirect();
     if (rotating) setRotating(false);
   };
   const input = attachGlobeInput(canvas, {
@@ -155,6 +166,27 @@ export function createOrbitGlobe(
     select(undefined);
     wake();
   };
+  const steer = (event: Event) => {
+    const t = (event as CustomEvent<number>).detail;
+    if (t === journey) return;
+    journey = t;
+    if (journey > 0) {
+      if (!origin) origin = { ...pose };
+      input.stop();
+      globe.highlight(featured);
+      const close = matchMedia('(max-width: 767px)').matches ? 3.12 : 2.8;
+      pose.lon =
+        (lerpAngle((origin.lon * Math.PI) / 180, (featured.lon * Math.PI) / 180, t) * 180) /
+        Math.PI;
+      pose.lat = lerp(origin.lat, featured.lat, t);
+      pose.zoom = lerp(origin.zoom, close, t);
+    } else if (origin) {
+      Object.assign(pose, origin);
+      origin = undefined;
+    }
+    wake();
+  };
+  canvas.addEventListener('quake-journey', steer);
   canvas.addEventListener('globe-reset', reset);
   const resize = new ResizeObserver(() => {
     const zoom = openingZoom();
@@ -176,6 +208,10 @@ export function createOrbitGlobe(
   return {
     reset,
     setRotating,
+    toggleRotation: () => {
+      undirect();
+      setRotating(!rotating);
+    },
     clearSelection: () => select(undefined),
     showFeatured: () => {
       takeControl();
@@ -200,6 +236,7 @@ export function createOrbitGlobe(
       resize.disconnect();
       input.dispose();
       canvas.removeEventListener('globe-reset', reset);
+      canvas.removeEventListener('quake-journey', steer);
       canvas.removeEventListener('webglcontextlost', lost);
       globe.dispose();
     },

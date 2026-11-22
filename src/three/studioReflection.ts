@@ -9,6 +9,7 @@ const roomUniforms = `
   uniform sampler2D studioConcrete;
   uniform float studioCarReady;
   uniform float closingFloor;
+  uniform float closingLight;
   uniform float studioDusk;
   uniform float garageStudioDim;
   uniform float garageStudioLow;
@@ -46,6 +47,7 @@ export function applyStudioReflection(
       studioChassis: { value: new THREE.Vector4(0, 0, 1, 2) },
       studioCarReady: { value: 0 },
       closingFloor: { value: 0 },
+      closingLight: { value: -1 },
       studioDusk: { value: 0 },
       garageStudioDim: { value: 0 },
       garageStudioLow: { value: 0 },

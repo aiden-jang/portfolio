@@ -20,6 +20,7 @@ import { Lineup } from './lineup/Lineup';
 import { useLineup } from './lineup/state';
 import { useGarageStudio, startFromLink } from './garageStudio/state';
 import { OpeningPoster } from './ui/OpeningPoster';
+import { OpeningLoopControl } from './ui/OpeningLoopControl';
 import './ui/reading-flow.css';
 import './ui/dialog-motion.css';
 import './ui/showroom-layout.css';
@@ -111,6 +112,7 @@ export function App() {
               }}
             />
             <CarControls />
+            <OpeningLoopControl />
             <Sections />
             <CarLoadNotice />
             <CommandMenu onSection={scrollToSection} />

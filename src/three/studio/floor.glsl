@@ -151,6 +151,14 @@
           + vec3(.031,.027,.023)*pool*grain
           + vec3(.043,.038,.032)*streak*grain
           + vec3(.016,.012,.009)*streakEdge*grain;
+        if (closingLight >= 0.) {
+          vec2 center = vec2(mix(4.25,.38,closingLight),mix(-2.3,.1,closingLight));
+          vec2 spread = (floorFromCar - center) / vec2(2.8,4.35);
+          float daylight = exp(-dot(spread,spread)*1.38);
+          float rake = floorFromCar.x - mix(4.8,1.18,closingLight) - .23*floorFromCar.y;
+          float wash = exp(-rake*rake*.81 - pow((floorFromCar.y-.15)/3.5,2.));
+          concrete = .53*concrete + (vec3(.052,.042,.031)*daylight + vec3(.018,.015,.012)*wash)*grain;
+        }
         float sawcut = exp(-abs(floorFromCar.x-2.97)*35.);
         concrete *= 1.-.25*sawcut*pool;
         vec3 carReflection = satinMirror * rimFade * .22 * concreteBreakup;

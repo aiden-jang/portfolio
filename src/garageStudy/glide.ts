@@ -2,38 +2,13 @@ import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { repaintStudio } from '../garageStudio/state';
 import { CatmullRomCurve3, MathUtils, PerspectiveCamera, Vector3 } from 'three';
 import { track, useGarageStudy } from './state';
+import { truckFocus, truckPhone, truckWide } from './lineupTruck';
+import { useLineup } from '../lineup/state';
 
 function path(points: [number, number, number][]) {
   return new CatmullRomCurve3(points.map(([x, y, z]) => new Vector3(x, y, z)));
 }
 
-const desktop = path([
-  [-4.0, 1.43, -2.83],
-  [-2.6, 1.29, -1.91],
-  [-1.05, 1.24, -1.5],
-  [-0.17, 1.18, -2.48],
-  [-0.35, 1.23, -4.26],
-  [0.51, 1.39, -6.1],
-  [2.94, 1.93, -8.1],
-]);
-const phone = path([
-  [-4.58, 1.7, -3.69],
-  [-2.96, 1.48, -2.29],
-  [-1.22, 1.34, -1.84],
-  [-0.25, 1.28, -2.8],
-  [-0.45, 1.39, -4.92],
-  [0.51, 1.61, -6.88],
-  [2.38, 2.23, -9.7],
-]);
-const subjects = path([
-  [-0.88, 0.88, -0.51],
-  [-0.66, 0.91, -0.77],
-  [0.46, 0.76, -0.66],
-  [1.02, 0.7, -1.07],
-  [1.35, 0.65, -1.63],
-  [1.4, 0.58, -1.42],
-  [1.42, 0.53, -1.28],
-]);
 const bumper = path([
   [2.25, 0.83, 4.7],
   [1.3, 0.69, 3.7],
@@ -53,7 +28,8 @@ export function frameGlide(
   bumperGlide: boolean,
 ) {
   const { playing } = useGarageStudy.getState();
-  const delta = Math.min(dt, 0.064);
+  if (playing && reduced) useGarageStudy.setState({ playing: false });
+  const delta = Math.min(dt, bumperGlide ? 0.064 : 0.2);
   if (!track.entry) {
     track.fromX = camera.position.x;
     track.fromY = camera.position.y;
@@ -64,23 +40,26 @@ export function frameGlide(
     track.targetZ = currentTarget.z;
   }
   track.entry = reduced ? 1 : Math.min(1, track.entry + delta / 0.72);
-  if (playing && track.entry >= 1) {
-    track.position = Math.min(1, track.position + delta / (bumperGlide ? 3.4 : 6.2));
+  if (
+    playing &&
+    !reduced &&
+    track.entry >= 1 &&
+    (bumperGlide || useLineup.getState().status === 'ready') &&
+    !document.hidden
+  ) {
+    track.position = Math.min(1, track.position + delta / (bumperGlide ? 3.4 : 4.25));
     if (track.position === 1) useGarageStudy.setState({ playing: false });
   }
   const time = track.position;
   const t = time * time * (3 - 2 * time);
   const entry = track.entry * track.entry * (3 - 2 * track.entry);
-  (bumperGlide ? bumper : phoneSize ? phone : desktop).getPoint(t, eye);
+  (bumperGlide ? bumper : phoneSize ? truckPhone : truckWide).getPoint(t, eye);
   if (bumperGlide) {
     look.copy(bumperSubject);
     if (phoneSize) eye.z += 0.9;
-  } else subjects.getPoint(t, look);
-  if (phoneSize && !bumperGlide) {
-    const reveal = MathUtils.smoothstep(t, 0.6, 1);
-    look.x -= 0.76 * reveal;
-    look.y += 0.12;
-    look.z += 0.36 * reveal;
+  } else {
+    truckFocus.getPoint(t, look);
+    if (phoneSize) look.x -= 0.82 * MathUtils.smoothstep(t, 0.58, 1);
   }
   camera.position.set(
     MathUtils.lerp(track.fromX, eye.x, entry),
@@ -92,7 +71,7 @@ export function frameGlide(
     MathUtils.lerp(track.targetY, look.y, entry),
     MathUtils.lerp(track.targetZ, look.z, entry),
   );
-  const fov = bumperGlide ? (phoneSize ? 51 : 38) : phoneSize ? 65 : 44;
+  const fov = bumperGlide ? (phoneSize ? 51 : 38) : phoneSize ? MathUtils.lerp(54, 65, t) : 40;
   camera.fov = MathUtils.lerp(track.fromFov, fov, entry);
   camera.updateProjectionMatrix();
   camera.lookAt(currentTarget);

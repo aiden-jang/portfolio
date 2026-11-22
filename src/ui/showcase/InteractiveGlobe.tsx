@@ -3,8 +3,9 @@ import { GlobeControls } from './GlobeControls';
 import { GlobeEventCard } from './GlobeEventCard';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from '../ScreenshotViewer';
-import { ScreenshotImage } from '../ScreenshotImage';
+import { GlobeArtwork } from './GlobeArtwork';
 import { previewLink } from '../previewLinks';
+import { setQuakeManual, syncQuakeCamera } from './quakeProgress';
 
 type Engine = ReturnType<(typeof import('./globe-engine'))['createOrbitGlobe']>;
 const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
@@ -13,10 +14,11 @@ const START_THRESHOLD = 0.12;
 type GlobeProps = {
   image: string;
   caption: string;
+  journey?: boolean;
   onCompare?: (trigger: HTMLButtonElement) => void;
 };
 
-export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
+export function InteractiveGlobe({ image, caption, onCompare, journey }: GlobeProps) {
   const figure = useRef<HTMLElement>(null),
     canvas = useRef<HTMLCanvasElement>(null),
     launch = useRef<HTMLButtonElement>(null),
@@ -41,6 +43,7 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
     [captured, setCaptured] = useState('');
   const exitRef = useRef<() => void>(() => {});
   exitRef.current = () => {
+    setQuakeManual(figure.current, false);
     setMode(null);
     setRotating(false);
     setSelected(null);
@@ -111,6 +114,7 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
           requestedFocus.current || !!figure.current?.contains(document.activeElement);
         requestedFocus.current = false;
         setPhase('error');
+        setQuakeManual(figure.current, false);
         setMode(null);
         setRotating(false);
         if (restoreFocus)
@@ -134,6 +138,7 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
         if (disposed) return;
         handle.current = engine.createOrbitGlobe(target, snapshot, geography, aurora, {
           autoRotate: mode === 'auto',
+          onManual: journey ? () => setQuakeManual(target, true) : undefined,
           onRotation: setRotating,
           paused: () =>
             !visible.current ||
@@ -154,6 +159,7 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
           }),
         );
         setPhase('ready');
+        if (journey && mode === 'auto') syncQuakeCamera(target);
       })
       .catch((error) => {
         if (error?.name !== 'AbortError') failed();
@@ -164,7 +170,7 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
       handle.current?.dispose();
       handle.current = null;
     };
-  }, [mode]);
+  }, [mode, journey]);
   const ready = !!mode && phase === 'ready';
   useGlobeCardPosition(figure, ready && !!selected);
   useEffect(() => {
@@ -182,36 +188,18 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
         data-has-event={ready && !!selected}
       >
         <div className="project-preview orbit-preview" data-project="everythingisfine">
-          <div className="preview-thumbnail">
-            <div className="orbit-art" data-poster={!posterUnavailable}>
-              <ScreenshotImage
-                key={posterUnavailable ? 'screenshot' : 'poster'}
-                src={posterUnavailable ? image : '/projects/globe-opening-desktop.webp'}
-                narrowSrc={posterUnavailable ? undefined : '/projects/globe-opening-mobile.webp'}
-                alt={
-                  posterUnavailable
-                    ? 'meanwhile. product interface'
-                    : 'Globe centered on the North Pacific, with the Kamchatka earthquake marked'
-                }
-                lazy
-                onReady={posterUnavailable ? undefined : onPosterReady}
-                onUnavailable={
-                  posterUnavailable ? () => setScreenshotUnavailable(true) : onPosterUnavailable
-                }
-              />
-              {mode && (
-                <div className="orbit-viewport" aria-busy={phase === 'loading'}>
-                  <canvas
-                    ref={canvas}
-                    id="globe-view"
-                    tabIndex={ready ? 0 : -1}
-                    role="img"
-                    aria-label="Interactive globe. Drag or use arrow keys to rotate. Press zero to reset, Escape to finish."
-                  />
-                </div>
-              )}
-            </div>
-          </div>
+          <GlobeArtwork
+            image={image}
+            fallback={posterUnavailable}
+            canvas={canvas}
+            started={!!mode}
+            loading={phase === 'loading'}
+            ready={ready}
+            journey={journey}
+            onPosterReady={onPosterReady}
+            onPosterUnavailable={onPosterUnavailable}
+            onScreenshotUnavailable={() => setScreenshotUnavailable(true)}
+          />
           <div className="orbit-actions">
             {!ready && (
               <button
@@ -222,6 +210,7 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
                 onClick={() => {
                   mayAutoStart.current = false;
                   requestedFocus.current = true;
+                  if (journey) setQuakeManual(figure.current, true);
                   setMode('manual');
                 }}
               >
@@ -237,7 +226,7 @@ export function InteractiveGlobe({ image, caption, onCompare }: GlobeProps) {
                 reduced={reduced}
                 rotating={rotating}
                 showRef={show}
-                onRotate={() => handle.current?.setRotating(!rotating)}
+                onRotate={() => handle.current?.toggleRotation()}
                 eventSelected={!!selected}
                 onShow={() => handle.current?.[selected ? 'showEvent' : 'showFeatured']()}
                 onReset={() => handle.current?.reset()}

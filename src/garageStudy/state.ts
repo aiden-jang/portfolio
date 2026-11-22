@@ -22,6 +22,12 @@ export const track = {
   targetZ: 0,
 };
 
+export function startLineupGlide() {
+  track.position = 0;
+  track.entry = 1;
+  useGarageStudy.setState({ camera: 'glide', playing: true });
+}
+
 export function resetStudyCamera() {
   useGarageStudy.setState({ camera: 'orbit', playing: false });
 }

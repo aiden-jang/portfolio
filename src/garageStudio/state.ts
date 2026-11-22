@@ -1,8 +1,9 @@
+import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { clearStudioCut } from './studioCut';
 import { useMatchedSwap } from './matchedSwap';
 import { stopOrbitMotion } from './orbitMotion';
 import { resetExhibit } from '../garageExhibits/state';
-import { resetStudyCamera, track, useGarageStudy } from '../garageStudy/state';
+import { resetStudyCamera, startLineupGlide, track, useGarageStudy } from '../garageStudy/state';
 import { create } from 'zustand';
 import { useAppStore } from '../store';
 import { useLineup } from '../lineup/state';
@@ -157,7 +158,13 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
     resetStudyCamera();
     if (last === 'detail' && beforeDetail) restoreCameraAndCar(beforeDetail);
     if (last === 'lineup') useLineup.getState().close();
-    if (chapter === 'lineup') useLineup.getState().open();
+    if (chapter === 'lineup') {
+      useLineup.getState().open();
+      if (!prefersReducedMotion()) {
+        startLineupGlide();
+        set({ proposed: false });
+      }
+    }
     if (chapter === 'detail') {
       const prior = setup();
       const id = supportsDetail(prior.carIndex) ? prior.carIndex : 15;
@@ -248,12 +255,16 @@ export function startFromLink(params: URLSearchParams) {
   const chapter = params.get('scene');
   if (chapter && Object.hasOwn(chapters, chapter)) state.select(chapter as Chapter);
   useGarageStudio.setState({
-    proposed: params.get('variant') !== 'current',
+    proposed: params.has('variant')
+      ? params.get('variant') !== 'current'
+      : chapter !== 'lineup' || prefersReducedMotion(),
     guides: params.get('guides') === '1',
   });
   const camera = params.get('camera');
   const { chapter: view, proposed } = useGarageStudio.getState();
   const car = useAppStore.getState().carIndex;
+  if (view === 'lineup' && (proposed || (params.has('variant') && camera !== 'glide')))
+    resetStudyCamera();
   const look = params.get('studioLook');
   useGarageStudy.setState({
     refined: params.get('finish') !== 'current',
