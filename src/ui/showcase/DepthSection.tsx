@@ -10,18 +10,40 @@ const gap = (emsc.depthKm - usgs.depthKm).toFixed(1);
 export function DepthSection({
   selected,
   onSelect,
+  controlsFirst = false,
 }: {
   selected?: Agency;
   onSelect?: (agency: Agency) => void;
+  controlsFirst?: boolean;
 } = {}) {
   const [local, setLocal] = useState<Agency>('USGS');
   const active = selected ?? local;
+  const actions = (
+    <div className="creative-depth-actions" role="group" aria-label="Highlight a reported depth">
+      {kamchatkaExample.sources.map(({ name, depthKm }) => (
+        <button
+          key={name}
+          type="button"
+          aria-pressed={name === active}
+          data-agency={name}
+          onClick={() => {
+            setLocal(name);
+            onSelect?.(name);
+          }}
+        >
+          <span>{name}</span>
+          <strong>{depthKm.toFixed(1)} km</strong>
+        </button>
+      ))}
+    </div>
+  );
   return (
     <figure className="earth-depth creative-depth">
       <figcaption>
         <strong>Depth below the surface</strong>
         <span>M5.8 from both agencies</span>
       </figcaption>
+      {controlsFirst && actions}
       <div
         className="creative-depth-scale"
         style={
@@ -55,23 +77,7 @@ export function DepthSection({
           </div>
         </div>
       </div>
-      <div className="creative-depth-actions" role="group" aria-label="Highlight a reported depth">
-        {kamchatkaExample.sources.map(({ name, depthKm }) => (
-          <button
-            key={name}
-            type="button"
-            aria-pressed={name === active}
-            data-agency={name}
-            onClick={() => {
-              setLocal(name);
-              onSelect?.(name);
-            }}
-          >
-            <span>{name}</span>
-            <strong>{depthKm.toFixed(1)} km</strong>
-          </button>
-        ))}
-      </div>
+      {!controlsFirst && actions}
     </figure>
   );
 }

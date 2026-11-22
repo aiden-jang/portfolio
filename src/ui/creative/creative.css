@@ -299,43 +299,9 @@ html:root #project-iodine .scope-cases-single > div {
 .creative-case .request-replay {
   max-width: 910px;
 }
-.creative-case[data-case='iodine'] .featured-story-opening > :is(h4, p) {
-  display: none;
-}
-.creative-case[data-case='iodine'] .featured-story-opening:has([data-story-cover='iodine']) {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 20px;
-}
-.creative-case[data-case='iodine'] .featured-story-opening .reader-cover {
-  grid-area: 1/2;
-}
-.creative-case[data-case='iodine'] .featured-story-opening .iodine-story-example {
-  grid-area: 1/1;
-}
-.creative-case[data-case='iodine'] .featured-story-opening .reader-cover-frame {
-  height: clamp(170px, 22vw, 280px);
-}
 .creative-case .scope-study {
   max-width: none;
   margin-bottom: 34px;
-}
-.creative-quake-case {
-  display: grid;
-  grid-template-columns: minmax(0, 1.43fr) minmax(0, 1fr);
-  gap: clamp(12px, 4vw, 56px);
-  align-items: center;
-}
-.creative-case-globe img {
-  width: 100%;
-  display: block;
-  border-radius: 6px;
-}
-.creative-case-globe figcaption {
-  font-size: 12px;
-  color: #b6c5ce;
-  margin-top: 8px;
 }
 .creative-case :is(.work-story, .work-story-ending) {
   margin-top: 32px;
@@ -425,20 +391,6 @@ html:root #project-iodine .scope-cases-single > div {
   .creative-tour-actions {
     justify-content: flex-start;
     margin-top: 6px;
-  }
-  .creative-quake-case,
-  .creative-case[data-case='iodine'] .featured-story-opening:has([data-story-cover='iodine']) {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-  .creative-case[data-case='iodine'] .featured-story-opening .reader-cover {
-    grid-area: auto;
-  }
-  .creative-case[data-case='iodine'] .featured-story-opening .iodine-story-example {
-    grid-area: auto;
-  }
-  .creative-case[data-case='iodine'] .featured-story-opening .reader-cover-frame {
-    height: 98px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

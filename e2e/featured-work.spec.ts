@@ -188,3 +188,55 @@ test('the globe keeps the narrow-phone composition while WebGL loads', async ({ 
     releaseGeography();
   }
 });
+
+for (const [width, height] of [
+  [1440, 900],
+  [390, 660],
+]) {
+  test(`case study openings keep saved evidence interactive at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: {
+          writeText: async (value: string) => sessionStorage.setItem('copied-evidence', value),
+        },
+      });
+    });
+
+    await page.goto('/cases/iodine/');
+    const evidence = page.getByRole('region', { name: 'Recorded Iodine edit recovery' });
+    const undo = evidence.getByRole('button', { name: 'Undo edit', exact: true });
+    await expect(undo).toBeInViewport({ ratio: 1, timeout: 4000 });
+    const code = evidence.locator('.iodine-evidence-line');
+    await expect(code).toContainText('.trim()');
+    await undo.click();
+    await expect(code).not.toContainText('.trim()');
+    await expect(evidence.getByText('Revert feedback queued', { exact: true })).toBeVisible();
+    await expect(page).toHaveURL(/\/cases\/iodine\/\?edit=restored$/);
+    await page.getByRole('button', { name: 'Copy evidence link' }).click();
+    const saved = await page.evaluate(() => sessionStorage.getItem('copied-evidence'));
+    expect(saved).toMatch(/\/cases\/iodine\/\?edit=restored$/);
+    await page.goto(saved!);
+    await expect(evidence.getByText('File restored', { exact: true })).toBeVisible();
+    await evidence.getByRole('button', { name: 'Replay edit', exact: true }).click();
+    await expect(code).toContainText('.trim()');
+
+    await page.goto('/cases/meanwhile/?agency=EMSC');
+    const comparison = page.getByRole('region', { name: 'Kamchatka depth comparison' });
+    const emsc = comparison.getByRole('button', { name: 'EMSC 71.0 km', exact: true });
+    const usgs = comparison.getByRole('button', { name: 'USGS 54.7 km', exact: true });
+    await expect(emsc).toBeInViewport({ ratio: 1 });
+    await expect(emsc).toHaveAttribute('aria-pressed', 'true');
+    await expect(comparison.getByText('20260817_0000423', { exact: true })).toBeVisible();
+    await usgs.press('Enter');
+    await expect(usgs).toHaveAttribute('aria-pressed', 'true');
+    await expect(comparison.getByText('usd0015edq', { exact: true })).toBeVisible();
+    await expect(page).toHaveURL(/\/cases\/meanwhile\/\?agency=USGS$/);
+    await page.reload();
+    await expect(usgs).toHaveAttribute('aria-pressed', 'true');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+      width,
+    );
+  });
+}

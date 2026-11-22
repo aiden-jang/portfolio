@@ -1,4 +1,3 @@
-import { kamchatkaExample } from '../../data/kamchatkaExample';
 import { useEffect, useState } from 'react';
 import { WORK_ITEMS, workId } from '../../data/workItems';
 import { copyText } from '../../browserSharing';
@@ -6,8 +5,7 @@ import { WorkStoryOpening } from '../WorkStoryOpening';
 import { WorkStory } from '../WorkStory';
 import { WorkStoryEnding } from '../WorkStoryEnding';
 import { IodineSession, type IodinePhase } from '../showcase/iodine-session';
-import { DepthSection } from '../showcase/DepthSection';
-import { EarthquakeGlobeStill, EarthquakeMatchSignals } from '../showcase/EarthquakeEvidence';
+import { IodineCaseOpening, QuakeCaseOpening } from './CaseOpening';
 import { ScopedApprovals } from '../showcase/ScopedApprovals';
 import { ControlIcon } from '../ControlIcon';
 import { ResumeButton } from '../ResumeButton';
@@ -47,6 +45,7 @@ const stories = {
 export function StoryPage({ id }: { id: StoryId }) {
   const item = WORK_ITEMS.find((candidate) => workId(candidate) === id)!;
   const story = stories[id];
+  const redesigned = id === 'iodine' || id === 'everythingisfine';
   const root = portfolioPath(location.pathname);
   const [phase, setPhase] = useState<IodinePhase>(() =>
     new URLSearchParams(location.search).get('edit') === 'restored' ? 'restored' : 'edited',
@@ -80,48 +79,28 @@ export function StoryPage({ id }: { id: StoryId }) {
         : '#project-everythingisfine';
   return (
     <IodineSession.Provider value={{ phase, setPhase }}>
-      <div className="creative-case" data-case={id}>
+      <div
+        className="creative-case"
+        data-case={id}
+        data-opening={redesigned ? 'evidence' : undefined}
+      >
         <header className="creative-case-nav">
           <a href={root + section}>
             <ControlIcon name="arrow" /> Portfolio
           </a>
+          {redesigned && <span className="case-opening-label">{story.label}</span>}
           <ResumeButton />
         </header>
         <main className="story-scroll-area creative-case-content">
           <header className="creative-case-heading">
-            <p>{story.label}</p>
+            {!redesigned && <p>{story.label}</p>}
             <h1>{story.title}</h1>
             <p>{story.role}</p>
           </header>
           {id === 'everythingisfine' ? (
-            <div className="creative-quake-case">
-              <figure className="creative-case-globe">
-                <EarthquakeGlobeStill />
-                <figcaption>Off the east coast of Kamchatka · 17 Aug 2026</figcaption>
-              </figure>
-              <div>
-                <DepthSection selected={agency} onSelect={setAgency} />
-                <EarthquakeMatchSignals />
-                <p className="preview-inline-source">
-                  <a
-                    href={kamchatkaExample.report}
-                    target="_blank"
-                    rel="noopener"
-                    aria-describedby="external-link-hint"
-                  >
-                    USGS event record
-                  </a>
-                  <a
-                    href="https://github.com/aiden-jang/meanwhile/blob/main/src/sources/fixtures/one-quake-both-feeds.json"
-                    target="_blank"
-                    rel="noopener"
-                    aria-describedby="external-link-hint"
-                  >
-                    Matching fixture
-                  </a>
-                </p>
-              </div>
-            </div>
+            <QuakeCaseOpening agency={agency} onSelect={setAgency} />
+          ) : id === 'iodine' ? (
+            <IodineCaseOpening />
           ) : (
             <WorkStoryOpening item={item} />
           )}

@@ -67,7 +67,10 @@ function CodePanel({
   );
 }
 
-export function IodineContribution({ reader = false }: { reader?: boolean } = {}) {
+export function IodineContribution({
+  reader = false,
+  sourceLast = false,
+}: { reader?: boolean; sourceLast?: boolean } = {}) {
   const session = useContext(IodineSession);
   const [localPhase, setLocalPhase] = useState<IodinePhase>('edited');
   const phase = session?.phase ?? localPhase;
@@ -106,6 +109,19 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
   if (reader) {
     const lines = (restored ? example.restored : example.after).trimEnd().split('\n');
     const [beforeEdit, afterEdit] = lines[1].split('.trim()');
+    const source = (
+      <p className="iodine-example-source">
+        Recorded example file.{' '}
+        <a
+          href={example.source + '#L92-L107'}
+          target="_blank"
+          rel="noopener"
+          aria-describedby="external-link-hint"
+        >
+          View Iodine’s restore code <span aria-hidden="true">↗</span>
+        </a>
+      </p>
+    );
     return (
       <div className="iodine-story-example" data-phase={phase}>
         <div className="cinema-code-heading">
@@ -144,17 +160,7 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
           {undo}
           <span className="iodine-archive-label">Recorded example</span>
         </div>
-        <p className="iodine-example-source">
-          Recorded example file.{' '}
-          <a
-            href={example.source + '#L92-L107'}
-            target="_blank"
-            rel="noopener"
-            aria-describedby="external-link-hint"
-          >
-            View Iodine’s restore code <span aria-hidden="true">↗</span>
-          </a>
-        </p>
+        {!sourceLast && source}
         <div className="cinema-result" aria-live="polite">
           <strong>{restored ? 'Revert feedback queued' : 'Snapshot saved'}</strong>
           <p>
@@ -164,6 +170,7 @@ export function IodineContribution({ reader = false }: { reader?: boolean } = {}
           </p>
         </div>
         {restored && <RestoredFeedback onFile={revealLine} />}
+        {sourceLast && source}
       </div>
     );
   }
