@@ -2,15 +2,13 @@ import { useDialogFocus } from '../useDialogFocus';
 import { usePageScrollLock } from '../usePageScrollLock';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CARS } from '../../config';
+import { CARS, F40_INDEX } from '../../config';
 import { useAppStore } from '../../store';
 import './credits.css';
 
 export function Credits() {
   const current = useAppStore((state) =>
-    state.sceneUnavailable || state.isCarLoading || state.carLoadError
-      ? null
-      : CARS[state.carIndex],
+    state.sceneUnavailable || state.isCarLoading || state.carLoadError ? null : CARS[F40_INDEX],
   );
   const credit = current?.credit;
   const credited = CARS.filter((car) => !!car.credit);

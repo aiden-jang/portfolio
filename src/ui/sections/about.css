@@ -35,8 +35,8 @@ html:root #sec-about {
   text-wrap: balance;
 }
 .about-body {
-  margin: 24px 0 0;
-  max-width: 58ch;
+  margin: 0;
+  max-width: 32ch;
   font-size: clamp(16px, 1.35vw, 19px);
   line-height: 1.6;
   color: var(--color-muted);
@@ -54,7 +54,7 @@ html:root #sec-about {
 }
 .about-framing-image {
   position: relative;
-  border: 1px solid #504838;
+  border: 1px solid var(--color-line);
   border-radius: 9px;
   overflow: hidden;
   background: #0a0909;
@@ -63,28 +63,6 @@ html:root #sec-about {
   display: block;
   width: 100%;
   height: auto;
-}
-.about-frame-lines {
-  position: absolute;
-  inset: 12% 8% 9%;
-  border: 1px solid #bdad8b90;
-  background:
-    linear-gradient(
-      90deg,
-      transparent calc(33.33% - 0.5px),
-      #bdad8b4d 33.33%,
-      transparent calc(33.33% + 0.7px),
-      transparent calc(66.66% - 0.5px),
-      #bdad8b4d 66.66%,
-      transparent calc(66.66% + 0.7px)
-    ),
-    linear-gradient(
-      0deg,
-      transparent calc(33.33% - 0.5px),
-      #bdad8b4d 33.33%,
-      transparent calc(33.33% + 0.7px)
-    );
-  pointer-events: none;
 }
 .about-framing-study figcaption {
   display: grid;
@@ -151,9 +129,6 @@ html:root #sec-about {
     line-height: 1.1;
     letter-spacing: -0.041em;
   }
-  .about-body {
-    margin-top: 15px;
-  }
 }
 
 .about-story-link {
@@ -208,4 +183,51 @@ html:root #sec-about {
 .about-framing-actions svg {
   width: 15px;
   height: 15px;
+}
+
+.about-copy > .about-lead {
+  max-width: 23ch;
+  margin: 0 0 clamp(29px, 4vw, 58px);
+}
+#sec-about .about-copy > h2 {
+  margin-bottom: clamp(14px, 2.5vw, 31px);
+}
+#sec-about .about-reel-heading h3 {
+  font-size: clamp(17px, 1.6vw, 23px);
+  letter-spacing: -0.02em;
+}
+#sec-about .about-reel-stage {
+  max-height: 65svh;
+}
+#sec-about .about-reel-stage :is(video, img) {
+  object-fit: cover;
+}
+@media (max-width: 700px) {
+  .about-copy > .about-lead {
+    font-size: clamp(28px, 8.2vw, 38px);
+  }
+}
+#sec-about .about-reel[data-phase='ended'] .about-reel-play {
+  inset: 12px 12px auto auto;
+  min-height: 44px;
+}
+
+.about-reel-story {
+  display: grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(210px, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+  margin-bottom: clamp(44px, 6vw, 88px);
+}
+@media (max-width: 899px) {
+  .about-reel-story {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .about-reel-story .about-body {
+    max-width: 39ch;
+  }
+}
+.about-framing-study:not(:focus-within) .about-frame-split {
+  display: none;
 }

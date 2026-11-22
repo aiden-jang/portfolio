@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type * as THREE from 'three';
-import { CARS, GARAGE_INDICES, adjacentCar } from './config';
+import { CARS, DEFAULT_CAR_INDEX, GARAGE_INDICES, adjacentCar } from './config';
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
 import { cameraViews, isFerrariView, type CameraView } from './three/cameraViews';
@@ -94,8 +94,17 @@ function resetFerrariView(state: AppState) {
   };
 }
 
+function initialCarIndex() {
+  if (typeof location === 'undefined') return DEFAULT_CAR_INDEX;
+  const sharedCar = new URLSearchParams(location.search).get('car');
+  const index = sharedCar?.trim() ? Number(sharedCar) : NaN;
+  return Number.isInteger(index) && index >= 0 && index < CARS.length ? index : DEFAULT_CAR_INDEX;
+}
+
+const initialIndex = initialCarIndex();
+
 export const useAppStore = create<AppState>((set, get) => ({
-  carIndex: 0,
+  carIndex: initialIndex,
   themeName:
     typeof location === 'undefined'
       ? DEFAULT_LIGHTING
@@ -177,7 +186,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     bodyMaterial: null,
     bodyOriginalColor: null,
     lamps: [],
-    exposureCurrent: CARS[0]?.exposure ?? 1,
+    exposureCurrent: CARS[initialIndex].exposure,
     floorReflection: 1,
     lightPulseT: 0,
     carModel: null,

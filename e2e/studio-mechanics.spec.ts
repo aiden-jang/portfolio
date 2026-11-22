@@ -7,7 +7,7 @@ for (const width of [1440, 390]) {
     test.use({ viewport: { width, height: 844 }, hasTouch: phone, isMobile: phone });
     test('reopens both race wings at the shared state', async ({ page }) => {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-      await page.goto('/?garage=studio');
+      await page.goto('/?garage=studio&car=0');
       const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
       const button = (name: string) => studio.getByRole('button', { name, exact: true });
       const ready = () => expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });

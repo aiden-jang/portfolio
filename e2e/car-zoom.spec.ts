@@ -25,7 +25,7 @@ for (const width of [1440, 390, 320]) {
       await page.route('**/_vercel/**', (route) =>
         route.fulfill({ body: '', contentType: 'application/javascript' }),
       );
-      await page.goto('/');
+      await page.goto('/?car=0');
       const dock = page.locator(width < 768 ? '#mobile-bar' : '#desktop-dock');
       const zoomIn = dock.getByRole('button', { name: 'Zoom in', exact: true });
       const zoomOut = dock.getByRole('button', { name: 'Zoom out', exact: true });

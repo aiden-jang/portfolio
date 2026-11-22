@@ -69,7 +69,7 @@ export function Scene({ getScrollT }: Props) {
             <LineupScene />
           </Suspense>
         ) : (
-          <Floor studio={studio} />
+          <Floor studio={studio || contactVisible} closing={contactVisible && !garageStudio} />
         )}
         <Car />
         <CameraRig getScrollT={getScrollT} lineup={lineup || garageStudio} />

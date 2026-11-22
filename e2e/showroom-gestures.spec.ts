@@ -59,7 +59,7 @@ test('a slow Studio switch retains the outgoing photo and name with reduced moti
   });
 
   try {
-    await page.goto('/?garage=studio');
+    await page.goto('/?garage=studio&car=0');
     const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
     await expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
     await studio.getByRole('button', { name: 'Choose car', exact: true }).click();

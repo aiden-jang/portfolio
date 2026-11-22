@@ -97,5 +97,8 @@ The [finished](../public/projects/showroom-finished.webp) and
 the portfolio’s Studio renderer. Both use the Ferrari F40 by
 [vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95),
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-The About slider varies how much of the clay render is visible. Opening the
-shot in Studio and returning preserves the slider and the reading position.
+The full clay frame comes into view before scrolling reveals paint from the nose.
+The slider also supports manual control. Opening the shot in Studio and returning
+preserves the slider and reading position. The About reel pairs local project captures
+with a tighter mobile view for Iodine. It loops while in view and plays on request when
+reduced motion is enabled.

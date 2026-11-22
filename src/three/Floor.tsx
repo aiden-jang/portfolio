@@ -21,7 +21,15 @@ const TRANSITION_RATE = 2.5;
 type Footprint = NonNullable<ReturnType<typeof studioCarFootprint>>;
 export type LineupFootprints = readonly [Footprint, Footprint?];
 
-export function Floor({ studio, lineup }: { studio: boolean; lineup?: LineupFootprints | null }) {
+export function Floor({
+  studio,
+  lineup,
+  closing = false,
+}: {
+  studio: boolean;
+  lineup?: LineupFootprints | null;
+  closing?: boolean;
+}) {
   const { gl, scene } = useThree();
   const mobile = useThree((state) => studio && state.size.width < 768);
   const studioTint = useMemo(() => new THREE.Color(), []);
@@ -95,6 +103,7 @@ export function Floor({ studio, lineup }: { studio: boolean; lineup?: LineupFoot
     );
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
     if (studio) {
+      uniforms.closingFloor.value = Number(closing);
       const settle = Math.min(1, dt * 10);
       const dusk = inStudioDusk(preview);
       uniforms.studioDusk.value += (Number(dusk) - uniforms.studioDusk.value) * settle;

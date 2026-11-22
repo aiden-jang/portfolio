@@ -131,7 +131,7 @@ for (const width of [1440, 390]) {
 
     test('compares finishes, zooms into the F40 deck, and shares the camera', async ({ page }) => {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-      await page.goto('/?garage=studio');
+      await page.goto('/?garage=studio&car=0');
       const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
       const button = (name: string) =>
         studio.getByRole('button', { name, exact: true }).filter({ visible: true });

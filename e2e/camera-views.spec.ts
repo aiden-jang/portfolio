@@ -26,7 +26,7 @@ for (const width of [1440, 390]) {
     test.use({ viewport: { width, height: 844 }, isMobile: width < 768, hasTouch: width < 768 });
     test.beforeEach(async ({ page }) => {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-      await page.goto('/');
+      await page.goto('/?car=0');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60000 });
     });
 

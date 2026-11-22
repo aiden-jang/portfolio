@@ -5,7 +5,6 @@ import { parseScenePaint, type ActiveBodyColor } from '../paint';
 import { parseLighting } from '../lighting';
 
 export function useSceneUrl() {
-  const setCarIndex = useAppStore((state) => state.setCarIndex);
   const setThemeName = useAppStore((state) => state.setThemeName);
   const applyBodyColor = useAppStore((state) => state.applyBodyColor);
   const hasBodyMaterial = useAppStore((state) => state.hasBodyMaterial);
@@ -17,10 +16,6 @@ export function useSceneUrl() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const carIndex = Number(params.get('car'));
-    if (Number.isInteger(carIndex) && carIndex >= 0 && carIndex < CARS.length)
-      setCarIndex(carIndex);
-
     const light = params.get('light');
     if (light !== null) setThemeName(parseLighting(light));
 
@@ -29,7 +24,7 @@ export function useSceneUrl() {
       useAppStore.setState({ activeBodyColor: scenePaintRef.current });
     if (params.has('exhibit')) scenePaintRef.current = null;
     setSceneReady(true);
-  }, [setCarIndex, setThemeName]);
+  }, [setThemeName]);
 
   useEffect(() => {
     if (!sceneReady) return;

@@ -13,26 +13,26 @@ async function accessible(page: Page) {
   ).toEqual([]);
 }
 
-function carPixels({ width, height, data }: PNG): number {
-  let red = 0;
+function carPixels({ width, height, data }: PNG, yellow: boolean): number {
+  let count = 0;
   for (let y = Math.floor(height * 0.3); y < height * 0.78; y += 2) {
     for (let x = 0; x < width; x += 2) {
       const offset = (y * width + x) * 4;
-      if (
-        data[offset] > 60 &&
-        data[offset] > data[offset + 1] * 1.4 &&
-        data[offset] > data[offset + 2] * 1.4
-      )
-        red++;
+      const [r, g, b] = data.subarray(offset, offset + 3);
+      if (yellow ? r > 120 && g > r * 0.6 && g > b * 1.6 : r > 60 && r > g * 1.4 && r > b * 1.4)
+        count++;
     }
   }
-  return red;
+  return count;
 }
 
-async function expectVisibleCar(page: Page, timeout = process.env.CI ? 60_000 : 20_000) {
+async function expectVisibleCar(
+  page: Page,
+  { timeout = process.env.CI ? 60_000 : 20_000, yellow = false } = {},
+) {
   await expect(page.locator('.portfolio-scene canvas')).toBeVisible();
   await expect(async () => {
-    const pixels = carPixels(await captureShowroom(page, process.env.CI ? 20_000 : 8_000));
+    const pixels = carPixels(await captureShowroom(page, process.env.CI ? 20_000 : 8_000), yellow);
     expect(pixels).toBeGreaterThan(1000);
   }).toPass({ timeout });
 }
@@ -58,7 +58,7 @@ for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 900 });
       const errors: string[] = [];
       page.on('pageerror', (error) => errors.push(error.message));
-      await page.goto('/');
+      await page.goto('/?car=0');
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
       await expectVisibleCar(page);
@@ -349,7 +349,7 @@ test('a delayed effects download does not block content or the model request', a
     await held;
     await route.continue();
   });
-  const model = page.waitForRequest('**/models/ferrari-f120-f40.glb');
+  const model = page.waitForRequest('**/models/corvette-opening.glb');
   const effectsDownloaded = page.waitForResponse('**/Effects-*.js');
   try {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -361,7 +361,7 @@ test('a delayed effects download does not block content or the model request', a
   }
   await (await effectsDownloaded).finished();
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-  await expectVisibleCar(page);
+  await expectVisibleCar(page, { yellow: true });
   await page.evaluate(async () => {
     for (let frame = 0; frame < 6; frame++)
       await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
@@ -388,5 +388,5 @@ test('clean capture mode frames a visible car without page chrome', async ({ pag
   await expect(page.locator('.portfolio-scene canvas')).toBeVisible();
   await expect(page.locator('body')).toHaveAttribute('data-car-view', 'visible');
   await expect(page.getByRole('heading')).toHaveCount(0);
-  await expectVisibleCar(page, 60_000);
+  await expectVisibleCar(page, { timeout: 60_000 });
 });

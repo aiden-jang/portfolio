@@ -290,8 +290,9 @@ Near-lossless WebP is used only when smaller, with measured RGB differences no
 greater than 2/255 and alpha preserved exactly; otherwise the original image stays.
 The source GLB is 78,448,624 bytes and the optimized asset is 44,385,812 bytes.
 The yellow TF Sport livery is fixed, with no repaint controls or authored animations.
-Flat aero and underbody meshes remain visible. The model loads only when selected,
-outside the arrival prefetch pool. This asset remains a substantial optional download.
+Flat aero and underbody meshes remain visible. The homepage uses a separate
+[texture-reduced copy](../public/models/corvette-opening.glb) with the same mesh, embedded
+credits and livery. Garage Studio loads the full-resolution model for close-ups.
 
 ## BMW M1 Turbo
 

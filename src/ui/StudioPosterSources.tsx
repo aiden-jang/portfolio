@@ -10,34 +10,54 @@ const layouts = [
 
 const base = '/showroom/studio/studio-';
 
+const corvetteBase = '/showroom/corvette/corvette-';
+
+export const CORVETTE_POSTER = corvetteBase + 'desktop.webp';
 export const STUDIO_POSTER = base + 'desktop.webp';
 
-export function StudioPosterSources({ opening = false }: { opening?: boolean }) {
+export function StudioPosterSources({
+  opening = false,
+  corvette = false,
+}: {
+  opening?: boolean;
+  corvette?: boolean;
+}) {
+  const prefix = corvette ? corvetteBase : base;
   return (
     <>
       {layouts.map(([name, media]) => (
-        <StudioSource key={name} name={name} media={media} opening={opening} />
+        <StudioSource key={name} name={name} media={media} opening={opening} prefix={prefix} />
       ))}
       {opening && (
         <source
           media="(prefers-reduced-motion: no-preference)"
-          srcSet={base + 'desktop-motion.webp'}
+          srcSet={prefix + 'desktop-motion.webp'}
         />
       )}
     </>
   );
 }
 
-function StudioSource({ name, media, opening }: { name: string; media: string; opening: boolean }) {
+function StudioSource({
+  name,
+  media,
+  opening,
+  prefix,
+}: {
+  name: string;
+  media: string;
+  opening: boolean;
+  prefix: string;
+}) {
   return (
     <>
       {opening && (
         <source
           media={media + ' and (prefers-reduced-motion: no-preference)'}
-          srcSet={base + name + '-motion.webp'}
+          srcSet={prefix + name + '-motion.webp'}
         />
       )}
-      <source media={media} srcSet={base + name + '.webp'} />
+      <source media={media} srcSet={prefix + name + '.webp'} />
     </>
   );
 }

@@ -183,10 +183,12 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         const study = target.getByRole('img', { name: /^Finished Ferrari F40/ });
         await expect(study).toHaveAttribute('src', '/projects/showroom-finished.webp');
         const frame = await study.boundingBox();
+        const reel = await target.locator('.about-reel').boundingBox();
         const story = await target.locator('.about-story').boundingBox();
         const details = await target.locator('.about-details').boundingBox();
-        if (width >= 900) expect(story!.x).toBeGreaterThan(frame!.x + frame!.width);
-        else expect(story!.y).toBeGreaterThan(frame!.y + frame!.height);
+        if (width >= 900) expect(story!.x).toBeGreaterThan(reel!.x + reel!.width);
+        else expect(story!.y).toBeGreaterThan(reel!.y + reel!.height);
+        expect(frame!.y).toBeGreaterThan(story!.y + story!.height);
         expect(details!.y).toBeGreaterThan(story!.y + story!.height);
         const contribution = target.getByRole('link', { name: 'iodine', exact: true });
         await expect(contribution).toHaveAccessibleDescription('Opens in a new tab');

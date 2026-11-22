@@ -77,12 +77,9 @@ export function useShowroomTransition() {
         // Finish the fade where the dock stops fitting in the Intro viewport.
         const dockEnd = Math.max(0.015, (intro.offsetHeight + 0.5) / h - 1);
         const dock = 1 - smoothProgress(progress, 0.005, dockEnd);
-        const glow = smoothProgress(contactProgress, 0.32, 0.94);
         root.style.setProperty('--garage-controls-opacity', String(dock));
-        root.style.setProperty('--contact-glow-opacity', String(glow));
       } else {
         root.style.removeProperty('--garage-controls-opacity');
-        root.style.removeProperty('--contact-glow-opacity');
       }
 
       const arrival = clamp((h * 0.95 - work.getBoundingClientRect().top) / (h * 0.9), 0, 1);
@@ -151,7 +148,6 @@ export function useShowroomTransition() {
         '--work-figure-scale',
         '--work-poster-opacity',
         '--garage-controls-opacity',
-        '--contact-glow-opacity',
       ]) {
         root.style.removeProperty(name);
       }

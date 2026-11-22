@@ -84,7 +84,7 @@ test('a slow car swap keeps its status clear of the header and controls', async 
     await route.continue();
   });
   try {
-    await page.goto('/');
+    await page.goto('/?car=0');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await page.getByRole('button', { name: /Browse cars. Ferrari F40/ }).click();
     await page.getByRole('button', { name: 'Show Porsche 911 GT3 RS, 992', exact: true }).click();

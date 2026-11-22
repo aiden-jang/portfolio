@@ -1,17 +1,55 @@
-import { useId, useState, type CSSProperties } from 'react';
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { openAboutShot } from '../../garageStudio/aboutShot';
 import { useAppStore } from '../../store';
 import { ControlIcon } from '../ControlIcon';
 
 export function AboutFraming() {
-  const [amount, setAmount] = useState(50);
+  const [amount, setAmount] = useState(0);
+  const image = useRef<HTMLDivElement>(null);
+  const [manual, setManual] = useState(false);
+  useEffect(() => {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let frame = 0;
+    function update() {
+      frame = 0;
+      if (manual || !image.current) return;
+      if (reduced.matches) {
+        setAmount(50);
+        return;
+      }
+      const { top, height } = image.current.getBoundingClientRect();
+      const headerBottom =
+        document.querySelector('.portfolio-header')?.getBoundingClientRect().bottom ?? 0;
+      const visibleSpace = Math.max(0, innerHeight - height - headerBottom);
+      const start = innerHeight - height - visibleSpace * 0.54;
+      const end = Math.max(headerBottom + 16, innerHeight * 0.23);
+      // Keep the complete clay frame visible before scrubbing into the paint.
+      const travel = Math.max(64, start - end);
+      setAmount(Math.round(100 * Math.max(0, Math.min(1, (start - top) / travel))));
+    }
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(update);
+    }
+    addEventListener('scroll', schedule, { passive: true });
+    addEventListener('resize', schedule);
+    reduced.addEventListener('change', schedule);
+    update();
+    return () => {
+      cancelAnimationFrame(frame);
+      removeEventListener('scroll', schedule);
+      removeEventListener('resize', schedule);
+      reduced.removeEventListener('change', schedule);
+    };
+  }, [manual]);
+  const reveal = manual || amount === 0 || amount === 100 ? amount : 14 + 0.66 * amount;
   const id = useId();
   const sceneUnavailable = useAppStore((state) => state.sceneUnavailable);
   return (
     <figure className="about-framing-study">
       <div
+        ref={image}
         className="about-framing-image"
-        style={{ '--paint-reveal': amount + '%' } as CSSProperties}
+        style={{ '--paint-reveal': reveal + '%' } as CSSProperties}
       >
         <img
           src="/projects/showroom-finished.webp"
@@ -29,8 +67,9 @@ export function AboutFraming() {
           height="900"
           loading="lazy"
         />
-        <span className="about-frame-lines" aria-hidden="true" />
-        <span className="about-frame-split" aria-hidden="true" />
+        {manual && amount > 0 && amount < 100 && (
+          <span className="about-frame-split" aria-hidden="true" />
+        )}
       </div>
       <div className="about-frame-scrub">
         <label htmlFor={id}>Clay to finished paint</label>
@@ -41,7 +80,10 @@ export function AboutFraming() {
           min={0}
           max={100}
           aria-valuetext={amount + '% finished paint'}
-          onChange={(event) => setAmount(event.currentTarget.valueAsNumber)}
+          onChange={(event) => {
+            setManual(true);
+            setAmount(event.currentTarget.valueAsNumber);
+          }}
         />
       </div>
       <figcaption>

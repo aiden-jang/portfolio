@@ -270,6 +270,9 @@ const registry: Omit<CarSpec, 'credit'>[] = [
   },
 ];
 
+export const F40_INDEX = 0;
+export const DEFAULT_CAR_INDEX = 20;
+
 export const CARS: CarSpec[] = registry.map((car) => ({
   ...car,
   credit: credits[car.file as keyof typeof credits],

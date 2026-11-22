@@ -328,6 +328,7 @@ it('drops the opening offset by Work and starts settled under reduced motion', a
 
 it('holds the wheel composition through a short drag and returns to the whole car on a wider orbit', async () => {
   await withOpeningCamera(1440, ({ tick, load }) => {
+    useAppStore.getState().setCarIndex(0);
     load();
     tick(120);
     useAppStore.getState().setCameraView('wheel');

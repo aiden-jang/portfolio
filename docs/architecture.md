@@ -147,8 +147,8 @@ supplied clips. `useCarDetails` resets and disposes these interactions on select
 changes. Reduced motion snaps detail poses.
 
 The stable car registry and curated picker order are separate. Retired cars retain
-their original IDs, models and credits for existing shared links. The default car
-and the smallest companion warm the HTTP cache only when the browser reports a
+their original IDs, models and credits for existing shared links. The closing F40
+and a small companion warm the HTTP cache only when the browser reports a
 fast connection without data saving; missing connection information disables
 these optional downloads. All other models load only on selection. Per-model source,
 licensing, optimization and material decisions live in

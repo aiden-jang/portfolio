@@ -17,7 +17,7 @@ for (const width of [1440, 390]) {
       });
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
       try {
-        await page.goto('/?garage=studio');
+        await page.goto('/?garage=studio&car=0');
         const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
         await expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
         await openStudioControls(studio);

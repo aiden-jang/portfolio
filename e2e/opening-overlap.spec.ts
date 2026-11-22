@@ -8,7 +8,7 @@ test('the desktop opening orbit overlaps a stationary intro title', async ({ pag
   const modelGate = new Promise<void>((resolve) => {
     releaseModel = resolve;
   });
-  await page.route('**/models/ferrari-f120-f40.glb', async (route) => {
+  await page.route('**/models/corvette-opening.glb', async (route) => {
     await modelGate;
     await route.continue();
   });

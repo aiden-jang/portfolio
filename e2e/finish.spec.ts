@@ -9,7 +9,7 @@ for (const viewport of [
     page,
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto('/');
+    await page.goto('/?car=0');
     const dock = page.locator('#desktop-dock');
     await expect(dock).toBeVisible();
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });

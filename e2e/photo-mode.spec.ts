@@ -37,7 +37,7 @@ for (const width of [1440, 390, 320]) {
           return original.apply(this, args);
         };
       });
-      await page.goto('/');
+      await page.goto('/?car=0');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60000 });
       const garage = page
         .getByRole('button', { name: 'Garage controls', exact: true })

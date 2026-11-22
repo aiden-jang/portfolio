@@ -9,7 +9,7 @@ for (const viewport of [
   const narrow = viewport.width === 320;
   const device = narrow ? 'narrow mobile' : phone ? 'mobile' : 'desktop';
   const poster = narrow ? 'phone-tall' : phone ? 'phone' : 'desktop-motion';
-  test(`the ${device} Ferrari poster hands off to the live garage`, async ({ page }) => {
+  test(`the ${device} Corvette poster hands off to the live garage`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.emulateMedia({ reducedMotion: phone ? 'reduce' : 'no-preference' });
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
@@ -17,7 +17,7 @@ for (const viewport of [
     const gate = new Promise<void>((resolve) => {
       resume = resolve;
     });
-    await page.route('**/models/ferrari-f120-f40.glb', async (route) => {
+    await page.route('**/models/corvette-opening.glb', async (route) => {
       await gate;
       await route.continue();
     });
@@ -37,7 +37,7 @@ for (const viewport of [
       await expect(art).toBeVisible({ timeout: 8_000 });
       await expect
         .poll(() => art.evaluate((photo) => (photo as HTMLImageElement).currentSrc))
-        .toContain(`studio-${poster}.webp`);
+        .toContain(`corvette-${poster}.webp`);
       const firstPosition = await title.boundingBox();
       await expect(page.locator('.car-choice-status').first()).toContainText(/loading/i);
       resume();
@@ -57,7 +57,7 @@ for (const viewport of [
 test('Behind the render switches finishes and returns focus to Garage', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-  await page.goto('/');
+  await page.goto('/?car=0');
   const garage = page.getByRole('button', { name: 'Garage controls', exact: true }).filter({
     visible: true,
   });

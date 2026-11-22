@@ -1,7 +1,8 @@
 import { phoneOpeningFrame } from '../three/phoneOpeningFrame';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { parseLighting } from '../lighting';
-import { StudioPosterSources, STUDIO_POSTER } from './StudioPosterSources';
+import { CORVETTE_POSTER, StudioPosterSources, STUDIO_POSTER } from './StudioPosterSources';
+import { DEFAULT_CAR_INDEX, F40_INDEX } from '../config';
 import { useAppStore } from '../store';
 import { framingDistanceMultiplier } from '../three/cameraPose';
 import './opening-poster.css';
@@ -9,9 +10,13 @@ import './opening-poster.css';
 function openingPosterLighting() {
   const params = new URLSearchParams(location.search);
   const lighting = parseLighting(params.get('light'));
+  const { carIndex } = useAppStore.getState();
+  const hasPoster =
+    carIndex === F40_INDEX || (carIndex === DEFAULT_CAR_INDEX && lighting === 'studio');
   return scrollY <= 1 &&
     (!location.hash || location.hash === '#sec-intro') &&
-    (params.get('car') ?? '0') === '0' &&
+    hasPoster &&
+    !params.has('garage') &&
     (params.get('paint') ?? 'original') === 'original' &&
     lighting !== 'night'
     ? lighting
@@ -20,7 +25,10 @@ function openingPosterLighting() {
 
 export function OpeningPoster() {
   const [lighting] = useState(openingPosterLighting);
+  const [carIndex] = useState(() => useAppStore.getState().carIndex);
+  const corvette = carIndex === DEFAULT_CAR_INDEX;
   const studio = lighting === 'studio';
+  const poster = corvette ? CORVETTE_POSTER : STUDIO_POSTER;
   const [phase, setPhase] = useState<'loading' | 'fading' | 'done'>('loading');
   const picture = useRef<HTMLPictureElement>(null);
   const photo = useRef<HTMLImageElement>(null);
@@ -88,7 +96,7 @@ export function OpeningPoster() {
       if (
         state.sceneUnavailable ||
         state.carLoadError ||
-        state.carIndex !== 0 ||
+        state.carIndex !== carIndex ||
         state.themeName !== lighting ||
         state.activeBodyColor !== 'original' ||
         state.hasManualView
@@ -111,7 +119,7 @@ export function OpeningPoster() {
       refs.holdOpeningPose = false;
       finish.current = undefined;
     };
-  }, [lighting, studio]);
+  }, [carIndex, lighting, studio]);
 
   if (!lighting || phase === 'done') return null;
 
@@ -126,7 +134,7 @@ export function OpeningPoster() {
       }}
     >
       {studio ? (
-        <StudioPosterSources opening />
+        <StudioPosterSources opening corvette={corvette} />
       ) : (
         <>
           <source
@@ -142,7 +150,7 @@ export function OpeningPoster() {
       )}
       <img
         ref={photo}
-        src={studio ? STUDIO_POSTER : '/showroom/f40-desktop-opening.webp'}
+        src={studio ? poster : '/showroom/f40-desktop-opening.webp'}
         fetchPriority="high"
         width={1440}
         height={900}

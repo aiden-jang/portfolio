@@ -8,7 +8,7 @@ for (const width of [1440, 390]) {
 
     async function openStudio(page: Page) {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-      await page.goto('/');
+      await page.goto('/?car=0');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
       await page
         .getByRole('button', { name: 'Garage controls', exact: true })
@@ -100,7 +100,7 @@ for (const width of [1440, 390]) {
 
     test('opens the photographed F40 shot and shares the adjusted angle', async ({ page }) => {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-      await page.goto('/?garage=studio');
+      await page.goto('/?garage=studio&car=0');
       const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
       await expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       const photo = studio.getByRole('button', { name: 'Photo', exact: true });

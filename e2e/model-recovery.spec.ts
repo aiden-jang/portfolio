@@ -8,7 +8,7 @@ test('a failed car download preserves the portfolio and can retry the original m
     requests++;
     return requests === 1 ? route.fulfill({ status: 503, body: 'Unavailable' }) : route.continue();
   });
-  await page.goto('/');
+  await page.goto('/?car=0');
   const notice = page.getByRole('alert').filter({ hasText: /Couldn.t load Ferrari F40/ });
   await expect(notice).toBeVisible({ timeout: 60_000 });
   await expect(page.locator('#sec-intro')).toBeVisible();

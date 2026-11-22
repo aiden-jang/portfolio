@@ -9,13 +9,14 @@ import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
-import { CARS, PREFETCH_MODEL_INDICES, THEMES } from '../config';
+import { CARS, F40_INDEX, THEMES } from '../config';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { smoothTowards } from '../math';
 import { useCarDetails } from './useCarDetails';
 import { createPopupHeadlights } from './popupHeadlights';
 import { prepareModelFinish } from './modelFinishes';
-import { canPrefetchModels } from './modelPrefetch';
+import { scheduleCompanionPrefetch } from './modelPrefetch';
+import { useShowroomModel } from './useShowroomModel';
 import { loadCarModel } from './loadCarModel';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
@@ -42,7 +43,7 @@ const EXPOSURE_RATE = 2.5;
 
 export function Car() {
   const { scene, invalidate } = useThree();
-  const carIndex = useAppStore((s) => s.carIndex);
+  const { carIndex, modelFile } = useShowroomModel();
   const retryVersion = useAppStore((s) => s.carRetryVersion);
   const armIntro = useAppStore((s) => s.armIntro);
 
@@ -115,7 +116,7 @@ export function Car() {
     let prefetchTimer = 0;
     let readyFrame = 0;
 
-    void loadCarModel(loader, `/models/${spec.file}`, controller.signal).then(
+    void loadCarModel(loader, `/models/${modelFile}`, controller.signal).then(
       (gltf) => {
         if (cancelled) {
           disposeModel(gltf.scene);
@@ -158,11 +159,13 @@ export function Car() {
             ? []
             : buildLamps(group, orientedSize, scale, !headlights.current);
         attachDetails(model, spec);
-        refs.bodyMaterial = detectBodyMaterial(model, spec.paintMaterial);
+        const app = useAppStore.getState();
+        refs.bodyMaterial =
+          app.carIndex === carIndex ? detectBodyMaterial(model, spec.paintMaterial) : null;
         refs.bodyOriginalColor = refs.bodyMaterial?.color?.clone() ?? null;
         setHasBodyMaterial(!!refs.bodyMaterial);
         // Has to run after material discovery, or a shared link's paint reverts on the swap.
-        useAppStore.getState().applyBodyColor(useAppStore.getState().activeBodyColor);
+        if (refs.bodyMaterial) app.applyBodyColor(app.activeBodyColor);
         // The decoded model is not ready to see until the renderer has painted it.
         invalidate();
         readyFrame = requestAnimationFrame(() => {
@@ -173,29 +176,7 @@ export function Car() {
 
         if (!refs.introArmed) armIntro();
 
-        // Plain `fetch`, not GLTFLoader: this only needs to warm the HTTP cache, and parsing
-        // plus meshopt-decoding spare cars would compete with the one on screen.
-        if (
-          canPrefetchModels(
-            (
-              navigator as Navigator & {
-                connection?: { saveData?: boolean; effectiveType?: string };
-              }
-            ).connection,
-          )
-        ) {
-          prefetchTimer = window.setTimeout(() => {
-            for (const i of PREFETCH_MODEL_INDICES) {
-              const a = CARS[i];
-              if (a && a.file !== spec.file) {
-                fetch(`/models/${a.file}`, {
-                  priority: 'low',
-                  signal: controller.signal,
-                } as RequestInit).catch(() => {});
-              }
-            }
-          }, 1500);
-        }
+        prefetchTimer = scheduleCompanionPrefetch(spec.file, controller.signal);
       },
       (err) => {
         if (cancelled) return;
@@ -204,7 +185,7 @@ export function Car() {
         useAppStore
           .getState()
           .setCarLoadError(`Couldn’t load ${spec.name}. You can keep browsing or try again.`);
-        console.error(`Failed to load /models/${spec.file}`, err);
+        console.error(`Failed to load /models/${modelFile}`, err);
       },
     );
 
@@ -215,7 +196,17 @@ export function Car() {
       cancelAnimationFrame(readyFrame);
       setCarLoading(false);
     };
-  }, [carIndex, retryVersion, loader, group, armIntro, invalidate, attachDetails, releaseDetails]);
+  }, [
+    carIndex,
+    modelFile,
+    retryVersion,
+    loader,
+    group,
+    armIntro,
+    invalidate,
+    attachDetails,
+    releaseDetails,
+  ]);
 
   useEffect(() => {
     scene.add(group);
@@ -233,8 +224,10 @@ export function Car() {
 
   useFrame((state, dt) => {
     const app = useAppStore.getState();
-    group.visible = !useLineup.getState().active;
     const review = useGarageStudio.getState();
+    group.visible =
+      !useLineup.getState().active &&
+      (!app.isContactVisible || review.active || displayedIndex.current === F40_INDEX);
     const exhibit = useGarageExhibit.getState();
     const onStage = review.active && review.chapter === 'walk' && displayedIndex.current === 20;
     const reduced = prefersReducedMotion();

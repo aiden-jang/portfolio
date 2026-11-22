@@ -137,4 +137,23 @@
       if (garageStudioPass > 1.9) {
         litFloor = vec3(.004,.004,.004) + satinMirror * rimFade * .87 * contact;
       }
+      if (closingFloor > .5) {
+        vec2 floorFromCar = ground - studioChassis.xy;
+        vec2 poolPosition = (floorFromCar - vec2(.78,.26)) / vec2(3.1,4.9);
+        float pool = exp(-dot(poolPosition,poolPosition)*1.18);
+        float lineDistance = floorFromCar.x - 1.6 - .075*floorFromCar.y;
+        vec2 streakPosition = vec2(lineDistance/.205,(floorFromCar.y+.28)/2.82);
+        vec2 edgePosition = vec2(lineDistance/.61,(floorFromCar.y+.32)/3.4);
+        float streak = exp(-dot(streakPosition,streakPosition));
+        float streakEdge = exp(-dot(edgePosition,edgePosition));
+        float grain = clamp(.90+(fine-.0771)*9.+(coarse-.0771)*13.,.55,1.32);
+        vec3 concrete = vec3(.0045,.0041,.0038)
+          + vec3(.031,.027,.023)*pool*grain
+          + vec3(.043,.038,.032)*streak*grain
+          + vec3(.016,.012,.009)*streakEdge*grain;
+        float sawcut = exp(-abs(floorFromCar.x-2.97)*35.);
+        concrete *= 1.-.25*sawcut*pool;
+        vec3 carReflection = satinMirror * rimFade * .22 * concreteBreakup;
+        litFloor = (concrete + (carReflection + softBounce*.20)*reflectionStrength) * contact;
+      }
       gl_FragColor.rgb = litFloor;
