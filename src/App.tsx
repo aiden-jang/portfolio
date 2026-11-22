@@ -111,7 +111,6 @@ export function App() {
               }}
             />
             <CarControls />
-            <i className="creative-match-point" aria-hidden="true" />
             <Sections />
             <CarLoadNotice />
             <CommandMenu onSection={scrollToSection} />

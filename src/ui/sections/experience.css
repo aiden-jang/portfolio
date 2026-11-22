@@ -4,8 +4,7 @@ html:root #sec-experience {
   border: 0;
   user-select: text;
   -webkit-user-select: text;
-  padding-block: calc(var(--portfolio-header-height) + clamp(32px, 5svh, 54px))
-    clamp(32px, 6vw, 76px);
+  padding-block: calc(var(--portfolio-header-height) + 20px) clamp(32px, 6vw, 76px);
 }
 
 .experience-content {
@@ -15,12 +14,12 @@ html:root #sec-experience {
 }
 
 .experience-content > h2 {
-  margin: 0 0 clamp(28px, 3.3vw, 46px);
+  margin: 0 0 clamp(28px, 4.3vw, 62px);
   max-width: none;
-  font-weight: 480;
-  font-size: clamp(20px, 1.75vw, 26px);
-  line-height: 1.1;
-  letter-spacing: -0.025em;
+  font-weight: 445;
+  font-size: var(--chapter-heading-size);
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
 .experience-grid {
@@ -96,6 +95,13 @@ html:root #sec-experience {
   gap: 20px 46px;
   align-items: end;
   margin-bottom: clamp(20px, 2.6vw, 36px);
+}
+
+@media (min-width: 1024px) {
+  .experience-spread-heading {
+    grid-template-columns: var(--chapter-columns);
+    column-gap: var(--chapter-column-gap);
+  }
 }
 
 .experience-measure {
@@ -333,10 +339,7 @@ html:root #sec-experience {
 
 @media (max-width: 600px) {
   html:root #sec-experience {
-    padding-block: calc(var(--portfolio-header-height) + 34px) 56px;
-  }
-  .experience-content > h2 {
-    margin-bottom: 29px;
+    padding-block: calc(var(--portfolio-header-height) + 20px) 56px;
   }
   .experience-lead-story h3 {
     text-wrap: pretty;

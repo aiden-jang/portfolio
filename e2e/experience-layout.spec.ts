@@ -43,6 +43,19 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     expect(heading!.y, 'section heading clears the fixed header').toBeGreaterThanOrEqual(
       header!.y + header!.height,
     );
+    if (width === 1440 || width < 768) {
+      for (const selector of ['#sec-intro h1', '#sec-work h2', '.iodine-intro h3']) {
+        const chapter = await page.locator(selector).boundingBox();
+        expect(chapter!.x, selector + ' shares the Experience gutter').toBeCloseTo(heading!.x, 0);
+      }
+    }
+    if (width < 768) {
+      const copy = await page.locator('.earthquake-intro').boundingBox();
+      const globe = await page.locator('#project-everythingisfine .orbit-feature').boundingBox();
+      expect(globe!.y, 'globe controls follow the project introduction').toBeGreaterThan(
+        copy!.y + copy!.height,
+      );
+    }
     const lead = section.getByRole('link', { name: 'Read the case study', exact: true });
     await expect(lead).toBeInViewport({ ratio: 1 });
     const history = section.locator('.experience-history');

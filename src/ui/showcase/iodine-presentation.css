@@ -1,5 +1,5 @@
 .garage-project.iodine-feature {
-  padding-block: 0 clamp(48px, 7vw, 96px);
+  padding-block: 0 8px;
 }
 .iodine-intro {
   display: grid;
@@ -9,10 +9,10 @@
   margin-bottom: clamp(24px, 3vw, 42px);
 }
 .garage-project .iodine-intro h3 {
-  font-size: clamp(66px, 9.5vw, 138px);
+  font-size: clamp(54px, 5.5vw, 82px);
   font-weight: 440;
-  line-height: 0.86;
-  letter-spacing: -0.055em;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
   margin: 0;
 }
 .garage-project .iodine-summary {
@@ -277,6 +277,13 @@ html:root .iodine-feature .scope-study p {
   outline-offset: 4px;
 }
 
+@media (min-width: 1024px) {
+  .iodine-intro {
+    grid-template-columns: var(--chapter-columns);
+    column-gap: var(--chapter-column-gap);
+  }
+}
+
 @media (max-width: 767px) {
   .iodine-preview-row {
     grid-template-columns: minmax(0, 1fr);
@@ -293,7 +300,7 @@ html:root .iodine-feature .scope-study p {
     gap: 18px;
   }
   .garage-project .iodine-intro h3 {
-    font-size: clamp(60px, 19.7vw, 92px);
+    font-size: clamp(42px, 12vw, 63px);
   }
   .iodine-diff {
     grid-template-columns: minmax(0, 1fr);

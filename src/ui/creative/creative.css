@@ -1,15 +1,3 @@
-.creative-match-point {
-  position: fixed;
-  inset: 0 auto auto 0;
-  z-index: 12;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #edd1ab;
-  opacity: var(--creative-point-opacity, 0);
-  transform: translate3d(var(--creative-point-x, 0px), var(--creative-point-y, 0px), 0);
-  pointer-events: none;
-}
 .opening-poster:not([data-fading]) {
   opacity: var(--opening-scroll, 1);
   transition: none;
@@ -356,21 +344,11 @@ html:root #project-iodine .scope-cases-single > div {
 }
 
 @media (max-width: 767px) {
-  html:root .earthquake-feature[data-comparing='false'] {
-    grid-template-rows: auto auto auto;
-    min-height: auto;
-    padding-block: var(--portfolio-header-height) clamp(29px, 6vh, 42px);
-  }
-  html:root .portfolio-chrome #project-everythingisfine .orbit-feature .preview-thumbnail {
-    height: clamp(218px, 38svh, 342px);
-  }
   html:root .earthquake-feature[data-comparing='false'] .orbit-event {
     top: auto;
   }
-  html:root #project-everythingisfine .earthquake-intro h3 {
-    font-size: clamp(30px, 9vw, 43px);
-  }
   html:root .earthquake-intro .creative-quake-hook {
+    font-size: clamp(27px, 7.8vw, 38px);
     max-width: 19ch;
     margin-bottom: 8px;
   }
@@ -391,10 +369,5 @@ html:root #project-iodine .scope-cases-single > div {
   .creative-tour-actions {
     justify-content: flex-start;
     margin-top: 6px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .creative-match-point {
-    display: none;
   }
 }

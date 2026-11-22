@@ -5,12 +5,20 @@ body:not([data-car-controls='visible']) .orbit-status {
   visibility: hidden;
   pointer-events: none;
 }
-body[data-car-view='reading']:not([data-contact-view='visible']) .portfolio-scene,
+html:not([data-showroom-handoff])
+  body[data-car-view='reading']:not([data-contact-view='visible'])
+  .portfolio-scene,
 body[data-car-view='reading'] #desktop-dock,
 body[data-car-view='reading'] #mobile-bar,
 body[data-car-view='reading'] .car-load-notice,
 body[data-car-view='reading'] .car-loading-progress,
 body[data-car-view='reading'] .scene-loading-note {
+  visibility: hidden;
+}
+
+html[data-showroom-handoff]
+  body:has(.portfolio-chrome:not([inert]))
+  :is(.car-loading-progress, .scene-loading-note) {
   visibility: hidden;
 }
 

@@ -1,6 +1,17 @@
 import { expect, test, type Page } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    const get = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (
+      this: HTMLCanvasElement,
+      type: string,
+      ...args: unknown[]
+    ) {
+      if (/webgl/.test(type)) return null;
+      return Reflect.apply(get, this, [type, ...args]);
+    } as typeof get;
+  });
   await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
   await page.route('**/*.glb', (route) => route.abort());
 });
@@ -32,14 +43,32 @@ test('the desktop underline tracks the section and fits after resize', async ({ 
   await scrollTo(page, 44);
   await expect(header).toHaveCSS('background-color', 'rgba(16, 16, 20, 0.5)');
 
+  const root = page.locator('html');
+  await scrollTo(page, 810);
+  await expect(root).toHaveAttribute('data-showroom-handoff', '');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(root).not.toHaveAttribute('data-showroom-handoff', '');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+
   await nav.getByRole('link', { name: 'Featured work', exact: true }).click();
   await expect(nav.locator('a[aria-current]')).toHaveText('Featured work');
+  await expect(page.getByRole('heading', { name: 'Featured work', exact: true })).toBeFocused();
   await expect.poll(markerFollowsActive).toBe(true);
   await expect(header).toHaveCSS('background-color', 'rgb(16, 16, 20)');
 
   await nav.getByRole('link', { name: 'Contact', exact: true }).click();
   await expect(page.getByRole('link', { name: /me@aidenjang.com/ })).toBeInViewport();
+  await expect(root).not.toHaveAttribute('data-showroom-handoff', '');
+  await expect
+    .poll(() =>
+      page.locator('#sec-contact').evaluate((section) => section.getBoundingClientRect().top),
+    )
+    .toBeCloseTo(0, 0);
   await page.setViewportSize({ width: 1024, height: 900 });
+  await expect.poll(markerFollowsActive).toBe(true);
+  // Responsive reflow can move the current scroll position into a neighboring section.
+  await nav.getByRole('link', { name: 'Contact', exact: true }).click();
+  await expect(page.getByRole('link', { name: /me@aidenjang.com/ })).toBeInViewport();
   await expect(nav.locator('a[aria-current]')).toHaveText('Contact');
   await expect.poll(markerFollowsActive).toBe(true);
 
