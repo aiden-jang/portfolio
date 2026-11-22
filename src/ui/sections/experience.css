@@ -4,7 +4,7 @@ html:root #sec-experience {
   border: 0;
   user-select: text;
   -webkit-user-select: text;
-  padding-block: calc(var(--portfolio-header-height) + 20px) clamp(32px, 6vw, 76px);
+  padding-block: calc(var(--portfolio-header-height) + 20px) clamp(40px, 6vw, 74px);
 }
 
 .experience-content {
@@ -339,7 +339,7 @@ html:root #sec-experience {
 
 @media (max-width: 600px) {
   html:root #sec-experience {
-    padding-block: calc(var(--portfolio-header-height) + 20px) 56px;
+    padding-block: calc(var(--portfolio-header-height) + 20px) 25px;
   }
   .experience-lead-story h3 {
     text-wrap: pretty;

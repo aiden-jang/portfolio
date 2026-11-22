@@ -24,7 +24,9 @@ test('phone navigation uses the persistent menu without intro-only section dots'
   const navigation = page.getByRole('navigation', { name: 'Mobile navigation' });
   await expect(navigation.getByRole('link')).toHaveCount(6);
   await navigation.getByRole('link', { name: 'More projects', exact: true }).click();
-  await expect(page.locator('#sec-more-work h2')).toBeInViewport();
+  const gardenHeading = page.getByRole('heading', { name: 'bloomnote', exact: true });
+  await expect(gardenHeading).toBeInViewport();
+  await expect(gardenHeading).toBeFocused();
   await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
   await navigation.getByRole('link', { name: 'About', exact: true }).click();
   await expect(page.locator('#sec-about h2')).toBeInViewport();

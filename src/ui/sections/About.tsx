@@ -17,10 +17,10 @@ export function AboutSection({
     <Section id="sec-about" side="left" desktopVertical="top" mobileVertical="top">
       <div className="about-copy pointer-events-auto">
         <h2>About</h2>
-        <p className="about-lead">Most of my side projects start with something ordinary.</p>
         <div className="about-reel-story">
           <AboutReel />
           <div className="about-story">
+            <p className="about-lead">Most of my side projects start with something ordinary.</p>
             <p className="about-body">
               Picking dinner with friends became{' '}
               {wherever ? (
@@ -53,7 +53,6 @@ export function AboutSection({
           </div>
         </div>
         <div className="about-grid">
-          <AboutFraming />
           <div className="about-profile">
             <dl className="about-details">
               <div>
@@ -80,6 +79,7 @@ export function AboutSection({
               </div>
             </dl>
           </div>
+          <AboutFraming />
         </div>
       </div>
     </Section>

@@ -97,11 +97,11 @@ html:root #sec-more-work {
 }
 
 .project-gallery-heading {
-  margin: 0 0 clamp(24px, 3.3vw, 42px);
-  font-size: clamp(36px, 4vw, 56px);
+  margin: 0 0 clamp(25px, 3.5vw, 48px);
+  font-size: var(--chapter-heading-size);
   line-height: 1;
-  letter-spacing: -0.045em;
-  font-weight: 450;
+  letter-spacing: -0.04em;
+  font-weight: 445;
 }
 
 .project-gallery .garage-project-compact {
@@ -247,7 +247,7 @@ html:root #sec-more-work .preview-thumbnail > img {
   min-width: 0;
 }
 .gallery-replay {
-  margin-bottom: clamp(52px, 8.6vw, 114px);
+  margin-bottom: clamp(40px, 6vw, 82px);
 }
 
 .project-gallery.gallery-replay .garage-project-copy {

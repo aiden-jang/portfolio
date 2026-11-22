@@ -61,15 +61,13 @@ export function MoreProjectsSection({ onOpen }: Props) {
   return (
     <Section id="sec-more-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="bloom-gallery pointer-events-auto">
-        <div className="garage-work bloom-gallery-heading">
-          <h2 className="project-gallery-heading">More projects</h2>
-        </div>
         <BloomPreview
           {...PREVIEWS.bloomnote}
           url={bloomnote.link?.url}
           onRead={(trigger) => onOpen(bloomnote, trigger)}
         />
         <div className="garage-work bloom-gallery-rest">
+          <h2 className="project-gallery-heading">More projects</h2>
           <div className="project-gallery gallery-replay">
             <Project item={iguess} onOpen={onOpen} copyFirst />
           </div>

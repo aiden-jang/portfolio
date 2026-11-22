@@ -21,7 +21,7 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     await page.goto('/#sec-more-work');
     await page.evaluate(() => document.fonts.ready);
     const gallery = page.locator('.project-gallery');
-    await expect(page.locator('#sec-more-work h3')).toHaveText([
+    await expect(page.locator('#bloom-garden-title, #sec-more-work h3')).toHaveText([
       'bloomnote',
       'iguess',
       'wherever',
@@ -38,6 +38,20 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     }
     const bloom = page.locator('#project-bloomnote');
     await expect(bloom.getByRole('blockquote')).toContainText('For that brilliant laugh');
+    const galleryTitle = await page
+      .getByRole('heading', { name: 'More projects', exact: true })
+      .boundingBox();
+    const gardenTitle = await bloom.getByRole('heading', { name: 'bloomnote' }).boundingBox();
+    const aboutTitle = await page.locator('#sec-about h2').boundingBox();
+    const garden = await bloom.boundingBox();
+    expect(galleryTitle!.y).toBeGreaterThan(garden!.y + garden!.height);
+    expect(galleryTitle!.x).toBeCloseTo(gardenTitle!.x, 0);
+    expect(galleryTitle!.x).toBeCloseTo(aboutTitle!.x, 0);
+    if (width < 768) {
+      const profile = await page.locator('.about-profile').boundingBox();
+      const framing = await page.locator('.about-framing-study').boundingBox();
+      expect(framing!.y).toBeGreaterThan(profile!.y + profile!.height);
+    }
     const spread = await bloom.evaluate((item) => ({
       card: item.getBoundingClientRect().toJSON(),
       viewport: document.documentElement.clientWidth,

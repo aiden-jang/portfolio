@@ -35,6 +35,7 @@ export function useShowroomTransition() {
     const intro = document.getElementById('sec-intro');
     const work = document.getElementById('sec-work');
     const contact = document.getElementById('sec-contact');
+    const plot = document.querySelector<HTMLElement>('.bloom-garden-plot');
     if (!intro || !work || !contact) return;
 
     const root = document.documentElement;
@@ -60,6 +61,10 @@ export function useShowroomTransition() {
       const headerScrim = reduced
         ? Number(scrollY >= headerTravel / 2)
         : smoothProgress(scrollY, 0, headerTravel);
+      if (plot && !reduced) {
+        const remaining = clamp((plot.getBoundingClientRect().top - h * 0.49) / (h * 0.44), 0, 1);
+        plot.style.setProperty('--garden-arrival', remaining ** 2 * (phone ? 22 : 42) + 'px');
+      }
       const movingForward = scrollY >= lastScroll;
       lastScroll = scrollY;
       if (progress < 0.05) visitedIntro = true;
@@ -135,6 +140,7 @@ export function useShowroomTransition() {
       work.removeEventListener('animationend', endPulse);
       work.removeEventListener('animationcancel', endPulse);
       clearPulse();
+      plot?.style.removeProperty('--garden-arrival');
       refs.floorReflection = 1;
       root.removeAttribute('data-showroom-handoff');
       for (const name of [

@@ -71,7 +71,7 @@ export function BloomPreview({
     >
       <div className="bloom-garden-inner" hidden={composing}>
         <header className="bloom-garden-heading">
-          <h3 id="bloom-garden-title">bloomnote</h3>
+          <h2 id="bloom-garden-title">bloomnote</h2>
           <p>{description}</p>
         </header>
 
