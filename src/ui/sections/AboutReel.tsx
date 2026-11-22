@@ -123,13 +123,11 @@ export function AboutReel() {
     <figure className="about-reel" aria-labelledby="about-reel-title" data-phase={phase}>
       <header className="about-reel-heading">
         <h3 id="about-reel-title">Selected work in motion</h3>
-        <span>0:12</span>
       </header>
       <div className="about-reel-stage" data-format={format}>
         <video
           ref={video}
-          aria-label="Twelve-second selected work reel"
-          aria-describedby="about-reel-caption"
+          aria-label="Selected work reel"
           preload="none"
           muted
           playsInline
@@ -158,10 +156,6 @@ export function AboutReel() {
           <span>{labels[phase]}</span>
         </button>
       </div>
-      <figcaption id="about-reel-caption">
-        The Ferrari F40 in Studio, Kamchatka on the globe, a file restored in Iodine, and a flower
-        opened in bloomnote. Silent film.
-      </figcaption>
     </figure>
   );
 }

@@ -16,25 +16,10 @@ html:root #sec-about {
   font: 445 var(--chapter-heading-size)/1 var(--font-display);
   letter-spacing: -0.04em;
 }
-.about-grid,
 .about-reel-story {
   display: grid;
   grid-template-columns: minmax(0, 1.68fr) minmax(0, 1fr);
   gap: 22px clamp(30px, 5vw, 78px);
-}
-.about-grid {
-  align-items: start;
-}
-@media (min-width: 900px) {
-  .about-grid {
-    grid-template-areas: 'framing profile';
-  }
-  .about-profile {
-    grid-area: profile;
-  }
-  .about-framing-study {
-    grid-area: framing;
-  }
 }
 .about-lead {
   margin: 0 0 17px;
@@ -60,33 +45,8 @@ html:root #sec-about {
 .about-details {
   margin: 0;
 }
-.about-framing-study {
-  margin: 0;
-}
-.about-framing-image {
-  position: relative;
-  border: 1px solid var(--color-line);
-  border-radius: 9px;
-  overflow: hidden;
-  background: #0a0909;
-}
-.about-framing-image img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.about-framing-study figcaption {
-  display: grid;
-  gap: 3px;
-  padding-top: 10px;
-  color: var(--color-muted);
-  font-size: 13px;
-  line-height: 1.5;
-}
-.about-framing-study figcaption strong {
-  color: var(--color-fg);
-  font-size: 15px;
-  font-weight: 570;
+.about-profile {
+  margin-top: clamp(22px, 3.2vw, 44px);
 }
 .about-details > div {
   padding: 15px 0;
@@ -156,48 +116,6 @@ html:root #sec-about {
   text-decoration-color: currentColor;
 }
 
-.about-framing-image .about-frame-clay {
-  position: absolute;
-  inset: 0;
-  clip-path: inset(0 0 0 var(--paint-reveal));
-}
-.about-frame-split {
-  position: absolute;
-  inset: 0 auto 0 var(--paint-reveal);
-  width: 2px;
-  background: #eadcc6;
-}
-.about-frame-scrub {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  margin-top: 9px;
-  font-size: 12px;
-  color: var(--color-muted);
-}
-.about-frame-scrub input {
-  width: 100%;
-  min-height: 44px;
-  accent-color: #eadcc6;
-}
-
-.about-framing-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0 16px;
-}
-.about-framing-actions a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.about-framing-actions svg {
-  width: 15px;
-  height: 15px;
-}
-
 #sec-about .about-reel-heading h3 {
   font-size: clamp(17px, 1.6vw, 23px);
   letter-spacing: -0.02em;
@@ -215,17 +133,13 @@ html:root #sec-about {
 
 .about-reel-story {
   align-items: center;
-  margin-bottom: clamp(44px, 6vw, 92px);
+  margin-bottom: clamp(44px, 8svh, 100px);
 }
 @media (max-width: 899px) {
-  .about-grid,
   .about-reel-story {
     grid-template-columns: minmax(0, 1fr);
   }
   .about-reel-story .about-body {
     max-width: 39ch;
   }
-}
-.about-framing-study:not(:focus-within) .about-frame-split {
-  display: none;
 }

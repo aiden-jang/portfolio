@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from '../ScreenshotViewer';
+import { useVisibleDemo } from '../../hooks/useVisibleDemo';
 import { ControlIcon } from '../ControlIcon';
 import round from './iguess-round.json';
 import './iguess-replay.css';
@@ -28,10 +29,15 @@ function paint(canvas: HTMLCanvasElement, visible: number) {
 }
 
 export function IguessReplay({ image, caption }: { image: string; caption: string }) {
+  const demo = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const inspector = useRef<HTMLButtonElement>(null);
   const [phase, setPhase] = useState<'ready' | 'drawing' | 'guess' | 'answer'>('ready');
   const [open, setOpen] = useState(false);
+  const playOnce = useCallback(() => {
+    setPhase((current) => (current === 'ready' ? 'drawing' : current));
+  }, []);
+  useVisibleDemo(demo, playOnce, 350);
   const ended = phase === 'guess' || phase === 'answer';
 
   useEffect(() => {
@@ -67,19 +73,13 @@ export function IguessReplay({ image, caption }: { image: string; caption: strin
 
   return (
     <>
-      <figure className="iguess-replay" aria-label="Recorded iguess drawing round">
+      <figure ref={demo} className="iguess-replay" aria-label="Recorded iguess drawing round">
         <div className="iguess-replay-content">
           <canvas ref={canvas} width="1120" height="840" aria-hidden="true" />
           <div className="iguess-replay-sidebar">
             <div className="iguess-replay-chat" aria-live="polite">
               <span>{ended ? 'The guess' : 'Recorded round'}</span>
-              <p>
-                {ended
-                  ? round.guess
-                  : phase === 'drawing'
-                    ? 'Waiting for the drawing…'
-                    : 'Watch the sketch take shape and see what the guesser comes up with.'}
-              </p>
+              {ended && <p>{round.guess}</p>}
               {phase === 'answer' && (
                 <div className="iguess-answer">
                   <span>Word</span>

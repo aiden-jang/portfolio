@@ -50,37 +50,35 @@ export function AboutSection({
               )}
               . Then there’s <strong>mrrp</strong>, a room for two and a pixel cat.
             </p>
+            <div className="about-profile">
+              <dl className="about-details">
+                <div>
+                  <dt>Background</dt>
+                  <dd>Computer Engineering at Rutgers</dd>
+                </div>
+                <div>
+                  <dt>Open source</dt>
+                  <dd>
+                    <a
+                      href="https://github.com/hyunwookshin/iodine/commits/main/?author=aiden-jang"
+                      target="_blank"
+                      aria-describedby="external-link-hint"
+                      rel="noopener noreferrer"
+                      className="about-contribution-link"
+                    >
+                      iodine <span aria-hidden="true">↗</span>
+                    </a>
+                    <p>
+                      Scoped terminal approvals, agent edit recovery, and clickable file paths in
+                      agent replies.
+                    </p>
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </div>
         </div>
-        <div className="about-grid">
-          <div className="about-profile">
-            <dl className="about-details">
-              <div>
-                <dt>Background</dt>
-                <dd>Computer Engineering at Rutgers</dd>
-              </div>
-              <div>
-                <dt>Open source</dt>
-                <dd>
-                  <a
-                    href="https://github.com/hyunwookshin/iodine/commits/main/?author=aiden-jang"
-                    target="_blank"
-                    aria-describedby="external-link-hint"
-                    rel="noopener noreferrer"
-                    className="about-contribution-link"
-                  >
-                    iodine <span aria-hidden="true">↗</span>
-                  </a>
-                  <p>
-                    Scoped terminal approvals, agent edit recovery, and clickable file paths in
-                    agent replies.
-                  </p>
-                </dd>
-              </div>
-            </dl>
-          </div>
-          <AboutFraming />
-        </div>
+        <AboutFraming />
       </div>
     </Section>
   );

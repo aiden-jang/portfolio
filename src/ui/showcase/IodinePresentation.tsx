@@ -33,7 +33,7 @@ export function IodinePresentation({ item, preview, onOpen }: Props) {
         </div>
       </div>
       <div className="iodine-preview-row">
-        <IodineContribution reader />
+        <IodineContribution reader auto />
         <div className="iodine-editor-tile story-photo-card">
           <button
             type="button"

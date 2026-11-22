@@ -56,7 +56,8 @@ illustrate the handoff and do not measure network or physical-device performance
 
 Iodine's local example records an actual snapshot, edit, revert and feedback queue
 using its snapshot service. The example file is synthetic. Undo and Replay
-switch the current file at the same line on desktop and phone. The scope control
+switch the current file at the same line on desktop and phone. The gallery shows one
+restore when the example stays in view. Reduced motion keeps it manual. The scope control
 shows the recorded decisions for an approved folder and a folder outside it.
 The editor screenshot opens on the highlighted symbolic-link check. Fit image
 shows the full editor and assistant. The case URL carries the edited or restored
@@ -72,8 +73,8 @@ Sources: [mrrp artwork](https://github.com/aiden-jang/mrrp/tree/23fb567/packages
 the [bloomnote recipient screenshot](../public/projects/bloomnote-garden.jpg), and the contribution
 link in the Iodine example.
 
-The iguess gallery replay draws a saved round stroke by stroke and displays the
-recorded guess. With reduced motion, Play round displays the finished drawing and
+The iguess gallery replay plays one saved round when the drawing enters view,
+then holds on the recorded guess. With reduced motion, Play round displays the finished drawing and
 guess immediately. The reader illustrates how the room socket, Durable Object and
 AI Worker share a round. The portfolio runs both examples locally.
 
@@ -91,13 +92,14 @@ detail. Fit image restores the full frame.
 
 ## Showroom study
 
-The [finished](../public/projects/showroom-finished.webp) and
-[clay](../public/projects/showroom-clay.webp) images are matching captures from
-the portfolio’s Studio renderer. Both use the Ferrari F40 by
+The [desktop](../public/showroom/finish-study/desktop.mp4) and
+[mobile](../public/showroom/finish-study/mobile.mp4) studies use the portfolio’s
+Studio renderer and the Ferrari F40 by
 [vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95),
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-The full clay frame comes into view before scrolling reveals paint from the nose.
-The slider also supports manual control. Opening the shot in Studio and returning
-preserves the slider and reading position. The About reel pairs local project captures
+The full clay profile holds before the camera turns and the red paint resolves.
+Scrolling in either direction scrubs the recorded turn. The slider supports
+manual control and blends between stills with reduced motion. Opening the shot
+in Studio and returning preserves the reading position. The About reel pairs local project captures
 with a tighter mobile view for Iodine. It loops while in view and plays on request when
 reduced motion is enabled.

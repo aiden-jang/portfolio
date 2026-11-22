@@ -1,4 +1,5 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useVisibleDemo } from '../../hooks/useVisibleDemo';
 import example from '../../data/iodineExample.json';
 import { IodineSession, type IodinePhase } from './iodine-session';
 import './iodine-feedback.css';
@@ -70,11 +71,15 @@ function CodePanel({
 export function IodineContribution({
   reader = false,
   sourceLast = false,
-}: { reader?: boolean; sourceLast?: boolean } = {}) {
+  auto = false,
+}: { reader?: boolean; sourceLast?: boolean; auto?: boolean } = {}) {
   const session = useContext(IodineSession);
   const [localPhase, setLocalPhase] = useState<IodinePhase>('edited');
   const phase = session?.phase ?? localPhase;
   const setPhase = session?.setPhase ?? setLocalPhase;
+  const demo = useRef<HTMLDivElement>(null);
+  const restoreDemo = useCallback(() => setPhase('restored'), [setPhase]);
+  useVisibleDemo(demo, restoreDemo, 1150);
   const activeLine = useRef<HTMLSpanElement>(null);
   const [replaying, setReplaying] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>();
@@ -111,7 +116,7 @@ export function IodineContribution({
     const [beforeEdit, afterEdit] = lines[1].split('.trim()');
     const source = (
       <p className="iodine-example-source">
-        Recorded example file.{' '}
+        {!auto && <>Recorded example file. </>}
         <a
           href={example.source + '#L92-L107'}
           target="_blank"
@@ -123,7 +128,7 @@ export function IodineContribution({
       </p>
     );
     return (
-      <div className="iodine-story-example" data-phase={phase}>
+      <div className="iodine-story-example" ref={auto ? demo : undefined} data-phase={phase}>
         <div className="cinema-code-heading">
           <button type="button" className="iodine-line-link" onClick={revealLine}>
             {example.file}:2
@@ -163,11 +168,13 @@ export function IodineContribution({
         {!sourceLast && source}
         <div className="cinema-result" aria-live="polite">
           <strong>{restored ? 'Revert feedback queued' : 'Snapshot saved'}</strong>
-          <p>
-            {restored
-              ? 'The file is back. Revert feedback tells the agent what changed.'
-              : 'A snapshot preserves the previous file contents.'}
-          </p>
+          {!auto && (
+            <p>
+              {restored
+                ? 'The file is back. Revert feedback tells the agent what changed.'
+                : 'A snapshot preserves the previous file contents.'}
+            </p>
+          )}
         </div>
         {restored && <RestoredFeedback onFile={revealLine} />}
         {sourceLast && source}

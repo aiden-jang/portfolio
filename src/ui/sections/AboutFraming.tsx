@@ -1,117 +1,171 @@
-import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef } from 'react';
 import { openAboutShot } from '../../garageStudio/aboutShot';
 import { useAppStore } from '../../store';
 import { ControlIcon } from '../ControlIcon';
+import './about-framing.css';
+
+const media = '/showroom/finish-study/';
+const narrowQuery = '(max-width: 767px)';
+
+function FinishPoster({ finish }: { finish: 'clay' | 'paint' }) {
+  return (
+    <picture className={'finish-poster finish-poster-' + finish} aria-hidden="true">
+      <source media={narrowQuery} srcSet={media + 'mobile-' + finish + '.webp'} />
+      <img src={media + 'desktop-' + finish + '.webp'} alt="" loading="lazy" decoding="async" />
+    </picture>
+  );
+}
 
 export function AboutFraming() {
-  const [amount, setAmount] = useState(0);
-  const image = useRef<HTMLDivElement>(null);
-  const [manual, setManual] = useState(false);
+  const track = useRef<HTMLDivElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  const range = useRef<HTMLInputElement>(null);
+  const sceneUnavailable = useAppStore((state) => state.sceneUnavailable);
+
   useEffect(() => {
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const lane = track.current!;
+    const player = video.current!;
+    const slider = range.current!;
+    const motion = matchMedia('(prefers-reduced-motion: no-preference)');
+    const narrow = matchMedia(narrowQuery);
+    const short = matchMedia('(max-height: 490px)');
+    let nearby = false;
+    let manual = false;
+    let progress = 0;
     let frame = 0;
-    function update() {
-      frame = 0;
-      if (manual || !image.current) return;
-      if (reduced.matches) {
-        setAmount(50);
+
+    function seek() {
+      if (player.readyState < 1 || !Number.isFinite(player.duration) || player.seeking) return;
+      const time = progress * Math.max(0, player.duration - 1 / 24);
+      if (Math.abs(player.currentTime - time) > 0.018) player.currentTime = time;
+    }
+    function apply(next: number) {
+      if (progress !== next) {
+        progress = next;
+        slider.value = String(Math.round(progress * 100));
+        slider.setAttribute(
+          'aria-valuetext',
+          progress < 0.43 ? 'Clay' : progress < 0.75 ? 'Changing to paint' : 'Paint',
+        );
+        lane.style.setProperty('--finish-paint', String(progress));
+      }
+      seek();
+    }
+    function configure() {
+      if (!nearby || !motion.matches || short.matches) {
+        if (player.hasAttribute('src')) {
+          player.removeAttribute('src');
+          player.load();
+        }
+        lane.removeAttribute('data-film-ready');
         return;
       }
-      const { top, height } = image.current.getBoundingClientRect();
-      const headerBottom =
-        document.querySelector('.portfolio-header')?.getBoundingClientRect().bottom ?? 0;
-      const visibleSpace = Math.max(0, innerHeight - height - headerBottom);
-      const start = innerHeight - height - visibleSpace * 0.54;
-      const end = Math.max(headerBottom + 16, innerHeight * 0.23);
-      // Keep the complete clay frame visible before scrubbing into the paint.
-      const travel = Math.max(64, start - end);
-      setAmount(Math.round(100 * Math.max(0, Math.min(1, (start - top) / travel))));
+      const source = media + (narrow.matches ? 'mobile.mp4' : 'desktop.mp4');
+      if (player.getAttribute('src') !== source) {
+        lane.removeAttribute('data-film-ready');
+        player.src = source;
+      }
+    }
+    function paint() {
+      frame = 0;
+      if (!motion.matches || short.matches) return;
+      const rect = lane.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > innerHeight) manual = false;
+      if (manual || !nearby) return;
+      const travel = lane.clientHeight - lane.firstElementChild!.clientHeight;
+      if (travel > 0) apply(Math.min(1, Math.max(0, -rect.top / travel)));
     }
     function schedule() {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (!frame) frame = requestAnimationFrame(paint);
     }
+    function updateMedia() {
+      configure();
+      schedule();
+    }
+    function markReady() {
+      lane.setAttribute('data-film-ready', '');
+      seek();
+    }
+    const showPoster = () => lane.removeAttribute('data-film-ready');
+    const useSlider = () => {
+      manual = true;
+      apply(slider.valueAsNumber / 100);
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        nearby = entry.isIntersecting;
+        if (nearby) updateMedia();
+      },
+      { rootMargin: '720px' },
+    );
+    observer.observe(lane);
+    for (const query of [motion, narrow, short]) query.addEventListener('change', updateMedia);
     addEventListener('scroll', schedule, { passive: true });
     addEventListener('resize', schedule);
-    reduced.addEventListener('change', schedule);
-    update();
+    player.addEventListener('loadedmetadata', seek);
+    player.addEventListener('loadeddata', markReady);
+    player.addEventListener('error', showPoster);
+    player.addEventListener('seeked', seek);
+    slider.addEventListener('input', useSlider);
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(frame);
+      for (const query of [motion, narrow, short]) query.removeEventListener('change', updateMedia);
       removeEventListener('scroll', schedule);
       removeEventListener('resize', schedule);
-      reduced.removeEventListener('change', schedule);
+      player.removeEventListener('loadedmetadata', seek);
+      player.removeEventListener('loadeddata', markReady);
+      player.removeEventListener('error', showPoster);
+      player.removeEventListener('seeked', seek);
+      slider.removeEventListener('input', useSlider);
     };
-  }, [manual]);
-  const reveal = manual || amount === 0 || amount === 100 ? amount : 14 + 0.66 * amount;
-  const id = useId();
-  const sceneUnavailable = useAppStore((state) => state.sceneUnavailable);
+  }, []);
+
   return (
-    <figure className="about-framing-study">
-      <div
-        ref={image}
-        className="about-framing-image"
-        style={{ '--paint-reveal': reveal + '%' } as CSSProperties}
-      >
-        <img
-          src="/projects/showroom-finished.webp"
-          alt="Finished Ferrari F40, framed low with room for its reflection"
-          width="1440"
-          height="900"
-          loading="lazy"
-        />
-        <img
-          src="/projects/showroom-clay.webp"
-          alt=""
-          aria-hidden="true"
-          className="about-frame-clay"
-          width="1440"
-          height="900"
-          loading="lazy"
-        />
-        {manual && amount > 0 && amount < 100 && (
-          <span className="about-frame-split" aria-hidden="true" />
-        )}
+    <figure className="about-framing-study" aria-labelledby="finish-study-title">
+      <div className="scroll-film-track" ref={track}>
+        <div className="scroll-film">
+          <FinishPoster finish="clay" />
+          <FinishPoster finish="paint" />
+          <video ref={video} muted playsInline preload="auto" aria-hidden="true" />
+          <h3 id="finish-study-title">Framing the showroom</h3>
+          <div className="scroll-film-range">
+            <span aria-hidden="true">Clay</span>
+            <input
+              ref={range}
+              type="range"
+              min="0"
+              max="100"
+              defaultValue="0"
+              aria-label="Ferrari camera and finish"
+              aria-valuetext="Clay"
+            />
+            <span aria-hidden="true">Paint</span>
+          </div>
+        </div>
       </div>
-      <div className="about-frame-scrub">
-        <label htmlFor={id}>Clay to finished paint</label>
-        <input
-          id={id}
-          type="range"
-          value={amount}
-          min={0}
-          max={100}
-          aria-valuetext={amount + '% finished paint'}
-          onChange={(event) => {
-            setManual(true);
-            setAmount(event.currentTarget.valueAsNumber);
-          }}
-        />
-      </div>
-      <figcaption>
-        <strong>Framing the showroom</strong>
-        <span>
-          The low camera fits the front wheel and rear wing in one shot, with room below for the
-          reflection.
-        </span>
+      <figcaption className="about-framing-notes">
         <span>
           Model by{' '}
           <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">vecarz</a>, CC
           BY 4.0.
         </span>
+        <div className="about-framing-actions">
+          {!sceneUnavailable && (
+            <button
+              className="creative-about-action"
+              type="button"
+              aria-label="Open this shot in Studio"
+              onClick={(event) => openAboutShot(event.currentTarget)}
+            >
+              Studio
+            </button>
+          )}
+          <a className="creative-about-action" href="/cases/showroom/">
+            How I built the showroom <ControlIcon name="arrow" />
+          </a>
+        </div>
       </figcaption>
-      <div className="about-framing-actions">
-        {!sceneUnavailable && (
-          <button
-            className="creative-about-action"
-            type="button"
-            onClick={(event) => openAboutShot(event.currentTarget)}
-          >
-            Open this shot in Studio
-          </button>
-        )}
-        <a className="creative-about-action" href="/cases/showroom/">
-          How I built the showroom <ControlIcon name="arrow" />
-        </a>
-      </div>
     </figure>
   );
 }
