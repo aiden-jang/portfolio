@@ -178,7 +178,7 @@ export function AboutReel() {
         </button>
       </div>
       <figcaption id="about-reel-caption">
-        A dinner vote in wherever, Kamchatka on the globe, a file restored in Iodine, and a flower
+        The Ferrari F40 in Studio, Kamchatka on the globe, a file restored in Iodine, and a flower
         opened in bloomnote. Silent film.
       </figcaption>
     </figure>
