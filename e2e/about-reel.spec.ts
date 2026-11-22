@@ -1,24 +1,27 @@
 import { expect, test } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext as (
+      this: HTMLCanvasElement,
+      type: string,
+      options?: unknown,
+    ) => RenderingContext | null;
+    Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+      value(this: HTMLCanvasElement, type: string, options?: unknown) {
+        return type.startsWith('webgl') ? null : getContext.call(this, type, options);
+      },
+    });
+  });
+});
+
 for (const [width, format, videoWidth] of [
   [1440, 'desktop', 1440],
   [390, 'phone', 720],
 ] as const) {
   test(`About plays the responsive reel on demand at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-    await page.addInitScript(() => {
-      const getContext = HTMLCanvasElement.prototype.getContext as (
-        this: HTMLCanvasElement,
-        type: string,
-        options?: unknown,
-      ) => RenderingContext | null;
-      Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
-        value(this: HTMLCanvasElement, type: string, options?: unknown) {
-          return type.startsWith('webgl') ? null : getContext.call(this, type, options);
-        },
-      });
-    });
     await page.goto('/#sec-about');
     const reel = page.getByRole('figure', { name: 'Selected work in motion' });
     await expect(reel).toBeVisible();
@@ -63,3 +66,36 @@ for (const [width, format, videoWidth] of [
     await expect(video).toHaveJSProperty('paused', true);
   });
 }
+
+test('the reel keeps playing at the viewport edge and resumes after leaving it', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/#sec-about');
+  const video = page.locator('.about-reel-stage video');
+  await video.scrollIntoViewIfNeeded();
+  await expect(video).toHaveJSProperty('paused', false);
+  await expect(video).toHaveJSProperty('loop', true);
+  const scrollToVisibleHeight = (height: number) =>
+    video.evaluate((player, height) => {
+      scrollBy({
+        top: player.getBoundingClientRect().top - innerHeight + height,
+        behavior: 'instant',
+      });
+    }, height);
+  await scrollToVisibleHeight(32);
+  await expect(video).toBeInViewport();
+  const time = () => video.evaluate((player: HTMLVideoElement) => player.currentTime);
+  const partlyVisible = await time();
+  await expect.poll(time).toBeGreaterThan(partlyVisible + 0.2);
+  await scrollToVisibleHeight(-32);
+  await expect(video).not.toBeInViewport();
+  await expect(video).toHaveJSProperty('paused', true);
+  await video.evaluate((player: HTMLVideoElement) => {
+    player.currentTime = 5;
+  });
+  await scrollToVisibleHeight(32);
+  await expect(video).toHaveJSProperty('paused', false);
+  await expect.poll(time).toBeGreaterThan(5);
+});

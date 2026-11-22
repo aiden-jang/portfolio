@@ -57,20 +57,13 @@ export function AboutReel() {
   useEffect(() => {
     const player = video.current!;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    const study = document.querySelector('.about-framing-image');
-    const headerHeight =
-      document.querySelector('.portfolio-header')?.getBoundingClientRect().height ?? 0;
-    let timer = 0;
     let visible = false;
-    let studyVisible = false;
     let attempted = false;
     let pausedOffscreen = false;
 
     function reconsider() {
-      clearTimeout(timer);
       player.loop = !reduced.matches;
-      const canWatch = visible && !studyVisible && !document.hidden;
-      if (!canWatch) {
+      if (!visible || document.hidden) {
         if (!player.paused && !player.ended) {
           pausedOffscreen = true;
           player.pause();
@@ -79,45 +72,33 @@ export function AboutReel() {
       }
 
       if (reduced.matches) return;
-      timer = window.setTimeout(() => {
-        if (!attempted && !player.src) {
-          attempted = true;
-          void play(true);
-        } else if (pausedOffscreen && !player.ended) {
-          pausedOffscreen = false;
-          void player.play().catch(() => {});
-        }
-      }, 280);
+      if (!attempted && !player.src) {
+        attempted = true;
+        void play(true);
+      } else if (pausedOffscreen && !player.ended) {
+        pausedOffscreen = false;
+        void player.play().catch(() => {});
+      }
     }
 
     function pauseWhileHidden() {
-      if (!visible || studyVisible || document.hidden) reconsider();
+      if (!visible || document.hidden) reconsider();
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        visible = entry.intersectionRatio >= 0.55;
+        visible = entry.intersectionRatio > 0;
         reconsider();
       },
-      { threshold: 0.55, rootMargin: `-${Math.round(headerHeight)}px 0px 0px` },
-    );
-    const studyObserver = new IntersectionObserver(
-      ([entry]) => {
-        studyVisible = entry.intersectionRatio >= 0.5;
-        reconsider();
-      },
-      { threshold: 0.5, rootMargin: '0px 0px -35% 0px' },
+      { threshold: Number.EPSILON },
     );
     observer.observe(player);
-    if (study) studyObserver.observe(study);
     reduced.addEventListener('change', reconsider);
     document.addEventListener('visibilitychange', reconsider);
     player.addEventListener('playing', pauseWhileHidden);
     reconsider();
     return () => {
-      clearTimeout(timer);
       observer.disconnect();
-      studyObserver.disconnect();
       reduced.removeEventListener('change', reconsider);
       document.removeEventListener('visibilitychange', reconsider);
       player.removeEventListener('playing', pauseWhileHidden);
