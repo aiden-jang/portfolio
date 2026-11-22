@@ -102,7 +102,8 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     }
     if (width >= 1050) {
       expect.soft(frame('wherever').top).toBeCloseTo(frame('mrrp').top, 0);
-      expect.soft(frame('wherever').width).toBeGreaterThan(frame('mrrp').width * 2);
+      expect.soft(frame('wherever').width).toBeCloseTo(frame('mrrp').width, 0);
+      expect.soft(frame('wherever').bottom).toBeCloseTo(frame('mrrp').bottom, 0);
     } else {
       expect.soft(frame('wherever').bottom).toBeLessThan(frame('mrrp').top);
     }

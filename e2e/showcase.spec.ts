@@ -119,11 +119,15 @@ for (const width of [1440, 390]) {
     await page.keyboard.press('Escape');
     await expect(page.locator('.work-modal-panel')).toHaveCount(0);
     for (const [project, first, second, asset] of [
-      ['wherever', 'Cast a vote', 'Dinner is handled', 'wherever-winner'],
+      ['wherever', 'Group result', 'Pizza swipe', 'wherever-vote'],
       ['platform', 'Choose an app', 'Already signed in', 'platform-app'],
     ] as const) {
       const card = page.locator(`#project-${project}`);
       const step = card.getByRole('button', { name: second, exact: true });
+      await expect(card.getByRole('button', { name: first, exact: true })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
       await step.click();
       await expect(step).toHaveAttribute('aria-pressed', 'true');
       const trigger = card.getByRole('button', { name: `Inspect screenshot: ${second}` });

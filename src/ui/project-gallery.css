@@ -314,7 +314,25 @@ html:root #sec-more-work .preview-thumbnail > img {
 
 @media (min-width: 1050px) {
   .gallery-collection {
-    grid-template-columns: minmax(0, 1.11fr) minmax(0, 1fr);
-    gap: clamp(27px, 3vw, 45px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px 18px;
+  }
+  .gallery-companions {
+    display: contents;
+  }
+}
+
+@media (width < 740px) or (width >= 1050px) {
+  :is(#project-mrrp, #project-worth) .project-card-media {
+    container-type: inline-size;
+  }
+
+  /* Match the 2:1 wherever frame plus its 44px screenshot controls and border. */
+  html:root
+    #sec-more-work
+    :is(#project-mrrp, #project-worth)
+    :is(.preview-thumbnail, .worth-focus) {
+    width: 100%;
+    height: calc(50cqw + 45px);
   }
 }

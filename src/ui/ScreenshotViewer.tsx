@@ -8,6 +8,7 @@ import './screenshot-viewer.css';
 
 type Props = {
   image: string;
+  narrowImage?: string;
   name: string;
   caption: string;
   returnFocus: HTMLElement | null;
@@ -21,6 +22,7 @@ type Props = {
 
 export function ScreenshotViewer({
   image,
+  narrowImage,
   name,
   caption,
   returnFocus,
@@ -232,6 +234,7 @@ export function ScreenshotViewer({
         <ScreenshotImage
           key={image}
           src={image}
+          narrowSrc={narrowImage}
           alt={`${name} product interface, full screenshot`}
           onUnavailable={onUnavailable}
           onReady={onReady}

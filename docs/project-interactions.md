@@ -77,10 +77,9 @@ recorded guess. With reduced motion, Play round displays the finished drawing an
 guess immediately. The reader illustrates how the room socket, Durable Object and
 AI Worker share a round. The portfolio runs both examples locally.
 
-The wherever gallery opens on the [app’s taco teaser photo](../public/projects/wherever-tacos.jpg)
-from its [sample deck](https://github.com/aiden-jang/wherever/blob/d5b10d2/packages/web/public/teaser-tacos.jpg).
-The screenshot inspector pairs two captures from a local two-person room using sample restaurants. Both participants voted
-for the restaurant shown on the result screen. The platform gallery captures
+The wherever gallery opens with the group’s result and ranked backups. The second
+shot shows Late Night Pizza Decisions mid-swipe. Both captures come from the same
+local two-person round with sample restaurants. The platform gallery captures
 the account hub and the signed-in worth archive from the same local test session.
 The hub capture masks the test email. Swipe or select a step to move between
 the recorded states. The screenshot inspector opens the uncropped frames.

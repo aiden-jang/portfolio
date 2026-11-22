@@ -35,9 +35,9 @@ export const PREVIEWS: Record<string, ProductPreview> = {
       'An AI Guesser round: a turnstile sketch, an active timer and the AI’s guess, “square.”',
   },
   wherever: {
-    image: '/projects/wherever.jpg',
+    image: '/projects/wherever-winner.webp',
     description: 'Swipe on nearby restaurants together and let the group pick dinner.',
-    caption: 'Restaurant voting: photos, price, travel estimate, veto and super-like in one room.',
+    caption: 'Noodle Situation won the local sample round, with tacos and pizza as backups.',
   },
   bloomnote: {
     image: '/projects/bloomnote-garden.jpg',

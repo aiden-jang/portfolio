@@ -7,14 +7,14 @@ import './project-pair.css';
 const evidence = {
   wherever: [
     {
-      key: 'wherever-vote',
-      title: 'Cast a vote',
-      caption: 'Alex and Maya vote in a local room with sample restaurants.',
+      key: 'wherever-winner',
+      title: 'Group result',
+      caption: 'Alex and Maya both picked Noodle Situation. Tacos and pizza ranked next.',
     },
     {
-      key: 'wherever-winner',
-      title: 'Dinner is handled',
-      caption: 'Both people picked Probably Fine Tacos in the same sample round.',
+      key: 'wherever-vote',
+      title: 'Pizza swipe',
+      caption: 'Mid-swipe on Late Night Pizza Decisions, with the sample room vote in progress.',
     },
   ],
   platform: [
@@ -41,7 +41,7 @@ export function ProjectPair({ name }: { name: keyof typeof evidence }) {
   const selected = view === null ? null : frames[view];
   const current = frames[step]!;
   const label = name === 'wherever' ? 'Sample dinner round' : 'Shared sign-in';
-  const action = name === 'wherever' ? 'Show dinner result' : 'Open worth';
+  const isWherever = name === 'wherever';
   const compare = (event: PointerEvent<HTMLDivElement>, complete: boolean) => {
     const start = drag.current;
     if (!start || event.pointerId !== start.id) return;
@@ -87,24 +87,14 @@ export function ProjectPair({ name }: { name: keyof typeof evidence }) {
           <div className="preview-sequence-track" data-step={step} ref={track}>
             {frames.map((frame, index) => (
               <div className="preview-sequence-frame" key={frame.key} aria-hidden={step !== index}>
-                {name === 'wherever' && index === 0 ? (
-                  <>
-                    <img
-                      src="/projects/wherever-tacos.jpg"
-                      alt="Tacos from the sample dinner round"
-                      width={700}
-                      height={467}
-                      loading="lazy"
-                    />
-                    <span className="wherever-exhibit-title">Probably Fine Tacos</span>
-                  </>
-                ) : (
-                  <ScreenshotImage
-                    src={'/projects/' + frame.key + '-detail.webp'}
-                    alt={frame.title}
-                    lazy
-                  />
-                )}
+                <ScreenshotImage
+                  src={'/projects/' + frame.key + '-detail.webp'}
+                  narrowSrc={
+                    isWherever ? '/projects/' + frame.key + '-detail-mobile.webp' : undefined
+                  }
+                  alt={frame.title}
+                  lazy
+                />
               </div>
             ))}
           </div>
@@ -132,17 +122,20 @@ export function ProjectPair({ name }: { name: keyof typeof evidence }) {
             <ControlIcon name="fit" />
           </button>
         </div>
-        <figcaption className="preview-sequence-caption">
-          <p aria-live="polite">{current.caption}</p>
-          <button type="button" onClick={() => setStep(step === 0 ? 1 : 0)}>
-            {step === 0 ? action : 'Replay'} <ControlIcon name="arrow" />
-          </button>
-        </figcaption>
+        {!isWherever && (
+          <figcaption className="preview-sequence-caption">
+            <p aria-live="polite">{current.caption}</p>
+            <button type="button" onClick={() => setStep(step === 0 ? 1 : 0)}>
+              {step === 0 ? 'Open worth' : 'Replay'} <ControlIcon name="arrow" />
+            </button>
+          </figcaption>
+        )}
       </figure>
       {selected && view !== null && (
         <ScreenshotViewer
           name={name}
           image={'/projects/' + selected.key + '.webp'}
+          narrowImage={isWherever ? '/projects/' + selected.key + '-mobile.webp' : undefined}
           caption={selected.caption}
           returnFocus={inspect.current}
           onClose={() => setView(null)}
