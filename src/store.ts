@@ -39,6 +39,7 @@ type AppState = {
   activeBodyColor: ActiveBodyColor;
   hasBodyMaterial: boolean;
   isCarLoading: boolean;
+  renderedCarIndex: number | null;
   carLoadError: string | null;
   carRetryVersion: number;
   sceneUnavailable: boolean;
@@ -65,7 +66,7 @@ type AppState = {
   resetCamera: () => void;
   armIntro: () => void;
   setHasBodyMaterial: (v: boolean) => void;
-  setCarLoading: (v: boolean) => void;
+  setCarLoading: (loading: boolean, renderedCarIndex?: number) => void;
   setCarLoadError: (error: string | null) => void;
   retryCar: () => void;
   applyBodyColor: (color: ActiveBodyColor) => void;
@@ -153,6 +154,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   activeBodyColor: 'original',
   hasBodyMaterial: false,
   isCarLoading: true,
+  renderedCarIndex: null,
   carLoadError: null,
   carRetryVersion: 0,
   sceneUnavailable: false,
@@ -259,15 +261,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().refs.introArmed = true;
   },
   setHasBodyMaterial: (v) => set({ hasBodyMaterial: v }),
-  setCarLoading: (v) =>
+  setCarLoading: (loading, renderedCarIndex) =>
     set(
-      v
-        ? {
-            isCarLoading: true,
-            drsOpen: false,
-            hasDRS: false,
-          }
-        : { isCarLoading: false },
+      loading
+        ? { isCarLoading: true, renderedCarIndex: null, drsOpen: false, hasDRS: false }
+        : { isCarLoading: false, renderedCarIndex: renderedCarIndex ?? null },
     ),
   setCarLoadError: (carLoadError) => set({ carLoadError }),
   retryCar: () =>

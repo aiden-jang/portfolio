@@ -16,6 +16,11 @@ body[data-car-view='reading'] .scene-loading-note {
   visibility: hidden;
 }
 
+body[data-contact-view='visible']:not(:has(.garage-studio))
+  :is(.car-loading-progress, .scene-loading-note, .car-load-notice) {
+  visibility: hidden;
+}
+
 html[data-showroom-handoff]
   body:has(.portfolio-chrome:not([inert]))
   :is(.car-loading-progress, .scene-loading-note) {

@@ -172,7 +172,7 @@ export function Car() {
         invalidate();
         readyFrame = requestAnimationFrame(() => {
           readyFrame = requestAnimationFrame(() => {
-            if (!cancelled) setCarLoading(false);
+            if (!cancelled) setCarLoading(false, carIndex);
           });
         });
 
