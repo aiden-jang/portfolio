@@ -282,12 +282,26 @@ it('loops the shared angles on desktop and mobile and replays from the front', a
       const front = yaw();
       const frontHeight = camera.position.y;
       expect(front).toBeGreaterThan(KEYFRAMES[0].azimuth);
-      tick(115);
+      tick(105);
+      expect(Math.abs(yaw() - Math.PI / 2)).toBeLessThan(0.13);
+      const across = () => {
+        const direction = camera.getWorldDirection(camera.position.clone());
+        return camera.position.x * -direction.z + camera.position.z * direction.x;
+      };
+      const profileStart = across();
+      tick(60);
+      expect(Math.abs(yaw() - Math.PI / 2)).toBeLessThan(0.13);
+      expect(across()).toBeGreaterThan(profileStart + 0.15);
+
+      tick(55);
+      expect(Math.abs(yaw())).toBeLessThan(0.05);
+      expect(camera.position.y).toBeLessThan(frontHeight * 0.55);
+      tick(95);
       expect(yaw()).toBeLessThan(-2);
-      tick(110);
+      tick(115);
       expect(camera.position.y).toBeGreaterThan(frontHeight * 2);
-      tick(114);
-      expect(yaw()).toBeCloseTo(front, 5);
+      tick(67);
+      expect(yaw()).toBeCloseTo(front, 2);
       expect(useOpeningPlayback.getState().playback).toBe('playing');
 
       tick(115);
