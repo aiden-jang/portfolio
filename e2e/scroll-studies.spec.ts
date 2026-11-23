@@ -38,6 +38,8 @@ for (const width of [1440, 390]) {
         });
       }, offset);
     }
+    await place('.orbit-feature', 0.2);
+    await expect(page.getByRole('button', { name: 'Retry globe', exact: true })).toBeVisible();
     await expect(recovery).toHaveText('Agent edit');
     await place('#project-iodine .recovery', 0.22);
     const parkedEditor = await page.evaluate(() => scrollY);
