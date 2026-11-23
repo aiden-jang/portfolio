@@ -332,11 +332,16 @@ it('loops distinct Corvette shots and holds the view during pause', async () => 
       useOpeningPlayback.getState().toggle();
       tick(100);
       expect(camera.position.length()).toBeLessThan(wideDistance * 0.55);
+      tick(60);
+      expect(Math.abs(yaw() - Math.PI / 2)).toBeLessThan(0.08);
+      tick(60);
+      expect(Math.abs(yaw())).toBeLessThan(0.05);
+      expect(camera.position.y).toBeLessThan(0.55);
       tick(80);
       expect(yaw()).toBeLessThan(-2);
-      tick(100);
+      tick(90);
       expect(camera.position.y).toBeGreaterThan(7);
-      tick(122);
+      tick(98);
       expect(yaw()).toBeCloseTo(wide, 1);
     });
   }

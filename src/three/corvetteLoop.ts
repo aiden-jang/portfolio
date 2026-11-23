@@ -6,6 +6,7 @@ type Lens = {
   distance: number;
   targetY: number;
   shiftX?: number;
+  driftX?: number;
   shiftY?: number;
 };
 
@@ -23,7 +24,7 @@ const views: Shot[] = [
     elevation: 0.15,
     distance: 8.25,
     targetY: 0.55,
-    duration: 2.1,
+    duration: 1.54,
     slide: -0.17,
     travel: -0.36,
     mobile: { yaw: 0.92, distance: 16.0, targetY: 0.48 },
@@ -33,18 +34,40 @@ const views: Shot[] = [
     elevation: 0.105,
     distance: 3.0,
     targetY: 0.49,
-    duration: 1.35,
+    duration: 1.1,
     slide: 0.18,
     travel: -0.23,
     wheel: true,
     mobile: { yaw: 1.12, distance: 4.45 },
   },
   {
+    yaw: Math.PI / 2 + 0.035,
+    elevation: 0.1,
+    distance: 9.15,
+    targetY: 0.48,
+    duration: 1.38,
+    slide: -0.065,
+    travel: -0.12,
+    shiftX: -0.38,
+    driftX: 0.74,
+    mobile: { distance: 21.4, shiftX: -0.13, driftX: 0.26, shiftY: 0.04 },
+  },
+  {
+    yaw: -0.023,
+    elevation: -0.007,
+    distance: 6.65,
+    targetY: 0.47,
+    duration: 1.25,
+    slide: 0.046,
+    travel: -0.35,
+    mobile: { distance: 12.75, targetY: 0.48, shiftY: 0.05 },
+  },
+  {
     yaw: -2.56,
     elevation: 0.12,
     distance: 7.5,
     targetY: 0.52,
-    duration: 1.75,
+    duration: 1.48,
     slide: -0.19,
     travel: -0.32,
     mobile: { yaw: -2.51, distance: 14.9 },
@@ -56,7 +79,7 @@ const views: Shot[] = [
     targetY: 0.52,
     shiftX: -1.55,
     shiftY: 0.43,
-    duration: 1.5,
+    duration: 1.38,
     slide: 0.15,
     travel: -0.3,
     mobile: { yaw: -0.26, distance: 14.6, shiftX: 0, shiftY: 0.8 },
@@ -81,7 +104,7 @@ export function sampleCorvetteLoop(elapsed: number, phone: boolean, aspect: numb
     distance: (lens.distance + view.travel * progress) * fit,
     elevation: lens.elevation,
     targetY: lens.targetY,
-    shiftX: lens.shiftX ?? 0,
+    shiftX: (lens.shiftX ?? 0) + (lens.driftX ?? 0) * progress,
     shiftY: lens.shiftY ?? 0,
     wheel: Boolean(view.wheel),
   };

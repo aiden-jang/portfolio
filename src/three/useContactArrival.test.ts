@@ -78,7 +78,10 @@ it('updates the viewport crop when a short phone resizes inside the same tall se
   const root = createRoot(host);
   try {
     await act(() => root.render(createElement(Probe)));
-    applyArrival({ ...KEYFRAMES.at(-1)! }, 0, true);
+    const pose = { ...KEYFRAMES.at(-1)! };
+    applyArrival(pose, 0, true);
+    expect(pose.azimuth).toBeCloseTo(0.29);
+    expect(pose.elevation).toBeCloseTo(0.61);
     expect(camera.view?.height).toBe(740);
     size.height = 568;
     applyArrival({ ...KEYFRAMES.at(-1)! }, 0, true);

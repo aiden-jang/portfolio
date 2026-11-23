@@ -4,7 +4,7 @@ import type { Keyframe } from '../types';
 import { contactArrivalProgress, easeOutCubic } from './cameraPose';
 import { useThree } from '@react-three/fiber';
 import { PerspectiveCamera, type Camera } from 'three';
-import { contactFrame } from './contactFrame';
+import { CONTACT_DESKTOP_MIN_WIDTH, contactFrame } from './contactFrame';
 import { phoneOpeningFrame } from './phoneOpeningFrame';
 import { clamp } from '../math';
 
@@ -55,8 +55,10 @@ export function useContactArrival() {
         view.height,
       );
     }
-    pose.azimuth = 0;
-    pose.elevation = 0.12 + (pose.elevation - 0.12) * t;
+    const desktop = size.width >= CONTACT_DESKTOP_MIN_WIDTH;
+    const contactElevation = desktop ? 0.63 : 0.61;
+    pose.azimuth = (desktop ? 0.38 : 0.29) * t;
+    pose.elevation = 0.12 + (contactElevation - 0.12) * t;
     pose.distance = (10 + (pose.distance - 10) * t) * view.distanceMultiplier;
   };
 }
