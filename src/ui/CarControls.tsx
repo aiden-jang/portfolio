@@ -1,6 +1,5 @@
 import { CARS } from '../config';
 import { useAppStore } from '../store';
-import { CameraResetButton } from './CameraResetButton';
 import { CarPicker } from './CarPicker';
 import { ColorSwatches, MobileColorButton } from './ColorSwatches';
 import { CarDetailButton } from './CarDetailButton';
@@ -26,7 +25,6 @@ export function CarControls() {
   const fixedLivery = CARS[carIndex].fixedLivery;
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const visible = sectionIndex === 0;
-  const manualView = useAppStore((state) => state.hasManualView);
   const unavailable = useAppStore((state) => state.sceneUnavailable);
   const loading = useAppStore((state) => state.isCarLoading);
   const retrying = useRef(false);
@@ -53,7 +51,6 @@ export function CarControls() {
       >
         {visible && (
           <div className="car-controls-row">
-            {manualView && <CameraResetButton />}
             <div className="car-view-row">
               <CarPicker mobile />
               <CarZoomControls />
@@ -98,7 +95,6 @@ export function CarControls() {
           </div>
         </div>
       )}
-      {visible && manualView && <CameraResetButton className="desktop-camera-reset" />}
       {visible && <Hint />}
     </>
   );

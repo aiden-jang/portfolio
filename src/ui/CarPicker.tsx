@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { CARS } from '../config';
+import { CARS, DEFAULT_CAR_INDEX } from '../config';
 import { useAppStore } from '../store';
 import { CarBrowser } from './CarBrowser';
 import './car-picker.css';
@@ -39,7 +39,7 @@ export function CarPicker({ mobile = false }: { mobile?: boolean }) {
         aria-label={`Browse cars. ${car.name}, ${car.code}`}
         onClick={() => setOpen(true)}
       >
-        <span>{car.name}</span>
+        <span>{mobile && index === DEFAULT_CAR_INDEX ? 'Corvette' : car.name}</span>
         <small>
           {!mobile && <>{car.code} · </>}
           {loading ? 'Loading…' : 'Browse cars'}

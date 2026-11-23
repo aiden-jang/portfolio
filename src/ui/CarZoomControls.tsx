@@ -1,6 +1,7 @@
 import { useAppStore } from '../store';
 import { CAR_ZOOM_MAX, CAR_ZOOM_MIN, CAR_ZOOM_STEP } from '../three/carZoom';
 import { ControlIcon } from './ControlIcon';
+import { CameraResetButton } from './CameraResetButton';
 
 export function CarZoomControls() {
   const zoom = useAppStore((state) => state.cameraZoom);
@@ -8,7 +9,7 @@ export function CarZoomControls() {
   const failed = useAppStore((state) => !!state.carLoadError);
   const setZoom = useAppStore((state) => state.setCameraZoom);
   return (
-    <div className="car-zoom-controls" role="group" aria-label="Car zoom">
+    <div className="car-zoom-controls" role="group" aria-label="Camera controls">
       <button
         type="button"
         className="scene-control-button"
@@ -29,6 +30,7 @@ export function CarZoomControls() {
       >
         <ControlIcon name="zoom" />
       </button>
+      <CameraResetButton />
     </div>
   );
 }

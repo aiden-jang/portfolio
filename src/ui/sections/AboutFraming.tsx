@@ -58,6 +58,7 @@ export function AboutFraming() {
           player.load();
         }
         lane.removeAttribute('data-film-ready');
+        lane.removeAttribute('data-detail');
         return;
       }
       const source = media + (narrow.matches ? 'mobile.mp4' : 'desktop.mp4');
@@ -73,7 +74,11 @@ export function AboutFraming() {
       if (rect.bottom < 0 || rect.top > innerHeight) manual = false;
       if (manual || !nearby) return;
       const travel = lane.clientHeight - lane.firstElementChild!.clientHeight;
-      if (travel > 0) apply(Math.min(1, Math.max(0, -rect.top / travel)));
+      if (travel > 0) {
+        const t = Math.min(1, Math.max(0, -rect.top / travel));
+        apply(Math.min(1, Math.max(0, (t - 0.16) / 0.59)));
+        lane.dataset.detail = String(t >= 0.84);
+      }
     }
     function schedule() {
       if (!frame) frame = requestAnimationFrame(paint);
@@ -89,6 +94,7 @@ export function AboutFraming() {
     const showPoster = () => lane.removeAttribute('data-film-ready');
     const useSlider = () => {
       manual = true;
+      lane.dataset.detail = 'false';
       apply(slider.valueAsNumber / 100);
     };
     const observer = new IntersectionObserver(
@@ -128,7 +134,18 @@ export function AboutFraming() {
           <FinishPoster finish="clay" />
           <FinishPoster finish="paint" />
           <video ref={video} muted playsInline preload="auto" aria-hidden="true" />
-          <h3 id="finish-study-title">Framing the showroom</h3>
+          <img
+            className="finish-detail"
+            src="/showroom/exhibits/louvers.webp"
+            alt=""
+            loading="lazy"
+          />
+
+          <div className="film-heading">
+            <h3 id="finish-study-title">Framing the showroom</h3>
+            <p className="finish-cue">Scroll to reveal the paint.</p>
+            <p className="finish-cue-manual">Slide to reveal the paint.</p>
+          </div>
           <div className="scroll-film-range">
             <span aria-hidden="true">Clay</span>
             <input

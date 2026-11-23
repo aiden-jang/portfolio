@@ -87,7 +87,6 @@ export function ExperienceSection({ onOpen }: Props) {
       <div data-nosnippet className="experience-content pointer-events-auto">
         <h2>Experience</h2>
         <div className="experience-grid">
-          {lead && <LeadOutcome item={lead} />}
           <div className="experience-history">
             <h3>Where I&apos;ve worked</h3>
             <ol role="list">
@@ -124,6 +123,11 @@ export function ExperienceSection({ onOpen }: Props) {
             )}
           </div>
         </div>
+        {lead && (
+          <div className="batch-lane">
+            <LeadOutcome item={lead} />
+          </div>
+        )}
       </div>
     </Section>
   );

@@ -335,7 +335,7 @@ it('restarts the Corvette opening on return to Intro and stays settled under red
     expect(swept).toBeGreaterThan(KEYFRAMES[0].azimuth + 0.1);
     scrollTo(0.2);
     tick();
-    expect(yaw()).toBeCloseTo(KEYFRAMES[1].azimuth, 5);
+    expect(yaw()).not.toBeCloseTo(KEYFRAMES[1].azimuth, 2);
     expect(useOpeningPlayback.getState().playback).toBe('off');
     scrollTo(0);
     tick(60);

@@ -5,7 +5,7 @@ import { clamp, lerpAngle, lerp } from '../math';
 import { usePhotoMode } from '../ui/photo/state';
 import { framingDistanceMultiplier, orbitPosition } from './cameraPose';
 import { sampleCorvetteLoop } from './corvetteLoop';
-import { useOpeningPlayback } from './openingPlayback';
+import { getOpeningReplayVersion, useOpeningPlayback } from './openingPlayback';
 import { placeCamera } from './studio/cameraFraming';
 import { useAppStore } from '../store';
 import { motionState } from './studioEntrance';
@@ -15,7 +15,6 @@ const HOLD_SECONDS = 0.18;
 const SWEEP_SECONDS = 2.25;
 type Phase = 'waiting' | 'playing' | 'settled' | 'interrupted' | 'reduced';
 
-let replayVersion = 0;
 let observer: ((phase: Phase) => void) | undefined;
 
 export function observeOpeningOrbit(listener: (phase: Phase) => void) {
@@ -25,20 +24,16 @@ export function observeOpeningOrbit(listener: (phase: Phase) => void) {
   };
 }
 
-export function replayOpeningOrbit() {
-  replayVersion++;
-  useAppStore.getState().resetCamera();
-}
-
 function openingState() {
   const { carIndex, cameraResetVersion } = useAppStore.getState();
   return {
     phase: 'waiting' as Phase,
-    version: replayVersion,
+    version: getOpeningReplayVersion(),
     carIndex,
     cameraResetVersion,
     elapsed: 0,
     offset: 0,
+    lastShot: undefined as ReturnType<typeof sampleCorvetteLoop> | undefined,
     reportedPhase: undefined as Phase | undefined,
     scrolled: false,
     leftIntro: false,
@@ -75,18 +70,26 @@ export function useOpeningOrbit() {
     width: number,
     aspect: number,
   ) => {
-    if (!current.current || current.current.version !== replayVersion) {
+    if (!current.current) {
       current.current = openingState();
       useOpeningPlayback.setState({ playback: 'off' });
-      rig.introT = 0;
     }
     let motion = current.current;
     let store = useAppStore.getState();
     const atIntro = scroll <= 0.002 && window.scrollY <= 1;
     if (scroll > 0.12) motion.leftIntro = true;
-    if (motion.leftIntro && atIntro && !store.isContactVisible && !rig.isDown) {
+    const replayRequested = motion.version !== getOpeningReplayVersion();
+    if (
+      (motion.leftIntro || replayRequested) &&
+      atIntro &&
+      !store.isContactVisible &&
+      !rig.isDown
+    ) {
       motion.leftIntro = false;
-      if (!reduced && store.carIndex === DEFAULT_CAR_INDEX && !usePhotoMode.getState().active) {
+      if (
+        (replayRequested || (!reduced && store.carIndex === DEFAULT_CAR_INDEX)) &&
+        !usePhotoMode.getState().active
+      ) {
         store.resetCamera();
         store = useAppStore.getState();
         motion = current.current = openingState();
@@ -149,7 +152,7 @@ export function useOpeningOrbit() {
       }
     }
 
-    if (corvette && shot && playback === 'off')
+    if (corvette && shot && playback === 'off' && atIntro)
       useOpeningPlayback.setState({ playback: 'playing' });
     else if (!shot && playback !== 'off') useOpeningPlayback.setState({ playback: 'off' });
     motionState.openingOrbitProgress =
@@ -157,6 +160,28 @@ export function useOpeningOrbit() {
     if (observer && motion.reportedPhase !== motion.phase) {
       motion.reportedPhase = motion.phase;
       observer(motion.phase);
+    }
+    if (shot) motion.lastShot = shot;
+    if (
+      !shot &&
+      motion.lastShot &&
+      motion.phase === 'interrupted' &&
+      scroll > 0 &&
+      scroll < 1 &&
+      !reduced &&
+      !store.hasManualView &&
+      !store.isContactVisible &&
+      !photo &&
+      store.carIndex === DEFAULT_CAR_INDEX &&
+      store.cameraResetVersion === motion.cameraResetVersion
+    ) {
+      const travel = clamp(scroll, 0, 1);
+      const last = motion.lastShot;
+      shot = {
+        ...last,
+        shiftX: last.shiftX + travel * (phone ? 0.7 : 1.8),
+        distance: last.distance * (1 - travel * 0.1),
+      };
     }
     if (shot) {
       rig.introT = 1;

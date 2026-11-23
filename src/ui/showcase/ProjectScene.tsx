@@ -3,12 +3,13 @@ import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import './project-scene.css';
 
 function presentScene(stage: HTMLElement, progress: number) {
-  stage.style.setProperty('--scene-blend', easedProgress(progress, 0.27, 0.72).toFixed(3));
+  if (stage.id === 'project-wherever') {
+    stage.style.setProperty('--paper', String(easedProgress(progress, 0.12, 0.53)));
+    stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
+  }
   stage.dataset.sceneProgress = progress.toFixed(3);
   stage.dispatchEvent(new CustomEvent('project-scene-progress', { detail: progress }));
 }
-
-type SceneFrame = { image: string; alt: string; anchor?: string };
 
 export function ProjectScene({
   id,
@@ -18,7 +19,7 @@ export function ProjectScene({
   children,
 }: {
   id: string;
-  theme: 'iodine' | 'iguess' | 'mrrp' | 'dinner';
+  theme: 'iodine' | 'dinner';
   title: ReactNode;
   links: ReactNode;
   children: ReactNode;
@@ -30,7 +31,7 @@ export function ProjectScene({
       <div className="project-scene-body" data-study-pin>
         <header className="project-scene-heading">
           <h3>{title}</h3>
-          <div className="project-scene-links">{links}</div>
+          {links && <div className="project-scene-links">{links}</div>}
         </header>
         {children}
       </div>
@@ -38,21 +39,20 @@ export function ProjectScene({
   );
 }
 
-export function ScrollScenes({ frames }: { frames: readonly [SceneFrame, SceneFrame] }) {
+export function DinnerScene() {
   const track = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const stage = track.current;
     const section = stage?.closest('article');
     const body = stage?.parentElement;
-    const second = frames[1].anchor;
     if (!stage || !section || !body) return;
     const animated = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 610px)');
     const seekSecond = () => {
-      if (!second || location.hash !== '#' + second || !animated.matches) return;
+      if (location.hash !== '#project-owewell' || !animated.matches) return;
       const top = window.scrollY + section.getBoundingClientRect().top;
       const inset = Number.parseFloat(getComputedStyle(body).top);
       const travel = section.offsetHeight - body.offsetHeight;
-      window.scrollTo({ top: top - inset + travel * 0.85, behavior: 'instant' });
+      window.scrollTo({ top: top - inset + travel * 0.9, behavior: 'instant' });
     };
     const initial = requestAnimationFrame(seekSecond);
     window.addEventListener('hashchange', seekSecond);
@@ -60,24 +60,37 @@ export function ScrollScenes({ frames }: { frames: readonly [SceneFrame, SceneFr
       cancelAnimationFrame(initial);
       window.removeEventListener('hashchange', seekSecond);
     };
-  }, [frames]);
+  }, []);
 
   return (
-    <div className="project-scene-track" ref={track}>
-      {frames.map(({ image, alt, anchor }) => (
-        <div key={image} className="project-scene-still">
-          {anchor && <span id={anchor} className="project-scene-anchor" />}
-          <picture>
-            <source media="(max-width: 700px)" srcSet={`/projects/scenes/${image}-mobile.webp`} />
-            <img
-              src={`/projects/scenes/${image}-desktop.webp`}
-              alt={alt}
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
+    <div className="dinner-sequence" ref={track}>
+      <div className="dinner-photo">
+        <div className="dinner-result">
+          <small>Alex &amp; Maya’s pick</small>
+          <strong>
+            Neighborhood
+            <br />
+            Pizza Kitchen
+          </strong>
         </div>
-      ))}
+      </div>
+      <div className="bill" id="project-owewell">
+        <div className="paper total">
+          <span>Neighborhood Pizza Kitchen</span>
+          <small>Dinner for two</small>
+          <strong>$48.00</strong>
+        </div>
+        <div className="stubs">
+          <div className="paper stub">
+            <small>Your share</small>
+            <strong>$24.00</strong>
+          </div>
+          <div className="paper stub due">
+            <small>Alex owes you</small>
+            <strong>$24.00</strong>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

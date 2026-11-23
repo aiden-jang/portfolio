@@ -231,32 +231,6 @@
     grid-row: 1;
   }
 }
-.camera-reset-button {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  right: 0;
-  width: 108px;
-  height: 44px;
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-control);
-  background: var(--color-panel);
-  pointer-events: auto;
-}
-.camera-reset-button > span:last-child {
-  font: 12px/1.4 var(--font-display);
-  letter-spacing: 0;
-  text-transform: none;
-}
-@media (max-width: 1023px) {
-  .camera-reset-button {
-    justify-content: center;
-    width: 44px;
-  }
-  .camera-reset-button > span:last-child {
-    display: none;
-  }
-}
-
 .mobile-paint-name {
   border-radius: 4px;
 }

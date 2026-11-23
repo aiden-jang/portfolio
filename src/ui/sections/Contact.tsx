@@ -1,6 +1,6 @@
 import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
-import { H2, P_LI, PANEL_BASE, Section } from './shared';
+import { H2, PANEL_BASE, Section } from './shared';
 import { Credits } from './Credits';
 
 const EMAIL = 'me@aidenjang.com';
@@ -15,9 +15,7 @@ export function ContactSection() {
       <div className={PANEL_BASE}>
         <div className="contact-copy-block">
           <h2 className={H2}>Let’s talk.</h2>
-          <p className={`${P_LI} mx-auto mt-3 max-w-[30ch]`}>
-            Have a role, project or question in mind?
-          </p>
+
           <EmailActions />
         </div>
       </div>

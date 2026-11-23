@@ -1,7 +1,7 @@
 import { BloomPreview } from '../showcase/BloomPreview';
-import { BeanRoom } from '../showcase/BeanRoom';
-import { IguessReplay } from '../showcase/IguessReplay';
-import { ProjectScene, SceneAppLink, ScrollScenes } from '../showcase/ProjectScene';
+import { Duet } from '../showcase/Duet';
+
+import { ProjectScene, SceneAppLink, DinnerScene } from '../showcase/ProjectScene';
 import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
 import { IodinePresentation } from '../showcase/IodinePresentation';
 import '../project-gallery.css';
@@ -55,15 +55,6 @@ const owewell = orderedCollection.find((item) => item.mark === 'owewell')!;
 const supportingProjects = orderedCollection.filter(
   (item) => ![bloomnote, iguess, mrrp, wherever, owewell].includes(item),
 );
-const dinner = [
-  { image: 'wherever-result', alt: 'Two votes choose Neighborhood Pizza Kitchen in wherever.' },
-  {
-    image: 'owewell-result',
-    anchor: 'project-owewell',
-    alt: 'owewell splits the $48 dinner bill into $24 per person. Alex owes you $24.',
-  },
-] as const;
-
 function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
   if (!item.link) return null;
   return (
@@ -85,10 +76,8 @@ export function MoreProjectsSection({ onOpen }: Props) {
         <div className="garage-work bloom-gallery-rest">
           <h2 className="project-gallery-heading">More projects</h2>
           <div className="project-scenes">
-            <ProjectScene
-              id="project-iguess"
-              theme="iguess"
-              title={
+            <Duet
+              drawTitle={
                 <button
                   type="button"
                   aria-label="How I built it: iguess"
@@ -97,30 +86,22 @@ export function MoreProjectsSection({ onOpen }: Props) {
                   iguess
                 </button>
               }
-              links={<AppLink item={iguess} />}
-            >
-              <IguessReplay />
-            </ProjectScene>
-            <ProjectScene
-              id="project-mrrp"
-              theme="mrrp"
-              title="mrrp"
-              links={<AppLink item={mrrp} />}
-            >
-              <BeanRoom />
-            </ProjectScene>
+              drawLink={<AppLink item={iguess} />}
+              roomLink={<AppLink item={mrrp} />}
+            />
             <ProjectScene
               id="project-wherever"
               theme="dinner"
-              title="wherever → owewell"
-              links={
+              title={
                 <>
                   <AppLink item={wherever} label="wherever" />
+                  <i aria-hidden="true"> / </i>
                   <AppLink item={owewell} label="owewell" />
                 </>
               }
+              links={null}
             >
-              <ScrollScenes frames={dinner} />
+              <DinnerScene />
             </ProjectScene>
           </div>
           <div className="project-gallery gallery-companions">

@@ -102,6 +102,10 @@ export function useShowroomTransition() {
       root.style.setProperty('--header-scrim', String(headerScrim));
       root.style.setProperty('--stage-opacity', String(stage));
       root.style.setProperty('--work-figure-scale', String(scale));
+      root.style.setProperty(
+        '--incoming-pan',
+        reduced ? '0px' : (1 - arrival) * (phone ? 46 : 132) + 'px',
+      );
       root.style.setProperty('--work-poster-opacity', String(globe));
 
       if (pulsingPoster && (pulsingPoster !== poster || !movingForward)) clearPulse();

@@ -78,29 +78,10 @@
   width: 40px;
   flex-basis: 40px;
 }
-.desktop-camera-reset {
-  display: none;
-}
 .section-dot:focus-visible {
   outline: 2px solid var(--color-fg);
   outline-offset: 2px;
   border-radius: 6px;
-}
-@media (min-width: 768px) {
-  .desktop-camera-reset {
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    bottom: 104px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: 112px;
-    z-index: 30;
-  }
-  .desktop-camera-reset > span:last-child {
-    display: inline;
-  }
 }
 @media (min-width: 768px) and (max-width: 1023px) and (min-height: 501px) {
   html:root #desktop-dock .car-controls-row {
@@ -168,23 +149,8 @@
   .compact-paint-trigger {
     display: flex;
   }
-  .desktop-camera-reset {
-    bottom: 157px;
-  }
   .orbit-invitation {
     bottom: 166px;
-  }
-}
-@media (max-width: 767px) {
-  #mobile-bar .camera-reset-button {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 112px;
-    bottom: calc(100% + 12px);
-  }
-  .camera-reset-button > span:last-child {
-    display: inline;
   }
 }
 @media (min-width: 768px) and (max-height: 500px) {
@@ -283,21 +249,6 @@
   }
   html:root nav[aria-label='Section progress'] {
     display: none;
-  }
-  .desktop-camera-reset {
-    display: flex;
-    position: fixed;
-    justify-content: center;
-    left: max(28px, env(safe-area-inset-left));
-    right: auto;
-    top: 218px;
-    bottom: auto;
-    width: 112px;
-    transform: none;
-    z-index: 30;
-  }
-  .desktop-camera-reset > span:last-child {
-    display: inline;
   }
   html:root .portfolio-header {
     height: 60px;

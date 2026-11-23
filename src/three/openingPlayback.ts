@@ -6,3 +6,13 @@ export const useOpeningPlayback = create<{ playback: Playback; toggle: () => voi
   playback: 'off',
   toggle: () => set(({ playback }) => ({ playback: playback === 'paused' ? 'playing' : 'paused' })),
 }));
+
+let replayVersion = 0;
+
+export function replayOpeningOrbit() {
+  replayVersion++;
+}
+
+export function getOpeningReplayVersion() {
+  return replayVersion;
+}

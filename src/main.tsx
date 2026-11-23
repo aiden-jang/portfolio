@@ -4,6 +4,7 @@ import { App } from './App';
 import { StoryPage } from './ui/creative/StoryPage';
 import { storyAtLocation } from './ui/creative/storyRoutes';
 import './ui/composition-polish.css';
+import './ui/portfolio-sequence.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('#root element not found');

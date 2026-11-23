@@ -11,21 +11,29 @@ function paint(canvas: HTMLCanvasElement, visible: number) {
   const context = canvas.getContext('2d');
   if (!context) return;
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.lineWidth = 4.6;
+  context.lineWidth = 7;
   context.lineCap = 'round';
   context.lineJoin = 'round';
-  context.strokeStyle = '#25241e';
+  context.strokeStyle = '#f7f0df';
+  let tip: number[] = [];
   for (const stroke of round.strokes) {
     if (visible <= 0) break;
     context.beginPath();
     stroke.slice(0, visible).forEach(([x, y], index) => {
-      const drawX = 162 + x * 636;
-      const drawY = 22 + y * 558;
+      const drawX = 61 + x * 854;
+      const drawY = -63 + y * 735;
+      tip = [drawX, drawY];
       if (index === 0) context.moveTo(drawX, drawY);
       else context.lineTo(drawX, drawY);
     });
     context.stroke();
     visible -= stroke.length;
+  }
+  if (tip.length && visible < 0) {
+    context.beginPath();
+    context.fillStyle = '#f2ac79';
+    context.arc(tip[0]!, tip[1]!, 8, 0, Math.PI * 2);
+    context.fill();
   }
 }
 
@@ -41,10 +49,10 @@ export function IguessReplay() {
     let drawn = -1;
     let label = '';
     const draw = (progress: number) => {
-      const visible = Math.round(pointCount * easedProgress(progress, 0.05, 0.65));
+      const visible = Math.round(pointCount * (0.085 + 0.915 * easedProgress(progress, 0, 0.59)));
       if (drawn !== visible) paint(element, visible);
       drawn = visible;
-      const next = progress > 0.86 ? answer : progress >= 0.66 ? guess : '';
+      const next = progress > 0.77 ? answer : progress >= 0.27 ? guess : 'What is it?';
       if (next !== label) setResult(next);
       label = next;
     };
@@ -57,10 +65,21 @@ export function IguessReplay() {
   return (
     <figure ref={demo} className="iguess-replay" aria-label="Recorded iguess drawing round">
       <canvas ref={canvas} width="960" height="605" aria-hidden="true" />
-      <div className="iguess-replay-controls">
+      <div className="iguess-replay-controls" data-verdict={result === answer}>
+        <small>
+          {result === answer ? 'Answer' : result === guess ? 'AI guess' : 'Draw & guess'}
+        </small>
         <span className="iguess-replay-result" role="status">
-          {result && <span key={result}>{result}</span>}
+          {result === guess ? (
+            <>
+              <span>“A rocket.”</span>
+              <em>With reservations.</em>
+            </>
+          ) : (
+            <span>{result}</span>
+          )}
         </span>
+        {result === answer && <s aria-hidden="true">A rocket.</s>}
       </div>
     </figure>
   );

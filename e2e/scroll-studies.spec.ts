@@ -18,7 +18,7 @@ for (const width of [1440, 390]) {
     });
     await page.goto('/#sec-work');
     const iodine = page.locator('#project-iodine');
-    const outside = iodine.getByRole('img', { name: /requests a fresh approval/ }).locator('../..');
+    const recovery = iodine.getByRole('status');
     async function seekScene(id: string, progress: number) {
       await page.locator(id).evaluate((element, amount) => {
         const body = element.querySelector<HTMLElement>('[data-study-pin]')!;
@@ -31,27 +31,27 @@ for (const width of [1440, 390]) {
       }, progress);
     }
     await seekScene('#project-iodine', 0.9);
-    await expect(outside).toHaveCSS('opacity', '1');
+    await expect(recovery).toHaveText('File restored');
     await seekScene('#project-iodine', 0.08);
-    await expect(outside).toHaveCSS('opacity', '0');
+    await expect(recovery).toHaveText('Agent edit');
 
     const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
-    await seekScene('#project-iguess', 0.92);
+    await seekScene('.duet', 0.45);
     await expect(drawing.getByRole('status')).toHaveText('Guitar');
-    const drawingPin = page.locator('#project-iguess [data-study-pin]');
+    const drawingPin = page.locator('.duet [data-study-pin]');
     expect(
       await drawingPin.evaluate((el) =>
         Math.abs(el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).top)),
       ),
     ).toBeLessThan(2);
-    await seekScene('#project-iguess', 0.7);
+    await seekScene('.duet', 0.3);
     await expect(drawing.getByRole('status')).toContainText('A rocket');
-    await seekScene('#project-iguess', 0.1);
-    await expect(drawing.getByRole('status')).toHaveText('');
+    await seekScene('.duet', 0.1);
+    await expect(drawing.getByRole('status')).toHaveText('What is it?');
     const room = page.locator('#project-mrrp .bean-window');
-    await seekScene('#project-mrrp', 0.86);
+    await seekScene('.duet', 0.94);
     await expect(room).toHaveAttribute('data-light', 'morning');
-    await seekScene('#project-mrrp', 0.12);
+    await seekScene('.duet', 0.71);
     await expect(room).toHaveAttribute('data-light', 'evening');
     const verdict = page.locator('#project-everythingisfine .quake-journey-readings');
     await seekScene('#project-everythingisfine', 0.78);
@@ -100,7 +100,7 @@ for (const width of [1440, 390]) {
     await expect
       .poll(() => video.evaluate((el: HTMLVideoElement) => el.videoWidth))
       .toBe(width === 390 ? 416 : 1152);
-    await scroll(0.83);
+    await scroll(0.93);
     await expect
       .poll(() => video.evaluate((el: HTMLVideoElement) => el.currentTime))
       .toBeGreaterThan(3);
@@ -115,7 +115,7 @@ for (const width of [1440, 390]) {
     await expect(slider).toHaveAttribute('aria-valuetext', 'Paint');
     await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');
 
-    await expect(outside).toHaveCSS('opacity', '1');
+    await expect(recovery).toHaveText('File restored');
     await expect(drawing.getByRole('status')).toHaveText('Guitar');
   });
 }

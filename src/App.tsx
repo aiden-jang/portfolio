@@ -10,6 +10,7 @@ import { useSceneUrl } from './hooks/useSceneUrl';
 import { CarControls } from './ui/CarControls';
 import { useShowroomTransition } from './hooks/useShowroomTransition';
 import { PortfolioHeader } from './ui/PortfolioHeader';
+import { replayOpeningOrbit } from './three/openingPlayback';
 import { CommandMenu } from './ui/CommandMenu';
 import { CarLoadNotice } from './ui/CarLoadNotice';
 import { SceneBoundary } from './ui/SceneBoundary';
@@ -101,6 +102,7 @@ export function App() {
             <PortfolioHeader
               onLink={(id) => {
                 if (location.hash !== '#' + id) history.pushState(null, '', '#' + id);
+                if (id === 'sec-intro') replayOpeningOrbit();
                 scrollToSection(id);
                 const heading = document
                   .getElementById(id)

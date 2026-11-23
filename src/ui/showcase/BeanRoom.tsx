@@ -9,6 +9,7 @@ import {
 } from 'react';
 import type { Cat } from './mrrp/renderer.js';
 import './bean-room.css';
+import { useRoomCamera } from './roomCamera';
 
 const bean = {
   name: 'Bean',
@@ -76,6 +77,8 @@ export function BeanRoom() {
     };
   }, []);
 
+  useRoomCamera(live, near && !!Renderer);
+
   function pet() {
     setPets((count) => count + 1);
     setPetAt(Date.now());
@@ -127,7 +130,7 @@ export function BeanRoom() {
   }
 
   return (
-    <div className="bean-room" ref={room}>
+    <div className="bean-room" data-light={morning ? 'morning' : 'evening'} ref={room}>
       <div className="bean-window" data-light={morning ? 'morning' : 'evening'}>
         <picture className="bean-room-poster" aria-hidden={!!Renderer && near}>
           <source media="(max-width: 700px)" srcSet="/projects/scenes/mrrp-room-art-mobile.webp" />

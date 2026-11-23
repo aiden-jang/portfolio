@@ -116,11 +116,12 @@ for (const [width, height] of [
     await reader.getByRole('button', { name: 'Close', exact: true }).click();
     await expect(story).toBeFocused();
     const iodine = page.locator('#project-iodine');
+    await iodine.getByRole('button', { name: 'Replay edit' }).click();
     await iodine.getByRole('link', { name: 'Read the iodine case study' }).click();
     await expect(page.getByRole('heading', { name: 'An edit you can take back.' })).toBeVisible();
-    await expect(page).toHaveURL(/story=iodine$/);
+    await expect(page).toHaveURL(/cases\/iodine\/$/);
     await page.getByRole('button', { name: 'Undo edit', exact: true }).press('Enter');
-    await expect(page).toHaveURL(/story=iodine&edit=restored$/);
+    await expect(page).toHaveURL(/cases\/iodine\/\?edit=restored$/);
     await page.reload();
     await expect(page.getByText('Revert feedback queued', { exact: true })).toBeVisible();
     await expect(

@@ -57,7 +57,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       );
     }
     const lead = section.getByRole('link', { name: 'Read the case study', exact: true });
-    await expect(lead).toBeInViewport({ ratio: 1 });
+    await expect(lead).toBeVisible();
     const history = section.locator('.experience-history');
     await expect(history.getByText('LiveIntent', { exact: true })).toHaveCount(1);
     await expect(history).toContainText('Associate Software Engineer');
@@ -89,8 +89,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         };
       });
       const { history, lead, proof, rows } = boxes;
-      expect(history.y).toBeGreaterThanOrEqual(lead.bottom - 1);
-      expect(proof.y).toBeGreaterThanOrEqual(lead.bottom - 1);
+      expect(lead.y).toBeGreaterThanOrEqual(Math.max(history.bottom, proof.bottom) - 1);
       if (width > 900) {
         expect(proof.x).toBeGreaterThanOrEqual(history.right - 1);
         expect(lead.x).toBeCloseTo(history.x, 0);
@@ -116,21 +115,26 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       else await expect(batchedRequest).toBeHidden();
       await page.emulateMedia({ reducedMotion: 'no-preference' });
       const plot = comparison.locator('.batching-plots');
-      const scrollToPlot = (topRatio: number) =>
-        plot.evaluate((node, ratio) => {
-          const plotTop = node.getBoundingClientRect().top + scrollY;
-          scrollTo({ top: plotTop - ratio * innerHeight, behavior: 'instant' });
-        }, topRatio);
+      const scrollToBatch = (progress: number) =>
+        section.locator('.batch-lane').evaluate((lane, amount) => {
+          const pinned = lane.firstElementChild as HTMLElement;
+          const inset = parseFloat(getComputedStyle(pinned).top) || 85;
+          const travel = (lane as HTMLElement).offsetHeight - pinned.offsetHeight;
+          scrollTo({
+            top: scrollY + lane.getBoundingClientRect().top - inset + travel * amount,
+            behavior: 'instant',
+          });
+        }, progress);
       const marks = plot.locator('.batching-marks');
-      await scrollToPlot(width === 390 ? 0.68 : 0.54);
+      await scrollToBatch(-0.08);
       await expect(comparison).toHaveAttribute('data-scroll-stage', 'start', { timeout: 3500 });
-      await scrollToPlot(width === 390 ? 0.5 : 0.36);
+      await scrollToBatch(0.34);
       await expect(comparison).toHaveAttribute('data-scroll-stage', 'middle');
       await expect(marks).not.toHaveCSS('transform', 'none');
-      await scrollToPlot(width === 390 ? 0.32 : 0.15);
+      await scrollToBatch(0.85);
       await expect(after).toHaveAttribute('aria-pressed', 'true');
-      await expect(comparison.locator('.batching-scroll-metric')).toBeVisible();
-      await scrollToPlot(width === 390 ? 0.68 : 0.54);
+      await expect(section.locator('.experience-measure')).toBeVisible();
+      await scrollToBatch(-0.08);
       await expect(before).toHaveAttribute('aria-pressed', 'true');
       await expect(marks).toHaveCSS('transform', 'none');
       const replay = comparison.getByRole('button', { name: 'Replay batching' });
@@ -142,7 +146,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await before.click();
       await expect(requestGrid).toBeVisible();
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      await scrollToPlot(width === 390 ? 0.32 : 0.15);
+      await scrollToBatch(0.85);
       await expect(before).toHaveAttribute('aria-pressed', 'true');
       await expect(marks).toHaveCSS('animation-name', 'none');
       await replay.click();

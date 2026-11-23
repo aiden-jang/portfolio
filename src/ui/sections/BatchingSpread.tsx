@@ -59,7 +59,20 @@ export function BatchingSpread() {
 
       const start = height * (phone.matches ? 0.62 : 0.49);
       const finish = height * (phone.matches ? 0.34 : 0.17);
-      const progress = Math.min(1, Math.max(0, (start - panelTop) / (start - finish)));
+      const lane = element.closest<HTMLElement>('.batch-lane');
+      const pin = lane?.firstElementChild as HTMLElement | null;
+      const sticky = pin && getComputedStyle(pin).position === 'sticky';
+      const progress =
+        lane && pin && sticky
+          ? Math.min(
+              1,
+              Math.max(
+                0,
+                (parseFloat(getComputedStyle(pin).top) - lane.getBoundingClientRect().top) /
+                  Math.max(1, (lane.offsetHeight - pin.offsetHeight) * 0.64),
+              ),
+            )
+          : Math.min(1, Math.max(0, (start - panelTop) / (start - finish)));
       const time = Math.round(progress * replayDuration);
       const next = progress >= 0.74 ? 'after' : 'before';
       const stage = progress === 0 ? 'start' : progress === 1 ? 'end' : 'middle';

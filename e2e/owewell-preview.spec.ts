@@ -17,12 +17,12 @@ for (const width of [1440, 390]) {
     });
     await page.goto('/#project-owewell');
     const dinner = page.locator('#project-wherever');
-    const bill = dinner.getByRole('img', { name: /splits the .48 dinner bill/ });
-    await expect(bill).toBeInViewport();
-    await expect(bill.locator('../..')).toHaveCSS('opacity', '1');
+    const bill = dinner.locator('#project-owewell');
+    await expect(bill.getByText('Alex owes you')).toBeInViewport();
+    await expect(bill.getByText('$24.00', { exact: true })).toHaveCount(2);
     await expect
-      .poll(() => bill.evaluate((image: HTMLImageElement) => image.naturalWidth))
-      .toBeGreaterThan(0);
+      .poll(() => dinner.evaluate((el) => Number(el.style.getPropertyValue('--tear'))))
+      .toBe(1);
     await expect(dinner.getByRole('link', { name: 'Open app: wherever' })).toHaveAttribute(
       'href',
       'https://wherever.aidenjang.com',
