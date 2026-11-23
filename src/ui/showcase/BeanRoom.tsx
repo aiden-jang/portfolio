@@ -31,7 +31,7 @@ function roomClock(hour: number) {
 }
 
 export function BeanRoom() {
-  const windowRef = useRef<HTMLDivElement>(null);
+  const room = useRef<HTMLDivElement>(null);
   const live = useRef<HTMLDivElement>(null);
   const fade = useRef<HTMLCanvasElement>(null);
   const [near, setNear] = useState(false);
@@ -45,7 +45,7 @@ export function BeanRoom() {
   const clock = useMemo(() => roomClock(morning ? 9 : 20), [morning]);
 
   useEffect(() => {
-    const stage = windowRef.current;
+    const stage = room.current;
     if (!stage) return;
     let disposed = false;
     const observer = new IntersectionObserver(
@@ -100,8 +100,8 @@ export function BeanRoom() {
   }
 
   return (
-    <div className="bean-room">
-      <div className="bean-window" ref={windowRef} data-light={morning ? 'morning' : 'evening'}>
+    <div className="bean-room" ref={room}>
+      <div className="bean-window" data-light={morning ? 'morning' : 'evening'}>
         <picture className="bean-room-poster" aria-hidden={!!Renderer && near}>
           <source media="(max-width: 700px)" srcSet="/projects/scenes/mrrp-room-art-mobile.webp" />
           <img

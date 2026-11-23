@@ -124,6 +124,9 @@
   .quake-journey-readings dl {
     margin: 6px 0;
   }
+}
+
+@media (prefers-reduced-motion: no-preference) and (620px <= height) and (width < 768px) {
   html:root .quake-journey-run > .earthquake-feature {
     top: calc(var(--portfolio-header-height) + 3px);
   }

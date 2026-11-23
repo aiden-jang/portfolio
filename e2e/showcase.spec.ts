@@ -32,6 +32,7 @@ for (const width of [1440, 390]) {
     await expect(iodine.getByRole('img', { name: /reuses an approval/ })).toBeVisible();
     await expect(iodine.getByRole('img', { name: /requests a fresh approval/ })).toBeVisible();
     const room = page.locator('#project-mrrp');
+    await room.locator('.bean-window').scrollIntoViewIfNeeded();
     await room.getByRole('button', { name: 'Pet Bean', exact: true }).click();
     await expect(room.getByRole('img', { name: /Bean’s room/ })).toBeVisible();
     await expect(room.getByRole('status')).toHaveText('You pet Bean.');
