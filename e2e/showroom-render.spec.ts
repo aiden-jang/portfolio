@@ -65,33 +65,52 @@ for (const viewport of [
   });
 }
 
+test('Behind the render switches finishes and returns focus to Garage', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
+  await page.goto('/?car=0');
+  const garage = page.getByRole('button', { name: 'Garage controls', exact: true }).filter({
+    visible: true,
+  });
+  await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+  await garage.click();
+  await page.getByRole('combobox').fill('Behind the render');
+  await page.getByRole('option', { name: /Behind the render/ }).click();
+  const study = page.getByRole('dialog', { name: 'Behind the render' });
+  await expect(study.getByRole('button', { name: 'Studio' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await study.getByRole('button', { name: 'Clay' }).click();
+  await expect(study.getByRole('button', { name: 'Clay' })).toHaveAttribute('aria-pressed', 'true');
+  await study.getByText('How I built it', { exact: true }).click();
+  await expect(study.getByText(/The floor renders a second view/)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(study).toHaveCount(0);
+  await expect(garage).toBeFocused();
+});
+
 for (const width of [1440, 390]) {
-  test(`Studio closes Behind the render and restores Garage focus at ${width}px`, async ({
-    page,
-  }) => {
+  test(`About film clears when opening its shot in Studio at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-    await page.goto('/?car=0&light=dusk');
-    const garage = page.getByRole('button', { name: 'Garage controls', exact: true }).filter({
-      visible: true,
-    });
-    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-    await garage.click();
-    await page.getByRole('combobox').fill('Behind the render');
-    await page.getByRole('option', { name: /Behind the render/ }).click();
-    const study = page.getByRole('dialog', { name: 'Behind the render' });
-    await study.getByRole('button', { name: 'Clay' }).click();
-    await expect(study.getByRole('button', { name: 'Clay' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
-    await study.getByText('How I built it', { exact: true }).click();
-    await expect(study.getByText(/The floor renders a second view/)).toBeVisible();
-    await study.getByRole('button', { name: 'Studio', exact: true }).click();
-    await expect(study).toHaveCount(0);
-    await expect(garage).toBeFocused();
-    await expect(page).toHaveURL(/[?&]light=studio(?:[&#]|$)/);
-    await garage.press('Enter');
-    await expect(page.getByRole('combobox')).toBeVisible();
+    await page.goto('/#sec-about', { waitUntil: 'domcontentloaded' });
+
+    const open = page.getByRole('button', { name: 'Open this shot in Studio' });
+    await open.scrollIntoViewIfNeeded();
+    const film = page.locator('.scroll-film video');
+    await expect(film).toBeVisible();
+
+    await open.click();
+    const studio = page.getByRole('dialog', { name: 'Garage Studio' });
+    await expect(studio).toBeVisible();
+    await expect(film).toBeHidden();
+    await expect(page.locator('.portfolio-scene canvas')).toBeVisible();
+
+    await studio.getByRole('button', { name: 'Back to Garage' }).click();
+    await expect(studio).toBeHidden();
+    await expect(open).toBeFocused();
+    await expect(film).toBeVisible();
   });
 }

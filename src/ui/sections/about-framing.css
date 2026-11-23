@@ -52,7 +52,7 @@
   visibility: hidden;
 }
 .scroll-film-track[data-film-ready] video {
-  visibility: visible;
+  visibility: inherit;
 }
 .scroll-film h3 {
   margin: 0;
