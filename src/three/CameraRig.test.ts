@@ -5,7 +5,7 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { Box3, BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Vector3 } from 'three';
 import { CameraRig } from './CameraRig';
 import { useAppStore } from '../store';
-import { F40_INDEX, KEYFRAMES } from '../config';
+import { DEFAULT_CAR_INDEX, F40_INDEX, KEYFRAMES } from '../config';
 import { replayOpeningOrbit, useOpeningPlayback } from './openingPlayback';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 
@@ -359,21 +359,28 @@ it('hands the in-flight angle to a drag and does not resume the cuts', async () 
   });
 });
 
-it('restarts the Corvette opening on return to Intro and stays settled under reduced motion', async () => {
-  await withOpeningCamera(390, ({ tick, yaw, load, scrollTo }) => {
-    load();
-    tick(60);
-    const swept = yaw();
-    expect(swept).toBeGreaterThan(KEYFRAMES[0].azimuth + 0.1);
-    scrollTo(0.2);
-    tick();
-    expect(yaw()).not.toBeCloseTo(KEYFRAMES[1].azimuth, 2);
-    expect(useOpeningPlayback.getState().playback).toBe('off');
-    scrollTo(0);
-    tick(60);
-    expect(yaw()).toBeCloseTo(swept, 2);
-    expect(useOpeningPlayback.getState().playback).toBe('playing');
-  });
+it('restarts both camera sequences on short and long returns to Intro, except under reduced motion', async () => {
+  for (const [width, carIndex] of [
+    [390, DEFAULT_CAR_INDEX],
+    [1440, F40_INDEX],
+  ]) {
+    await withOpeningCamera(width, ({ tick, yaw, load, scrollTo }) => {
+      useAppStore.setState({ carIndex });
+      load();
+      tick(60);
+      const first = yaw();
+      expect(useOpeningPlayback.getState().playback).toBe('playing');
+      for (const position of [0.02, 0.2]) {
+        scrollTo(position);
+        tick();
+        expect(useOpeningPlayback.getState().playback).toBe('off');
+        scrollTo(0);
+        tick(60);
+        expect(useOpeningPlayback.getState().playback).toBe('playing');
+        expect(yaw()).toBeCloseTo(first, 3);
+      }
+    });
+  }
   vi.mocked(prefersReducedMotion).mockReturnValue(true);
   await withOpeningCamera(390, ({ tick, yaw, load, scrollTo }) => {
     load();

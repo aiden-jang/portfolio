@@ -52,7 +52,9 @@ export function useOpeningOrbit() {
       if (event.deltaY && !event.ctrlKey && (event.deltaY > 0 || window.scrollY > 1)) interrupt();
     };
     const scroll = () => {
-      if (window.scrollY > 1) interrupt();
+      if (window.scrollY <= 1 || !current.current) return;
+      current.current.scrolled = true;
+      current.current.leftIntro = true;
     };
     window.addEventListener('wheel', wheel, { passive: true });
     window.addEventListener('scroll', scroll, { passive: true });
@@ -79,7 +81,7 @@ export function useOpeningOrbit() {
     let motion = current.current;
     let store = useAppStore.getState();
     const atIntro = scroll <= 0.002 && window.scrollY <= 1;
-    if (scroll > 0.12) motion.leftIntro = true;
+    if (!atIntro) motion.leftIntro = true;
     const replayRequested = motion.version !== getOpeningReplayVersion();
     const switchedCar = motion.carIndex !== store.carIndex;
     if (
@@ -89,10 +91,7 @@ export function useOpeningOrbit() {
       !rig.isDown
     ) {
       motion.leftIntro = false;
-      if (
-        (replayRequested || switchedCar || (!reduced && store.carIndex === DEFAULT_CAR_INDEX)) &&
-        !usePhotoMode.getState().active
-      ) {
+      if ((replayRequested || switchedCar || !reduced) && !usePhotoMode.getState().active) {
         store.resetCamera();
         store = useAppStore.getState();
         const previousModel = motion.model;

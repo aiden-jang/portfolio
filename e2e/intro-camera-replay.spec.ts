@@ -76,6 +76,12 @@ for (const width of [1440, 390]) {
       finishLoad();
     }
     await expect(playing).toBeEnabled({ timeout: 60_000 });
+    for (const offset of [48, 940]) {
+      await page.evaluate((top) => window.scrollTo({ top, behavior: 'instant' }), offset);
+      await expect(playing).toHaveCount(0);
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+      await expect(playing).toBeVisible();
+    }
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await expect(camera).toBeHidden();
