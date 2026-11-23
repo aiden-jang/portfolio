@@ -1,0 +1,210 @@
+#project-wherever .dinner-sequence {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  height: calc(100svh - var(--portfolio-header-height));
+  min-height: 410px;
+  background: #24201b;
+}
+.dinner-sequence::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 52% 43%, #42332a, transparent 73%);
+  pointer-events: none;
+  z-index: -2;
+}
+#project-wherever h3 a:first-child {
+  opacity: calc(1 - var(--bill-arrival, 0) * 0.32);
+}
+#project-wherever h3 a:last-child {
+  opacity: calc(0.68 + var(--bill-arrival, 0) * 0.32);
+}
+.dinner-ticket {
+  position: relative;
+  display: grid;
+  grid-area: 1 / 1;
+  align-self: center;
+  justify-self: center;
+  grid-template-columns: 1.07fr 1fr;
+  width: min(63vw, 760px, calc((100svh - 170px) * 1.76));
+  margin-top: 54px;
+  transform: translateX(calc(-1 * clamp(142px, 18vw, 218px) * var(--bill-arrival, 0)))
+    scale(calc(1 - 0.13 * var(--bill-arrival, 0)));
+  min-height: clamp(292px, 42svh, 396px);
+  overflow: hidden;
+  border-radius: 12px;
+  background: #392319;
+  box-shadow: 0 20px 38px #100a084a;
+}
+.dinner-ticket-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 48% 54%;
+}
+.dinner-ticket-paper {
+  grid-column: 2;
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+  display: grid;
+  align-content: center;
+  padding: clamp(20px, 3vw, 45px);
+  color: #252820;
+  background: #f2eedf;
+  transform: translateX(calc(102% * var(--bill-arrival, 0)));
+}
+.dinner-ticket-state,
+.dinner-ticket-decisions {
+  position: relative;
+  display: grid;
+}
+.dinner-ticket-state {
+  margin-block-end: 11px;
+  font: 530 13px/1.35 var(--font-display);
+  color: #514c41;
+}
+.dinner-ticket-paper > strong {
+  display: block;
+  font: 610 clamp(24px, 3.15vw, 47px)/1.02 var(--font-display);
+  letter-spacing: -0.038em;
+  max-width: 12ch;
+}
+.dinner-ticket-decisions {
+  margin-top: clamp(20px, 3.5vw, 40px);
+}
+.dinner-ticket-vote,
+.dinner-ticket-match {
+  grid-area: 1 / 1;
+}
+.dinner-ticket-vote {
+  opacity: calc(1 - var(--vote-match, 0));
+  transform: translateY(calc(-10px * var(--vote-match, 0)));
+}
+.dinner-ticket-match {
+  opacity: var(--vote-match, 0);
+  transform: translateY(calc(10px * (1 - var(--vote-match, 0))));
+}
+.dinner-ticket-actions,
+.dinner-ticket-count {
+  display: flex;
+  gap: 7px 9px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.dinner-ticket-actions span,
+.dinner-ticket-count span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #a8a38f;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font: 560 13px/1.3 var(--font-display);
+}
+.dinner-ticket-actions span:first-child {
+  color: #57554a;
+}
+.dinner-ticket-actions span:last-child {
+  color: #fbf7e9;
+  background: #2a3629;
+  border-color: #2a3629;
+  transform: translateX(calc(9px * var(--vote-swipe, 0)));
+}
+.dinner-ticket-count span {
+  background: #dce5d7;
+  border-color: #b9c6b1;
+}
+.dinner-ticket-count b {
+  font-weight: 650;
+}
+.dinner-ticket-count small {
+  width: 100%;
+  font: 480 13px/1.3 var(--font-display);
+  color: #4a5145;
+}
+
+@media (max-width: 1000px) and (min-width: 701px) {
+  .dinner-ticket {
+    width: min(58vw, calc((100svh - 170px) * 1.76));
+  }
+}
+@media (max-width: 700px) {
+  .dinner-sequence::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, #19130cb3, #19130c50 46%, #19130cc9),
+      url('/projects/scenes/wherever-pizza.jpg') 58% center / cover;
+    opacity: calc(0.78 * var(--bill-arrival, 0));
+    pointer-events: none;
+    z-index: -1;
+  }
+  .dinner-ticket {
+    grid-template: clamp(145px, 25svh, 226px) auto / minmax(0, 1fr);
+    min-height: 0;
+    margin-top: 50px;
+    transform: translateY(calc(-33px * var(--bill-arrival, 0)))
+      scale(calc(1 - 0.07 * var(--bill-arrival, 0)));
+    opacity: calc(1 - var(--bill-arrival, 0));
+    width: min(calc(100vw - 2 * var(--portfolio-gutter)), 345px);
+  }
+  .dinner-ticket-photo {
+    object-position: 58% 43%;
+  }
+  .dinner-ticket-paper {
+    grid-area: 2 / 1;
+    align-content: start;
+    padding: 21px 22px 22px;
+    transform: translateY(calc(62px * var(--bill-arrival, 0)));
+  }
+  .dinner-ticket-paper > strong {
+    font-size: clamp(25px, 7.6vw, 34px);
+  }
+  .dinner-ticket-decisions {
+    margin-top: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce), (max-height: 609px) {
+  #project-wherever .dinner-sequence {
+    height: auto;
+    min-height: 0;
+    padding: 112px var(--portfolio-gutter) 56px;
+    gap: 45px;
+  }
+  #project-wherever h3 a:is(:first-child, :last-child) {
+    opacity: 1;
+  }
+  .dinner-sequence::after {
+    display: none;
+  }
+  .dinner-ticket {
+    grid-area: auto;
+    width: min(100%, 760px);
+    margin-top: 0;
+    opacity: 1;
+    transform: none;
+  }
+  .dinner-ticket-paper,
+  .dinner-ticket-match {
+    opacity: 1;
+    transform: none;
+  }
+  .dinner-ticket-vote {
+    display: none;
+  }
+  .dinner-sequence .bill {
+    grid-area: auto;
+    justify-self: center;
+    width: min(100%, 450px);
+    margin: 0;
+    opacity: 1;
+    transform: none;
+  }
+}

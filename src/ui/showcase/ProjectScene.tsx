@@ -1,11 +1,20 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import './project-scene.css';
+import './dinner-scene.css';
+
+function settleDinner(progress: number) {
+  if (progress < 0.24) return 0;
+  if (progress < 0.55) return 0.47;
+  return 1;
+}
 
 function presentScene(stage: HTMLElement, progress: number) {
   if (stage.id === 'project-wherever') {
-    stage.style.setProperty('--paper', String(easedProgress(progress, 0.12, 0.53)));
     stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
+    stage.style.setProperty('--vote-swipe', String(easedProgress(progress, 0.09, 0.31)));
+    stage.style.setProperty('--vote-match', String(easedProgress(progress, 0.24, 0.43)));
+    stage.style.setProperty('--bill-arrival', String(easedProgress(progress, 0.55, 0.9)));
   }
   stage.dataset.sceneProgress = progress.toFixed(3);
   stage.dispatchEvent(new CustomEvent('project-scene-progress', { detail: progress }));
@@ -25,7 +34,7 @@ export function ProjectScene({
   children: ReactNode;
 }) {
   const scene = useRef<HTMLElement>(null);
-  useScrollStudy(scene, true, presentScene);
+  useScrollStudy(scene, true, presentScene, theme === 'dinner' ? settleDinner : undefined);
   return (
     <article ref={scene} id={id} className={`project-scene project-scene-${theme}`}>
       <div className="project-scene-body" data-study-pin>
@@ -39,6 +48,46 @@ export function ProjectScene({
   );
 }
 
+function DinnerTicket() {
+  return (
+    <div
+      className="dinner-ticket"
+      role="img"
+      aria-label="A sample vote for Neighborhood Pizza Kitchen. Alex and Maya both vote yes."
+    >
+      <img
+        className="dinner-ticket-photo"
+        src="/projects/scenes/wherever-pizza.jpg"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+      <div className="dinner-ticket-paper">
+        <div className="dinner-ticket-state">
+          <span className="dinner-ticket-vote">Pick your dinner</span>
+          <span className="dinner-ticket-match">Tonight’s plan</span>
+        </div>
+        <strong>Neighborhood Pizza Kitchen</strong>
+        <div className="dinner-ticket-decisions">
+          <div className="dinner-ticket-vote dinner-ticket-actions">
+            <span>Nope</span>
+            <span>Yes, please</span>
+          </div>
+          <div className="dinner-ticket-match dinner-ticket-count">
+            <span>
+              Alex <b>✓</b>
+            </span>
+            <span>
+              Maya <b>✓</b>
+            </span>
+            <small>2 of 2 picked it</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function DinnerScene() {
   const track = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -48,7 +97,13 @@ export function DinnerScene() {
     if (!stage || !section || !body) return;
     const animated = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 610px)');
     const seekSecond = () => {
-      if (location.hash !== '#project-owewell' || !animated.matches) return;
+      if (location.hash !== '#project-owewell') return;
+      if (!animated.matches) {
+        stage
+          .querySelector('#project-owewell')
+          ?.scrollIntoView({ block: 'center', behavior: 'instant' });
+        return;
+      }
       const top = window.scrollY + section.getBoundingClientRect().top;
       const inset = Number.parseFloat(getComputedStyle(body).top);
       const travel = section.offsetHeight - body.offsetHeight;
@@ -64,16 +119,7 @@ export function DinnerScene() {
 
   return (
     <div className="dinner-sequence" ref={track}>
-      <div className="dinner-photo">
-        <div className="dinner-result">
-          <small>Alex &amp; Maya’s pick</small>
-          <strong>
-            Neighborhood
-            <br />
-            Pizza Kitchen
-          </strong>
-        </div>
-      </div>
+      <DinnerTicket />
       <div className="bill" id="project-owewell">
         <div className="paper total">
           <span>Neighborhood Pizza Kitchen</span>

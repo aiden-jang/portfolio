@@ -58,7 +58,6 @@ export function AboutFraming() {
           player.load();
         }
         lane.removeAttribute('data-film-ready');
-        lane.removeAttribute('data-detail');
         return;
       }
       const source = media + (narrow.matches ? 'mobile.mp4' : 'desktop.mp4');
@@ -76,8 +75,7 @@ export function AboutFraming() {
       const travel = lane.clientHeight - lane.firstElementChild!.clientHeight;
       if (travel > 0) {
         const t = Math.min(1, Math.max(0, -rect.top / travel));
-        apply(Math.min(1, Math.max(0, (t - 0.16) / 0.59)));
-        lane.dataset.detail = String(t >= 0.84);
+        apply(Math.min(1, Math.max(0, (t - 0.16) / 0.76)));
       }
     }
     function schedule() {
@@ -94,7 +92,6 @@ export function AboutFraming() {
     const showPoster = () => lane.removeAttribute('data-film-ready');
     const useSlider = () => {
       manual = true;
-      lane.dataset.detail = 'false';
       apply(slider.valueAsNumber / 100);
     };
     const observer = new IntersectionObserver(
@@ -134,12 +131,6 @@ export function AboutFraming() {
           <FinishPoster finish="clay" />
           <FinishPoster finish="paint" />
           <video ref={video} muted playsInline preload="auto" aria-hidden="true" />
-          <img
-            className="finish-detail"
-            src="/showroom/exhibits/louvers.webp"
-            alt=""
-            loading="lazy"
-          />
 
           <div className="film-heading">
             <h3 id="finish-study-title">Framing the showroom</h3>

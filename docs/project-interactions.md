@@ -70,9 +70,10 @@ Scroll through iguess to draw one recorded round, reveal the guess and see the a
 Scroll back to retrace the same strokes. The case study shows
 how the room socket, Durable Object and AI Worker share a round.
 
-The dinner scene pairs the wherever group decision and the matching $48 owewell split.
-Scrolling reverses both capture transitions. Reduced motion shows both capture states
-and the finished iguess drawing without playback.
+The dinner scene keeps the same pizza in view as Alex and Maya’s wherever vote
+becomes a match and the $48 owewell receipt arrives. Scrolling back reverses the
+sequence. Reduced motion shows the match and receipt in order and leaves the
+iguess drawing in its finished state.
 
 The bloomnote garden recomposes three blooms from the
 [approved recipient capture](../public/projects/bloomnote-garden.jpg). Selecting a flower
@@ -87,8 +88,9 @@ The [desktop](../public/showroom/finish-study/desktop.mp4) and
 Studio renderer and the Ferrari F40 by
 [vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95),
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-The full clay profile holds before the camera turns toward the rear and the red paint resolves.
-Scrolling in either direction scrubs the recorded turn. The slider supports
+The full clay profile holds before the camera turns toward the rear, reveals the
+red paint and rises over the louvers in one take. Scrolling in either direction
+scrubs the recorded turn. The slider supports
 manual control and blends between stills with reduced motion. Opening the shot
 in Studio and returning preserves the reading position. The About reel pairs local project captures
 with a tighter mobile view for Iodine. It loops while in view, is tappable to pause, and

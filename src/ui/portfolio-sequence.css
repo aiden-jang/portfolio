@@ -44,8 +44,7 @@ html:root .portfolio-chrome .project-scenes .project-scene h3 {
   padding: 0 4vw 0 0;
   display: block;
 }
-.iguess-replay-controls small,
-.dinner-result small {
+.iguess-replay-controls small {
   display: block;
   font: 480 clamp(13px, 1.1vw, 17px)/1.3 var(--font-display);
   margin-bottom: 14px;
@@ -83,13 +82,6 @@ html:root .portfolio-chrome .project-scenes .project-scene h3 {
   font-weight: 350;
   color: #a99b86;
   font-style: normal;
-}
-.dinner-sequence {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  display: grid;
-  height: clamp(288px, 56svh, 560px);
 }
 .gallery-companions .garage-project-copy {
   order: -1;
@@ -300,35 +292,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
 #project-wherever .project-scene-links a {
   color: #fff9ed;
 }
-#project-wherever .dinner-sequence {
-  height: calc(100svh - var(--portfolio-header-height));
-  min-height: 410px;
-}
-.dinner-sequence .dinner-photo {
-  grid-area: 1 / 1;
-  position: relative;
-  display: grid;
-  align-items: end;
-  width: 100%;
-  height: 100%;
-  background:
-    linear-gradient(180deg, #17100bbe, transparent 28%, transparent 53%, #170e09e6),
-    url('/projects/scenes/wherever-pizza.jpg') center / cover;
-  z-index: 0;
-}
-.dinner-sequence .dinner-result {
-  color: #fff6e7;
-  padding: 0 var(--portfolio-gutter) 7svh;
-}
-.dinner-sequence .dinner-result strong {
-  display: block;
-  font:
-    400 clamp(37px, 6.6vw, 104px)/0.97 Fraunces,
-    Georgia,
-    serif;
-  letter-spacing: -0.045em;
-  max-width: 12ch;
-}
 .bill {
   grid-area: 1/1;
   justify-self: end;
@@ -337,8 +300,9 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   position: relative;
   width: min(36vw, 450px);
   z-index: 1;
-  transform: translateY(calc(92svh * (1 - var(--paper, 1))))
-    rotate(calc(-4deg + 4deg * var(--tear, 1)));
+  opacity: var(--bill-arrival, 0);
+  transform: translateY(calc(46svh * (1 - var(--bill-arrival, 0))))
+    rotate(calc(-3deg + 3deg * var(--tear, 1)));
   color: #303228;
   font-family: var(--font-mono), monospace;
   filter: drop-shadow(0 12px 14px #21180e55);
@@ -463,21 +427,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   #project-wherever .project-scene-links a {
     font-size: 11px;
   }
-  .dinner-sequence .dinner-photo {
-    grid-area: 1 / 1;
-    position: relative;
-    display: grid;
-    align-items: end;
-    background-position: 58% center;
-  }
-  .dinner-sequence .dinner-result {
-    align-self: start;
-    padding: clamp(92px, 13svh, 120px) var(--portfolio-gutter) 0;
-    text-shadow: 0 1px 12px #231306;
-  }
-  .dinner-sequence .dinner-result strong {
-    font-size: clamp(37px, 10vw, 60px);
-  }
   .bill {
     width: min(76vw, 400px);
     align-self: end;
@@ -505,9 +454,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   .duet .sketch {
     min-height: max(420px, 80svh);
   }
-  .bill {
-    transform: none;
-  }
   .stub,
   .stub.due {
     transform: none;
@@ -534,6 +480,7 @@ html:root #project-mrrp.room-shot .bean-room-canvas canvas {
 }
 #project-wherever h3 a {
   display: inline-block;
+  min-height: 44px;
   padding: 6px 0;
 }
 #project-wherever h3 a span {
@@ -713,23 +660,6 @@ html:root #sec-about {
 .scroll-film-track {
   --scroll-travel: 110svh;
 }
-.scroll-film > .finish-detail {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -2;
-  object-fit: cover;
-  object-position: 50% 55%;
-  opacity: 0;
-}
-.scroll-film-track[data-detail='true'] .finish-detail {
-  opacity: 1;
-}
-.scroll-film-track[data-detail='true'] .film-heading {
-  opacity: 0;
-}
 .about-framing-notes {
   padding-block: 12px 18px;
   display: flex;
@@ -816,13 +746,6 @@ html:root #sec-contact {
 .recovery-line .removed {
   line-height: inherit;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .scroll-film-track[data-detail='true'] .scroll-film-range {
-    background: #0d0d0ea8;
-    padding-inline: 12px;
-  }
-}
-
 @media (max-width: 360px) {
   #project-iodine .recovery-line {
     min-height: 2.5em;

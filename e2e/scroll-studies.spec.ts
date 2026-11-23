@@ -100,10 +100,18 @@ for (const width of [1440, 390]) {
     await expect
       .poll(() => video.evaluate((el: HTMLVideoElement) => el.videoWidth))
       .toBe(width === 390 ? 416 : 1152);
-    await scroll(0.93);
-    await expect
-      .poll(() => video.evaluate((el: HTMLVideoElement) => el.currentTime))
-      .toBeGreaterThan(3);
+    const time = () => video.evaluate((el: HTMLVideoElement) => el.currentTime);
+    await scroll(0.82);
+    await expect.poll(time).toBeGreaterThan(3.3);
+    const beforeFinalTurn = await time();
+    expect(beforeFinalTurn).toBeLessThan(3.6);
+    await scroll(0.88);
+    await expect.poll(time).toBeGreaterThan(beforeFinalTurn + 0.21);
+    expect(await time()).toBeLessThan(3.95);
+    await scroll(0.95);
+    await expect.poll(time).toBeGreaterThan(3.96);
+    await expect(video).toBeVisible();
+    await expect(track.locator('.finish-detail')).toHaveCount(0);
     await scroll(0.26);
     await expect
       .poll(() => video.evaluate((el: HTMLVideoElement) => el.currentTime))
