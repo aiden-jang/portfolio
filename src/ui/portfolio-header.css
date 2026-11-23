@@ -16,9 +16,15 @@
   justify-content: space-between;
   height: var(--portfolio-header-height);
   padding: 0 5vw;
-  background: rgb(16 16 20 / var(--header-scrim, 0));
-  border-bottom: 1px solid rgb(255 255 255 / calc(var(--header-scrim, 0) * 0.09));
+  background: rgb(16 16 20 / calc(var(--header-scrim, 0) * 0.94));
+  border-bottom: 1px solid rgb(255 255 255 / calc(var(--header-scrim, 0) * 0.05));
   pointer-events: none;
+}
+@supports (backdrop-filter: blur(1px)) {
+  .portfolio-header {
+    background: rgb(16 16 20 / calc(var(--header-scrim, 0) * 0.76));
+    backdrop-filter: blur(calc(var(--header-scrim, 0) * 10px));
+  }
 }
 .portfolio-header > header,
 .portfolio-header #nav {

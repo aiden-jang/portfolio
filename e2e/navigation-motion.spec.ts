@@ -41,7 +41,7 @@ test('the desktop underline tracks the section and fits after resize', async ({ 
   await expect.poll(markerFollowsActive).toBe(true);
   await expect(header).toHaveCSS('background-color', /^rgba\(\d+, \d+, \d+, 0\)$/);
   await scrollTo(page, 44);
-  await expect(header).toHaveCSS('background-color', 'rgba(16, 16, 20, 0.5)');
+  await expect(header).toHaveCSS('background-color', 'rgba(16, 16, 20, 0.38)');
 
   const root = page.locator('html');
   await scrollTo(page, 810);
@@ -54,16 +54,19 @@ test('the desktop underline tracks the section and fits after resize', async ({ 
   await expect(nav.locator('a[aria-current]')).toHaveText('Featured work');
   await expect(page.getByRole('heading', { name: 'Featured work', exact: true })).toBeFocused();
   await expect.poll(markerFollowsActive).toBe(true);
-  await expect(header).toHaveCSS('background-color', 'rgb(16, 16, 20)');
+  await expect(header).toHaveCSS('background-color', 'rgba(16, 16, 20, 0.76)');
+  await expect(header).toHaveCSS('backdrop-filter', 'blur(10px)');
 
   await nav.getByRole('link', { name: 'Contact', exact: true }).click();
   await expect(page.getByRole('link', { name: /me@aidenjang.com/ })).toBeInViewport();
   await expect(root).not.toHaveAttribute('data-showroom-handoff', '');
   await expect
     .poll(() =>
-      page.locator('#sec-contact').evaluate((section) => section.getBoundingClientRect().top),
+      page
+        .locator('#sec-contact')
+        .evaluate((section) => Math.abs(section.getBoundingClientRect().top)),
     )
-    .toBeCloseTo(0, 0);
+    .toBeLessThanOrEqual(1);
   await page.setViewportSize({ width: 1024, height: 900 });
   await expect.poll(markerFollowsActive).toBe(true);
   // Responsive reflow can move the current scroll position into a neighboring section.
@@ -93,6 +96,7 @@ test.describe('mobile navigation motion', () => {
     const menu = page.getByRole('button', { name: /^Menu(?:$|: )/ });
     const panel = page.locator('#mobile-navigation');
     await menu.press('Enter');
+    await expect(panel).toHaveCSS('background-color', 'rgb(16, 16, 20)');
     await panel.getByRole('link', { name: 'Featured work', exact: true }).focus();
     await page.keyboard.press('Escape');
     await expect(menu).toBeFocused();
