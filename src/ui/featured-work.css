@@ -17,7 +17,6 @@ html:root #sec-work .project-featured-group {
 }
 @media (prefers-reduced-motion: no-preference) and (min-height: 620px) {
   html:root .portfolio-chrome #sec-work {
-    margin-top: -36svh;
     background: linear-gradient(
       180deg,
       transparent,
@@ -473,11 +472,5 @@ html:root .orbit-event-trigger:has(span) {
 @media (max-width: 359px) {
   html:root :is(#sec-work, #sec-experience) {
     --portfolio-gutter: 24px;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) and (max-width: 767px) and (min-height: 620px) {
-  html:root .portfolio-chrome #sec-work {
-    margin-top: -24svh;
   }
 }

@@ -25,6 +25,12 @@ for (const width of [1440, 390]) {
       }
     };
     await expect(playing).toBeVisible({ timeout: 60_000 });
+    expect(
+      await page
+        .locator('#sec-work')
+        .evaluate((section) => section.getBoundingClientRect().top - innerHeight),
+    ).toBeGreaterThanOrEqual(-1);
+    await expect(dock).toHaveCSS('opacity', '1');
     await expect(dock.getByRole('button', { name: 'Reset view', exact: true })).toHaveCount(0);
     const position = await camera.boundingBox();
     const zoomPosition = await zoom.boundingBox();
@@ -79,8 +85,11 @@ for (const width of [1440, 390]) {
     for (const offset of [48, 940]) {
       await page.evaluate((top) => window.scrollTo({ top, behavior: 'instant' }), offset);
       await expect(playing).toHaveCount(0);
+      if (offset === 48) await expect(dock).toHaveCSS('opacity', '1');
+      else await expect(dock).toBeHidden();
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
       await expect(playing).toBeVisible();
+      await expect(dock).toHaveCSS('opacity', '1');
     }
 
     await page.emulateMedia({ reducedMotion: 'reduce' });

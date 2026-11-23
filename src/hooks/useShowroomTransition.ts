@@ -87,7 +87,7 @@ export function useShowroomTransition() {
           : 1 - smoothProgress(progress, 0.79, fadeEnd);
         // Finish the fade where the dock stops fitting in the Intro viewport.
         const dockEnd = Math.max(0.015, (intro.offsetHeight + 0.5) / h - 1);
-        const dock = 1 - smoothProgress(progress, 0.005, dockEnd);
+        const dock = 1 - smoothProgress(progress, dockEnd * 0.64, dockEnd);
         root.style.setProperty('--garage-controls-opacity', String(dock));
       } else {
         root.style.removeProperty('--garage-controls-opacity');
