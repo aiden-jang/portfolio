@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { useMapEditorCut } from '../showcase/useMapEditorCut';
 import { BloomPreview } from '../showcase/BloomPreview';
 import { Duet } from '../showcase/Duet';
 
@@ -24,11 +26,17 @@ const orderedCollection = editorialOrder
   .concat(collection.filter((item) => !editorialOrder.includes(workId(item))));
 
 export function WorkSection({ onOpen }: Props) {
+  const featuredGroup = useRef<HTMLDivElement>(null);
+  useMapEditorCut(featuredGroup);
   return (
     <Section id="sec-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="garage-work pointer-events-auto">
         <h2 className="featured-work-heading">Featured work</h2>
-        <div className="garage-project-list project-featured-group" aria-label="Featured projects">
+        <div
+          ref={featuredGroup}
+          className="garage-project-list project-featured-group"
+          aria-label="Featured projects"
+        >
           {featured.map((item) =>
             item.mark === 'everythingisfine' ? (
               <EarthquakeFeature

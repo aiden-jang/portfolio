@@ -83,6 +83,41 @@ for (const width of [1440, 390]) {
     );
     await expect(quake).toHaveAttribute('data-study-progress', '0.430');
     await nudgeSettledReading(0.54);
+
+    const featured = page.locator('.project-featured-group');
+    const gridOpacity = () =>
+      iodine
+        .locator('.recovery-source')
+        .evaluate((el) => Number(getComputedStyle(el, '::before').opacity));
+    const approachEditor = () =>
+      iodine.evaluate((article) => {
+        const body = article.querySelector('[data-study-pin]')!;
+        const editor = body.querySelector('.recovery')!;
+        const offset = editor.getBoundingClientRect().top - body.getBoundingClientRect().top;
+        scrollTo({
+          top: scrollY + article.getBoundingClientRect().top + offset - innerHeight * 0.69,
+          behavior: 'instant',
+        });
+      });
+    await seekScene('#project-everythingisfine', 0.96);
+    await expect(quake).toHaveAttribute('data-quake-view', 'map');
+    await approachEditor();
+    await expect(featured).toHaveAttribute('data-map-editor-cut', '');
+    await expect.poll(gridOpacity).toBeGreaterThan(0.25);
+    await seekScene('#project-iodine', 0.86);
+    await expect(recovery).toHaveText('File restored');
+    await expect(featured).not.toHaveAttribute('data-map-editor-cut');
+    await approachEditor();
+    await expect(recovery).toHaveText('Agent edit');
+    await expect.poll(gridOpacity).toBeGreaterThan(0.25);
+    await seekScene('#project-iodine', 0.15);
+    await iodine.getByRole('button', { name: 'Undo edit', exact: true }).click();
+    await expect(recovery).toHaveText('File restored');
+    await expect(iodine.getByRole('link', { name: 'Read the iodine case study' })).toHaveAttribute(
+      'href',
+      /edit=restored/,
+    );
+
     const track = page.locator('.scroll-film-track');
     const video = track.locator('video');
     const slider = track.getByRole('slider');
@@ -120,6 +155,7 @@ for (const width of [1440, 390]) {
       .toBeLessThan(1.5);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect(featured).not.toHaveAttribute('data-map-editor-cut');
     await expect(video).not.toHaveAttribute('src', /mp4/);
     await slider.fill('100');
     await expect(slider).toHaveAttribute('aria-valuetext', 'Paint');
