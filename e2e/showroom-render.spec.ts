@@ -65,27 +65,33 @@ for (const viewport of [
   });
 }
 
-test('Behind the render switches finishes and returns focus to Garage', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-  await page.goto('/?car=0');
-  const garage = page.getByRole('button', { name: 'Garage controls', exact: true }).filter({
-    visible: true,
+for (const width of [1440, 390]) {
+  test(`Studio closes Behind the render and restores Garage focus at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
+    await page.goto('/?car=0&light=dusk');
+    const garage = page.getByRole('button', { name: 'Garage controls', exact: true }).filter({
+      visible: true,
+    });
+    await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
+    await garage.click();
+    await page.getByRole('combobox').fill('Behind the render');
+    await page.getByRole('option', { name: /Behind the render/ }).click();
+    const study = page.getByRole('dialog', { name: 'Behind the render' });
+    await study.getByRole('button', { name: 'Clay' }).click();
+    await expect(study.getByRole('button', { name: 'Clay' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await study.getByText('How I built it', { exact: true }).click();
+    await expect(study.getByText(/The floor renders a second view/)).toBeVisible();
+    await study.getByRole('button', { name: 'Studio', exact: true }).click();
+    await expect(study).toHaveCount(0);
+    await expect(garage).toBeFocused();
+    await expect(page).toHaveURL(/[?&]light=studio(?:[&#]|$)/);
+    await garage.press('Enter');
+    await expect(page.getByRole('combobox')).toBeVisible();
   });
-  await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-  await garage.click();
-  await page.getByRole('combobox').fill('Behind the render');
-  await page.getByRole('option', { name: /Behind the render/ }).click();
-  const study = page.getByRole('dialog', { name: 'Behind the render' });
-  await expect(study.getByRole('button', { name: 'Studio' })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
-  await study.getByRole('button', { name: 'Clay' }).click();
-  await expect(study.getByRole('button', { name: 'Clay' })).toHaveAttribute('aria-pressed', 'true');
-  await study.getByText('How I built it', { exact: true }).click();
-  await expect(study.getByText(/The floor renders a second view/)).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(study).toHaveCount(0);
-  await expect(garage).toBeFocused();
-});
+}

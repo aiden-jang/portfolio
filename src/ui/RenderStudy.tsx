@@ -5,8 +5,6 @@ import { useDialogFocus } from './useDialogFocus';
 import { usePageScrollLock } from './usePageScrollLock';
 import './render-study.css';
 
-const FINISHES = ['studio', 'clay'] as const;
-
 export function RenderStudy() {
   const finish = useAppStore((state) => state.renderFinish);
   const setFinish = useAppStore((state) => state.setRenderFinish);
@@ -64,16 +62,18 @@ export function RenderStudy() {
       </button>
       <div className="render-study-controls">
         <div role="group" aria-label="Ferrari render finish" className="render-study-finish">
-          {FINISHES.map((view) => (
-            <button
-              key={view}
-              type="button"
-              aria-pressed={finish === view}
-              onClick={() => setFinish(view)}
-            >
-              {view === 'studio' ? 'Studio' : 'Clay'}
-            </button>
-          ))}
+          <button
+            type="button"
+            onClick={() => {
+              useAppStore.getState().setThemeName('studio');
+              setFinish(null);
+            }}
+          >
+            Studio
+          </button>
+          <button type="button" aria-pressed={finish === 'clay'} onClick={() => setFinish('clay')}>
+            Clay
+          </button>
         </div>
         <p role="status">
           {finish === 'studio'
