@@ -29,11 +29,12 @@ export function useContactArrival() {
     }
     state.progress = contactArrivalProgress(contact.top, size.height, state.progress, dt, reduced);
     Object.assign(pose, KEYFRAMES.at(-1)!);
-    const t = easeOutCubic(state.progress);
+    const matchCut = !reduced && size.height >= 500;
+    const t = matchCut ? 1 : easeOutCubic(state.progress);
     const view = contactFrame({
       ...size,
       sectionHeight: contact.height,
-      sectionTop: contact.top,
+      sectionTop: matchCut ? Math.min(0, contact.top) : contact.top,
       progress: t,
     });
     // Treat a tall Contact section as one scene and show only its current viewport slice.

@@ -739,3 +739,28 @@ html:root #sec-contact {
     min-height: 2.5em;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 500px) {
+  html:root:not([data-scene-unavailable]) .scroll-film-track {
+    --finish-outro: 0.22;
+    height: calc(var(--stage-height) + var(--scroll-travel) + var(--finish-outro) * 100svh);
+  }
+  html:root:not([data-scene-unavailable]) #sec-contact {
+    margin-top: -23svh;
+    z-index: 1;
+  }
+  html:root[data-closing-match] :is(#sec-about, .scroll-film-track) {
+    background: transparent;
+  }
+  html:root[data-closing-match] .scroll-film:not(:focus-within) {
+    opacity: 0;
+    pointer-events: none;
+  }
+  html:root[data-closing-match] #sec-contact .panel {
+    translate: 0 calc(-1 * var(--contact-lift, 0px));
+    opacity: var(--contact-reveal, 1);
+  }
+  html:root[data-closing-match] #sec-contact .panel:focus-within {
+    opacity: 1;
+  }
+}

@@ -72,7 +72,9 @@ export function AboutFraming() {
       const rect = lane.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > innerHeight) manual = false;
       if (manual || !nearby) return;
-      const travel = lane.clientHeight - lane.firstElementChild!.clientHeight;
+      const stage = lane.firstElementChild!.clientHeight;
+      const outro = Number(getComputedStyle(lane).getPropertyValue('--finish-outro'));
+      const travel = lane.clientHeight - stage * (1 + outro);
       if (travel > 0) {
         const t = Math.min(1, Math.max(0, -rect.top / travel));
         apply(Math.min(1, Math.max(0, (t - 0.16) / 0.76)));
@@ -126,6 +128,28 @@ export function AboutFraming() {
 
   return (
     <figure className="about-framing-study" aria-labelledby="finish-study-title">
+      <figcaption className="about-framing-notes">
+        <span>
+          Model by{' '}
+          <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">vecarz</a>, CC
+          BY 4.0.
+        </span>
+        <div className="about-framing-actions">
+          {!sceneUnavailable && (
+            <button
+              className="creative-about-action"
+              type="button"
+              aria-label="Open this shot in Studio"
+              onClick={(event) => openAboutShot(event.currentTarget)}
+            >
+              Studio
+            </button>
+          )}
+          <a className="creative-about-action" href="/cases/showroom/">
+            How I built the showroom <ControlIcon name="arrow" />
+          </a>
+        </div>
+      </figcaption>
       <div className="scroll-film-track" ref={track}>
         <div className="scroll-film">
           <FinishPoster finish="clay" />
@@ -152,28 +176,6 @@ export function AboutFraming() {
           </div>
         </div>
       </div>
-      <figcaption className="about-framing-notes">
-        <span>
-          Model by{' '}
-          <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">vecarz</a>, CC
-          BY 4.0.
-        </span>
-        <div className="about-framing-actions">
-          {!sceneUnavailable && (
-            <button
-              className="creative-about-action"
-              type="button"
-              aria-label="Open this shot in Studio"
-              onClick={(event) => openAboutShot(event.currentTarget)}
-            >
-              Studio
-            </button>
-          )}
-          <a className="creative-about-action" href="/cases/showroom/">
-            How I built the showroom <ControlIcon name="arrow" />
-          </a>
-        </div>
-      </figcaption>
     </figure>
   );
 }

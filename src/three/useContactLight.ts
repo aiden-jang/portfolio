@@ -11,7 +11,7 @@ export function useContactLight() {
       current.elapsed = 0;
       return -1;
     }
-    if (current.elapsed >= SECONDS) return 1;
+    if (innerHeight >= 500 || current.elapsed >= SECONDS) return 1;
     if (prefersReducedMotion()) {
       current.elapsed = SECONDS;
       return 1;

@@ -35,6 +35,7 @@ export function useShowroomTransition() {
     const intro = document.getElementById('sec-intro');
     const work = document.getElementById('sec-work');
     const contact = document.getElementById('sec-contact');
+    const finish = document.querySelector<HTMLElement>('.scroll-film-track');
     const plot = document.querySelector<HTMLElement>('.bloom-garden-plot');
     if (!intro || !work || !contact) return;
 
@@ -69,8 +70,24 @@ export function useShowroomTransition() {
       lastScroll = scrollY;
       if (progress < 0.05) visitedIntro = true;
 
-      const contactProgress = (h - contact.getBoundingClientRect().top) / h;
+      const contactTop = contact.getBoundingClientRect().top;
+      const contactProgress = (h - contactTop) / h;
       const inContact = contactProgress > 0;
+      const { sceneUnavailable, isCarLoading } = useAppStore.getState();
+      const canMatch = finish && !reduced && h >= 500 && !sceneUnavailable;
+      const filmRemaining = canMatch ? finish.getBoundingClientRect().bottom - h : Infinity;
+      const matchCut = inContact && !isCarLoading && !!refs.carModel && filmRemaining < h * 0.11;
+      root.toggleAttribute('data-scene-unavailable', sceneUnavailable);
+      root.toggleAttribute('data-closing-match', matchCut);
+      if (matchCut) {
+        const reveal = 1 - smoothProgress(filmRemaining, -h * 0.05, h * 0.11);
+        const lift = Math.max(0, contactTop) - (1 - reveal) * 14;
+        contact.style.setProperty('--contact-lift', `${lift}px`);
+        contact.style.setProperty('--contact-reveal', String(reveal));
+      } else {
+        contact.style.removeProperty('--contact-lift');
+        contact.style.removeProperty('--contact-reveal');
+      }
       refs.floorReflection =
         reduced || inContact ? 1 : lerp(1, 0.07, smoothProgress(progress, 0.08, 0.52));
 
@@ -83,7 +100,9 @@ export function useShowroomTransition() {
       let stage = 1;
       if (!reduced) {
         stage = inContact
-          ? smoothProgress(contactProgress, 0.05, phone ? 0.48 : 0.44)
+          ? canMatch
+            ? 1
+            : smoothProgress(contactProgress, 0.05, phone ? 0.48 : 0.44)
           : 1 - smoothProgress(progress, 0.79, fadeEnd);
         // Finish the fade where the dock stops fitting in the Intro viewport.
         const dockEnd = Math.max(0.015, (intro.offsetHeight + 0.5) / h - 1);
@@ -125,8 +144,16 @@ export function useShowroomTransition() {
     work.addEventListener('load', schedule, true);
     work.addEventListener('animationend', endPulse);
     work.addEventListener('animationcancel', endPulse);
+    const unsubscribe = useAppStore.subscribe((next, previous) => {
+      if (
+        next.sceneUnavailable !== previous.sceneUnavailable ||
+        next.isCarLoading !== previous.isCarLoading
+      )
+        schedule();
+    });
     paint();
     return () => {
+      unsubscribe();
       cancelAnimationFrame(frame);
       removeEventListener('scroll', schedule);
       removeEventListener('resize', schedule);
@@ -138,6 +165,10 @@ export function useShowroomTransition() {
       plot?.style.removeProperty('--garden-arrival');
       refs.floorReflection = 1;
       root.removeAttribute('data-showroom-handoff');
+      root.removeAttribute('data-closing-match');
+      root.removeAttribute('data-scene-unavailable');
+      contact.style.removeProperty('--contact-lift');
+      contact.style.removeProperty('--contact-reveal');
       for (const name of ['--header-scrim', '--stage-opacity', '--garage-controls-opacity']) {
         root.style.removeProperty(name);
       }
