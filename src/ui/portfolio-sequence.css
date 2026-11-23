@@ -740,27 +740,18 @@ html:root #sec-contact {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) and (min-height: 500px) {
-  html:root:not([data-scene-unavailable]) .scroll-film-track {
-    --finish-outro: 0.22;
-    height: calc(var(--stage-height) + var(--scroll-travel) + var(--finish-outro) * 100svh);
-  }
-  html:root:not([data-scene-unavailable]) #sec-contact {
-    margin-top: -23svh;
-    z-index: 1;
-  }
-  html:root[data-closing-match] :is(#sec-about, .scroll-film-track) {
-    background: transparent;
-  }
-  html:root[data-closing-match] .scroll-film:not(:focus-within) {
-    opacity: 0;
-    pointer-events: none;
-  }
-  html:root[data-closing-match] #sec-contact .panel {
-    translate: 0 calc(-1 * var(--contact-lift, 0px));
-    opacity: var(--contact-reveal, 1);
-  }
-  html:root[data-closing-match] #sec-contact .panel:focus-within {
-    opacity: 1;
-  }
+/* Let the floor in the final frame fall into the shadows at the top of Contact. */
+#sec-about .scroll-film::before {
+  background:
+    linear-gradient(180deg, #100f0bc9, #100f0b21 31%, transparent 49%),
+    linear-gradient(0deg, #050403, #080706c9 8%, transparent 27%);
+}
+#sec-contact::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 auto;
+  height: min(18svh, 150px);
+  background: linear-gradient(#050403, transparent);
+  pointer-events: none;
 }

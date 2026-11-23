@@ -72,9 +72,7 @@ export function AboutFraming() {
       const rect = lane.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > innerHeight) manual = false;
       if (manual || !nearby) return;
-      const stage = lane.firstElementChild!.clientHeight;
-      const outro = Number(getComputedStyle(lane).getPropertyValue('--finish-outro'));
-      const travel = lane.clientHeight - stage * (1 + outro);
+      const travel = lane.clientHeight - lane.firstElementChild!.clientHeight;
       if (travel > 0) {
         const t = Math.min(1, Math.max(0, -rect.top / travel));
         apply(Math.min(1, Math.max(0, (t - 0.16) / 0.76)));
