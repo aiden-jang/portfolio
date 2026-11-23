@@ -145,15 +145,61 @@ export function useNavigation(sceneOnly = false) {
       currentSection.current = index;
       setSectionIndex(index);
     };
+    const rememberCase = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
+      const link = event.target instanceof Element ? event.target.closest('a') : null;
+      if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+      const url = new URL(link.href, location.href);
+      if (
+        url.origin !== location.origin ||
+        (!url.searchParams.has('story') && !/\/cases\/(iodine|meanwhile)\/?$/.test(url.pathname))
+      )
+        return;
+      history.replaceState(
+        { ...history.state, portfolioCaseReturn: { y: scrollY, href: link.href } },
+        '',
+      );
+    };
+    const navigation = performance.getEntriesByType('navigation')[0] as
+      PerformanceNavigationTiming | undefined;
+    const bookmark =
+      navigation?.type === 'back_forward'
+        ? (history.state?.portfolioCaseReturn as { y: number; href: string } | undefined)
+        : undefined;
+    const restoreCaseReturn = () => {
+      if (!bookmark || !Number.isFinite(bookmark.y)) return false;
+      window.scrollTo({ top: bookmark.y, behavior: 'instant' });
+      const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('main a'));
+      const destination = new URL(bookmark.href, location.href);
+      const sameCase = (link: HTMLAnchorElement) =>
+        link.pathname === destination.pathname &&
+        new URL(link.href).searchParams.get('story') === destination.searchParams.get('story');
+      const trigger = links.find((link) => link.href === bookmark.href) ?? links.find(sameCase);
+      trigger?.focus({ preventScroll: true });
+      return true;
+    };
     let active = true;
     const refreshLayout = () => {
       if (active) onScroll();
     };
     const linkFrame = requestAnimationFrame(() => {
-      restoreSectionLink();
+      if (!restoreCaseReturn()) restoreSectionLink();
       refreshLayout();
     });
-    void document.fonts?.ready.then(refreshLayout);
+    void document.fonts?.ready.then(() => {
+      if (active) {
+        restoreCaseReturn();
+        refreshLayout();
+      }
+    });
     onScroll();
     // WebKit can finish its first layout after effects run, without a scroll event.
     const layoutObserver = new ResizeObserver(onScroll);
@@ -161,6 +207,7 @@ export function useNavigation(sceneOnly = false) {
       const section = document.getElementById(id);
       if (section) layoutObserver.observe(section);
     }
+    document.addEventListener('click', rememberCase);
     window.addEventListener('hashchange', restoreSectionLink);
     window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
@@ -172,6 +219,7 @@ export function useNavigation(sceneOnly = false) {
       cancelAnimationFrame(linkFrame);
       cancelSmoothScroll();
       layoutObserver.disconnect();
+      document.removeEventListener('click', rememberCase);
       window.removeEventListener('hashchange', restoreSectionLink);
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('touchstart', onTouchStart);

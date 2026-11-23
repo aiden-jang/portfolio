@@ -57,3 +57,14 @@ body:has(.garage-studio .studio-matched-status) .car-loading-progress {
     bottom: auto;
   }
 }
+
+.garage-studio-title .studio-swap-name {
+  min-height: 20px;
+  margin-top: 8px;
+  pointer-events: none;
+  font: 510 clamp(12px, 1.2vw, 15px)/1.35 var(--font-display);
+  color: #f4e6cb;
+}
+.studio-swap-name:empty {
+  visibility: hidden;
+}

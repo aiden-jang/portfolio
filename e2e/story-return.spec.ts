@@ -18,9 +18,20 @@ for (const width of [1440, 390]) {
     });
     await page.goto('/#sec-work');
     await page.evaluate(() => document.fonts.ready);
+    const iodine = page.getByRole('link', { name: 'Read the iodine case study', exact: true });
+    await iodine.scrollIntoViewIfNeeded();
+    const position = await page.evaluate(() => scrollY);
+    await iodine.click();
+    await expect(page.getByRole('heading', { name: 'An edit you can take back.' })).toBeVisible();
+    await page.goBack();
+    await expect
+      .poll(() => page.evaluate((previous) => Math.abs(scrollY - previous), position))
+      .toBeLessThan(2);
+    await expect(iodine).toBeInViewport();
+
     for (const [label, id] of [
       ['How I built it: iguess', 'iguess'],
-      ['Read the wherever case study', 'wherever'],
+      ['How I built it: worth', 'worth'],
     ]) {
       const trigger = page.getByRole('button', { name: label, exact: true });
       await trigger.scrollIntoViewIfNeeded();

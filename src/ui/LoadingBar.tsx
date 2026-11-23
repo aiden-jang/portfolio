@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useProgress } from '@react-three/drei';
 import { CARS } from '../config';
 import { useAppStore } from '../store';
@@ -9,8 +9,15 @@ export function LoadingBar() {
   const { progress, active } = useProgress();
   const carIndex = useAppStore((state) => state.carIndex);
   const section = useAppStore((state) => state.sectionIndex);
+  const loading = useAppStore((state) => state.isCarLoading);
+  const error = useAppStore((state) => state.carLoadError);
+  const firstFrame = useRef(false);
+  useEffect(() => {
+    if (!loading && !error) firstFrame.current = true;
+  }, [loading, error]);
+  const visible = active && !firstFrame.current;
   const bar = useRef<HTMLDivElement>(null);
-  useLoadingPlacement(bar, active, section);
+  useLoadingPlacement(bar, visible, section);
   const car = CARS[carIndex];
   const pct = Math.round(progress);
   return (
@@ -19,11 +26,11 @@ export function LoadingBar() {
       className={`
         car-loading-progress
         transition-opacity duration-300
-        ${active ? 'opacity-100' : 'opacity-0'}
+        ${visible ? 'opacity-100' : 'opacity-0'}
       `}
       role="status"
-      aria-hidden={!active}
-      aria-label={active ? `Loading ${car?.name ?? 'car'}` : undefined}
+      aria-hidden={!visible}
+      aria-label={visible ? `Loading ${car?.name ?? 'car'}` : undefined}
     >
       <div className="h-[2px]">
         <div

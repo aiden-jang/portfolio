@@ -22,7 +22,12 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     await page.goto('/#sec-experience');
     await page.evaluate(() => document.fonts.ready);
     const section = page.locator('#sec-experience');
-    await expect(section.locator('h2')).toHaveText('Experience', { timeout: 3000 });
+    const replayHeading = section.getByRole('heading', {
+      name: '120 calls became one.',
+      exact: true,
+    });
+    await expect(replayHeading).toBeVisible({ timeout: 3000 });
+    await expect(section.getByRole('heading', { name: 'Experience', exact: true })).toBeVisible();
     const nav = page.locator('#nav');
     if (width >= 768) {
       await expect(nav.locator('a[data-section]')).toHaveText([
@@ -38,7 +43,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     await expect
       .poll(() => section.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
       .toBeLessThan(2);
-    const heading = await section.locator('h2').boundingBox();
+    const heading = await replayHeading.boundingBox();
     const header = await page.locator('.portfolio-header').boundingBox();
     expect(heading!.y, 'section heading clears the fixed header').toBeGreaterThanOrEqual(
       header!.y + header!.height,
@@ -89,7 +94,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         };
       });
       const { history, lead, proof, rows } = boxes;
-      expect(lead.y).toBeGreaterThanOrEqual(Math.max(history.bottom, proof.bottom) - 1);
+      expect(lead.bottom).toBeLessThanOrEqual(Math.min(history.y, proof.y) + 1);
       if (width > 900) {
         expect(proof.x).toBeGreaterThanOrEqual(history.right - 1);
         expect(lead.x).toBeCloseTo(history.x, 0);
@@ -108,13 +113,12 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       const comparison = section.getByRole('figure', { name: 'Request batching comparison' });
       const before = comparison.getByRole('button', { name: 'Before', exact: true });
       const after = comparison.getByRole('button', { name: 'After', exact: true });
-      const requestGrid = comparison.getByRole('heading', { name: '120 separate requests' });
-      const batchedRequest = comparison.getByRole('heading', { name: '1 batched request' });
+      const requestGrid = comparison.getByText('120 separate requests', { exact: true });
+      const batchedRequest = comparison.getByText('1 batched request', { exact: true });
       await expect(requestGrid).toBeVisible();
-      if (width === 1440) await expect(batchedRequest).toBeVisible();
-      else await expect(batchedRequest).toBeHidden();
+      await expect(batchedRequest).toBeHidden();
+      await expect(comparison.locator('.batching-marks rect')).toHaveCount(120);
       await page.emulateMedia({ reducedMotion: 'no-preference' });
-      const plot = comparison.locator('.batching-plots');
       const scrollToBatch = (progress: number) =>
         section.locator('.batch-lane').evaluate((lane, amount) => {
           const pinned = lane.firstElementChild as HTMLElement;
@@ -125,11 +129,10 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
             behavior: 'instant',
           });
         }, progress);
-      const marks = plot.locator('.batching-marks');
+      const marks = comparison.locator('.batching-marks rect').first();
       await scrollToBatch(-0.08);
-      await expect(comparison).toHaveAttribute('data-scroll-stage', 'start', { timeout: 3500 });
+      await expect(before).toHaveAttribute('aria-pressed', 'true');
       await scrollToBatch(0.34);
-      await expect(comparison).toHaveAttribute('data-scroll-stage', 'middle');
       await expect(marks).not.toHaveCSS('transform', 'none');
       await scrollToBatch(0.85);
       await expect(after).toHaveAttribute('aria-pressed', 'true');
@@ -142,7 +145,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await expect(comparison.getByRole('button', { name: 'Batching…' })).toBeFocused();
       await expect(after).toHaveAttribute('aria-pressed', 'true');
       await expect(batchedRequest).toBeVisible();
-      if (width === 390) await expect(requestGrid).toBeHidden();
+      await expect(requestGrid).toBeHidden();
       await before.click();
       await expect(requestGrid).toBeVisible();
       await page.emulateMedia({ reducedMotion: 'reduce' });

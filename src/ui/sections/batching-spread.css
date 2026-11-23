@@ -1,389 +1,125 @@
 .batching-spread {
+  min-width: 0;
   margin: 0;
-  color: #f3eeea;
-  background: #161716;
-  border: 1px solid #363b35;
+  color: #f1efe8;
+}
+.batching-instrument {
   overflow: hidden;
+  border: 1px solid #384640;
   border-radius: 12px;
+  background: radial-gradient(ellipse at 50% 48%, #242d25 0, #141a17 69%);
 }
-.batching-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 9px clamp(12px, 2vw, 26px);
-  border-bottom: 1px solid #363b35;
+.batching-instrument svg {
+  display: block;
+  width: 100%;
+  padding: clamp(7px, 2vw, 21px);
 }
+.batching-marks rect {
+  fill: #ddc49f;
+}
+.batching-packet {
+  opacity: 0;
+  stroke: #c2e2d0;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  transform-origin: 320px 144px;
+}
+.batching-packet rect {
+  fill: #c2e2d012;
+}
+.batching-instrument .batching-readout {
+  color: #d4b993;
+  font: 480 clamp(12px, 1.35vw, 16px)/1.3 var(--font-mono);
+  padding: 0 clamp(14px, 2vw, 24px) clamp(12px, 2vw, 20px);
+}
+.batching-spread[data-phase='after'] .batching-readout {
+  color: #c2e2d0;
+}
+.batching-spread[data-phase='after'] .batching-marks {
+  opacity: 0;
+}
+.batching-spread[data-phase='after'] .batching-packet {
+  opacity: 1;
+}
+.batching-controls,
 .batching-states {
   display: flex;
-  gap: 2px;
   align-items: center;
+  gap: 4px;
+}
+.batching-controls {
+  justify-content: space-between;
+  padding-top: 12px;
 }
 .batching-controls button {
   min-height: 44px;
-  padding-inline: 12px;
+  padding-inline: clamp(9px, 1.45vw, 16px);
   border-radius: 5px;
-  font-size: 14px;
+  color: #c5c7bf;
+  font-size: 13px;
   white-space: nowrap;
 }
-.batching-states button {
-  color: #c8c8be;
-}
-.batching-states button[aria-pressed='true'] {
-  background: #31362f;
-  color: #f3eeea;
-}
+.batching-states button[aria-pressed='true'],
 .batching-controls button:hover {
-  background: #303630;
+  background: #29362e;
+  color: #eff2ea;
 }
 .batching-controls button:focus-visible {
   outline: 2px solid #d6ecdf;
   outline-offset: 2px;
 }
-.batching-controls .batching-play {
+.batching-play {
   display: flex;
   gap: 7px;
   align-items: center;
-  padding-inline: 13px;
-  border: 1px solid #526657;
-  color: #dbeddf;
+  border: 1px solid #4c6657;
 }
 .batching-play svg {
   width: 15px;
 }
-.batching-plots {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  isolation: isolate;
+@media (prefers-reduced-motion: no-preference) {
+  .batching-spread[data-driver='scroll'] .batching-marks,
+  .batching-spread[data-phase='running'] .batching-marks {
+    opacity: 1;
+  }
+  .batching-spread[data-driver='scroll'] .batching-marks rect {
+    animation: batch-converge 960ms calc(0ms - var(--batch-scroll-time)) both paused;
+  }
+  .batching-spread[data-driver='scroll'] .batching-packet {
+    animation: batch-unify 960ms calc(0ms - var(--batch-scroll-time)) both paused;
+  }
+  .batching-spread[data-phase='running'] .batching-marks rect {
+    animation: batch-converge 960ms both;
+  }
+  .batching-spread[data-phase='running'] .batching-packet {
+    animation: batch-unify 960ms both;
+  }
 }
-.batching-plot {
-  min-width: 0;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 13px;
-  margin: 0;
-  padding: clamp(16px, 2.4vw, 33px);
-}
-.batching-plot h4 {
-  margin: 0;
-  font-weight: 500;
-  font-size: clamp(17px, 1.9vw, 27px);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-.batching-plot p {
-  margin: 0;
-  color: #c8c6bd;
-  font-size: clamp(13px, 1.15vw, 15px);
-  line-height: 1.42;
-}
-.batching-before {
-  background: #201d19;
-}
-.batching-after {
-  border-left: 1px solid #363b35;
-  background: #181e19;
-}
-.batching-after h4 {
-  color: #daeee0;
-}
-.batching-graphic {
-  display: grid;
-  min-height: clamp(128px, 16vw, 225px);
-  place-items: center;
-}
-.batching-graphic svg {
-  overflow: visible;
-  width: min(100%, 395px);
-  height: auto;
-}
-.batching-marks {
-  fill: #dbc19f;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 220ms ease;
-}
-.batching-packet {
-  stroke: #beddca;
-  stroke-width: 2.5px;
-  stroke-linecap: round;
-  opacity: 0.45;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 220ms ease;
-}
-.batching-gate {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: grid;
-  place-items: center;
-  width: 33px;
-  height: 33px;
-  transform: translate(-50%, -50%);
-  border: 1px solid #4a5248;
-  border-radius: 50%;
-  color: #cbd4c9;
-  background: #191b18;
-}
-.batching-gate svg {
-  width: 17px;
-}
-.batching-flight {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 5px;
-  border-radius: 3px;
-  opacity: 0;
-  background: #c2e4d0;
-}
-.batching-spread[data-phase='before'] .batching-packet rect {
-  stroke-dasharray: 5 5;
-}
-.batching-spread[data-phase='after'] .batching-packet rect {
-  fill: #beddca0c;
-}
-.batching-spread[data-phase='after'] .batching-marks {
-  opacity: 0.63;
-}
-.batching-spread[data-phase='after'] .batching-packet {
-  opacity: 1;
-}
-.batching-spread[data-phase='running'] .batching-marks {
-  animation: requests-gather 960ms cubic-bezier(0.45, 0.15, 0.2, 1) both;
-}
-.batching-spread[data-phase='running'] .batching-flight {
-  animation: request-travel 480ms 270ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-.batching-spread[data-phase='running'] .batching-packet {
-  animation: request-arrive 410ms 550ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-@keyframes requests-gather {
-  50% {
-    transform: translateX(31%) scale(0.07, 0.04);
-    opacity: 0.5;
+@keyframes batch-converge {
+  0%,
+  12% {
+    opacity: 1;
+    transform: none;
   }
   55% {
-    transform: translateX(36%) scale(0.04);
-    opacity: 0;
+    opacity: 0.78;
+    transform: translate(var(--merge-x), var(--merge-y));
   }
-  75% {
-    transform: none;
-    opacity: 0;
-  }
+  68%,
   100% {
-    transform: none;
-    opacity: 0.63;
-  }
-}
-@keyframes request-travel {
-  0% {
-    left: 33%;
     opacity: 0;
-  }
-  19% {
-    opacity: 1;
-  }
-  78% {
-    opacity: 1;
-  }
-  100% {
-    left: 75%;
-    opacity: 0;
+    transform: translate(var(--merge-x), var(--merge-y));
   }
 }
-@keyframes request-arrive {
-  0% {
-    transform: scale(0.14, 0.28);
-    opacity: 0.45;
-  }
-  100% {
-    transform: none;
-    opacity: 1;
-  }
-}
-@media (max-width: 700px) {
-  .batching-plots {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .batching-after {
-    border-left: 0;
-    display: none;
-  }
-  .batching-spread[data-phase='after'] .batching-before {
-    display: none;
-  }
-  .batching-spread[data-phase='after'] .batching-after,
-  .batching-spread[data-phase='running'] .batching-after {
-    display: grid;
-  }
-  .batching-spread[data-phase='running'] .batching-after {
-    position: absolute;
-    inset: 0;
-    animation: batch-mobile-reveal 320ms 430ms ease both;
-  }
-  .batching-plot {
-    grid-template-rows: auto minmax(142px, 1fr) auto;
-    gap: 7px;
-  }
-  .batching-graphic svg {
-    max-width: 285px;
-  }
-  .batching-gate,
-  .batching-flight {
-    display: none;
-  }
-  .batching-controls {
-    padding: 6px 8px;
-  }
-  .batching-controls button,
-  .batching-controls .batching-play {
-    padding-inline: 8px;
-    font-size: 12px;
-  }
-  @keyframes batch-mobile-reveal {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .batching-spread *,
-  .batching-spread *::before,
-  .batching-spread *::after {
-    animation-duration: 1ms !important;
-    animation-delay: 0ms !important;
-    transition-duration: 1ms !important;
-  }
-}
-
-.batching-scroll-metric {
-  display: none;
-}
-
-.batching-controls {
-  position: relative;
-}
-
-.batching-spread[data-metric-visible='false'] .batching-scroll-metric {
-  position: absolute;
-  left: 50%;
-  display: block;
-  transform: translateX(-50%);
-  color: #d6ecdf;
-  font-size: 14px;
-  font-weight: 520;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-@media (max-width: 700px) {
-  .batching-spread[data-metric-visible='false'] .batching-scroll-metric {
-    top: calc(100% + 19px);
-    right: 15px;
-    left: auto;
-    z-index: 1;
-    transform: none;
-    font-size: 12px;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .batching-spread[data-driver='scroll'] .batching-marks {
-    animation: scroll-gather 960ms calc(0ms - var(--batch-scroll-time)) linear both paused;
-  }
-
-  .batching-spread[data-driver='scroll'] .batching-flight {
-    animation: request-travel 330ms calc(445ms - var(--batch-scroll-time))
-      cubic-bezier(0.35, 0.4, 0.6, 0.7) both paused;
-  }
-
-  .batching-spread[data-driver='scroll'] .batching-packet {
-    animation: request-arrive 320ms calc(640ms - var(--batch-scroll-time))
-      cubic-bezier(0.16, 1, 0.3, 1) both paused;
-  }
-
-  @media (max-width: 700px) {
-    .batching-spread[data-driver='scroll'] .batching-before {
-      display: grid;
-    }
-
-    .batching-spread[data-driver='scroll'] .batching-after {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      animation: batch-mobile-reveal 310ms calc(420ms - var(--batch-scroll-time)) ease both paused;
-    }
-
-    .batching-spread[data-driver='scroll'][data-scroll-stage='start'] .batching-after,
-    .batching-spread[data-driver='scroll'][data-scroll-stage='end'] .batching-before {
-      visibility: hidden;
-    }
-
-    .batching-spread[data-driver='scroll'] .batching-marks {
-      animation-name: scroll-gather-inline;
-    }
-
-    .batching-spread[data-driver='scroll'] .batching-packet {
-      animation-delay: calc(510ms - var(--batch-scroll-time));
-    }
-  }
-}
-
-@keyframes scroll-gather {
+@keyframes batch-unify {
   0%,
-  9% {
-    transform: none;
-    opacity: 1;
-  }
-
-  40% {
-    transform: translateX(19%) scale(0.44, 0.47);
-    opacity: 0.9;
-  }
-
-  54% {
-    transform: translateX(37%) scale(0.06);
-    opacity: 0.2;
-  }
-
-  60% {
-    transform: translateX(37%) scale(0.04);
+  53% {
     opacity: 0;
+    transform: scaleX(0.12) scaleY(0.08);
   }
-
-  76% {
-    transform: none;
-    opacity: 0;
-  }
-
+  76%,
   100% {
-    transform: none;
-    opacity: 0.63;
-  }
-}
-
-@keyframes scroll-gather-inline {
-  0%,
-  9% {
-    transform: none;
     opacity: 1;
-  }
-
-  36% {
-    transform: scale(0.52, 0.47);
-    opacity: 0.88;
-  }
-
-  55%,
-  100% {
-    transform: scale(0.05);
-    opacity: 0;
+    transform: none;
   }
 }

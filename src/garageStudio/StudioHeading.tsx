@@ -4,12 +4,13 @@ import { ControlIcon } from '../ui/ControlIcon';
 type Props = {
   title: string;
   car: string;
+  incoming?: string;
   leadWithCar: boolean;
   exit: RefObject<HTMLButtonElement>;
   onExit: () => void;
 };
 
-export function StudioHeading({ title, car, leadWithCar, exit, onExit }: Props) {
+export function StudioHeading({ title, car, incoming, leadWithCar, exit, onExit }: Props) {
   const linkedShot = new URLSearchParams(window.location.search).get('garage') === 'studio';
   return (
     <>
@@ -26,6 +27,9 @@ export function StudioHeading({ title, car, leadWithCar, exit, onExit }: Props) 
           {leadWithCar ? car.replaceAll('-', '\u2011') : title}
         </h2>
         {!leadWithCar && <p className="studio-compact-title">{car}</p>}
+        <p className="studio-swap-name" role="status">
+          {incoming ? `Loading ${incoming}…` : null}
+        </p>
       </div>
     </>
   );

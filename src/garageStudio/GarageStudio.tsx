@@ -191,6 +191,7 @@ export function GarageStudio() {
       <StudioHeading
         title={title}
         car={subtitle}
+        incoming={swap && !error ? CARS[swap.incoming].name : undefined}
         leadWithCar={exhibit === 'free' && !photo && !study && !pair}
         exit={exit}
         onExit={() => {
@@ -205,7 +206,7 @@ export function GarageStudio() {
           aria-hidden="true"
         />
       )}
-      {waiting && (
+      {waiting && (!swap || error) && (
         <StudioLoading
           car={swap?.incoming ?? id}
           pair={pair}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, type ReactNode } from 'react';
 import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import './project-scene.css';
 import './dinner-scene.css';
@@ -18,6 +18,7 @@ function settleRecovery(progress: number) {
 
 function presentScene(stage: HTMLElement, progress: number) {
   if (stage.id === 'project-wherever') {
+    stage.dataset.dinnerState = progress >= 0.56 ? 'bill' : progress >= 0.32 ? 'match' : 'vote';
     stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
     stage.style.setProperty('--vote-swipe', String(easedProgress(progress, 0.09, 0.31)));
     stage.style.setProperty('--vote-match', String(easedProgress(progress, 0.24, 0.43)));
@@ -41,7 +42,24 @@ export function ProjectScene({
   children: ReactNode;
 }) {
   const scene = useRef<HTMLElement>(null);
-  useScrollStudy(scene, true, presentScene, theme === 'dinner' ? settleDinner : settleRecovery);
+  const manual = useRef<{ y: number; phase: number } | null>(null);
+  const draw = useCallback((stage: HTMLElement, progress: number) => {
+    const pick = manual.current;
+    if (pick && Math.abs(scrollY - pick.y) > 26) manual.current = null;
+    presentScene(stage, manual.current?.phase ?? progress);
+  }, []);
+  useScrollStudy(scene, true, draw, theme === 'dinner' ? settleDinner : settleRecovery);
+  useEffect(() => {
+    const stage = scene.current;
+    if (!stage || theme !== 'dinner') return;
+    const select = (event: Event) => {
+      const phase = (event as CustomEvent<number>).detail;
+      manual.current = { y: scrollY, phase };
+      presentScene(stage, phase);
+    };
+    stage.addEventListener('dinner-preview-step', select);
+    return () => stage.removeEventListener('dinner-preview-step', select);
+  }, [theme]);
   return (
     <article ref={scene} id={id} className={`project-scene project-scene-${theme}`}>
       <div className="project-scene-body" data-study-pin>
@@ -56,12 +74,16 @@ export function ProjectScene({
 }
 
 function DinnerTicket() {
+  const choose = (event: React.MouseEvent<HTMLButtonElement>, phase: number) => {
+    const stage = event.currentTarget.closest('article');
+    stage?.dispatchEvent(new CustomEvent('dinner-preview-step', { detail: phase }));
+    const target = stage?.querySelector<HTMLButtonElement>(
+      phase === 1 ? '.dinner-replay' : '.dinner-split',
+    );
+    target?.focus({ preventScroll: true });
+  };
   return (
-    <div
-      className="dinner-ticket"
-      role="img"
-      aria-label="A sample vote for Neighborhood Pizza Kitchen. Alex and Maya both vote yes."
-    >
+    <div className="dinner-ticket">
       <img
         className="dinner-ticket-photo"
         src="/projects/scenes/wherever-pizza.jpg"
@@ -78,7 +100,9 @@ function DinnerTicket() {
         <div className="dinner-ticket-decisions">
           <div className="dinner-ticket-vote dinner-ticket-actions">
             <span>Nope</span>
-            <span>Yes, please</span>
+            <button type="button" onClick={(event) => choose(event, 0.47)}>
+              Vote yes
+            </button>
           </div>
           <div className="dinner-ticket-match dinner-ticket-count">
             <span>
@@ -87,7 +111,9 @@ function DinnerTicket() {
             <span>
               Maya <b>✓</b>
             </span>
-            <small>2 of 2 picked it</small>
+            <button className="dinner-split" type="button" onClick={(event) => choose(event, 1)}>
+              Split $48
+            </button>
           </div>
         </div>
       </div>
@@ -116,11 +142,29 @@ export function DinnerScene() {
       const travel = section.offsetHeight - body.offsetHeight;
       window.scrollTo({ top: top - inset + travel * 0.9, behavior: 'instant' });
     };
-    const initial = requestAnimationFrame(seekSecond);
-    window.addEventListener('hashchange', seekSecond);
+    let frame = 0;
+    let active = true;
+    const queueSeek = () => {
+      cancelAnimationFrame(frame);
+      // Reload can restore the old scroll offset after the first layout.
+      frame = requestAnimationFrame(() => {
+        frame = requestAnimationFrame(seekSecond);
+      });
+    };
+    const restoreLink = (event: PageTransitionEvent) => {
+      if (!event.persisted) queueSeek();
+    };
+    queueSeek();
+    void document.fonts?.ready.then(() => {
+      if (active) queueSeek();
+    });
+    addEventListener('pageshow', restoreLink);
+    addEventListener('hashchange', queueSeek);
     return () => {
-      cancelAnimationFrame(initial);
-      window.removeEventListener('hashchange', seekSecond);
+      active = false;
+      cancelAnimationFrame(frame);
+      removeEventListener('pageshow', restoreLink);
+      removeEventListener('hashchange', queueSeek);
     };
   }, []);
 
@@ -143,6 +187,19 @@ export function DinnerScene() {
             <strong>$24.00</strong>
           </div>
         </div>
+        <button
+          type="button"
+          className="dinner-replay"
+          onClick={(event) => {
+            const stage = event.currentTarget.closest('article');
+            stage?.dispatchEvent(new CustomEvent('dinner-preview-step', { detail: 0 }));
+            stage
+              ?.querySelector<HTMLButtonElement>('.dinner-ticket-actions button')
+              ?.focus({ preventScroll: true });
+          }}
+        >
+          Replay dinner
+        </button>
       </div>
     </div>
   );

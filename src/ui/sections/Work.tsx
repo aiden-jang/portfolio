@@ -7,6 +7,7 @@ import { ProjectScene, SceneAppLink, DinnerScene } from '../showcase/ProjectScen
 import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
 import { IodinePresentation } from '../showcase/IodinePresentation';
 import '../project-gallery.css';
+import '../showcase/project-scene-flow.css';
 import { PREVIEWS } from '../../data/projectPreviews';
 import { FEATURED_PROJECTS, visibleProjects } from '../../data/workBrowsing';
 import { workId } from '../../data/workItems';
@@ -102,12 +103,20 @@ export function MoreProjectsSection({ onOpen }: Props) {
               theme="dinner"
               title={
                 <>
-                  <AppLink item={wherever} label="wherever" />
-                  <i aria-hidden="true"> / </i>
-                  <AppLink item={owewell} label="owewell" />
+                  <span className="dinner-title-vote">wherever</span>
+                  <span className="dinner-title-bill">owewell</span>
                 </>
               }
-              links={null}
+              links={
+                <>
+                  <span className="dinner-title-vote">
+                    <AppLink item={wherever} />
+                  </span>
+                  <span className="dinner-title-bill">
+                    <AppLink item={owewell} />
+                  </span>
+                </>
+              }
             >
               <DinnerScene />
             </ProjectScene>

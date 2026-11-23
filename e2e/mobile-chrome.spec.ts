@@ -76,7 +76,7 @@ test('phone controls have a touch close action and omit keyboard instructions', 
   await page.getByRole('button', { name: 'Close car browser', exact: true }).click();
 });
 
-test('a slow car swap keeps its status clear of the header and controls', async ({ page }) => {
+test('a slow car swap keeps loading in the car-name slot', async ({ page }) => {
   let release!: () => void;
   const held = new Promise<void>((resolve) => {
     release = resolve;
@@ -90,8 +90,10 @@ test('a slow car swap keeps its status clear of the header and controls', async 
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await page.getByRole('button', { name: /Browse cars. Ferrari F40/ }).click();
     await page.getByRole('button', { name: 'Show Porsche 911 GT3 RS, 992', exact: true }).click();
-    const loading = page.getByRole('status', { name: 'Loading Porsche 911 GT3 RS', exact: true });
-    await expect(loading).toBeVisible();
+    const carName = page
+      .getByRole('button', { name: /Browse cars. Porsche 911 GT3 RS/ })
+      .filter({ visible: true });
+    await expect(carName).toHaveAttribute('aria-busy', 'true');
     for (const [width, height] of [
       [320, 568],
       [390, 844],
@@ -99,22 +101,16 @@ test('a slow car swap keeps its status clear of the header and controls', async 
     ]) {
       await page.setViewportSize({ width, height });
       const dock = page.locator(width < 768 ? '#mobile-bar' : '#desktop-dock');
-      await expect
-        .poll(async () => {
-          const banner = await loading.boundingBox();
-          const header = await page.locator('.portfolio-header').boundingBox();
-          const controls = await dock.locator('.car-controls-row').boundingBox();
-          return Boolean(
-            banner &&
-            header &&
-            controls &&
-            banner.y >= header.y + header.height &&
-            banner.y + banner.height <= controls.y - 12 &&
-            banner.x >= 0 &&
-            banner.x + banner.width <= width,
-          );
-        })
-        .toBe(true);
+      const nameSlot = dock.locator('.car-browse-trigger');
+      const status = nameSlot.getByText(/Loading…/);
+      await expect(nameSlot).toHaveAttribute('aria-busy', 'true');
+      await expect(status).toBeInViewport();
+      const slot = (await nameSlot.boundingBox())!;
+      const label = (await status.boundingBox())!;
+      expect(label.x).toBeGreaterThanOrEqual(slot.x);
+      expect(label.y).toBeGreaterThanOrEqual(slot.y);
+      expect(label.y + label.height).toBeLessThanOrEqual(slot.y + slot.height + 1);
+      await expect(page.locator('.car-loading-progress')).toHaveAttribute('aria-hidden', 'true');
       await page.screenshot({ path: test.info().outputPath(`loading-${width}.png`) });
     }
   } finally {

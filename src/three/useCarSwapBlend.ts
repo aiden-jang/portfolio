@@ -16,6 +16,7 @@ export function useCarSwapBlend() {
 
   useEffect(() => {
     const interrupt = () => {
+      pending.current?.canvas.remove();
       pending.current = undefined;
       blend.current?.motion.cancel();
       blend.current?.canvas.remove();
@@ -35,14 +36,21 @@ export function useCarSwapBlend() {
   }, []);
 
   return (canvas: HTMLCanvasElement) => {
-    const { carIndex, isCarLoading, refs, sectionIndex, renderFinish, carLoadError } =
-      useAppStore.getState();
+    const {
+      carIndex,
+      isCarLoading,
+      refs,
+      sectionIndex,
+      renderFinish,
+      carLoadError,
+      sceneUnavailable,
+    } = useAppStore.getState();
     const model = refs.carModel;
     const last = displayed.current;
-    if (!model) return;
-    if (last?.model !== model) displayed.current = { model, index: carIndex };
+    if (model && last?.model !== model) displayed.current = { model, index: carIndex };
 
     if (
+      sceneUnavailable ||
       sectionIndex !== 0 ||
       useLineup.getState().active ||
       useGarageStudio.getState().active ||
@@ -53,19 +61,24 @@ export function useCarSwapBlend() {
       !canvas.parentElement ||
       prefersReducedMotion()
     ) {
+      pending.current?.canvas.remove();
       pending.current = undefined;
       return;
     }
 
+    if (!model) return;
     if (last && last.model !== model) {
       const still = pending.current;
       pending.current = undefined;
-      if (still?.index !== carIndex) return;
+      if (still?.index !== carIndex) {
+        still?.canvas.remove();
+        return;
+      }
       blend.current?.motion.cancel();
       blend.current?.canvas.remove();
       canvas.parentElement.append(still.canvas);
       const motion = still.canvas.animate([{ opacity: 1 }, { opacity: 0 }], {
-        duration: 245,
+        duration: 96,
         easing: 'cubic-bezier(.22,.61,.36,1)',
       });
       const completed = { canvas: still.canvas, motion };
@@ -90,6 +103,8 @@ export function useCarSwapBlend() {
       if (!context || !shot.animate) return;
       // Sample the composed outgoing frame, so the studio and its reflection share the transition.
       context.drawImage(canvas, 0, 0);
+      pending.current?.canvas.remove();
+      canvas.parentElement.append(shot);
       pending.current = { index: carIndex, canvas: shot };
     }
   };

@@ -1,8 +1,10 @@
+import { useRef } from 'react';
 import { BatchingSpread } from './BatchingSpread';
 import { storyHref } from '../creative/storyRoutes';
 import { workId, WORK_ITEMS } from '../../data/workItems';
 import { isPortfolioProject } from '../../data/workBrowsing';
 import './experience.css';
+import './experience-fullscreen.css';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ControlIcon } from '../ControlIcon';
@@ -85,10 +87,10 @@ export function ExperienceSection({ onOpen }: Props) {
   return (
     <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">
       <div data-nosnippet className="experience-content pointer-events-auto">
-        <h2>Experience</h2>
+        {lead && <LeadOutcome item={lead} />}
+        <h2 id="experience-history-title">Experience</h2>
         <div className="experience-grid">
           <div className="experience-history">
-            <h3>Where I&apos;ve worked</h3>
             <ol role="list">
               {ROLES.map(({ company, roles }) => (
                 <li key={company} className="experience-employer">
@@ -123,35 +125,33 @@ export function ExperienceSection({ onOpen }: Props) {
             )}
           </div>
         </div>
-        {lead && (
-          <div className="batch-lane">
-            <LeadOutcome item={lead} />
-          </div>
-        )}
       </div>
     </Section>
   );
 }
 
 function LeadOutcome({ item }: { item: WorkDetail }) {
+  const lane = useRef<HTMLDivElement>(null);
   return (
-    <article className="experience-lead">
-      <div className="experience-spread-heading">
-        <p className="experience-measure">
-          <span className="sr-only">
-            Page load went from {loadTime.before} seconds to {loadTime.after} seconds.
-          </span>
-          <span className="experience-from" aria-hidden="true">
-            {loadTime.before}s
-          </span>
-          <span className="experience-change" aria-hidden="true">
-            →
-          </span>
-          <span aria-hidden="true">{loadTime.after}s</span>
-        </p>
-        <div className="experience-lead-story">
-          <h3 id="experience-lead-title">120 API calls became one</h3>
-          <p>I combined the linked line items into one API response, cutting page load time.</p>
+    <div className="batch-lane" ref={lane}>
+      <article className="experience-lead" data-study-pin aria-labelledby="experience-lead-title">
+        <div className="experience-batch-copy">
+          <h2 id="experience-lead-title">120 calls became one.</h2>
+          <p className="experience-measure">
+            <span className="sr-only">
+              Page load went from {loadTime.before} seconds to {loadTime.after} seconds.
+            </span>
+            <span className="experience-from" aria-hidden="true">
+              {loadTime.before}s
+            </span>
+            <span className="experience-change" aria-hidden="true">
+              →
+            </span>
+            <span aria-hidden="true">{loadTime.after}s</span>
+          </p>
+          <p className="experience-batch-description">
+            I combined the linked line items into one API response.
+          </p>
           <div className="experience-lead-actions">
             <a
               href={storyHref('ad-slot-details-120-1-api-call')}
@@ -163,9 +163,9 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
             <span>{item.context}</span>
           </div>
         </div>
-      </div>
-      <BatchingSpread />
-    </article>
+        <BatchingSpread lane={lane} />
+      </article>
+    </div>
   );
 }
 

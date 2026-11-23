@@ -28,15 +28,17 @@ for (const width of [1440, 390]) {
         await expect(picker).toBeHidden();
         const status = studio.getByRole('status').filter({ hasText: 'Loading Mercedes 300 SL' });
         await expect(status).toBeVisible();
-        expect((await status.boundingBox())!.y).toBeGreaterThan(422);
+        const title = studio
+          .getByRole('heading', { name: 'Ferrari F40', exact: true })
+          .filter({ visible: true });
+        const titleBox = (await title.boundingBox())!;
+        const statusBox = (await status.boundingBox())!;
+        expect(statusBox.y).toBeGreaterThanOrEqual(titleBox.y + titleBox.height - 1);
+        expect(statusBox.y - titleBox.y - titleBox.height).toBeLessThan(28);
+        await expect(page.locator('.studio-car-swap')).toBeVisible();
         await expect(
           studio.getByText('Ferrari F40', { exact: true }).filter({ visible: true }),
         ).toBeVisible();
-        await expect
-          .poll(() =>
-            status.locator('img').evaluate((img) => (img as HTMLImageElement).naturalWidth),
-          )
-          .toBeGreaterThan(0);
         release();
         await expect(
           studio.getByText('Mercedes 300 SL', { exact: true }).filter({ visible: true }),

@@ -3,6 +3,11 @@ import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import { BeanRoom } from './BeanRoom';
 import { IguessReplay } from './IguessReplay';
 
+function settleDuet(progress: number) {
+  if (progress <= 0.53 || progress >= 0.73) return progress;
+  return progress < 0.64 ? 0.53 : 0.75;
+}
+
 export function Duet({
   drawTitle,
   drawLink,
@@ -40,7 +45,7 @@ export function Duet({
       stage.dispatchEvent(new CustomEvent('project-scene-progress', { detail: p }));
     }
   }, []);
-  useScrollStudy(lane, true, paint);
+  useScrollStudy(lane, true, paint, settleDuet);
   useEffect(() => {
     const el = lane.current!,
       stage = pin.current!,

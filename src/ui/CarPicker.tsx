@@ -36,6 +36,7 @@ export function CarPicker({ mobile = false }: { mobile?: boolean }) {
         className="car-browse-trigger"
         aria-haspopup="dialog"
         aria-expanded={open}
+        aria-busy={loading}
         aria-label={`Browse cars. ${car.name}, ${car.code}`}
         onClick={() => setOpen(true)}
       >

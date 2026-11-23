@@ -40,6 +40,7 @@ export function BeanRoom() {
   const fade = useRef<HTMLCanvasElement>(null);
   const hotspots = useRef<HTMLDivElement>(null);
   const welcomed = useRef(false);
+  const toyCue = useRef<'waiting' | 'played' | 'manual'>('waiting');
   const [action, setAction] = useState<{
     kind: RoomAction;
     count: number;
@@ -138,6 +139,7 @@ export function BeanRoom() {
   }, []);
 
   function interact(kind: RoomAction) {
+    toyCue.current = 'manual';
     setAction((current) => ({ kind, count: (current?.count ?? 0) + 1 }));
   }
 
@@ -177,6 +179,12 @@ export function BeanRoom() {
     const update = (event: Event) => {
       progress.current = (event as CustomEvent<number>).detail;
       if (!motion.matches) return;
+      if (progress.current < 0.05 && toyCue.current === 'played') toyCue.current = 'waiting';
+      const canPlay = !scene.inert && toyCue.current === 'waiting' && welcomed.current;
+      if (progress.current >= 0.18 && canPlay) {
+        toyCue.current = 'played';
+        setAction((current) => ({ kind: 'mouse', count: (current?.count ?? 0) + 1 }));
+      }
       if (manualAt.current !== undefined && Math.abs(progress.current - manualAt.current) < 0.2)
         return;
       manualAt.current = undefined;

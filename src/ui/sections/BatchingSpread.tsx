@@ -1,19 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import { prefersReducedMotion } from '../../hooks/reducedMotion';
+import { useScrollStudy } from '../../hooks/useScrollStudy';
 import { ControlIcon } from '../ControlIcon';
 import './batching-spread.css';
 
 const replayDuration = 960;
 const marks = Array.from({ length: 120 }, (_, index) => ({
-  x: 12 + (index % 12) * 27,
-  y: 12 + Math.floor(index / 12) * 13,
+  x: 50 + (index % 12) * 47,
+  y: 36 + Math.floor(index / 12) * 24,
 }));
 
-export function BatchingSpread() {
+function relayBatchProgress(stage: HTMLElement, progress: number) {
+  stage.dispatchEvent(new CustomEvent('batch-preview-progress', { detail: progress }));
+}
+
+function settleBatch(progress: number) {
+  if (progress <= 0.1 || progress >= 0.72) return progress;
+  return progress < 0.42 ? 0.1 : 0.78;
+}
+
+export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
   const [phase, setPhase] = useState<'before' | 'running' | 'after'>('before');
   const figure = useRef<HTMLElement>(null);
-  const plots = useRef<HTMLDivElement>(null);
   const manual = useRef<{ scrollY: number; until: number } | null>(null);
+  useScrollStudy(lane, true, relayBatchProgress, settleBatch);
 
   function show(next: typeof phase) {
     manual.current = {
@@ -25,28 +35,16 @@ export function BatchingSpread() {
   }
 
   useEffect(() => {
+    const stage = lane.current;
     const element = figure.current;
-    const panel = plots.current;
-    if (!element || !panel) return;
-    const measure = element.closest('.experience-lead')?.querySelector('.experience-measure');
-    const navigation = document.querySelector('.portfolio-header');
-    const motion = matchMedia('(prefers-reduced-motion: reduce)');
-    const phone = matchMedia('(max-width: 700px)');
-    let frame = 0;
-
-    const update = () => {
-      frame = 0;
-      const height = window.innerHeight;
-      const panelTop = panel.getBoundingClientRect().top;
-      const headerBottom = navigation?.getBoundingClientRect().bottom ?? 0;
-      const metricVisible = (measure?.getBoundingClientRect().top ?? headerBottom) >= headerBottom;
-      if (element.dataset.metricVisible !== String(metricVisible)) {
-        element.dataset.metricVisible = String(metricVisible);
-      }
-      if (motion.matches) {
+    if (!stage || !element) return;
+    const motion = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 700px)');
+    const update = (event: Event) => {
+      if (!motion.matches) {
         delete element.dataset.driver;
         return;
       }
+      const p = (event as CustomEvent<number>).detail;
       const override = manual.current;
       if (override) {
         if (performance.now() < override.until) {
@@ -56,58 +54,25 @@ export function BatchingSpread() {
         if (Math.abs(window.scrollY - override.scrollY) < 18) return;
         manual.current = null;
       }
-
-      const start = height * (phone.matches ? 0.62 : 0.49);
-      const finish = height * (phone.matches ? 0.34 : 0.17);
-      const lane = element.closest<HTMLElement>('.batch-lane');
-      const pin = lane?.firstElementChild as HTMLElement | null;
-      const sticky = pin && getComputedStyle(pin).position === 'sticky';
-      const progress =
-        lane && pin && sticky
-          ? Math.min(
-              1,
-              Math.max(
-                0,
-                (parseFloat(getComputedStyle(pin).top) - lane.getBoundingClientRect().top) /
-                  Math.max(1, (lane.offsetHeight - pin.offsetHeight) * 0.64),
-              ),
-            )
-          : Math.min(1, Math.max(0, (start - panelTop) / (start - finish)));
-      const time = Math.round(progress * replayDuration);
-      const next = progress >= 0.74 ? 'after' : 'before';
-      const stage = progress === 0 ? 'start' : progress === 1 ? 'end' : 'middle';
-      if (element.dataset.driver !== 'scroll') element.dataset.driver = 'scroll';
-      if (element.dataset.scrollStage !== stage) element.dataset.scrollStage = stage;
-      const scrollTime = time + 'ms';
-      if (element.style.getPropertyValue('--batch-scroll-time') !== scrollTime) {
-        element.style.setProperty('--batch-scroll-time', scrollTime);
-      }
-      if (element.dataset.phase !== next) setPhase(next);
+      const progress = Math.min(1, p / 0.72);
+      element.dataset.driver = 'scroll';
+      element.style.setProperty(
+        '--batch-scroll-time',
+        Math.round(progress * replayDuration) + 'ms',
+      );
+      setPhase(progress >= 0.74 ? 'after' : 'before');
     };
-
-    function schedule() {
-      if (!frame) frame = requestAnimationFrame(update);
-    }
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    motion.addEventListener('change', schedule);
-    schedule();
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-      motion.removeEventListener('change', schedule);
-    };
-  }, []);
+    stage.addEventListener('batch-preview-progress', update);
+    return () => stage.removeEventListener('batch-preview-progress', update);
+  }, [lane]);
 
   useEffect(() => {
     if (phase !== 'running') return;
     const timer = window.setTimeout(() => setPhase('after'), replayDuration);
     return () => window.clearTimeout(timer);
   }, [phase]);
-  const after = phase === 'after';
 
+  const after = phase === 'after';
   return (
     <figure
       ref={figure}
@@ -115,10 +80,33 @@ export function BatchingSpread() {
       data-phase={phase}
       aria-label="Request batching comparison"
     >
+      <div className="batching-instrument">
+        <svg viewBox="0 0 640 288" aria-hidden="true">
+          <g className="batching-marks">
+            {marks.map(({ x, y }) => (
+              <rect
+                key={x + ':' + y}
+                x={x}
+                y={y}
+                width="22"
+                height="5"
+                rx="2"
+                style={
+                  { '--merge-x': `${309 - x}px`, '--merge-y': `${141 - y}px` } as CSSProperties
+                }
+              />
+            ))}
+          </g>
+          <g className="batching-packet">
+            <rect x="209" y="108" width="222" height="72" rx="7" />
+            <path d="M239 144h162" />
+          </g>
+        </svg>
+        <div className="batching-readout">
+          {after ? '1 batched request' : '120 separate requests'}
+        </div>
+      </div>
       <div className="batching-controls">
-        <span className="batching-scroll-metric" aria-hidden="true">
-          60s → 2s
-        </span>
         <div className="batching-states" role="group" aria-label="Compare request patterns">
           <button type="button" aria-pressed={!after} onClick={() => show('before')}>
             Before
@@ -139,43 +127,10 @@ export function BatchingSpread() {
           {phase === 'running' ? 'Batching…' : 'Replay batching'}
         </button>
       </div>
-      <div ref={plots} className="batching-plots">
-        <div className="batching-plot batching-before">
-          <h4>120 separate requests</h4>
-          <div className="batching-graphic">
-            <svg viewBox="0 0 337 141" aria-hidden="true">
-              <g className="batching-marks">
-                {marks.map(({ x, y }) => (
-                  <rect key={`${x},${y}`} x={x} y={y} width="16" height="5" rx="1.5" />
-                ))}
-              </g>
-            </svg>
-          </div>
-          <p>One fetch per linked line item</p>
-        </div>
-        <div className="batching-plot batching-after">
-          <h4>1 batched request</h4>
-          <div className="batching-graphic">
-            <svg viewBox="0 0 337 141" aria-hidden="true">
-              <g className="batching-packet">
-                <rect x="101" y="53" width="135" height="35" rx="4" fill="none" />
-                <path d="M121 70.5h95" />
-              </g>
-            </svg>
-          </div>
-          <p>One response with the joined data</p>
-        </div>
-        <div className="batching-gate" aria-hidden="true">
-          <ControlIcon name="arrow" />
-        </div>
-        <span className="batching-flight" aria-hidden="true" />
-      </div>
-      <figcaption>
-        <span className="sr-only" aria-live="polite">
-          {after
-            ? 'After batching: one API call and two seconds to load.'
-            : 'Before batching: 120 API calls and about 60 seconds to load.'}
-        </span>
+      <figcaption className="sr-only" aria-live="polite">
+        {after
+          ? 'After batching: one API call and two seconds to load.'
+          : 'Before batching: 120 API calls and about 60 seconds to load.'}
       </figcaption>
     </figure>
   );

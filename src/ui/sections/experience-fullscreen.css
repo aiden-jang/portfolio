@@ -1,0 +1,108 @@
+html:root #sec-experience:has(.batch-lane) {
+  padding-block-start: 0;
+  overflow-x: clip;
+}
+.experience-content .batch-lane {
+  --batch-travel: min(64svh, 600px);
+  position: relative;
+  margin-top: 0;
+  border: 0;
+  z-index: 0;
+}
+.experience-content .batch-lane::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(50% - 50vw);
+  content: '';
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 71% 38%, #18251d 0%, transparent 58%),
+    linear-gradient(#111416 0%, #141a16 69%, var(--color-bg) 100%);
+}
+.experience-content .batch-lane .experience-lead {
+  min-height: calc(100svh - var(--portfolio-header-height) - 4px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.76fr) minmax(0, 1.24fr);
+  align-content: center;
+  align-items: center;
+  gap: clamp(27px, 4vw, 57px);
+  padding-block: clamp(20px, 4svh, 38px);
+}
+.experience-batch-copy h2 {
+  max-width: 11ch;
+  margin: 0;
+  text-wrap: balance;
+  color: #f1efe8;
+  font-size: clamp(39px, 4.6vw, 72px);
+  font-weight: 460;
+  letter-spacing: -0.04em;
+  line-height: 0.99;
+}
+.experience-batch-copy .experience-measure {
+  font-size: clamp(46px, 5.4vw, 86px);
+  margin-block: clamp(25px, 5svh, 49px) 8px;
+  color: #e9ede5;
+}
+.experience-batch-copy .experience-measure > span:last-child {
+  color: #c5dbc9;
+}
+.batch-lane:has([data-phase='after']) .experience-batch-copy .experience-measure > span:last-child {
+  color: #d9f1d7;
+}
+.experience-batch-description {
+  max-width: 35ch;
+  margin: 18px 0 4px;
+  color: #c8c9be;
+  font-size: clamp(14px, 1.25vw, 18px);
+}
+.experience-content .batching-spread .batching-controls {
+  padding: 10px 0 0;
+}
+#experience-history-title {
+  margin-block: clamp(40px, 7svh, 80px) clamp(19px, 3.5svh, 40px);
+  font-size: clamp(38px, 5vw, 70px);
+}
+.experience-content .experience-employer {
+  padding-block: 12px 14px;
+}
+.experience-content .experience-roles {
+  margin-top: 6px;
+}
+.experience-content .experience-grid {
+  padding-bottom: clamp(32px, 6svh, 58px);
+}
+@media (prefers-reduced-motion: no-preference) and (min-height: 700px) {
+  .experience-content .batch-lane::after {
+    height: var(--batch-travel);
+  }
+}
+@media (max-width: 767px) {
+  .experience-content .batch-lane {
+    --batch-travel: min(39svh, 315px);
+  }
+  .experience-content .batch-lane .experience-lead {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(18px, 3.5svh, 31px);
+    align-content: center;
+  }
+  .experience-batch-copy h2 {
+    max-width: 12ch;
+    font-size: clamp(33px, 11vw, 52px);
+  }
+  .experience-batch-copy .experience-measure {
+    margin-top: 20px;
+    font-size: clamp(48px, 15vw, 68px);
+  }
+  .experience-batch-description {
+    margin-top: 11px;
+  }
+  .experience-content .experience-employer {
+    padding-block: 10px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (max-height: 699px) {
+  html:root #sec-experience:has(.batch-lane) {
+    padding-block-start: var(--portfolio-header-height);
+  }
+}
