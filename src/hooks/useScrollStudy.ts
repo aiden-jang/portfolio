@@ -24,6 +24,7 @@ export function useScrollStudy(
     let sticky = false;
     let displayed = -1;
     let finish = 0;
+    let settlingToward: number | undefined;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const paint = (t: number) => {
       displayed = t;
@@ -33,10 +34,10 @@ export function useScrollStudy(
       clearTimeout(timer);
       cancelAnimationFrame(finish);
     };
-    const settleAfterScroll = (t: number) => {
-      const target = settle?.(t) ?? t;
-      if (target === t) return;
+    const settleAfterScroll = (target: number) => {
+      if (target === displayed) return;
       timer = setTimeout(() => {
+        settlingToward = target;
         const start = performance.now();
         const from = displayed;
         const ease = (now: number) => {
@@ -62,9 +63,16 @@ export function useScrollStudy(
           : clamp((inset - stage.getBoundingClientRect().top) / span, 0, 1);
       if (t === last) return;
       last = t;
-      paint(t);
       stopSettling();
-      settleAfterScroll(t);
+      const target = settle?.(t) ?? t;
+      if (target !== settlingToward) settlingToward = undefined;
+      // A nudge toward the same reading can catch the animation, but cannot rewind it.
+      const next =
+        settlingToward === undefined
+          ? t
+          : clamp(displayed, Math.min(t, target), Math.max(t, target));
+      paint(next);
+      settleAfterScroll(target);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);

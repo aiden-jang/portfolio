@@ -58,12 +58,29 @@ for (const width of [1440, 390]) {
     const parkedScroll = await page.evaluate(() => scrollY);
     await expect(verdict).toHaveCSS('opacity', '1');
     expect(await page.evaluate(() => scrollY)).toBe(parkedScroll);
+    const quake = page.locator('#project-everythingisfine');
+    async function nudgeSettledReading(progress: number) {
+      const settled = await quake.getAttribute('data-study-progress');
+      await seekScene('#project-everythingisfine', progress);
+      await page.evaluate(
+        () =>
+          new Promise<void>((done) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => done())),
+          ),
+      );
+      expect(await quake.getAttribute('data-study-progress')).toBe(settled);
+    }
+    await expect(quake).toHaveAttribute('data-study-progress', '0.940');
+    await nudgeSettledReading(0.8);
+    await nudgeSettledReading(0.82);
     await seekScene('#project-everythingisfine', 0.56);
     await expect(verdict).toHaveCSS('opacity', '0');
     await expect(page.locator('#project-everythingisfine')).toHaveAttribute(
       'data-quake-view',
       'globe',
     );
+    await expect(quake).toHaveAttribute('data-study-progress', '0.430');
+    await nudgeSettledReading(0.54);
     const track = page.locator('.scroll-film-track');
     const video = track.locator('video');
     const slider = track.getByRole('slider');
