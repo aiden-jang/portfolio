@@ -121,22 +121,8 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
             </section>
           </>
         ) : (
-          <div className="earthquake-intro">
+          <div className="earthquake-intro earthquake-title">
             <h3>{item.shortName}</h3>
-            <div className="quake-journey-copy">
-              <p className="creative-quake-hook">
-                Same quake, <strong>16.3 km apart.</strong>
-              </p>
-              <QuakeReadings />
-            </div>
-            <button
-              ref={compareButton}
-              type="button"
-              className="featured-primary"
-              onClick={(event) => launchComparison(event.currentTarget)}
-            >
-              Compare the Kamchatka reports <ControlIcon name="arrow" />
-            </button>
           </div>
         )}
         <div className="earthquake-orbit-slot" hidden={comparing}>
@@ -147,6 +133,24 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
             journey
           />
         </div>
+        {!comparing && (
+          <div className="earthquake-intro earthquake-detail">
+            <div className="quake-journey-copy">
+              <p className="creative-quake-hook">
+                Same quake, <strong>16.3 km apart.</strong>
+              </p>
+              <QuakeReadings />
+            </div>
+            <button
+              ref={compareButton}
+              type="button"
+              className="featured-primary earthquake-compare"
+              onClick={(event) => launchComparison(event.currentTarget)}
+            >
+              Compare the Kamchatka reports <ControlIcon name="arrow" />
+            </button>
+          </div>
+        )}
         {!comparing && (
           <div className="earthquake-footer">
             <span className="earthquake-record">

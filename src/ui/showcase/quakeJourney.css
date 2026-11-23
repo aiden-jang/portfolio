@@ -2,7 +2,7 @@
   .quake-journey-run::after {
     display: block;
     content: '';
-    height: min(75svh, 680px);
+    height: min(56svh, 470px);
   }
   html:root .quake-journey-run > .earthquake-feature {
     position: sticky;
@@ -17,7 +17,11 @@
 }
 .quake-journey-run .quake-journey-copy {
   display: grid;
+  align-items: center;
   max-width: 330px;
+}
+.quake-journey-run .earthquake-compare {
+  margin-top: 12px;
 }
 .quake-journey-copy > * {
   grid-area: 1 / 1;
@@ -119,7 +123,10 @@
     height: 112%;
   }
   .quake-journey-run .quake-journey-copy {
-    max-width: 100%;
+    max-width: none;
+  }
+  .quake-journey-run .earthquake-compare {
+    margin-top: 4px;
   }
   .quake-journey-readings dl {
     margin: 6px 0;

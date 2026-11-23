@@ -13,12 +13,10 @@ html:root .orbit-preview::before {
   pointer-events: none;
   background: url('/projects/globe-stars-desktop.svg') center / 100% 100% no-repeat;
   mask-image: linear-gradient(transparent, #000 12% 81%, transparent);
-  opacity: var(--work-poster-opacity, 1);
 }
 html:root .orbit-art {
   position: absolute;
   inset: 0;
-  opacity: var(--work-poster-opacity, 1);
 }
 html:root .orbit-art picture {
   display: block;
@@ -115,7 +113,7 @@ html:root :is(.orbit-screenshot, .orbit-rotate, .orbit-reset) svg {
 @media (max-width: 767px) {
   html:root .orbit-preview::before {
     background-image: url('/projects/globe-stars-mobile.svg');
-    opacity: calc(var(--work-poster-opacity, 1) * 0.85);
+    opacity: 0.85;
   }
   html:root .orbit-preview .preview-thumbnail {
     container-type: size;

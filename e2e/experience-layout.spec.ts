@@ -50,11 +50,11 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       }
     }
     if (width < 768) {
-      const copy = await page.locator('.earthquake-intro').boundingBox();
+      const title = await page.locator('.earthquake-title').boundingBox();
       const globe = await page.locator('#project-everythingisfine .orbit-feature').boundingBox();
-      expect(globe!.y, 'globe controls follow the project introduction').toBeGreaterThan(
-        copy!.y + copy!.height,
-      );
+      const detail = await page.locator('.earthquake-detail').boundingBox();
+      expect(globe!.y).toBeGreaterThanOrEqual(title!.y + title!.height);
+      expect(detail!.y).toBeGreaterThanOrEqual(globe!.y + globe!.height);
     }
     const lead = section.getByRole('link', { name: 'Read the case study', exact: true });
     await expect(lead).toBeVisible();

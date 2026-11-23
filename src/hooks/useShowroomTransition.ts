@@ -74,7 +74,7 @@ export function useShowroomTransition() {
       refs.floorReflection =
         reduced || inContact ? 1 : lerp(1, 0.07, smoothProgress(progress, 0.08, 0.52));
 
-      const fadeEnd = phone ? 0.99 : 1.12;
+      const fadeEnd = 0.91;
       root.toggleAttribute(
         'data-showroom-handoff',
         !reduced && !inContact && progress > 0.09 && progress < fadeEnd,
@@ -84,7 +84,7 @@ export function useShowroomTransition() {
       if (!reduced) {
         stage = inContact
           ? smoothProgress(contactProgress, 0.05, phone ? 0.48 : 0.44)
-          : 1 - smoothProgress(progress, phone ? 0.24 : 0.31, fadeEnd);
+          : 1 - smoothProgress(progress, 0.79, fadeEnd);
         // Finish the fade where the dock stops fitting in the Intro viewport.
         const dockEnd = Math.max(0.015, (intro.offsetHeight + 0.5) / h - 1);
         const dock = 1 - smoothProgress(progress, 0.005, dockEnd);
@@ -93,20 +93,11 @@ export function useShowroomTransition() {
         root.style.removeProperty('--garage-controls-opacity');
       }
 
-      const arrival = clamp((h * 0.95 - work.getBoundingClientRect().top) / (h * 0.9), 0, 1);
-      const scale = reduced ? 1 : lerp(0.965, 1, arrival);
       const poster = reduced ? null : work.querySelector<HTMLElement>(ART);
       const rect = poster?.getBoundingClientRect();
-      const globe = rect ? lerp(0.56, 1, smoothProgress((h - rect.top) / h, 0, 0.57)) : 1;
 
       root.style.setProperty('--header-scrim', String(headerScrim));
       root.style.setProperty('--stage-opacity', String(stage));
-      root.style.setProperty('--work-figure-scale', String(scale));
-      root.style.setProperty(
-        '--incoming-pan',
-        reduced ? '0px' : (1 - arrival) * (phone ? 46 : 132) + 'px',
-      );
-      root.style.setProperty('--work-poster-opacity', String(globe));
 
       if (pulsingPoster && (pulsingPoster !== poster || !movingForward)) clearPulse();
       if (
@@ -147,13 +138,7 @@ export function useShowroomTransition() {
       plot?.style.removeProperty('--garden-arrival');
       refs.floorReflection = 1;
       root.removeAttribute('data-showroom-handoff');
-      for (const name of [
-        '--header-scrim',
-        '--stage-opacity',
-        '--work-figure-scale',
-        '--work-poster-opacity',
-        '--garage-controls-opacity',
-      ]) {
+      for (const name of ['--header-scrim', '--stage-opacity', '--garage-controls-opacity']) {
         root.style.removeProperty(name);
       }
     };

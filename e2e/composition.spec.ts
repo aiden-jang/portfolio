@@ -41,12 +41,13 @@ for (const [width, height] of [
       const layoutWidth = await page.evaluate(() => document.documentElement.clientWidth);
       if (width >= 900) {
         expect(copy!.x + copy!.width).toBeLessThan(layoutWidth / 2);
-        expect(Math.abs(copy!.y + copy!.height / 2 - height / 2)).toBeLessThan(2);
       } else {
         expect(Math.abs(copy!.x + copy!.width / 2 - layoutWidth / 2)).toBeLessThan(2);
-        const contact = await page.locator('#sec-contact').boundingBox();
-        expect(copy!.y - contact!.y).toBeCloseTo(Math.max(128, height * 0.21), 0);
       }
+      const contact = await page.locator('#sec-contact').boundingBox();
+      const header = await page.locator('.portfolio-header').boundingBox();
+      const inset = width >= 900 ? Math.max(120, height * 0.17) : header!.height + 24;
+      expect(copy!.y - contact!.y).toBeCloseTo(inset, 0);
     }).toPass({ timeout: 5000 });
     const copy = await page.locator('.contact-copy-block').boundingBox();
     const header = await page.locator('.portfolio-header').boundingBox();

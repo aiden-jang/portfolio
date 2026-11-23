@@ -9,6 +9,13 @@ function settleDinner(progress: number) {
   return 1;
 }
 
+export const RECOVERY_RESTORE_POINT = 0.54;
+
+function settleRecovery(progress: number) {
+  if (progress < 0.32 || progress > 0.76) return progress;
+  return progress < RECOVERY_RESTORE_POINT ? 0.3 : 0.78;
+}
+
 function presentScene(stage: HTMLElement, progress: number) {
   if (stage.id === 'project-wherever') {
     stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
@@ -34,7 +41,7 @@ export function ProjectScene({
   children: ReactNode;
 }) {
   const scene = useRef<HTMLElement>(null);
-  useScrollStudy(scene, true, presentScene, theme === 'dinner' ? settleDinner : undefined);
+  useScrollStudy(scene, true, presentScene, theme === 'dinner' ? settleDinner : settleRecovery);
   return (
     <article ref={scene} id={id} className={`project-scene project-scene-${theme}`}>
       <div className="project-scene-body" data-study-pin>

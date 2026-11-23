@@ -33,14 +33,21 @@ for (const viewport of [
 
     await scroll(0.5);
     await expect(poster).toHaveAttribute('aria-busy', 'false');
-    await expect(art).not.toHaveCSS('opacity', '1');
+    await expect(art).toHaveCSS('opacity', '1');
+    await expect(page.locator('html')).toHaveCSS('--stage-opacity', '1');
     await scroll(1);
+    await art.evaluate((el) => {
+      const { top, height } = el.getBoundingClientRect();
+      scrollBy({ top: top + height * 0.38 - innerHeight * 0.43, behavior: 'instant' });
+    });
     await expect(art).toHaveCSS('opacity', '1');
     await expect(page.locator('body')).toHaveAttribute('data-kamchatka-pulses', '1');
     await expect(art).not.toHaveAttribute('data-kamchatka-pulse');
 
+    await page.evaluate(() => scrollTo({ top: innerHeight * 1.1, behavior: 'instant' }));
+    await expect(page.locator('html')).toHaveCSS('--stage-opacity', '0');
     await scroll(0);
-    await expect(art).not.toHaveCSS('opacity', '1');
+    await expect(page.locator('html')).toHaveCSS('--stage-opacity', '1');
     await scroll(1);
     await expect(art).toHaveCSS('opacity', '1');
     await expect(art).not.toHaveAttribute('data-kamchatka-pulse');

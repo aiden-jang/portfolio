@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import example from '../../data/iodineExample.json';
 import { evidenceHref } from '../creative/storyRoutes';
-import { ProjectScene } from './ProjectScene';
+import { ProjectScene, RECOVERY_RESTORE_POINT } from './ProjectScene';
 
 export function IodinePresentation() {
   const frame = useRef<HTMLDivElement>(null);
@@ -10,16 +10,17 @@ export function IodinePresentation() {
   useEffect(() => {
     const article = frame.current?.closest('article');
     if (!article) return;
-    const sync = () => {
-      const next = Number(article.dataset.sceneProgress ?? 0) >= 0.54;
+    const sync = (progress: number) => {
+      const next = progress >= RECOVERY_RESTORE_POINT;
       if (next !== scrollPhase.current) {
         scrollPhase.current = next;
         restore(next);
       }
     };
-    sync();
-    article.addEventListener('project-scene-progress', sync);
-    return () => article.removeEventListener('project-scene-progress', sync);
+    const onProgress = (event: Event) => sync((event as CustomEvent<number>).detail);
+    sync(Number(article.dataset.sceneProgress ?? 0));
+    article.addEventListener('project-scene-progress', onProgress);
+    return () => article.removeEventListener('project-scene-progress', onProgress);
   }, []);
   const [first, second, last] = example.after.trimEnd().split('\n');
   const [start, end] = second!.trim().split('.trim()');

@@ -205,13 +205,7 @@ export function useOpeningOrbit() {
       store.carIndex === DEFAULT_CAR_INDEX &&
       store.cameraResetVersion === motion.cameraResetVersion
     ) {
-      const travel = clamp(scroll, 0, 1);
-      const last = motion.lastShot;
-      shot = {
-        ...last,
-        shiftX: last.shiftX + travel * (phone ? 0.7 : 1.8),
-        distance: last.distance * (1 - travel * 0.1),
-      };
+      shot = motion.lastShot;
     }
     if (shot) {
       rig.introT = 1;

@@ -1,6 +1,5 @@
 html:root {
   --stage-opacity: 1;
-  --work-figure-scale: 0.88;
 }
 html:root .portfolio-scene {
   opacity: var(--stage-opacity);
@@ -26,10 +25,6 @@ html:root .portfolio-chrome #sec-work {
   margin-top: -15svh;
   padding-top: 130px;
   background: transparent;
-}
-html:root #project-everythingisfine > figure {
-  transform: scale(var(--work-figure-scale));
-  transform-origin: 72% 50%;
 }
 html:root .portfolio-chrome #project-everythingisfine .preview-thumbnail {
   aspect-ratio: 1.72;

@@ -11,7 +11,7 @@ html:root #project-everythingisfine .earthquake-intro h3 {
 }
 html:root .earthquake-intro .creative-quake-hook {
   max-width: 14ch;
-  margin: 0 0 13px;
+  margin: 0;
   color: #f2ede6;
   font-size: clamp(30px, 4.2vw, 66px);
   font-weight: 470;
@@ -318,9 +318,9 @@ html:root .earthquake-inspection .earthquake-date {
     top: auto;
   }
   html:root .earthquake-intro .creative-quake-hook {
-    font-size: clamp(27px, 7.8vw, 38px);
+    font-size: clamp(24px, 6.7vw, 35px);
     max-width: 19ch;
-    margin-bottom: 8px;
+    line-height: 1.06;
   }
   html:root .earthquake-intro .creative-quake-role {
     margin-bottom: 13px;

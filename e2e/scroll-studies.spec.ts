@@ -30,9 +30,11 @@ for (const width of [1440, 390]) {
         });
       }, progress);
     }
-    await seekScene('#project-iodine', 0.9);
+    await seekScene('#project-iodine', 0.62);
+    await expect(iodine).toHaveAttribute('data-scene-progress', '0.780');
     await expect(recovery).toHaveText('File restored');
-    await seekScene('#project-iodine', 0.08);
+    await seekScene('#project-iodine', 0.49);
+    await expect(iodine).toHaveAttribute('data-scene-progress', '0.300');
     await expect(recovery).toHaveText('Agent edit');
 
     const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
