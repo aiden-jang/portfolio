@@ -86,7 +86,7 @@
 @media (min-width: 768px) and (max-width: 1023px) and (min-height: 501px) {
   html:root #desktop-dock .car-controls-row {
     display: grid;
-    grid-template-columns: 80px 1fr 90px 100px;
+    grid-template-columns: 80px 1fr var(--lighting-button-width) 100px;
     width: 540px;
     gap: 4px;
   }
@@ -116,7 +116,7 @@
   html:root #desktop-dock button[aria-label^='Lighting:'] {
     grid-column: 3;
     grid-row: 2;
-    width: 90px;
+    width: var(--lighting-button-width);
     display: grid;
     gap: 6px;
   }
@@ -129,7 +129,7 @@
     display: inline;
   }
   html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) {
-    grid-template-columns: 1fr 90px 100px;
+    grid-template-columns: 1fr var(--lighting-button-width) 100px;
   }
   html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .car-paint-slot {
     grid-column: 1;
@@ -191,16 +191,17 @@
     display: none;
   }
   html:root #desktop-dock .car-controls-row {
-    width: 640px;
+    width: max-content;
     max-width: calc(100vw - 32px);
     padding: 4px;
     gap: 4px;
   }
   html:root #desktop-dock .car-choice {
-    width: 240px;
+    flex: 0 1 240px;
   }
   html:root #desktop-dock .car-browse-trigger {
-    width: 152px;
+    flex: 1;
+    width: auto;
   }
   html:root #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
     width: 104px;
@@ -209,7 +210,7 @@
     width: 80px;
   }
   html:root #desktop-dock button[aria-label^='Lighting:'] {
-    width: 90px;
+    width: var(--lighting-button-width);
     display: grid;
     gap: 6px;
   }

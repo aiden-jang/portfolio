@@ -30,6 +30,61 @@ for (const viewport of [
   });
 }
 
+test('both lighting labels fit the dock without shifting its controls', async ({ page }) => {
+  await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
+  await page.goto('/?car=10');
+  await page.evaluate(() => document.fonts.ready);
+  const lighting = page.getByRole('button', { name: /^Lighting:/ }).filter({ visible: true });
+
+  const measure = () =>
+    lighting.evaluate((button) => {
+      const label = button.querySelector('span')!;
+      const text = document.createRange();
+      text.selectNodeContents(label);
+      const bounds = button.getBoundingClientRect();
+      const dock = button.closest('.car-controls-row')!.getBoundingClientRect();
+      return {
+        width: bounds.width,
+        x: bounds.x,
+        textRight: text.getBoundingClientRect().right,
+        contentRight: bounds.right - parseFloat(getComputedStyle(button).paddingRight),
+        dockRight: dock.right,
+        garageRight: button
+          .closest('.car-controls-row')!
+          .querySelector('.all-controls-trigger')!
+          .getBoundingClientRect().right,
+        available: label.clientWidth,
+        required: label.scrollWidth,
+      };
+    });
+
+  for (const [width, height] of [
+    [1440, 900],
+    [768, 1024],
+    [768, 432],
+    [390, 844],
+    [320, 568],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await expect(lighting).toHaveAccessibleName('Lighting: Studio. Switch to After Hours');
+    const studio = await measure();
+    expect(studio.required, `Studio label at ${width}×${height}`).toBeLessThanOrEqual(
+      studio.available + 1,
+    );
+    await lighting.click();
+    await expect(lighting).toHaveAccessibleName('Lighting: After Hours. Switch to Studio');
+    const afterHours = await measure();
+    expect(afterHours.required, `After Hours label at ${width}×${height}`).toBeLessThanOrEqual(
+      afterHours.available + 1,
+    );
+    expect(afterHours.textRight).toBeLessThanOrEqual(afterHours.contentRight + 1);
+    expect(afterHours.garageRight).toBeLessThanOrEqual(afterHours.dockRight + 1);
+    expect(afterHours.width).toBeCloseTo(studio.width, 0);
+    expect(afterHours.x).toBeCloseTo(studio.x, 0);
+    await lighting.click();
+  }
+});
+
 for (const width of [1440, 390]) {
   test(`unavailable WebGL offers a static preview and a real retry at ${width}px`, async ({
     page,
