@@ -6,7 +6,7 @@ import { Box3, BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Vector3 
 import { CameraRig } from './CameraRig';
 import { useAppStore } from '../store';
 import { F40_INDEX, KEYFRAMES } from '../config';
-import { useOpeningPlayback } from './openingPlayback';
+import { replayOpeningOrbit, useOpeningPlayback } from './openingPlayback';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 
 let frame: (
@@ -265,7 +265,7 @@ async function withOpeningCamera(
   }
 }
 
-it('keeps the brief opening sweep for a shared F40', async () => {
+it('loops the shared angles on desktop and mobile and replays from the front', async () => {
   for (const [width, degrees] of [
     [1440, 26],
     [390, 20],
@@ -274,16 +274,48 @@ it('keeps the brief opening sweep for a shared F40', async () => {
       useAppStore.setState({ carIndex: F40_INDEX });
       load(false);
       tick(240);
-      const start = KEYFRAMES[0].azimuth - (degrees * Math.PI) / 180;
-      expect(yaw()).toBeCloseTo(start, 5);
+      expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth - (degrees * Math.PI) / 180, 5);
+      expect(useOpeningPlayback.getState().playback).toBe('off');
+
       load();
-      tick(60);
-      expect(yaw()).toBeGreaterThan(start + 0.06);
-      expect(yaw()).toBeLessThan(KEYFRAMES[0].azimuth - 0.06);
-      tick(100);
-      expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
+      tick(35);
+      const front = yaw();
+      const frontHeight = camera.position.y;
+      expect(front).toBeGreaterThan(KEYFRAMES[0].azimuth);
+      tick(115);
+      expect(yaw()).toBeLessThan(-2);
+      tick(110);
+      expect(camera.position.y).toBeGreaterThan(frontHeight * 2);
+      tick(114);
+      expect(yaw()).toBeCloseTo(front, 5);
+      expect(useOpeningPlayback.getState().playback).toBe('playing');
+
+      tick(115);
+      replayOpeningOrbit();
+      tick(35);
+      expect(yaw()).toBeCloseTo(front, 5);
     });
   }
+});
+
+it('waits for the replacement model before playing the selected car’s shots', async () => {
+  await withOpeningCamera(1440, ({ tick, yaw, load }) => {
+    load();
+    tick(60);
+    const { refs, setCarIndex, setCarLoading } = useAppStore.getState();
+    const replacement = refs.carModel!.clone();
+    setCarIndex(F40_INDEX);
+    tick(240);
+    expect(useOpeningPlayback.getState().playback).toBe('off');
+    setCarLoading(true);
+    refs.carModel = replacement;
+    tick(80);
+    expect(useOpeningPlayback.getState().playback).toBe('off');
+    setCarLoading(false);
+    tick(35);
+    expect(yaw()).toBeGreaterThan(KEYFRAMES[0].azimuth);
+    expect(useOpeningPlayback.getState().playback).toBe('playing');
+  });
 });
 
 it('loops distinct Corvette shots and holds the view during pause', async () => {

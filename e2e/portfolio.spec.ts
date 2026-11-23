@@ -67,9 +67,7 @@ for (const width of [1440, 390]) {
         .getByRole('button', { name: 'Garage controls', exact: true })
         .filter({ visible: true });
       const controlsPosition = await controls.boundingBox();
-      await expect(
-        page.getByRole('button', { name: 'Reset camera view', exact: true }),
-      ).toHaveCount(0);
+      await expect(page.getByRole('button', { name: 'Reset view', exact: true })).toBeEnabled();
       await page.mouse.move(8, 450);
       await page.mouse.down();
       await page.mouse.move(16, 490, { steps: 4 });
@@ -77,7 +75,7 @@ for (const width of [1440, 390]) {
       await page.mouse.up();
       await expect(page.locator('body')).not.toHaveClass(/orbiting/);
       const reset = page
-        .getByRole('button', { name: 'Reset camera view', exact: true })
+        .getByRole('button', { name: 'Reset view', exact: true })
         .filter({ visible: true });
       await expect(reset).toBeVisible();
       if (width === 390) {
@@ -85,16 +83,18 @@ for (const width of [1440, 390]) {
           await page.setViewportSize({ width: phoneWidth, height: 900 });
           const bounds = (await reset.boundingBox())!;
           const layoutWidth = await page.evaluate(() => document.documentElement.clientWidth);
-          expect(Math.abs(bounds.x + bounds.width / 2 - layoutWidth / 2)).toBeLessThan(1);
-          const dock = (await page.locator('#mobile-bar .car-controls-row').boundingBox())!;
-          expect(bounds.y + bounds.height).toBeLessThanOrEqual(dock.y - 10);
+          const zoom = (await page.locator('#mobile-bar .car-zoom-controls').boundingBox())!;
+          expect(bounds.width).toBeGreaterThanOrEqual(44);
+          expect(bounds.x + bounds.width).toBeLessThanOrEqual(layoutWidth);
+          expect(bounds.x).toBeGreaterThan(zoom.x);
+          expect(bounds.y).toBe(zoom.y);
         }
         await page.setViewportSize({ width, height: 900 });
       }
       expect(await controls.boundingBox()).toEqual(controlsPosition);
-      await reset.click();
-      await expect(controls).toBeFocused();
-      await expect(reset).toBeHidden();
+      await reset.press('Enter');
+      await expect(reset).toBeFocused();
+      await expect(reset).toBeEnabled();
       await controls.click();
       await page.getByRole('combobox', { name: 'Search portfolio controls' }).fill('share');
       await expect(page.getByRole('option', { name: /Share this garage/ })).toBeVisible();

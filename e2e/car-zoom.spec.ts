@@ -30,7 +30,7 @@ for (const width of [1440, 390, 320]) {
       const zoomIn = dock.getByRole('button', { name: 'Zoom in', exact: true });
       const zoomOut = dock.getByRole('button', { name: 'Zoom out', exact: true });
       const reset = page
-        .getByRole('button', { name: 'Reset camera view', exact: true })
+        .getByRole('button', { name: 'Reset view', exact: true })
         .filter({ visible: true });
       await expect(zoomIn).toBeEnabled({ timeout: 60_000 });
       await expect(async () => expect(await carArea(page)).toBeGreaterThan(1000)).toPass({
@@ -52,7 +52,7 @@ for (const width of [1440, 390, 320]) {
       });
       await page.screenshot({ path: test.info().outputPath('zoom-in.png') });
       await reset.click();
-      await expect(reset).toHaveCount(0);
+      await expect(reset).toBeEnabled();
       await expect(async () =>
         expect(Math.abs((await carArea(page)) / initial - 1)).toBeLessThan(0.03),
       ).toPass({ timeout: 20_000 });

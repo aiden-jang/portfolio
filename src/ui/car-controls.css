@@ -1,12 +1,3 @@
-#desktop-dock button[aria-label='Reset camera view'] {
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-@media (min-width: 768px) and (max-width: 1023px) {
-  #desktop-dock button[aria-label='Reset camera view'] > span:last-child {
-    display: none;
-  }
-}
 .car-controls-row {
   position: relative;
   display: flex;
@@ -277,9 +268,6 @@
   width: 16px;
   height: 16px;
 }
-#desktop-dock button[aria-label='Reset camera view'] {
-  color: #a3a3ad;
-}
 #desktop-dock [role='status'] {
   max-width: 240px;
   white-space: normal;
@@ -288,9 +276,4 @@
   font: 12px/1.4 var(--font-display);
   letter-spacing: 0;
   text-transform: none;
-}
-@media (pointer: coarse) {
-  body.orbiting .camera-reset-button {
-    visibility: hidden;
-  }
 }

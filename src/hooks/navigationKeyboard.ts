@@ -1,5 +1,6 @@
 import { GARAGE_INDICES, SECTION_IDS } from '../config';
 import { useAppStore } from '../store';
+import { resetShowroomCamera } from '../three/openingPlayback';
 
 type NavigationActions = {
   goToSection: (index: number) => void;
@@ -79,7 +80,7 @@ export function handleNavigationKey(
     case 'v':
     case 'V':
       e.preventDefault();
-      useAppStore.getState().resetCamera();
+      resetShowroomCamera();
       break;
     case 'x':
     case 'X':

@@ -1,14 +1,12 @@
-import { DEFAULT_CAR_INDEX } from '../config';
 import { useAppStore } from '../store';
 import { useOpeningPlayback } from '../three/openingPlayback';
 import { ControlIcon } from './ControlIcon';
 import './opening-loop-control.css';
 
 export function OpeningLoopControl() {
-  const car = useAppStore((state) => state.carIndex);
   const section = useAppStore((state) => state.sectionIndex);
   const playback = useOpeningPlayback((state) => state.playback);
-  if (playback === 'off' || car !== DEFAULT_CAR_INDEX || section !== 0) return null;
+  if (playback === 'off' || section !== 0) return null;
   const paused = playback === 'paused';
   const label = paused ? 'Resume opening camera' : 'Pause opening camera';
   return (

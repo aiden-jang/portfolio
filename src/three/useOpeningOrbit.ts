@@ -5,6 +5,7 @@ import { clamp, lerpAngle, lerp } from '../math';
 import { usePhotoMode } from '../ui/photo/state';
 import { framingDistanceMultiplier, orbitPosition } from './cameraPose';
 import { sampleCorvetteLoop } from './corvetteLoop';
+import { sampleSharedGarageCamera } from './sharedGarageCamera';
 import { getOpeningReplayVersion, useOpeningPlayback } from './openingPlayback';
 import { placeCamera } from './studio/cameraFraming';
 import { useAppStore } from '../store';
@@ -12,8 +13,7 @@ import { motionState } from './studioEntrance';
 import type { RigState } from './useOrbitGesture';
 
 const HOLD_SECONDS = 0.18;
-const SWEEP_SECONDS = 2.25;
-type Phase = 'waiting' | 'playing' | 'settled' | 'interrupted' | 'reduced';
+type Phase = 'waiting' | 'playing' | 'interrupted' | 'reduced';
 
 let observer: ((phase: Phase) => void) | undefined;
 
@@ -25,7 +25,7 @@ export function observeOpeningOrbit(listener: (phase: Phase) => void) {
 }
 
 function openingState() {
-  const { carIndex, cameraResetVersion } = useAppStore.getState();
+  const { carIndex, cameraResetVersion, refs } = useAppStore.getState();
   return {
     phase: 'waiting' as Phase,
     version: getOpeningReplayVersion(),
@@ -37,6 +37,8 @@ function openingState() {
     reportedPhase: undefined as Phase | undefined,
     scrolled: false,
     leftIntro: false,
+    model: refs.carModel,
+    awaitingSwap: false,
   };
 }
 
@@ -79,20 +81,23 @@ export function useOpeningOrbit() {
     const atIntro = scroll <= 0.002 && window.scrollY <= 1;
     if (scroll > 0.12) motion.leftIntro = true;
     const replayRequested = motion.version !== getOpeningReplayVersion();
+    const switchedCar = motion.carIndex !== store.carIndex;
     if (
-      (motion.leftIntro || replayRequested) &&
+      (motion.leftIntro || replayRequested || switchedCar) &&
       atIntro &&
       !store.isContactVisible &&
       !rig.isDown
     ) {
       motion.leftIntro = false;
       if (
-        (replayRequested || (!reduced && store.carIndex === DEFAULT_CAR_INDEX)) &&
+        (replayRequested || switchedCar || (!reduced && store.carIndex === DEFAULT_CAR_INDEX)) &&
         !usePhotoMode.getState().active
       ) {
         store.resetCamera();
         store = useAppStore.getState();
+        const previousModel = motion.model;
         motion = current.current = openingState();
+        motion.awaitingSwap = switchedCar && previousModel === motion.model;
         rig.introT = 0;
         useOpeningPlayback.setState({ playback: 'off' });
       }
@@ -102,6 +107,10 @@ export function useOpeningOrbit() {
     const corvette = motion.carIndex === DEFAULT_CAR_INDEX;
     const playback = useOpeningPlayback.getState().playback;
     const photo = usePhotoMode.getState().active;
+    if (motion.model !== store.refs.carModel) {
+      motion.model = store.refs.carModel;
+      motion.awaitingSwap = false;
+    }
     let shot: ReturnType<typeof sampleCorvetteLoop> | undefined;
     const unfinished = motion.phase === 'waiting' || motion.phase === 'playing';
 
@@ -118,15 +127,28 @@ export function useOpeningOrbit() {
       (rig.isDown || store.hasManualView || store.carIndex !== motion.carIndex)
     ) {
       // Start manual camera control from the angle already on screen.
+      if (!corvette && motion.lastShot)
+        rig.dragElevation = motion.lastShot.elevation - KEYFRAMES[0].elevation;
       rig.idleSpin += motion.offset;
       motion.offset = 0;
       motion.phase = 'interrupted';
-    } else if (unfinished && store.refs.introArmed && store.refs.carModel) {
+    } else if (
+      unfinished &&
+      !motion.awaitingSwap &&
+      !store.carLoadError &&
+      store.refs.introArmed &&
+      store.refs.carModel
+    ) {
       // Frame the first visible paint at the start angle, then wait for the load signal.
       if (!store.isCarLoading && !store.refs.holdOpeningPose) {
         motion.phase = 'playing';
-        if (!document.hidden && (!corvette || (playback !== 'paused' && !photo)))
-          motion.elapsed += Math.min(dt, corvette ? 0.2 : 0.05);
+        if (
+          !document.hidden &&
+          playback !== 'paused' &&
+          !photo &&
+          !document.querySelector('dialog[open]')
+        )
+          motion.elapsed += Math.min(dt, 0.2);
       }
       const elapsed = motion.elapsed - HOLD_SECONDS;
       if (corvette && elapsed >= 0) {
@@ -145,15 +167,24 @@ export function useOpeningOrbit() {
           shot.targetY = lerp(opening.targetY, shot.targetY, ease);
         }
         motion.offset = shot.yaw - opening.azimuth;
+      } else if (!corvette && motion.phase === 'playing' && elapsed >= 0) {
+        const framed = sampleSharedGarageCamera(
+          elapsed,
+          store.refs.carModel,
+          width,
+          aspect,
+          phone ? 34 : 32,
+        );
+        if (framed) {
+          shot = framed;
+          motion.offset = shot.yaw - KEYFRAMES[0].azimuth;
+        }
       } else {
-        const t = clamp(elapsed / SWEEP_SECONDS, 0, 1);
-        motion.offset = -arc * (1 - t * t * (3 - 2 * t));
-        if (t === 1) motion.phase = 'settled';
+        motion.offset = -arc;
       }
     }
 
-    if (corvette && shot && playback === 'off' && atIntro)
-      useOpeningPlayback.setState({ playback: 'playing' });
+    if (shot && playback === 'off' && atIntro) useOpeningPlayback.setState({ playback: 'playing' });
     else if (!shot && playback !== 'off') useOpeningPlayback.setState({ playback: 'off' });
     motionState.openingOrbitProgress =
       !corvette && motion.phase === 'playing' ? clamp(1 + motion.offset / arc, 0, 1) : 0;

@@ -6,6 +6,7 @@ import { useLineup } from '../lineup/state';
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { canStudyRender, useAppStore } from '../store';
+import { resetShowroomCamera } from '../three/openingPlayback';
 import { cameraViews, type CameraView } from '../three/cameraViews';
 import { CAR_ZOOM_MAX, CAR_ZOOM_MIN, CAR_ZOOM_STEP } from '../three/carZoom';
 
@@ -179,7 +180,7 @@ export function buildCommands({
       label: 'Reset camera view',
       hint: 'V',
       keywords: 'camera view orbit reset',
-      run: () => useAppStore.getState().resetCamera(),
+      run: resetShowroomCamera,
     },
     ...([-1, 1] as const).map((direction) => ({
       id: direction === 1 ? 'zoom-in' : 'zoom-out',

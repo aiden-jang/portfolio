@@ -1,30 +1,22 @@
-import { smoothScrollTo } from '../hooks/scrollNavigation';
 import { useAppStore } from '../store';
-import { replayOpeningOrbit } from '../three/openingPlayback';
+import { resetShowroomCamera } from '../three/openingPlayback';
 import { ControlIcon } from './ControlIcon';
 
 export function CameraResetButton() {
-  const manualView = useAppStore((state) => state.hasManualView);
+  const loading = useAppStore((state) => state.isCarLoading);
+  const failed = useAppStore((state) => !!state.carLoadError);
   return (
-    <div className="camera-reset-slot">
-      {manualView && (
-        <button
-          type="button"
-          className="scene-control-button camera-reset-button"
-          onClick={(event) => {
-            event.currentTarget
-              .closest('.car-controls-row')
-              ?.querySelector<HTMLButtonElement>('.all-controls-trigger')
-              ?.focus({ preventScroll: true });
-            replayOpeningOrbit();
-            if (window.scrollY > 1) smoothScrollTo(0);
-          }}
-          aria-label="Reset camera view"
-          title="Reset view"
-        >
-          <ControlIcon name="reset" />
-        </button>
-      )}
-    </div>
+    <button
+      type="button"
+      className="scene-control-button camera-reset-button"
+      onClick={resetShowroomCamera}
+      aria-label="Reset view"
+      disabled={loading || failed}
+    >
+      <ControlIcon name="reset" />
+      <span className="camera-reset-label" aria-hidden="true">
+        Reset view
+      </span>
+    </button>
   );
 }

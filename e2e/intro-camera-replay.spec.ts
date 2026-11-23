@@ -35,17 +35,39 @@ for (const width of [1440, 390]) {
     const zoom = dock.getByRole('button', { name: 'Zoom in', exact: true });
     const firstPosition = await zoom.boundingBox();
     await zoom.click();
-    const reset = dock.getByRole('button', { name: 'Reset camera view' });
+    const reset = dock.getByRole('button', { name: 'Reset view' });
     await expect(reset).toBeVisible();
     expect(await zoom.boundingBox()).toEqual(firstPosition);
     await reset.click();
-    await expect(reset).toHaveCount(0);
+    await expect(reset).toBeEnabled();
+    await expect(playing).toBeVisible();
+
+    await playing.click();
+    await reset.click();
+    await expect(playing).toBeVisible();
+
+    let finishLoad!: () => void;
+    const loading = new Promise<void>((resolve) => {
+      finishLoad = resolve;
+    });
+    await page.route('**/models/ferrari-f1-75.glb', async (route) => {
+      await loading;
+      await route.continue();
+    });
+    try {
+      await dock.getByRole('button', { name: 'Next car', exact: true }).click();
+      await expect(reset).toBeDisabled();
+      await expect(playing).toHaveCount(0);
+    } finally {
+      finishLoad();
+    }
+    await expect(reset).toBeEnabled({ timeout: 60_000 });
     await expect(playing).toBeVisible();
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await zoom.click();
     await reset.click();
-    await expect(reset).toHaveCount(0);
+    await expect(reset).toBeEnabled();
     await selectIntro();
     await homepage.click();
     await expect(playing).toHaveCount(0);

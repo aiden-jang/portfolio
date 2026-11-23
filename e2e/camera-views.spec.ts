@@ -6,7 +6,7 @@ function cameraControls(page: Page) {
     .getByRole('button', { name: 'Garage controls', exact: true })
     .filter({ visible: true });
   const reset = page
-    .getByRole('button', { name: 'Reset camera view', exact: true })
+    .getByRole('button', { name: 'Reset view', exact: true })
     .filter({ visible: true });
   const dialog = page.getByRole('dialog', { name: 'Command menu' });
   return {
@@ -49,7 +49,7 @@ for (const width of [1440, 390]) {
       expect(changed).toBeGreaterThan(500);
       await select('Corner view');
       await reset.click();
-      await expect(reset).toHaveCount(0);
+      await expect(reset).toBeEnabled();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,
       );
