@@ -52,43 +52,33 @@ first live frame and first drag. The slow-load replay includes an intentional ho
 model request. The edited handoff view starts shortly before the first live frame. The clips
 illustrate the handoff and do not measure network or physical-device performance.
 
-## Recorded and illustrated examples
+## Project scenes
 
-Iodine's local example records an actual snapshot, edit, revert and feedback queue
-using its snapshot service. The example file is synthetic. Undo and Replay
-switch the current file at the same line on desktop and phone. The gallery shows one
-restore when the example stays in view. Reduced motion keeps it manual. The scope control
-shows the recorded decisions for an approved folder and a folder outside it.
-The editor screenshot opens on the highlighted symbolic-link check. Fit image
-shows the full editor and assistant. The case URL carries the edited or restored
-state, the file reference focuses the line, and the source link opens the restore
-implementation.
+The Iodine gallery crossfades between real captures of a reused terminal approval and
+a fresh approval request. The case study keeps the recorded snapshot, Undo and Replay,
+editable-state link and clickable file reference. Its scope control switches between the
+recorded decisions for the approved folder and a folder outside it.
 
-Bean's small artwork frames come from mrrp's native sit/perk renderer and eye painter.
-The bloomnote garden uses its own flower renderer to recompose the three blooms from the
-approved recipient capture. Selecting a flower shows its original meaning. The original
-garden and full recipient note are available in the screenshot viewer.
+The mrrp scene uses Bean’s native room canvas with controls to pet Bean, sit together
+and switch the lighting. The renderer loads near the viewport and releases its canvas
+offscreen. The portfolio room is silent and uses local examples. To rebuild the checked-in
+renderer, run `node scripts/vendor-mrrp.mjs /path/to/mrrp` with a clean checkout of
+[the pinned revision](https://github.com/aiden-jang/mrrp/tree/23fb567d2a430db8eda47ff4011abccd8030ae5a).
+The original [MIT license](../public/projects/mrrp-license.txt) ships with the renderer.
 
-Sources: [mrrp artwork](https://github.com/aiden-jang/mrrp/tree/23fb567/packages/web/src),
-the [bloomnote recipient screenshot](../public/projects/bloomnote-garden.jpg), and the contribution
-link in the Iodine example.
+The iguess replay draws one recorded round as it enters view, pauses offscreen, then
+reveals the guess and answer. Replay starts the same round again. The case study shows
+how the room socket, Durable Object and AI Worker share a round.
 
-The iguess gallery replay plays one saved round when the drawing enters view,
-then holds on the recorded guess. With reduced motion, Play round displays the finished drawing and
-guess immediately. The reader illustrates how the room socket, Durable Object and
-AI Worker share a round. The portfolio runs both examples locally.
+The dinner scene pairs the wherever group decision and the matching $48 owewell split.
+Scrolling reverses both capture transitions. Reduced motion shows both capture states
+and the finished iguess drawing without playback.
 
-The wherever gallery opens with the group’s result and ranked backups. The second
-shot shows Late Night Pizza Decisions mid-swipe. Both captures come from the same
-local two-person round with sample restaurants. The platform gallery captures
-the account hub and the signed-in worth archive from the same local test session.
-The hub capture masks the test email. Swipe or select a step to move between
-the recorded states. The screenshot inspector opens the uncropped frames.
-
-Owewell's paired inspector captures come from the local calculator. Maya and Alex
-split a sample $48 bill equally. Selecting a payer opens the matching screenshot.
-In the screenshot viewer, selecting a point in the fitted image zooms around that
-detail. Fit image restores the full frame.
+The bloomnote garden recomposes three blooms from the
+[approved recipient capture](../public/projects/bloomnote-garden.jpg). Selecting a flower
+shows its meaning. The screenshot viewer includes the garden and the full note.
+The platform gallery shows the account hub and signed-in worth archive from the same
+local test session, with the test email masked.
 
 ## Showroom study
 

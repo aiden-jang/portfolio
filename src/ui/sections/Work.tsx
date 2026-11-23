@@ -1,5 +1,7 @@
 import { BloomPreview } from '../showcase/BloomPreview';
-import { Bean } from '../showcase/Bean';
+import { BeanRoom } from '../showcase/BeanRoom';
+import { IguessReplay } from '../showcase/IguessReplay';
+import { ProjectScene, SceneAppLink, ScrollScenes } from '../showcase/ProjectScene';
 import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
 import { IodinePresentation } from '../showcase/IodinePresentation';
 import '../project-gallery.css';
@@ -36,12 +38,7 @@ export function WorkSection({ onOpen }: Props) {
                 onOpen={onOpen}
               />
             ) : (
-              <IodinePresentation
-                key={item.title}
-                item={item}
-                preview={PREVIEWS.iodine}
-                onOpen={onOpen}
-              />
+              <IodinePresentation key={item.title} />
             ),
           )}
         </div>
@@ -52,10 +49,29 @@ export function WorkSection({ onOpen }: Props) {
 
 const bloomnote = orderedCollection.find((item) => item.mark === 'bloomnote')!;
 const iguess = orderedCollection.find((item) => item.mark === 'iguess')!;
+const mrrp = orderedCollection.find((item) => item.mark === 'mrrp')!;
 const wherever = orderedCollection.find((item) => item.mark === 'wherever')!;
+const owewell = orderedCollection.find((item) => item.mark === 'owewell')!;
 const supportingProjects = orderedCollection.filter(
-  (item) => item !== bloomnote && item !== iguess && item !== wherever,
+  (item) => ![bloomnote, iguess, mrrp, wherever, owewell].includes(item),
 );
+const dinner = [
+  { image: 'wherever-result', alt: 'Two votes choose Neighborhood Pizza Kitchen in wherever.' },
+  {
+    image: 'owewell-result',
+    anchor: 'project-owewell',
+    alt: 'owewell splits the $48 dinner bill into $24 per person. Alex owes you $24.',
+  },
+] as const;
+
+function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
+  if (!item.link) return null;
+  return (
+    <SceneAppLink href={item.link.url} name={item.shortName ?? item.title}>
+      {label}
+    </SceneAppLink>
+  );
+}
 
 export function MoreProjectsSection({ onOpen }: Props) {
   return (
@@ -68,16 +84,49 @@ export function MoreProjectsSection({ onOpen }: Props) {
         />
         <div className="garage-work bloom-gallery-rest">
           <h2 className="project-gallery-heading">More projects</h2>
-          <div className="project-gallery gallery-replay">
-            <Project item={iguess} onOpen={onOpen} copyFirst />
+          <div className="project-scenes">
+            <ProjectScene
+              id="project-iguess"
+              theme="iguess"
+              title={
+                <button
+                  type="button"
+                  aria-label="How I built it: iguess"
+                  onClick={(event) => onOpen(iguess, event.currentTarget)}
+                >
+                  iguess
+                </button>
+              }
+              links={<AppLink item={iguess} />}
+            >
+              <IguessReplay />
+            </ProjectScene>
+            <ProjectScene
+              id="project-mrrp"
+              theme="mrrp"
+              title="mrrp"
+              links={<AppLink item={mrrp} />}
+            >
+              <BeanRoom />
+            </ProjectScene>
+            <ProjectScene
+              id="project-wherever"
+              theme="dinner"
+              title="wherever → owewell"
+              links={
+                <>
+                  <AppLink item={wherever} label="wherever" />
+                  <AppLink item={owewell} label="owewell" />
+                </>
+              }
+            >
+              <ScrollScenes frames={dinner} />
+            </ProjectScene>
           </div>
-          <div className="project-gallery gallery-collection">
-            <Project item={wherever} onOpen={onOpen} />
-            <div className="gallery-companions">
-              {supportingProjects.map((item) => (
-                <Project key={item.title} item={item} onOpen={onOpen} />
-              ))}
-            </div>
+          <div className="project-gallery gallery-companions">
+            {supportingProjects.map((item) => (
+              <Project key={item.title} item={item} onOpen={onOpen} />
+            ))}
           </div>
         </div>
       </div>
@@ -85,7 +134,7 @@ export function MoreProjectsSection({ onOpen }: Props) {
   );
 }
 
-function Project({ item, onOpen, copyFirst }: { item: WorkDetail; copyFirst?: boolean } & Props) {
+function Project({ item, onOpen }: { item: WorkDetail } & Props) {
   const name = item.shortName ?? item.title;
   const preview = PREVIEWS[item.mark ?? ''];
   const description = preview?.description ?? item.summary;
@@ -101,7 +150,6 @@ function Project({ item, onOpen, copyFirst }: { item: WorkDetail; copyFirst?: bo
           <ControlIcon name="arrow" />
         </button>
       </h3>
-      {item.shortName === 'mrrp' && <Bean />}
     </div>
   );
   const link = item.link && (
@@ -138,9 +186,8 @@ function Project({ item, onOpen, copyFirst }: { item: WorkDetail; copyFirst?: bo
   );
   return (
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
-      {copyFirst && copy}
       <div className="project-card-media">{media}</div>
-      {!copyFirst && copy}
+      {copy}
     </article>
   );
 }

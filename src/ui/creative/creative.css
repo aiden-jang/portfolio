@@ -138,36 +138,6 @@ html:root .earthquake-inspection .earthquake-date {
   border-color: currentColor;
 }
 
-html:root #project-iodine {
-  padding-block: clamp(52px, 8vw, 122px) clamp(46px, 7vw, 94px);
-}
-html:root #project-iodine .iodine-preview-row {
-  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
-  gap: clamp(10px, 2vw, 26px);
-  align-items: stretch;
-}
-#project-iodine .iodine-story-example {
-  align-self: stretch;
-  border-radius: 6px;
-  background: #1a1b21;
-}
-html:root #project-iodine .iodine-story-example pre {
-  padding-block: clamp(18px, 3vw, 42px);
-  font-size: clamp(12px, 1.5vw, 22px);
-  line-height: 1.75;
-  overflow-x: auto;
-}
-html:root #project-iodine .iodine-story-example .iodine-evidence-line {
-  min-width: max-content;
-}
-#project-iodine .iodine-preview-row .iodine-editor-tile {
-  min-height: 245px;
-  border-radius: 6px;
-}
-html:root #project-iodine .scope-cases-single > div {
-  min-height: 108px;
-}
-
 #sec-about .about-framing-study {
   margin-bottom: 24px;
 }
@@ -355,13 +325,6 @@ html:root #project-iodine .scope-cases-single > div {
   html:root .earthquake-intro .creative-quake-role {
     margin-bottom: 13px;
     max-width: 34ch;
-  }
-  html:root #project-iodine .iodine-preview-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  #project-iodine .iodine-preview-row .iodine-editor-tile {
-    min-height: 118px;
-    max-height: 136px;
   }
   .creative-studio-tour {
     display: block;

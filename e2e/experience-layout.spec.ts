@@ -44,7 +44,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       header!.y + header!.height,
     );
     if (width === 1440 || width < 768) {
-      for (const selector of ['#sec-intro h1', '#sec-work h2', '.iodine-intro h3']) {
+      for (const selector of ['#sec-intro h1', '#sec-work h2', '#project-iodine']) {
         const chapter = await page.locator(selector).boundingBox();
         expect(chapter!.x, selector + ' shares the Experience gutter').toBeCloseTo(heading!.x, 0);
       }
@@ -186,15 +186,26 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await expect
         .poll(() => target.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
         .toBeLessThan(2);
-      const title = await target.locator('h2').boundingBox(),
+      const title = await target
+          .getByRole('heading', {
+            name: id === 'sec-more-work' ? 'More projects' : 'About',
+            exact: true,
+          })
+          .boundingBox(),
         banner = await page.locator('.portfolio-header').boundingBox();
       expect(title!.y, id + ' clears the fixed header').toBeGreaterThanOrEqual(
         banner!.y + banner!.height,
       );
       if (id === 'sec-about') {
         await expect(target.locator('h2')).toHaveText('About', { timeout: 3000 });
-        const study = target.getByRole('img', { name: /^Finished Ferrari F40/ });
-        await expect(study).toHaveAttribute('src', '/projects/showroom-finished.webp');
+        const study = target.getByRole('figure', { name: 'Framing the showroom' });
+        await expect(
+          study.getByRole('slider', { name: 'Ferrari camera and finish' }),
+        ).toBeVisible();
+        await expect(study.locator('.finish-poster-paint img')).toHaveAttribute(
+          'src',
+          '/showroom/finish-study/desktop-paint.webp',
+        );
         const frame = await study.boundingBox();
         const reel = await target.locator('.about-reel').boundingBox();
         const story = await target.locator('.about-story').boundingBox();
@@ -202,7 +213,8 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         if (width >= 900) expect(story!.x).toBeGreaterThan(reel!.x + reel!.width);
         else expect(story!.y).toBeGreaterThan(reel!.y + reel!.height);
         expect(frame!.y).toBeGreaterThan(story!.y + story!.height);
-        expect(details!.y).toBeGreaterThan(story!.y + story!.height);
+        const aboutBody = await target.locator('.about-body').boundingBox();
+        expect(details!.y).toBeGreaterThan(aboutBody!.y + aboutBody!.height);
         const contribution = target.getByRole('link', { name: 'iodine', exact: true });
         await expect(contribution).toHaveAccessibleDescription('Opens in a new tab');
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(

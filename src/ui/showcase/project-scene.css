@@ -1,0 +1,208 @@
+.project-scene {
+  --scene-edge: clamp(17px, 3.4vw, 43px);
+  --scene-inset: calc(var(--portfolio-header-height) + 10px);
+  --scene-ink: #eeeae4;
+  --scene-muted: #b9b7ae;
+  --scene-surface: #141416;
+  --scene-line: #ffffff19;
+  --scene-height: clamp(262px, 48svh, 500px);
+  --scene-run: min(46svh, 420px);
+  position: relative;
+  min-width: 0;
+  scroll-margin-top: var(--scene-inset);
+  color: var(--scene-ink);
+  text-shadow: none;
+}
+
+.project-scene-iodine {
+  --scene-surface: #17191b;
+  --scene-line: #86a2b028;
+}
+
+.project-scene-iguess {
+  --scene-surface: #eeeee5;
+  --scene-ink: #24251e;
+  --scene-muted: #44473c;
+  --scene-line: #211f1a19;
+}
+
+.project-scene-mrrp {
+  --scene-surface: #1a1914;
+  --scene-muted: #d0c3a7;
+  --scene-line: #c6b39031;
+}
+
+.project-scene-dinner {
+  --scene-surface: #1c1915;
+  --scene-muted: #d0c4b4;
+  --scene-line: #c5a67829;
+}
+
+.project-scene-body {
+  border: 1px solid var(--scene-line);
+  border-radius: clamp(6px, 1.2vw, 12px);
+  background: var(--scene-surface);
+  padding: var(--scene-edge);
+}
+
+.project-scene-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 20px;
+  margin-bottom: clamp(15px, 2vw, 25px);
+}
+
+html:root .portfolio-chrome .project-scene h3 {
+  min-width: 0;
+  margin: 0;
+  font: 470 clamp(33px, 4.25vw, 66px)/0.98 var(--font-display);
+  letter-spacing: -0.039em;
+  color: var(--scene-ink);
+  text-wrap: balance;
+}
+
+.project-scene h3 button {
+  min-height: 44px;
+  text-align: left;
+}
+
+.project-scene-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 1px 17px;
+  flex: none;
+}
+
+.project-scene-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  font: 450 13px/1.25 var(--font-display);
+  color: var(--scene-muted);
+  white-space: nowrap;
+}
+
+.project-scene-links a:hover {
+  color: var(--scene-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.project-scene :is(a, button, canvas):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.project-scene-track {
+  --scene-blend: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.project-scene-still {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  height: var(--scene-height);
+  border-radius: 6px;
+  background: #212122;
+}
+
+.project-scene-dinner .project-scene-still {
+  background: #1b1917;
+}
+
+.project-scene-dinner .project-scene-still:last-child {
+  background: #151e1c;
+}
+
+.project-scene-still picture,
+.project-scene-still img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  border-radius: inherit;
+}
+
+.project-scene-still img {
+  object-fit: contain;
+}
+
+.project-scene-dinner .project-scene-still:last-child picture {
+  width: min(100%, 850px);
+}
+
+.project-scene-anchor {
+  position: absolute;
+  top: 0;
+  scroll-margin-top: var(--scene-inset);
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 610px) {
+  .project-scene:is(.project-scene-iodine, .project-scene-dinner) {
+    padding-bottom: var(--scene-run);
+  }
+
+  .project-scene:is(.project-scene-iodine, .project-scene-dinner) .project-scene-body {
+    position: sticky;
+    top: var(--scene-inset);
+  }
+
+  .project-scene-track {
+    position: relative;
+    gap: 0;
+  }
+
+  .project-scene-still {
+    grid-area: 1 / 1;
+  }
+
+  .project-scene-still:last-child {
+    opacity: var(--scene-blend);
+  }
+
+  .project-scene-anchor {
+    top: calc(var(--scene-run) * 0.85 - var(--scene-edge) - 77px);
+  }
+}
+
+@media (max-width: 700px) {
+  .project-scene {
+    --scene-edge: 13px;
+    --scene-height: clamp(218px, 39svh, 396px);
+    --scene-run: min(34svh, 320px);
+  }
+
+  .project-scene-iodine {
+    --scene-height: clamp(190px, 28svh, 255px);
+  }
+
+  .project-scene-heading {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  html:root .portfolio-chrome .project-scene h3 {
+    font-size: clamp(29px, 8vw, 38px);
+  }
+
+  .project-scene-links a {
+    font-size: 12px;
+  }
+
+  .project-scene-dinner .project-scene-links {
+    display: grid;
+    gap: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .project-scene-dinner .project-scene-links a {
+    min-height: 32px;
+  }
+}

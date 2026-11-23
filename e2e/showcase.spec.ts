@@ -29,43 +29,19 @@ for (const width of [1440, 390]) {
     await expect(page.getByRole('button', { name: 'Explore globe', exact: true })).toBeFocused();
     await expect(canvas).toHaveCount(0);
     const iodine = page.locator('#project-iodine');
-    const code = iodine.locator('.iodine-evidence-line');
-    const editedLine = await code.boundingBox();
-    await expect(code).toContainText('.trim()');
-    await iodine.getByRole('button', { name: 'Undo edit', exact: true }).press('Enter');
-    await expect(code).not.toContainText('.trim()');
-    await expect(iodine.getByText('Revert feedback queued', { exact: true })).toBeVisible();
-    const restoredLine = await code.boundingBox();
-    expect(restoredLine!.x).toBeCloseTo(editedLine!.x);
-    const replay = iodine.getByRole('button', { name: 'Replay edit', exact: true });
-    await expect(replay).toBeFocused();
-    await replay.press('Enter');
-    await expect(code).toContainText('.trim()');
-    const approvals = iodine.getByRole('region', { name: 'What an approval covers' });
-    await expect(approvals).toContainText('ls src/components');
-    await expect(approvals).toContainText('Approval reused');
-    await approvals.getByRole('button', { name: 'Outside scope' }).click();
-    await expect(approvals).toContainText('ls docs');
-    await expect(approvals).toContainText('Fresh approval needed');
-    const screenshot = iodine.getByRole('button', { name: 'Inspect editor detail for iodine' });
-    await expect(iodine.locator('.iodine-editor-tile img')).toHaveAttribute(
-      'src',
-      '/projects/iodine.png',
+    await expect(iodine.getByRole('img', { name: /reuses an approval/ })).toBeVisible();
+    await expect(iodine.getByRole('img', { name: /requests a fresh approval/ })).toBeVisible();
+    const room = page.locator('#project-mrrp');
+    await room.getByRole('button', { name: 'Pet Bean', exact: true }).click();
+    await expect(room.getByRole('img', { name: /Bean’s room/ })).toBeVisible();
+    await expect(room.getByRole('status')).toHaveText('You pet Bean.');
+    await room.getByRole('button', { name: 'Sit together' }).click();
+    await expect(room.getByRole('button', { name: 'Sit together' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
     );
-    await screenshot.press('Enter');
-    const editor = page.getByRole('dialog', { name: 'iodine screenshot', exact: true });
-    await expect(editor.getByRole('button', { name: 'Close screenshot' })).toBeFocused();
-    await expect(editor.getByRole('img')).toHaveAttribute('src', '/projects/iodine.png');
-    const editorViewport = editor.getByRole('region', { name: 'iodine screenshot image' });
-    await expect.poll(() => editorViewport.evaluate((el) => el.scrollTop)).toBeGreaterThan(170);
-    await editor.getByRole('button', { name: 'Fit image', exact: true }).click();
-    await expect(editor.getByRole('button', { name: 'Zoom in', exact: true })).toBeVisible();
-    await expect.poll(() => editorViewport.evaluate((el) => el.scrollTop)).toBe(0);
-    await page.keyboard.press('Escape');
-    await expect(screenshot).toBeFocused();
-    await page.getByRole('button', { name: 'Pet Bean', exact: true }).click();
-    await expect(page.locator('.bean-response')).toHaveText('mrrp.');
-    await expect(page.locator('.bean-cameo img')).toHaveJSProperty('complete', true);
+    await room.getByRole('button', { name: 'Morning light' }).click();
+    await expect(room.getByRole('status')).toHaveText('Morning in Bean’s room.');
     const bloomnote = page.locator('#project-bloomnote');
     await expect(bloomnote.getByRole('blockquote')).toContainText('For that brilliant laugh');
     await bloomnote.getByRole('button', { name: 'Anemone' }).click();
@@ -90,26 +66,8 @@ for (const width of [1440, 390]) {
     await expect(worth).toBeFocused();
 
     const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
-    const play = drawing.getByRole('button', { name: 'Play round' });
-    const canvasBefore = drawing.locator('canvas');
-    const startingFrame = await canvasBefore.evaluate((canvas) =>
-      (canvas as HTMLCanvasElement).toDataURL(),
-    );
-    await play.click();
-    await expect(drawing.getByText('The guess', { exact: true })).toBeVisible();
-    await expect(drawing.getByText('A rocket. With reservations.', { exact: false })).toBeVisible();
-    await expect
-      .poll(() => canvasBefore.evaluate((canvas) => (canvas as HTMLCanvasElement).toDataURL()))
-      .not.toBe(startingFrame);
-    const reveal = drawing.getByRole('button', { name: 'Reveal word' });
-    await expect(drawing.getByText('guitar', { exact: true })).toBeHidden();
-    await reveal.click();
-    await expect(drawing.getByText('guitar', { exact: true })).toBeVisible();
-    const drawingScreenshot = drawing.getByRole('button', { name: 'Inspect screenshot: iguess' });
-    await drawingScreenshot.click();
-    await expect(page.getByRole('dialog', { name: 'iguess screenshot' })).toBeVisible();
-    await page.keyboard.press('Escape');
-    await expect(drawingScreenshot).toBeFocused();
+    await expect(drawing.getByRole('status')).toHaveText('Guitar');
+    await expect(drawing.getByRole('button', { name: 'Replay the drawing' })).toBeHidden();
     await page.getByRole('button', { name: 'How I built it: iguess', exact: true }).click();
     await page.getByRole('button', { name: 'Follow the flow' }).click();
     await expect(page.locator('.flow-explanation')).toContainText('AI Worker');
@@ -119,7 +77,6 @@ for (const width of [1440, 390]) {
     await page.keyboard.press('Escape');
     await expect(page.locator('.work-modal-panel')).toHaveCount(0);
     for (const [project, first, second, asset] of [
-      ['wherever', 'Group result', 'Pizza swipe', 'wherever-vote'],
       ['platform', 'Choose an app', 'Already signed in', 'platform-app'],
     ] as const) {
       const card = page.locator(`#project-${project}`);
@@ -145,7 +102,7 @@ for (const width of [1440, 390]) {
     }
     await expect(
       page.locator(':is(.project-featured-group, #sec-more-work) article[id^="project-"]'),
-    ).toHaveCount(9);
+    ).toHaveCount(8);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
     expect(errors).toEqual([]);
     await page.screenshot({ path: test.info().outputPath(`showcase-${width}.png`) });

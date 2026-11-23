@@ -1,0 +1,86 @@
+.bean-room {
+  display: grid;
+  justify-items: center;
+}
+
+.bean-window {
+  position: relative;
+  width: min(100%, 650px);
+  aspect-ratio: 1.22;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #2d282c;
+}
+
+.bean-room-poster,
+.bean-room-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.bean-room-poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bean-room-poster img {
+  object-fit: cover;
+}
+
+html:root .bean-room-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+}
+
+.bean-room .bean-light-fade {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.bean-room-controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: clamp(10px, 1.8vw, 18px);
+}
+
+.bean-room-controls button {
+  min-height: 44px;
+  padding: 0 clamp(10px, 2vw, 19px);
+  border: 1px solid #d5c09c65;
+  border-radius: 5px;
+  font: 500 13px var(--font-display);
+  color: #f0e8d7;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.bean-room-controls button:disabled {
+  opacity: 0.65;
+}
+
+.bean-room-controls button:is(:hover, [aria-pressed='true']):enabled {
+  background: #dcc2971a;
+  border-color: #d5c09c90;
+}
+
+@media (max-width: 700px) {
+  .bean-window {
+    aspect-ratio: 1.16;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bean-room-controls button {
+    transition: none;
+  }
+}

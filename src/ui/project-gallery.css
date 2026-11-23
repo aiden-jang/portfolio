@@ -209,27 +209,9 @@ html:root #sec-more-work .preview-thumbnail > img {
   padding: 12px;
 }
 
-#project-mrrp {
-  --project-preview-zoom: 1.22;
-  --project-preview-origin: 29% 57%;
-}
-
 #project-worth {
   --project-preview-zoom: 1.12;
   --project-preview-origin: 90% 54%;
-}
-
-#project-owewell {
-  --project-preview-position: 50% 30%;
-}
-
-#project-iguess {
-  --project-preview-fit: contain;
-  --project-preview-surface: #202622;
-}
-
-#project-wherever {
-  --project-preview-position: 50% 58%;
 }
 
 #project-platform {
@@ -246,41 +228,10 @@ html:root #sec-more-work .preview-thumbnail > img {
 .project-card-media {
   min-width: 0;
 }
-.gallery-replay {
-  margin-bottom: clamp(40px, 6vw, 82px);
-}
-
-.project-gallery.gallery-replay .garage-project-copy {
-  padding: 0 0 clamp(16px, 2.2vw, 27px);
-}
-
-.gallery-replay .project-card-heading {
-  align-items: center;
-  border-top: 1px solid var(--color-line);
-  padding-top: clamp(11px, 1.8vw, 24px);
-}
-
-.project-gallery.gallery-replay .project-title h3 {
-  font-size: clamp(42px, 6.1vw, 90px);
-  line-height: 0.96;
-  letter-spacing: -0.04em;
-}
-
-.project-gallery.gallery-replay .project-title h3 svg {
-  width: clamp(17px, 1.7vw, 24px);
-  height: auto;
-}
-
-.project-gallery.gallery-replay .garage-project-copy > p {
-  margin-top: 10px;
-  font-size: clamp(14px, 1.36vw, 18px);
-}
-
-.gallery-collection {
+.project-scenes {
   display: grid;
-  align-items: start;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 34px;
+  gap: clamp(36px, 6vw, 72px);
+  margin-bottom: clamp(36px, 6vw, 72px);
 }
 
 .gallery-companions {
@@ -292,47 +243,11 @@ html:root #sec-more-work .preview-thumbnail > img {
 
 .gallery-companions .preview-sequence-stage {
   height: auto;
-  aspect-ratio: 1.95;
-}
-
-.gallery-companions .preview-sequence-steps {
-  gap: 5px;
-  flex-wrap: wrap;
-}
-
-.gallery-companions .owewell-demo {
-  aspect-ratio: auto;
-  min-height: 0;
-  padding: 13px;
+  aspect-ratio: 2;
 }
 
 @media (min-width: 740px) {
   .gallery-companions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1050px) {
-  .gallery-collection {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 30px 18px;
-  }
-  .gallery-companions {
-    display: contents;
-  }
-}
-
-@media (width < 740px) or (width >= 1050px) {
-  :is(#project-mrrp, #project-worth) .project-card-media {
-    container-type: inline-size;
-  }
-
-  /* Match the 2:1 wherever frame plus its 44px screenshot controls and border. */
-  html:root
-    #sec-more-work
-    :is(#project-mrrp, #project-worth)
-    :is(.preview-thumbnail, .worth-focus) {
-    width: 100%;
-    height: calc(50cqw + 45px);
   }
 }

@@ -1,6 +1,4 @@
 import { ProjectPair } from './showcase/ProjectPair';
-import { IguessReplay } from './showcase/IguessReplay';
-import { OwewellPreview } from './showcase/OwewellPreview';
 import { copyText } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
 import { ScreenshotImage } from './ScreenshotImage';
@@ -150,10 +148,6 @@ export function ProjectPreview(props: Props) {
   if (linked !== null) return <ScreenshotProjectPreview {...props} />;
   if (props.name === 'wherever' || props.name === 'platform') {
     return <ProjectPair name={props.name} />;
-  }
-  if (props.name === 'iguess') return <IguessReplay image={props.image} caption={props.caption} />;
-  if (props.name === 'owewell') {
-    return <OwewellPreview />;
   }
   return <ScreenshotProjectPreview {...props} />;
 }

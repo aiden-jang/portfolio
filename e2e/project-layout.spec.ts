@@ -24,10 +24,9 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     await expect(page.locator('#bloom-garden-title, #sec-more-work h3')).toHaveText([
       'bloomnote',
       'iguess',
-      'wherever',
       'mrrp',
+      'wherever → owewell',
       'worth',
-      'owewell',
       'platform',
     ]);
     if (width === 320) {
@@ -73,53 +72,32 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       items.map((item) => ({
         name: item.id,
         frame: item
-          .querySelector(
-            '.preview-thumbnail, .owewell-demo, .worth-focus, .iguess-replay, .project-pair',
-          )!
+          .querySelector('.preview-thumbnail, .worth-focus, .project-pair')!
           .getBoundingClientRect()
           .toJSON(),
         title: item.querySelector('h3 button')!.getBoundingClientRect().toJSON(),
         app: item.querySelector('.garage-project-links a')!.getBoundingClientRect().toJSON(),
-        description: item
-          .querySelector('.garage-project-copy > p')!
-          .getBoundingClientRect()
-          .toJSON(),
       })),
     );
-    for (const { name, frame, title, app, description } of cards) {
+    for (const { name, frame, title, app } of cards) {
       expect.soft(frame.height, name + ' has a readable image').toBeGreaterThanOrEqual(105);
       expect.soft(frame.width, name + ' media fits the viewport').toBeLessThanOrEqual(width);
-      expect.soft(app.left, `${name} action clears the title`).toBeGreaterThanOrEqual(title.right);
+      expect.soft(app.left, name + ' action clears its title').toBeGreaterThanOrEqual(title.right);
+      expect.soft(title.top - frame.bottom, name + ' image-to-title gap').toBeLessThan(34);
       expect
-        .soft(description.top, `${name} description follows actions`)
-        .toBeGreaterThanOrEqual(app.bottom - 1);
-      if (name === 'project-iguess') {
-        expect
-          .soft(frame.top, 'the replay follows its introduction')
-          .toBeGreaterThan(description.bottom);
-      } else {
-        expect.soft(title.top - frame.bottom, `${name} image-to-title gap`).toBeLessThan(34);
-        expect
-          .soft(title.top, `${name} image precedes title`)
-          .toBeGreaterThanOrEqual(frame.bottom - 1);
-      }
+        .soft(title.top, name + ' image precedes title')
+        .toBeGreaterThanOrEqual(frame.bottom - 1);
     }
-    const frame = (name: string) => cards.find((card) => card.name === 'project-' + name)!.frame;
-    expect.soft(frame('iguess').width).toBeGreaterThanOrEqual(frame('wherever').width);
-    expect.soft(frame('iguess').bottom).toBeLessThan(frame('wherever').top);
     if (width >= 740) {
-      expect.soft(frame('mrrp').width).toBeCloseTo(frame('worth').width, 0);
-      expect
-        .soft(frame('mrrp').top, 'supporting previews align')
-        .toBeCloseTo(frame('worth').top, 0);
-      expect.soft(frame('owewell').top).toBeCloseTo(frame('platform').top, 0);
+      expect.soft(cards[0]!.frame.width).toBeCloseTo(cards[1]!.frame.width, 0);
+      expect.soft(cards[0]!.frame.top).toBeCloseTo(cards[1]!.frame.top, 0);
     }
-    if (width >= 1050) {
-      expect.soft(frame('wherever').top).toBeCloseTo(frame('mrrp').top, 0);
-      expect.soft(frame('wherever').width).toBeCloseTo(frame('mrrp').width, 0);
-      expect.soft(frame('wherever').bottom).toBeCloseTo(frame('mrrp').bottom, 0);
-    } else {
-      expect.soft(frame('wherever').bottom).toBeLessThan(frame('mrrp').top);
+    const scenes = await page
+      .locator('.project-scenes > article')
+      .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().toJSON()));
+    for (let index = 1; index < scenes.length; index++) {
+      expect(scenes[index]!.top).toBeGreaterThan(scenes[index - 1]!.bottom);
+      expect(scenes[index]!.width).toBe(scenes[0]!.width);
     }
     await expect(page.locator('.project-featured-group article h3')).toHaveText([
       'meanwhile.',

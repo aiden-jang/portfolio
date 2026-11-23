@@ -1,137 +1,129 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ScreenshotViewer } from '../ScreenshotViewer';
-import { useVisibleDemo } from '../../hooks/useVisibleDemo';
-import { ControlIcon } from '../ControlIcon';
+import { useEffect, useRef, useState } from 'react';
 import round from './iguess-round.json';
 import './iguess-replay.css';
 
 const pointCount = round.strokes.reduce((total, stroke) => total + stroke.length, 0);
-const firstLook = round.strokes.slice(0, 3).reduce((total, stroke) => total + stroke.length, 0);
+const answer = round.word[0]!.toUpperCase() + round.word.slice(1);
+const guess = `“${round.guess.replace(/ \(.*\)$/, '')}”`;
+const drawDuration = 2300;
+const guessDuration = 1250;
 
 function paint(canvas: HTMLCanvasElement, visible: number) {
   const context = canvas.getContext('2d');
   if (!context) return;
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.lineWidth = 5;
+  context.lineWidth = 4.6;
   context.lineCap = 'round';
   context.lineJoin = 'round';
-  context.strokeStyle = '#22231b';
+  context.strokeStyle = '#25241e';
   for (const stroke of round.strokes) {
     if (visible <= 0) break;
     context.beginPath();
     stroke.slice(0, visible).forEach(([x, y], index) => {
-      if (index === 0) context.moveTo(x * canvas.width, y * canvas.height);
-      else context.lineTo(x * canvas.width, y * canvas.height);
+      const drawX = 162 + x * 636;
+      const drawY = 22 + y * 558;
+      if (index === 0) context.moveTo(drawX, drawY);
+      else context.lineTo(drawX, drawY);
     });
     context.stroke();
     visible -= stroke.length;
   }
 }
 
-export function IguessReplay({ image, caption }: { image: string; caption: string }) {
+export function IguessReplay() {
   const demo = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
-  const inspector = useRef<HTMLButtonElement>(null);
-  const [phase, setPhase] = useState<'ready' | 'drawing' | 'guess' | 'answer'>('ready');
-  const [open, setOpen] = useState(false);
-  const playOnce = useCallback(() => {
-    setPhase((current) => (current === 'ready' ? 'drawing' : current));
-  }, []);
-  useVisibleDemo(demo, playOnce, 350);
-  const ended = phase === 'guess' || phase === 'answer';
+  const [replay, setReplay] = useState(0);
+  const [result, setResult] = useState('');
 
   useEffect(() => {
+    const board = demo.current;
     const element = canvas.current;
-    if (!element) return;
-    if (phase === 'ready' && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (!entry?.isIntersecting) return;
-          paint(element, firstLook);
-          observer.disconnect();
-        },
-        { rootMargin: '200px' },
-      );
-      observer.observe(element);
-      return () => observer.disconnect();
-    }
-    if (phase !== 'drawing') {
-      paint(element, phase === 'ready' ? firstLook : pointCount);
-      return;
-    }
+    if (!board || !element) return;
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    let visible = false;
     let frame = 0;
-    const start = performance.now();
-    const draw = (now: number) => {
-      const progress = Math.min(1, (now - start) / 2600);
-      paint(element, Math.floor(pointCount * progress));
-      if (progress < 1) frame = requestAnimationFrame(draw);
-      else setPhase('guess');
+    let elapsed = 0;
+    let last = 0;
+    let drawn = -1;
+    let label = '';
+
+    function stop() {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      last = 0;
+    }
+
+    function draw(now: number) {
+      frame = 0;
+      elapsed += last ? Math.min(64, now - last) : 0;
+      last = now;
+      const points = Math.round(pointCount * Math.min(elapsed / drawDuration, 1));
+      if (points !== drawn && element) paint(element, points);
+      drawn = points;
+      const next =
+        elapsed < drawDuration ? '' : elapsed < drawDuration + guessDuration ? guess : answer;
+      if (label !== next) {
+        setResult(next);
+        label = next;
+      }
+      wake();
+    }
+
+    function wake() {
+      if (visible && !document.hidden && !motion.matches && label !== answer && !frame)
+        frame = requestAnimationFrame(draw);
+    }
+
+    function reset() {
+      stop();
+      elapsed = 0;
+      drawn = motion.matches ? pointCount : 0;
+      label = motion.matches ? answer : '';
+      if (element) paint(element, drawn);
+      setResult(label);
+      wake();
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = !!entry && entry.intersectionRatio >= 0.28;
+        if (visible) wake();
+        else stop();
+      },
+      { threshold: 0.28 },
+    );
+    const visibility = () => {
+      if (document.hidden) stop();
+      else wake();
     };
-    frame = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(frame);
-  }, [phase]);
+    observer.observe(board);
+    motion.addEventListener('change', reset);
+    document.addEventListener('visibilitychange', visibility);
+    reset();
+    return () => {
+      stop();
+      observer.disconnect();
+      motion.removeEventListener('change', reset);
+      document.removeEventListener('visibilitychange', visibility);
+    };
+  }, [replay]);
 
   return (
-    <>
-      <figure ref={demo} className="iguess-replay" aria-label="Recorded iguess drawing round">
-        <div className="iguess-replay-content">
-          <canvas ref={canvas} width="1120" height="840" aria-hidden="true" />
-          <div className="iguess-replay-sidebar">
-            <div className="iguess-replay-chat" aria-live="polite">
-              <span>{ended ? 'The guess' : 'Recorded round'}</span>
-              {ended && <p>{round.guess}</p>}
-              {phase === 'answer' && (
-                <div className="iguess-answer">
-                  <span>Word</span>
-                  <strong>{round.word}</strong>
-                </div>
-              )}
-            </div>
-            <div className="iguess-replay-actions">
-              <button
-                type="button"
-                className="iguess-replay-play"
-                aria-disabled={phase === 'drawing'}
-                onClick={() => {
-                  if (phase === 'drawing') return;
-                  setPhase(
-                    matchMedia('(prefers-reduced-motion: reduce)').matches ? 'guess' : 'drawing',
-                  );
-                }}
-              >
-                <ControlIcon name="play" />{' '}
-                {phase === 'ready' ? 'Play round' : phase === 'drawing' ? 'Drawing…' : 'Replay'}
-              </button>
-              {ended && (
-                <button
-                  type="button"
-                  onClick={() => setPhase(phase === 'answer' ? 'guess' : 'answer')}
-                >
-                  {phase === 'answer' ? 'Hide word' : 'Reveal word'}
-                </button>
-              )}
-              <button
-                ref={inspector}
-                className="iguess-replay-inspect"
-                aria-label="Inspect screenshot: iguess"
-                type="button"
-                onClick={() => setOpen(true)}
-              >
-                Screenshot
-              </button>
-            </div>
-          </div>
-        </div>
-      </figure>
-      {open && (
-        <ScreenshotViewer
-          image={image}
-          caption={caption}
-          name="iguess"
-          returnFocus={inspector.current}
-          onClose={() => setOpen(false)}
-        />
-      )}
-    </>
+    <figure ref={demo} className="iguess-replay" aria-label="Recorded iguess drawing round">
+      <canvas ref={canvas} width="960" height="605" aria-hidden="true" />
+      <div className="iguess-replay-controls">
+        <span className="iguess-replay-result" role="status">
+          {result && <span key={result}>{result}</span>}
+        </span>
+        <button
+          type="button"
+          aria-label="Replay the drawing"
+          onClick={() => setReplay((count) => count + 1)}
+        >
+          Replay
+        </button>
+      </div>
+    </figure>
   );
 }

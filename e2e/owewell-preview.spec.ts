@@ -1,42 +1,35 @@
 import { expect, test } from '@playwright/test';
 
 for (const width of [1440, 390]) {
-  test.describe(`owewell at ${width}px`, () => {
-    test.use({ viewport: { width, height: 900 }, hasTouch: width === 390 });
-
-    test('changing the payer reverses the settlement and keeps the screenshot available', async ({
-      page,
-    }) => {
-      await page.goto('/#project-owewell');
-      const owewell = page.locator('#project-owewell');
-      const result = owewell.getByRole('status');
-      const you = owewell.getByRole('radio', { name: 'You', exact: true });
-      const alex = owewell.getByRole('radio', { name: 'Alex', exact: true });
-      await expect(you).toBeChecked();
-      await expect(result).toHaveText('Alex pays you $24.00');
-
-      if (width < 768) await alex.tap();
-      else await you.press('ArrowRight');
-      await expect(alex).toBeChecked();
-      await expect(result).toHaveText('You pay Alex $24.00');
-      await expect(owewell.getByRole('link', { name: 'Open app: owewell' })).toBeVisible();
-
-      const screenshot = owewell.getByRole('button', { name: 'Inspect screenshot: owewell' });
-      await screenshot.click();
-      const viewer = page.getByRole('dialog', { name: 'owewell screenshot' });
-      await expect(viewer.getByRole('img')).toHaveAttribute('src', '/projects/owewell-alex.webp');
-      await expect(viewer).toContainText('Maya owes Alex $24');
-      await viewer.getByRole('button', { name: 'Close screenshot' }).click();
-      await expect(screenshot).toBeFocused();
-      await expect(alex).toBeChecked();
-
-      if (width < 768) await you.tap();
-      else await alex.press('ArrowLeft');
-      await expect(you).toBeChecked();
-      await expect(result).toHaveText('Alex pays you $24.00');
-      await screenshot.click();
-      await expect(viewer.getByRole('img')).toHaveAttribute('src', '/projects/owewell-you.webp');
-      await expect(viewer).toContainText('Alex owes Maya $24');
+  test(`the direct dinner link lands on the bill split at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.addInitScript(() => {
+      const get = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (
+        this: HTMLCanvasElement,
+        type: string,
+        ...args: unknown[]
+      ) {
+        if (type.startsWith('webgl')) return null;
+        return Reflect.apply(get, this, [type, ...args]);
+      } as typeof get;
     });
+    await page.goto('/#project-owewell');
+    const dinner = page.locator('#project-wherever');
+    const bill = dinner.getByRole('img', { name: /splits the .48 dinner bill/ });
+    await expect(bill).toBeInViewport();
+    await expect(bill.locator('../..')).toHaveCSS('opacity', '1');
+    await expect
+      .poll(() => bill.evaluate((image: HTMLImageElement) => image.naturalWidth))
+      .toBeGreaterThan(0);
+    await expect(dinner.getByRole('link', { name: 'Open app: wherever' })).toHaveAttribute(
+      'href',
+      'https://wherever.aidenjang.com',
+    );
+    await expect(dinner.getByRole('link', { name: 'Open app: owewell' })).toHaveAttribute(
+      'href',
+      'https://owewell.aidenjang.com',
+    );
   });
 }

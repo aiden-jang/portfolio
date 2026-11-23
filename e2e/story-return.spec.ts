@@ -19,7 +19,7 @@ for (const width of [1440, 390]) {
     await page.goto('/#sec-work');
     await page.evaluate(() => document.fonts.ready);
     for (const [label, id] of [
-      ['How I built it: mrrp', 'mrrp'],
+      ['How I built it: iguess', 'iguess'],
       ['Read the wherever case study', 'wherever'],
     ]) {
       const trigger = page.getByRole('button', { name: label, exact: true });

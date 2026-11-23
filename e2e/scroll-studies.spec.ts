@@ -17,16 +17,29 @@ for (const width of [1440, 390]) {
       } as typeof get;
     });
     await page.goto('/#sec-work');
-    const iodine = page.locator('#project-iodine .iodine-story-example');
-    await iodine.scrollIntoViewIfNeeded();
-    await expect(iodine.getByText('Revert feedback queued')).toBeVisible();
-    await iodine.getByRole('button', { name: 'Replay edit' }).click();
-    await expect(iodine.getByRole('button', { name: 'Undo edit' })).toBeVisible();
+    const iodine = page.locator('#project-iodine');
+    const outside = iodine.getByRole('img', { name: /requests a fresh approval/ }).locator('../..');
+    async function seekApproval(progress: number) {
+      await iodine.evaluate((element, amount) => {
+        const body = element.firstElementChild as HTMLElement;
+        const travel = (element as HTMLElement).offsetHeight - body.offsetHeight;
+        const inset = parseFloat(getComputedStyle(body).top);
+        scrollTo({
+          top: scrollY + element.getBoundingClientRect().top - inset + travel * amount,
+          behavior: 'instant',
+        });
+      }, progress);
+    }
+    await seekApproval(0.9);
+    await expect(outside).toHaveCSS('opacity', '1');
+    await seekApproval(0.08);
+    await expect(outside).toHaveCSS('opacity', '0');
 
     const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
     await drawing.scrollIntoViewIfNeeded();
-    await expect(drawing.getByRole('button', { name: 'Reveal word' })).toBeVisible();
-
+    await expect(drawing.getByRole('status')).toHaveText('Guitar');
+    await drawing.getByRole('button', { name: 'Replay the drawing' }).click();
+    await expect(drawing.getByRole('status')).toHaveText('');
     const track = page.locator('.scroll-film-track');
     const video = track.locator('video');
     const slider = track.getByRole('slider');
@@ -61,14 +74,8 @@ for (const width of [1440, 390]) {
     await expect(slider).toHaveAttribute('aria-valuetext', 'Paint');
     await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');
 
-    await page.reload();
-    await iodine.scrollIntoViewIfNeeded();
-    await expect(iodine.getByRole('button', { name: 'Undo edit' })).toBeVisible();
-    await iodine.getByRole('button', { name: 'Undo edit' }).press('Enter');
-    await expect(iodine.getByText('Revert feedback queued')).toBeVisible();
-    await drawing.scrollIntoViewIfNeeded();
-    await expect(drawing.getByRole('button', { name: 'Play round' })).toBeVisible();
-    await drawing.getByRole('button', { name: 'Play round' }).press('Enter');
-    await expect(drawing.getByRole('button', { name: 'Reveal word' })).toBeVisible();
+    await expect(outside).toHaveCSS('opacity', '1');
+    await expect(drawing.getByRole('status')).toHaveText('Guitar');
+    await expect(drawing.getByRole('button', { name: 'Replay the drawing' })).toBeHidden();
   });
 }
