@@ -1,27 +1,36 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import example from '../../data/iodineExample.json';
 import { evidenceHref } from '../creative/storyRoutes';
-import { ProjectScene, RECOVERY_RESTORE_POINT } from './ProjectScene';
+import { useTimedScene } from '../../hooks/useTimedScene';
+import './iodine-timed.css';
+import { ProjectScene } from './ProjectScene';
 
 export function IodinePresentation() {
   const frame = useRef<HTMLDivElement>(null);
   const [restored, restore] = useState(false);
-  const scrollPhase = useRef(false);
-  useEffect(() => {
-    const article = frame.current?.closest('article');
-    if (!article) return;
-    const sync = (progress: number) => {
-      const next = progress >= RECOVERY_RESTORE_POINT;
-      if (next !== scrollPhase.current) {
-        scrollPhase.current = next;
-        restore(next);
-      }
-    };
-    const onProgress = (event: Event) => sync((event as CustomEvent<number>).detail);
-    sync(Number(article.dataset.sceneProgress ?? 0));
-    article.addEventListener('project-scene-progress', onProgress);
-    return () => article.removeEventListener('project-scene-progress', onProgress);
+  const [replay, replayEdit] = useState(0);
+  const [manual, setManual] = useState(false);
+  const draw = useCallback((progress: number) => {
+    const editor = frame.current;
+    if (!editor) return;
+    const phase = progress === 0 ? 'ready' : progress < 0.56 ? 'reviewing' : 'restored';
+    if (editor.dataset.playback === phase) return;
+    editor.dataset.playback = phase;
+    if (phase === 'restored') restore(true);
   }, []);
+  useTimedScene(frame, draw, { enabled: !manual, duration: 1720, replay });
+
+  function chooseStep() {
+    if (restored) {
+      restore(false);
+      setManual(false);
+      replayEdit((count) => count + 1);
+    } else {
+      setManual(true);
+      if (frame.current) frame.current.dataset.playback = 'restored';
+      restore(true);
+    }
+  }
   const [first, second, last] = example.after.trimEnd().split('\n');
   const [start, end] = second!.trim().split('.trim()');
   return (
@@ -59,7 +68,7 @@ export function IodinePresentation() {
         </div>
         <div className="recovery-bottom">
           <span>{restored ? 'Revert feedback queued' : 'Snapshot saved'}</span>
-          <button type="button" onClick={() => restore(!restored)}>
+          <button type="button" onClick={chooseStep}>
             {restored ? 'Replay edit' : 'Undo edit'}
           </button>
         </div>

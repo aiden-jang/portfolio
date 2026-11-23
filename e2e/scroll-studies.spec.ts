@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 for (const width of [1440, 390]) {
-  test(`the examples and F40 study respond to scroll at ${width}px`, async ({ page }) => {
+  test(`timed demos and scroll studies keep their states at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
@@ -30,12 +30,39 @@ for (const width of [1440, 390]) {
         });
       }, progress);
     }
-    await seekScene('#project-iodine', 0.62);
-    await expect(iodine).toHaveAttribute('data-scene-progress', '0.780');
-    await expect(recovery).toHaveText('File restored');
-    await seekScene('#project-iodine', 0.49);
-    await expect(iodine).toHaveAttribute('data-scene-progress', '0.300');
+    function place(selector: string, offset: number) {
+      return page.locator(selector).evaluate((element, top) => {
+        scrollTo({
+          top: scrollY + element.getBoundingClientRect().top - innerHeight * top,
+          behavior: 'instant',
+        });
+      }, offset);
+    }
     await expect(recovery).toHaveText('Agent edit');
+    await place('#project-iodine .recovery', 0.22);
+    const parkedEditor = await page.evaluate(() => scrollY);
+    await expect(recovery).toHaveText('File restored');
+    expect(await page.evaluate(() => scrollY)).toBe(parkedEditor);
+
+    const batch = page.locator('.batching-spread');
+    await seekScene('.batch-lane', 0.25);
+    const position = () =>
+      batch.evaluate((el) => parseInt(el.style.getPropertyValue('--batch-scroll-time')));
+    await expect.poll(position).toBeGreaterThan(250);
+    const partialBatch = await position();
+    // Wait longer than the former settle animation to catch a diagram that still moves at rest.
+    await page.waitForTimeout(460);
+    expect(await position()).toBe(partialBatch);
+    await seekScene('.batch-lane', 0.08);
+    await expect.poll(position).toBeLessThan(partialBatch);
+
+    const garden = page.locator('#project-bloomnote');
+    await place('#project-bloomnote .bloom-garden-plot', 0.4);
+    const parkedGarden = await page.evaluate(() => scrollY);
+    await expect(garden).toHaveAttribute('data-study-progress', '1.000');
+    expect(await page.evaluate(() => scrollY)).toBe(parkedGarden);
+    await place('#project-bloomnote .bloom-garden-plot', 0.6);
+    await expect(garden).toHaveAttribute('data-study-progress', '1.000');
 
     const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
     await seekScene('.duet', 0.45);
@@ -89,30 +116,18 @@ for (const width of [1440, 390]) {
       iodine
         .locator('.recovery-source')
         .evaluate((el) => Number(getComputedStyle(el, '::before').opacity));
-    const approachEditor = () =>
-      iodine.evaluate((article) => {
-        const body = article.querySelector('[data-study-pin]')!;
-        const editor = body.querySelector('.recovery')!;
-        const offset = editor.getBoundingClientRect().top - body.getBoundingClientRect().top;
-        scrollTo({
-          top: scrollY + article.getBoundingClientRect().top + offset - innerHeight * 0.69,
-          behavior: 'instant',
-        });
-      });
+    const approachEditor = () => place('#project-iodine .recovery', 0.69);
     await seekScene('#project-everythingisfine', 0.96);
     await expect(quake).toHaveAttribute('data-quake-view', 'map');
     await approachEditor();
     await expect(featured).toHaveAttribute('data-map-editor-cut', '');
     await expect.poll(gridOpacity).toBeGreaterThan(0.25);
-    await seekScene('#project-iodine', 0.86);
+    await place('#project-iodine .recovery', 0.2);
     await expect(recovery).toHaveText('File restored');
     await expect(featured).not.toHaveAttribute('data-map-editor-cut');
     await approachEditor();
-    await expect(recovery).toHaveText('Agent edit');
-    await expect.poll(gridOpacity).toBeGreaterThan(0.25);
-    await seekScene('#project-iodine', 0.15);
-    await iodine.getByRole('button', { name: 'Undo edit', exact: true }).click();
     await expect(recovery).toHaveText('File restored');
+    await expect.poll(gridOpacity).toBeGreaterThan(0.25);
     await expect(iodine.getByRole('link', { name: 'Read the iodine case study' })).toHaveAttribute(
       'href',
       /edit=restored/,
@@ -162,6 +177,12 @@ for (const width of [1440, 390]) {
     await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');
 
     await expect(recovery).toHaveText('File restored');
+    await place('#project-iodine .recovery', 0.22);
+    await iodine.getByRole('button', { name: 'Replay edit', exact: true }).click();
+    await expect(recovery).toHaveText('Agent edit');
+    await iodine.getByRole('button', { name: 'Undo edit', exact: true }).click();
+    await expect(recovery).toHaveText('File restored');
+    await expect(garden.locator('.bloom-garden-plant img').first()).toHaveCSS('clip-path', 'none');
     await expect(drawing.getByRole('status')).toHaveText('Guitar');
   });
 }

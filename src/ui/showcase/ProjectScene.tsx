@@ -9,13 +9,6 @@ function settleDinner(progress: number) {
   return 1;
 }
 
-export const RECOVERY_RESTORE_POINT = 0.54;
-
-function settleRecovery(progress: number) {
-  if (progress < 0.32 || progress > 0.76) return progress;
-  return progress < RECOVERY_RESTORE_POINT ? 0.3 : 0.78;
-}
-
 function presentScene(stage: HTMLElement, progress: number) {
   if (stage.id === 'project-wherever') {
     stage.dataset.dinnerState = progress >= 0.56 ? 'bill' : progress >= 0.32 ? 'match' : 'vote';
@@ -48,7 +41,7 @@ export function ProjectScene({
     if (pick && Math.abs(scrollY - pick.y) > 26) manual.current = null;
     presentScene(stage, manual.current?.phase ?? progress);
   }, []);
-  useScrollStudy(scene, true, draw, theme === 'dinner' ? settleDinner : settleRecovery);
+  useScrollStudy(scene, theme === 'dinner', draw, settleDinner);
   useEffect(() => {
     const stage = scene.current;
     if (!stage || theme !== 'dinner') return;

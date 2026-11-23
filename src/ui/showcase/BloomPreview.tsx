@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ControlIcon } from '../ControlIcon';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import type { PreviewState } from '../../data/projectPreviews';
@@ -10,7 +10,7 @@ import './bloom-garden.css';
 import { BloomComposer } from './BloomComposer';
 import { BloomPlot } from './BloomPlot';
 import { bloomFlowers } from './bloomFlowers';
-import { useScrollStudy } from '../../hooks/useScrollStudy';
+import { useTimedScene } from '../../hooks/useTimedScene';
 import { advanceGarden } from './gardenFocus';
 
 export function BloomPreview({
@@ -57,7 +57,11 @@ export function BloomPreview({
   const [hasOpenedComposer, setHasOpenedComposer] = useState(false);
   const article = useRef<HTMLElement>(null);
   const write = useRef<HTMLButtonElement>(null);
-  useScrollStudy(article, !composing, advanceGarden);
+  const plot = useRef<HTMLDivElement>(null);
+  const draw = useCallback((progress: number) => {
+    if (article.current) advanceGarden(article.current, progress);
+  }, []);
+  useTimedScene(plot, draw, { enabled: !composing, duration: 1650 });
   const composerTitle = useRef<HTMLHeadingElement>(null);
   useLayoutEffect(() => {
     if (!hasOpenedComposer) return;
@@ -86,6 +90,7 @@ export function BloomPreview({
             <p>A garden from Maya to Sarah</p>
           </figure>
           <BloomPlot
+            plotRef={plot}
             label="Flowers in Sarah’s garden"
             selected={selected}
             onSelect={(index) => {

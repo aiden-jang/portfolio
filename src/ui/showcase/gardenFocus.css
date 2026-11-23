@@ -1,35 +1,25 @@
 .bloom-garden-study {
-  --flower-focus: 0;
-  --note-ink: 0;
-  --plot-start: -32%;
-  --focus-enlargement: 0.23;
   display: block;
 }
-@media (prefers-reduced-motion: no-preference) and (min-height: 620px) {
-  .bloom-garden-study:not([data-composing])::after {
-    content: '';
-    display: block;
-    height: min(57svh, 480px);
+@media (prefers-reduced-motion: no-preference) {
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-flower-0 {
+    --growth: var(--growth-0, 1);
   }
-  .bloom-garden-study > .bloom-garden-inner:not([hidden]) {
-    position: sticky;
-    top: var(--portfolio-header-height);
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-flower-1 {
+    --growth: var(--growth-1, 1);
   }
-  .bloom-garden-study .bloom-garden-plot {
-    transform: translateX(calc(var(--plot-start) * (1 - var(--flower-focus))));
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-flower-2 {
+    --growth: var(--growth-2, 1);
   }
-  .bloom-garden-study .bloom-garden-flower[aria-pressed='true'] .bloom-garden-plant {
-    transition: none;
-    transform: scale(calc(1 + var(--flower-focus) * var(--focus-enlargement)))
-      rotate(calc(var(--flower-focus) * -2deg));
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-plant img {
+    transform-origin: center bottom;
+    transform: scaleY(calc(0.7 + 0.3 * var(--growth)));
+    clip-path: inset(calc((1 - var(--growth)) * 65%) 0 0);
+    opacity: calc(0.42 + 0.58 * var(--growth));
   }
-  .bloom-garden-study .bloom-garden-flower[aria-pressed='false'] .bloom-garden-plant {
-    opacity: calc(1 - var(--flower-focus) * 0.72);
-    transform: scale(calc(1 - var(--flower-focus) * 0.11));
-  }
-  .bloom-garden-study .bloom-garden-letter {
-    opacity: var(--note-ink);
-    transform: translateY(calc(14px * (1 - var(--note-ink))));
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-letter {
+    opacity: calc(0.76 + 0.24 * var(--note-ink, 1));
+    transform: translateY(calc(8px * (1 - var(--note-ink, 1))));
   }
   .bloom-garden-study[data-manual-flower] .bloom-garden-letter {
     opacity: 1;
@@ -37,18 +27,14 @@
   }
 }
 @media (max-width: 767px) {
-  .bloom-garden-study {
-    --plot-start: 0%;
-    --focus-enlargement: 0.13;
-  }
   .bloom-garden-study > .bloom-garden-inner:not([hidden]) {
     gap: 13px;
     padding-block-start: 22px;
   }
-  .bloom-garden-study .bloom-garden-flower-1 {
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-flower-1 {
     --plant-height: clamp(144px, 25svh, 211px);
   }
-  .bloom-garden-study .bloom-garden-letter {
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-letter {
     min-height: 122px;
   }
 }

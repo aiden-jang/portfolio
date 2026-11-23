@@ -266,12 +266,6 @@ html:root .bloom-gallery .bloom-gallery-rest {
     height: 12px;
   }
 }
-@media (prefers-reduced-motion: no-preference) {
-  .bloom-garden-plant img {
-    transform: translateY(var(--garden-arrival, 0px));
-    clip-path: inset(0 0 var(--garden-arrival, 0px));
-  }
-}
 @media (max-width: 359px) {
   html:root #sec-more-work {
     --portfolio-gutter: 24px;

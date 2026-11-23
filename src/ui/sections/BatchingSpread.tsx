@@ -14,16 +14,11 @@ function relayBatchProgress(stage: HTMLElement, progress: number) {
   stage.dispatchEvent(new CustomEvent('batch-preview-progress', { detail: progress }));
 }
 
-function settleBatch(progress: number) {
-  if (progress <= 0.1 || progress >= 0.72) return progress;
-  return progress < 0.42 ? 0.1 : 0.78;
-}
-
 export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
   const [phase, setPhase] = useState<'before' | 'running' | 'after'>('before');
   const figure = useRef<HTMLElement>(null);
   const manual = useRef<{ scrollY: number; until: number } | null>(null);
-  useScrollStudy(lane, true, relayBatchProgress, settleBatch);
+  useScrollStudy(lane, true, relayBatchProgress);
 
   function show(next: typeof phase) {
     manual.current = {

@@ -140,13 +140,13 @@ html:root .portfolio-chrome .project-scene h3 {
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-height: 610px) {
-  .project-scene::after {
+  .project-scene:not(.project-scene-iodine)::after {
     content: '';
     display: block;
     height: var(--scene-run);
   }
 
-  .project-scene .project-scene-body {
+  .project-scene:not(.project-scene-iodine) .project-scene-body {
     position: sticky;
     top: var(--scene-inset);
   }
