@@ -14,8 +14,9 @@ import { useAppStore } from '../store';
 import { activeOrbit, inBlackout, useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { F40_PAINT, openingStudioWeight } from './openingStudio';
-import { isOpeningStudio } from '../lighting';
-import { createStudioEnvironment } from './studio/environment';
+import { isOpeningLowLight, isOpeningStudio } from '../lighting';
+import { applyAfterHoursLighting } from './studio/afterHoursLighting';
+import { useStudioEnvironment } from './studio/useStudioEnvironment';
 
 const TRANSITION_RATE = 2.5;
 
@@ -24,11 +25,9 @@ const NIGHT_KEY_FLOOR = 0.2;
 
 export function Lights() {
   const { gl, scene } = useThree();
-  const studioMap = useRef<THREE.WebGLRenderTarget | null>(null);
-  const duskMap = useRef<THREE.WebGLRenderTarget | null>(null);
+  const studioEnvironment = useStudioEnvironment(gl);
+  const afterHoursLevel = useRef(0);
   const duskMix = useRef(0);
-  const opticsMap = useRef<THREE.WebGLRenderTarget | null>(null);
-  const blackoutMap = useRef<THREE.WebGLRenderTarget | null>(null);
   const dim = useRef(0);
   const defaultMap = useRef<THREE.Texture | null>(null);
   useEffect(() => {
@@ -47,14 +46,6 @@ export function Lights() {
       scene.environment = previous;
       scene.environmentIntensity = previousIntensity;
       environment.dispose();
-      studioMap.current?.dispose();
-      studioMap.current = null;
-      duskMap.current?.dispose();
-      duskMap.current = null;
-      opticsMap.current?.dispose();
-      opticsMap.current = null;
-      blackoutMap.current?.dispose();
-      blackoutMap.current = null;
     };
   }, [gl, scene]);
   const ambient = useRef<THREE.AmbientLight>(null!);
@@ -77,11 +68,6 @@ export function Lights() {
     const exhibit = useGarageExhibit.getState();
     const dusk = inStudioDusk(preview);
     duskMix.current += (Number(dusk) - duskMix.current) * Math.min(dt * 11, 1);
-    if (dusk && !duskMap.current) {
-      const generator = new THREE.PMREMGenerator(gl);
-      duskMap.current = createStudioEnvironment(generator, 'dusk');
-      generator.dispose();
-    }
     const cabinTarget =
       preview.active &&
       preview.chapter === 'walk' &&
@@ -108,38 +94,30 @@ export function Lights() {
       dt,
     );
     const studio = lineup || preview.active || isOpeningStudio(state);
-    if (dark && !blackoutMap.current) {
-      const generator = new THREE.PMREMGenerator(gl);
-      blackoutMap.current = createStudioEnvironment(generator, 'blackout');
-      generator.dispose();
-    }
+    const afterHours = !lineup && !preview.active && isOpeningLowLight(state);
+    const low = (afterHoursLevel.current = smoothTowards(
+      afterHoursLevel.current,
+      Number(afterHours),
+      Math.min(1, dt * 8),
+    ));
     dim.current = THREE.MathUtils.lerp(dim.current, Number(dark), Math.min(1, dt * 12));
     const amount = dim.current;
-    if (studio && !studioMap.current) {
-      const generator = new THREE.PMREMGenerator(gl);
-      studioMap.current = createStudioEnvironment(generator);
-      generator.dispose();
-    }
     const optics =
       preview.active &&
       !dark &&
       (!preview.study || preview.study === 'finished') &&
       useGarageStudy.getState().refined;
-    if (optics && !opticsMap.current) {
-      const generator = new THREE.PMREMGenerator(gl);
-      opticsMap.current = createStudioEnvironment(generator, 'optics');
-      generator.dispose();
-    }
-    scene.environment = studio
-      ? ((dusk
-          ? duskMap.current?.texture
-          : dark
-            ? blackoutMap.current?.texture
-            : optics
-              ? opticsMap.current?.texture
-              : studioMap.current?.texture) ?? null)
-      : defaultMap.current;
-    const lighting = studio ? 'studio' : state.themeName === 'studio' ? 'dusk' : state.themeName;
+    const preset = dusk
+      ? 'dusk'
+      : afterHours
+        ? 'low-light'
+        : dark
+          ? 'blackout'
+          : optics
+            ? 'optics'
+            : 'studio';
+    scene.environment = studio ? studioEnvironment(preset) : defaultMap.current;
+    const lighting = studio ? 'studio' : 'dusk';
     const target = THEMES[lighting];
     const progress = lineup || preview.active ? 1 : motionState.progress;
     const sculpted = ['mercedes-benz-w198-300-sl.glb', 'red-bull-rb16b.glb'].includes(
@@ -163,7 +141,7 @@ export function Lights() {
     }
     scene.environmentIntensity = smoothTowards(
       scene.environmentIntensity,
-      studio ? 0.48 : sculpted ? 0.29 : 0.22 - 0.048 * weight,
+      studio ? 0.48 - 0.095 * low : sculpted ? 0.29 : 0.22 - 0.048 * weight,
       Math.min(1, dt * TRANSITION_RATE),
     );
     const k = Math.min(1, dt * TRANSITION_RATE);
@@ -236,6 +214,11 @@ export function Lights() {
       rim.current.position.set(-4.6, 2.35, 5.6);
       rim.current.intensity += 0.19;
     }
+    applyAfterHoursLighting(
+      [ambient.current, hemi.current, key.current, fill.current, rim.current],
+      low,
+      darkPaint,
+    );
     fill.current.intensity *= 1 - (darkPaint ? 0.53 : 0.78) * amount;
     key.current.intensity *= 1 - 0.65 * amount;
     rim.current.intensity *= 1 - (brightLivery ? 0.69 : 0.52) * amount;

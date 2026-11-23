@@ -20,7 +20,6 @@ export function PhotoMode() {
     unavailable = useAppStore((s) => s.sceneUnavailable),
     loading = useAppStore((s) => s.isCarLoading),
     error = useAppStore((s) => s.carLoadError);
-  const themeName = useAppStore((s) => s.themeName);
   const carIndex = useAppStore((s) => s.carIndex);
   const finish = useAppStore((s) => s.renderFinish);
   const [file, setFile] = useState<File | null>(null),
@@ -145,7 +144,7 @@ export function PhotoMode() {
                 <option value="" disabled>
                   Camera view
                 </option>
-                {Object.entries(cameraViews({ themeName, renderFinish: finish, carIndex })).map(
+                {Object.entries(cameraViews({ renderFinish: finish, carIndex })).map(
                   ([id, view]) => (
                     <option key={id} value={id}>
                       {view.label}

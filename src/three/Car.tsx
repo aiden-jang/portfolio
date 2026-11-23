@@ -259,7 +259,7 @@ export function Car() {
     headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
     headlights.current?.update(dt);
     const { refs } = app;
-    const target = THEMES[app.themeName];
+    const target = THEMES.studio;
     const k = Math.min(1, dt * TRANSITION_RATE);
 
     currentUnderglow.current = smoothColorHex(currentUnderglow.current, target.underglow, k);

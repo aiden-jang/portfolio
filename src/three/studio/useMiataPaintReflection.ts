@@ -34,7 +34,7 @@ export function useMiataPaintReflection() {
     const garage = useGarageStudio.getState();
     const litStudio = garage.active
       ? !inBlackout() && !inStudioDusk(garage)
-      : isOpeningStudio(state);
+      : state.themeName !== 'night' && isOpeningStudio(state);
     const active = litStudio && !useLineup.getState().active;
     if (active && !fixtures.current) {
       const generator = new PMREMGenerator(renderer);

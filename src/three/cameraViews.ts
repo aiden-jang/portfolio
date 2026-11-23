@@ -1,5 +1,4 @@
 import { isOpeningStudio } from '../lighting';
-import type { ThemeName } from '../types';
 
 const DEFAULT_VIEWS = {
   front: { label: 'Front view', azimuth: 0, elevation: 0.19, zoom: 1 },
@@ -33,7 +32,7 @@ const MOBILE_FERRARI_STUDIO_VIEWS = { ...MOBILE_STUDIO_VIEWS, ...MOBILE_FERRARI_
 export type CameraView = keyof typeof DEFAULT_VIEWS | keyof typeof FERRARI_VIEWS;
 type Preset = { label: string; azimuth: number; elevation: number; zoom: number };
 
-type Context = { themeName: ThemeName; renderFinish: string | null; carIndex: number };
+type Context = { renderFinish: string | null; carIndex: number };
 
 export function isFerrariView(view: CameraView) {
   return view === 'rear' || view === 'wheel';
@@ -61,7 +60,7 @@ export function isFerrariCameraFocused(
 }
 
 export function cameraViews(state: Context, mobile = false): Partial<Record<CameraView, Preset>> {
-  if (state.themeName !== 'studio' || state.renderFinish) return DEFAULT_VIEWS;
+  if (state.renderFinish) return DEFAULT_VIEWS;
   if (state.carIndex === 0) return mobile ? MOBILE_FERRARI_STUDIO_VIEWS : FERRARI_STUDIO_VIEWS;
   return mobile ? MOBILE_STUDIO_VIEWS : STUDIO_VIEWS;
 }

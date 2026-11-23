@@ -234,8 +234,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       hasBodyMaterial: false,
     });
   },
-  setThemeName: (theme) =>
-    set((state) => ({ themeName: theme, ...(theme !== 'studio' && resetFerrariView(state)) })),
+  setThemeName: (theme) => set({ themeName: theme }),
   toggleTheme: () => get().setThemeName(nextLighting(get().themeName)),
   setSectionIndex: (i) => set({ sectionIndex: i }),
   setContactVisible: (isContactVisible) => set({ isContactVisible }),

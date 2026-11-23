@@ -2,12 +2,15 @@ import * as THREE from 'three';
 
 export function createStudioEnvironment(
   generator: THREE.PMREMGenerator,
-  preset: 'studio' | 'blackout' | 'optics' | 'dusk' | 'miata' = 'studio',
+  preset: 'studio' | 'blackout' | 'optics' | 'dusk' | 'miata' | 'low-light' = 'studio',
 ) {
   const studio = new THREE.Scene();
   const refined = preset === 'optics';
   const miata = preset === 'miata';
-  studio.background = new THREE.Color(0.073, 0.065, 0.059);
+  const lowLight = preset === 'low-light';
+  studio.background = lowLight
+    ? new THREE.Color(0.037, 0.033, 0.029)
+    : new THREE.Color(0.073, 0.065, 0.059);
   const luminousPanel = (
     size: [number, number],
     position: [number, number, number],
@@ -35,14 +38,14 @@ export function createStudioEnvironment(
     [4.8, 2.38, 0.48],
     [0, 0.62, -0.16],
     new THREE.Color(1, 0.964, 0.918),
-    miata ? 4.4 : refined ? 5.7 : 10.6,
+    lowLight ? 3.4 : miata ? 4.4 : refined ? 5.7 : 10.6,
   );
   luminousPanel(
     [5.2, 2.12],
     [-3.25, 3.36, 6.05],
     [0, 0.48, 0],
     new THREE.Color(0.83, 0.89, 1),
-    miata ? 2.8 : refined ? 2.6 : 4.15,
+    lowLight ? 2.9 : miata ? 2.8 : refined ? 2.6 : 4.15,
   );
   luminousPanel([9.2, 3.6], [-6, 5.3, 2.4], [0, 0, 0], new THREE.Color(0.87, 0.92, 1), 1.05);
   luminousPanel(
@@ -60,6 +63,22 @@ export function createStudioEnvironment(
     new THREE.Color(1, 0.92, 0.81),
     2.2,
   );
+  if (lowLight) {
+    luminousPanel(
+      [0.26, 3.3],
+      [5.85, 1.87, -2.7],
+      [0, 0.61, 0],
+      new THREE.Color(1, 0.88, 0.71),
+      17.8,
+    );
+    luminousPanel(
+      [6.35, 0.48],
+      [-1.32, 3.55, -5.42],
+      [0, 0.51, 0],
+      new THREE.Color(0.9, 0.94, 1),
+      4.8,
+    );
+  }
   if (refined) {
     luminousPanel(
       [8.7, 0.78],

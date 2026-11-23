@@ -4,10 +4,9 @@ import { useAppStore } from '../store';
 export const F40_PAINT = { roughness: 0.34, coatRoughness: 0.26, coat: 0.55 };
 
 export function openingStudioWeight() {
-  const { carIndex, themeName, isContactVisible, renderFinish } = useAppStore.getState();
+  const { carIndex, isContactVisible, renderFinish } = useAppStore.getState();
   if (
     (carIndex !== F40_INDEX && carIndex !== DEFAULT_CAR_INDEX) ||
-    (themeName !== 'dusk' && themeName !== 'studio') ||
     isContactVisible ||
     renderFinish
   )

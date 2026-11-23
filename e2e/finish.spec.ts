@@ -78,7 +78,7 @@ for (const width of [1440, 390]) {
     expect(new URL(page.url()).searchParams.get('paint')).toBe('#3f464e');
     await expect(
       page
-        .getByRole('button', { name: 'Lighting: Night. Switch to Studio', exact: true })
+        .getByRole('button', { name: 'Lighting: After Hours. Switch to Studio', exact: true })
         .filter({ visible: true }),
     ).toBeVisible();
   });

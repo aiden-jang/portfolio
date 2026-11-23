@@ -199,7 +199,7 @@
     text-align: left;
   }
   #mobile-bar button[aria-label^='Lighting:'] {
-    flex: 0 0 74px;
+    flex: 0 0 104px;
     grid-template-columns: 16px minmax(0, 1fr);
   }
   #mobile-bar :is(.mobile-paint-name, .mobile-light-name) {

@@ -1,7 +1,6 @@
 import { paintStudioCut } from '../garageStudio/studioCut';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { useGarageStudio } from '../garageStudio/state';
-import { useLineup } from '../lineup/state';
 import { isOpeningStudio } from '../lighting';
 import { studioSurfacesReady } from './studio/textures';
 import { useFrame, useThree } from '@react-three/fiber';
@@ -97,11 +96,8 @@ export const Effects = memo(function Effects() {
   useFrame((state, dt) => {
     const graph = pipeline.current;
     if (!graph) return;
-    const { themeName, isCarLoading, carLoadError, refs } = useAppStore.getState();
-    const target =
-      THEMES[
-        useLineup.getState().active || useGarageStudio.getState().active ? 'studio' : themeName
-      ];
+    const { isCarLoading, carLoadError, refs } = useAppStore.getState();
+    const target = THEMES.studio;
     const k = Math.min(1, dt * TRANSITION_RATE);
     currentStrength.current = smoothTowards(currentStrength.current, target.bloomStrength, k);
     currentThreshold.current = smoothTowards(currentThreshold.current, target.bloomThreshold, k);

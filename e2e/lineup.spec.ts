@@ -108,7 +108,7 @@ for (const width of [1440, 390]) {
       await expect(garage).toBeFocused();
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();
       await expect(
-        page.getByRole('button', { name: /Lighting: Night/ }).filter({ visible: true }),
+        page.getByRole('button', { name: /Lighting: After Hours/ }).filter({ visible: true }),
       ).toBeVisible();
       expect(new URL(page.url()).search).toBe(initialSetup);
       if (phone) {

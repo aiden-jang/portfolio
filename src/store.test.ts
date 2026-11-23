@@ -248,8 +248,9 @@ it('guards curated views outside a ready intro and resets their zoom with the ca
     cameraZoom: 1,
     hasManualView: true,
   });
-  useAppStore.getState().setThemeName('dusk');
-  useAppStore.getState().setCameraView('detail');
+  useAppStore.getState().setThemeName('night');
+  expect(useAppStore.getState()).toMatchObject({ cameraView: 'detail', cameraViewVersion: 1 });
+  useAppStore.getState().setCameraZoom(1.15);
   expect(useAppStore.getState().cameraZoom).toBe(1.15);
   useAppStore.getState().resetCamera();
   expect(useAppStore.getState()).toMatchObject({ cameraZoom: 1, hasManualView: false });

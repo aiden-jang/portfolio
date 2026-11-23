@@ -14,6 +14,7 @@ import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import { applyStudioReflection } from './studioReflection';
+import { isOpeningLowLight } from '../lighting';
 import { openingStudioWeight } from './openingStudio';
 
 const FLOOR_RADIUS = 14;
@@ -77,10 +78,10 @@ export function Floor({
 
   useFrame((_state, dt) => {
     const state = useAppStore.getState();
-    const { themeName, refs, renderFinish } = state;
+    const { refs, renderFinish } = state;
     const inLineup = lineup !== undefined;
     const preview = useGarageStudio.getState();
-    const target = THEMES[inLineup || preview.active ? 'studio' : themeName];
+    const target = THEMES.studio;
     const k = Math.min(1, dt * TRANSITION_RATE);
 
     currentExposure.current = smoothTowards(currentExposure.current, target.exposure, k);
@@ -118,8 +119,12 @@ export function Floor({
       const settle = Math.min(1, dt * 10);
       const dusk = inStudioDusk(preview);
       uniforms.studioDusk.value += (Number(dusk) - uniforms.studioDusk.value) * settle;
-      uniforms.garageStudioDim.value +=
-        (Number(inBlackout()) - uniforms.garageStudioDim.value) * settle;
+      const roomDim = inBlackout()
+        ? 1
+        : !inLineup && !preview.active && isOpeningLowLight(state)
+          ? 0.62
+          : 0;
+      uniforms.garageStudioDim.value += (roomDim - uniforms.garageStudioDim.value) * settle;
       const extendedLamp = preview.active && useGarageExhibit.getState().exhibit === 'lamps';
       uniforms.extendedLamp.value = Number(extendedLamp);
       uniforms.garageStudioLamps.value +=

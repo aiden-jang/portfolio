@@ -4,6 +4,9 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getStudioProjection, photoProjectionGlsl } from './projection';
 import { inBlackout, useGarageStudio } from '../../garageStudio/state';
+import { isOpeningLowLight } from '../../lighting';
+import { useLineup } from '../../lineup/state';
+import { useAppStore } from '../../store';
 import { studioTexture } from './textures';
 
 const photoWallVertex = /* glsl */ `
@@ -167,7 +170,9 @@ export function StudioRoom() {
       ? 1
       : active && (study === 'shadows' || study === 'reflection')
         ? 0.94
-        : 0;
+        : !active && !useLineup.getState().active && isOpeningLowLight(useAppStore.getState())
+          ? 0.69
+          : 0;
     roomDim.value = THREE.MathUtils.lerp(roomDim.value, dim, Math.min(1, dt * 12));
   });
   const room = getStudioProjection(mobile);
