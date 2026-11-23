@@ -249,12 +249,12 @@ html:root .portfolio-chrome .duet .cut-id h3 {
   right: var(--portfolio-gutter);
   margin: 0;
   justify-content: center;
-  gap: clamp(12px, 4vw, 56px);
+  gap: 6px clamp(6px, 1.5vw, 20px);
 }
 #project-mrrp.room-shot .bean-room-controls button {
   background: #302625dd;
   border: 1px solid #eac49d60;
-  padding-inline: 14px;
+  padding-inline: clamp(8px, 2vw, 14px);
   border-radius: 4px;
   color: var(--bean-cream);
 }

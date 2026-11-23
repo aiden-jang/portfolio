@@ -22,6 +22,7 @@ for (const width of [1440, 390]) {
     const match = dinner.locator('.dinner-ticket-state .dinner-ticket-match');
     await expect(bill.getByText('Alex owes you')).toBeInViewport();
     await expect(bill).toHaveCSS('opacity', '1');
+    await expect(dinner.getByText('Alex and Maya matched on pizza')).toBeVisible();
     await expect(bill.getByText('$24.00', { exact: true })).toHaveCount(2);
     await expect
       .poll(() => dinner.evaluate((el) => Number(el.style.getPropertyValue('--tear'))))

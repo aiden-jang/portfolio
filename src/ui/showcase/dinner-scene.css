@@ -46,6 +46,24 @@
   object-fit: cover;
   object-position: 48% 54%;
 }
+.dinner-match-recap {
+  grid-area: 1 / 1;
+  align-self: center;
+  justify-self: center;
+  z-index: 1;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 5px;
+  background: #211914ed;
+  color: #fff9ed;
+  font: 520 clamp(13px, 1.2vw, 16px)/1.4 var(--font-display);
+  transform: translate(calc(-1 * clamp(142px, 18vw, 218px)), clamp(100px, 15svh, 142px));
+  visibility: hidden;
+}
+#project-wherever[data-dinner-state='bill'] .dinner-match-recap {
+  visibility: visible;
+  opacity: var(--bill-arrival, 0);
+}
 .dinner-ticket-paper {
   grid-column: 2;
   position: relative;
@@ -155,6 +173,11 @@
   .dinner-ticket-photo {
     object-position: 58% 43%;
   }
+  .dinner-match-recap {
+    align-self: start;
+    margin: max(82px, 10svh) var(--portfolio-gutter) 0;
+    transform: none;
+  }
   .dinner-ticket-paper {
     grid-area: 2 / 1;
     align-content: start;
@@ -194,6 +217,9 @@
     transform: none;
   }
   .dinner-ticket-vote {
+    display: none;
+  }
+  #project-wherever[data-dinner-state='bill'] .dinner-match-recap {
     display: none;
   }
   .dinner-sequence .bill {

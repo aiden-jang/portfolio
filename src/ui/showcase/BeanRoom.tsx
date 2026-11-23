@@ -10,7 +10,7 @@ import {
 import type { Cat, RoomAction, RoomPositions } from './mrrp/renderer.js';
 import { useReducedMotion } from '../../hooks/reducedMotion';
 import './bean-room.css';
-import { BeanRoomTargets } from './BeanRoomTargets';
+import { BeanRoomButtons, BeanRoomTargets } from './BeanRoomTargets';
 import { useRoomCamera } from './roomCamera';
 
 const bean = {
@@ -215,6 +215,7 @@ export function BeanRoom() {
     }
   }
 
+  const targets = { boxed, onPet: pet, onBox: playWithBox, onMouse: playWithMouse };
   return (
     <div className="bean-room" data-light={morning ? 'morning' : 'evening'} ref={room}>
       <div className="bean-window" data-light={morning ? 'morning' : 'evening'}>
@@ -250,13 +251,7 @@ export function BeanRoom() {
               spot={together ? 0.42 : null}
             />
             <canvas className="bean-light-fade" ref={fade} aria-hidden="true" />
-            <BeanRoomTargets
-              ref={hotspots}
-              boxed={boxed}
-              onPet={pet}
-              onBox={playWithBox}
-              onMouse={playWithMouse}
-            />
+            <BeanRoomTargets ref={hotspots} {...targets} />
           </div>
         )}
       </div>
@@ -266,6 +261,7 @@ export function BeanRoom() {
         </span>
       ) : (
         <div className="bean-room-controls" role="group" aria-label="Spend a moment with Bean">
+          <BeanRoomButtons disabled={!Renderer} {...targets} />
           <button
             type="button"
             disabled={!Renderer}

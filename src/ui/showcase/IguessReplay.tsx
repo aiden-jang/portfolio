@@ -56,7 +56,7 @@ export function IguessReplay({ active }: { active: boolean }) {
       setResult(next);
     }
   }, []);
-  useTimedScene(demo, draw, { enabled: active, duration: 3040, hold: 3400 });
+  useTimedScene(demo, draw, { enabled: active, duration: 3040, hold: 1250 });
 
   return (
     <figure ref={demo} className="iguess-replay" aria-label="Recorded iguess drawing round">

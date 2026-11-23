@@ -111,7 +111,8 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     await assertLayout();
     if (width === 1440 || width === 390) {
       const comparison = section.getByRole('figure', { name: 'Request batching comparison' });
-      await expect(comparison.locator('.batching-instrument')).toHaveCSS('border-top-width', '0px');
+      await expect(comparison).toHaveCSS('border-top-width', '0px');
+      await expect(comparison.locator('.batching-packet rect')).toHaveCount(0);
       const before = comparison.getByRole('button', { name: 'Before', exact: true });
       const after = comparison.getByRole('button', { name: 'After', exact: true });
       const requestGrid = comparison.getByText('120 separate requests', { exact: true });

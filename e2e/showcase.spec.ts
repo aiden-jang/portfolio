@@ -1,5 +1,21 @@
 import { expect, test } from '@playwright/test';
 for (const width of [1440, 390]) {
+  test(`Bean's visible controls work at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/#project-mrrp', { waitUntil: 'domcontentloaded' });
+    const room = page.locator('#project-mrrp');
+    const controls = room.getByRole('group', { name: 'Spend a moment with Bean' });
+    const status = room.getByRole('status');
+    await controls.getByRole('button', { name: 'Pet', exact: true }).click();
+    await expect(status).toHaveText('Bean leans in and gives you a little mrrp.');
+    await controls.getByRole('button', { name: 'Toy mouse' }).click();
+    await expect(status).toHaveText('Bean crouches and pounces on the toy mouse.');
+    const box = controls.getByRole('button', { name: 'Box', exact: true });
+    await box.click();
+    await expect(box).toHaveAttribute('aria-pressed', 'true');
+  });
+
   test(`project interactions preserve their examples and navigation at ${width}px`, async ({
     page,
   }) => {

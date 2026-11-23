@@ -60,31 +60,26 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       data-phase={phase}
       aria-label="Request batching comparison"
     >
-      <div className="batching-instrument">
-        <svg viewBox="0 0 640 288" aria-hidden="true">
-          <g className="batching-marks">
-            {marks.map(({ x, y }) => (
-              <rect
-                key={x + ':' + y}
-                x={x}
-                y={y}
-                width="22"
-                height="5"
-                rx="2"
-                style={
-                  { '--merge-x': `${309 - x}px`, '--merge-y': `${141 - y}px` } as CSSProperties
-                }
-              />
-            ))}
-          </g>
-          <g className="batching-packet">
-            <rect x="209" y="108" width="222" height="72" rx="7" />
-            <path d="M239 144h162" />
-          </g>
-        </svg>
-        <div className="batching-readout">
-          {after ? '1 batched request' : '120 separate requests'}
-        </div>
+      <svg viewBox="0 0 640 288" aria-hidden="true">
+        <g className="batching-marks">
+          {marks.map(({ x, y }) => (
+            <rect
+              key={x + ':' + y}
+              x={x}
+              y={y}
+              width="22"
+              height="5"
+              rx="2"
+              style={{ '--merge-x': `${309 - x}px`, '--merge-y': `${141 - y}px` } as CSSProperties}
+            />
+          ))}
+        </g>
+        <g className="batching-packet">
+          <path d="M225 144h190" />
+        </g>
+      </svg>
+      <div className="batching-readout">
+        {after ? '1 batched request' : '120 separate requests'}
       </div>
       <div className="batching-controls">
         <div className="batching-states" role="group" aria-label="Compare request patterns">

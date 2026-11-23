@@ -185,6 +185,7 @@ export function DinnerScene() {
   return (
     <div className="dinner-sequence" ref={track}>
       <DinnerTicket />
+      <p className="dinner-match-recap">Alex and Maya matched on pizza</p>
       <div className="bill" id="project-owewell">
         <div className="paper total">
           <span>Neighborhood Pizza Kitchen</span>

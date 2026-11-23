@@ -16,7 +16,7 @@ export function IodinePresentation() {
     editor.dataset.playback = phase;
     restore(phase === 'restored');
   }, []);
-  useTimedScene(frame, draw, { duration: 1720, hold: 3900 });
+  useTimedScene(frame, draw, { duration: 1720, hold: 1400 });
 
   const [first, second, last] = example.after.trimEnd().split('\n');
   const [start, end] = second!.trim().split('.trim()');

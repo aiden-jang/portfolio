@@ -7,6 +7,28 @@ type Props = {
   onMouse: () => void;
 };
 
+export function BeanRoomButtons({
+  boxed,
+  onPet,
+  onBox,
+  onMouse,
+  disabled,
+}: Props & { disabled: boolean }) {
+  return (
+    <>
+      <button type="button" disabled={disabled} onClick={onPet}>
+        Pet
+      </button>
+      <button type="button" disabled={disabled} onClick={onMouse}>
+        Toy mouse
+      </button>
+      <button type="button" disabled={disabled} aria-pressed={boxed} onClick={onBox}>
+        Box
+      </button>
+    </>
+  );
+}
+
 export const BeanRoomTargets = forwardRef<HTMLDivElement, Props>(function BeanRoomTargets(
   { boxed, onPet, onBox, onMouse },
   ref,
