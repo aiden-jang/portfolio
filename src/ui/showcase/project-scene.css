@@ -3,8 +3,6 @@
   --scene-inset: calc(var(--portfolio-header-height) + 10px);
   --scene-ink: #eeeae4;
   --scene-muted: #b9b7ae;
-  --scene-surface: #141416;
-  --scene-line: #ffffff19;
   --scene-height: clamp(262px, 48svh, 500px);
   --scene-run: min(46svh, 420px);
   position: relative;
@@ -20,25 +18,24 @@
 }
 
 .project-scene-iguess {
-  --scene-surface: #eeeee5;
-  --scene-ink: #24251e;
-  --scene-muted: #44473c;
-  --scene-line: #211f1a19;
+  --scene-run: min(57svh, 480px);
 }
 
 .project-scene-mrrp {
-  --scene-surface: #1a1914;
   --scene-muted: #d0c3a7;
-  --scene-line: #c6b39031;
+  --scene-run: min(33svh, 300px);
 }
 
 .project-scene-dinner {
-  --scene-surface: #1c1915;
   --scene-muted: #d0c4b4;
-  --scene-line: #c5a67829;
+  --scene-run: min(43svh, 360px);
 }
 
 .project-scene-body {
+  display: flow-root;
+}
+
+.project-scene-iodine .project-scene-body {
   border: 1px solid var(--scene-line);
   border-radius: clamp(6px, 1.2vw, 12px);
   background: var(--scene-surface);
@@ -97,7 +94,6 @@ html:root .portfolio-chrome .project-scene h3 {
 }
 
 .project-scene-track {
-  --scene-blend: 0;
   display: grid;
   gap: 14px;
 }
@@ -144,11 +140,13 @@ html:root .portfolio-chrome .project-scene h3 {
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-height: 610px) {
-  .project-scene:is(.project-scene-iodine, .project-scene-dinner) {
-    padding-bottom: var(--scene-run);
+  .project-scene::after {
+    content: '';
+    display: block;
+    height: var(--scene-run);
   }
 
-  .project-scene:is(.project-scene-iodine, .project-scene-dinner) .project-scene-body {
+  .project-scene .project-scene-body {
     position: sticky;
     top: var(--scene-inset);
   }
@@ -163,7 +161,7 @@ html:root .portfolio-chrome .project-scene h3 {
   }
 
   .project-scene-still:last-child {
-    opacity: var(--scene-blend);
+    opacity: var(--scene-blend, 0);
   }
 
   .project-scene-anchor {
@@ -175,10 +173,10 @@ html:root .portfolio-chrome .project-scene h3 {
   .project-scene {
     --scene-edge: 13px;
     --scene-height: clamp(218px, 39svh, 396px);
-    --scene-run: min(34svh, 320px);
   }
 
   .project-scene-iodine {
+    --scene-run: min(34svh, 320px);
     --scene-height: clamp(190px, 28svh, 255px);
   }
 
@@ -204,5 +202,19 @@ html:root .portfolio-chrome .project-scene h3 {
 @media (max-width: 430px) {
   .project-scene-dinner .project-scene-links a {
     min-height: 32px;
+  }
+}
+
+.project-scene-iguess .iguess-replay {
+  color: #24251e;
+}
+
+.project-scene-dinner .project-scene-still:first-child {
+  background: #1c1916;
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 610px) {
+  .project-scene-mrrp .bean-window {
+    max-width: calc((100svh - var(--scene-inset) - 178px) * 1.22);
   }
 }

@@ -40,13 +40,16 @@ for (const [width, format, videoWidth] of [
     await retry.press('Enter');
     await expect(video).toHaveJSProperty('duration', 12);
     await expect(video).toHaveJSProperty('videoWidth', videoWidth);
-    await expect(video).toHaveJSProperty('controls', true);
+    await expect(video).toHaveJSProperty('controls', false);
     await expect
       .poll(() => video.evaluate((player: HTMLVideoElement) => player.currentTime))
       .toBeGreaterThan(0);
-    await expect(video).toBeFocused();
+    await expect(reel.getByRole('button', { name: 'Pause reel' })).toBeFocused();
 
     await expect(video).toBeInViewport();
+    await reel.getByRole('button', { name: 'Pause reel' }).press('Enter');
+    await expect(video).toHaveJSProperty('paused', true);
+    await reel.getByRole('button', { name: 'Resume reel' }).press('Enter');
     await video.evaluate((player: HTMLVideoElement) => {
       player.playbackRate = 4;
     });
@@ -56,7 +59,7 @@ for (const [width, format, videoWidth] of [
       player.playbackRate = 1;
     });
     await replay.press('Enter');
-    await expect(video).toHaveJSProperty('controls', true);
+    await expect(video).toHaveJSProperty('controls', false);
     await expect
       .poll(() => video.evaluate((player: HTMLVideoElement) => player.currentTime))
       .toBeLessThan(5);

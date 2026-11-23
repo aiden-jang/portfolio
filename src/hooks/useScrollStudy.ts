@@ -10,6 +10,7 @@ export function useScrollStudy(
   ref: RefObject<HTMLElement>,
   enabled: boolean,
   draw: (el: HTMLElement, t: number) => void,
+  settle?: (t: number) => number,
 ) {
   useEffect(() => {
     const stage = ref.current;
@@ -21,6 +22,31 @@ export function useScrollStudy(
     let inset = 0;
     let span = 1;
     let sticky = false;
+    let displayed = -1;
+    let finish = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const paint = (t: number) => {
+      displayed = t;
+      if (stage) draw(stage, t);
+    };
+    const stopSettling = () => {
+      clearTimeout(timer);
+      cancelAnimationFrame(finish);
+    };
+    const settleAfterScroll = (t: number) => {
+      const target = settle?.(t) ?? t;
+      if (target === t) return;
+      timer = setTimeout(() => {
+        const start = performance.now();
+        const from = displayed;
+        const ease = (now: number) => {
+          const blend = easedProgress(now - start, 0, 250);
+          paint(from + (target - from) * blend);
+          if (blend < 1) finish = requestAnimationFrame(ease);
+        };
+        finish = requestAnimationFrame(ease);
+      }, 130);
+    };
     const measure = () => {
       const style = getComputedStyle(pinned);
       sticky = style.position === 'sticky';
@@ -36,7 +62,9 @@ export function useScrollStudy(
           : clamp((inset - stage.getBoundingClientRect().top) / span, 0, 1);
       if (t === last) return;
       last = t;
-      draw(stage, t);
+      paint(t);
+      stopSettling();
+      settleAfterScroll(t);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -50,10 +78,11 @@ export function useScrollStudy(
     measure();
     return () => {
       cancelAnimationFrame(frame);
+      stopSettling();
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', measure);
       preference.removeEventListener('change', measure);
       size.disconnect();
     };
-  }, [ref, enabled, draw]);
+  }, [ref, enabled, draw, settle]);
 }

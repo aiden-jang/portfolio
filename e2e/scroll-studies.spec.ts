@@ -19,9 +19,9 @@ for (const width of [1440, 390]) {
     await page.goto('/#sec-work');
     const iodine = page.locator('#project-iodine');
     const outside = iodine.getByRole('img', { name: /requests a fresh approval/ }).locator('../..');
-    async function seekApproval(progress: number) {
-      await iodine.evaluate((element, amount) => {
-        const body = element.firstElementChild as HTMLElement;
+    async function seekScene(id: string, progress: number) {
+      await page.locator(id).evaluate((element, amount) => {
+        const body = element.querySelector<HTMLElement>('[data-study-pin]')!;
         const travel = (element as HTMLElement).offsetHeight - body.offsetHeight;
         const inset = parseFloat(getComputedStyle(body).top);
         scrollTo({
@@ -30,16 +30,40 @@ for (const width of [1440, 390]) {
         });
       }, progress);
     }
-    await seekApproval(0.9);
+    await seekScene('#project-iodine', 0.9);
     await expect(outside).toHaveCSS('opacity', '1');
-    await seekApproval(0.08);
+    await seekScene('#project-iodine', 0.08);
     await expect(outside).toHaveCSS('opacity', '0');
 
     const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
-    await drawing.scrollIntoViewIfNeeded();
+    await seekScene('#project-iguess', 0.92);
     await expect(drawing.getByRole('status')).toHaveText('Guitar');
-    await drawing.getByRole('button', { name: 'Replay the drawing' }).click();
+    const drawingPin = page.locator('#project-iguess [data-study-pin]');
+    expect(
+      await drawingPin.evaluate((el) =>
+        Math.abs(el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).top)),
+      ),
+    ).toBeLessThan(2);
+    await seekScene('#project-iguess', 0.7);
+    await expect(drawing.getByRole('status')).toContainText('A rocket');
+    await seekScene('#project-iguess', 0.1);
     await expect(drawing.getByRole('status')).toHaveText('');
+    const room = page.locator('#project-mrrp .bean-window');
+    await seekScene('#project-mrrp', 0.86);
+    await expect(room).toHaveAttribute('data-light', 'morning');
+    await seekScene('#project-mrrp', 0.12);
+    await expect(room).toHaveAttribute('data-light', 'evening');
+    const verdict = page.locator('#project-everythingisfine .quake-journey-readings');
+    await seekScene('#project-everythingisfine', 0.78);
+    const parkedScroll = await page.evaluate(() => scrollY);
+    await expect(verdict).toHaveCSS('opacity', '1');
+    expect(await page.evaluate(() => scrollY)).toBe(parkedScroll);
+    await seekScene('#project-everythingisfine', 0.56);
+    await expect(verdict).toHaveCSS('opacity', '0');
+    await expect(page.locator('#project-everythingisfine')).toHaveAttribute(
+      'data-quake-view',
+      'globe',
+    );
     const track = page.locator('.scroll-film-track');
     const video = track.locator('video');
     const slider = track.getByRole('slider');
@@ -76,6 +100,5 @@ for (const width of [1440, 390]) {
 
     await expect(outside).toHaveCSS('opacity', '1');
     await expect(drawing.getByRole('status')).toHaveText('Guitar');
-    await expect(drawing.getByRole('button', { name: 'Replay the drawing' })).toBeHidden();
   });
 }

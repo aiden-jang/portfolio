@@ -1,7 +1,6 @@
 .iguess-replay {
   display: grid;
   justify-items: center;
-  border: 1px solid #272d2017;
   border-radius: 6px;
   margin: 0;
   overflow: hidden;
@@ -22,7 +21,7 @@
   padding: 7px clamp(13px, 3vw, 26px);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 12px;
   border-top: 1px solid #272d2019;
 }
@@ -47,25 +46,8 @@
   }
 }
 
-.iguess-replay-controls button {
-  min-height: 44px;
-  padding: 0 12px;
-  font: 550 13px var(--font-display);
-  color: #32372a;
-  border: 1px solid #28292032;
-  border-radius: 5px;
-}
-
-.iguess-replay-controls button:hover {
-  background: #2829200e;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .iguess-replay-result > span {
     animation: none;
-  }
-
-  .iguess-replay-controls button {
-    display: none;
   }
 }

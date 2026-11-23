@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -39,6 +40,9 @@ export function BeanRoom() {
   const [failed, setFailed] = useState(false);
   const [together, setTogether] = useState(false);
   const [morning, setMorning] = useState(false);
+  const lightOn = useRef(false);
+  const manualAt = useRef<number>();
+  const progress = useRef(0);
   const [pets, setPets] = useState(0);
   const [petAt, setPetAt] = useState<number | null>(null);
   const [status, setStatus] = useState('');
@@ -78,7 +82,9 @@ export function BeanRoom() {
     setStatus('You pet Bean.');
   }
 
-  function switchLight() {
+  const changeLight = useCallback((next: boolean) => {
+    if (lightOn.current === next) return;
+    lightOn.current = next;
     const canvas = live.current?.querySelector('canvas[role="img"]');
     const overlay = fade.current;
     if (
@@ -95,7 +101,28 @@ export function BeanRoom() {
         easing: 'cubic-bezier(.2,.7,.2,1)',
       });
     }
-    setMorning(!morning);
+    setMorning(next);
+  }, []);
+
+  useEffect(() => {
+    const scene = room.current?.closest('article');
+    if (!scene) return;
+    const motion = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 610px)');
+    const update = (event: Event) => {
+      progress.current = (event as CustomEvent<number>).detail;
+      if (!motion.matches) return;
+      if (manualAt.current !== undefined && Math.abs(progress.current - manualAt.current) < 0.2)
+        return;
+      manualAt.current = undefined;
+      changeLight(progress.current >= 0.58);
+    };
+    scene.addEventListener('project-scene-progress', update);
+    return () => scene.removeEventListener('project-scene-progress', update);
+  }, [changeLight]);
+
+  function switchLight() {
+    manualAt.current = progress.current;
+    changeLight(!morning);
     setStatus(morning ? 'Evening in Bean’s room.' : 'Morning in Bean’s room.');
   }
 

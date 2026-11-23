@@ -62,8 +62,18 @@
     background 180ms ease-out,
     border-color 180ms ease-out;
 }
-.about-reel-play[hidden] {
-  display: none;
+.about-reel[data-phase='playing'] .about-reel-play {
+  inset: 0;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  color: transparent;
+  outline-offset: -4px;
+}
+
+.about-reel[data-phase='playing'] .about-reel-play:focus-visible {
+  color: #fff;
+  background: #14100f66;
 }
 .about-reel-play:focus-visible {
   outline: 2px solid #fff1dc;

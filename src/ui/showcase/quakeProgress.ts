@@ -26,3 +26,8 @@ export function syncQuakeCamera(canvas: HTMLCanvasElement) {
   if (stage && !stage.hasAttribute('data-quake-manual'))
     canvas.dispatchEvent(new CustomEvent('quake-journey', { detail: quakeTravel(stage) }));
 }
+
+export function settleQuake(progress: number) {
+  if (progress <= 0.43 || progress >= 0.94) return progress;
+  return progress < 0.68 ? 0.43 : 0.94;
+}

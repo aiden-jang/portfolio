@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './about-reel.css';
 
 const media = {
@@ -15,7 +15,8 @@ const phoneViewport = '(max-width: 700px)';
 const labels = {
   ready: 'Play reel',
   loading: 'Loading reel',
-  playing: 'Play reel',
+  playing: 'Pause reel',
+  paused: 'Resume reel',
   ended: 'Replay reel',
   error: 'Retry reel',
 };
@@ -24,16 +25,12 @@ export function AboutReel() {
   const [phase, setPhase] = useState<keyof typeof labels>('ready');
   const [format, setFormat] = useState<'desktop' | 'phone'>();
   const video = useRef<HTMLVideoElement>(null);
-  const button = useRef<HTMLButtonElement>(null);
-  const ownsFocus = useRef(false);
-
   const pending = useRef(false);
 
   const play = useCallback(async (automatic = false) => {
     const player = video.current;
     if (!player || pending.current) return;
     pending.current = true;
-    ownsFocus.current = !automatic && document.activeElement === button.current;
     const next = matchMedia(phoneViewport).matches ? 'phone' : 'desktop';
     const source = new URL(media[next].video, location.href).href;
     if (player.src !== source || player.error) {
@@ -105,20 +102,6 @@ export function AboutReel() {
     };
   }, [play]);
 
-  useLayoutEffect(() => {
-    if (!ownsFocus.current) return;
-    const active = document.activeElement;
-    if (phase === 'playing' && (active === button.current || active === document.body)) {
-      video.current?.focus({ preventScroll: true });
-    }
-    if (
-      (phase === 'ended' || phase === 'error') &&
-      (active === video.current || active === document.body)
-    ) {
-      button.current?.focus({ preventScroll: true });
-    }
-  }, [phase]);
-
   return (
     <figure className="about-reel" aria-labelledby="about-reel-title" data-phase={phase}>
       <header className="about-reel-heading">
@@ -131,8 +114,7 @@ export function AboutReel() {
           preload="none"
           muted
           playsInline
-          controls={phase === 'playing'}
-          tabIndex={phase === 'playing' ? 0 : -1}
+          tabIndex={-1}
           onEnded={() => setPhase('ended')}
           onError={() => setPhase('error')}
         />
@@ -143,15 +125,24 @@ export function AboutReel() {
           </picture>
         )}
         <button
-          ref={button}
           type="button"
           className="about-reel-play"
-          hidden={phase === 'playing'}
           aria-disabled={phase === 'loading' || undefined}
-          onClick={() => void play()}
+          onClick={() => {
+            if (phase === 'playing') {
+              video.current?.pause();
+              setPhase('paused');
+            } else {
+              void play();
+            }
+          }}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m9 5 11 7-11 7z" fill="currentColor" />
+            {phase === 'playing' ? (
+              <path d="M8 5v14m8-14v14" stroke="currentColor" strokeWidth="2" />
+            ) : (
+              <path d="m9 5 11 7-11 7z" fill="currentColor" />
+            )}
           </svg>
           <span>{labels[phase]}</span>
         </button>

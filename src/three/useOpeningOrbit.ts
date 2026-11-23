@@ -41,6 +41,7 @@ function openingState() {
     offset: 0,
     reportedPhase: undefined as Phase | undefined,
     scrolled: false,
+    leftIntro: false,
   };
 }
 
@@ -51,10 +52,10 @@ export function useOpeningOrbit() {
       if (current.current) current.current.scrolled = true;
     };
     const wheel = (event: WheelEvent) => {
-      if (event.deltaY && !event.ctrlKey) interrupt();
+      if (event.deltaY && !event.ctrlKey && (event.deltaY > 0 || window.scrollY > 1)) interrupt();
     };
     const scroll = () => {
-      if (window.scrollY > 0) interrupt();
+      if (window.scrollY > 1) interrupt();
     };
     window.addEventListener('wheel', wheel, { passive: true });
     window.addEventListener('scroll', scroll, { passive: true });
@@ -79,8 +80,20 @@ export function useOpeningOrbit() {
       useOpeningPlayback.setState({ playback: 'off' });
       rig.introT = 0;
     }
-    const motion = current.current;
-    const store = useAppStore.getState();
+    let motion = current.current;
+    let store = useAppStore.getState();
+    const atIntro = scroll <= 0.002 && window.scrollY <= 1;
+    if (scroll > 0.12) motion.leftIntro = true;
+    if (motion.leftIntro && atIntro && !store.isContactVisible && !rig.isDown) {
+      motion.leftIntro = false;
+      if (!reduced && store.carIndex === DEFAULT_CAR_INDEX && !usePhotoMode.getState().active) {
+        store.resetCamera();
+        store = useAppStore.getState();
+        motion = current.current = openingState();
+        rig.introT = 0;
+        useOpeningPlayback.setState({ playback: 'off' });
+      }
+    }
     const phone = width < 768;
     const arc = ((phone ? 20 : 26) * Math.PI) / 180;
     const corvette = motion.carIndex === DEFAULT_CAR_INDEX;
@@ -95,7 +108,7 @@ export function useOpeningOrbit() {
     } else if (store.isContactVisible || store.cameraResetVersion !== motion.cameraResetVersion) {
       if (unfinished) motion.phase = 'interrupted';
       motion.offset = 0;
-    } else if (unfinished && (motion.scrolled || scroll > 0)) {
+    } else if (unfinished && (motion.scrolled || (scroll > 0 && !atIntro))) {
       motion.phase = 'interrupted';
     } else if (
       (unfinished || motion.offset !== 0) &&

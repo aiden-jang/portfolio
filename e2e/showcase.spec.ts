@@ -68,7 +68,6 @@ for (const width of [1440, 390]) {
 
     const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
     await expect(drawing.getByRole('status')).toHaveText('Guitar');
-    await expect(drawing.getByRole('button', { name: 'Replay the drawing' })).toBeHidden();
     await page.getByRole('button', { name: 'How I built it: iguess', exact: true }).click();
     await page.getByRole('button', { name: 'Follow the flow' }).click();
     await expect(page.locator('.flow-explanation')).toContainText('AI Worker');

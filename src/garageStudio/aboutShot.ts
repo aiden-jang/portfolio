@@ -12,8 +12,9 @@ export function openAboutShot(trigger: HTMLElement) {
   useAppStore.setState({ activeBodyColor: 'original' });
   useAppStore.getState().applyBodyColor('original');
   useGarageStudy.setState({ camera: 'orbit', playing: false, refined: true, look: 'studio' });
-  Object.assign(activeOrbit(), { pitch: 0, zoom: 1 });
-  selectPose(0.7);
+  const phone = matchMedia('(max-width: 767px)').matches;
+  Object.assign(activeOrbit(), { pitch: 0, zoom: phone ? 0.86 : 1 });
+  selectPose(2.88);
   useGarageStudio.setState({ guides: false });
   repaintStudio();
 }

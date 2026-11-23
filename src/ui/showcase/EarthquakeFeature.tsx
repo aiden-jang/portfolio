@@ -9,7 +9,7 @@ import { ControlIcon } from '../ControlIcon';
 import { storyHref } from '../creative/storyRoutes';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
 import { QuakeReadings } from './quakeJourney';
-import { advanceQuake } from './quakeProgress';
+import { advanceQuake, settleQuake } from './quakeProgress';
 
 // The visible date also applies to the snapshot poster before WebGL loads.
 const snapshotDate = '2026-11-17T00:55:59.000Z';
@@ -31,7 +31,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
   const compareButton = useRef<HTMLButtonElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const journey = useRef<HTMLElement>(null);
-  useScrollStudy(journey, !comparing, advanceQuake);
+  useScrollStudy(journey, !comparing, advanceQuake, settleQuake);
   useLayoutEffect(() => {
     const sync = () => {
       setComparing(location.hash.startsWith(compareRoute));

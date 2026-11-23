@@ -1,5 +1,12 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import './project-scene.css';
+
+function presentScene(stage: HTMLElement, progress: number) {
+  stage.style.setProperty('--scene-blend', easedProgress(progress, 0.27, 0.72).toFixed(3));
+  stage.dataset.sceneProgress = progress.toFixed(3);
+  stage.dispatchEvent(new CustomEvent('project-scene-progress', { detail: progress }));
+}
 
 type SceneFrame = { image: string; alt: string; anchor?: string };
 
@@ -16,9 +23,11 @@ export function ProjectScene({
   links: ReactNode;
   children: ReactNode;
 }) {
+  const scene = useRef<HTMLElement>(null);
+  useScrollStudy(scene, true, presentScene);
   return (
-    <article id={id} className={`project-scene project-scene-${theme}`}>
-      <div className="project-scene-body">
+    <article ref={scene} id={id} className={`project-scene project-scene-${theme}`}>
+      <div className="project-scene-body" data-study-pin>
         <header className="project-scene-heading">
           <h3>{title}</h3>
           <div className="project-scene-links">{links}</div>
@@ -38,21 +47,6 @@ export function ScrollScenes({ frames }: { frames: readonly [SceneFrame, SceneFr
     const second = frames[1].anchor;
     if (!stage || !section || !body) return;
     const animated = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 610px)');
-    let frame = 0;
-    let listening = false;
-
-    const paint = () => {
-      frame = 0;
-      const travel = section.offsetHeight - body.offsetHeight;
-      const inset = Number.parseFloat(getComputedStyle(body).top);
-      const position = (inset - section.getBoundingClientRect().top) / travel;
-      const progress = Math.max(0, Math.min(1, (position - 0.27) / 0.45));
-      const blend = progress ** 2 * (3 - 2 * progress);
-      if (Number.isFinite(blend)) stage.style.setProperty('--scene-blend', blend.toFixed(3));
-    };
-    const schedule = () => {
-      if (listening && animated.matches && !frame) frame = requestAnimationFrame(paint);
-    };
     const seekSecond = () => {
       if (!second || location.hash !== '#' + second || !animated.matches) return;
       const top = window.scrollY + section.getBoundingClientRect().top;
@@ -62,22 +56,9 @@ export function ScrollScenes({ frames }: { frames: readonly [SceneFrame, SceneFr
     };
     const initial = requestAnimationFrame(seekSecond);
     window.addEventListener('hashchange', seekSecond);
-    const visibility = new IntersectionObserver(([entry]) => {
-      listening = !!entry?.isIntersecting;
-      schedule();
-    });
-    visibility.observe(section);
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    animated.addEventListener('change', schedule);
     return () => {
-      cancelAnimationFrame(frame);
       cancelAnimationFrame(initial);
       window.removeEventListener('hashchange', seekSecond);
-      visibility.disconnect();
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-      animated.removeEventListener('change', schedule);
     };
   }, [frames]);
 

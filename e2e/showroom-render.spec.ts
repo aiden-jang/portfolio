@@ -47,6 +47,17 @@ for (const viewport of [
       await expect(art).toHaveCount(0, { timeout: 60_000 });
       await expect(page.locator('.car-choice-status').first()).toHaveText('');
       expect(await title.boundingBox()).toEqual(firstPosition);
+      const opening = page.getByRole('button', { name: 'Pause opening camera' });
+      if (phone) {
+        await expect(opening).toHaveCount(0);
+      } else {
+        await expect(opening).toBeVisible();
+        await opening.click();
+        await page.locator('#sec-work').evaluate((section) => section.scrollIntoView());
+        await expect(opening).toHaveCount(0);
+        await page.getByRole('button', { name: 'Aiden Jang, back to the top' }).click();
+        await expect(opening).toBeVisible();
+      }
     } finally {
       resume();
       resumeFloor();

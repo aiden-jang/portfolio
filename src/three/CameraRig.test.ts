@@ -327,7 +327,7 @@ it('hands the in-flight angle to a drag and does not resume the cuts', async () 
   });
 });
 
-it('drops the opening offset by Work and starts settled under reduced motion', async () => {
+it('restarts the Corvette opening on return to Intro and stays settled under reduced motion', async () => {
   await withOpeningCamera(390, ({ tick, yaw, load, scrollTo }) => {
     load();
     tick(60);
@@ -336,16 +336,20 @@ it('drops the opening offset by Work and starts settled under reduced motion', a
     scrollTo(0.2);
     tick();
     expect(yaw()).toBeCloseTo(KEYFRAMES[1].azimuth, 5);
-    scrollTo(0);
-    tick(180);
-    expect(yaw()).toBeCloseTo(swept, 5);
     expect(useOpeningPlayback.getState().playback).toBe('off');
+    scrollTo(0);
+    tick(60);
+    expect(yaw()).toBeCloseTo(swept, 2);
+    expect(useOpeningPlayback.getState().playback).toBe('playing');
   });
   vi.mocked(prefersReducedMotion).mockReturnValue(true);
-  await withOpeningCamera(390, ({ tick, yaw, load }) => {
+  await withOpeningCamera(390, ({ tick, yaw, load, scrollTo }) => {
     load();
     tick();
     expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
+    scrollTo(0.2);
+    tick();
+    scrollTo(0);
     tick(60);
     expect(yaw()).toBeCloseTo(KEYFRAMES[0].azimuth, 5);
   });
