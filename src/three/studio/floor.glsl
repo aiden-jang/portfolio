@@ -94,7 +94,7 @@
       vec3 satinMirror = mirror/(1.+.89*highlight);
       float concreteBreakup = mix(1.,clamp(.71+fine*3.3+coarse*2.1,.65,1.16),satinFalloff);
       float rimFade = 1.-smoothstep(.60,2.58,fromFootprint);
-      vec3 groundBounce = satinMirror * rimFade * concreteBreakup;
+      vec3 groundBounce = satinMirror * rimFade * concreteBreakup * studioCarMirrorWeight;
       vec2 diffuseDistance = (ground-studioChassis.xy)/vec2(1.9,2.40);
       vec3 softBounce = studioPaint * .081 * exp(-dot(diffuseDistance,diffuseDistance)) * studioCarReady;
       float nearFixture = roomGlow(room.xz,vec2(studioLightBarX,.26),vec2(2.75,2.46));

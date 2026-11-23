@@ -70,16 +70,23 @@ it.each([
   const finish = detectBodyMaterial(model, spec.paintMaterial) as THREE.MeshPhysicalMaterial;
   expect(finish.name).toBe(materialName);
   expect(finish).toBeInstanceOf(THREE.MeshPhysicalMaterial);
-  const mercedes = file === 'mercedes-benz-w198-300-sl.glb';
-  const f40 = file === 'ferrari-f120-f40.glb';
-  if (mercedes) expect(finish.roughness).toBe(0.28);
-  else if (f40) expect(finish.roughness).toBe(0.34);
-  else expect(finish.roughness).toBeLessThanOrEqual(Math.min(roughness, 0.24));
-  expect(finish.clearcoat).toBe(f40 ? 0.55 : mercedes ? 0.65 : 1);
-  expect(finish.clearcoatRoughness).toBe(f40 ? 0.26 : mercedes ? 0.18 : coatRoughness);
+  if (file === 'mazda-mx5-na.glb') {
+    expect(finish.metalness).toBeLessThan(0.1);
+    expect(finish.roughness).toBe(0.27);
+    expect(finish.clearcoat).toBe(0.96);
+    expect(finish.clearcoatRoughness).toBe(0.078);
+  } else {
+    const mercedes = file === 'mercedes-benz-w198-300-sl.glb';
+    const f40 = file === 'ferrari-f120-f40.glb';
+    if (mercedes) expect(finish.roughness).toBe(0.28);
+    else if (f40) expect(finish.roughness).toBe(0.34);
+    else expect(finish.roughness).toBeLessThanOrEqual(Math.min(roughness, 0.24));
+    expect(finish.clearcoat).toBe(f40 ? 0.55 : mercedes ? 0.65 : 1);
+    expect(finish.clearcoatRoughness).toBe(f40 ? 0.26 : mercedes ? 0.18 : coatRoughness);
+    expect(finish.metalness).toBe(mercedes ? 0.55 : metalness);
+  }
   expect(finish.color).toEqual(color);
   expect(finish.map).toBe(body.map);
-  expect(finish.metalness).toBe(mercedes ? 0.55 : metalness);
   for (const [index, material] of materials.entries()) {
     if (material !== body) expect(material.toJSON()).toEqual(before[index]);
   }

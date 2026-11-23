@@ -1,6 +1,9 @@
 import type { CarSpec } from './types';
 import credits from './data/carCredits.json' with { type: 'json' };
 
+export const MIATA_MODEL = 'mazda-mx5-na.glb';
+export const MIATA_BODY_PAINT = 'Material.002';
+
 // Registry indices are permanent because shared garage URLs store them.
 const registry: Omit<CarSpec, 'credit'>[] = [
   {
@@ -110,7 +113,7 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     exposure: 1,
   },
   {
-    file: 'mazda-mx5-na.glb',
+    file: MIATA_MODEL,
     popupHeadlights: {
       clip: 'Scene',
       closedTime: 1 / 24,
@@ -120,7 +123,7 @@ const registry: Omit<CarSpec, 'credit'>[] = [
     },
     name: 'Mazda MX-5 Miata',
     code: 'NA',
-    paintMaterial: 'Material.002',
+    paintMaterial: MIATA_BODY_PAINT,
     defaultPaint: {
       name: 'British Racing Green',
       hex: '#23473b',

@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { CARS, THEMES } from '../config';
+import { MIATA_BODY_PAINT, MIATA_MODEL } from '../cars';
 import { studioCarFootprint } from './studio/carGrounding';
 import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
@@ -106,6 +107,13 @@ export function Floor({
     const uniforms = (reflector.material as THREE.ShaderMaterial).uniforms;
     if (studio) {
       uniforms.closingFloor.value = Number(closing);
+      uniforms.studioCarMirrorWeight.value =
+        !closing &&
+        !inLineup &&
+        CARS[state.carIndex].file === MIATA_MODEL &&
+        refs.bodyMaterial?.name === MIATA_BODY_PAINT
+          ? 0.78
+          : 1;
       uniforms.closingLight.value = contactLight(closing, dt);
       const settle = Math.min(1, dt * 10);
       const dusk = inStudioDusk(preview);

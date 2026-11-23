@@ -79,7 +79,7 @@ export function Lights() {
     duskMix.current += (Number(dusk) - duskMix.current) * Math.min(dt * 11, 1);
     if (dusk && !duskMap.current) {
       const generator = new THREE.PMREMGenerator(gl);
-      duskMap.current = createStudioEnvironment(generator, false, false, true);
+      duskMap.current = createStudioEnvironment(generator, 'dusk');
       generator.dispose();
     }
     const cabinTarget =
@@ -110,7 +110,7 @@ export function Lights() {
     const studio = lineup || preview.active || isOpeningStudio(state);
     if (dark && !blackoutMap.current) {
       const generator = new THREE.PMREMGenerator(gl);
-      blackoutMap.current = createStudioEnvironment(generator, true);
+      blackoutMap.current = createStudioEnvironment(generator, 'blackout');
       generator.dispose();
     }
     dim.current = THREE.MathUtils.lerp(dim.current, Number(dark), Math.min(1, dt * 12));
@@ -127,7 +127,7 @@ export function Lights() {
       useGarageStudy.getState().refined;
     if (optics && !opticsMap.current) {
       const generator = new THREE.PMREMGenerator(gl);
-      opticsMap.current = createStudioEnvironment(generator, false, true);
+      opticsMap.current = createStudioEnvironment(generator, 'optics');
       generator.dispose();
     }
     scene.environment = studio

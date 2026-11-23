@@ -23,6 +23,7 @@ import { useAppStore } from '../store';
 import { useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { useRenderFinish } from './useRenderFinish';
+import { useMiataPaintReflection } from './studio/useMiataPaintReflection';
 import {
   autoFitToLength,
   prepareModelGlass,
@@ -90,6 +91,7 @@ export function Car() {
     return m;
   }, [underglowMat]);
   useRenderFinish(group, underglow);
+  useMiataPaintReflection();
   useEffect(() => {
     group.add(underglow);
     return () => {

@@ -95,6 +95,9 @@ describe('disposeModel', () => {
     const material = paint(0xff0000);
     material.map = new THREE.Texture(bitmap);
     material.normalMap = new THREE.Texture(bitmap);
+    const studio = new THREE.WebGLRenderTarget(8, 8);
+    material.envMap = studio.texture;
+    const studioDispose = vi.spyOn(studio.texture, 'dispose');
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const disposals = [geometry, material, material.map, material.normalMap].map((resource) =>
       vi.spyOn(resource, 'dispose'),
@@ -107,6 +110,8 @@ describe('disposeModel', () => {
 
     expect(bitmap.close).toHaveBeenCalledTimes(1);
     for (const dispose of disposals) expect(dispose).toHaveBeenCalledTimes(1);
+    expect(studioDispose).not.toHaveBeenCalled();
+    studio.dispose();
   });
 
   it('also releases ordinary texture sources when ImageBitmap is unavailable', () => {

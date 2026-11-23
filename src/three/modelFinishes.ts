@@ -1,4 +1,5 @@
 import { type Mesh, MeshPhysicalMaterial, MeshStandardMaterial, type Object3D } from 'three';
+import { MIATA_BODY_PAINT, MIATA_MODEL } from '../cars';
 import { F40_PAINT } from './openingStudio';
 
 const roadPaint: Record<string, string> = {
@@ -7,7 +8,6 @@ const roadPaint: Record<string, string> = {
   'datsun-s30-280z.glb': '280z_CarPaint',
   'bmw-e30-m3.glb': 'BMW_E30_M3_PAINT',
   'toyota-a80-supra.glb': 'TOYOTA_SUPRA_CAR_PAINT',
-  'mazda-mx5-na.glb': 'Material.002',
   'porsche-930-911-rwb.glb': 'M_Body',
   'bmw-g82-m4-adro.glb': 'untitledBMW_M4CompetitionG82TNR3_2021PaintTNR_Material_008',
 };
@@ -46,6 +46,7 @@ function prepareGlossPaint(
   coatRoughness: number,
   preserveSource: 'none' | 'coat' | 'both' = 'none',
   coatStrength = 1,
+  metalness?: number,
 ): void {
   const replacements = new Map<MeshStandardMaterial, MeshPhysicalMaterial>();
   model.traverse((object) => {
@@ -66,6 +67,7 @@ function prepareGlossPaint(
           ? Math.min(finish.clearcoatRoughness, coatRoughness)
           : coatRoughness;
       finish.clearcoat = coatStrength;
+      finish.metalness = metalness ?? finish.metalness;
       finish.needsUpdate = true;
       replacements.set(material, finish);
       return finish;
@@ -120,6 +122,8 @@ export function prepareModelFinish(model: Object3D, file: string): void {
       'none',
       F40_PAINT.coat,
     );
+  if (file === MIATA_MODEL)
+    return prepareGlossPaint(model, MIATA_BODY_PAINT, 0.27, 0.078, 'none', 0.96, 0.075);
   if (file === 'lamborghini-countach-5000qv.glb') return prepareCountachFinish(model);
   if (Object.hasOwn(roadPaint, file))
     return prepareGlossPaint(model, roadPaint[file], 0.24, 0.06, 'both');

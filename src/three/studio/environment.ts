@@ -2,11 +2,11 @@ import * as THREE from 'three';
 
 export function createStudioEnvironment(
   generator: THREE.PMREMGenerator,
-  blackout = false,
-  refined = false,
-  dusk = false,
+  preset: 'studio' | 'blackout' | 'optics' | 'dusk' | 'miata' = 'studio',
 ) {
   const studio = new THREE.Scene();
+  const refined = preset === 'optics';
+  const miata = preset === 'miata';
   studio.background = new THREE.Color(0.073, 0.065, 0.059);
   const luminousPanel = (
     size: [number, number],
@@ -35,14 +35,14 @@ export function createStudioEnvironment(
     [4.8, 2.38, 0.48],
     [0, 0.62, -0.16],
     new THREE.Color(1, 0.964, 0.918),
-    refined ? 5.7 : 10.6,
+    miata ? 4.4 : refined ? 5.7 : 10.6,
   );
   luminousPanel(
     [5.2, 2.12],
     [-3.25, 3.36, 6.05],
     [0, 0.48, 0],
     new THREE.Color(0.83, 0.89, 1),
-    refined ? 2.6 : 4.15,
+    miata ? 2.8 : refined ? 2.6 : 4.15,
   );
   luminousPanel([9.2, 3.6], [-6, 5.3, 2.4], [0, 0, 0], new THREE.Color(0.87, 0.92, 1), 1.05);
   luminousPanel(
@@ -84,7 +84,31 @@ export function createStudioEnvironment(
     );
   }
 
-  if (dusk) {
+  if (miata) {
+    luminousPanel(
+      [8.5, 0.72],
+      [-2.4, 4.72, -5.3],
+      [0, 0.64, 0.35],
+      new THREE.Color(1, 0.963, 0.912),
+      8.7,
+    );
+    luminousPanel(
+      [7.2, 0.5],
+      [4.55, 3.1, 0.42],
+      [0, 0.54, 0.06],
+      new THREE.Color(0.82, 0.94, 1),
+      5.8,
+    );
+    luminousPanel(
+      [5.8, 1.22],
+      [-0.25, 3.13, 5.96],
+      [0, 0.55, 0.07],
+      new THREE.Color(0.95, 0.97, 1),
+      5.4,
+    );
+  }
+
+  if (preset === 'dusk') {
     for (const item of [...studio.children]) {
       if (item instanceof THREE.Mesh) {
         studio.remove(item);
@@ -115,7 +139,7 @@ export function createStudioEnvironment(
       5.1,
     );
   }
-  if (blackout) {
+  if (preset === 'blackout') {
     for (const item of [...studio.children]) {
       if (item instanceof THREE.Mesh) {
         studio.remove(item);

@@ -36,8 +36,11 @@ export function disposeModel(obj: THREE.Object3D): void {
     }
   });
   for (const material of materials) {
-    for (const value of Object.values(material))
-      if (value && (value as THREE.Texture).isTexture) textures.add(value as THREE.Texture);
+    for (const value of Object.values(material)) {
+      const texture = value as THREE.Texture | undefined;
+      // Studio environment textures belong to their renderer's render target.
+      if (texture?.isTexture && !texture.isRenderTargetTexture) textures.add(texture);
+    }
     material.dispose();
   }
   for (const texture of textures) {

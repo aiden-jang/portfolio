@@ -8,6 +8,7 @@ const varying = 'varying vec4 vUv; varying vec3 vFloorPosition;';
 const roomUniforms = `
   uniform sampler2D studioConcrete;
   uniform float studioCarReady;
+  uniform float studioCarMirrorWeight;
   uniform float closingFloor;
   uniform float closingLight;
   uniform float studioDusk;
@@ -46,6 +47,7 @@ export function applyStudioReflection(
       },
       studioChassis: { value: new THREE.Vector4(0, 0, 1, 2) },
       studioCarReady: { value: 0 },
+      studioCarMirrorWeight: { value: 1 },
       closingFloor: { value: 0 },
       closingLight: { value: -1 },
       studioDusk: { value: 0 },
