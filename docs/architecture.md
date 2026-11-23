@@ -73,16 +73,14 @@ Selecting a car command reveals the showroom.
 Effects have their own lazy-loading boundary inside the canvas, so their download
 does not block mounting the scene or starting the model request. Rendering pauses
 in reading sections and resumes for the visible Contact car.
-`CameraRig` combines section poses, pointer offsets and intro motion. Manual orbit
-holds the chosen angle until Reset view; `carFraming` caches visible model bounds
-and increases distance when needed to fit a resized manual view without changing
-its angle. Hidden export planes do not participate in that framing. The opening
-sweep runs once when the first car loads. Dragging hands its current angle to
-manual orbit. Scrolling stops the sweep and blends its offset out by Featured
-work. Reset view returns to the settled angle. Reset appears outside the dock's layout so its arrival does not move the
-other controls. Share and randomization live in Garage controls alongside keyboard
-navigation. The primary dock keeps car selection, paint, lighting and available
-model-specific details. Film grain is static.
+`CameraRig` combines section poses, pointer offsets and intro motion. `carFraming`
+caches visible model bounds and fits a resized manual view without changing its
+angle. The cinematic camera loops once the selected car is ready. Dragging
+hands its current angle to manual orbit, and scrolling stops the loop for the
+handoff to Featured work. The Intro playback button pauses, resumes or restarts
+the loop. With reduced motion, it restores the default still view after manual
+adjustments. Garage controls include Reset camera view, sharing and randomization
+alongside keyboard navigation. Film grain is static.
 `carHitTest` raycasts only the loaded model, excluding hidden meshes. A tap on the
 car briefly boosts its existing lamps without camera shake or a floor-glow pulse;
 empty intro space does not trigger it. Cars without road lamps omit this response.

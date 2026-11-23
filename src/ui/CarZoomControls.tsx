@@ -1,7 +1,6 @@
 import { useAppStore } from '../store';
 import { CAR_ZOOM_MAX, CAR_ZOOM_MIN, CAR_ZOOM_STEP } from '../three/carZoom';
 import { ControlIcon } from './ControlIcon';
-import { CameraResetButton } from './CameraResetButton';
 
 export function CarZoomControls() {
   const zoom = useAppStore((state) => state.cameraZoom);
@@ -30,7 +29,6 @@ export function CarZoomControls() {
       >
         <ControlIcon name="zoom" />
       </button>
-      <CameraResetButton />
     </div>
   );
 }

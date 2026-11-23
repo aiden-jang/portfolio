@@ -67,16 +67,14 @@ for (const width of [1440, 390]) {
         .getByRole('button', { name: 'Garage controls', exact: true })
         .filter({ visible: true });
       const controlsPosition = await controls.boundingBox();
-      await expect(page.getByRole('button', { name: 'Reset view', exact: true })).toBeEnabled();
+      const reset = page.getByRole('button', { name: 'Restore default view' });
+      await expect(reset).toHaveCount(0);
       await page.mouse.move(8, 450);
       await page.mouse.down();
       await page.mouse.move(16, 490, { steps: 4 });
       await expect(page.locator('body')).toHaveClass(/orbiting/);
       await page.mouse.up();
       await expect(page.locator('body')).not.toHaveClass(/orbiting/);
-      const reset = page
-        .getByRole('button', { name: 'Reset view', exact: true })
-        .filter({ visible: true });
       await expect(reset).toBeVisible();
       if (width === 390) {
         for (const phoneWidth of [390, 320]) {
@@ -86,8 +84,8 @@ for (const width of [1440, 390]) {
           const zoom = (await page.locator('#mobile-bar .car-zoom-controls').boundingBox())!;
           expect(bounds.width).toBeGreaterThanOrEqual(44);
           expect(bounds.x + bounds.width).toBeLessThanOrEqual(layoutWidth);
-          expect(bounds.x).toBeGreaterThan(zoom.x);
-          expect(bounds.y).toBe(zoom.y);
+          expect(bounds.height).toBeGreaterThanOrEqual(44);
+          expect(bounds.y).toBeLessThan(zoom.y);
         }
         await page.setViewportSize({ width, height: 900 });
       }

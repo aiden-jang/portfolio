@@ -18,14 +18,19 @@
   width: 17px;
   height: 17px;
 }
-.opening-loop-control:hover {
+.opening-loop-control:enabled:hover {
   background: #222124;
+}
+.opening-loop-control:disabled {
+  opacity: 0.48;
+  cursor: default;
 }
 .opening-loop-control:focus-visible {
   outline: 2px solid #f3dec1;
   outline-offset: 3px;
 }
-body:not([data-car-controls='visible']) .opening-loop-control {
+body:not([data-car-controls='visible']) .opening-loop-control,
+.opening-loop-control[data-idle-reset]:not(:focus) {
   visibility: hidden;
   pointer-events: none;
 }

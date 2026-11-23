@@ -37,10 +37,10 @@ CI pins Ubuntu 24.04 to keep browser system dependencies stable across runner-im
 Control search leaves IME composition keys to the input. Enter executes a command
 only after text composition has finished; ordinary keyboard navigation remains available.
 
-Intro zoom uses the same bounded camera controls on desktop and phones. Reset restores
-both the angle and zoom; choosing another car restores its default zoom. Wheel and swipe
-gestures retain page scrolling. The zoom blends out as the page leaves Intro, keeping
-the Contact camera fixed.
+Intro zoom uses the same bounded controls on desktop and phones. Restarting the
+camera restores the default framing and zoom. Reduced motion restores a still
+view. Wheel and swipe gestures retain page scrolling, and zoom blends out as
+the page leaves Intro so Contact keeps its fixed camera.
 
 Project showcase checks exercise globe event links and retry, keyboard exit,
 recorded Iodine undo/replay, Bean feedback, the flower meaning and the iguess flow.
