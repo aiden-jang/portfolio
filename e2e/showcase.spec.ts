@@ -37,7 +37,19 @@ for (const width of [1440, 390]) {
     await room.locator('.bean-window').scrollIntoViewIfNeeded();
     await room.getByRole('button', { name: 'Pet Bean', exact: true }).click();
     await expect(room.getByRole('img', { name: /Bean’s room/ })).toBeVisible();
-    await expect(room.getByRole('status')).toHaveText('You pet Bean.');
+    await expect(room.getByRole('status')).toHaveText('Bean leans in and gives you a little mrrp.');
+    await room.getByRole('button', { name: 'Play with the toy mouse' }).press('Enter');
+    await expect(room.getByRole('status')).toHaveText(
+      'Bean crouches and pounces on the toy mouse.',
+    );
+    const box = room.getByRole('button', { name: 'Cardboard box' });
+    await box.click();
+    await expect(box).toHaveAttribute('aria-pressed', 'true');
+    await expect(room.getByRole('status')).toHaveText(
+      'Bean hides in the box, then peeks over the edge.',
+    );
+    await box.press('Enter');
+    await expect(box).toHaveAttribute('aria-pressed', 'false');
     await room.getByRole('button', { name: 'Sit together' }).click();
     await expect(room.getByRole('button', { name: 'Sit together' })).toHaveAttribute(
       'aria-pressed',

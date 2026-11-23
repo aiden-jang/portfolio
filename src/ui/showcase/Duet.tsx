@@ -62,16 +62,19 @@ export function Duet({
     observer.observe(canvas);
     measure();
     const seek = () => {
-      if (location.hash === '#project-mrrp' && getComputedStyle(stage).position === 'sticky') {
-        scrollTo({
-          top:
-            scrollY +
-            el.getBoundingClientRect().top -
-            parseFloat(getComputedStyle(stage).top) +
-            (el.offsetHeight - stage.offsetHeight) * 0.7,
-          behavior: 'instant',
-        });
+      if (location.hash !== '#project-mrrp') return;
+      if (getComputedStyle(stage).position !== 'sticky') {
+        room.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
+        return;
       }
+      scrollTo({
+        top:
+          scrollY +
+          el.getBoundingClientRect().top -
+          parseFloat(getComputedStyle(stage).top) +
+          (el.offsetHeight - stage.offsetHeight) * 0.7,
+        behavior: 'instant',
+      });
     };
     const initial = requestAnimationFrame(seek);
     addEventListener('hashchange', seek);

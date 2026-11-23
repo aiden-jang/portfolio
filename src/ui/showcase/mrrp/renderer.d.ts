@@ -1,8 +1,23 @@
 import type { ComponentType } from 'react';
 
+export type RoomAction = 'welcome' | 'pet' | 'mouse' | 'box' | 'sit';
+export type RoomPositions = {
+  center: number;
+  bean: [number, number];
+  mouse: [number, number];
+  box: [number, number];
+};
+
 export const Cat: ComponentType<{
   label: string;
-  look: { name: string; fur: string; furDk: string; belly: string; eyes: string; tabby: boolean };
+  look: {
+    name: string;
+    fur: string;
+    furDk: string;
+    belly: string;
+    eyes: string;
+    tabby: boolean;
+  };
   clock: { tz: string; homeHour: number };
   mood: null;
   nudge: number;
@@ -15,4 +30,8 @@ export const Cat: ComponentType<{
   staying: boolean;
   satWith: boolean;
   spot: number | null;
+  roomPlay: {
+    action: { kind: RoomAction; count: number } | null;
+    onPositions: (points: RoomPositions) => void;
+  };
 }>;

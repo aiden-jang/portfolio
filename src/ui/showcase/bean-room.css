@@ -1,4 +1,6 @@
 .bean-room {
+  --bean-cream: #fff3df;
+  --bean-ink: #392b29;
   display: grid;
   justify-items: center;
 }
@@ -83,4 +85,83 @@ html:root .bean-room-canvas canvas {
   .bean-room-controls button {
     transition: none;
   }
+}
+
+.bean-hotspots {
+  position: absolute;
+  left: var(--camera-x, 0);
+  top: var(--camera-y, 0);
+  width: var(--camera-w, 100%);
+  height: var(--camera-h, 100%);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.bean-hotspots[data-positioned] {
+  visibility: visible;
+}
+
+.bean-target {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: clamp(44px, 5.7vw, 86px);
+  height: clamp(44px, 5.7vw, 86px);
+  translate: -50% -50%;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+
+.bean-target[data-object='bean'] {
+  left: var(--bean-x);
+  top: var(--bean-y);
+  width: clamp(66px, 10vw, 128px);
+  height: clamp(68px, 10vw, 128px);
+}
+
+.bean-target[data-object='mouse'] {
+  left: var(--mouse-x);
+  top: var(--mouse-y);
+}
+
+.bean-target[data-object='box'] {
+  left: var(--box-x);
+  top: var(--box-y);
+}
+
+.bean-target span {
+  position: absolute;
+  top: calc(100% + 4px);
+  width: max-content;
+  padding: 5px 8px;
+  background: var(--bean-ink);
+  color: var(--bean-cream);
+  box-shadow: 0 2px 0 #281b1acc;
+  border: 1px solid #eca9818c;
+  border-radius: 3px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+html:root .bean-room .bean-target:focus-visible {
+  outline: 2px dashed var(--bean-cream);
+  outline-offset: 2px;
+}
+
+.bean-target:focus-visible span {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .bean-target:hover span {
+    opacity: 1;
+  }
+}
+
+#project-mrrp {
+  scroll-margin-top: var(--portfolio-header-height);
 }

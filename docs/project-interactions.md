@@ -59,11 +59,16 @@ a fresh approval request. The case study keeps the recorded snapshot, Undo and R
 editable-state link and clickable file reference. Its scope control switches between the
 recorded decisions for the approved folder and a folder outside it.
 
-The mrrp scene uses Bean’s native room canvas with controls to pet Bean, sit together
-and switch the lighting. The room also changes light as the visitor scrolls. The
-renderer loads near the viewport and releases its canvas offscreen. The portfolio room is silent and uses local examples. To rebuild the checked-in
+The mrrp scene uses Bean’s native room canvas. Visitors can pet Bean, play with her toy
+mouse, and invite her into the cardboard box using the room itself or keyboard controls.
+Sit together and Morning light stay available below the room. The initial light warms
+the room at golden hour, then changes as visitors scroll through the scene.
+
+The canvas loads near the viewport and unmounts when it leaves. Reduced motion uses
+still reactions. The room is silent and uses local examples. To rebuild the checked-in
 renderer, run `node scripts/vendor-mrrp.mjs /path/to/mrrp` with a clean checkout of
 [the pinned revision](https://github.com/aiden-jang/mrrp/tree/23fb567d2a430db8eda47ff4011abccd8030ae5a).
+The script applies the [room patch](../scripts/patches/mrrp-room.patch) to a temporary copy.
 The original [MIT license](../public/projects/mrrp-license.txt) ships with the renderer.
 
 Scroll through iguess to draw one recorded round, reveal the guess and see the answer.
