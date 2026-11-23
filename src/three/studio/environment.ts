@@ -63,12 +63,21 @@ export function createStudioEnvironment(
     new THREE.Color(1, 0.92, 0.81),
     2.2,
   );
+  if (preset === 'studio') {
+    luminousPanel(
+      [0.2, 2.65],
+      [5.85, 1.48, -2.7],
+      [0, 0.61, 0],
+      new THREE.Color(1, 0.85, 0.69),
+      8.2,
+    );
+  }
   if (lowLight) {
     luminousPanel(
       [0.26, 3.3],
       [5.85, 1.87, -2.7],
       [0, 0.61, 0],
-      new THREE.Color(1, 0.88, 0.71),
+      new THREE.Color(0.42, 0.72, 1),
       17.8,
     );
     luminousPanel(

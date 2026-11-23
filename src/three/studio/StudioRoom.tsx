@@ -85,8 +85,9 @@ const photoWallFragment = /* glsl */ `
       vec2(studioLightBarX-.12,1.62),vec2(3.3,1.54)) * exp(-abs(room.z)*.49);
     float bounce = roomGlow(room.xz,vec2(-6.25,9.2),vec2(6.15,7.1))
       * exp(-pow((room.y-1.34)*.48,2.));
-    vec3 finish = vec3(.0088,.0080,.0071) + vec3(.023,.021,.019)*spill
-      + vec3(.017,.014,.011)*softBounce + vec3(.031,.028,.025)*bounce;
+    vec3 finish = vec3(.0088,.0080,.0071) + reflectedAccent(vec3(.023,.021,.019),.74)*spill
+      + reflectedAccent(vec3(.017,.014,.011),.8)*softBounce
+      + reflectedAccent(vec3(.031,.028,.025),.62)*bounce;
     vec3 wall = finish * floorJoin * panel * (ceiling ? .59 : 1.);
     float toCorner = room.x - studioLightBarX;
     if (frontWall) {
@@ -121,7 +122,7 @@ const photoWallFragment = /* glsl */ `
         wall *= .79;
       }
       float transfer = frontWall ? .047*frontBounce : .223*returnGraze;
-      wall += cornerLightTint()*transfer*heightProfile*relief*grazingRelief;
+      wall += cornerLightTint()*transfer*(1.+.33*studioBarBlue)*heightProfile*relief*grazingRelief;
     }
 
     if (corner) {
@@ -140,12 +141,12 @@ const photoWallFragment = /* glsl */ `
       vec3 channel = mix(vec3(.013,.011,.009),vec3(.019,.016,.012),liner);
       wall = mix(wall*.81,channel,trim*.83);
       wall = mix(wall,vec3(.011,.010,.009),max(0.,capMask-trim)*.82);
-      wall += core*vec3(1.39,1.20,.98);
+      wall += core*mix(vec3(1.38,1.22,1.02),vec3(.54,1.07,1.76),studioBarBlue);
     }
     if (!ceiling && !corner) {
       float wash = backdropWash(worldWallPoint);
       float bottomBounce = .28 + .72*smoothstep(0., .37, room.y);
-      wall += vec3(.169,.150,.127)*wash*bottomBounce*panel*relief*grazingRelief;
+      wall += reflectedAccent(vec3(.169,.150,.127),.89)*wash*bottomBounce*panel*relief*grazingRelief;
     }
     wall *= corner ? mix(1.,0.79,roomDim) : mix(1.,0.27,roomDim);
     float duskWash = exp(-pow((room.x-studioLightBarX+1.6)/2.9,2.))*(1.-smoothstep(.40,3.7,room.y));
@@ -166,12 +167,16 @@ export function StudioRoom() {
     const { active, study, chapter } = useGarageStudio.getState();
     const dusk = inStudioDusk({ active, chapter });
     studioDusk.value += (Number(dusk) - studioDusk.value) * Math.min(dt * 12, 1);
+    const coolBar =
+      !active && !useLineup.getState().active && isOpeningLowLight(useAppStore.getState());
+    const bar = room.uniforms.studioBarBlue;
+    bar.value = THREE.MathUtils.lerp(bar.value, Number(coolBar), Math.min(1, dt * 9));
     const dim = inBlackout()
       ? 1
       : active && (study === 'shadows' || study === 'reflection')
         ? 0.94
-        : !active && !useLineup.getState().active && isOpeningLowLight(useAppStore.getState())
-          ? 0.69
+        : coolBar
+          ? 0.64
           : 0;
     roomDim.value = THREE.MathUtils.lerp(roomDim.value, dim, Math.min(1, dt * 12));
   });

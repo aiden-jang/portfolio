@@ -9,6 +9,7 @@ export const photoProjectionGlsl = /* glsl */ `
   uniform float studioPhotoFitX;
   uniform mat4 studioRoomBasis;
   uniform float studioLightBarX;
+  uniform float studioBarBlue;
 
   vec3 roomPoint(vec3 worldPoint) {
     return (studioRoomBasis * vec4(worldPoint,1.)).xyz;
@@ -55,7 +56,12 @@ export const photoProjectionGlsl = /* glsl */ `
   }
 
   vec3 cornerLightTint() {
-    return vec3(1.,.73,.50);
+    return mix(vec3(1.,.80,.62),vec3(.34,.70,1.04),studioBarBlue);
+  }
+
+  vec3 reflectedAccent(vec3 warm, float amount) {
+    vec3 ice = vec3(.54,.87,1.35) * dot(warm,vec3(.2126,.7152,.0722));
+    return mix(warm,ice,studioBarBlue*amount);
   }
 
   float lightBarFloorWash(vec2 floorPosition) {
@@ -141,6 +147,7 @@ function createStudioProjection(mobile: boolean) {
     studioPhotoFitX: { value: 1 },
     studioRoomBasis: { value: inverse },
     studioLightBarX: { value: 0 },
+    studioBarBlue: { value: 0 },
   };
 
   function roomFraming(viewportAspect: number) {

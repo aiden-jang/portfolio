@@ -3,21 +3,18 @@ import { useEffect, useRef, type RefObject } from 'react';
 export function useTimedScene(
   subject: RefObject<HTMLElement | null>,
   draw: (progress: number) => void,
-  {
-    enabled = true,
-    duration,
-    replay = 0,
-  }: { enabled?: boolean; duration: number; replay?: number },
+  { enabled = true, duration, hold = 0 }: { enabled?: boolean; duration: number; hold?: number },
 ) {
-  const clock = useRef({ replay, elapsed: 0, started: false });
+  const clock = useRef({ elapsed: 0, remainingHold: hold, started: false });
 
   useEffect(() => {
     const node = subject.current;
     if (!node || !enabled) return;
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
-    if (clock.current.replay !== replay) clock.current = { replay, elapsed: 0, started: false };
     const timeline = clock.current;
     let frame = 0;
+    let timer = 0;
+    let holdStarted = 0;
     let previous: number | undefined;
     let visible = false;
 
@@ -32,18 +29,37 @@ export function useTimedScene(
       schedule();
     }
 
+    function stop() {
+      cancelAnimationFrame(frame);
+      if (timer) {
+        clearTimeout(timer);
+        timeline.remainingHold = Math.max(
+          0,
+          timeline.remainingHold - (performance.now() - holdStarted),
+        );
+      }
+      timer = 0;
+      frame = 0;
+      previous = undefined;
+    }
+
     function schedule() {
-      const running =
-        visible &&
-        timeline.started &&
-        !document.hidden &&
-        !preference.matches &&
-        timeline.elapsed < duration;
-      if (running && !frame) frame = requestAnimationFrame(render);
+      const running = visible && timeline.started && !document.hidden && !preference.matches;
       if (!running) {
-        cancelAnimationFrame(frame);
-        frame = 0;
+        stop();
+      } else if (timeline.elapsed < duration && !frame) {
+        frame = requestAnimationFrame(render);
+      } else if (timeline.elapsed >= duration && hold > 0 && !timer) {
         previous = undefined;
+        holdStarted = performance.now();
+        timer = window.setTimeout(() => {
+          timer = 0;
+          if (!visible || document.hidden || preference.matches) return;
+          timeline.elapsed = 0;
+          timeline.remainingHold = hold;
+          draw(0);
+          schedule();
+        }, timeline.remainingHold);
       }
     }
 
@@ -57,21 +73,23 @@ export function useTimedScene(
     );
 
     const preferenceChanged = () => {
-      if (!preference.matches && timeline.elapsed < duration) {
+      if (hold > 0) draw(preference.matches ? 1 : timeline.elapsed / duration);
+      if (!preference.matches && (timeline.elapsed < duration || hold > 0)) {
         observer.unobserve(node);
         observer.observe(node);
       }
       schedule();
     };
     if (!preference.matches) draw(timeline.elapsed / duration);
+    else if (hold > 0) draw(1);
     observer.observe(node);
     preference.addEventListener('change', preferenceChanged);
     document.addEventListener('visibilitychange', schedule);
     return () => {
       observer.disconnect();
-      cancelAnimationFrame(frame);
+      stop();
       preference.removeEventListener('change', preferenceChanged);
       document.removeEventListener('visibilitychange', schedule);
     };
-  }, [subject, draw, enabled, duration, replay]);
+  }, [subject, draw, enabled, duration, hold]);
 }

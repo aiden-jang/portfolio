@@ -44,7 +44,10 @@ for (const width of [1440, 390]) {
     await place('#project-iodine .recovery', 0.22);
     const parkedEditor = await page.evaluate(() => scrollY);
     await expect(recovery).toHaveText('File restored');
+    await expect(iodine.getByRole('button', { name: /^(Undo|Replay) edit$/ })).toHaveCount(0);
     expect(await page.evaluate(() => scrollY)).toBe(parkedEditor);
+    await expect(recovery).toHaveText('Agent edit');
+    await expect(recovery).toHaveText('File restored');
 
     const batch = page.locator('.batching-spread');
     await seekScene('.batch-lane', 0.25);
@@ -75,10 +78,11 @@ for (const width of [1440, 390]) {
         Math.abs(el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).top)),
       ),
     ).toBeLessThan(2);
-    await seekScene('.duet', 0.3);
-    await expect(drawing.getByRole('status')).toContainText('A rocket');
-    await seekScene('.duet', 0.1);
+    const parkedDrawing = await page.evaluate(() => scrollY);
     await expect(drawing.getByRole('status')).toHaveText('What is it?');
+    await expect(drawing.getByRole('status')).toContainText('A rocket');
+    await expect(drawing.getByRole('status')).toHaveText('Guitar');
+    expect(await page.evaluate(() => scrollY)).toBe(parkedDrawing);
     const room = page.locator('#project-mrrp .bean-window');
     await seekScene('.duet', 0.94);
     await expect(room).toHaveAttribute('data-light', 'morning');
@@ -178,12 +182,9 @@ for (const width of [1440, 390]) {
     await expect(slider).toHaveAttribute('aria-valuetext', 'Paint');
     await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');
 
-    await expect(recovery).toHaveText('File restored');
     await place('#project-iodine .recovery', 0.22);
-    await iodine.getByRole('button', { name: 'Replay edit', exact: true }).click();
-    await expect(recovery).toHaveText('Agent edit');
-    await iodine.getByRole('button', { name: 'Undo edit', exact: true }).click();
     await expect(recovery).toHaveText('File restored');
+    await expect(iodine.getByRole('button', { name: 'Replay edit', exact: true })).toHaveCount(0);
     await expect(garden.locator('.bloom-garden-plant img').first()).toHaveCSS('clip-path', 'none');
     await expect(drawing.getByRole('status')).toHaveText('Guitar');
   });

@@ -11,7 +11,7 @@ export function WorthRanking({ onUnavailable }: { onUnavailable: () => void }) {
     node.style.setProperty('--rank-progress', String(easedProgress(progress, 0.24, 0.73)));
     node.style.setProperty('--verdict-progress', String(easedProgress(progress, 0.7, 0.92)));
   }, []);
-  useTimedScene(panel, draw, { duration: 2200 });
+  useTimedScene(panel, draw, { duration: 1980, hold: 3600 });
 
   return (
     <span ref={panel} className="worth-focus worth-ranking" aria-hidden="true">

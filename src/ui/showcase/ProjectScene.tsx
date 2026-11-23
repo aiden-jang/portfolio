@@ -1,24 +1,16 @@
-import { useCallback, useEffect, useRef, type ReactNode } from 'react';
-import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { easedProgress } from '../../hooks/useScrollStudy';
+import { useTimedScene } from '../../hooks/useTimedScene';
 import './project-scene.css';
 import './dinner-scene.css';
 
-function settleDinner(progress: number) {
-  if (progress < 0.24) return 0;
-  if (progress < 0.55) return 0.47;
-  return 1;
-}
-
 function presentScene(stage: HTMLElement, progress: number) {
-  if (stage.id === 'project-wherever') {
-    stage.dataset.dinnerState = progress >= 0.56 ? 'bill' : progress >= 0.32 ? 'match' : 'vote';
-    stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
-    stage.style.setProperty('--vote-swipe', String(easedProgress(progress, 0.09, 0.31)));
-    stage.style.setProperty('--vote-match', String(easedProgress(progress, 0.24, 0.43)));
-    stage.style.setProperty('--bill-arrival', String(easedProgress(progress, 0.55, 0.9)));
-  }
+  stage.dataset.dinnerState = progress >= 0.56 ? 'bill' : progress >= 0.32 ? 'match' : 'vote';
+  stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
+  stage.style.setProperty('--vote-swipe', String(easedProgress(progress, 0.09, 0.31)));
+  stage.style.setProperty('--vote-match', String(easedProgress(progress, 0.24, 0.43)));
+  stage.style.setProperty('--bill-arrival', String(easedProgress(progress, 0.55, 0.9)));
   stage.dataset.sceneProgress = progress.toFixed(3);
-  stage.dispatchEvent(new CustomEvent('project-scene-progress', { detail: progress }));
 }
 
 export function ProjectScene({
@@ -35,27 +27,50 @@ export function ProjectScene({
   children: ReactNode;
 }) {
   const scene = useRef<HTMLElement>(null);
-  const manual = useRef<{ y: number; phase: number } | null>(null);
-  const draw = useCallback((stage: HTMLElement, progress: number) => {
-    const pick = manual.current;
-    if (pick && Math.abs(scrollY - pick.y) > 26) manual.current = null;
-    presentScene(stage, manual.current?.phase ?? progress);
+  const body = useRef<HTMLDivElement>(null);
+  const manual = useRef(0);
+  const [actionFocused, setActionFocused] = useState(false);
+  const draw = useCallback((progress: number) => {
+    if (!scene.current) return;
+    const compact = matchMedia('(height < 610px)').matches;
+    presentScene(scene.current, compact ? 1 : Math.max(manual.current, progress));
   }, []);
-  useScrollStudy(scene, theme === 'dinner', draw, settleDinner);
+  useTimedScene(body, draw, { enabled: theme === 'dinner' && !actionFocused, duration: 5080 });
   useEffect(() => {
     const stage = scene.current;
     if (!stage || theme !== 'dinner') return;
+    const preference = matchMedia('(prefers-reduced-motion: reduce), (height < 610px)');
+    const settle = () => {
+      if (preference.matches) presentScene(stage, 1);
+    };
     const select = (event: Event) => {
       const phase = (event as CustomEvent<number>).detail;
-      manual.current = { y: scrollY, phase };
-      presentScene(stage, phase);
+      manual.current = Math.max(manual.current, phase);
+      presentScene(stage, manual.current);
     };
+    settle();
+    preference.addEventListener('change', settle);
     stage.addEventListener('dinner-preview-step', select);
-    return () => stage.removeEventListener('dinner-preview-step', select);
+    return () => {
+      preference.removeEventListener('change', settle);
+      stage.removeEventListener('dinner-preview-step', select);
+    };
   }, [theme]);
   return (
     <article ref={scene} id={id} className={`project-scene project-scene-${theme}`}>
-      <div className="project-scene-body" data-study-pin>
+      <div
+        className="project-scene-body"
+        ref={body}
+        data-study-pin
+        onFocus={(event) => setActionFocused(!!event.target.closest('.dinner-ticket button'))}
+        onBlur={(event) => {
+          if (!(
+            event.relatedTarget instanceof Element &&
+            event.relatedTarget.closest('.dinner-ticket button')
+          ))
+            setActionFocused(false);
+        }}
+      >
         <header className="project-scene-heading">
           <h3>{title}</h3>
           {links && <div className="project-scene-links">{links}</div>}
@@ -70,8 +85,8 @@ function DinnerTicket() {
   const choose = (event: React.MouseEvent<HTMLButtonElement>, phase: number) => {
     const stage = event.currentTarget.closest('article');
     stage?.dispatchEvent(new CustomEvent('dinner-preview-step', { detail: phase }));
-    const target = stage?.querySelector<HTMLButtonElement>(
-      phase === 1 ? '.dinner-replay' : '.dinner-split',
+    const target = stage?.querySelector<HTMLElement>(
+      phase === 1 ? '.dinner-title-bill a' : '.dinner-split',
     );
     target?.focus({ preventScroll: true });
   };
@@ -124,6 +139,7 @@ export function DinnerScene() {
     const animated = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 610px)');
     const seekSecond = () => {
       if (location.hash !== '#project-owewell') return;
+      section.dispatchEvent(new CustomEvent('dinner-preview-step', { detail: 1 }));
       if (!animated.matches) {
         stage
           .querySelector('#project-owewell')
@@ -180,19 +196,6 @@ export function DinnerScene() {
             <strong>$24.00</strong>
           </div>
         </div>
-        <button
-          type="button"
-          className="dinner-replay"
-          onClick={(event) => {
-            const stage = event.currentTarget.closest('article');
-            stage?.dispatchEvent(new CustomEvent('dinner-preview-step', { detail: 0 }));
-            stage
-              ?.querySelector<HTMLButtonElement>('.dinner-ticket-actions button')
-              ?.focus({ preventScroll: true });
-          }}
-        >
-          Replay dinner
-        </button>
       </div>
     </div>
   );

@@ -41,8 +41,7 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   display: inline;
 }
 #project-wherever:not([data-dinner-state='match']) .dinner-ticket-match,
-#project-wherever:not([data-dinner-state='vote']) .dinner-ticket-vote,
-#project-wherever:not([data-dinner-state='bill']) .dinner-replay {
+#project-wherever:not([data-dinner-state='vote']) .dinner-ticket-vote {
   visibility: hidden;
 }
 #project-wherever[data-dinner-state='bill'] .dinner-ticket-match {
@@ -67,15 +66,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   outline: 2px solid #263a2a;
   outline-offset: 3px;
 }
-.dinner-replay {
-  min-height: 44px;
-  width: 100%;
-  color: #f6eadc;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  font: 500 13px/1.3 var(--font-display);
-  text-align: right;
-}
 @media (prefers-reduced-motion: reduce), (max-height: 609px) {
   #project-wherever[data-dinner-state] .dinner-title-vote,
   #project-wherever[data-dinner-state] .dinner-title-bill {
@@ -84,8 +74,7 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   #project-wherever h3 .dinner-title-bill::before {
     content: ' / ';
   }
-  #project-wherever .dinner-split,
-  #project-wherever .dinner-replay {
+  #project-wherever .dinner-split {
     display: none;
   }
   #project-wherever .dinner-ticket-match {

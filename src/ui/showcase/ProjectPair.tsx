@@ -125,9 +125,6 @@ export function ProjectPair({ name }: { name: keyof typeof evidence }) {
         {!isWherever && (
           <figcaption className="preview-sequence-caption">
             <p aria-live="polite">{current.caption}</p>
-            <button type="button" onClick={() => setStep(step === 0 ? 1 : 0)}>
-              {step === 0 ? 'Open worth' : 'Replay'} <ControlIcon name="arrow" />
-            </button>
           </figcaption>
         )}
       </figure>

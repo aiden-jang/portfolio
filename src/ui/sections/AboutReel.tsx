@@ -17,7 +17,7 @@ const labels = {
   loading: 'Loading reel',
   playing: 'Pause reel',
   paused: 'Resume reel',
-  ended: 'Replay reel',
+  ended: 'Play reel',
   error: 'Retry reel',
 };
 

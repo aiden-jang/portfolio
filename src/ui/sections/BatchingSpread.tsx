@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
-import { prefersReducedMotion } from '../../hooks/reducedMotion';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
-import { ControlIcon } from '../ControlIcon';
 import './batching-spread.css';
 
 const replayDuration = 960;
@@ -15,16 +13,13 @@ function relayBatchProgress(stage: HTMLElement, progress: number) {
 }
 
 export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
-  const [phase, setPhase] = useState<'before' | 'running' | 'after'>('before');
+  const [phase, setPhase] = useState<'before' | 'after'>('before');
   const figure = useRef<HTMLElement>(null);
-  const manual = useRef<{ scrollY: number; until: number } | null>(null);
+  const manual = useRef<number | null>(null);
   useScrollStudy(lane, true, relayBatchProgress);
 
   function show(next: typeof phase) {
-    manual.current = {
-      scrollY: window.scrollY,
-      until: next === 'running' ? performance.now() + replayDuration : 0,
-    };
+    manual.current = window.scrollY;
     if (figure.current) figure.current.dataset.driver = 'controls';
     setPhase(next);
   }
@@ -41,12 +36,8 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       }
       const p = (event as CustomEvent<number>).detail;
       const override = manual.current;
-      if (override) {
-        if (performance.now() < override.until) {
-          override.scrollY = window.scrollY;
-          return;
-        }
-        if (Math.abs(window.scrollY - override.scrollY) < 18) return;
+      if (override !== null) {
+        if (Math.abs(window.scrollY - override) < 18) return;
         manual.current = null;
       }
       const progress = Math.min(1, p / 0.72);
@@ -60,12 +51,6 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
     stage.addEventListener('batch-preview-progress', update);
     return () => stage.removeEventListener('batch-preview-progress', update);
   }, [lane]);
-
-  useEffect(() => {
-    if (phase !== 'running') return;
-    const timer = window.setTimeout(() => setPhase('after'), replayDuration);
-    return () => window.clearTimeout(timer);
-  }, [phase]);
 
   const after = phase === 'after';
   return (
@@ -110,17 +95,6 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
             After
           </button>
         </div>
-        <button
-          type="button"
-          className="batching-play"
-          aria-disabled={phase === 'running'}
-          onClick={() => {
-            if (phase !== 'running') show(prefersReducedMotion() ? 'after' : 'running');
-          }}
-        >
-          <ControlIcon name="play" />
-          {phase === 'running' ? 'Batching…' : 'Replay batching'}
-        </button>
       </div>
       <figcaption className="sr-only" aria-live="polite">
         {after

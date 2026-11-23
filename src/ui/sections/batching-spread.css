@@ -68,18 +68,8 @@
   outline: 2px solid #d6ecdf;
   outline-offset: 2px;
 }
-.batching-play {
-  display: flex;
-  gap: 7px;
-  align-items: center;
-  border: 1px solid #4c6657;
-}
-.batching-play svg {
-  width: 15px;
-}
 @media (prefers-reduced-motion: no-preference) {
-  .batching-spread[data-driver='scroll'] .batching-marks,
-  .batching-spread[data-phase='running'] .batching-marks {
+  .batching-spread[data-driver='scroll'] .batching-marks {
     opacity: 1;
   }
   .batching-spread[data-driver='scroll'] .batching-marks rect {
@@ -87,12 +77,6 @@
   }
   .batching-spread[data-driver='scroll'] .batching-packet {
     animation: batch-unify 960ms calc(0ms - var(--batch-scroll-time)) both paused;
-  }
-  .batching-spread[data-phase='running'] .batching-marks rect {
-    animation: batch-converge 960ms both;
-  }
-  .batching-spread[data-phase='running'] .batching-packet {
-    animation: batch-unify 960ms both;
   }
 }
 @keyframes batch-converge {
@@ -121,5 +105,11 @@
   100% {
     opacity: 1;
     transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 700px) {
+  .batching-controls {
+    display: none;
   }
 }

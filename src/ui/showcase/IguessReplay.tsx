@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { easedProgress } from '../../hooks/useScrollStudy';
+import { useTimedScene } from '../../hooks/useTimedScene';
 import round from './iguess-round.json';
 import './iguess-replay.css';
 
@@ -37,30 +38,25 @@ function paint(canvas: HTMLCanvasElement, visible: number) {
   }
 }
 
-export function IguessReplay() {
+export function IguessReplay({ active }: { active: boolean }) {
   const demo = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [result, setResult] = useState('');
 
-  useEffect(() => {
+  const cache = useRef({ drawn: -1, label: '' });
+  const draw = useCallback((progress: number) => {
     const element = canvas.current;
-    const scene = demo.current?.closest('article');
-    if (!scene || !element) return;
-    let drawn = -1;
-    let label = '';
-    const draw = (progress: number) => {
-      const visible = Math.round(pointCount * (0.085 + 0.915 * easedProgress(progress, 0, 0.59)));
-      if (drawn !== visible) paint(element, visible);
-      drawn = visible;
-      const next = progress > 0.77 ? answer : progress >= 0.27 ? guess : 'What is it?';
-      if (next !== label) setResult(next);
-      label = next;
-    };
-    const update = (event: Event) => draw((event as CustomEvent<number>).detail);
-    draw(Number(scene.dataset.sceneProgress ?? 0));
-    scene.addEventListener('project-scene-progress', update);
-    return () => scene.removeEventListener('project-scene-progress', update);
+    if (!element) return;
+    const visible = Math.round(pointCount * (0.085 + 0.915 * easedProgress(progress, 0, 0.59)));
+    if (cache.current.drawn !== visible) paint(element, visible);
+    cache.current.drawn = visible;
+    const next = progress > 0.77 ? answer : progress >= 0.27 ? guess : 'What is it?';
+    if (next !== cache.current.label) {
+      cache.current.label = next;
+      setResult(next);
+    }
   }, []);
+  useTimedScene(demo, draw, { enabled: active, duration: 3040, hold: 3400 });
 
   return (
     <figure ref={demo} className="iguess-replay" aria-label="Recorded iguess drawing round">
@@ -69,7 +65,7 @@ export function IguessReplay() {
         <small>
           {result === answer ? 'Answer' : result === guess ? 'AI guess' : 'Draw & guess'}
         </small>
-        <span className="iguess-replay-result" role="status">
+        <span className="iguess-replay-result" role="status" aria-live="off">
           {result === guess ? (
             <>
               <span>“A rocket.”</span>

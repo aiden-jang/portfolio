@@ -39,11 +39,11 @@
       float lightWash = lightBarFloorWash(room.xz);
       float diffuseReturn = roomGlow(room.xz,vec2(-6.25,9.2),vec2(6.15,7.1));
       vec3 neutral = vec3(.0062,.0058,.0054) + vec3(.018,.016,.014) * carArea;
-      vec3 litMaterial = neutral + vec3(.014,.0115,.0095) * broadSpill
-        + vec3(.0125,.011,.010) * diffuseReturn;
+      vec3 litMaterial = neutral + reflectedAccent(vec3(.014,.0115,.0095),.78) * broadSpill
+        + reflectedAccent(vec3(.0125,.011,.010),.62) * diffuseReturn;
       float topcoat = clamp(1. + (coarse-.0771)*4.6,.91,1.10);
       float floorDarkening = .85 + .15*(1.-smoothstep(5.,17.,radius));
-      vec3 litConcrete = litMaterial + cornerLightTint() * .193 * lightWash;
+      vec3 litConcrete = litMaterial + cornerLightTint() * mix(.193,.230,studioBarBlue) * lightWash;
       // The camera sees more of the sheen when its view grazes the cured concrete.
       vec3 toEye = normalize(cameraPosition - vFloorPosition);
       float grazing = 1.-smoothstep(.10,.49,max(0.,toEye.y));
@@ -53,7 +53,7 @@
       vec2 streakShape = vec2((softboxAcross+.07*softboxAlong)/.94,softboxAlong/3.48);
       float grazingStreak = exp(-dot(streakShape,streakShape));
       float spillSheen = grazingStreak*(.23+.77*grazing)*mix(.72,1.16,relief);
-      litConcrete += vec3(.036,.033,.029)*spillSheen;
+      litConcrete += reflectedAccent(vec3(.036,.033,.029),.82)*spillSheen;
       vec3 floorTone = litConcrete * relief * topcoat * floorDarkening;
       float frontJoint = exp(-abs(room.z)*6.6) * (1.-smoothstep(studioLightBarX-.03,studioLightBarX+.24,room.x));
       float sideJoint = exp(-abs(room.x-studioLightBarX)*6.6) * smoothstep(0.,.14,room.z);
@@ -110,7 +110,7 @@
       float cutLip = exp(-pow((cutPosition-.028)*67.,2.))*localCut;
       floorTone *= 1.-groove*.28+cutLip*.10;
       floorTone *= mix(1., .30, garageStudioDim);
-      floorTone += cornerLightTint() * .045 * reflectedBar * garageStudioDim;
+      floorTone += cornerLightTint() * mix(.045,.072,studioBarBlue) * reflectedBar * garageStudioDim;
       vec2 lampDist = vec2((abs(ground.x) - .64)/.52,(ground.y - 3.22)/1.25);
       float pools = exp(-dot(lampDist,lampDist)) * smoothstep(1.95,2.39,ground.y);
       floorTone += vec3(.072,.064,.047) * garageStudioLamps * pools * relief;

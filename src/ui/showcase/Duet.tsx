@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import { BeanRoom } from './BeanRoom';
 import { IguessReplay } from './IguessReplay';
@@ -22,12 +22,12 @@ export function Duet({
   const drawing = useRef<HTMLElement>(null);
   const room = useRef<HTMLElement>(null);
   const circle = useRef({ r: 0 });
+  const [drawingActive, setDrawingActive] = useState(true);
   const paint = useCallback((laneElement: HTMLElement, t: number) => {
     if (!room.current || !drawing.current || !pin.current) return;
     laneElement.dataset.duetProgress = String(t);
     const animated = getComputedStyle(pin.current).position === 'sticky';
     const reveal = animated ? easedProgress(t, 0.53, 0.69) : 1;
-    const draw = animated ? Math.min(1, t / 0.48) : 1;
     const light = animated ? Math.min(1, Math.max(0, (t - 0.69) / 0.31)) : 1;
     const { r: radius } = circle.current;
     room.current.style.setProperty('--iris', reveal * radius + 'px');
@@ -35,15 +35,14 @@ export function Duet({
       '--close',
       String(animated ? 1 - easedProgress(t, 0.67, 0.87) : 0),
     );
-    drawing.current.inert = animated && reveal > 0.8;
-    room.current.inert = animated && reveal < 0.8;
-    for (const [stage, p] of [
-      [drawing.current, draw],
-      [room.current, light],
-    ] as const) {
-      stage.dataset.sceneProgress = String(p);
-      stage.dispatchEvent(new CustomEvent('project-scene-progress', { detail: p }));
+    const covered = animated && reveal > 0.8;
+    if (drawing.current.inert !== covered) {
+      drawing.current.inert = covered;
+      setDrawingActive(!covered);
     }
+    room.current.inert = animated && reveal < 0.8;
+    room.current.dataset.sceneProgress = String(light);
+    room.current.dispatchEvent(new CustomEvent('project-scene-progress', { detail: light }));
   }, []);
   useScrollStudy(lane, true, paint, settleDuet);
   useEffect(() => {
@@ -97,7 +96,7 @@ export function Duet({
             <h3>{drawTitle}</h3>
             {drawLink}
           </header>
-          <IguessReplay />
+          <IguessReplay active={drawingActive} />
         </article>
         <article ref={room} id="project-mrrp" className="room-shot">
           <header className="cut-id">

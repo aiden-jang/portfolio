@@ -54,10 +54,10 @@ illustrate the handoff and do not measure network or physical-device performance
 
 ## Project scenes
 
-The Iodine gallery crossfades between real captures of a reused terminal approval and
-a fresh approval request. The case study keeps the recorded snapshot, Undo and Replay,
-editable-state link and clickable file reference. Its scope control switches between the
-recorded decisions for the approved folder and a folder outside it.
+Iodine’s recorded edit recovery loops and holds the restored file in view. The
+case study keeps the snapshot, manual Undo and Replay, links to saved states, and
+the clickable file reference. Its scope control compares the approved folder
+with a folder outside it.
 
 The mrrp scene uses Bean’s native room canvas. Visitors can pet Bean, play with her toy
 mouse, and invite her into the cardboard box using the room itself or keyboard controls.
@@ -71,16 +71,20 @@ renderer, run `node scripts/vendor-mrrp.mjs /path/to/mrrp` with a clean checkout
 The script applies the [room patch](../scripts/patches/mrrp-room.patch) to a temporary copy.
 The original [MIT license](../public/projects/mrrp-license.txt) ships with the renderer.
 
-Scroll through iguess to draw one recorded round, reveal the guess and see the answer.
-Scroll back to retrace the same strokes. The case study shows
-how the room socket, Durable Object and AI Worker share a round.
+The iguess scene draws the recorded round, shows the wrong guess, then holds the
+answer before restarting. The worth preview moves Goose Island IPA ahead of
+Brooklyn Kura Sake Junmai and holds the verdict. These demos pause offscreen and
+in hidden tabs. Reduced motion shows their finished states.
 
 The dinner scene keeps the same pizza in view as Alex and Maya’s wherever vote
-becomes a match and the $48 owewell receipt arrives. Scrolling back reverses the
-sequence. Reduced motion shows the match and receipt in order and leaves the
-iguess drawing in its finished state.
+becomes a match and the $48 owewell receipt arrives. It runs once and holds the
+bill on return. The saved owewell link goes straight to the receipt. Reduced
+motion shows the match and receipt together.
 
-The bloomnote garden recomposes three blooms from the
+The request-batching diagram follows scroll. Its static Before and After controls
+are available on short viewports and with reduced motion.
+
+The bloomnote garden reveals its three blooms once, then holds the view from the
 [approved recipient capture](../public/projects/bloomnote-garden.jpg). Selecting a flower
 shows its meaning. The screenshot viewer includes the garden and the full note.
 The platform gallery shows the account hub and signed-in worth archive from the same

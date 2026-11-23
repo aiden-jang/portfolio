@@ -8,29 +8,16 @@ import { ProjectScene } from './ProjectScene';
 export function IodinePresentation() {
   const frame = useRef<HTMLDivElement>(null);
   const [restored, restore] = useState(false);
-  const [replay, replayEdit] = useState(0);
-  const [manual, setManual] = useState(false);
   const draw = useCallback((progress: number) => {
     const editor = frame.current;
     if (!editor) return;
     const phase = progress === 0 ? 'ready' : progress < 0.56 ? 'reviewing' : 'restored';
     if (editor.dataset.playback === phase) return;
     editor.dataset.playback = phase;
-    if (phase === 'restored') restore(true);
+    restore(phase === 'restored');
   }, []);
-  useTimedScene(frame, draw, { enabled: !manual, duration: 1720, replay });
+  useTimedScene(frame, draw, { duration: 1720, hold: 3900 });
 
-  function chooseStep() {
-    if (restored) {
-      restore(false);
-      setManual(false);
-      replayEdit((count) => count + 1);
-    } else {
-      setManual(true);
-      if (frame.current) frame.current.dataset.playback = 'restored';
-      restore(true);
-    }
-  }
   const [first, second, last] = example.after.trimEnd().split('\n');
   const [start, end] = second!.trim().split('.trim()');
   return (
@@ -50,7 +37,9 @@ export function IodinePresentation() {
       <div className="recovery" ref={frame} data-restored={restored}>
         <div className="recovery-meta">
           <code>{example.file}:2</code>
-          <span role="status">{restored ? 'File restored' : 'Agent edit'}</span>
+          <span role="status" aria-live="off">
+            {restored ? 'File restored' : 'Agent edit'}
+          </span>
         </div>
         <div className="recovery-source">
           <pre className="sr-only">
@@ -68,9 +57,6 @@ export function IodinePresentation() {
         </div>
         <div className="recovery-bottom">
           <span>{restored ? 'Revert feedback queued' : 'Snapshot saved'}</span>
-          <button type="button" onClick={chooseStep}>
-            {restored ? 'Replay edit' : 'Undo edit'}
-          </button>
         </div>
       </div>
     </ProjectScene>
