@@ -19,8 +19,7 @@ html:root #project-wherever .project-scene-heading {
   top: clamp(16px, 3.4svh, 31px);
   min-height: 44px;
 }
-html:root .duet .cut-id a,
-html:root #project-wherever .project-scene-links a {
+html:root .duet .cut-id a {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -33,12 +32,15 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   font: 500 clamp(25px, 2.8vw, 46px)/1 var(--font-display);
   letter-spacing: -0.037em;
 }
-#project-wherever .dinner-title-bill,
-#project-wherever[data-dinner-state='bill'] .dinner-title-vote {
-  display: none;
+#project-wherever h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.35em;
 }
-#project-wherever[data-dinner-state='bill'] .dinner-title-bill {
-  display: inline;
+#project-wherever .dinner-handoff {
+  color: #c4b5a5;
+  font-size: 0.72em;
 }
 #project-wherever:not([data-dinner-state='match']) .dinner-ticket-match,
 #project-wherever:not([data-dinner-state='vote']) .dinner-ticket-vote {
@@ -67,13 +69,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   outline-offset: 3px;
 }
 @media (prefers-reduced-motion: reduce), (max-height: 609px) {
-  #project-wherever[data-dinner-state] .dinner-title-vote,
-  #project-wherever[data-dinner-state] .dinner-title-bill {
-    display: inline;
-  }
-  #project-wherever h3 .dinner-title-bill::before {
-    content: ' / ';
-  }
   #project-wherever .dinner-split {
     display: none;
   }

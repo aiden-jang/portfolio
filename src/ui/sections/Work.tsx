@@ -103,20 +103,18 @@ export function MoreProjectsSection({ onOpen }: Props) {
               theme="dinner"
               title={
                 <>
-                  <span className="dinner-title-vote">wherever</span>
-                  <span className="dinner-title-bill">owewell</span>
-                </>
-              }
-              links={
-                <>
                   <span className="dinner-title-vote">
-                    <AppLink item={wherever} />
+                    <AppLink item={wherever} label="wherever" />
+                  </span>
+                  <span className="dinner-handoff" aria-hidden="true">
+                    /
                   </span>
                   <span className="dinner-title-bill">
-                    <AppLink item={owewell} />
+                    <AppLink item={owewell} label="owewell" />
                   </span>
                 </>
               }
+              links={null}
             >
               <DinnerScene />
             </ProjectScene>

@@ -34,6 +34,8 @@ for (const width of [1440, 390]) {
       'href',
       'https://owewell.aidenjang.com',
     );
+    await expect(dinner.getByRole('link', { name: 'Open app: wherever' })).toBeVisible();
+    await expect(dinner.getByRole('link', { name: 'Open app: owewell' })).toBeVisible();
 
     async function seek(progress: number) {
       await dinner.evaluate((stage, amount) => {
@@ -85,6 +87,14 @@ for (const width of [1440, 390]) {
     await seek(0.15);
     await expect(bill).toHaveCSS('opacity', '1');
     await expect(vote).toBeHidden();
+    await expect(dinner.getByRole('link', { name: 'Open app: wherever' })).toBeVisible();
+    await expect.poll(progress).toBe(1);
+    await pin.evaluate((body) => {
+      scrollBy({ top: -innerHeight - body.getBoundingClientRect().top, behavior: 'instant' });
+    });
+    await expect(dinner).toHaveAttribute('data-dinner-state', 'vote');
+    await seek(0.04);
+    await expect(vote).toBeVisible();
 
     await page.goto('/#project-owewell');
     await page.emulateMedia({ reducedMotion: 'reduce' });

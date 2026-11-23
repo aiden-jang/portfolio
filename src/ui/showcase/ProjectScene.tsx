@@ -39,6 +39,7 @@ export function ProjectScene({
     enabled: theme === 'dinner' && !actionFocused,
     duration: 3280,
     startThreshold: 0.25,
+    restartAfterExit: true,
   });
   useEffect(() => {
     const stage = scene.current;

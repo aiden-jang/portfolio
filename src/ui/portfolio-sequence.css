@@ -282,9 +282,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
 #project-wherever h3 i {
   color: #d7caba;
 }
-#project-wherever .project-scene-links a {
-  color: #fff9ed;
-}
 .bill {
   grid-area: 1/1;
   justify-self: end;
@@ -411,14 +408,8 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   .duet #project-iguess .iguess-replay-controls small {
     margin-bottom: 12px;
   }
-  #project-wherever .project-scene-links {
-    gap: 10px;
-  }
   #project-wherever .project-scene-heading {
     gap: 8px;
-  }
-  #project-wherever .project-scene-links a {
-    font-size: 11px;
   }
   .bill {
     width: min(76vw, 400px);
@@ -476,9 +467,6 @@ html:root #project-mrrp.room-shot .bean-room-canvas canvas {
 #project-wherever h3 a span {
   font: 400 0.38em var(--font-display);
   vertical-align: super;
-}
-#project-wherever .project-scene-links:empty {
-  display: none;
 }
 #project-iodine {
   --scene-run: min(45svh, 360px);

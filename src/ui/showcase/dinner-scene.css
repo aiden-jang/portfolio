@@ -15,11 +15,11 @@
   pointer-events: none;
   z-index: -2;
 }
-#project-wherever h3 a:first-child {
-  opacity: calc(1 - var(--bill-arrival, 0) * 0.32);
+#project-wherever .dinner-title-vote {
+  color: color-mix(in srgb, #fff9ed, #dbcbba calc(var(--bill-arrival, 0) * 100%));
 }
-#project-wherever h3 a:last-child {
-  opacity: calc(0.68 + var(--bill-arrival, 0) * 0.32);
+#project-wherever .dinner-title-bill {
+  color: color-mix(in srgb, #dbcbba, #fff9ed calc(var(--bill-arrival, 0) * 100%));
 }
 .dinner-ticket {
   position: relative;
@@ -175,8 +175,8 @@
     padding: 112px var(--portfolio-gutter) 56px;
     gap: 45px;
   }
-  #project-wherever h3 a:is(:first-child, :last-child) {
-    opacity: 1;
+  #project-wherever :is(.dinner-title-vote, .dinner-title-bill) {
+    color: #fff9ed;
   }
   .dinner-sequence::after {
     display: none;

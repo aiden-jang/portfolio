@@ -8,7 +8,14 @@ export function useTimedScene(
     duration,
     hold = 0,
     startThreshold = 0.64,
-  }: { enabled?: boolean; duration: number; hold?: number; startThreshold?: number },
+    restartAfterExit = false,
+  }: {
+    enabled?: boolean;
+    duration: number;
+    hold?: number;
+    startThreshold?: number;
+    restartAfterExit?: boolean;
+  },
 ) {
   const clock = useRef({ elapsed: 0, remainingHold: hold, started: false });
 
@@ -71,6 +78,11 @@ export function useTimedScene(
     const observer = new IntersectionObserver(
       ([entry]) => {
         visible = entry.isIntersecting && entry.intersectionRatio > 0;
+        if (!visible && restartAfterExit && timeline.elapsed >= duration) {
+          timeline.elapsed = 0;
+          timeline.started = false;
+          draw(0);
+        }
         if (visible && !preference.matches && entry.intersectionRatio >= startThreshold)
           timeline.started = true;
         schedule();
@@ -97,5 +109,5 @@ export function useTimedScene(
       preference.removeEventListener('change', preferenceChanged);
       document.removeEventListener('visibilitychange', schedule);
     };
-  }, [subject, draw, enabled, duration, hold, startThreshold]);
+  }, [subject, draw, enabled, duration, hold, startThreshold, restartAfterExit]);
 }
