@@ -1,4 +1,5 @@
 import { ProjectPair } from './showcase/ProjectPair';
+import { WorthRanking } from './showcase/WorthRanking';
 import { copyText } from '../browserSharing';
 import { useShareFeedback } from './useShareFeedback';
 import { ScreenshotImage } from './ScreenshotImage';
@@ -78,23 +79,7 @@ function ScreenshotProjectPreview({
           aria-label={`Inspect screenshot: ${name}`}
         >
           {showWorthCrop ? (
-            <div className="worth-focus" aria-hidden="true">
-              <div className="worth-list-crop">
-                <strong>Drinks</strong>
-                <ScreenshotImage
-                  src="/projects/worth-list.webp"
-                  alt=""
-                  lazy
-                  onUnavailable={onCropUnavailable}
-                />
-              </div>
-              <ScreenshotImage
-                src="/projects/worth-verdict.webp"
-                alt=""
-                lazy
-                onUnavailable={onCropUnavailable}
-              />
-            </div>
+            <WorthRanking onUnavailable={onCropUnavailable} />
           ) : (
             <div className="preview-thumbnail">
               <ScreenshotImage

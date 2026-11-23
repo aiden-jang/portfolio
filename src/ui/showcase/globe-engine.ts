@@ -64,6 +64,7 @@ export function createOrbitGlobe(
     zoom: openingZoom(),
   };
   const pose: GlobePose = { ...initial };
+  const art = canvas.closest<HTMLElement>('.orbit-art');
   let frame = 0,
     previous = 0,
     holdUntil = 0,
@@ -91,6 +92,20 @@ export function createOrbitGlobe(
       if (journey === 0 && rotating && time > holdUntil)
         pose.lon = (pose.lon + ROTATION_RATE * dt) % 360;
       globe.render(pose);
+      if (art && journey > 0 && journey < 1) {
+        const surface = canvas.getBoundingClientRect();
+        const marker = globe.project(featured.lon, featured.lat, surface);
+        if (marker && surface.width && surface.height) {
+          art.style.setProperty(
+            '--event-x',
+            `${((marker.x - surface.left) / surface.width) * 100}%`,
+          );
+          art.style.setProperty(
+            '--event-y',
+            `${((marker.y - surface.top) / surface.height) * 100}%`,
+          );
+        }
+      }
       if (moving || (rotating && journey === 0)) frame = requestAnimationFrame(draw);
       else previous = 0;
     } catch {

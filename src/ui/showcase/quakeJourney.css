@@ -13,7 +13,7 @@
   --map-reveal: var(--directed-map-reveal, 0);
   --depth-reveal: var(--directed-depth-reveal, 0);
   --globe-dim: calc(1 - var(--map-reveal));
-  --map-scale: 1.16;
+  --map-scale: 1;
 }
 .quake-journey-run .quake-journey-copy {
   display: grid;
@@ -67,30 +67,49 @@
   font-size: 0.46em;
   letter-spacing: 0;
 }
-.quake-journey-run .orbit-viewport {
-  opacity: var(--globe-dim);
-}
-.quake-map {
-  --pin-x: 55%;
-  --pin-y: 54%;
+.quake-travel-art {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  opacity: var(--map-reveal);
-  clip-path: circle(calc(85% * var(--map-reveal)) at var(--pin-x) var(--pin-y));
+  --focus-x: 55%;
+  --focus-y: 54%;
+  --pin-x: var(--event-x, var(--focus-x));
+  --pin-y: var(--event-y, var(--focus-y));
+}
+[data-quake-locked] .quake-travel-art {
+  --pin-x: var(--focus-x);
+  --pin-y: var(--focus-y);
+}
+.quake-map {
+  position: absolute;
+  inset: 0;
+  clip-path: circle(calc(105% * var(--map-reveal)) at var(--pin-x) var(--pin-y));
 }
 .quake-map-image {
   position: absolute;
   left: var(--pin-x);
   top: var(--pin-y);
-  width: 122%;
-  height: 122%;
+  width: 170%;
+  height: 175%;
   max-width: none;
   background-position: center;
   background-size: cover;
   transform: translate(-50%, -50%) scale(var(--map-scale));
-  transform-origin: center;
+}
+.quake-travel-art :is(.quake-map-pin, .quake-map-magnitude) {
+  opacity: var(--journey-pin, 0);
+  z-index: 1;
+}
+.quake-map-pin::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
+  border: 1px solid #efbc9180;
+  border-radius: 50%;
+}
+[data-quake-manual] .quake-travel-art {
+  visibility: hidden;
 }
 .quake-map-pin {
   position: absolute;
@@ -114,13 +133,9 @@
   font: 600 12px/1 var(--font-display);
 }
 @media (max-width: 767px) {
-  .quake-map {
-    --pin-x: 50%;
-    --pin-y: 50%;
-  }
-  .quake-map-image {
-    width: 150%;
-    height: 112%;
+  .quake-travel-art {
+    --focus-x: 50%;
+    --focus-y: 50%;
   }
   .quake-journey-run .quake-journey-copy {
     max-width: none;
@@ -141,6 +156,11 @@
 
 html:root .quake-journey-run[data-quake-view='map']:not([data-quake-manual]) .orbit-viewport {
   visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .quake-map {
+    clip-path: none;
+  }
 }
 @media (prefers-reduced-motion: no-preference) {
   html:root

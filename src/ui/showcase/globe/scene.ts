@@ -166,12 +166,14 @@ export function createGlobeScene(
     camera.updateMatrixWorld();
     renderer.render(scene, camera);
   };
-  const project = (lon: number, lat: number) => {
+  const project = (lon: number, lat: number, rect = canvas.getBoundingClientRect()) => {
     const point = vector(lon, lat);
     if (point.dot(camera.position.clone().sub(point)) <= 0) return null;
-    const r = canvas.getBoundingClientRect();
     point.project(camera);
-    return { x: r.left + ((point.x + 1) * r.width) / 2, y: r.top + ((1 - point.y) * r.height) / 2 };
+    return {
+      x: rect.left + ((point.x + 1) * rect.width) / 2,
+      y: rect.top + ((1 - point.y) * rect.height) / 2,
+    };
   };
   resize();
   return {

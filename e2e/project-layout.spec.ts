@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 for (const width of [1440, 1024, 768, 390, 320]) {
   test(`project previews stay aligned and proportioned at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: width === 320 ? 568 : 1000 });
+    await page.setViewportSize({ width, height: width === 320 ? 568 : width === 390 ? 730 : 1000 });
     await page.addInitScript(() => {
       const get = HTMLCanvasElement.prototype.getContext;
       HTMLCanvasElement.prototype.getContext = function (
@@ -25,15 +25,19 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       'bloomnote',
       'iguess',
       'mrrp',
-      'wherever → owewell',
+      /^wherever\s*owewell$/,
       'worth',
       'platform',
     ]);
+    const worth = gallery.locator('#project-worth');
     if (width === 320) {
-      const worth = gallery.locator('#project-worth');
+      await worth.scrollIntoViewIfNeeded();
       await expect(worth.getByRole('status')).toContainText('Screenshot unavailable');
       await expect(worth.getByRole('button', { name: 'Inspect screenshot: worth' })).toBeDisabled();
       await expect(worth.locator('.garage-project-links a')).toHaveAttribute('target', '_blank');
+    } else {
+      await expect(worth.getByText('Brooklyn Kura Sake Junmai', { exact: true })).toBeVisible();
+      await expect(worth.locator('.worth-ranking')).toHaveCSS('--worth-rise', '1');
     }
     const bloom = page.locator('#project-bloomnote');
     await expect(bloom.getByRole('blockquote')).toContainText('For that brilliant laugh');
@@ -75,23 +79,28 @@ for (const width of [1440, 1024, 768, 390, 320]) {
           .querySelector('.preview-thumbnail, .worth-focus, .project-pair')!
           .getBoundingClientRect()
           .toJSON(),
+        copy: item.querySelector('.garage-project-copy')!.getBoundingClientRect().toJSON(),
         title: item.querySelector('h3 button')!.getBoundingClientRect().toJSON(),
         app: item.querySelector('.garage-project-links a')!.getBoundingClientRect().toJSON(),
       })),
     );
-    for (const { name, frame, title, app } of cards) {
+    for (const { name, frame, copy, title, app } of cards) {
       expect.soft(frame.height, name + ' has a readable image').toBeGreaterThanOrEqual(105);
       expect.soft(frame.width, name + ' media fits the viewport').toBeLessThanOrEqual(width);
       expect.soft(app.left, name + ' action clears its title').toBeGreaterThanOrEqual(title.right);
-      expect.soft(title.top - frame.bottom, name + ' image-to-title gap').toBeLessThan(34);
-      expect
-        .soft(title.top, name + ' image precedes title')
-        .toBeGreaterThanOrEqual(frame.bottom - 1);
+      if (width >= 768) {
+        expect.soft(frame.left, name + ' media clears the copy column').toBeGreaterThan(copy.right);
+        expect.soft((frame.top + frame.bottom) / 2).toBeCloseTo((copy.top + copy.bottom) / 2, 0);
+      } else {
+        expect
+          .soft(frame.top - copy.bottom, name + ' media follows the copy')
+          .toBeGreaterThanOrEqual(0);
+        expect.soft(frame.top - copy.bottom, name + ' copy-to-media gap').toBeLessThan(34);
+      }
     }
-    if (width >= 740) {
-      expect.soft(cards[0]!.frame.width).toBeCloseTo(cards[1]!.frame.width, 0);
-      expect.soft(cards[0]!.frame.top).toBeCloseTo(cards[1]!.frame.top, 0);
-    }
+    expect.soft(cards[0]!.frame.width).toBeCloseTo(cards[1]!.frame.width, 0);
+    expect.soft(cards[0]!.frame.left).toBeCloseTo(cards[1]!.frame.left, 0);
+    expect.soft(cards[1]!.frame.top).toBeGreaterThan(cards[0]!.frame.bottom);
     const scenes = await page
       .locator('.project-scenes > article')
       .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().toJSON()));

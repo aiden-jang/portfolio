@@ -10,6 +10,11 @@
 body[data-opening-poster] .opening-poster {
   background: linear-gradient(#040307 34%, #010102 42%);
 }
+@media (prefers-reduced-motion: no-preference) {
+  .opening-poster[data-corvette] {
+    transition-duration: 120ms;
+  }
+}
 .opening-poster[data-fading] {
   opacity: 0;
 }

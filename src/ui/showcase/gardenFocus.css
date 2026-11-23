@@ -38,3 +38,25 @@
     min-height: 122px;
   }
 }
+
+@media (width < 768px) and (height <= 780px) {
+  html:root #sec-more-work:has(.bloom-gallery) {
+    --garden-entry: clamp(20px, 5svh, 38px);
+  }
+  .bloom-garden-study > .bloom-garden-inner:not([hidden]) {
+    gap: 10px;
+    padding-block-start: 16px;
+  }
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-flower {
+    --plant-height: clamp(92px, 16svh, 130px);
+  }
+  .bloom-garden-study .bloom-garden-inner .bloom-garden-flower-1 {
+    --plant-height: clamp(116px, 21svh, 160px);
+  }
+  .bloom-garden-study .bloom-garden-letter {
+    min-height: 103px;
+  }
+  .bloom-garden-letter blockquote {
+    font-size: clamp(23px, 6.4vw, 32px);
+  }
+}

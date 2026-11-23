@@ -755,3 +755,36 @@ html:root #sec-contact {
   background: linear-gradient(#050403, transparent);
   pointer-events: none;
 }
+
+@media (width < 768px) and (height <= 780px) {
+  .duet #project-iguess .iguess-replay {
+    gap: 14px;
+    align-items: center;
+    padding: 58px var(--portfolio-gutter) 18px;
+  }
+  .duet #project-iguess canvas {
+    width: min(100%, 410px);
+    max-height: 41svh;
+    object-fit: contain;
+  }
+  .duet #project-iguess .iguess-replay-controls {
+    display: grid;
+    align-content: start;
+    min-height: 100px;
+    text-align: center;
+  }
+  .duet #project-iguess .iguess-replay-controls small {
+    margin-bottom: 8px;
+  }
+  .duet #project-iguess .iguess-replay-result {
+    font-size: clamp(38px, 11vw, 64px);
+  }
+  .duet #project-iguess .iguess-replay-result em {
+    margin-top: 6px;
+    font-size: clamp(20px, 6vw, 28px);
+  }
+  .duet #project-iguess .iguess-replay-controls s {
+    position: static;
+    margin-top: 4px;
+  }
+}

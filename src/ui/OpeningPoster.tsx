@@ -23,6 +23,37 @@ function openingPosterLighting() {
     : null;
 }
 
+function fitOpeningPoster(
+  picture: HTMLPictureElement | null,
+  photo: HTMLImageElement | null,
+  corvette: boolean,
+  studio: boolean,
+) {
+  const mobile = innerWidth < 768;
+  const frame = mobile ? phoneOpeningFrame(innerWidth, innerHeight) : { scale: 1, lift: 0 };
+  let { scale, lift } = frame;
+  if (corvette) {
+    // Responsive Corvette stills already include the camera's phone view offset.
+    scale = 1;
+    lift = 0;
+    if (mobile && photo?.naturalWidth && photo.naturalHeight) {
+      const { naturalWidth, naturalHeight } = photo;
+      const reference = phoneOpeningFrame(naturalWidth, naturalHeight);
+      const cover = Math.max(innerWidth / naturalWidth, innerHeight / naturalHeight);
+      scale = frame.scale / reference.scale;
+      lift = frame.lift - reference.lift * cover * scale;
+    }
+  }
+  picture?.style.setProperty('--opening-reframe', String(scale));
+  picture?.style.setProperty('--opening-lift', -lift + 'px');
+  if (studio) return;
+  const referenceAspect = mobile ? 390 / 844 : 1440 / 900;
+  const distanceScale =
+    framingDistanceMultiplier(referenceAspect) /
+    framingDistanceMultiplier(innerWidth / innerHeight);
+  picture?.style.setProperty('--opening-poster-scale', String(distanceScale));
+}
+
 export function OpeningPoster() {
   const [lighting] = useState(openingPosterLighting);
   const [carIndex] = useState(() => useAppStore.getState().carIndex);
@@ -43,18 +74,7 @@ export function OpeningPoster() {
     let finished = false;
     body.dataset.openingMedia = '';
     refs.holdOpeningPose = true;
-    const fit = () => {
-      const frame =
-        innerWidth < 768 ? phoneOpeningFrame(innerWidth, innerHeight) : { scale: 1, lift: 0 };
-      picture.current?.style.setProperty('--opening-reframe', String(frame.scale));
-      picture.current?.style.setProperty('--opening-lift', -frame.lift + 'px');
-      if (studio) return;
-      const referenceAspect = innerWidth < 768 ? 390 / 844 : 1440 / 900;
-      const scale =
-        framingDistanceMultiplier(referenceAspect) /
-        framingDistanceMultiplier(innerWidth / innerHeight);
-      picture.current?.style.setProperty('--opening-poster-scale', String(scale));
-    };
+    const fit = () => fitOpeningPoster(picture.current, photo.current, corvette, studio);
     const end = () => {
       if (finished) return;
       finished = true;
@@ -79,7 +99,7 @@ export function OpeningPoster() {
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) end();
         else {
           setPhase('fading');
-          timer = window.setTimeout(end, 210);
+          timer = window.setTimeout(end, corvette ? 170 : 210);
         }
       });
     };
@@ -119,7 +139,7 @@ export function OpeningPoster() {
       refs.holdOpeningPose = false;
       finish.current = undefined;
     };
-  }, [carIndex, lighting, studio]);
+  }, [carIndex, corvette, lighting, studio]);
 
   if (!lighting || phase === 'done') return null;
 
@@ -128,6 +148,7 @@ export function OpeningPoster() {
       ref={picture}
       className={studio ? 'opening-poster studio-media' : 'opening-poster'}
       aria-hidden="true"
+      data-corvette={corvette || undefined}
       data-fading={phase === 'fading' || undefined}
       onTransitionEnd={(event) => {
         if (phase === 'fading' && event.propertyName === 'opacity') finish.current?.();
@@ -156,6 +177,7 @@ export function OpeningPoster() {
         height={900}
         alt=""
         onLoad={() => {
+          fitOpeningPoster(picture.current, photo.current, corvette, studio);
           if (finish.current) document.body.dataset.openingPoster = '';
         }}
         onError={() => finish.current?.()}

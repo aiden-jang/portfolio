@@ -72,37 +72,79 @@
   }
 }
 
-.worth-focus {
+.worth-ranking {
   display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  align-content: center;
   align-items: center;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.99fr);
-  gap: 5%;
-  aspect-ratio: 2;
-  padding: clamp(12px, 1.5vw, 21px);
-  overflow: hidden;
-  border-radius: 9px;
-  border: 1px solid #494435;
-  background: #20201c;
-}
-.worth-list-crop {
-  min-width: 0;
-}
-.worth-list-crop strong {
-  display: block;
-  margin: 0 0 clamp(7px, 1.3vw, 17px);
-  color: #d5ccaa;
-  font-weight: 550;
-  font-size: clamp(13px, 2vw, 23px);
-  letter-spacing: -0.015em;
-}
-.worth-focus img {
-  display: block;
   width: 100%;
-  height: auto;
+  aspect-ratio: 2 / 1;
+  background: radial-gradient(ellipse at 14% 0, #34332a, #22221d 55%);
+  border: 1px solid #77725b6b;
+  border-radius: 8px;
+  padding: clamp(12px, 1.7vw, 27px);
+  overflow: hidden;
+  color: #eeebd9;
+  gap: clamp(5px, 0.7vw, 11px);
+  --worth-rise: 1;
+  --worth-result: 1;
 }
-.worth-focus > img {
-  border-radius: 11px;
+.worth-ranking-heading {
+  grid-column: 1;
+  color: #e0d6ad;
+  font: 640 clamp(17px, 1.8vw, 29px)/1 var(--font-display);
+  letter-spacing: -0.046em;
 }
-.worth-focus .worth-list-crop img {
-  border-block: 1px solid #504d3f;
+.worth-ranking-list {
+  position: relative;
+  grid-column: 1;
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  height: clamp(72px, 8.3vw, 112px);
+  min-height: 0;
+  gap: 4px;
+}
+.worth-ranking-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 0;
+  padding: 0 10px;
+  border-radius: 4px;
+  background: #ffffff0b;
+  color: inherit;
+  font: 550 clamp(11px, 1.1vw, 16px)/1.15 var(--font-display);
+}
+.worth-ranking-sake {
+  transform: translateY(calc((100% + 4px) * var(--worth-rise)));
+}
+.worth-ranking-ipa {
+  z-index: 1;
+  transform: translateY(calc((-100% - 4px) * var(--worth-rise)));
+  background: color-mix(in srgb, #454431 calc(75% * var(--worth-result)), #303029);
+}
+.worth-ranking .worth-ranking-verdict {
+  grid-area: 1 / 2 / span 2;
+  align-self: stretch;
+  justify-self: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  opacity: var(--worth-result);
+  transform: translateY(calc(6px * (1 - var(--worth-result))));
+  margin-inline-start: 3px;
+}
+.worth-ranking .worth-ranking-verdict img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 8px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .worth-ranking {
+    --worth-rise: var(--rank-progress, 1);
+    --worth-result: var(--verdict-progress, 1);
+  }
 }

@@ -4,8 +4,10 @@ import './quakeJourney.css';
 
 export function QuakeMap() {
   return (
-    <div className="quake-map" aria-hidden="true">
-      <div className="quake-map-image" style={{ backgroundImage: `url(${map})` }} />
+    <div className="quake-travel-art" aria-hidden="true">
+      <div className="quake-map">
+        <div className="quake-map-image" style={{ backgroundImage: `url(${map})` }} />
+      </div>
       <span className="quake-map-pin" />
       <span className="quake-map-magnitude">M{kamchatkaExample.sources[0].magnitude}</span>
     </div>
