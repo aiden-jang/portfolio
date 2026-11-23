@@ -3,7 +3,12 @@ import { useEffect, useRef, type RefObject } from 'react';
 export function useTimedScene(
   subject: RefObject<HTMLElement | null>,
   draw: (progress: number) => void,
-  { enabled = true, duration, hold = 0 }: { enabled?: boolean; duration: number; hold?: number },
+  {
+    enabled = true,
+    duration,
+    hold = 0,
+    startThreshold = 0.64,
+  }: { enabled?: boolean; duration: number; hold?: number; startThreshold?: number },
 ) {
   const clock = useRef({ elapsed: 0, remainingHold: hold, started: false });
 
@@ -66,10 +71,11 @@ export function useTimedScene(
     const observer = new IntersectionObserver(
       ([entry]) => {
         visible = entry.isIntersecting && entry.intersectionRatio > 0;
-        if (!preference.matches && entry.intersectionRatio >= 0.64) timeline.started = true;
+        if (visible && !preference.matches && entry.intersectionRatio >= startThreshold)
+          timeline.started = true;
         schedule();
       },
-      { threshold: [0, 0.64] },
+      { threshold: [0, startThreshold] },
     );
 
     const preferenceChanged = () => {
@@ -91,5 +97,5 @@ export function useTimedScene(
       preference.removeEventListener('change', preferenceChanged);
       document.removeEventListener('visibilitychange', schedule);
     };
-  }, [subject, draw, enabled, duration, hold]);
+  }, [subject, draw, enabled, duration, hold, startThreshold]);
 }

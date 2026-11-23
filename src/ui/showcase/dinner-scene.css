@@ -110,10 +110,7 @@
 .dinner-ticket-actions span:first-child {
   color: #57554a;
 }
-.dinner-ticket-actions span:last-child {
-  color: #fbf7e9;
-  background: #2a3629;
-  border-color: #2a3629;
+.dinner-ticket-actions > button {
   transform: translateX(calc(9px * var(--vote-swipe, 0)));
 }
 .dinner-ticket-count span {

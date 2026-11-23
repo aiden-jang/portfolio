@@ -52,11 +52,34 @@ for (const width of [1440, 390]) {
     await expect(bill).toHaveCSS('opacity', '1');
     await expect(dinner.getByRole('button', { name: 'Replay dinner' })).toHaveCount(0);
 
-    await page.goto('/?paint=original#project-wherever', { waitUntil: 'domcontentloaded' });
+    await page.goto('/?paint=original', { waitUntil: 'domcontentloaded' });
+    const pin = dinner.locator('[data-study-pin]');
+    await pin.evaluate((body) => {
+      const sceneTop = body.parentElement!.getBoundingClientRect().top + scrollY;
+      scrollTo({
+        top: sceneTop - innerHeight + body.clientHeight * 0.38,
+        behavior: 'instant',
+      });
+    });
+    await expect(pin).toBeInViewport({ ratio: 0.3 });
+    await expect(pin).not.toBeInViewport({ ratio: 0.64 });
+    const progress = () => dinner.evaluate((el) => Number(el.dataset.sceneProgress));
+    await expect.poll(progress, { timeout: 2000 }).toBeGreaterThan(0.1);
+    await pin.evaluate((body) => {
+      scrollBy({ top: -innerHeight - body.getBoundingClientRect().top, behavior: 'instant' });
+    });
+    await expect(pin).not.toBeInViewport();
+    await page.evaluate(
+      () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+    );
+    const paused = await progress();
+    await page.waitForTimeout(180);
+    expect(await progress()).toBe(paused);
+
     await seek(0.04);
-    await expect(dinner).toHaveAttribute('data-dinner-state', 'vote');
     const parked = await page.evaluate(() => scrollY);
-    await expect(dinner).toHaveAttribute('data-dinner-state', 'match');
+    expect(await progress()).toBeGreaterThanOrEqual(paused);
+    await expect.poll(progress).toBeGreaterThan(paused);
     await expect(bill).toHaveCSS('opacity', '1');
     expect(await page.evaluate(() => scrollY)).toBe(parked);
     await seek(0.15);

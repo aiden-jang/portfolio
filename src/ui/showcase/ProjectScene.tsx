@@ -35,7 +35,11 @@ export function ProjectScene({
     const compact = matchMedia('(height < 610px)').matches;
     presentScene(scene.current, compact ? 1 : Math.max(manual.current, progress));
   }, []);
-  useTimedScene(body, draw, { enabled: theme === 'dinner' && !actionFocused, duration: 5080 });
+  useTimedScene(body, draw, {
+    enabled: theme === 'dinner' && !actionFocused,
+    duration: 3280,
+    startThreshold: 0.25,
+  });
   useEffect(() => {
     const stage = scene.current;
     if (!stage || theme !== 'dinner') return;
