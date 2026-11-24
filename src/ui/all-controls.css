@@ -9,6 +9,10 @@
   font: 12px/1.4 var(--font-display);
   cursor: pointer;
 }
+.all-controls-trigger > [aria-hidden] {
+  font-size: 18px;
+  line-height: 1;
+}
 .all-controls-trigger:hover {
   color: var(--color-fg);
 }

@@ -16,8 +16,7 @@ export function HeadlightButton({
   const loading = useAppStore((state) => state.isCarLoading);
   const available = useAppStore((state) => state.hasPopupHeadlights);
   const toggle = useAppStore((state) => state.toggleHeadlights);
-  const isF40 = carIndex === F40_INDEX;
-  if (!isF40 && !CARS[carIndex].popupHeadlights) return null;
+  if (carIndex !== F40_INDEX && !CARS[carIndex].popupHeadlights) return null;
   const action = raised ? 'Lower headlights' : 'Raise headlights';
   return (
     <button
@@ -27,19 +26,13 @@ export function HeadlightButton({
         onChange?.();
       }}
       disabled={loading || waiting || !available}
-      aria-label={isF40 ? action : 'Pop-up headlights'}
+      aria-label="Pop-up headlights"
       aria-pressed={raised}
       title={action}
-      className={
-        studio
-          ? undefined
-          : isF40
-            ? 'scene-control-button intro-headlight-button'
-            : 'scene-control-button'
-      }
+      className={studio ? undefined : 'scene-control-button'}
     >
       <ControlIcon name="headlights" />
-      <span>{isF40 ? action : 'Lights'}</span>
+      <span>Lights</span>
     </button>
   );
 }

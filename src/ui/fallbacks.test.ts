@@ -211,11 +211,16 @@ it('shows accessible headlight toggles for the Miata and F40 and disables them u
     expect(button.getAttribute('aria-pressed')).toBe('false');
     await act(() => useAppStore.getState().setCarIndex(0));
     const f40 = host.querySelector('button')!;
-    expect(f40.getAttribute('aria-label')).toBe('Raise headlights');
+    expect(f40.getAttribute('aria-label')).toBe('Pop-up headlights');
+    expect(f40.textContent).toBe('Lights');
+    expect(f40.querySelector('svg')).not.toBeNull();
+    expect(f40.title).toBe('Raise headlights');
     expect(f40.disabled).toBe(true);
     await act(() => useAppStore.setState({ hasPopupHeadlights: true, isCarLoading: false }));
     await act(() => f40.click());
-    expect(f40.getAttribute('aria-label')).toBe('Lower headlights');
+    expect(f40.title).toBe('Lower headlights');
+    expect(f40.getAttribute('aria-pressed')).toBe('true');
+    expect(f40.textContent).toBe('Lights');
     await act(() => useAppStore.getState().setCarIndex(1));
     expect(host.querySelector('button')).toBeNull();
   } finally {

@@ -1,9 +1,8 @@
 import { openRearLouvers } from '../garageExhibits/select';
 import { selectMechanical } from '../garageExhibits/mechanical';
 import { useGarageStudio } from '../garageStudio/state';
-import { introStudioCommands } from './introStudioCommands';
-import { useLineup } from '../lineup/state';
 import { usePhotoMode } from './photo/state';
+import { useLineup } from '../lineup/state';
 import { CARS, GARAGE_INDICES, SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { shareCurrentScene } from '../sceneLink';
 import { canStudyRender, useAppStore } from '../store';
@@ -49,21 +48,6 @@ export function buildCommands({
       keywords: 'walkaround details blackout studio overhead lineup photo',
       run: () => useGarageStudio.getState().open(),
     },
-    {
-      id: 'photo-mode',
-      label: 'Photo mode',
-      hint: 'camera',
-      keywords: 'photo capture screenshot postcard save image',
-      run: () => usePhotoMode.getState().open(),
-    },
-    {
-      id: 'lineup',
-      label: 'Lineup',
-      hint: 'studio',
-      keywords: 'compare scale Ferrari F40 Red Bull RB16B pair cars',
-      run: () => useLineup.getState().open(),
-    },
-    ...introStudioCommands,
     {
       id: 'rear-wing',
       label:
@@ -130,11 +114,25 @@ export function buildCommands({
       },
     },
     {
+      id: 'lineup',
+      label: 'Lineup',
+      hint: 'studio',
+      keywords: 'compare scale Ferrari F40 Red Bull RB16B pair cars',
+      run: () => useLineup.getState().open(),
+    },
+    {
       id: 'behind-the-render',
       label: 'Behind the render',
       hint: 'studio',
       keywords: 'clay matte finish materials lighting Ferrari F40',
       run: () => useAppStore.getState().setRenderFinish('studio'),
+    },
+    {
+      id: 'photo-mode',
+      label: 'Photo mode',
+      hint: 'camera',
+      keywords: 'photo capture screenshot postcard save image',
+      run: () => usePhotoMode.getState().open(),
     },
     ...Object.entries(cameraViews(state)).map(([view, { label }]) => ({
       id: `view-${view}`,
@@ -226,12 +224,7 @@ export function buildCommands({
           !state.carLoadError
         );
       if (id === 'behind-the-render') return canStudyRender(state);
-      if (
-        id === 'lineup' ||
-        id === 'photo-mode' ||
-        id === 'garage-studio' ||
-        id.startsWith('studio-')
-      )
+      if (id === 'lineup' || id === 'photo-mode' || id === 'garage-studio')
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;
       if (id.startsWith('view-'))
         return state.sectionIndex === 0 && !state.isCarLoading && !state.carLoadError;

@@ -44,7 +44,7 @@
 }
 @media (min-width: 768px) and (max-width: 1023px) and (min-height: 501px) {
   html:root #desktop-dock .car-controls-row {
-    grid-template-columns: 80px minmax(0, 1fr) 88px var(--lighting-button-width) 92px;
+    grid-template-columns: 80px minmax(0, 1fr) 88px var(--lighting-button-width) 82px;
     gap: 4px;
   }
   html:root #desktop-dock .car-zoom-controls {
@@ -54,12 +54,12 @@
   html:root #desktop-dock button[aria-label^='Lighting:'] {
     grid-column: 4;
   }
-  html:root #desktop-dock .garage-dock-actions {
+  html:root #desktop-dock .all-controls-trigger {
     grid-column: 5;
-    width: 92px;
+    width: 82px;
   }
   html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) {
-    grid-template-columns: minmax(0, 1fr) 88px var(--lighting-button-width) 92px;
+    grid-template-columns: minmax(0, 1fr) 88px var(--lighting-button-width) 82px;
   }
   html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .car-zoom-controls {
     grid-column: 2;
@@ -70,7 +70,7 @@
     button[aria-label^='Lighting:'] {
     grid-column: 3;
   }
-  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .garage-dock-actions {
+  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .all-controls-trigger {
     grid-column: 4;
   }
 }
