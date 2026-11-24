@@ -262,7 +262,7 @@ export function Car() {
       studio && !review.active && group.visible && !reduced ? motionState.openingOrbitProgress : 0,
     );
     headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
-    headlights.current?.update(dt);
+    headlights.current?.update(dt, lampLevel);
     const { refs } = app;
     const target = THEMES.studio;
     const k = Math.min(1, dt * TRANSITION_RATE);

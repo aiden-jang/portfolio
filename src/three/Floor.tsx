@@ -123,13 +123,19 @@ export function Floor({
       const afterHours = !closing && !inLineup && !preview.active && isOpeningLowLight(state);
       uniforms.afterHoursGrounding.value +=
         (Number(afterHours) - uniforms.afterHoursGrounding.value) * settle;
-      const lampFloor = uniforms.afterHoursLampFloor.value as THREE.Vector3;
-      const lampStyle = afterHoursLampStyles[CARS[state.carIndex].file];
-      const lampActive = afterHours && lampStyle !== undefined && !state.isCarLoading;
-      lampFloor.x = smoothTowards(lampFloor.x, Number(lampActive), settle);
-      if (lampStyle) {
-        lampFloor.y = lampStyle.spacing;
-        lampFloor.z = lampStyle.warmth;
+      const head = uniforms.afterHoursHeadSpill.value as THREE.Vector3;
+      const tail = uniforms.afterHoursTailSpill.value as THREE.Vector2;
+      const car = CARS[state.carIndex];
+      const lamps = afterHoursLampStyles[car.file];
+      const lampActive = afterHours && !!lamps && !state.isCarLoading;
+      const headsOn =
+        lampActive && !!lamps.head && (!car.popupHeadlights || state.headlightsRaised);
+      head.x = smoothTowards(head.x, Number(headsOn), settle);
+      tail.x = smoothTowards(tail.x, Number(lampActive), settle);
+      if (lamps) {
+        head.y = lamps.head?.spacing ?? 0;
+        head.z = lamps.head?.warmth ?? 0;
+        tail.y = lamps.tail;
       }
       const roomDim = inBlackout() ? 1 : afterHours ? 0.82 : 0;
       uniforms.garageStudioDim.value += (roomDim - uniforms.garageStudioDim.value) * settle;

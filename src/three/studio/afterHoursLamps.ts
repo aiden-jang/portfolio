@@ -1,9 +1,12 @@
 import { Mesh, MeshStandardMaterial, type Object3D } from 'three';
+import { smoothTowards } from '../../math';
+import { additionalAfterHoursLamps, type LampFloorProfile } from './afterHoursLampProfiles';
 
-export const afterHoursLampStyles: Record<string, { spacing: number; warmth: number }> = {
-  'ferrari-f120-f40.glb': { spacing: 0.67, warmth: 0.46 },
-  'corvette-c8r-tf-sport.glb': { spacing: 0.84, warmth: 0 },
-  'mercedes-benz-w198-300-sl.glb': { spacing: 0.76, warmth: 0.85 },
+export const afterHoursLampStyles: Partial<Record<string, LampFloorProfile>> = {
+  ...additionalAfterHoursLamps,
+  'ferrari-f120-f40.glb': { head: { spacing: 0.67, warmth: 0.46 }, tail: 0.67 },
+  'corvette-c8r-tf-sport.glb': { head: { spacing: 0.84, warmth: 0 }, tail: 0.84 },
+  'mercedes-benz-w198-300-sl.glb': { head: { spacing: 0.76, warmth: 0.85 }, tail: 0.76 },
 };
 
 const lampMaterials: Record<string, Record<string, string>> = {
@@ -48,7 +51,7 @@ const lampMaterials: Record<string, Record<string, string>> = {
 };
 
 export function prepareAfterHoursLamps(model: Object3D, file: string) {
-  const shaders = lampMaterials[file];
+  const shaders = lampMaterials[file] ?? additionalAfterHoursLamps[file]?.materials;
   if (!shaders) return null;
   const level = { value: 0 };
   const visited = new Set<MeshStandardMaterial>();
@@ -76,6 +79,10 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
           `
           uniform float lampLevel;
           varying vec3 lampPosition;
+          float neutralLens(vec3 sampleColor) {
+            float minChannel = min(min(sampleColor.r,sampleColor.g),sampleColor.b);
+            return smoothstep(.025,.28,minChannel);
+          }
           float redLens(vec3 sampleColor) {
             return smoothstep(.018,.20,sampleColor.r)
               * smoothstep(.075,.34,(sampleColor.r-sampleColor.g*1.85)/max(.06,sampleColor.r))
@@ -98,5 +105,8 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
       };
     }
   });
-  return level;
+  return (active: boolean, dt: number) => {
+    level.value = smoothTowards(level.value, Number(active), Math.min(1, dt * 9));
+    return level.value;
+  };
 }

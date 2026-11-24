@@ -10,7 +10,7 @@ const carSurfaces = {
 
 export function prepareAfterHoursSurfaces(model: Object3D, carFile: string) {
   const surface = carSurfaces[carFile as keyof typeof carSurfaces];
-  if (!surface) return null;
+  if (!surface) return prepareAfterHoursLamps(model, carFile);
 
   const evening = { value: 0 };
   const materials = new Set<MeshStandardMaterial>();
@@ -78,8 +78,6 @@ export function prepareAfterHoursSurfaces(model: Object3D, carFile: string) {
   return (active: boolean, dt: number) => {
     const target = Number(active);
     evening.value = smoothTowards(evening.value, target, Math.min(1, dt * 10));
-    if (!lamps) return 0;
-    lamps.value = smoothTowards(lamps.value, target, Math.min(1, dt * 9));
-    return lamps.value;
+    return lamps?.(active, dt) ?? 0;
   };
 }

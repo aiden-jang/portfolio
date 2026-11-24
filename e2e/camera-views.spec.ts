@@ -11,7 +11,7 @@ function cameraControls(page: Page) {
     reset,
     async select(name: string) {
       await garage.press('Control+k');
-      await expect(dialog).toHaveCSS('--garage-anchor-y', '24px');
+      await expect(dialog).toHaveCSS('--garage-anchor-y', '8px');
       await dialog.getByRole('option', { name: new RegExp(name) }).click();
       await expect(dialog).toHaveCount(0);
       if (name !== 'Reset camera view') await expect(reset).toBeVisible();
@@ -26,6 +26,7 @@ for (const width of [1440, 390]) {
       await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
       await page.goto('/?car=0');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60000 });
+      await expect(page.locator('.opening-poster')).toBeHidden();
     });
 
     test('Garage offers front, profile, and corner shots with a reset', async ({ page }) => {

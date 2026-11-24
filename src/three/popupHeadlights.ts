@@ -90,10 +90,11 @@ export function createPopupHeadlights(
   action.play();
   let position = 1;
   let target = 1;
+  let afterHours = 0;
   const sample = () => {
     const eased = position * position * (3 - 2 * position);
     mixer.setTime(settings.closedTime + (settings.openTime - settings.closedTime) * eased);
-    illumination.setBrightness(MathUtils.smoothstep(eased, 0.4, 1));
+    illumination.setBrightness(MathUtils.smoothstep(eased, 0.4, 1) * (1 + afterHours * 0.32));
   };
   sample();
   return {
@@ -104,8 +105,9 @@ export function createPopupHeadlights(
         sample();
       }
     },
-    update(dt: number) {
-      if (position === target) return;
+    update(dt: number, lampLevel = 0) {
+      if (position === target && afterHours === lampLevel) return;
+      afterHours = lampLevel;
       const step = Math.min(dt, 0.1) / 0.7;
       position += Math.sign(target - position) * Math.min(Math.abs(target - position), step);
       sample();
