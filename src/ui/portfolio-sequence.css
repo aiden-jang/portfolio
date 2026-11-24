@@ -588,13 +588,6 @@ html:root #sec-work #project-iodine .project-scene-body {
 html:root #sec-experience {
   padding-bottom: 0;
 }
-html:root #sec-more-work:has(.bloom-gallery) {
-  --garden-entry: clamp(20px, 5svh, 48px);
-  background:
-    linear-gradient(to bottom, var(--color-bg), var(--garden-paper)) top / 100% var(--garden-entry)
-      no-repeat,
-    var(--color-bg);
-}
 .gallery-companions .garage-project-compact {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);

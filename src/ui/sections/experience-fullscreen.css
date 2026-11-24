@@ -16,7 +16,7 @@ html:root #sec-experience:has(.batch-lane) {
   content: '';
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 71% 38%, #18251d 0%, transparent 58%),
+    radial-gradient(ellipse at 71% 38%, #22312a 0%, transparent 66%),
     linear-gradient(#111416 0%, #141a16 69%, var(--color-bg) 100%);
 }
 .experience-content .batch-lane .experience-lead {

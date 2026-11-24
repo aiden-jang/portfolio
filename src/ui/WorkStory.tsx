@@ -1,3 +1,4 @@
+import { ProjectPair } from './showcase/ProjectPair';
 import { FlowWalkthrough } from './showcase/FlowWalkthrough';
 import { StoryScreenshot } from './StoryScreenshot';
 import { workId } from '../data/workItems';
@@ -36,13 +37,16 @@ export function WorkStory({ item }: { item: WorkDetail }) {
           </section>
         )}
       </div>
-      {preview && (item.mark !== 'bloomnote' || view?.image !== preview.image) && (
-        <StoryScreenshot
-          image={view?.image ?? preview.image}
-          name={item.shortName ?? item.title}
-          caption={view?.caption ?? preview.caption}
-        />
-      )}
+      {item.mark === 'auth' && <ProjectPair name="platform" />}
+      {preview &&
+        item.mark !== 'auth' &&
+        (item.mark !== 'bloomnote' || view?.image !== preview.image) && (
+          <StoryScreenshot
+            image={view?.image ?? preview.image}
+            name={item.shortName ?? item.title}
+            caption={view?.caption ?? preview.caption}
+          />
+        )}
     </div>
   );
   return (

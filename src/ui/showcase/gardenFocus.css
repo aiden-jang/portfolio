@@ -40,9 +40,6 @@
 }
 
 @media (width < 768px) and (height <= 780px) {
-  html:root #sec-more-work:has(.bloom-gallery) {
-    --garden-entry: clamp(20px, 5svh, 38px);
-  }
   .bloom-garden-study > .bloom-garden-inner:not([hidden]) {
     gap: 10px;
     padding-block-start: 16px;

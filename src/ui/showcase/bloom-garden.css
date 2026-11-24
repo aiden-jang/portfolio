@@ -7,12 +7,8 @@
 
 html:root #sec-more-work:has(.bloom-gallery) {
   --garden-paper: #f1f2e7;
-  --garden-entry: clamp(105px, 16svh, 170px);
-  padding: var(--garden-entry) 0 clamp(30px, 4vw, 58px);
-  background:
-    linear-gradient(180deg, var(--color-bg), #393a30 35%, #818474 65%, var(--garden-paper)) top /
-      100% var(--garden-entry) no-repeat,
-    var(--color-bg);
+  padding: 0 0 clamp(30px, 4vw, 58px);
+  background: var(--color-bg);
 }
 .bloom-gallery {
   width: 100%;
@@ -206,9 +202,6 @@ html:root .bloom-gallery .bloom-gallery-rest {
   }
 }
 @media (max-width: 767px) {
-  html:root #sec-more-work:has(.bloom-gallery) {
-    --garden-entry: clamp(58px, 9svh, 78px);
-  }
   .bloom-garden {
     min-height: calc(89svh - var(--portfolio-header-height));
   }

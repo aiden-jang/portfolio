@@ -148,8 +148,8 @@ for (const width of [1440, 390]) {
     for (const [project, first, second, asset] of [
       ['platform', 'Choose an app', 'Already signed in', 'platform-app'],
     ] as const) {
-      const card = page.locator(`#project-${project}`);
-      await card.getByText('View screenshots', { exact: true }).click();
+      await page.getByRole('button', { name: 'How I built it: platform', exact: true }).click();
+      const card = page.locator('.work-modal-panel');
       const step = card.getByRole('button', { name: second, exact: true });
       await expect(card.getByRole('button', { name: first, exact: true })).toHaveAttribute(
         'aria-pressed',
@@ -169,6 +169,7 @@ for (const width of [1440, 390]) {
       await expect(dialog.getByText(`1 / 2 · ${first}`)).toBeVisible();
       await page.keyboard.press('Escape');
       await expect(trigger).toBeFocused();
+      await page.keyboard.press('Escape');
     }
     await expect(
       page.locator(':is(.project-featured-group, #sec-more-work) article[id^="project-"]'),

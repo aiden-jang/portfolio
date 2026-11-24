@@ -1,9 +1,6 @@
 #project-iodine .project-scene-body {
   background: radial-gradient(ellipse at 68% 50%, #182522 0%, #131918 38%, #111114 75%);
 }
-#sec-experience .experience-lead {
-  background: radial-gradient(ellipse at 64% 58%, #22312a 0%, #171f1c 54%, #131815 100%);
-}
 .experience-lead:has(.batching-spread[data-phase='after']) .experience-measure > span:last-child {
   color: #cef4d9;
 }
@@ -25,40 +22,6 @@
 #sec-more-work .gallery-companions #project-worth,
 #sec-more-work .gallery-companions #project-platform {
   padding-block: clamp(26px, 5vw, 72px);
-}
-.platform-handoff {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  display: grid;
-  aspect-ratio: 1.65;
-  background: #f2f1ed;
-  border-radius: 12px;
-}
-.platform-handoff > div {
-  grid-area: 1 / 1;
-  min-width: 0;
-  display: grid;
-  align-content: stretch;
-  grid-template-rows: minmax(0, 1fr) auto;
-  transition: opacity 280ms ease;
-}
-.platform-handoff img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 44%;
-}
-.platform-handoff span {
-  padding: 10px 16px;
-  background: #191a18;
-  color: #eae6db;
-  font-size: 13px;
-}
-.platform-handoff[data-open='true'] .platform-hub,
-.platform-handoff[data-open='false'] .platform-archive {
-  opacity: 0;
 }
 #sec-about .about-framing-notes {
   padding-block: 14px 20px;
@@ -87,18 +50,6 @@
     transform-origin: 58% 54%;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .platform-handoff > div {
-    transition: none;
-  }
-  .platform-handoff {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .platform-handoff > div {
-    grid-area: auto;
-    opacity: 1 !important;
-  }
-}
 #sec-more-work .project-scenes {
   margin-bottom: 0;
 }
@@ -116,9 +67,6 @@
 }
 #sec-more-work #project-platform .project-card-media {
   max-width: 580px;
-}
-#sec-more-work #project-platform .platform-handoff img {
-  object-fit: contain;
 }
 #sec-more-work #project-wherever {
   --scene-run: min(29svh, 265px);
@@ -160,19 +108,6 @@
     text-wrap: balance;
   }
 }
-.platform-screenshots {
-  margin-top: 8px;
-  color: var(--color-muted);
-  font-size: 13px;
-}
-
-.platform-screenshots summary {
-  display: list-item;
-  min-height: 44px;
-  padding-block: 12px;
-  cursor: pointer;
-}
-
 #mobile-navigation > button {
   display: flex;
   min-height: 44px;
@@ -187,4 +122,11 @@
 #mobile-navigation > button svg {
   width: 16px;
   height: 16px;
+}
+
+.platform-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
 }

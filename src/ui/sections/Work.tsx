@@ -16,7 +16,6 @@ import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
 import { ControlIcon } from '../ControlIcon';
-import { PlatformHandoff } from '../showcase/PlatformHandoff';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
@@ -181,13 +180,14 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
       <div className="project-card-media">
         {item.mark === 'auth' && !location.search.includes('preview=platform') ? (
-          <>
-            <PlatformHandoff />
-            <details className="platform-screenshots">
-              <summary>View screenshots</summary>
-              {media}
-            </details>
-          </>
+          <img
+            className="platform-cover"
+            src="/projects/platform-hub.webp"
+            width={1050}
+            height={740}
+            alt="The shared accounts hub and its connected apps"
+            loading="lazy"
+          />
         ) : (
           media
         )}
