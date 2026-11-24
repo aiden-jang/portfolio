@@ -252,13 +252,8 @@ export function Car() {
       useGarageStudy.getState().refined;
     reviewFinish.current?.(refinements);
     const studio = review.active || isOpeningStudio(app);
-    if (afterHoursSurfaces.current) {
-      afterHoursSurfaces.current.value = smoothTowards(
-        afterHoursSurfaces.current.value,
-        Number(!review.active && isOpeningLowLight(app)),
-        Math.min(1, dt * 10),
-      );
-    }
+    const lampLevel =
+      afterHoursSurfaces.current?.(!review.active && isOpeningLowLight(app), dt) ?? 0;
     studioFinish.current?.(
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,
@@ -291,7 +286,10 @@ export function Car() {
 
     for (const l of refs.lamps) {
       const boost = 1 + pulse * 0.8;
-      l.light.intensity = l.baseIntensity * boost * (studio ? (l.isHeadlight ? 0.035 : 0.14) : 1);
+      const studioScale = l.isHeadlight
+        ? 0.035 * (1 - lampLevel * 0.24)
+        : 0.14 * (1 - lampLevel * 0.74);
+      l.light.intensity = l.baseIntensity * boost * (studio ? studioScale : 1);
     }
     updateDetails(dt);
   });

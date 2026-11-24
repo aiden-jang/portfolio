@@ -14,6 +14,7 @@ const roomUniforms = `
   uniform float studioDusk;
   uniform float garageStudioDim;
   uniform float afterHoursGrounding;
+  uniform vec3 afterHoursLampFloor;
   uniform float garageStudioLow;
   uniform float garageStudioPass;
   uniform float garageStudioLamps;
@@ -54,6 +55,7 @@ export function applyStudioReflection(
       studioDusk: { value: 0 },
       garageStudioDim: { value: 0 },
       afterHoursGrounding: { value: 0 },
+      afterHoursLampFloor: { value: new THREE.Vector3() },
       garageStudioLow: { value: 0 },
       garageStudioPass: { value: 0 },
       garageStudioLamps: { value: 0 },

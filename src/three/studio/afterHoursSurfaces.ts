@@ -1,4 +1,6 @@
 import { Mesh, MeshStandardMaterial, type Object3D } from 'three';
+import { smoothTowards } from '../../math';
+import { prepareAfterHoursLamps } from './afterHoursLamps';
 
 const carSurfaces = {
   'ferrari-f120-f40.glb': { paint: 'Metallic', glass: 'Translucent' },
@@ -72,5 +74,12 @@ export function prepareAfterHoursSurfaces(model: Object3D, carFile: string) {
       };
     }
   });
-  return evening;
+  const lamps = prepareAfterHoursLamps(model, carFile);
+  return (active: boolean, dt: number) => {
+    const target = Number(active);
+    evening.value = smoothTowards(evening.value, target, Math.min(1, dt * 10));
+    if (!lamps) return 0;
+    lamps.value = smoothTowards(lamps.value, target, Math.min(1, dt * 9));
+    return lamps.value;
+  };
 }

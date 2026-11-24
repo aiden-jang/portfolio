@@ -15,6 +15,7 @@ import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import { applyStudioReflection } from './studioReflection';
 import { isOpeningLowLight } from '../lighting';
+import { afterHoursLampStyles } from './studio/afterHoursLamps';
 import { openingStudioWeight } from './openingStudio';
 
 const FLOOR_RADIUS = 14;
@@ -122,6 +123,14 @@ export function Floor({
       const afterHours = !closing && !inLineup && !preview.active && isOpeningLowLight(state);
       uniforms.afterHoursGrounding.value +=
         (Number(afterHours) - uniforms.afterHoursGrounding.value) * settle;
+      const lampFloor = uniforms.afterHoursLampFloor.value as THREE.Vector3;
+      const lampStyle = afterHoursLampStyles[CARS[state.carIndex].file];
+      const lampActive = afterHours && lampStyle !== undefined && !state.isCarLoading;
+      lampFloor.x = smoothTowards(lampFloor.x, Number(lampActive), settle);
+      if (lampStyle) {
+        lampFloor.y = lampStyle.spacing;
+        lampFloor.z = lampStyle.warmth;
+      }
       const roomDim = inBlackout() ? 1 : afterHours ? 0.82 : 0;
       uniforms.garageStudioDim.value += (roomDim - uniforms.garageStudioDim.value) * settle;
       const extendedLamp = preview.active && useGarageExhibit.getState().exhibit === 'lamps';
