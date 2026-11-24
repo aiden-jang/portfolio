@@ -31,6 +31,37 @@ for (const width of [1440, 390]) {
     ).toBeGreaterThanOrEqual(-1);
     await expect(dock).toHaveCSS('opacity', '1');
     await expect(dock.getByRole('button', { name: 'Reset view', exact: true })).toHaveCount(0);
+    const dockPadding = await dock.locator('.car-controls-row').evaluate((row) => {
+      const bounds = row.getBoundingClientRect();
+      const x = bounds.x + bounds.width / 2;
+      const y = bounds.y + 2;
+      return { x, y, isPadding: document.elementFromPoint(x, y) === row };
+    });
+    expect(dockPadding.isPadding).toBe(true);
+    if (width < 768) {
+      const row = dock.locator('.car-controls-row');
+      const touch = {
+        pointerType: 'touch',
+        pointerId: 9,
+        isPrimary: true,
+        bubbles: true,
+        clientX: dockPadding.x,
+        clientY: dockPadding.y,
+      };
+      await row.dispatchEvent('pointerdown', touch);
+      await page.evaluate(
+        () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))),
+      );
+      await row.dispatchEvent('pointerup', touch);
+    } else {
+      await page.mouse.move(dockPadding.x, dockPadding.y);
+      await page.mouse.down();
+      await page.evaluate(
+        () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))),
+      );
+      await page.mouse.up();
+    }
+    await expect(playing).toBeEnabled();
     const position = await camera.boundingBox();
     await playing.click();
     await expect(paused).toBeVisible();

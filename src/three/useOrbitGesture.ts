@@ -17,7 +17,7 @@ const MIN_ELEVATION_FREE = -0.4;
 const MAX_ELEVATION_FREE = 0.9;
 const SCROLL_PAUSE_DURATION = 0.2;
 const NON_DRAGGABLE_SELECTOR =
-  'a, button, input, select, textarea, summary, dialog, .panel, #nav, .garage-lineup, .garage-studio';
+  'a, button, input, select, textarea, summary, dialog, .panel, #nav, .car-controls-row, .garage-lineup, .garage-studio';
 
 export type RigState = {
   dragAzimuth: number;
