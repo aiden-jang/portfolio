@@ -28,7 +28,7 @@ const redCover =
   `
   diffuseColor.a = mix(diffuseColor.a,.70,back*lampLevel);
 `;
-const rain = tail('(.38 + 1.48*redLens(diffuseColor.rgb))*float(abs(lampPosition.x)<.09)');
+const rain = tail('.28 + 1.48*redLens(diffuseColor.rgb) + .10*float(abs(lampPosition.x)<.09)');
 
 export const additionalAfterHoursLamps: Partial<Record<string, LampProfile>> = {
   'toyota-a80-supra.glb': {
@@ -61,8 +61,8 @@ export const additionalAfterHoursLamps: Partial<Record<string, LampProfile>> = {
       BMW_E30_M3_TAILLIGHT_REFLECTOR:
         tail(redTexture) +
         `
-        float reverseLamp = neutralLens(totalEmissiveRadiance) * back * lampLevel;
-        outgoingLight = max(vec3(0.),outgoingLight - .95 * reverseLamp * totalEmissiveRadiance);
+        float unfilteredBulb = neutralLens(totalEmissiveRadiance) * back * lampLevel;
+        outgoingLight = max(vec3(0.),outgoingLight - .95 * unfilteredBulb * totalEmissiveRadiance);
       `,
     },
   },

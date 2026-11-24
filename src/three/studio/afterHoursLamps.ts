@@ -2,6 +2,7 @@ import { Mesh, MeshStandardMaterial, type Object3D } from 'three';
 import { smoothTowards } from '../../math';
 import { additionalAfterHoursLamps, type LampFloorProfile } from './afterHoursLampProfiles';
 import { parkedLampMaterials, studioLensReflection } from './studioLampMaterials';
+import { exteriorLampShaders } from './exteriorLampProfiles';
 import type { Lamp } from '../../types';
 
 export const afterHoursLampStyles: Partial<Record<string, LampFloorProfile>> = {
@@ -60,7 +61,8 @@ const lampMaterials: Record<string, Record<string, string>> = {
 
 export function prepareAfterHoursLamps(model: Object3D, file: string) {
   const shaders = lampMaterials[file] ?? additionalAfterHoursLamps[file]?.materials;
-  if (!shaders) return null;
+  const exterior = exteriorLampShaders[file];
+  if (!shaders && !exterior) return null;
   const level = { value: 0 };
   const managed = { value: 0 };
   const masks = parkedLampMaterials[file];
@@ -69,7 +71,7 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
     if (!(node instanceof Mesh)) return;
     for (const material of Array.isArray(node.material) ? node.material : [node.material]) {
       if (!(material instanceof MeshStandardMaterial) || visited.has(material)) continue;
-      const lens = shaders[material.name];
+      const lens = (shaders?.[material.name] ?? '') + (exterior?.[material.name] ?? '');
       const mask = masks?.[material.name];
       const reflection = studioLensReflection[file]?.[material.name];
       if (!lens && !mask && !reflection) continue;
@@ -101,6 +103,14 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
             return smoothstep(.018,.20,sampleColor.r)
               * smoothstep(.075,.34,(sampleColor.r-sampleColor.g*1.85)/max(.06,sampleColor.r))
               * smoothstep(.04,.24,(sampleColor.r-sampleColor.b*1.6)/max(.06,sampleColor.r));
+          }
+          float amberLens(vec3 c) {
+            float peak = max(.01,c.r);
+            return smoothstep(.08,.36,peak)
+              * smoothstep(.12,.34,c.g/peak)
+              * (1.-smoothstep(.76,.96,c.g/peak))
+              * (1.-smoothstep(.18,.43,c.b/peak))
+              * smoothstep(.035,.15,c.g-c.b);
           }
         ` +
           shader.fragmentShader.replace(
