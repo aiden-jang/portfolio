@@ -14,7 +14,8 @@ import { useAppStore } from '../store';
 import { activeOrbit, inBlackout, useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { F40_PAINT, openingStudioWeight } from './openingStudio';
-import { isOpeningLowLight, isOpeningStudio } from '../lighting';
+import { isOpeningStudio } from '../lighting';
+import { isAfterHoursScene } from '../garageStudio/lighting';
 import { applyAfterHoursLighting } from './studio/afterHoursLighting';
 import { useStudioEnvironment } from './studio/useStudioEnvironment';
 
@@ -94,7 +95,7 @@ export function Lights() {
       dt,
     );
     const studio = lineup || preview.active || isOpeningStudio(state);
-    const afterHours = !lineup && !preview.active && isOpeningLowLight(state);
+    const afterHours = !lineup && isAfterHoursScene(state, preview);
     const low = (afterHoursLevel.current = smoothTowards(
       afterHoursLevel.current,
       Number(afterHours),

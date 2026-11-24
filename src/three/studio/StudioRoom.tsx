@@ -4,7 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getStudioProjection, photoProjectionGlsl } from './projection';
 import { inBlackout, useGarageStudio } from '../../garageStudio/state';
-import { isOpeningLowLight } from '../../lighting';
+import { isAfterHoursScene } from '../../garageStudio/lighting';
 import { useLineup } from '../../lineup/state';
 import { useAppStore } from '../../store';
 import { studioTexture } from './textures';
@@ -172,11 +172,12 @@ export function StudioRoom() {
   const studioDusk = useMemo(() => ({ value: 0 }), []);
   const roomDim = useMemo(() => ({ value: 0 }), []);
   useFrame((_state, dt) => {
-    const { active, study, chapter } = useGarageStudio.getState();
-    const dusk = inStudioDusk({ active, chapter });
+    const studio = useGarageStudio.getState();
+    const { active, study } = studio;
+    const dusk = inStudioDusk(studio);
     studioDusk.value += (Number(dusk) - studioDusk.value) * Math.min(dt * 12, 1);
     const coolBar =
-      !active && !useLineup.getState().active && isOpeningLowLight(useAppStore.getState());
+      !useLineup.getState().active && isAfterHoursScene(useAppStore.getState(), studio);
     const bar = room.uniforms.studioBarBlue;
     bar.value = THREE.MathUtils.lerp(bar.value, Number(coolBar), Math.min(1, dt * 9));
     const dim = inBlackout()

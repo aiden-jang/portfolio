@@ -28,6 +28,12 @@ for (const width of [1440, 390]) {
 
     test('switches walkaround cameras, render passes and blackout lighting', async ({ page }) => {
       const { studio, button } = await openStudio(page);
+      const looks = studio.getByRole('combobox', { name: 'Studio lighting' });
+      await expect(looks).toHaveValue('night');
+      await looks.selectOption('studio');
+      await expect(studio.getByText('AJ / Studio', { exact: true })).toBeVisible();
+      await looks.selectOption('night');
+      await expect(studio.getByText('AJ / After Hours', { exact: true })).toBeVisible();
       await expect(button('Wheel height')).toHaveAttribute('aria-pressed', 'true');
       await button('Standard height').click();
       await expect(button('Standard height')).toHaveAttribute('aria-pressed', 'true');
@@ -53,7 +59,6 @@ for (const width of [1440, 390]) {
       }
       await button('Done').click();
       await button('Blackout').first().click();
-      const looks = studio.getByRole('combobox', { name: 'Studio lighting' });
       await looks.selectOption('blackout');
       await expect(looks).toHaveValue('blackout');
     });

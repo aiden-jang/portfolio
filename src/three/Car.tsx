@@ -34,7 +34,8 @@ import {
   makeRadialGlowTexture,
 } from './carHelpers';
 
-import { isOpeningLowLight, isOpeningStudio } from '../lighting';
+import { isOpeningStudio } from '../lighting';
+import { isAfterHoursScene } from '../garageStudio/lighting';
 import { prepareAfterHoursSurfaces } from './studio/afterHoursSurfaces';
 import { motionState } from './studioEntrance';
 import { getStudioProjection } from './studio/projection';
@@ -252,8 +253,7 @@ export function Car() {
       useGarageStudy.getState().refined;
     reviewFinish.current?.(refinements);
     const studio = review.active || isOpeningStudio(app);
-    const lampLevel =
-      afterHoursSurfaces.current?.(!review.active && isOpeningLowLight(app), dt) ?? 0;
+    const lampLevel = afterHoursSurfaces.current?.(isAfterHoursScene(app, review), dt) ?? 0;
     studioFinish.current?.(
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,

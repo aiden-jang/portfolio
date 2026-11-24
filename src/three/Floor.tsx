@@ -14,7 +14,7 @@ import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import { applyStudioReflection } from './studioReflection';
-import { isOpeningLowLight } from '../lighting';
+import { isAfterHoursScene } from '../garageStudio/lighting';
 import { afterHoursLampStyles } from './studio/afterHoursLamps';
 import { openingStudioWeight } from './openingStudio';
 
@@ -120,7 +120,7 @@ export function Floor({
       const settle = Math.min(1, dt * 10);
       const dusk = inStudioDusk(preview);
       uniforms.studioDusk.value += (Number(dusk) - uniforms.studioDusk.value) * settle;
-      const afterHours = !closing && !inLineup && !preview.active && isOpeningLowLight(state);
+      const afterHours = !closing && !inLineup && isAfterHoursScene(state, preview);
       uniforms.afterHoursGrounding.value +=
         (Number(afterHours) - uniforms.afterHoursGrounding.value) * settle;
       const head = uniforms.afterHoursHeadSpill.value as THREE.Vector3;

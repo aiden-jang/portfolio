@@ -1,5 +1,9 @@
 import type { RefObject } from 'react';
 import { ControlIcon } from '../ui/ControlIcon';
+import { useAppStore } from '../store';
+import { useGarageStudy } from '../garageStudy/state';
+import { useGarageStudio } from './state';
+import { isGarageAfterHours } from './lighting';
 
 type Props = {
   title: string;
@@ -11,11 +15,14 @@ type Props = {
 };
 
 export function StudioHeading({ title, car, incoming, leadWithCar, exit, onExit }: Props) {
+  const theme = useAppStore((state) => state.themeName);
+  const look = useGarageStudy((state) => state.look);
+  const afterHours = useGarageStudio((state) => isGarageAfterHours(theme, state, look));
   const linkedShot = new URLSearchParams(window.location.search).get('garage') === 'studio';
   return (
     <>
       <header className="garage-studio-header">
-        <span>AJ / Studio</span>
+        <span>{afterHours ? 'AJ / After Hours' : 'AJ / Studio'}</span>
         <button ref={exit} type="button" className="studio-return" onClick={onExit}>
           <ControlIcon name="arrow" /> {linkedShot ? 'Back to portfolio' : 'Back to Garage'}
         </button>

@@ -28,7 +28,7 @@ const redCover =
   `
   diffuseColor.a = mix(diffuseColor.a,.70,back*lampLevel);
 `;
-const rain = tail('(.26 + .95*redLens(diffuseColor.rgb))*float(abs(lampPosition.x)<.09)');
+const rain = tail('(.38 + 1.48*redLens(diffuseColor.rgb))*float(abs(lampPosition.x)<.09)');
 
 export const additionalAfterHoursLamps: Partial<Record<string, LampProfile>> = {
   'toyota-a80-supra.glb': {

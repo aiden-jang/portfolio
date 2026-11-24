@@ -2,6 +2,7 @@ import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { clearStudioCut } from './studioCut';
 import { useMatchedSwap } from './matchedSwap';
 import { stopOrbitMotion } from './orbitMotion';
+import { parseStudioLighting, saveStudioLighting } from './lighting';
 import { resetExhibit } from '../garageExhibits/state';
 import { resetStudyCamera, startLineupGlide, track, useGarageStudy } from '../garageStudy/state';
 import { create } from 'zustand';
@@ -231,15 +232,13 @@ export function shotUrl() {
   url.searchParams.set('zoom', current.zoom.toFixed(4));
   url.searchParams.set('car', String(app.carIndex));
   url.searchParams.set('paint', app.activeBodyColor);
-  url.searchParams.set('light', 'studio');
   url.searchParams.set(
     'part',
     (CARS[app.carIndex].drs ? app.drsOpen : app.headlightsRaised) ? 'up' : 'down',
   );
   const optics = useGarageStudy.getState();
   url.searchParams.set('finish', optics.refined ? 'refined' : 'current');
-  if (optics.look) url.searchParams.set('studioLook', optics.look);
-  else url.searchParams.delete('studioLook');
+  saveStudioLighting(url.searchParams, app.themeName, state, optics.look);
   if (optics.camera !== 'orbit') url.searchParams.set('camera', optics.camera);
   else url.searchParams.delete('camera');
   if (optics.camera === 'glide') url.searchParams.set('glide', track.position.toFixed(4));
@@ -265,10 +264,9 @@ export function startFromLink(params: URLSearchParams) {
   const car = useAppStore.getState().carIndex;
   if (view === 'lineup' && (proposed || (params.has('variant') && camera !== 'glide')))
     resetStudyCamera();
-  const look = params.get('studioLook');
   useGarageStudy.setState({
     refined: params.get('finish') !== 'current',
-    look: look === 'studio' || look === 'dusk' || look === 'blackout' ? look : null,
+    look: parseStudioLighting(params.get('studioLook'), view),
   });
   if (
     view === 'walk' &&
