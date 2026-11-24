@@ -1,9 +1,27 @@
 import { useGarageStudy, type StudioLighting } from '../garageStudy/state';
-import { isOpeningLowLight } from '../lighting';
+import type { Exhibit } from '../garageExhibits/state';
+import { isOpeningLowLight, isOpeningStudio } from '../lighting';
 import type { ThemeName } from '../types';
 import type { useGarageStudio } from './state';
 
 type StudioView = Pick<ReturnType<typeof useGarageStudio.getState>, 'active' | 'chapter' | 'study'>;
+
+export function usesVehicleLampPreset(
+  app: Parameters<typeof isOpeningStudio>[0],
+  studio: StudioView,
+  exhibit: Exhibit,
+) {
+  if (app.isContactVisible || app.renderFinish) return false;
+  if (!studio.active) return isOpeningStudio(app);
+  const look = useGarageStudy.getState().look;
+  return (
+    studio.chapter === 'walk' &&
+    exhibit === 'free' &&
+    (!studio.study || studio.study === 'finished') &&
+    look !== 'dusk' &&
+    look !== 'blackout'
+  );
+}
 
 export function isGarageAfterHours(
   theme: ThemeName,

@@ -13,6 +13,7 @@ import {
 } from '../three/carHelpers';
 import { loadCarModel } from '../three/loadCarModel';
 import { prepareModelFinish } from '../three/modelFinishes';
+import { prepareAfterHoursLamps } from '../three/studio/afterHoursLamps';
 import { studioCarFootprint } from '../three/studio/carGrounding';
 import { tuneStudioFerrari } from '../three/studio/ferrariMaterials';
 import { F40, F40_LENGTH, RB16B } from './vehicles';
@@ -52,11 +53,14 @@ export async function loadLineup(signal: AbortSignal, kind: LineupKind) {
       detectBodyMaterial(rb16b, second.paintMaterial)?.color?.set(second.defaultPaint.hex);
     }
     const cars = stageCars(f40, rb16b, kind);
+    const tuneFerrari = kind === 'original' ? tuneStudioFerrari(f40) : undefined;
+    prepareAfterHoursLamps(f40, first.file)?.(false, 1, true);
+    prepareAfterHoursLamps(rb16b, second.file)?.(false, 1, true);
     return {
       cars,
       points: cars.flatMap(({ bounds }) => corners(bounds)),
       wings: race ? [createDRS(f40, first.drs), createDRS(rb16b, second.drs)] : [],
-      tuneFerrari: kind === 'original' ? tuneStudioFerrari(f40) : undefined,
+      tuneFerrari,
       tuneRedBull: kind === 'original' ? tuneStudyMaterials(rb16b, RB16B.file) : undefined,
       dispose: () => {
         disposeModel(f40);

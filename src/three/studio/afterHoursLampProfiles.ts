@@ -37,6 +37,10 @@ export const additionalAfterHoursLamps: Partial<Record<string, LampProfile>> = {
     materials: {
       TOYOTA_SUPRA_MAIN_LIGHT: head(neutral, '1.15') + tail(redTexture),
       TOYOTA_SUPRA_LIGHT_GLASS: tail(),
+      TOYOTA_SUPRA_HEADLIGHT_BASE_CHROME: head(
+        neutral,
+        '1.22*exp(-pow((abs(lampPosition.x)-.50)/.14,2.)-pow((lampPosition.y-.625)/.078,2.))',
+      ),
     },
   },
   'porsche-930-911-rwb.glb': {

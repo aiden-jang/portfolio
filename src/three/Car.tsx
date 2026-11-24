@@ -35,7 +35,8 @@ import {
 } from './carHelpers';
 
 import { isOpeningStudio } from '../lighting';
-import { isAfterHoursScene } from '../garageStudio/lighting';
+import { isAfterHoursScene, usesVehicleLampPreset } from '../garageStudio/lighting';
+import { updateVehicleLights } from './studio/afterHoursLamps';
 import { prepareAfterHoursSurfaces } from './studio/afterHoursSurfaces';
 import { motionState } from './studioEntrance';
 import { getStudioProjection } from './studio/projection';
@@ -253,7 +254,9 @@ export function Car() {
       useGarageStudy.getState().refined;
     reviewFinish.current?.(refinements);
     const studio = review.active || isOpeningStudio(app);
-    const lampLevel = afterHoursSurfaces.current?.(isAfterHoursScene(app, review), dt) ?? 0;
+    const lampPreset = usesVehicleLampPreset(app, review, exhibit.exhibit);
+    const lampLevel =
+      afterHoursSurfaces.current?.(isAfterHoursScene(app, review), dt, lampPreset) ?? 0;
     studioFinish.current?.(
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,
@@ -261,8 +264,8 @@ export function Car() {
       app.isContactVisible && !review.active && group.visible,
       studio && !review.active && group.visible && !reduced ? motionState.openingOrbitProgress : 0,
     );
-    headlights.current?.setRaised(useAppStore.getState().headlightsRaised, prefersReducedMotion());
-    headlights.current?.update(dt, lampLevel);
+    headlights.current?.setRaised(app.headlightsRaised, reduced);
+    headlights.current?.update(dt, lampLevel, lampPreset);
     const { refs } = app;
     const target = THEMES.studio;
     const k = Math.min(1, dt * TRANSITION_RATE);
@@ -284,13 +287,7 @@ export function Car() {
     const pulse = reduced ? 0 : refs.lightPulseT;
     underglowMat.opacity = studio ? 0.012 : 0.1 + breath * 0.04;
 
-    for (const l of refs.lamps) {
-      const boost = 1 + pulse * 0.8;
-      const studioScale = l.isHeadlight
-        ? 0.035 * (1 - lampLevel * 0.24)
-        : 0.14 * (1 - lampLevel * 0.74);
-      l.light.intensity = l.baseIntensity * boost * (studio ? studioScale : 1);
-    }
+    updateVehicleLights(refs.lamps, studio, lampPreset, lampLevel, pulse);
     updateDetails(dt);
   });
 

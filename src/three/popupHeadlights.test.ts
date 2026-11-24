@@ -160,6 +160,13 @@ it('lights both actual lens surfaces, follows the hinges and restores owned reso
   controller.setRaised(true, true);
   expect(glowing.emissiveIntensity).toBe(4);
   expect(lights.every((light) => light.intensity > 0)).toBe(true);
+  controller.update(0.1, 0, true);
+  expect(glowing.emissiveIntensity).toBe(0);
+  expect(lights.every((light) => light.intensity === 0)).toBe(true);
+  expect(lights[0].getWorldPosition(new Vector3()).distanceTo(openedPosition)).toBeLessThan(1e-7);
+  controller.update(0.1, 1, true);
+  expect(glowing.emissiveIntensity).toBeGreaterThan(4);
+  expect(lights.every((light) => light.intensity > 0)).toBe(true);
   controller.dispose();
   expect(bulb.material).toBe(original);
   expect(disposed).toHaveBeenCalledOnce();

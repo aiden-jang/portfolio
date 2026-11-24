@@ -1,12 +1,20 @@
 import { Mesh, MeshStandardMaterial, type Object3D } from 'three';
 import { smoothTowards } from '../../math';
 import { additionalAfterHoursLamps, type LampFloorProfile } from './afterHoursLampProfiles';
+import { parkedLampMaterials, studioLensReflection } from './studioLampMaterials';
+import type { Lamp } from '../../types';
 
 export const afterHoursLampStyles: Partial<Record<string, LampFloorProfile>> = {
   ...additionalAfterHoursLamps,
   'ferrari-f120-f40.glb': { head: { spacing: 0.67, warmth: 0.46 }, tail: 0.67 },
-  'corvette-c8r-tf-sport.glb': { head: { spacing: 0.84, warmth: 0 }, tail: 0.84 },
-  'mercedes-benz-w198-300-sl.glb': { head: { spacing: 0.76, warmth: 0.85 }, tail: 0.76 },
+  'corvette-c8r-tf-sport.glb': {
+    head: { spacing: 0.84, warmth: 0 },
+    tail: 0.84,
+  },
+  'mercedes-benz-w198-300-sl.glb': {
+    head: { spacing: 0.76, warmth: 0.85 },
+    tail: 0.76,
+  },
 };
 
 const lampMaterials: Record<string, Record<string, string>> = {
@@ -54,13 +62,17 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
   const shaders = lampMaterials[file] ?? additionalAfterHoursLamps[file]?.materials;
   if (!shaders) return null;
   const level = { value: 0 };
+  const managed = { value: 0 };
+  const masks = parkedLampMaterials[file];
   const visited = new Set<MeshStandardMaterial>();
   model.traverse((node) => {
     if (!(node instanceof Mesh)) return;
     for (const material of Array.isArray(node.material) ? node.material : [node.material]) {
       if (!(material instanceof MeshStandardMaterial) || visited.has(material)) continue;
       const lens = shaders[material.name];
-      if (!lens) continue;
+      const mask = masks?.[material.name];
+      const reflection = studioLensReflection[file]?.[material.name];
+      if (!lens && !mask && !reflection) continue;
       visited.add(material);
       const compile = material.onBeforeCompile.bind(material);
       const key = material.customProgramCacheKey();
@@ -69,6 +81,7 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
       material.onBeforeCompile = (shader, renderer) => {
         compile(shader, renderer);
         shader.uniforms.lampLevel = level;
+        shader.uniforms.managedLamps = managed;
         shader.vertexShader =
           'varying vec3 lampPosition;\n' +
           shader.vertexShader.replace(
@@ -78,6 +91,7 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
         shader.fragmentShader =
           `
           uniform float lampLevel;
+          uniform float managedLamps;
           varying vec3 lampPosition;
           float neutralLens(vec3 sampleColor) {
             float minChannel = min(min(sampleColor.r,sampleColor.g),sampleColor.b);
@@ -92,12 +106,26 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
           shader.fragmentShader.replace(
             '#include <opaque_fragment>',
             `
+          ${
+            mask
+              ? `
+            float lensMask = managedLamps * (${mask});
+            float sourcePeak = max(max(totalEmissiveRadiance.r,totalEmissiveRadiance.g),totalEmissiveRadiance.b);
+            vec3 lensTexture = totalEmissiveRadiance / (.34+sourcePeak);
+            outgoingLight = max(vec3(0.),outgoingLight - totalEmissiveRadiance*lensMask)
+              + lensTexture*lensMask*mix(.103,.32,lampLevel);
+          `
+              : ''
+          }
+          ${reflection ? `outgoingLight *= 1.-managedLamps*(1.-lampLevel)*(${reflection});` : ''}
           if (lampLevel > .001) {
             float angle = abs(dot(normal,normalize(vViewPosition)));
             float lightView = lampLevel * mix(.24,1.,smoothstep(.09,.74,angle));
             float front = smoothstep(1.41,1.82,lampPosition.z);
             float back = smoothstep(1.56,1.94,-lampPosition.z);
-            ${lens}
+            ${lens ? 'vec3 unlitColor = outgoingLight;' : ''}
+            ${lens ?? ''}
+            ${lens ? 'outgoingLight += .58 * max(vec3(0.),outgoingLight-unlitColor);' : ''}
           }
           #include <opaque_fragment>
         `,
@@ -105,8 +133,27 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
       };
     }
   });
-  return (active: boolean, dt: number) => {
+  return (active: boolean, dt: number, manageLamps = false) => {
+    managed.value = Number(manageLamps);
     level.value = smoothTowards(level.value, Number(active), Math.min(1, dt * 9));
     return level.value;
   };
+}
+
+export function updateVehicleLights(
+  lamps: readonly Lamp[],
+  studio: boolean,
+  followPreset: boolean,
+  lampLevel: number,
+  pulse: number,
+) {
+  const boost = 1 + pulse * 0.8;
+  for (const { light, baseIntensity, isHeadlight } of lamps) {
+    const scale = followPreset
+      ? lampLevel * (isHeadlight ? 0.08 : 0.053)
+      : isHeadlight
+        ? 0.035 * (1 - lampLevel * 0.24)
+        : 0.14 * (1 - lampLevel * 0.74);
+    light.intensity = baseIntensity * boost * (studio ? scale : 1);
+  }
 }

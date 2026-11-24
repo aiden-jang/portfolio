@@ -130,8 +130,8 @@ export function Floor({
       const lampActive = afterHours && !!lamps && !state.isCarLoading;
       const headsOn =
         lampActive && !!lamps.head && (!car.popupHeadlights || state.headlightsRaised);
-      head.x = smoothTowards(head.x, Number(headsOn), settle);
-      tail.x = smoothTowards(tail.x, Number(lampActive), settle);
+      head.x = smoothTowards(head.x, Number(headsOn) * 2.35, settle);
+      tail.x = smoothTowards(tail.x, Number(lampActive) * 1.38, settle);
       if (lamps) {
         head.y = lamps.head?.spacing ?? 0;
         head.z = lamps.head?.warmth ?? 0;

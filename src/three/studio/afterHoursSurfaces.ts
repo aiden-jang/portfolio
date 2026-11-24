@@ -75,9 +75,9 @@ export function prepareAfterHoursSurfaces(model: Object3D, carFile: string) {
     }
   });
   const lamps = prepareAfterHoursLamps(model, carFile);
-  return (active: boolean, dt: number) => {
+  return (active: boolean, dt: number, manageLamps = false) => {
     const target = Number(active);
     evening.value = smoothTowards(evening.value, target, Math.min(1, dt * 10));
-    return lamps?.(active, dt) ?? 0;
+    return lamps?.(active, dt, manageLamps) ?? 0;
   };
 }
