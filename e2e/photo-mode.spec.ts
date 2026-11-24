@@ -39,11 +39,10 @@ for (const width of [1440, 390, 320]) {
       });
       await page.goto('/?car=0');
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60000 });
-      const garage = page
-        .getByRole('button', { name: 'Garage controls', exact: true })
+      const trigger = page
+        .getByRole('button', { name: 'Photo mode', exact: true })
         .filter({ visible: true });
-      await garage.press('Control+k');
-      await page.getByRole('option', { name: /Photo mode/ }).click();
+      await trigger.click();
       const photo = page.getByRole('region', { name: 'Photo mode' });
       await expect(photo).toBeVisible();
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeHidden();
@@ -94,7 +93,7 @@ for (const width of [1440, 390, 320]) {
       await expect(photo.getByRole('button', { name: 'Capture photo', exact: true })).toBeVisible();
       await page.keyboard.press('Escape');
       await expect(photo).toHaveCount(0);
-      await expect(garage).toBeFocused();
+      await expect(trigger).toBeFocused();
       expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('');
       if (width < 768) {
         await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();

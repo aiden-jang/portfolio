@@ -87,20 +87,6 @@
   color: var(--color-muted);
   font-size: 13px;
 }
-.about-framing-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 12px;
-}
-.about-framing-actions a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.about-framing-actions svg {
-  width: 15px;
-  height: 15px;
-}
 @media (max-width: 767px) {
   .scroll-film-track {
     --scroll-travel: 59svh;

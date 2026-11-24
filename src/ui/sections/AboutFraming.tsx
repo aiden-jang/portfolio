@@ -1,7 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { openAboutShot } from '../../garageStudio/aboutShot';
-import { useAppStore } from '../../store';
-import { ControlIcon } from '../ControlIcon';
 import './about-framing.css';
 
 const media = '/showroom/finish-study/';
@@ -20,7 +17,6 @@ export function AboutFraming() {
   const track = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const range = useRef<HTMLInputElement>(null);
-  const sceneUnavailable = useAppStore((state) => state.sceneUnavailable);
 
   useEffect(() => {
     const lane = track.current!;
@@ -159,21 +155,6 @@ export function AboutFraming() {
           <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">vecarz</a>, CC
           BY 4.0.
         </span>
-        <div className="about-framing-actions">
-          {!sceneUnavailable && (
-            <button
-              className="creative-about-action"
-              type="button"
-              aria-label="Open this shot in Studio"
-              onClick={(event) => openAboutShot(event.currentTarget)}
-            >
-              Open this shot in Studio
-            </button>
-          )}
-          <a className="creative-about-action" href="/cases/showroom/">
-            How I built the showroom <ControlIcon name="arrow" />
-          </a>
-        </div>
       </div>
     </figure>
   );

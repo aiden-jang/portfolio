@@ -9,6 +9,7 @@ import { Hint, AllControlsButton } from './Hint';
 import './car-controls.css';
 import { useEffect, useRef } from 'react';
 import { PaintPicker } from './PaintPicker';
+import { usePhotoMode } from './photo/state';
 import { CarZoomControls } from './CarZoomControls';
 
 function CarActionSlot() {
@@ -16,6 +17,26 @@ function CarActionSlot() {
     <div className="car-action-slot">
       <HeadlightButton />
       <CarDetailButton />
+    </div>
+  );
+}
+
+function IntroActions() {
+  const openPhoto = usePhotoMode((state) => state.open);
+  const loading = useAppStore((state) => state.isCarLoading);
+  const failed = useAppStore((state) => Boolean(state.carLoadError));
+  return (
+    <div className="intro-actions">
+      <button
+        type="button"
+        aria-label="Photo mode"
+        className="scene-control-button"
+        disabled={loading || failed}
+        onClick={(event) => openPhoto(event.currentTarget)}
+      >
+        Photo
+      </button>
+      <AllControlsButton />
     </div>
   );
 }
@@ -61,7 +82,7 @@ export function CarControls() {
               </div>
               <MobileThemeButton />
               <CarActionSlot />
-              <AllControlsButton />
+              <IntroActions />
             </div>
           </div>
         )}
@@ -91,7 +112,7 @@ export function CarControls() {
             </div>
             <CarZoomControls />
             <ThemeToggle />
-            <AllControlsButton />
+            <IntroActions />
           </div>
         </div>
       )}

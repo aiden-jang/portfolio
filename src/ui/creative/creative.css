@@ -141,7 +141,6 @@ html:root .earthquake-inspection .earthquake-date {
 #sec-about .about-framing-study {
   margin-bottom: 24px;
 }
-.creative-about-action,
 .creative-tour-start {
   min-height: 44px;
   padding-inline: 12px;
@@ -151,7 +150,6 @@ html:root .earthquake-inspection .earthquake-date {
   color: #eee0ca;
   text-align: left;
 }
-.creative-about-action:hover,
 .creative-tour-start:hover {
   background: #e9d7b512;
 }
@@ -307,8 +305,7 @@ html:root .earthquake-inspection .earthquake-date {
 }
 .creative-case :focus-visible,
 .creative-depth :focus-visible,
-.creative-studio-tour :focus-visible,
-.creative-about-action:focus-visible {
+.creative-studio-tour :focus-visible {
   outline: 2px solid #f4dbc3;
   outline-offset: 3px;
 }

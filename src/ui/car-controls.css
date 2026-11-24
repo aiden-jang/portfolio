@@ -96,6 +96,7 @@
   border-radius: 50%;
 }
 #desktop-dock {
+  --intro-actions-width: 118px;
   --lighting-button-width: 108px;
 }
 #desktop-dock .car-choice {
@@ -113,9 +114,6 @@
 }
 #desktop-dock .car-paint-slot[data-fixed-livery] {
   width: 112px;
-}
-#desktop-dock .all-controls-trigger {
-  width: 100px;
 }
 #desktop-dock .desktop-paint-swatches > .paint-swatches {
   width: 100%;
@@ -147,9 +145,6 @@
   }
   #desktop-dock .desktop-paint-swatches > .paint-swatches {
     gap: 4px;
-  }
-  #desktop-dock .all-controls-trigger {
-    width: 92px;
   }
   #desktop-dock button[aria-label^='Lighting:'] {
     width: 44px;
@@ -279,4 +274,39 @@
   font: 12px/1.4 var(--font-display);
   letter-spacing: 0;
   text-transform: none;
+}
+
+.intro-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+}
+.intro-actions > button {
+  min-width: 44px;
+  white-space: nowrap;
+}
+.intro-actions > button:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: -2px;
+}
+#desktop-dock .intro-actions {
+  width: var(--intro-actions-width);
+  justify-content: space-between;
+}
+@media (max-width: 767px) {
+  #mobile-bar .car-control-buttons {
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+  #mobile-bar .car-paint-slot:not([data-fixed-livery]) {
+    flex-basis: 44px;
+  }
+  #mobile-bar .car-paint-slot:not([data-fixed-livery]) > button {
+    display: flex;
+    justify-content: center;
+  }
+  #mobile-bar .car-paint-slot .mobile-paint-name {
+    display: none;
+  }
 }

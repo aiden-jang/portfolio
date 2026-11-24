@@ -9,8 +9,7 @@ for (const width of [1440, 390]) {
     const other = phone ? 'desktop' : 'phone';
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
     await page.route('**/*.glb', (route) => route.abort());
-    await page.goto('/#sec-about');
-    await page.getByRole('link', { name: 'How I built the showroom' }).click({ timeout: 5000 });
+    await page.goto('/cases/showroom/');
     await expect(page).toHaveURL(/\/cases\/showroom\/$/);
     await expect(page.getByRole('heading', { name: 'Building the showroom' })).toBeVisible();
     const slider = page.getByRole('slider', { name: 'Scrub from poster to drag' });

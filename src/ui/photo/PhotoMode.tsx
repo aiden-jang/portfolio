@@ -16,6 +16,7 @@ import './photo.css';
 export function PhotoMode() {
   const active = usePhotoMode((s) => s.active),
     close = usePhotoMode((s) => s.close);
+  const opener = usePhotoMode((s) => s.opener);
   const section = useAppStore((s) => s.sectionIndex),
     unavailable = useAppStore((s) => s.sceneUnavailable),
     loading = useAppStore((s) => s.isCarLoading),
@@ -61,13 +62,16 @@ export function PhotoMode() {
       setFile(null);
       setBusy(false);
       setNotice('');
-      queueMicrotask(() =>
-        Array.from(document.querySelectorAll<HTMLButtonElement>('.all-controls-trigger'))
-          .find((button) => button.getClientRects().length)
-          ?.focus({ preventScroll: true }),
-      );
+      queueMicrotask(() => {
+        const target = opener?.getClientRects().length
+          ? opener
+          : Array.from(document.querySelectorAll<HTMLButtonElement>('.all-controls-trigger')).find(
+              (button) => button.getClientRects().length,
+            );
+        target?.focus({ preventScroll: true });
+      });
     };
-  }, [active, close]);
+  }, [active, close, opener]);
   useEffect(
     () => () => {
       window.clearTimeout(chromeTimer.current);

@@ -91,26 +91,19 @@ test('Behind the render switches finishes and returns focus to Garage', async ({
 });
 
 for (const width of [1440, 390]) {
-  test(`About film clears when opening its shot in Studio at ${width}px`, async ({ page }) => {
+  test(`About keeps the finish study in the scroll at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
-    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
     await page.goto('/#sec-about', { waitUntil: 'domcontentloaded' });
-
-    const open = page.getByRole('button', { name: 'Open this shot in Studio' });
-    await open.scrollIntoViewIfNeeded();
-    const film = page.locator('.scroll-film video');
-    await expect(film).toBeVisible();
-
-    await open.click();
-    const studio = page.getByRole('dialog', { name: 'Garage Studio' });
-    await expect(studio).toBeVisible();
-    await expect(film).toBeHidden();
-    await expect(page.locator('.portfolio-scene canvas')).toBeVisible();
-
-    await studio.getByRole('button', { name: 'Back to Garage' }).click();
-    await expect(studio).toBeHidden();
-    await expect(open).toBeFocused();
-    await expect(film).toBeVisible();
+    const study = page.getByRole('figure', { name: 'Framing the showroom' });
+    const slider = study.getByRole('slider', { name: 'Ferrari camera and finish' });
+    await slider.scrollIntoViewIfNeeded();
+    await slider.focus();
+    await slider.press('End');
+    await expect(slider).toHaveAttribute('aria-valuetext', 'Paint');
+    await expect(study.getByRole('link', { name: 'vecarz' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Open this shot in Studio' })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'How I built the showroom' })).toHaveCount(0);
   });
 }
