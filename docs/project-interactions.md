@@ -49,14 +49,6 @@ Sources: [meanwhile. geography](https://github.com/aiden-jang/meanwhile/tree/b61
 [star catalogue](https://github.com/aiden-jang/meanwhile/blob/main/src/geo/stars.json),
 and [NOAA SWPC aurora forecast](https://www.swpc.noaa.gov/products/aurora-30-minute-forecast).
 
-## Showroom case study
-
-About links to the [showroom case study](../cases/showroom/index.html). It uses desktop
-and phone recordings of the actual F40 opening, with chapter markers for the poster,
-first live frame and first drag. The slow-load replay includes an intentional hold on the
-model request. The edited handoff view starts shortly before the first live frame. The clips
-illustrate the handoff and do not measure network or physical-device performance.
-
 ## Project scenes
 
 Iodine’s recorded edit recovery loops and holds the restored file in view. Its
