@@ -53,7 +53,8 @@ function LightingButton({ mobile = false }: { mobile?: boolean }) {
     <button
       type="button"
       aria-label={`Lighting: ${label}. Switch to ${next}`}
-      title={`Lighting: ${label}`}
+      title={mobile ? `Lighting: ${label}` : `Switch to ${next} · B`}
+      aria-keyshortcuts={mobile ? undefined : 'B'}
       onClick={toggle}
       className="scene-control-button"
     >

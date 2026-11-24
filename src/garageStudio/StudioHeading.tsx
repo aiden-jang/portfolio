@@ -4,6 +4,7 @@ import { useAppStore } from '../store';
 import { useGarageStudy } from '../garageStudy/state';
 import { useGarageStudio } from './state';
 import { isGarageAfterHours } from './lighting';
+import { StudioShortcuts } from './StudioShortcuts';
 
 type Props = {
   title: string;
@@ -23,9 +24,12 @@ export function StudioHeading({ title, car, incoming, leadWithCar, exit, onExit 
     <>
       <header className="garage-studio-header">
         <span>{afterHours ? 'AJ / After Hours' : 'AJ / Studio'}</span>
-        <button ref={exit} type="button" className="studio-return" onClick={onExit}>
-          <ControlIcon name="arrow" /> {linkedShot ? 'Back to portfolio' : 'Back to Garage'}
-        </button>
+        <div className="studio-header-actions">
+          <StudioShortcuts />
+          <button ref={exit} type="button" className="studio-return" onClick={onExit}>
+            <ControlIcon name="arrow" /> {linkedShot ? 'Back to portfolio' : 'Back to Garage'}
+          </button>
+        </div>
       </header>
       <div className="garage-studio-title">
         <h2 className="studio-original-title">{leadWithCar ? car : title}</h2>
