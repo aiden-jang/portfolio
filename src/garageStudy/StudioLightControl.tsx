@@ -1,8 +1,8 @@
 import { useGarageExhibit, type Lighting } from '../garageExhibits/state';
-import { isGarageAfterHours } from '../garageStudio/lighting';
+import { applyF40HeadlightPreset, isGarageAfterHours } from '../garageStudio/lighting';
 import { activeOrbit, repaintStudio, useGarageStudio } from '../garageStudio/state';
 import { stopOrbitMotion } from '../garageStudio/orbitMotion';
-import { stageStudioCut } from '../garageStudio/studioCut';
+import { clearStudioCut, stageStudioCut } from '../garageStudio/studioCut';
 import { useAppStore } from '../store';
 import { useGarageStudy } from './state';
 
@@ -27,7 +27,7 @@ export function StudioLightControl({ waiting }: { waiting: boolean }) {
         const next = event.target.value;
         stopOrbitMotion(activeOrbit(), 'requested');
         useGarageStudy.setState({ playing: false });
-        stageStudioCut(() => {
+        const applyLighting = () => {
           if (next === 'night') {
             useGarageStudy.setState({ look: next });
           } else if (exhibit === 'dusk') {
@@ -35,7 +35,12 @@ export function StudioLightControl({ waiting }: { waiting: boolean }) {
             useGarageStudio.setState({ proposed: next === 'blackout' });
           } else useGarageStudy.setState({ look: next as Lighting });
           repaintStudio();
-        }, false);
+        };
+        // A still-frame cut would cover the first part of the hinge swing.
+        if (walkaround && exhibit === 'free' && applyF40HeadlightPreset(next)) {
+          clearStudioCut();
+          applyLighting();
+        } else stageStudioCut(applyLighting, false);
         repaintStudio();
       }}
     >

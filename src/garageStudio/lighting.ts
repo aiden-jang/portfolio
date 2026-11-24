@@ -1,3 +1,5 @@
+import { F40_INDEX } from '../config';
+import { useAppStore } from '../store';
 import { useGarageStudy, type StudioLighting } from '../garageStudy/state';
 import type { Exhibit } from '../garageExhibits/state';
 import { isOpeningLowLight, isOpeningStudio } from '../lighting';
@@ -61,4 +63,12 @@ export function saveStudioLighting(
 export function parseStudioLighting(look: string | null, chapter: StudioView['chapter']) {
   if (look === 'studio' || look === 'dusk' || look === 'blackout') return look;
   return chapter === 'walk' && look === 'night' ? look : null;
+}
+
+export function applyF40HeadlightPreset(look: string | null = null) {
+  const { carIndex, themeName } = useAppStore.getState();
+  const preset = look ?? themeName;
+  if (carIndex !== F40_INDEX || (preset !== 'studio' && preset !== 'night')) return false;
+  useAppStore.setState({ headlightsRaised: preset === 'night' });
+  return true;
 }

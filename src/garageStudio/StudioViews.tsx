@@ -171,9 +171,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
           </button>
           {id === F40_INDEX && chapter === 'walk' && (
             <button
-              aria-label="Pop-up headlights"
               aria-pressed={raised}
-              title={raised ? 'Lower headlights' : 'Raise headlights'}
               disabled={!hasHeadlights || waiting}
               onClick={() => {
                 useAppStore.getState().toggleHeadlights();
@@ -181,7 +179,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
               }}
             >
               <ControlIcon name="headlights" />
-              Lights
+              {raised ? 'Lower headlights' : 'Raise headlights'}
             </button>
           )}
         </div>

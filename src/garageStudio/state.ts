@@ -2,7 +2,7 @@ import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { clearStudioCut } from './studioCut';
 import { useMatchedSwap } from './matchedSwap';
 import { stopOrbitMotion } from './orbitMotion';
-import { parseStudioLighting, saveStudioLighting } from './lighting';
+import { applyF40HeadlightPreset, parseStudioLighting, saveStudioLighting } from './lighting';
 import { resetExhibit } from '../garageExhibits/state';
 import { resetStudyCamera, startLineupGlide, track, useGarageStudy } from '../garageStudy/state';
 import { create } from 'zustand';
@@ -108,6 +108,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
       detailOrbit: pose(),
       pairOrbit: pose(window.innerWidth < 768 ? -0.58 : 0.72),
     });
+    applyF40HeadlightPreset();
   },
   close: () => {
     clearStudioCut();
@@ -178,9 +179,9 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
     if (app.carIndex !== id) {
       resetStudyCamera();
       app.setCarIndex(id);
+      if (get().chapter === 'walk') applyF40HeadlightPreset(useGarageStudy.getState().look);
     }
-    const { detailOrbit } = get();
-    if (supportsDetail(id)) Object.assign(detailOrbit, pose(detailYaw(id)));
+    if (supportsDetail(id)) Object.assign(get().detailOrbit, pose(detailYaw(id)));
   },
 }));
 
@@ -294,5 +295,5 @@ export function startFromLink(params: URLSearchParams) {
   if (params.has('part')) {
     const up = params.get('part') === 'up';
     useAppStore.setState({ drsOpen: up, headlightsRaised: up });
-  }
+  } else if (view === 'walk') applyF40HeadlightPreset(useGarageStudy.getState().look);
 }
