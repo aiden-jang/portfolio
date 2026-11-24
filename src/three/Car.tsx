@@ -23,7 +23,6 @@ import { useAppStore } from '../store';
 import { useGarageStudio } from '../garageStudio/state';
 import { useLineup } from '../lineup/state';
 import { useRenderFinish } from './useRenderFinish';
-import { useMiataPaintReflection } from './studio/useMiataPaintReflection';
 import {
   autoFitToLength,
   prepareModelGlass,
@@ -35,7 +34,7 @@ import {
 } from './carHelpers';
 
 import { isOpeningStudio } from '../lighting';
-import { isAfterHoursScene, usesVehicleLampPreset } from '../garageStudio/lighting';
+import { usesVehicleLampPreset } from '../garageStudio/lighting';
 import { updateVehicleLights } from './studio/afterHoursLamps';
 import { prepareAfterHoursSurfaces } from './studio/afterHoursSurfaces';
 import { motionState } from './studioEntrance';
@@ -95,7 +94,6 @@ export function Car() {
     return m;
   }, [underglowMat]);
   useRenderFinish(group, underglow);
-  useMiataPaintReflection();
   useEffect(() => {
     group.add(underglow);
     return () => {
@@ -253,8 +251,7 @@ export function Car() {
     reviewFinish.current?.(refinements);
     const studio = review.active || isOpeningStudio(app);
     const lampPreset = usesVehicleLampPreset(app, review, exhibit.exhibit);
-    const lampLevel =
-      afterHoursSurfaces.current?.(isAfterHoursScene(app, review), dt, lampPreset) ?? 0;
+    const lampLevel = afterHoursSurfaces.current?.(app.refs.afterHoursBlend, lampPreset) ?? 0;
     studioFinish.current?.(
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,

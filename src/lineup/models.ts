@@ -54,8 +54,8 @@ export async function loadLineup(signal: AbortSignal, kind: LineupKind) {
     }
     const cars = stageCars(f40, rb16b, kind);
     const tuneFerrari = kind === 'original' ? tuneStudioFerrari(f40) : undefined;
-    prepareAfterHoursLamps(f40, first.file)?.(false, 1, true);
-    prepareAfterHoursLamps(rb16b, second.file)?.(false, 1, true);
+    prepareAfterHoursLamps(f40, first.file)?.(0, true);
+    prepareAfterHoursLamps(rb16b, second.file)?.(0, true);
     return {
       cars,
       points: cars.flatMap(({ bounds }) => corners(bounds)),

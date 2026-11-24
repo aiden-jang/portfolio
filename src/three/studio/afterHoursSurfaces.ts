@@ -1,5 +1,4 @@
 import { Mesh, MeshStandardMaterial, type Object3D } from 'three';
-import { smoothTowards } from '../../math';
 import { prepareAfterHoursLamps } from './afterHoursLamps';
 
 const carSurfaces = {
@@ -75,9 +74,8 @@ export function prepareAfterHoursSurfaces(model: Object3D, carFile: string) {
     }
   });
   const lamps = prepareAfterHoursLamps(model, carFile);
-  return (active: boolean, dt: number, manageLamps = false) => {
-    const target = Number(active);
-    evening.value = smoothTowards(evening.value, target, Math.min(1, dt * 10));
-    return lamps?.(active, dt, manageLamps) ?? 0;
+  return (amount: number, manageLamps = false) => {
+    evening.value = amount;
+    return lamps?.(amount, manageLamps) ?? 0;
   };
 }

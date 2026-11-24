@@ -56,6 +56,7 @@ export function applyStudioReflection(
       closingLight: { value: -1 },
       studioDusk: { value: 0 },
       garageStudioDim: { value: 0 },
+      garageStudioBlackout: { value: 0 },
       afterHoursGrounding: { value: 0 },
       afterHoursHeadSpill: { value: new THREE.Vector3() },
       afterHoursTailSpill: { value: new THREE.Vector2() },

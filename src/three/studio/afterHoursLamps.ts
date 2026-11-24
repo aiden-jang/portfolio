@@ -1,5 +1,4 @@
 import { Mesh, MeshStandardMaterial, type Object3D } from 'three';
-import { smoothTowards } from '../../math';
 import { additionalAfterHoursLamps, type LampFloorProfile } from './afterHoursLampProfiles';
 import { parkedLampMaterials, studioLensReflection } from './studioLampMaterials';
 import { exteriorLampShaders } from './exteriorLampProfiles';
@@ -140,9 +139,10 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
               lens
                 ? `vec3 lensEnergy = max(vec3(0.),outgoingLight-unlitColor);
                      float lensPeak = max(lensEnergy.r,max(lensEnergy.g,lensEnergy.b));
-                     outgoingLight += (1.43 / (1. + .12*lensPeak) - 1.)*lensEnergy;`
+                     outgoingLight += (1.78 / (1. + .15*lensPeak) - 1.)*lensEnergy;`
                 : ''
             }
+            ${auxiliary ? 'lightView *= 1.22;' : ''}
             ${auxiliary ?? ''}
           }
           #include <opaque_fragment>
@@ -151,10 +151,10 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
       };
     }
   });
-  return (active: boolean, dt: number, manageLamps = false) => {
+  return (amount: number, manageLamps = false) => {
     managed.value = Number(manageLamps);
-    level.value = smoothTowards(level.value, Number(active), Math.min(1, dt * 9));
-    return level.value;
+    level.value = amount;
+    return amount;
   };
 }
 

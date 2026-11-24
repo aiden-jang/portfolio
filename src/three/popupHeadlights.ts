@@ -96,7 +96,7 @@ export function createPopupHeadlights(
   const sample = () => {
     const eased = position * position * (3 - 2 * position);
     mixer.setTime(settings.closedTime + (settings.openTime - settings.closedTime) * eased);
-    const power = followPreset ? afterHours * 1.31 : 1 + afterHours * 0.32;
+    const power = followPreset ? afterHours * 1.55 : 1 + afterHours * 0.32;
     illumination.setBrightness(MathUtils.smoothstep(eased, 0.4, 1) * power);
   };
   sample();

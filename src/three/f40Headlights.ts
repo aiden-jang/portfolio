@@ -81,7 +81,10 @@ function splitHeadlights(surfaces: SurfaceMeshes, parent: Object3D) {
       // The moving glass and bulbs have their own lighting, separate from the fixed lamps.
       const material = name === 'Metallic' ? mesh.material : mesh.material.clone();
       if (material !== mesh.material) ownedMaterials.push(material);
-      if (name === RAISED_LENS) bulbs.push(material);
+      if (name === RAISED_LENS) {
+        material.emissive.setHex(0xffefdb);
+        bulbs.push(material);
+      }
       const piece = new Mesh(geometry, material);
       piece.position.copy(pivot.position).negate();
       pivot.add(piece);
@@ -100,8 +103,9 @@ export function createF40Headlights(model: Object3D) {
       if (Object.hasOwn(sourceShape, name)) surfaces.set(name, node);
     }
   });
+  const sourceLens = surfaces.get(RAISED_LENS);
   const parent = surfaces.get('Metallic')?.parent;
-  if (!parent || surfaces.size !== Object.keys(sourceShape).length) return null;
+  if (!sourceLens || !parent || surfaces.size !== Object.keys(sourceShape).length) return null;
   for (const [name, mesh] of surfaces) {
     const [vertices, indices] = sourceShape[name];
     if (
@@ -156,7 +160,11 @@ export function createF40Headlights(model: Object3D) {
       const opening = MathUtils.smoothstep(position, 0, 1);
       beam = MathUtils.smoothstep(opening, 0.88, 1);
       for (const pivot of rig.pivots) pivot.rotation.x = CLOSE_ANGLE * (1 - opening);
-      for (const bulb of rig.bulbs) bulb.emissiveIntensity = beam * lampLevel * 3.6;
+      const light = beam * lampLevel;
+      for (const bulb of rig.bulbs) {
+        bulb.emissiveIntensity = light * 6.2;
+        bulb.opacity = MathUtils.lerp(sourceLens.material.opacity, 0.89, light);
+      }
     },
     get beam() {
       return active ? beam : undefined;

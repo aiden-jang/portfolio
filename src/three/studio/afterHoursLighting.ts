@@ -1,7 +1,23 @@
-import { Color, type Light } from 'three';
+import { Color, MathUtils, type Light } from 'three';
+import { prefersReducedMotion } from '../../hooks/reducedMotion';
 
 const blueEdge = new Color(0.23, 0.53, 1);
 const iceRim = new Color(0.61, 0.81, 1);
+
+export function sampleAfterHours(
+  progress: { current: number | null },
+  target: number,
+  animate: boolean,
+  dt: number,
+) {
+  const current = progress.current ?? target;
+  const step = Math.min(dt, 0.05) / 0.68;
+  progress.current =
+    animate && !prefersReducedMotion()
+      ? MathUtils.clamp(target, current - step, current + step)
+      : target;
+  return MathUtils.smoothstep(progress.current, 0, 1);
+}
 
 export function applyAfterHoursLighting(
   [ambient, hemi, key, fill, rim]: readonly [Light, Light, Light, Light, Light],

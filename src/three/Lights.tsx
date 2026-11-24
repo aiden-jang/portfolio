@@ -16,8 +16,9 @@ import { useLineup } from '../lineup/state';
 import { F40_PAINT, openingStudioWeight } from './openingStudio';
 import { isOpeningStudio } from '../lighting';
 import { isAfterHoursScene } from '../garageStudio/lighting';
-import { applyAfterHoursLighting } from './studio/afterHoursLighting';
+import { applyAfterHoursLighting, sampleAfterHours } from './studio/afterHoursLighting';
 import { afterHoursShadowWeight } from './studio/afterHoursTuning';
+import { updateMiataPaintReflection } from './studio/miataPaintReflection';
 import { useStudioEnvironment } from './studio/useStudioEnvironment';
 
 const TRANSITION_RATE = 2.5;
@@ -28,7 +29,8 @@ const NIGHT_KEY_FLOOR = 0.2;
 export function Lights() {
   const { gl, scene } = useThree();
   const studioEnvironment = useStudioEnvironment(gl);
-  const afterHoursLevel = useRef(0);
+  const afterHoursProgress = useRef<number | null>(null);
+  const baseEnvironmentIntensity = useRef(0.22);
   const duskMix = useRef(0);
   const dim = useRef(0);
   const defaultMap = useRef<THREE.Texture | null>(null);
@@ -97,12 +99,10 @@ export function Lights() {
       dt,
     );
     const studio = lineup || preview.active || isOpeningStudio(state);
-    const afterHours = !lineup && isAfterHoursScene(state, preview);
-    const low = (afterHoursLevel.current = smoothTowards(
-      afterHoursLevel.current,
-      Number(afterHours),
-      Math.min(1, dt * 8),
-    ));
+    const afterHoursAvailable = studio && !lineup && !dark && !dusk;
+    const targetLevel = Number(afterHoursAvailable && isAfterHoursScene(state, preview));
+    const low = sampleAfterHours(afterHoursProgress, targetLevel, afterHoursAvailable, dt);
+    state.refs.afterHoursBlend = low;
     dim.current = THREE.MathUtils.lerp(dim.current, Number(dark), Math.min(1, dt * 12));
     const amount = dim.current;
     const optics =
@@ -110,16 +110,8 @@ export function Lights() {
       !dark &&
       (!preview.study || preview.study === 'finished') &&
       useGarageStudy.getState().refined;
-    const preset = dusk
-      ? 'dusk'
-      : afterHours
-        ? 'low-light'
-        : dark
-          ? 'blackout'
-          : optics
-            ? 'optics'
-            : 'studio';
-    scene.environment = studio ? studioEnvironment(preset) : defaultMap.current;
+    const preset = dusk ? 'dusk' : dark ? 'blackout' : optics ? 'optics' : 'studio';
+    scene.environment = studio ? studioEnvironment(preset, low) : defaultMap.current;
     const lighting = studio ? 'studio' : 'dusk';
     const target = THEMES[lighting];
     const progress = lineup || preview.active ? 1 : motionState.progress;
@@ -142,10 +134,17 @@ export function Lights() {
       paint.clearcoatRoughness = studio ? 0.105 : F40_PAINT.coatRoughness + 0.095 * weight;
       paint.clearcoat = studio ? 0.91 : F40_PAINT.coat - 0.12 * weight;
     }
-    scene.environmentIntensity = smoothTowards(
-      scene.environmentIntensity,
-      studio ? 0.48 - 0.095 * low : sculpted ? 0.29 : 0.22 - 0.048 * weight,
+    baseEnvironmentIntensity.current = smoothTowards(
+      baseEnvironmentIntensity.current,
+      studio ? 0.48 : sculpted ? 0.29 : 0.22 - 0.048 * weight,
       Math.min(1, dt * TRANSITION_RATE),
+    );
+    scene.environmentIntensity = baseEnvironmentIntensity.current - 0.095 * low;
+    updateMiataPaintReflection(
+      !lineup && !dark && !dusk && (preview.active || isOpeningStudio(state))
+        ? () => studioEnvironment('miata', low)
+        : null,
+      THREE.MathUtils.lerp(0.55, scene.environmentIntensity, low),
     );
     const k = Math.min(1, dt * TRANSITION_RATE);
     const c = current.current;
@@ -240,7 +239,7 @@ export function Lights() {
       rim.current.position.set(-2.1, 2.0, -5.65);
       rim.current.intensity *= 0.86;
     }
-  });
+  }, -1);
 
   const init = current.current;
   return (

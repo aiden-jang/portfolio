@@ -14,7 +14,6 @@ import { smoothTowards } from '../math';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
 import { applyStudioReflection } from './studioReflection';
-import { isAfterHoursScene } from '../garageStudio/lighting';
 import { afterHoursLampStyles } from './studio/afterHoursLamps';
 import { lampFloorOrigins } from './studio/afterHoursTuning';
 import { openingStudioWeight } from './openingStudio';
@@ -121,18 +120,16 @@ export function Floor({
       const settle = Math.min(1, dt * 10);
       const dusk = inStudioDusk(preview);
       uniforms.studioDusk.value += (Number(dusk) - uniforms.studioDusk.value) * settle;
-      const afterHours = !closing && !inLineup && isAfterHoursScene(state, preview);
-      uniforms.afterHoursGrounding.value +=
-        (Number(afterHours) - uniforms.afterHoursGrounding.value) * settle;
+      const afterHours = closing || inLineup ? 0 : refs.afterHoursBlend;
+      uniforms.afterHoursGrounding.value = afterHours;
       const head = uniforms.afterHoursHeadSpill.value as THREE.Vector3;
       const tail = uniforms.afterHoursTailSpill.value as THREE.Vector2;
       const car = CARS[state.carIndex];
       const lamps = afterHoursLampStyles[car.file];
-      const lampActive = afterHours && !!lamps && !state.isCarLoading;
+      const lampLevel = lamps && !state.isCarLoading ? afterHours : 0;
       const beam = refs.f40HeadlightBeam ?? Number(!car.popupHeadlights || state.headlightsRaised);
-      const headLevel = lampActive && lamps.head ? beam * 2.35 : 0;
-      head.x = smoothTowards(head.x, headLevel, settle);
-      tail.x = smoothTowards(tail.x, Number(lampActive) * 1.38, settle);
+      head.x = lamps?.head ? beam * lampLevel * 2.9 : 0;
+      tail.x = lampLevel * 1.68;
       if (lamps) {
         head.y = lamps.head?.spacing ?? 0;
         head.z = lamps.head?.warmth ?? 0;
@@ -143,8 +140,10 @@ export function Floor({
           origin ? origin[1] + 0.06 : 2.04,
         );
       }
-      const roomDim = inBlackout() ? 1 : afterHours ? 0.82 : 0;
-      uniforms.garageStudioDim.value += (roomDim - uniforms.garageStudioDim.value) * settle;
+      const blackout = inBlackout();
+      const dim = uniforms.garageStudioBlackout;
+      dim.value += (Number(blackout) - dim.value) * settle;
+      uniforms.garageStudioDim.value = Math.max(dim.value, afterHours * 0.82);
       const extendedLamp = preview.active && useGarageExhibit.getState().exhibit === 'lamps';
       uniforms.extendedLamp.value = Number(extendedLamp);
       uniforms.garageStudioLamps.value +=

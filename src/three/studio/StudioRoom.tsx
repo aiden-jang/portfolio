@@ -4,8 +4,6 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getStudioProjection, photoProjectionGlsl } from './projection';
 import { inBlackout, useGarageStudio } from '../../garageStudio/state';
-import { isAfterHoursScene } from '../../garageStudio/lighting';
-import { useLineup } from '../../lineup/state';
 import { useAppStore } from '../../store';
 import { studioTexture } from './textures';
 
@@ -171,23 +169,21 @@ export function StudioRoom() {
   const invalidate = useThree(({ invalidate }) => invalidate);
   const studioDusk = useMemo(() => ({ value: 0 }), []);
   const roomDim = useMemo(() => ({ value: 0 }), []);
+  const studyDim = useMemo(() => ({ value: 0 }), []);
   useFrame((_state, dt) => {
     const studio = useGarageStudio.getState();
     const { active, study } = studio;
     const dusk = inStudioDusk(studio);
     studioDusk.value += (Number(dusk) - studioDusk.value) * Math.min(dt * 12, 1);
-    const coolBar =
-      !useLineup.getState().active && isAfterHoursScene(useAppStore.getState(), studio);
-    const bar = room.uniforms.studioBarBlue;
-    bar.value = THREE.MathUtils.lerp(bar.value, Number(coolBar), Math.min(1, dt * 9));
+    const evening = useAppStore.getState().refs.afterHoursBlend;
+    room.uniforms.studioBarBlue.value = evening;
     const dim = inBlackout()
       ? 1
       : active && (study === 'shadows' || study === 'reflection')
         ? 0.94
-        : coolBar
-          ? 0.64
-          : 0;
-    roomDim.value = THREE.MathUtils.lerp(roomDim.value, dim, Math.min(1, dt * 12));
+        : 0;
+    studyDim.value = THREE.MathUtils.lerp(studyDim.value, dim, Math.min(1, dt * 12));
+    roomDim.value = Math.max(studyDim.value, evening * 0.64);
   });
   const room = getStudioProjection(mobile);
   const framing = useMemo(() => room.roomFraming(aspect), [room, aspect]);

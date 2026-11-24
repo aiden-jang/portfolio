@@ -12,6 +12,7 @@ type Refs = {
   bodyOriginalColor: THREE.Color | null;
   lamps: Lamp[];
   f40HeadlightBeam?: number;
+  afterHoursBlend: number;
   exposureCurrent: number;
   floorReflection: number;
   lightPulseT: number;
@@ -52,7 +53,6 @@ type AppState = {
   headlightsRaised: boolean;
   hasPopupHeadlights: boolean;
   toggleHeadlights: () => void;
-
   refs: Refs;
 
   setCarIndex: (i: number) => void;
@@ -188,6 +188,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     bodyMaterial: null,
     bodyOriginalColor: null,
     lamps: [],
+    afterHoursBlend: 0,
     exposureCurrent: CARS[initialIndex].exposure,
     floorReflection: 1,
     lightPulseT: 0,
