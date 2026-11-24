@@ -16,6 +16,7 @@ import { useAppStore } from '../store';
 import { applyStudioReflection } from './studioReflection';
 import { isAfterHoursScene } from '../garageStudio/lighting';
 import { afterHoursLampStyles } from './studio/afterHoursLamps';
+import { lampFloorOrigins } from './studio/afterHoursTuning';
 import { openingStudioWeight } from './openingStudio';
 
 const FLOOR_RADIUS = 14;
@@ -136,6 +137,11 @@ export function Floor({
         head.y = lamps.head?.spacing ?? 0;
         head.z = lamps.head?.warmth ?? 0;
         tail.y = lamps.tail;
+        const origin = lampFloorOrigins[car.file];
+        (uniforms.afterHoursLampOrigin.value as THREE.Vector2).set(
+          origin ? Math.max(1.85, origin[0] + 0.1) : 2.13,
+          origin ? origin[1] + 0.06 : 2.04,
+        );
       }
       const roomDim = inBlackout() ? 1 : afterHours ? 0.82 : 0;
       uniforms.garageStudioDim.value += (roomDim - uniforms.garageStudioDim.value) * settle;

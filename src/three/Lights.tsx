@@ -17,6 +17,7 @@ import { F40_PAINT, openingStudioWeight } from './openingStudio';
 import { isOpeningStudio } from '../lighting';
 import { isAfterHoursScene } from '../garageStudio/lighting';
 import { applyAfterHoursLighting } from './studio/afterHoursLighting';
+import { afterHoursShadowWeight } from './studio/afterHoursTuning';
 import { useStudioEnvironment } from './studio/useStudioEnvironment';
 
 const TRANSITION_RATE = 2.5;
@@ -54,6 +55,7 @@ export function Lights() {
   const key = useRef<THREE.DirectionalLight>(null!);
   const fill = useRef<THREE.DirectionalLight>(null!);
   const rim = useRef<THREE.DirectionalLight>(null!);
+  const rearFill = useRef<THREE.DirectionalLight>(null!);
   const cabin = useRef<THREE.PointLight>(null!);
   const detailAccent = useRef<THREE.PointLight>(null!);
   const studioWeight = useRef(openingStudioWeight());
@@ -220,6 +222,12 @@ export function Lights() {
       low,
       darkPaint,
     );
+    const shadow = afterHoursShadowWeight(spec.file, state.activeBodyColor);
+    ambient.current.intensity *= 1 + (0.08 + shadow * 0.28) * low;
+    hemi.current.intensity *= 1 + shadow * 0.3 * low;
+    fill.current.intensity += (0.025 + shadow * 0.135) * low;
+    rearFill.current.intensity = (0.04 + shadow * 0.29) * low;
+    rearFill.current.visible = rearFill.current.intensity > 0.002;
     fill.current.intensity *= 1 - (darkPaint ? 0.53 : 0.78) * amount;
     key.current.intensity *= 1 - 0.65 * amount;
     rim.current.intensity *= 1 - (brightLivery ? 0.69 : 0.52) * amount;
@@ -237,6 +245,13 @@ export function Lights() {
   const init = current.current;
   return (
     <>
+      <directionalLight
+        ref={rearFill}
+        visible={false}
+        position={[3.3, 1.65, -5.8]}
+        color="#cbdfff"
+        intensity={0}
+      />
       <pointLight
         ref={cabin}
         visible={false}

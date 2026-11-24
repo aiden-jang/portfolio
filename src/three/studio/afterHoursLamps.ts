@@ -136,7 +136,13 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
             float back = smoothstep(1.56,1.94,-lampPosition.z);
             ${lens ? 'vec3 unlitColor = outgoingLight;' : ''}
             ${lens ?? ''}
-            ${lens ? 'outgoingLight += .58 * max(vec3(0.),outgoingLight-unlitColor);' : ''}
+            ${
+              lens
+                ? `vec3 lensEnergy = max(vec3(0.),outgoingLight-unlitColor);
+                     float lensPeak = max(lensEnergy.r,max(lensEnergy.g,lensEnergy.b));
+                     outgoingLight += (1.43 / (1. + .12*lensPeak) - 1.)*lensEnergy;`
+                : ''
+            }
             ${auxiliary ?? ''}
           }
           #include <opaque_fragment>

@@ -125,17 +125,19 @@
       floorTone += vec3(.46,.35,.195) * beam * extendedLamp * garageStudioLamps
         * clamp(relief,.62,1.32);
       if (max(afterHoursHeadSpill.x,afterHoursTailSpill.x) > .001) {
-        float headReach = ground.y - 2.13;
+        float headReach = ground.y - afterHoursLampOrigin.x;
         float headSide = abs(ground.x) - afterHoursHeadSpill.y;
-        float width = .22 + .135*max(0., headReach);
-        float headPool = exp(-pow(headSide/width,2.)-pow((headReach-.71)/.87,2.))
-          * smoothstep(-.05,.24,headReach);
-        float rearReach = -ground.y - 2.04;
+        float forward = max(0.,headReach);
+        float shoulderWidth = .18 + .18 * forward;
+        float axis = headSide - .09 * forward;
+        float cutoff = smoothstep(-.04,.34,headReach);
+        float headPool = exp(-pow(axis/shoulderWidth,2.)-pow((headReach-.91)/1.32,2.)) * cutoff;
+        float rearReach = -ground.y - afterHoursLampOrigin.y;
         float rearSide = abs(ground.x) - afterHoursTailSpill.y;
-        float tailPool = exp(-pow(rearSide/.24,2.)-pow((rearReach-.31)/.50,2.))
+        float tailPool = exp(-pow(rearSide/.21,2.)-pow((rearReach-.31)/.39,2.))
           * smoothstep(-.03,.14,rearReach);
         vec3 headTint = mix(vec3(.57,.73,1.),vec3(1.,.73,.41),afterHoursHeadSpill.z);
-        float rearStrength = afterHoursTailSpill.y == 0. ? .047 : .085;
+        float rearStrength = afterHoursTailSpill.y == 0. ? .03196 : .0578;
         floorTone += studioCarReady * (
           headTint*.027*headPool*afterHoursHeadSpill.x
           + vec3(rearStrength,.0045,.003)*tailPool*afterHoursTailSpill.x

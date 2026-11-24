@@ -33,11 +33,11 @@ export function createStudioEnvironment(
   };
   // Fixed fixtures give the moving camera a broad side reflection and a rear edge light.
   luminousPanel(
-    lowLight ? [8.4, 1.1] : [7.4, 2.85],
+    lowLight ? [8.8, 2.4] : [7.4, 2.85],
     [4.8, 2.38, 0.48],
     [0, 0.62, -0.16],
-    new THREE.Color(1, 0.964, 0.918),
-    lowLight ? 3.05 : miata ? 4.4 : refined ? 5.7 : 10.6,
+    new THREE.Color(1, lowLight ? 0.92 : 0.964, lowLight ? 0.81 : 0.918),
+    lowLight ? 5.1 : miata ? 4.4 : refined ? 5.7 : 10.6,
   );
   if (lowLight) {
     luminousPanel(
@@ -45,7 +45,7 @@ export function createStudioEnvironment(
       [1.8, 3.15, -4.7],
       [0, 0.58, 1.35],
       new THREE.Color(1, 0.91, 0.81),
-      5.1,
+      4.0,
     );
   }
   luminousPanel(
@@ -94,29 +94,29 @@ export function createStudioEnvironment(
       [-4.45, 2.15, 1.35],
       [0, 0.68, 0],
       new THREE.Color(0.16, 0.43, 1),
-      21.5,
+      17.0,
     );
     luminousPanel(
       [6.8, 0.88],
       [4.02, 3.05, 1.75],
       [0, 0.76, 0],
       new THREE.Color(0.22, 0.6, 1),
-      16.8,
+      13.2,
     );
     luminousPanel(
       [5.8, 0.72],
       [0.45, 2.72, -5.5],
       [0, 0.85, -0.65],
       new THREE.Color(0.17, 0.45, 1),
-      19.0,
+      16.0,
     );
     // This narrow panel catches the front fender at the opening angle.
     luminousPanel(
-      [0.56, 1.48],
+      [0.72, 1.55],
       [4.1, 1.47, -0.16],
       [0.92, 0.64, 1.54],
       new THREE.Color(0.055, 0.38, 1),
-      78,
+      48,
     );
     luminousPanel(
       [0.26, 3.3],
@@ -130,6 +130,20 @@ export function createStudioEnvironment(
       [-1.32, 3.55, -5.42],
       [0, 0.51, 0],
       new THREE.Color(0.9, 0.94, 1),
+      4.8,
+    );
+    luminousPanel(
+      [7.5, 2.15],
+      [-5.8, 1.75, -1.7],
+      [0, 0.44, -0.1],
+      new THREE.Color(0.75, 0.85, 1),
+      5.8,
+    );
+    luminousPanel(
+      [5.2, 1.18],
+      [2.8, 1.34, -5.8],
+      [0, 0.62, -0.75],
+      new THREE.Color(0.73, 0.85, 1),
       4.8,
     );
   }
