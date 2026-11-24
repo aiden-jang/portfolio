@@ -1,5 +1,46 @@
 import { expect, test } from '@playwright/test';
 for (const width of [1440, 390]) {
+  test(`room reveal follows a scroll nudge without jumping at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const duet = page.locator('.duet');
+    const seek = (progress: number) =>
+      duet.evaluate((stage, amount) => {
+        const pin = stage.querySelector<HTMLElement>('[data-study-pin]')!;
+        const travel = (stage as HTMLElement).offsetHeight - pin.offsetHeight;
+        scrollTo({
+          top:
+            scrollY +
+            stage.getBoundingClientRect().top -
+            parseFloat(getComputedStyle(pin).top) +
+            travel * amount,
+          behavior: 'instant',
+        });
+      }, progress);
+    await seek(0.6);
+    await expect(duet).toHaveAttribute('data-duet-progress', '0.53');
+    const step = duet.evaluate(async (stage) => {
+      const room = stage.querySelector<HTMLElement>('#project-mrrp')!;
+      const radius = () => parseFloat(room.style.getPropertyValue('--iris'));
+      let previous = radius();
+      let largest = 0;
+      const end = performance.now() + 400;
+      do {
+        await new Promise(requestAnimationFrame);
+        const current = radius();
+        largest = Math.max(largest, Math.abs(current - previous));
+        previous = current;
+      } while (performance.now() < end);
+      return largest / radius();
+    });
+    await seek(0.665);
+    expect(await step).toBeLessThan(0.28);
+    await expect(duet).toHaveAttribute('data-duet-progress', '0.75');
+    await seek(0.52);
+    await expect(duet.locator('#project-mrrp')).toHaveAttribute('inert', '');
+  });
+
   test(`Bean's visible controls work at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     await page.emulateMedia({ reducedMotion: 'no-preference' });

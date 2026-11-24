@@ -42,12 +42,10 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   color: #c4b5a5;
   font-size: 0.72em;
 }
-#project-wherever:not([data-dinner-state='match']) .dinner-ticket-match,
-#project-wherever:not([data-dinner-state='vote']) .dinner-ticket-vote {
+#project-wherever:not([data-dinner-state]) .dinner-ticket-match,
+#project-wherever[data-dinner-before-match] .dinner-ticket-match,
+#project-wherever[data-dinner-after-vote] .dinner-ticket-vote {
   visibility: hidden;
-}
-#project-wherever[data-dinner-state='bill'] .dinner-ticket-match {
-  visibility: visible;
 }
 #project-wherever:not([data-dinner-state='match']) .dinner-split {
   visibility: hidden;
@@ -71,8 +69,5 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
 @media (prefers-reduced-motion: reduce), (max-height: 609px) {
   #project-wherever .dinner-split {
     display: none;
-  }
-  #project-wherever .dinner-ticket-match {
-    visibility: visible;
   }
 }

@@ -4,16 +4,13 @@ export function useRoomCamera(host: RefObject<HTMLDivElement>, active: boolean, 
   useEffect(() => {
     const box = host.current;
     const canvas = box?.querySelector<HTMLCanvasElement>('canvas[role="img"]');
-    const section = box?.closest('article');
-    if (!active || !box || !canvas || !section) return;
+    if (!active || !box || !canvas) return;
 
     const position = () => {
       if (!canvas.width || !canvas.height) return;
       const width = box.clientWidth;
       const height = box.clientHeight;
-      const close = Number(section.style.getPropertyValue('--close')) || 0;
-      const zoom = !reduced && width > 700 ? 1 + 0.12 * close : 1;
-      const scale = Math.max(width / canvas.width, height / canvas.height) * zoom;
+      const scale = Math.max(width / canvas.width, height / canvas.height);
       const renderedWidth = canvas.width * scale;
       const renderedHeight = canvas.height * scale;
       box.style.setProperty('--camera-w', renderedWidth + 'px');
@@ -31,13 +28,15 @@ export function useRoomCamera(host: RefObject<HTMLDivElement>, active: boolean, 
     const resize = new ResizeObserver(position);
     resize.observe(box);
     const bitmap = new MutationObserver(position);
-    bitmap.observe(canvas, { attributes: true, attributeFilter: ['width', 'height'] });
-    section.addEventListener('project-scene-progress', position);
+    bitmap.observe(canvas, {
+      attributes: true,
+      attributeFilter: ['width', 'height'],
+    });
     position();
     return () => {
       resize.disconnect();
       bitmap.disconnect();
-      section.removeEventListener('project-scene-progress', position);
     };
+    // A motion preference change remounts the room canvas.
   }, [host, active, reduced]);
 }

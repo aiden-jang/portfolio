@@ -4,11 +4,23 @@ import { useTimedScene } from '../../hooks/useTimedScene';
 import './project-scene.css';
 import './dinner-scene.css';
 
+type DinnerStep = { progress: number; focus?: string };
+
 function presentScene(stage: HTMLElement, progress: number) {
-  stage.dataset.dinnerState = progress >= 0.56 ? 'bill' : progress >= 0.32 ? 'match' : 'vote';
+  const phase = progress >= 0.56 ? 'bill' : progress >= 0.32 ? 'match' : 'vote';
+  if (stage.dataset.dinnerState !== phase) {
+    stage.dataset.dinnerState = phase;
+    stage
+      .querySelector('.dinner-ticket-actions button')
+      ?.toggleAttribute('inert', phase !== 'vote');
+    stage.querySelector('.dinner-split')?.toggleAttribute('inert', phase !== 'match');
+  }
+  const match = easedProgress(progress, 0.24, 0.43);
+  stage.toggleAttribute('data-dinner-before-match', match === 0);
+  stage.toggleAttribute('data-dinner-after-vote', match === 1);
   stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
   stage.style.setProperty('--vote-swipe', String(easedProgress(progress, 0.09, 0.31)));
-  stage.style.setProperty('--vote-match', String(easedProgress(progress, 0.24, 0.43)));
+  stage.style.setProperty('--vote-match', String(match));
   stage.style.setProperty('--bill-arrival', String(easedProgress(progress, 0.55, 0.9)));
   stage.dataset.sceneProgress = progress.toFixed(3);
 }
@@ -29,9 +41,10 @@ export function ProjectScene({
   const scene = useRef<HTMLElement>(null);
   const body = useRef<HTMLDivElement>(null);
   const manual = useRef(0);
+  const manualFrame = useRef(0);
   const [actionFocused, setActionFocused] = useState(false);
   const draw = useCallback((progress: number) => {
-    if (!scene.current) return;
+    if (!scene.current || manualFrame.current) return;
     const compact = matchMedia('(height < 610px)').matches;
     presentScene(scene.current, compact ? 1 : Math.max(manual.current, progress));
   }, []);
@@ -46,17 +59,43 @@ export function ProjectScene({
     if (!stage || theme !== 'dinner') return;
     const preference = matchMedia('(prefers-reduced-motion: reduce), (height < 610px)');
     const settle = () => {
-      if (preference.matches) presentScene(stage, 1);
+      if (!preference.matches) return;
+      cancelAnimationFrame(manualFrame.current);
+      manualFrame.current = 0;
+      presentScene(stage, 1);
     };
     const select = (event: Event) => {
-      const phase = (event as CustomEvent<number>).detail;
-      manual.current = Math.max(manual.current, phase);
-      presentScene(stage, manual.current);
+      const { progress, focus } = (event as CustomEvent<DinnerStep>).detail;
+      const from = Number(stage.dataset.sceneProgress) || 0;
+      const target = Math.max(manual.current, from, progress);
+      const finish = () => {
+        manualFrame.current = 0;
+        manual.current = target;
+        presentScene(stage, target);
+        if (focus) stage.querySelector<HTMLElement>(focus)?.focus({ preventScroll: true });
+      };
+      cancelAnimationFrame(manualFrame.current);
+      if (!focus || preference.matches || from === target) {
+        finish();
+        return;
+      }
+      const start = performance.now();
+      const interpolate = (now: number) => {
+        const mix = easedProgress(now - start, 0, 290);
+        if (mix === 1) finish();
+        else {
+          presentScene(stage, from + (target - from) * mix);
+          manualFrame.current = requestAnimationFrame(interpolate);
+        }
+      };
+      manualFrame.current = requestAnimationFrame(interpolate);
     };
     settle();
     preference.addEventListener('change', settle);
     stage.addEventListener('dinner-preview-step', select);
     return () => {
+      cancelAnimationFrame(manualFrame.current);
+      manualFrame.current = 0;
       preference.removeEventListener('change', settle);
       stage.removeEventListener('dinner-preview-step', select);
     };
@@ -89,11 +128,14 @@ export function ProjectScene({
 function DinnerTicket() {
   const choose = (event: React.MouseEvent<HTMLButtonElement>, phase: number) => {
     const stage = event.currentTarget.closest('article');
-    stage?.dispatchEvent(new CustomEvent('dinner-preview-step', { detail: phase }));
-    const target = stage?.querySelector<HTMLElement>(
-      phase === 1 ? '.dinner-title-bill a' : '.dinner-split',
+    stage?.dispatchEvent(
+      new CustomEvent<DinnerStep>('dinner-preview-step', {
+        detail: {
+          progress: phase,
+          focus: phase === 1 ? '.dinner-title-bill a' : '.dinner-split',
+        },
+      }),
     );
-    target?.focus({ preventScroll: true });
   };
   return (
     <div className="dinner-ticket">
@@ -144,7 +186,11 @@ export function DinnerScene() {
     const animated = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 610px)');
     const seekSecond = () => {
       if (location.hash !== '#project-owewell') return;
-      section.dispatchEvent(new CustomEvent('dinner-preview-step', { detail: 1 }));
+      section.dispatchEvent(
+        new CustomEvent<DinnerStep>('dinner-preview-step', {
+          detail: { progress: 1 },
+        }),
+      );
       if (!animated.matches) {
         stage
           .querySelector('#project-owewell')

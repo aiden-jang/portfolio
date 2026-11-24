@@ -3,6 +3,8 @@ import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import { BeanRoom } from './BeanRoom';
 import { IguessReplay } from './IguessReplay';
 
+const revealRange = [0.53, 0.69] as const;
+
 function settleDuet(progress: number) {
   if (progress <= 0.53 || progress >= 0.73) return progress;
   return progress < 0.64 ? 0.53 : 0.75;
@@ -21,30 +23,30 @@ export function Duet({
   const pin = useRef<HTMLDivElement>(null);
   const drawing = useRef<HTMLElement>(null);
   const room = useRef<HTMLElement>(null);
-  const circle = useRef({ r: 0 });
+  const layout = useRef({ radius: 0, sticky: false });
+  const lastLight = useRef<number>();
   const [drawingActive, setDrawingActive] = useState(true);
   const paint = useCallback((laneElement: HTMLElement, t: number) => {
     if (!room.current || !drawing.current || !pin.current) return;
     laneElement.dataset.duetProgress = String(t);
-    const animated = getComputedStyle(pin.current).position === 'sticky';
-    const reveal = animated ? easedProgress(t, 0.53, 0.69) : 1;
+    const { sticky: animated, radius } = layout.current;
+    const reveal = animated ? easedProgress(t, ...revealRange) : 1;
     const light = animated ? Math.min(1, Math.max(0, (t - 0.69) / 0.31)) : 1;
-    const { r: radius } = circle.current;
     room.current.style.setProperty('--iris', reveal * radius + 'px');
-    room.current.style.setProperty(
-      '--close',
-      String(animated ? 1 - easedProgress(t, 0.67, 0.87) : 0),
-    );
-    const covered = animated && reveal > 0.8;
+    const covered = animated && reveal >= 0.92;
     if (drawing.current.inert !== covered) {
       drawing.current.inert = covered;
       setDrawingActive(!covered);
     }
-    room.current.inert = animated && reveal < 0.8;
+    const roomInert = animated && reveal < 0.92;
+    const interactionChanged = room.current.inert !== roomInert;
+    if (interactionChanged) room.current.inert = roomInert;
+    if (lastLight.current === light && !interactionChanged) return;
+    lastLight.current = light;
     room.current.dataset.sceneProgress = String(light);
     room.current.dispatchEvent(new CustomEvent('project-scene-progress', { detail: light }));
   }, []);
-  useScrollStudy(lane, true, paint, settleDuet);
+  useScrollStudy(lane, true, paint, settleDuet, revealRange);
   useEffect(() => {
     const el = lane.current!,
       stage = pin.current!,
@@ -54,8 +56,9 @@ export function Duet({
         b = canvas.getBoundingClientRect();
       const x = b.left - a.left + b.width * 0.5,
         y = b.top - a.top + b.height * 0.66;
-      circle.current = {
-        r: Math.hypot(Math.max(x, a.width - x), Math.max(y, a.height - y)) + 2,
+      layout.current = {
+        radius: Math.hypot(Math.max(x, a.width - x), Math.max(y, a.height - y)) + 2,
+        sticky: getComputedStyle(stage).position === 'sticky',
       };
       el.style.setProperty('--iris-x', x + 'px');
       el.style.setProperty('--iris-y', y + 'px');
@@ -64,6 +67,8 @@ export function Duet({
     const observer = new ResizeObserver(measure);
     observer.observe(stage);
     observer.observe(canvas);
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    preference.addEventListener('change', measure);
     measure();
     const seek = () => {
       if (location.hash !== '#project-mrrp') return;
@@ -84,6 +89,7 @@ export function Duet({
     addEventListener('hashchange', seek);
     return () => {
       observer.disconnect();
+      preference.removeEventListener('change', measure);
       cancelAnimationFrame(initial);
       removeEventListener('hashchange', seek);
     };

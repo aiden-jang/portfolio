@@ -11,6 +11,7 @@ export function useScrollStudy(
   enabled: boolean,
   draw: (el: HTMLElement, t: number) => void,
   settle?: (t: number) => number,
+  follow?: readonly [start: number, end: number],
 ) {
   useEffect(() => {
     const stage = ref.current;
@@ -23,6 +24,9 @@ export function useScrollStudy(
     let span = 1;
     let sticky = false;
     let displayed = -1;
+    let aim = -1;
+    let nextFrame = 0;
+    let lastFrame = 0;
     let finish = 0;
     let settlingToward: number | undefined;
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -34,10 +38,35 @@ export function useScrollStudy(
       clearTimeout(timer);
       cancelAnimationFrame(finish);
     };
+    const approach = (now: number) => {
+      nextFrame = 0;
+      const period = lastFrame ? Math.min(32, now - lastFrame) : 16;
+      lastFrame = now;
+      const [start, end] = follow!;
+      const position = Math.min(end, Math.max(start, displayed));
+      const goal = Math.min(end, Math.max(start, aim));
+      const gap = goal - position;
+      if (Math.abs(gap) < 0.001) {
+        paint(aim);
+        lastFrame = 0;
+        return;
+      }
+      const step = Math.min(Math.abs(gap) * (1 - Math.exp(-period / 48)), period * 0.00055);
+      paint(position + Math.sign(gap) * step);
+      nextFrame = requestAnimationFrame(approach);
+    };
+    const track = (target: number) => {
+      aim = target;
+      if (!nextFrame && displayed !== target) nextFrame = requestAnimationFrame(approach);
+    };
     const settleAfterScroll = (target: number) => {
       if (target === displayed) return;
       timer = setTimeout(() => {
         settlingToward = target;
+        if (follow) {
+          track(target);
+          return;
+        }
         const start = performance.now();
         const from = displayed;
         const ease = (now: number) => {
@@ -65,6 +94,18 @@ export function useScrollStudy(
       last = t;
       stopSettling();
       const target = settle?.(t) ?? t;
+      if (follow) {
+        if (displayed === -1 || preference.matches || !sticky) {
+          cancelAnimationFrame(nextFrame);
+          nextFrame = 0;
+          lastFrame = 0;
+          paint(t);
+        } else {
+          track(t);
+          settleAfterScroll(target);
+        }
+        return;
+      }
       if (target !== settlingToward) settlingToward = undefined;
       // A nudge toward the same reading can catch the animation, but cannot rewind it.
       const next =
@@ -86,11 +127,12 @@ export function useScrollStudy(
     measure();
     return () => {
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(nextFrame);
       stopSettling();
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', measure);
       preference.removeEventListener('change', measure);
       size.disconnect();
     };
-  }, [ref, enabled, draw, settle]);
+  }, [ref, enabled, draw, settle, follow]);
 }

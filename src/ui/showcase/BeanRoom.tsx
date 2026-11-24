@@ -1,17 +1,10 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ComponentType,
-  type ComponentProps,
-} from 'react';
-import type { Cat, RoomAction, RoomPositions } from './mrrp/renderer.js';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { RoomAction, RoomPositions } from './mrrp/renderer.js';
 import { useReducedMotion } from '../../hooks/reducedMotion';
 import './bean-room.css';
 import { BeanRoomButtons, BeanRoomTargets } from './BeanRoomTargets';
 import { useRoomCamera } from './roomCamera';
+import { useBeanRoomRenderer } from './useBeanRoomRenderer';
 
 const bean = {
   name: 'Bean',
@@ -21,9 +14,6 @@ const bean = {
   eyes: '#7cb342',
   tabby: true,
 };
-
-type RoomRenderer = ComponentType<ComponentProps<typeof Cat>>;
-let loading: Promise<typeof import('./mrrp/renderer.js')> | undefined;
 
 function roomClock(hour: number) {
   const utc = new Date().getUTCHours();
@@ -46,9 +36,6 @@ export function BeanRoom() {
     count: number;
   } | null>(null);
   const boxed = action?.kind === 'box';
-  const [near, setNear] = useState(false);
-  const [Renderer, setRenderer] = useState<RoomRenderer | null>(null);
-  const [failed, setFailed] = useState(false);
   const [together, setTogether] = useState(false);
   const [morning, setMorning] = useState(false);
   const lightOn = useRef(false);
@@ -59,40 +46,11 @@ export function BeanRoom() {
   const [status, setStatus] = useState('');
   const clock = useMemo(() => roomClock(morning ? 9 : 18), [morning]);
 
-  useEffect(() => {
-    const stage = room.current;
-    if (!stage) return;
-    let disposed = false;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return;
-        setNear(entry.isIntersecting);
-        if (!entry.isIntersecting) {
-          setAction((current) =>
-            current?.kind === 'box' || current?.kind === 'sit' ? current : null,
-          );
-          setPetAt(null);
-          return;
-        }
-        loading ??= import('./mrrp/renderer.js');
-        void loading.then(
-          ({ Cat }) => {
-            if (!disposed) setRenderer(() => Cat);
-          },
-          () => {
-            if (!disposed) setFailed(true);
-          },
-        );
-      },
-      { rootMargin: '160px 0px' },
-    );
-    observer.observe(stage);
-    return () => {
-      disposed = true;
-      observer.disconnect();
-    };
+  const leaveRoom = useCallback(() => {
+    setAction((current) => (current?.kind === 'box' || current?.kind === 'sit' ? current : null));
+    setPetAt(null);
   }, []);
-
+  const { near, Renderer, failed } = useBeanRoomRenderer(room, leaveRoom);
   const reduced = useReducedMotion();
   useRoomCamera(live, near && !!Renderer, reduced);
 
@@ -183,7 +141,10 @@ export function BeanRoom() {
       const canPlay = !scene.inert && toyCue.current === 'waiting' && welcomed.current;
       if (progress.current >= 0.18 && canPlay) {
         toyCue.current = 'played';
-        setAction((current) => ({ kind: 'mouse', count: (current?.count ?? 0) + 1 }));
+        setAction((current) => ({
+          kind: 'mouse',
+          count: (current?.count ?? 0) + 1,
+        }));
       }
       if (manualAt.current !== undefined && Math.abs(progress.current - manualAt.current) < 0.2)
         return;
@@ -215,7 +176,12 @@ export function BeanRoom() {
     }
   }
 
-  const targets = { boxed, onPet: pet, onBox: playWithBox, onMouse: playWithMouse };
+  const targets = {
+    boxed,
+    onPet: pet,
+    onBox: playWithBox,
+    onMouse: playWithMouse,
+  };
   return (
     <div className="bean-room" data-light={morning ? 'morning' : 'evening'} ref={room}>
       <div className="bean-window" data-light={morning ? 'morning' : 'evening'}>
