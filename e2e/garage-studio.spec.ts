@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openStudioControls } from './studioControls';
+import { clickStudioAdvanced, openStudioAdvanced, openStudioControls } from './studioControls';
 import { readFile } from 'node:fs/promises';
 import { PNG } from 'pngjs';
 
@@ -21,6 +21,8 @@ for (const width of [1440, 390]) {
         studio.getByRole('button', { name, exact: true }).filter({ visible: true });
       const ready = () => expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       await ready();
+      for (const angle of ['Front', 'Side', 'Rear']) await expect(button(angle)).toBeEnabled();
+      await expect(button('Advanced')).toBeVisible();
       await openStudioControls(studio);
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeHidden();
       return { studio, button, garage, ready };
@@ -52,7 +54,7 @@ for (const width of [1440, 390]) {
         })
         .toBeGreaterThan(12);
       await button('Rear').click();
-      await button('Render study').click();
+      await clickStudioAdvanced(studio, 'Render study');
       for (const pass of ['Clay', 'Shadows', 'Reflection']) {
         await button(pass).click();
         await expect(button(pass)).toHaveAttribute('aria-pressed', 'true');
@@ -68,7 +70,7 @@ for (const width of [1440, 390]) {
       await button('Details').click();
       await ready();
       await button('Open DRS').click();
-      await button('Share shot').click();
+      await clickStudioAdvanced(studio, 'Share shot');
       const link = new URL(
         await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue(),
       );
@@ -160,7 +162,7 @@ for (const width of [1440, 390]) {
           if (Math.abs(before.data[i] - after.data[i]) > 12) changed++;
         return changed;
       };
-      await button('Render study').click();
+      await clickStudioAdvanced(studio, 'Render study');
       const refined = await capture();
       await button('Current').click();
       await expect.poll(() => visuallyDiffers(refined)).toBeGreaterThan(200);
@@ -169,18 +171,23 @@ for (const width of [1440, 390]) {
       await expect.poll(() => visuallyDiffers(current)).toBeGreaterThan(200);
       await button('Done').click();
 
-      await button('Long lens').click();
-      await expect(button('Long lens')).toHaveAttribute('aria-pressed', 'true');
+      await clickStudioAdvanced(studio, 'Long lens');
+      const advanced = await openStudioAdvanced(studio);
+      await expect(advanced.getByRole('button', { name: 'Long lens' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+      await advanced.getByRole('button', { name: 'Close Advanced' }).click();
       await button('Rear deck').click();
       await expect(button('Rear deck')).toHaveAttribute('aria-pressed', 'true');
       const deck = await capture();
       await button('Zoom in').click();
       await expect.poll(() => visuallyDiffers(deck)).toBeGreaterThan(500);
 
-      await button('Render study').click();
+      await clickStudioAdvanced(studio, 'Render study');
       await button('Current').click();
       await button('Done').click();
-      await button('Share shot').click();
+      await clickStudioAdvanced(studio, 'Share shot');
       const field = studio.getByRole('textbox', { name: 'Exact shot link' });
       const url = new URL(await field.inputValue());
       expect(url.searchParams.get('camera')).toBe('deck');
@@ -190,7 +197,7 @@ for (const width of [1440, 390]) {
       await expect(studio).toBeVisible();
       await openStudioControls(studio);
       await expect(button('Rear deck')).toHaveAttribute('aria-pressed', 'true');
-      await button('Render study').click();
+      await clickStudioAdvanced(studio, 'Render study');
       await expect(button('Current')).toHaveAttribute('aria-pressed', 'true');
     });
 
@@ -207,7 +214,7 @@ for (const width of [1440, 390]) {
       await stage.focus();
       await stage.press('ArrowRight');
       await stage.press('ArrowRight');
-      await button('Share shot').click();
+      await clickStudioAdvanced(studio, 'Share shot');
       const field = studio.getByRole('textbox', { name: 'Exact shot link' });
       const glide = new URL(await field.inputValue());
       expect(glide.searchParams.get('camera')).toBe('glide');

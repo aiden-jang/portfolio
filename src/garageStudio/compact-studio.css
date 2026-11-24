@@ -69,9 +69,6 @@
   .studio-compact-dock > button:disabled {
     opacity: 0.55;
   }
-  .garage-studio:not([data-studio-tool])[data-controls-open='false'] .garage-studio-dock {
-    display: none;
-  }
   #studio-full-dock .studio-choose-full,
   .garage-studio-dock > :is(.garage-study, .garage-exhibit) > .studio-gallery-trigger {
     display: none;
@@ -136,5 +133,90 @@
   }
   .garage-studio:not([data-studio-tool])[data-controls-open='true'] .garage-studio-dock {
     display: grid;
+  }
+}
+
+.studio-advanced {
+  position: fixed;
+  inset: auto 50% 124px auto;
+  transform: translateX(50%);
+  max-height: calc(100dvh - 140px);
+  overflow: auto;
+  margin: 0;
+  width: min(320px, calc(100vw - 32px));
+  padding: 12px 16px;
+  border: 1px solid var(--rim);
+  border-radius: 14px;
+  background: var(--shell);
+  color: var(--ivory);
+  pointer-events: auto;
+}
+.studio-advanced::backdrop {
+  background: #09070565;
+}
+.studio-advanced header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 4px;
+}
+.studio-advanced h3 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.studio-advanced > button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border-top: 1px solid var(--rim);
+}
+@media (max-width: 767px), (max-height: 550px) and (orientation: landscape) {
+  .garage-studio:not([data-studio-tool])[data-controls-open='false']
+    .garage-studio-dock:not(:empty) {
+    display: block;
+    overflow: visible;
+  }
+  .garage-studio:not([data-studio-tool])[data-controls-open='false']
+    .garage-studio-dock
+    > :not(.studio-angles, .studio-tools, .studio-tool-note, .studio-link) {
+    display: none;
+  }
+  .garage-studio:not([data-studio-tool])[data-controls-open='false']
+    .studio-angles
+    button[aria-label^='Zoom'] {
+    display: none;
+  }
+  .garage-studio:not([data-studio-tool]) .studio-angles button {
+    flex: 1 1 auto;
+  }
+}
+
+@media (min-width: 950px) and (min-height: 551px) {
+  .garage-studio:not([data-studio-tool]) .garage-studio-dock:has(.studio-compare + .studio-angles) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 8px;
+  }
+  .garage-studio-dock:has(.studio-compare + .studio-angles)
+    > :not(.studio-compare, .studio-angles) {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 360px) and (max-width: 767px) {
+  .garage-studio:not([data-studio-tool])[data-controls-open='false']
+    .garage-studio-dock:has(.studio-angles) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+  .garage-studio:not([data-studio-tool])[data-controls-open='false'] .studio-tools {
+    border-top: 0;
+    margin: 0;
+    padding: 0 0 0 3px;
+    border-left: 1px solid var(--rim);
+  }
+  .garage-studio:not([data-studio-tool])[data-controls-open='false']
+    :is(.studio-tool-note, .studio-link) {
+    grid-column: 1 / -1;
   }
 }

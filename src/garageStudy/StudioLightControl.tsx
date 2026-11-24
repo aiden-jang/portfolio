@@ -36,8 +36,15 @@ export function StudioLightControl({ waiting }: { waiting: boolean }) {
           } else useGarageStudy.setState({ look: next as Lighting });
           repaintStudio();
         };
-        // A still-frame cut would cover the first part of the hinge swing.
-        if (walkaround && exhibit === 'free' && applyF40HeadlightPreset(next)) {
+        const inWalkaround = walkaround && exhibit === 'free';
+        const current = look ?? (afterHours ? 'night' : 'studio');
+        const betweenPresets =
+          inWalkaround &&
+          ((current === 'studio' && next === 'night') ||
+            (current === 'night' && next === 'studio'));
+        const movedHeadlights = inWalkaround && applyF40HeadlightPreset(next);
+        // Both presets already share a lighting fade. A still would cover that fade and the hinge.
+        if (betweenPresets || movedHeadlights) {
           clearStudioCut();
           applyLighting();
         } else stageStudioCut(applyLighting, false);

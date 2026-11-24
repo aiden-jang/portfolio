@@ -61,16 +61,6 @@ export function StudyControls({ waiting }: { waiting: boolean }) {
       ) : (
         <>
           <div className="garage-study-camera" role="group" aria-label="Studio cameras">
-            {chapter === 'walk' && (
-              <button
-                type="button"
-                disabled={waiting}
-                aria-pressed={camera === 'profile'}
-                onClick={() => choose('profile')}
-              >
-                Long lens
-              </button>
-            )}
             {chapter === 'walk' && car === 0 && (
               <button
                 type="button"

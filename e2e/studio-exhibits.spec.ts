@@ -1,5 +1,10 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openStudioControls, selectStudioExhibit } from './studioControls';
+import {
+  clickStudioAdvanced,
+  openStudioAdvanced,
+  openStudioControls,
+  selectStudioExhibit,
+} from './studioControls';
 
 for (const width of [1440, 390]) {
   const phone = width < 768;
@@ -26,7 +31,9 @@ for (const width of [1440, 390]) {
 
       await ready();
       await openStudioControls(studio);
-      await expect(button('Long lens')).toBeVisible();
+      const advanced = await openStudioAdvanced(studio);
+      await expect(advanced.getByRole('button', { name: 'Long lens' })).toBeVisible();
+      await advanced.getByRole('button', { name: 'Close Advanced' }).click();
       await expect(picker).toBeVisible({ timeout: 6000 });
       return { studio, button, picker, ready, open };
     }
@@ -75,7 +82,7 @@ for (const width of [1440, 390]) {
       await open('Corvette race wear');
       await button('Wheel close-up').click();
       await button('Clean').click();
-      await button('Share shot').click();
+      await clickStudioAdvanced(studio, 'Share shot');
       const link = await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue();
       await page.goto(link);
       await ready();
@@ -85,7 +92,9 @@ for (const width of [1440, 390]) {
       await selectStudioExhibit(studio, 'Free orbit');
       await ready();
       await openStudioControls(studio);
-      await expect(button('Long lens')).toBeVisible();
+      const advanced = await openStudioAdvanced(studio);
+      await expect(advanced.getByRole('button', { name: 'Long lens' })).toBeVisible();
+      await advanced.getByRole('button', { name: 'Close Advanced' }).click();
       await button('Choose car').click();
       const cars = page.getByRole('dialog', { name: 'Pick your ride.' });
       await expect(cars.locator('.car-option')).toHaveCount(12);
@@ -128,7 +137,7 @@ for (const width of [1440, 390]) {
       await stage.press('ArrowLeft');
       await openStudioControls(studio);
       await expect(photo).toBeVisible();
-      await studio.getByRole('button', { name: 'Share shot', exact: true }).click();
+      await clickStudioAdvanced(studio, 'Share shot');
       const link = new URL(
         await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue(),
       );
@@ -139,7 +148,7 @@ for (const width of [1440, 390]) {
       await expect(heading).toBeVisible();
       await expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       await openStudioControls(studio);
-      await studio.getByRole('button', { name: 'Share shot', exact: true }).click();
+      await clickStudioAdvanced(studio, 'Share shot');
       const reopened = new URL(
         await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue(),
       );

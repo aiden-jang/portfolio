@@ -162,7 +162,7 @@ export function createF40Headlights(model: Object3D) {
       for (const pivot of rig.pivots) pivot.rotation.x = CLOSE_ANGLE * (1 - opening);
       const light = beam * lampLevel;
       for (const bulb of rig.bulbs) {
-        bulb.emissiveIntensity = light * 6.2;
+        bulb.emissiveIntensity = light * 6.65;
         bulb.opacity = MathUtils.lerp(sourceLens.material.opacity, 0.89, light);
       }
     },

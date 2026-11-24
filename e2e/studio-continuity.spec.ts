@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { openStudioControls } from './studioControls';
+import { clickStudioAdvanced, openStudioControls } from './studioControls';
 
 for (const width of [1440, 390]) {
   const phone = width < 768;
@@ -46,7 +46,7 @@ for (const width of [1440, 390]) {
           timeout: 60_000,
         });
         await expect(studio).toHaveAttribute('data-ready', 'true');
-        await studio.getByRole('button', { name: 'Share shot', exact: true }).click();
+        await clickStudioAdvanced(studio, 'Share shot');
         const url = new URL(
           await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue(),
         );
@@ -79,7 +79,7 @@ for (const width of [1440, 390]) {
         lights.dispatchEvent(new Event('change', { bubbles: true }));
       });
       await expect(lighting).toHaveValue('dusk');
-      await studio.getByRole('button', { name: 'Share shot', exact: true }).click();
+      await clickStudioAdvanced(studio, 'Share shot');
       const url = new URL(
         await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue(),
       );

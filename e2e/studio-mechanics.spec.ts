@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { openStudioControls, selectStudioExhibit } from './studioControls';
+import { clickStudioAdvanced, openStudioControls, selectStudioExhibit } from './studioControls';
 
 for (const width of [1440, 390]) {
   const phone = width < 768;
@@ -21,7 +21,7 @@ for (const width of [1440, 390]) {
         studio.getByText('Red Bull RB16B & Ferrari F1-75').filter({ visible: true }),
       ).toBeVisible();
       await button('Open DRS').click();
-      await button('Share shot').click();
+      await clickStudioAdvanced(studio, 'Share shot');
       const url = await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue();
       await page.goto(url);
       await ready();

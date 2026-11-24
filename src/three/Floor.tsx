@@ -128,8 +128,8 @@ export function Floor({
       const lamps = afterHoursLampStyles[car.file];
       const lampLevel = lamps && !state.isCarLoading ? afterHours : 0;
       const beam = refs.f40HeadlightBeam ?? Number(!car.popupHeadlights || state.headlightsRaised);
-      head.x = lamps?.head ? beam * lampLevel * 2.9 : 0;
-      tail.x = lampLevel * 1.68;
+      head.x = lamps?.head ? beam * lampLevel * 3.08 : 0;
+      tail.x = lampLevel * 1.79;
       if (lamps) {
         head.y = lamps.head?.spacing ?? 0;
         head.z = lamps.head?.warmth ?? 0;
