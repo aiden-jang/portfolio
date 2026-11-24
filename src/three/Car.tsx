@@ -34,7 +34,8 @@ import {
   makeRadialGlowTexture,
 } from './carHelpers';
 
-import { isOpeningStudio } from '../lighting';
+import { isOpeningLowLight, isOpeningStudio } from '../lighting';
+import { prepareAfterHoursSurfaces } from './studio/afterHoursSurfaces';
 import { motionState } from './studioEntrance';
 import { getStudioProjection } from './studio/projection';
 import { tuneStudioFerrari } from './studio/ferrariMaterials';
@@ -59,6 +60,7 @@ export function Car() {
   const { attach: attachDetails, release: releaseDetails, update: updateDetails } = useCarDetails();
   const group = useMemo(() => new THREE.Group(), []);
   const studioFinish = useRef<ReturnType<typeof tuneStudioFerrari> | null>(null);
+  const afterHoursSurfaces = useRef<ReturnType<typeof prepareAfterHoursSurfaces>>(null);
   const reviewFinish = useRef<ReturnType<typeof tuneStudyMaterials>>();
   const brake = useRef<ReturnType<typeof prepareBrakePivot>>();
   const wear = useRef<ReturnType<typeof prepareRaceWear>>();
@@ -148,6 +150,7 @@ export function Car() {
         wearAmount.current = 0;
         studioFinish.current = carIndex === 0 ? tuneStudioFerrari(model) : null;
         studioFinish.current?.(isOpeningStudio(useAppStore.getState()));
+        afterHoursSurfaces.current = prepareAfterHoursSurfaces(model, spec.file);
         headlights.current = createPopupHeadlights(model, gltf.animations, spec.popupHeadlights);
         headlights.current?.setRaised(useAppStore.getState().headlightsRaised, true);
         useAppStore.setState({ hasPopupHeadlights: !!headlights.current });
@@ -249,6 +252,13 @@ export function Car() {
       useGarageStudy.getState().refined;
     reviewFinish.current?.(refinements);
     const studio = review.active || isOpeningStudio(app);
+    if (afterHoursSurfaces.current) {
+      afterHoursSurfaces.current.value = smoothTowards(
+        afterHoursSurfaces.current.value,
+        Number(!review.active && isOpeningLowLight(app)),
+        Math.min(1, dt * 10),
+      );
+    }
     studioFinish.current?.(
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,

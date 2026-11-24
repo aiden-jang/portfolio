@@ -66,13 +66,14 @@
       float tireAmbient = 0.;
       for (int wheel=0;wheel<4;wheel++) {
         vec2 tireOffset = ground - studioWheelTouch[wheel];
-        vec2 core = tireOffset/vec2(.108,.154);
-        vec2 broad = (tireOffset+vec2(.074,-.025))/vec2(.23,.295);
+        vec2 core = tireOffset/mix(vec2(.108,.154),vec2(.135,.188),afterHoursGrounding);
+        vec2 broad = (tireOffset+vec2(.074,-.025))
+          /mix(vec2(.23,.295),vec2(.259,.326),afterHoursGrounding);
         tireCore = max(tireCore,exp(-dot(core,core)));
         tireAmbient = max(tireAmbient,exp(-dot(broad,broad)));
       }
       float contact = (1.-.72*bellyShade*studioCarReady)
-        * (1.-min(.96,.89*tireCore+.34*tireAmbient)*studioCarReady);
+        * (1.-min(mix(.96,.98,afterHoursGrounding),.89*tireCore+mix(.34,.47,afterHoursGrounding)*tireAmbient)*studioCarReady);
 
       if (studioSecondReady > 0.5) {
         vec2 second = abs(ground - studioSecondChassis.xy) / studioSecondChassis.zw;
@@ -93,7 +94,9 @@
       float highlight = max(mirror.r,max(mirror.g,mirror.b));
       vec3 satinMirror = mirror/(1.+.89*highlight);
       float concreteBreakup = mix(1.,clamp(.71+fine*3.3+coarse*2.1,.65,1.16),satinFalloff);
-      float rimFade = 1.-smoothstep(.60,2.58,fromFootprint);
+      float rimFade = 1.-smoothstep(
+        mix(.60,.27,afterHoursGrounding),mix(2.58,1.49,afterHoursGrounding),fromFootprint
+      );
       vec3 groundBounce = satinMirror * rimFade * concreteBreakup * studioCarMirrorWeight;
       vec2 diffuseDistance = (ground-studioChassis.xy)/vec2(1.9,2.40);
       vec3 softBounce = studioPaint * .081 * exp(-dot(diffuseDistance,diffuseDistance)) * studioCarReady;

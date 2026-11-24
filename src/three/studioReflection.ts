@@ -13,6 +13,7 @@ const roomUniforms = `
   uniform float closingLight;
   uniform float studioDusk;
   uniform float garageStudioDim;
+  uniform float afterHoursGrounding;
   uniform float garageStudioLow;
   uniform float garageStudioPass;
   uniform float garageStudioLamps;
@@ -52,6 +53,7 @@ export function applyStudioReflection(
       closingLight: { value: -1 },
       studioDusk: { value: 0 },
       garageStudioDim: { value: 0 },
+      afterHoursGrounding: { value: 0 },
       garageStudioLow: { value: 0 },
       garageStudioPass: { value: 0 },
       garageStudioLamps: { value: 0 },

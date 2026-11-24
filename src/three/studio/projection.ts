@@ -56,7 +56,7 @@ export const photoProjectionGlsl = /* glsl */ `
   }
 
   vec3 cornerLightTint() {
-    return mix(vec3(1.,.80,.62),vec3(.34,.70,1.04),studioBarBlue);
+    return mix(vec3(1.,.80,.62),vec3(.23,.63,1.55),studioBarBlue);
   }
 
   vec3 reflectedAccent(vec3 warm, float amount) {
@@ -66,17 +66,18 @@ export const photoProjectionGlsl = /* glsl */ `
 
   float lightBarFloorWash(vec2 floorPosition) {
     vec2 offset = floorPosition - vec2(studioLightBarX-.026,.026);
-    vec2 axis = vec2(-.885,.465);
+    vec2 axis = normalize(mix(vec2(-.885,.465),vec2(-.80,.60),studioBarBlue));
     float along = dot(offset,axis);
     float across = dot(offset,vec2(axis.y,-axis.x));
     float distanceIn = max(0.,along);
-    float coreWidth = .30+.118*distanceIn;
+    float coreWidth = mix(.30+.118*distanceIn,.14+.038*distanceIn,studioBarBlue);
+    coreWidth = mix(coreWidth,.092+.026*distanceIn,studioBarBlue);
     float spillWidth = .75+.221*distanceIn;
     float core = exp(-pow(across/coreWidth,2.)-pow((distanceIn-2.65)/5.43,2.));
     float spill = exp(-pow(across/spillWidth,2.)-pow(distanceIn/6.94,2.));
     float inside = smoothstep(-.31,.65,along);
     float toe = .17+.83*smoothstep(.12,4.22,distanceIn);
-    return (.66*core+.34*spill)*inside*toe;
+    return (mix(mix(.66,.98,studioBarBlue),1.69,studioBarBlue)*core+mix(mix(.34,.10,studioBarBlue),.25,studioBarBlue)*spill)*inside*toe;
   }
 
   float floorCornerReflection(vec3 worldPoint, vec3 viewPosition, float textureRelief) {
@@ -92,7 +93,7 @@ export const photoProjectionGlsl = /* glsl */ `
     vec3 hit = p + travel*ray;
     float across = dot(hit.xz-corner,vec2(.707107,.707107));
     float spread = (.47 + .058*min(9.,travel))*mix(1.1,.91,clamp(textureRelief-.3,0.,1.));
-    float softLine = exp(-pow(across/spread,2.));
+    float softLine = exp(-pow(across/(spread*mix(1.,.49,studioBarBlue)),2.));
     float endFade = smoothstep(-.4,.44,hit.y)*(1.-smoothstep(2.18,3.40,hit.y));
     return softLine*endFade*smoothstep(.06,.32,approach)/(1.+travel*.23);
   }

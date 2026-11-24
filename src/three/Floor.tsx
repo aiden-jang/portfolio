@@ -119,11 +119,10 @@ export function Floor({
       const settle = Math.min(1, dt * 10);
       const dusk = inStudioDusk(preview);
       uniforms.studioDusk.value += (Number(dusk) - uniforms.studioDusk.value) * settle;
-      const roomDim = inBlackout()
-        ? 1
-        : !inLineup && !preview.active && isOpeningLowLight(state)
-          ? 0.62
-          : 0;
+      const afterHours = !closing && !inLineup && !preview.active && isOpeningLowLight(state);
+      uniforms.afterHoursGrounding.value +=
+        (Number(afterHours) - uniforms.afterHoursGrounding.value) * settle;
+      const roomDim = inBlackout() ? 1 : afterHours ? 0.82 : 0;
       uniforms.garageStudioDim.value += (roomDim - uniforms.garageStudioDim.value) * settle;
       const extendedLamp = preview.active && useGarageExhibit.getState().exhibit === 'lamps';
       uniforms.extendedLamp.value = Number(extendedLamp);

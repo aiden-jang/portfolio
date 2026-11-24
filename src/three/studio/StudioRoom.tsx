@@ -121,7 +121,10 @@ const photoWallFragment = /* glsl */ `
       } else if (returnWall) {
         wall *= .79;
       }
-      float transfer = frontWall ? .047*frontBounce : .223*returnGraze;
+      float transfer = frontWall ? .047*frontBounce*mix(1.,.33,studioBarBlue) : .223*returnGraze;
+      float graze = exp(-pow((distanceToFixture-.32-(room.y-.9)*.13)/.21,2.));
+      float vertical = exp(-pow((room.y-1.04)/.91,2.));
+      transfer += studioBarBlue * (returnWall ? .202 : .048) * graze * vertical;
       wall += cornerLightTint()*transfer*(1.+.33*studioBarBlue)*heightProfile*relief*grazingRelief;
     }
 
@@ -141,14 +144,19 @@ const photoWallFragment = /* glsl */ `
       vec3 channel = mix(vec3(.013,.011,.009),vec3(.019,.016,.012),liner);
       wall = mix(wall*.81,channel,trim*.83);
       wall = mix(wall,vec3(.011,.010,.009),max(0.,capMask-trim)*.82);
-      wall += core*mix(vec3(1.38,1.22,1.02),vec3(.54,1.07,1.76),studioBarBlue);
+      wall += core*mix(vec3(1.38,1.22,1.02),vec3(.30,.94,2.05),studioBarBlue);
     }
     if (!ceiling && !corner) {
       float wash = backdropWash(worldWallPoint);
       float bottomBounce = .28 + .72*smoothstep(0., .37, room.y);
-      wall += reflectedAccent(vec3(.169,.150,.127),.89)*wash*bottomBounce*panel*relief*grazingRelief;
+      wall += reflectedAccent(vec3(.169,.150,.127),.89)*wash*bottomBounce*panel*relief*grazingRelief*mix(1.,.14,studioBarBlue);
     }
     wall *= corner ? mix(1.,0.79,roomDim) : mix(1.,0.27,roomDim);
+    float nearLight = exp(-abs(toCorner)*.42-abs(room.z)*.53);
+    wall *= mix(1., mix(.35, .89, nearLight), studioBarBlue * float(!corner));
+    float pool = exp(-pow((room.y-1.03)/.92,2.)) *
+      exp(-abs(toCorner)*.28-abs(room.z)*.57);
+    wall += vec3(.0024,.0086,.024) * studioBarBlue * pool * relief * float(!corner && !ceiling);
     float duskWash = exp(-pow((room.x-studioLightBarX+1.6)/2.9,2.))*(1.-smoothstep(.40,3.7,room.y));
     wall *= mix(vec3(1.),vec3(.79,.60,.51),studioDusk);
     wall += vec3(.16,.063,.022)*duskWash*studioDusk;

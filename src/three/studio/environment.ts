@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-
 export function createStudioEnvironment(
   generator: THREE.PMREMGenerator,
   preset: 'studio' | 'blackout' | 'optics' | 'dusk' | 'miata' | 'low-light' = 'studio',
@@ -34,12 +33,21 @@ export function createStudioEnvironment(
   };
   // Fixed fixtures give the moving camera a broad side reflection and a rear edge light.
   luminousPanel(
-    [7.4, 2.85],
+    lowLight ? [8.4, 1.1] : [7.4, 2.85],
     [4.8, 2.38, 0.48],
     [0, 0.62, -0.16],
     new THREE.Color(1, 0.964, 0.918),
-    lowLight ? 3.4 : miata ? 4.4 : refined ? 5.7 : 10.6,
+    lowLight ? 3.05 : miata ? 4.4 : refined ? 5.7 : 10.6,
   );
+  if (lowLight) {
+    luminousPanel(
+      [4.9, 0.55],
+      [1.8, 3.15, -4.7],
+      [0, 0.58, 1.35],
+      new THREE.Color(1, 0.91, 0.81),
+      5.1,
+    );
+  }
   luminousPanel(
     [5.2, 2.12],
     [-3.25, 3.36, 6.05],
@@ -73,6 +81,43 @@ export function createStudioEnvironment(
     );
   }
   if (lowLight) {
+    luminousPanel(
+      [4.9, 0.19],
+      [0.75, 2.85, -4.9],
+      [0, 0.75, 0],
+      new THREE.Color(0.25, 0.77, 1),
+      12.6,
+    );
+    // These fixed strips show up in the clear coat as the viewpoint moves.
+    luminousPanel(
+      [7.4, 1.32],
+      [-4.45, 2.15, 1.35],
+      [0, 0.68, 0],
+      new THREE.Color(0.16, 0.43, 1),
+      21.5,
+    );
+    luminousPanel(
+      [6.8, 0.88],
+      [4.02, 3.05, 1.75],
+      [0, 0.76, 0],
+      new THREE.Color(0.22, 0.6, 1),
+      16.8,
+    );
+    luminousPanel(
+      [5.8, 0.72],
+      [0.45, 2.72, -5.5],
+      [0, 0.85, -0.65],
+      new THREE.Color(0.17, 0.45, 1),
+      19.0,
+    );
+    // This narrow panel catches the front fender at the opening angle.
+    luminousPanel(
+      [0.56, 1.48],
+      [4.1, 1.47, -0.16],
+      [0.92, 0.64, 1.54],
+      new THREE.Color(0.055, 0.38, 1),
+      78,
+    );
     luminousPanel(
       [0.26, 3.3],
       [5.85, 1.87, -2.7],
