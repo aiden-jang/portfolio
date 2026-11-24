@@ -92,6 +92,7 @@ html:root .portfolio-chrome .project-scenes .project-scene h3 {
   opacity: clamp(0, calc(1 - var(--finish-paint, 0) * 5), 1);
 }
 .finish-cue-manual {
+  opacity: 1;
   display: none;
 }
 @media (max-width: 700px) {
@@ -616,9 +617,6 @@ html:root #sec-experience {
 html:root #sec-about {
   padding-bottom: 0;
 }
-.scroll-film-track {
-  --scroll-travel: 110svh;
-}
 .about-framing-notes {
   padding-block: 12px 18px;
   display: flex;
@@ -697,9 +695,6 @@ html:root #sec-contact {
 @media (prefers-reduced-motion: reduce) {
   .recovery-line .removed {
     transition: none;
-  }
-  .scroll-film-track {
-    --scroll-travel: 0px;
   }
 }
 .recovery-line mark {

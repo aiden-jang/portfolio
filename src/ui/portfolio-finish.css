@@ -42,13 +42,6 @@
   #sec-more-work .gallery-companions #project-worth .preview-thumbnail {
     aspect-ratio: 1.24;
   }
-  .scroll-film-track {
-    --study-scale: calc(1 + 0.25 * var(--study-close, 0));
-  }
-  .scroll-film video {
-    transform: scale(var(--study-scale, 1));
-    transform-origin: 58% 54%;
-  }
 }
 #sec-more-work .project-scenes {
   margin-bottom: 0;

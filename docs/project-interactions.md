@@ -97,8 +97,8 @@ Studio renderer and the Ferrari F40 by
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 The full clay profile holds before the camera turns toward the rear, reveals the
 red paint and rises over the louvers in one take. Scrolling in either direction
-scrubs the recorded turn. The slider supports
-manual control and blends between stills with reduced motion. Opening the shot
-in Studio and returning preserves the reading position. The About reel pairs local project captures
+scrubs the recorded turn. Phones draw frames from the same recording as three compact image sheets.
+The scrubber follows the scroll and supports manual control, with stills for reduced motion.
+The About reel pairs local project captures
 with a tighter mobile view for Iodine. It loops while in view, is tappable to pause, and
 plays on request when reduced motion is enabled.

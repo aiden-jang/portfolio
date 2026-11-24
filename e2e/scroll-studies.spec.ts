@@ -155,29 +155,49 @@ for (const width of [1440, 390]) {
     const stage = await track.locator('.scroll-film').boundingBox();
     expect(stage!.width).toBeGreaterThanOrEqual(width - 1);
     expect(stage!.height).toBeGreaterThanOrEqual(843);
-    await expect
-      .poll(() => video.evaluate((el: HTMLVideoElement) => el.videoWidth))
-      .toBe(width === 390 ? 416 : 1152);
-    const time = () => video.evaluate((el: HTMLVideoElement) => el.currentTime);
-    await scroll(0.82);
-    await expect.poll(time).toBeGreaterThan(3.3);
-    const beforeFinalTurn = await time();
-    expect(beforeFinalTurn).toBeLessThan(3.6);
-    await scroll(0.88);
-    await expect.poll(time).toBeGreaterThan(beforeFinalTurn + 0.21);
-    expect(await time()).toBeLessThan(3.95);
-    await scroll(0.95);
-    await expect.poll(time).toBeGreaterThan(3.96);
-    await expect(video).toBeVisible();
+    if (width === 390) {
+      const frames = track.locator('canvas');
+      await expect(frames).toBeVisible();
+      await expect(frames).toHaveCSS('animation-name', 'none');
+      await expect(video).not.toHaveAttribute('src', /mp4/);
+      const image = () => frames.evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL());
+      const clay = await image();
+      await scroll(0.57);
+      await expect(slider).toHaveValue('54');
+      await expect.poll(image).not.toBe(clay);
+      const mid = await image();
+      await slider.fill('70');
+      await expect(slider).toHaveValue('70');
+      await scroll(0.95);
+      await expect(slider).toHaveValue('100');
+      await expect.poll(image).not.toBe(mid);
+      await scroll(0);
+      await expect(slider).toHaveValue('0');
+      await expect.poll(image).toBe(clay);
+    } else {
+      await expect.poll(() => video.evaluate((el: HTMLVideoElement) => el.videoWidth)).toBe(1152);
+      const time = () => video.evaluate((el: HTMLVideoElement) => el.currentTime);
+      await scroll(0.82);
+      await expect.poll(time).toBeGreaterThan(3.3);
+      const beforeFinalTurn = await time();
+      expect(beforeFinalTurn).toBeLessThan(3.6);
+      await scroll(0.88);
+      await expect.poll(time).toBeGreaterThan(beforeFinalTurn + 0.21);
+      expect(await time()).toBeLessThan(3.95);
+      await scroll(0.95);
+      await expect.poll(time).toBeGreaterThan(3.96);
+      await expect(video).toBeVisible();
+      await scroll(0.26);
+      await expect
+        .poll(() => video.evaluate((el: HTMLVideoElement) => el.currentTime))
+        .toBeLessThan(1.5);
+    }
     await expect(track.locator('.finish-detail')).toHaveCount(0);
-    await scroll(0.26);
-    await expect
-      .poll(() => video.evaluate((el: HTMLVideoElement) => el.currentTime))
-      .toBeLessThan(1.5);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await expect(featured).not.toHaveAttribute('data-map-editor-cut');
     await expect(video).not.toHaveAttribute('src', /mp4/);
+    await expect(track.locator('canvas')).toBeHidden();
     await slider.fill('100');
     await expect(slider).toHaveAttribute('aria-valuetext', 'Paint');
     await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');

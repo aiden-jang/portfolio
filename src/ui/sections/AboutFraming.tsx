@@ -1,14 +1,20 @@
 import { useEffect, useRef } from 'react';
+import { FINISH_MEDIA, finishFrames } from './finishFrames';
 import './about-framing.css';
-
-const media = '/showroom/finish-study/';
 const narrowQuery = '(max-width: 767px)';
+const scrollStart = 0.16;
+const scrollSpan = 0.76;
 
 function FinishPoster({ finish }: { finish: 'clay' | 'paint' }) {
   return (
     <picture className={'finish-poster finish-poster-' + finish} aria-hidden="true">
-      <source media={narrowQuery} srcSet={media + 'mobile-' + finish + '.webp'} />
-      <img src={media + 'desktop-' + finish + '.webp'} alt="" loading="lazy" decoding="async" />
+      <source media={narrowQuery} srcSet={FINISH_MEDIA + 'mobile-' + finish + '.webp'} />
+      <img
+        src={FINISH_MEDIA + 'desktop-' + finish + '.webp'}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
     </picture>
   );
 }
@@ -16,6 +22,7 @@ function FinishPoster({ finish }: { finish: 'clay' | 'paint' }) {
 export function AboutFraming() {
   const track = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
   const range = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -26,9 +33,9 @@ export function AboutFraming() {
     const narrow = matchMedia(narrowQuery);
     const short = matchMedia('(max-height: 490px)');
     let nearby = false;
-    let manual = false;
     let progress = 0;
     let frame = 0;
+    const phoneFrames = finishFrames(canvas.current!, () => progress);
 
     function seek() {
       if (player.readyState < 1 || !Number.isFinite(player.duration) || player.seeking) return;
@@ -44,12 +51,15 @@ export function AboutFraming() {
           progress < 0.43 ? 'Clay' : progress < 0.75 ? 'Changing to paint' : 'Paint',
         );
         lane.style.setProperty('--finish-paint', String(progress));
-        lane.style.setProperty('--study-close', String(Math.sin(Math.PI * progress) ** 2));
       }
-      seek();
+      if (narrow.matches) phoneFrames.draw();
+      else seek();
     }
     function configure() {
-      if (!nearby || !motion.matches || short.matches) {
+      const moving = nearby && motion.matches && !short.matches;
+      if (moving && narrow.matches) phoneFrames.load();
+      else phoneFrames.clear();
+      if (!moving || narrow.matches) {
         if (player.hasAttribute('src')) {
           player.removeAttribute('src');
           player.load();
@@ -57,22 +67,20 @@ export function AboutFraming() {
         lane.removeAttribute('data-film-ready');
         return;
       }
-      const source = media + (narrow.matches ? 'mobile.mp4' : 'desktop.mp4');
+      const source = FINISH_MEDIA + 'desktop.mp4';
       if (player.getAttribute('src') !== source) {
         lane.removeAttribute('data-film-ready');
         player.src = source;
       }
     }
+    const scrollTravel = () => lane.clientHeight - lane.firstElementChild!.clientHeight;
     function paint() {
       frame = 0;
-      if (!motion.matches || short.matches) return;
-      const rect = lane.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > innerHeight) manual = false;
-      if (manual || !nearby) return;
-      const travel = lane.clientHeight - lane.firstElementChild!.clientHeight;
+      if (!nearby || !motion.matches || short.matches) return;
+      const travel = scrollTravel();
       if (travel > 0) {
-        const t = Math.min(1, Math.max(0, -rect.top / travel));
-        apply(Math.min(1, Math.max(0, (t - 0.16) / 0.76)));
+        const position = -lane.getBoundingClientRect().top / travel;
+        apply(Math.min(1, Math.max(0, (position - scrollStart) / scrollSpan)));
       }
     }
     function schedule() {
@@ -88,13 +96,19 @@ export function AboutFraming() {
     }
     const showPoster = () => lane.removeAttribute('data-film-ready');
     const useSlider = () => {
-      manual = true;
       apply(slider.valueAsNumber / 100);
+      if (motion.matches && !short.matches) {
+        const start = scrollY + lane.getBoundingClientRect().top;
+        scrollTo({
+          top: start + scrollTravel() * (scrollStart + progress * scrollSpan),
+          behavior: 'instant',
+        });
+      }
     };
     const observer = new IntersectionObserver(
       ([entry]) => {
         nearby = entry.isIntersecting;
-        if (nearby) updateMedia();
+        updateMedia();
       },
       { rootMargin: '720px' },
     );
@@ -109,6 +123,7 @@ export function AboutFraming() {
     slider.addEventListener('input', useSlider);
     return () => {
       observer.disconnect();
+      phoneFrames.clear();
       cancelAnimationFrame(frame);
       for (const query of [motion, narrow, short]) query.removeEventListener('change', updateMedia);
       removeEventListener('scroll', schedule);
@@ -128,6 +143,7 @@ export function AboutFraming() {
           <FinishPoster finish="clay" />
           <FinishPoster finish="paint" />
           <video ref={video} muted playsInline preload="auto" aria-hidden="true" />
+          <canvas ref={canvas} width={352} height={760} hidden aria-hidden="true" />
 
           <div className="film-heading">
             <h3 id="finish-study-title">Framing the showroom</h3>

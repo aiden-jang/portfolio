@@ -13,7 +13,6 @@ for (const width of [1440, 390]) {
     const paused = page.getByRole('button', { name: 'Resume opening camera' });
     const restart = page.getByRole('button', { name: 'Restart camera' });
     const dock = page.locator(width < 768 ? '#mobile-bar' : '#desktop-dock');
-    const zoom = dock.getByRole('button', { name: 'Zoom in', exact: true });
     const homepage = page.getByRole('button', { name: 'Aiden Jang, back to the top' });
     const selectIntro = async () => {
       const nav = page.getByRole('navigation', { name: 'Mobile navigation' });
@@ -33,7 +32,6 @@ for (const width of [1440, 390]) {
     await expect(dock).toHaveCSS('opacity', '1');
     await expect(dock.getByRole('button', { name: 'Reset view', exact: true })).toHaveCount(0);
     const position = await camera.boundingBox();
-    const zoomPosition = await zoom.boundingBox();
     await playing.click();
     await expect(paused).toBeVisible();
     expect(await camera.boundingBox()).toEqual(position);
@@ -48,18 +46,12 @@ for (const width of [1440, 390]) {
     await homepage.click();
     await expect(playing).toBeVisible();
 
-    await zoom.click();
-    await expect(restart).toBeVisible();
-    expect(await camera.boundingBox()).toEqual(position);
-    expect(await zoom.boundingBox()).toEqual(zoomPosition);
-    await restart.click();
-    await expect(playing).toBeVisible();
-
     await page.mouse.move(width / 2, 450);
     await page.mouse.down();
     await page.mouse.move(width / 2 + 54, 450, { steps: 4 });
     await page.mouse.up();
     await expect(restart).toBeEnabled();
+    expect(await camera.boundingBox()).toEqual(position);
     await restart.click();
     await expect(playing).toBeVisible();
 
@@ -94,11 +86,14 @@ for (const width of [1440, 390]) {
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await expect(camera).toBeHidden();
-    await zoom.click();
+    await page.mouse.move(width / 2, 450);
+    await page.mouse.down();
+    await page.mouse.move(width / 2 + 54, 450, { steps: 4 });
+    await page.mouse.up();
     const restore = page.getByRole('button', { name: 'Restore default view' });
     await restore.press('Enter');
     await expect(restore).toBeFocused();
-    await zoom.focus();
+    await dock.getByRole('button', { name: /^Lighting:/ }).focus();
     await expect(camera).toBeHidden();
     await homepage.click();
     await expect(camera).toBeHidden();
