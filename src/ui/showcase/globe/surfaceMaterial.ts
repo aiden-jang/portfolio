@@ -8,6 +8,7 @@ export function lightSurface(
   ocean: boolean,
   reveal: { value: number },
   aurora: Texture,
+  terminatorStrength = 1,
 ): void {
   const compile = material.onBeforeCompile;
   const key = material.customProgramCacheKey();
@@ -17,6 +18,7 @@ export function lightSurface(
     shader.uniforms['uSurfaceMorph'] = morph;
     shader.uniforms['uSurfaceReveal'] = reveal;
     shader.uniforms['uRecordedAurora'] = { value: aurora };
+    shader.uniforms['uTerminatorStrength'] = { value: terminatorStrength };
     shader.vertexShader = shader.vertexShader.replace(
       'void main() {',
       `
@@ -36,6 +38,7 @@ export function lightSurface(
       uniform float uSurfaceMorph;
       uniform float uSurfaceReveal;
       uniform sampler2D uRecordedAurora;
+      uniform float uTerminatorStrength;
       varying vec3 vSurfaceDirection;
       varying vec3 vSurfaceWorld;
       ${ocean ? 'varying float vSheetLongitude;' : ''}
@@ -65,7 +68,7 @@ export function lightSurface(
       float width = clamp(fwidth(solar) * 1.25, 0.001, 0.018);
       float contour = 1.0 - smoothstep(width * 0.17, width, abs(solar));
       float halo = 1.0 - smoothstep(width, width * 6.0, abs(solar));
-      float visibleLine = (contour * 0.37 + halo * 0.11) * smoothstep(0.04, 0.42, facing);
+      float visibleLine = (contour * 0.37 + halo * 0.11) * smoothstep(0.04, 0.42, facing) * uTerminatorStrength;
       diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.28, 0.58, 0.70), visibleLine);
       ${
         ocean

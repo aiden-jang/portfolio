@@ -1,0 +1,166 @@
+.iodine-portfolio[hidden] {
+  display: none;
+}
+
+.iodine-case-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.iodine-case-link svg {
+  width: 0.43em;
+  height: 0.43em;
+  min-width: 16px;
+  min-height: 16px;
+  color: #c4c4b8;
+  transition: transform 180ms ease;
+}
+
+.iodine-case-link:hover svg {
+  transform: translateX(4px);
+}
+
+.creative-case[data-case='iodine'] {
+  --case-width: min(1280px, calc(100% - 48px));
+  background: #111114;
+}
+
+.creative-case[data-case='iodine'] .creative-case-content {
+  width: var(--case-width);
+}
+
+.creative-case[data-case='iodine'] .creative-case-nav {
+  padding-inline: max(24px, calc((100% - 1280px) / 2));
+}
+
+.creative-case[data-opening='evidence'] .iodine-case-heading {
+  display: block;
+  padding-block: clamp(22px, 4vw, 52px) clamp(18px, 3vw, 35px);
+}
+
+.creative-case[data-opening='evidence'] .iodine-case-heading h1 {
+  max-width: none;
+  font-size: clamp(38px, 5.65vw, 80px);
+  text-wrap: pretty;
+}
+
+.iodine-case-heading h1:focus {
+  outline: none;
+}
+
+.iodine-case-notes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px clamp(26px, 6vw, 100px);
+  padding-block: 22px;
+  color: #d0d1c9;
+  font-size: clamp(14px, 1.45vw, 19px);
+  line-height: 1.5;
+}
+
+.iodine-case-notes p {
+  max-width: 47ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.iodine-case-notes button,
+.iodine-case-notes a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #ebede2;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.iodine-case-screenshot {
+  border-block-start: 1px solid #323b3b;
+}
+
+.iodine-case-screenshot summary {
+  min-height: 44px;
+  padding-block: 11px;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .creative-case[data-opening='evidence'] .iodine-case-heading h1 {
+    max-width: 12ch;
+  }
+
+  .iodine-case-notes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding-block: 14px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(#project-iodine, .iodine-case-evidence) .recovery {
+    view-transition-name: iodine-editor;
+  }
+
+  .iodine-case-heading {
+    view-transition-name: iodine-case-heading;
+  }
+
+  #project-iodine .project-scene-heading {
+    view-transition-name: iodine-portfolio-heading;
+  }
+
+  ::view-transition-new(iodine-case-heading),
+  ::view-transition-new(iodine-portfolio-heading) {
+    animation: iodine-heading-in 260ms ease-out 135ms both;
+  }
+
+  ::view-transition-old(iodine-case-heading),
+  ::view-transition-old(iodine-portfolio-heading) {
+    animation: iodine-heading-in 120ms ease-in reverse both;
+  }
+
+  ::view-transition-group(iodine-editor) {
+    animation-duration: 520ms;
+    animation-timing-function: cubic-bezier(0.22, 0.8, 0.25, 1);
+  }
+
+  ::view-transition-old(iodine-editor),
+  ::view-transition-new(iodine-editor) {
+    block-size: 100%;
+    object-fit: none;
+    object-position: left top;
+    border-radius: 12px;
+  }
+
+  ::view-transition-group(root) {
+    animation-duration: 260ms;
+  }
+}
+
+@keyframes iodine-heading-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iodine-case-link svg {
+    transition: none;
+  }
+}
+
+.iodine-case-evidence .recovery-meta button {
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.iodine-case-evidence .recovery-source:focus-visible {
+  outline: 2px solid #e4e6d5;
+  outline-offset: 4px;
+}

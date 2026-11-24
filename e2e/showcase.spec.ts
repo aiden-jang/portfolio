@@ -86,7 +86,7 @@ for (const width of [1440, 390]) {
     await expect(page.getByRole('button', { name: 'Explore globe', exact: true })).toBeFocused();
     await expect(canvas).toHaveCount(0);
     const iodine = page.locator('#project-iodine');
-    await expect(iodine.getByRole('status')).toHaveText('File restored');
+    await expect(iodine.getByRole('status')).toHaveText('Edit undone');
     await expect(iodine.getByRole('button', { name: /^(Undo|Replay) edit$/ })).toHaveCount(0);
     const room = page.locator('#project-mrrp');
     await room.locator('.bean-window').scrollIntoViewIfNeeded();
@@ -149,6 +149,7 @@ for (const width of [1440, 390]) {
       ['platform', 'Choose an app', 'Already signed in', 'platform-app'],
     ] as const) {
       const card = page.locator(`#project-${project}`);
+      await card.getByText('View screenshots', { exact: true }).click();
       const step = card.getByRole('button', { name: second, exact: true });
       await expect(card.getByRole('button', { name: first, exact: true })).toHaveAttribute(
         'aria-pressed',
@@ -183,7 +184,7 @@ test('globe waits for featured work and a failed start keeps the preview and ret
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   const assets: string[] = [];
   page.on('request', (r) => {
-    if (/globe-engine|globe-geography|orbit-snapshot/.test(r.url())) assets.push(r.url());
+    if (/globe-engine|globe-geography|atlas-events/.test(r.url())) assets.push(r.url());
   });
   await page.goto('/');
   await expect(page.locator('#sec-intro h1')).toBeVisible();

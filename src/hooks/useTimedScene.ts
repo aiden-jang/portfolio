@@ -56,7 +56,13 @@ export function useTimedScene(
     }
 
     function schedule() {
-      const running = visible && timeline.started && !document.hidden && !preference.matches;
+      const reading = Boolean(node?.parentElement?.querySelector(':focus-visible'));
+      const running =
+        visible &&
+        timeline.started &&
+        !document.hidden &&
+        !preference.matches &&
+        !(hold > 0 && reading);
       if (!running) {
         stop();
       } else if (timeline.elapsed < duration && !frame) {
@@ -100,14 +106,21 @@ export function useTimedScene(
     };
     if (!preference.matches) draw(timeline.elapsed / duration);
     else if (hold > 0) draw(1);
+    function wake() {
+      queueMicrotask(schedule);
+    }
     observer.observe(node);
     preference.addEventListener('change', preferenceChanged);
     document.addEventListener('visibilitychange', schedule);
+    document.addEventListener('focusin', schedule);
+    document.addEventListener('focusout', wake);
     return () => {
       observer.disconnect();
       stop();
       preference.removeEventListener('change', preferenceChanged);
       document.removeEventListener('visibilitychange', schedule);
+      document.removeEventListener('focusin', schedule);
+      document.removeEventListener('focusout', wake);
     };
   }, [subject, draw, enabled, duration, hold, startThreshold, restartAfterExit]);
 }

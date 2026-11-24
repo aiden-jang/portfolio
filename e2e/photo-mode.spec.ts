@@ -42,7 +42,7 @@ for (const width of [1440, 390, 320]) {
       const garage = page
         .getByRole('button', { name: 'Garage controls', exact: true })
         .filter({ visible: true });
-      await garage.click();
+      await garage.press('Control+k');
       await page.getByRole('option', { name: /Photo mode/ }).click();
       const photo = page.getByRole('region', { name: 'Photo mode' });
       await expect(photo).toBeVisible();

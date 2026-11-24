@@ -12,6 +12,7 @@ import {
 } from './globe/data';
 import { subsolarPoint } from './globe/sun';
 import { attachGlobeInput } from './globe/input';
+import type { RecordedWeather } from './globe/recordedWeatherAssets';
 export { loadAurora, loadGeography };
 export type { PickedEvent };
 
@@ -39,6 +40,7 @@ type Options = {
   failed: () => void;
   exit: () => void;
   select: (event: PickedEvent | null) => void;
+  weather?: RecordedWeather;
 };
 export function createOrbitGlobe(
   canvas: HTMLCanvasElement,
@@ -47,7 +49,9 @@ export function createOrbitGlobe(
   aurora: Uint8Array<ArrayBuffer>,
   options: Options,
 ) {
-  const events = readEvents(snapshot);
+  const events = readEvents(snapshot).filter(
+    (event) => !options.weather || event.id !== featured.id,
+  );
   const selectable = [featured, ...events];
   const sun = subsolarPoint(SKY_TIME);
   const globe = createGlobeScene(
@@ -57,6 +61,7 @@ export function createOrbitGlobe(
     featured,
     vector(sun.lon, sun.lat),
     aurora,
+    options.weather,
   );
   const initial = {
     lon: 165,
@@ -91,7 +96,11 @@ export function createOrbitGlobe(
       const moving = journey === 0 && input.step(dt);
       if (journey === 0 && rotating && time > holdUntil)
         pose.lon = (pose.lon + ROTATION_RATE * dt) % 360;
-      globe.render(pose);
+      globe.render(
+        pose,
+        journey,
+        reduced.matches || (lastShown && lastShown !== featured.id) ? 0 : time / 1000,
+      );
       if (art && journey > 0 && journey < 1) {
         const surface = canvas.getBoundingClientRect();
         const marker = globe.project(featured.lon, featured.lat, surface);

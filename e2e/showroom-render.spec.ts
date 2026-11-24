@@ -73,7 +73,7 @@ test('Behind the render switches finishes and returns focus to Garage', async ({
     visible: true,
   });
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
-  await garage.click();
+  await garage.press('Control+k');
   await page.getByRole('combobox').fill('Behind the render');
   await page.getByRole('option', { name: /Behind the render/ }).click();
   const study = page.getByRole('dialog', { name: 'Behind the render' });

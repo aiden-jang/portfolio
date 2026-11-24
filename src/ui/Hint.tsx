@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAppStore } from '../store';
 import { COMMAND_MENU_EVENT } from './useCommandMenuEvents';
+import { useGarageStudio } from '../garageStudio/state';
 import './all-controls.css';
 
 export function AllControlsButton() {
@@ -12,7 +13,9 @@ export function AllControlsButton() {
       title="Garage controls"
       onClick={(event) => {
         event.currentTarget.focus({ preventScroll: true });
-        window.dispatchEvent(new Event(COMMAND_MENU_EVENT));
+        if (useAppStore.getState().sceneUnavailable)
+          window.dispatchEvent(new Event(COMMAND_MENU_EVENT));
+        else useGarageStudio.getState().open();
       }}
     >
       <span aria-hidden="true">···</span>

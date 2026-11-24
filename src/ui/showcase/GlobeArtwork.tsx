@@ -32,8 +32,8 @@ export function GlobeArtwork({
       <div className="orbit-art" data-poster={!fallback}>
         <ScreenshotImage
           key={fallback ? 'screenshot' : 'poster'}
-          src={fallback ? image : '/projects/globe-opening-desktop.webp'}
-          narrowSrc={fallback ? undefined : '/projects/globe-opening-mobile.webp'}
+          src={fallback ? image : '/projects/atlas-globe-desktop.webp'}
+          narrowSrc={fallback ? undefined : '/projects/atlas-globe-phone.webp'}
           alt={
             fallback
               ? 'meanwhile. product interface'

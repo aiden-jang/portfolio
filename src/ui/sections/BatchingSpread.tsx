@@ -13,7 +13,7 @@ function relayBatchProgress(stage: HTMLElement, progress: number) {
 }
 
 export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
-  const [phase, setPhase] = useState<'before' | 'after'>('before');
+  const [phase, setPhase] = useState<'before' | 'batching' | 'after'>('before');
   const figure = useRef<HTMLElement>(null);
   const manual = useRef<number | null>(null);
   useScrollStudy(lane, true, relayBatchProgress);
@@ -46,7 +46,7 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
         '--batch-scroll-time',
         Math.round(progress * replayDuration) + 'ms',
       );
-      setPhase(progress >= 0.74 ? 'after' : 'before');
+      setPhase(progress >= 0.76 ? 'after' : progress >= 0.32 ? 'batching' : 'before');
     };
     stage.addEventListener('batch-preview-progress', update);
     return () => stage.removeEventListener('batch-preview-progress', update);
@@ -79,7 +79,11 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
         </g>
       </svg>
       <div className="batching-readout">
-        {after ? '1 batched request' : '120 separate requests'}
+        {after
+          ? '1 batched request'
+          : phase === 'batching'
+            ? 'Batching requests'
+            : '120 separate requests'}
       </div>
       <div className="batching-controls">
         <div className="batching-states" role="group" aria-label="Compare request patterns">
@@ -91,10 +95,12 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
           </button>
         </div>
       </div>
-      <figcaption className="sr-only" aria-live="polite">
+      <figcaption className="sr-only">
         {after
           ? 'After batching: one API call and two seconds to load.'
-          : 'Before batching: 120 API calls and about 60 seconds to load.'}
+          : phase === 'batching'
+            ? 'Combining requests.'
+            : 'Before batching: 120 API calls and about 60 seconds to load.'}
       </figcaption>
     </figure>
   );

@@ -1,0 +1,190 @@
+#project-iodine .project-scene-body {
+  background: radial-gradient(ellipse at 68% 50%, #182522 0%, #131918 38%, #111114 75%);
+}
+#sec-experience .experience-lead {
+  background: radial-gradient(ellipse at 64% 58%, #22312a 0%, #171f1c 54%, #131815 100%);
+}
+.experience-lead:has(.batching-spread[data-phase='after']) .experience-measure > span:last-child {
+  color: #cef4d9;
+}
+#project-worth .worth-ranking {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  background: linear-gradient(115deg, #23251b, #1a1c15);
+}
+#project-worth .worth-ranking-row {
+  min-width: 0;
+  font-size: clamp(14px, 1.35vw, 20px);
+  white-space: normal;
+}
+#sec-more-work .gallery-companions #project-worth .preview-thumbnail {
+  aspect-ratio: 1.6;
+}
+#sec-more-work .gallery-companions #project-worth .worth-ranking-verdict img {
+  width: min(100%, 208px);
+}
+#sec-more-work .gallery-companions #project-worth,
+#sec-more-work .gallery-companions #project-platform {
+  padding-block: clamp(26px, 5vw, 72px);
+}
+.platform-handoff {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  aspect-ratio: 1.65;
+  background: #f2f1ed;
+  border-radius: 12px;
+}
+.platform-handoff > div {
+  grid-area: 1 / 1;
+  min-width: 0;
+  display: grid;
+  align-content: stretch;
+  grid-template-rows: minmax(0, 1fr) auto;
+  transition: opacity 280ms ease;
+}
+.platform-handoff img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 44%;
+}
+.platform-handoff span {
+  padding: 10px 16px;
+  background: #191a18;
+  color: #eae6db;
+  font-size: 13px;
+}
+.platform-handoff[data-open='true'] .platform-hub,
+.platform-handoff[data-open='false'] .platform-archive {
+  opacity: 0;
+}
+#sec-about .about-framing-notes {
+  padding-block: 14px 20px;
+}
+#sec-intro .intro-work-cue {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+#project-bloomnote {
+  scroll-margin-top: var(--portfolio-header-height);
+}
+@media (max-width: 700px) {
+  #project-worth .worth-ranking .worth-ranking-row {
+    padding-inline: 9px;
+    overflow-wrap: anywhere;
+  }
+  #sec-more-work .gallery-companions #project-worth .preview-thumbnail {
+    aspect-ratio: 1.24;
+  }
+  .scroll-film-track {
+    --study-scale: calc(1 + 0.25 * var(--study-close, 0));
+  }
+  .scroll-film video {
+    transform: scale(var(--study-scale, 1));
+    transform-origin: 58% 54%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .platform-handoff > div {
+    transition: none;
+  }
+  .platform-handoff {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .platform-handoff > div {
+    grid-area: auto;
+    opacity: 1 !important;
+  }
+}
+#sec-more-work .project-scenes {
+  margin-bottom: 0;
+}
+#sec-more-work .gallery-companions {
+  gap: 0;
+}
+#sec-more-work .gallery-companions #project-worth {
+  background: radial-gradient(ellipse at 82% 48%, #2a2a1d, #171911 68%);
+  margin-inline: calc(-1 * var(--portfolio-gutter));
+  padding-inline: var(--portfolio-gutter);
+  grid-template-columns: minmax(135px, 0.54fr) minmax(0, 1.46fr);
+}
+#sec-more-work #project-worth .project-card-media {
+  max-width: 740px;
+}
+#sec-more-work #project-platform .project-card-media {
+  max-width: 580px;
+}
+#sec-more-work #project-platform .platform-handoff img {
+  object-fit: contain;
+}
+#sec-more-work #project-wherever {
+  --scene-run: min(29svh, 265px);
+}
+@media (max-width: 767px) {
+  #sec-more-work .gallery-companions #project-worth {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #sec-more-work .gallery-companions #project-worth .project-card-media {
+    width: 100%;
+  }
+  .about-reel-story .about-story {
+    display: contents;
+  }
+  .about-reel-story .about-lead {
+    order: -1;
+    margin: 0;
+  }
+  .about-reel-story .about-profile {
+    margin-top: 0;
+  }
+}
+@media (min-width: 768px) {
+  #project-everythingisfine .quake-journey-copy {
+    max-width: min(35vw, 480px);
+  }
+  html:root #project-everythingisfine .earthquake-intro .creative-quake-hook {
+    max-width: 100%;
+    font-size: clamp(31px, 3.72vw, 58px);
+    line-height: 1.03;
+    text-wrap: initial;
+  }
+  #project-everythingisfine .creative-quake-hook strong {
+    display: block;
+    max-width: 19ch;
+    margin-top: 7px;
+    font-size: 0.78em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+}
+.platform-screenshots {
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.platform-screenshots summary {
+  display: list-item;
+  min-height: 44px;
+  padding-block: 12px;
+  cursor: pointer;
+}
+
+#mobile-navigation > button {
+  display: flex;
+  min-height: 44px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 16px;
+  border-top: 1px solid var(--color-line);
+  text-align: left;
+}
+
+#mobile-navigation > button svg {
+  width: 16px;
+  height: 16px;
+}

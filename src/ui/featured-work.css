@@ -42,6 +42,26 @@ html:root #sec-work .project-featured-group {
   align-items: center;
   padding-block: 0;
 }
+.earthquake-feature[data-comparing='false']::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -18px auto -14px calc(-0.72 * var(--portfolio-gutter));
+  width: min(48%, 612px);
+  background: url('/projects/atlas-stars-copy.svg') center / 100% 100% no-repeat;
+  opacity: 1;
+  pointer-events: none;
+  mask-image:
+    linear-gradient(90deg, transparent, #000 12% 78%, transparent),
+    linear-gradient(transparent, #000 13% 82%, transparent),
+    radial-gradient(ellipse at 32% 65%, #0007 8%, #000d 37%, #000 74%);
+  mask-composite: intersect;
+}
+@media (prefers-reduced-motion: no-preference) and (min-height: 620px) {
+  .quake-journey-run:not([data-quake-manual]) .earthquake-feature[data-comparing='false']::before {
+    opacity: clamp(0.09, 1.19 - 1.1 * var(--map-reveal, 0), 1);
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
   .orbit-feature:not([data-globe-phase='ready']) [data-kamchatka-pulse]::after {
     content: '';
@@ -347,6 +367,14 @@ html:root .portfolio-chrome #project-everythingisfine .earthquake-heading h3 {
     min-height: 0;
     gap: 6px;
     padding-top: 16px;
+  }
+  .earthquake-feature[data-comparing='false']::before {
+    inset: -4px calc(-1 * var(--portfolio-gutter)) 0;
+    width: auto;
+    background-image: url('/projects/atlas-stars-phone.svg');
+    mask-image:
+      linear-gradient(transparent, #000b 7%, transparent 27% 49%, #000c 67% 84%, transparent),
+      radial-gradient(ellipse at 40% 70%, #0005, #000 80%);
   }
   .earthquake-detail {
     grid-area: 3 / 1;

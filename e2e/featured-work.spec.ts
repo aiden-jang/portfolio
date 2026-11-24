@@ -83,17 +83,9 @@ for (const [width, height] of [
       name: 'Compare the Kamchatka reports',
       exact: true,
     });
-    const story = page.getByRole('button', {
-      name: 'How I built it: meanwhile.',
-      exact: true,
-    });
+    const story = page.getByRole('link', { name: 'Read the meanwhile. case study' });
     await expect(inspect).toHaveCount(1, { timeout: 5000 });
-    const snapshot = await page.request.get('/projects/orbit-snapshot.json');
-    const { metadata } = await snapshot.json();
-    await expect(page.locator('.earthquake-record time')).toHaveAttribute(
-      'datetime',
-      new Date(metadata.generated).toISOString(),
-    );
+    await expect(page.locator('.earthquake-record')).toContainText('Radar by RainViewer');
     await expect(inspect).toBeInViewport({ ratio: 1 });
     await inspect.press('Enter');
     await expect(
@@ -118,12 +110,11 @@ for (const [width, height] of [
     await expect(page.locator('#globe-view, .garage-studio')).toHaveCount(0);
     await page.goto('/#sec-work');
     await story.click();
-    const reader = page.getByRole('dialog');
-    await expect(reader.getByText('One event on the globe', { exact: true })).toBeVisible();
-    await reader.getByRole('button', { name: 'Close', exact: true }).click();
-    await expect(story).toBeFocused();
+    await expect(page.getByRole('heading', { name: 'One quake. Two depths.' })).toBeVisible();
+    await page.goBack();
+    await expect(story).toBeVisible();
     const iodine = page.locator('#project-iodine');
-    await expect(iodine.getByRole('status')).toHaveText('File restored');
+    await expect(iodine.getByRole('status')).toHaveText('Edit undone');
     await iodine.getByRole('link', { name: 'Read the iodine case study' }).click();
     await expect(page.getByRole('heading', { name: 'An edit you can take back.' })).toBeVisible();
     await expect(page).toHaveURL(/cases\/iodine\/\?edit=restored$/);
@@ -131,18 +122,21 @@ for (const [width, height] of [
     await page.getByRole('button', { name: 'Undo edit', exact: true }).press('Enter');
     await expect(page).toHaveURL(/cases\/iodine\/\?edit=restored$/);
     await page.reload();
-    await expect(page.getByText('Revert feedback queued', { exact: true })).toBeVisible();
+    await expect(page.getByText('Original line restored', { exact: true })).toBeVisible();
     await expect(
       page.getByText('Do not assume the edit is still applied.', { exact: false }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'src/greeting.ts:2', exact: true }).first().click();
-    await expect(page.locator('.iodine-evidence-line')).toBeFocused();
+    await expect(page.locator('.recovery-source')).toBeFocused();
     await expect(page.getByRole('link', { name: 'View Iodine’s restore code' })).toHaveAttribute(
       'href',
       /editSnapshots\.ts#L92-L107$/,
     );
     await page.getByRole('button', { name: 'Replay edit', exact: true }).press('Enter');
-    await expect(page.getByText('.trim()', { exact: true })).toBeVisible();
+    await expect(page.locator('.iodine-case-evidence .recovery')).toHaveAttribute(
+      'data-restored',
+      'false',
+    );
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
@@ -218,17 +212,17 @@ for (const [width, height] of [
     const evidence = page.getByRole('region', { name: 'Recorded Iodine edit recovery' });
     const undo = evidence.getByRole('button', { name: 'Undo edit', exact: true });
     await expect(undo).toBeInViewport({ ratio: 1, timeout: 4000 });
-    const code = evidence.locator('.iodine-evidence-line');
+    const code = evidence.locator('.recovery-source');
     await expect(code).toContainText('.trim()');
     await undo.click();
-    await expect(code).not.toContainText('.trim()');
-    await expect(evidence.getByText('Revert feedback queued', { exact: true })).toBeVisible();
+    await expect(evidence.locator('.recovery')).toHaveAttribute('data-restored', 'true');
+    await expect(evidence.getByText('Original line restored', { exact: true })).toBeVisible();
     await expect(page).toHaveURL(/\/cases\/iodine\/\?edit=restored$/);
     await page.getByRole('button', { name: 'Copy evidence link' }).click();
     const saved = await page.evaluate(() => sessionStorage.getItem('copied-evidence'));
     expect(saved).toMatch(/\/cases\/iodine\/\?edit=restored$/);
     await page.goto(saved!);
-    await expect(evidence.getByText('File restored', { exact: true })).toBeVisible();
+    await expect(evidence.getByText('Edit undone', { exact: true })).toBeVisible();
     await evidence.getByRole('button', { name: 'Replay edit', exact: true }).click();
     await expect(code).toContainText('.trim()');
 

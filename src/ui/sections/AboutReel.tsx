@@ -54,6 +54,7 @@ export function AboutReel() {
   useEffect(() => {
     const player = video.current!;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const size = matchMedia(phoneViewport);
     let visible = false;
     let attempted = false;
     let pausedOffscreen = false;
@@ -89,13 +90,31 @@ export function AboutReel() {
       },
       { threshold: Number.EPSILON },
     );
+    function switchFormat() {
+      if (!player.src) return;
+      const next = size.matches ? 'phone' : 'desktop';
+      const time = player.currentTime;
+      const wasPlaying = !player.paused;
+      player.addEventListener(
+        'loadedmetadata',
+        () => {
+          player.currentTime = Math.min(time, Math.max(0, player.duration - 0.08));
+          if (wasPlaying && visible && !document.hidden) void player.play().catch(() => {});
+        },
+        { once: true },
+      );
+      player.src = media[next].video;
+      setFormat(next);
+    }
     observer.observe(player);
+    size.addEventListener('change', switchFormat);
     reduced.addEventListener('change', reconsider);
     document.addEventListener('visibilitychange', reconsider);
     player.addEventListener('playing', pauseWhileHidden);
     reconsider();
     return () => {
       observer.disconnect();
+      size.removeEventListener('change', switchFormat);
       reduced.removeEventListener('change', reconsider);
       document.removeEventListener('visibilitychange', reconsider);
       player.removeEventListener('playing', pauseWhileHidden);
@@ -104,7 +123,7 @@ export function AboutReel() {
 
   return (
     <figure className="about-reel" aria-labelledby="about-reel-title" data-phase={phase}>
-      <header className="about-reel-heading">
+      <header className="sr-only">
         <h3 id="about-reel-title">Selected work in motion</h3>
       </header>
       <div className="about-reel-stage" data-format={format}>

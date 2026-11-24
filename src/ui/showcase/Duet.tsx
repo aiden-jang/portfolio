@@ -54,8 +54,8 @@ export function Duet({
     const measure = () => {
       const a = stage.getBoundingClientRect(),
         b = canvas.getBoundingClientRect();
-      const x = b.left - a.left + b.width * 0.5,
-        y = b.top - a.top + b.height * 0.66;
+      const x = b.left - a.left + b.width * 0.43,
+        y = b.top - a.top + b.height * 0.53;
       layout.current = {
         radius: Math.hypot(Math.max(x, a.width - x), Math.max(y, a.height - y)) + 2,
         sticky: getComputedStyle(stage).position === 'sticky',

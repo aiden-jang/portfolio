@@ -20,11 +20,16 @@ scroll the page. The renderer pauses offscreen, behind a dialog and in a hidden
 tab. Reduced motion keeps the still until the visitor chooses Explore globe and
 turns off both automatic rotation and coasting.
 
-The public assets contain all data needed by the embedded globe. The
-[USGS snapshot](../public/projects/orbit-snapshot.json) holds 194 magnitude 5.0+
-earthquakes, and the featured Kamchatka event comes from the reconciliation
-fixture above. Event links carry the selected USGS ID and camera to the live app.
-Older events can age out of its catalogue.
+The public assets contain all data needed by the embedded globe.
+The [USGS snapshot](../public/projects/atlas-events.json) contains 600 recorded
+earthquake reports through 17 November 2026. The featured Kamchatka event uses
+the reconciliation fixture above. Event links carry a selected USGS ID and camera
+to the live app. Older events can age out of its catalogue.
+
+The wider scene layers [NOAA GFS wind](../public/projects/atlas-wind.json) valid
+6 November 2026 at 12:00 UTC and [RainViewer](https://www.rainviewer.com/) radar
+recorded 24 November 2026 at 01:10 UTC. The layers come from separate dates and
+recede as the comparison focuses on the recorded Kamchatka reports.
 
 The day–night boundary, stars and aurora use the same recorded sky time,
 17 November 2026 at 23:00 UTC. The aurora is a 2° grid sampled from a saved NOAA
@@ -54,9 +59,10 @@ illustrate the handoff and do not measure network or physical-device performance
 
 ## Project scenes
 
-Iodine’s recorded edit recovery loops and holds the restored file in view. The
-case study keeps the snapshot, manual Undo and Replay, links to saved states, and
-the clickable file reference. Its scope control compares the approved folder
+Iodine’s recorded edit recovery loops and holds the restored file in view. Its
+case study opens on the same editor and preserves its scroll, focus and restored
+line on Back. Undo, Replay, saved states and the clickable file reference remain
+available in the case study. Its scope control compares the approved folder
 with a folder outside it.
 
 The mrrp scene uses Bean’s native room canvas. Visitors can pet Bean, play with her toy

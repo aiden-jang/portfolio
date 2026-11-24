@@ -41,11 +41,12 @@ test('phone controls have a touch close action and omit keyboard instructions', 
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'share', { value: async () => {}, configurable: true });
   });
+  // Exercise the touch controls while the lazy 3D scene is still loading.
+  await page.route('**/assets/Scene-*.js', () => {});
   await page.goto('/');
-  const controls = page
-    .getByRole('button', { name: 'Garage controls', exact: true })
-    .filter({ visible: true });
-  await controls.click();
+  const menu = page.getByRole('button', { name: /^Menu(?:$|: )/ });
+  await menu.click();
+  await page.getByRole('button', { name: 'Search controls' }).click();
   const dialog = page.getByRole('dialog', { name: 'Command menu' });
   await expect(
     dialog.getByText('↑ ↓ browse · Home End jump · Enter run', { exact: true }),
@@ -57,19 +58,26 @@ test('phone controls have a touch close action and omit keyboard instructions', 
   await expect(dialog.getByText('Garage shared', { exact: true })).toBeVisible();
   await dialog.getByRole('button', { name: 'Close controls', exact: true }).click();
   await expect(dialog).toHaveCount(0);
-  await expect(controls).toBeFocused();
-  for (const width of [320, 844]) {
-    await page.setViewportSize({ width, height: 844 });
-    await controls.click();
-    await expect(dialog.locator('.keyboard-hint').filter({ visible: true })).toHaveCount(0);
-    await dialog.getByRole('button', { name: 'Close controls', exact: true }).click();
-    await expect(controls).toBeFocused();
-  }
+  await expect(menu).toBeFocused();
+  await page.setViewportSize({ width: 320, height: 844 });
+  await menu.tap();
+  await page.getByRole('button', { name: 'Search controls' }).tap();
+  await expect(dialog.locator('.keyboard-hint').filter({ visible: true })).toHaveCount(0);
+  await dialog.getByRole('button', { name: 'Close controls', exact: true }).tap();
+  await expect(menu).toBeFocused();
+
+  await page.setViewportSize({ width: 844, height: 844 });
+  const brand = page.getByRole('button', { name: 'Aiden Jang, back to the top' });
+  await brand.focus();
+  await page.keyboard.press('Control+k');
+  await expect(dialog.locator('.keyboard-hint').filter({ visible: true })).toHaveCount(0);
+  await dialog.getByRole('button', { name: 'Close controls', exact: true }).tap();
+  await expect(brand).toBeFocused();
   await page.setViewportSize({ width: 390, height: 844 });
   await page
     .getByRole('button', { name: /Browse cars\./ })
     .filter({ visible: true })
-    .click();
+    .tap();
   await expect(
     page.getByText('Arrow keys to browse · Enter to choose', { exact: true }),
   ).toBeHidden();

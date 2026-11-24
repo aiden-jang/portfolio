@@ -14,6 +14,15 @@ html:root .orbit-preview::before {
   background: url('/projects/globe-stars-desktop.svg') center / 100% 100% no-repeat;
   mask-image: linear-gradient(transparent, #000 12% 81%, transparent);
 }
+html:root .orbit-preview[data-atlas='true']::before {
+  background-image: url('/projects/atlas-stars-desktop.svg');
+  opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) and (min-height: 620px) {
+  html:root .quake-journey-run:not([data-quake-manual]) .orbit-preview[data-atlas='true']::before {
+    opacity: calc(0.12 + var(--globe-dim, 1) * 0.88);
+  }
+}
 html:root .orbit-art {
   position: absolute;
   inset: 0;
@@ -114,6 +123,9 @@ html:root :is(.orbit-screenshot, .orbit-rotate, .orbit-reset) svg {
   html:root .orbit-preview::before {
     background-image: url('/projects/globe-stars-mobile.svg');
     opacity: 0.85;
+  }
+  html:root .orbit-preview[data-atlas='true']::before {
+    background-image: url('/projects/atlas-stars-phone.svg');
   }
   html:root .orbit-preview .preview-thumbnail {
     container-type: size;

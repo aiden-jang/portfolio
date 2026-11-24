@@ -6,21 +6,17 @@ import { EarthquakeGlobeStill } from './EarthquakeEvidence';
 import { DepthSection } from './DepthSection';
 import { InteractiveGlobe } from './InteractiveGlobe';
 import { ControlIcon } from '../ControlIcon';
-import { storyHref } from '../creative/storyRoutes';
+import { evidenceHref } from '../creative/storyRoutes';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
 import { QuakeReadings } from './quakeJourney';
 import { advanceQuake, settleQuake } from './quakeProgress';
 
-// The visible date also applies to the snapshot poster before WebGL loads.
-const snapshotDate = '2026-11-17T00:55:59.000Z';
-
 type Props = {
   item: WorkDetail;
   preview: ProductPreview;
-  onOpen: (item: WorkDetail, el: HTMLElement) => void;
 };
 
-export function EarthquakeFeature({ item, preview, onOpen }: Props) {
+export function EarthquakeFeature({ item, preview }: Props) {
   const compareRoute = '#quake/kamchatka';
   const [comparing, setComparing] = useState(() => location.hash.startsWith(compareRoute));
   const [agency, setAgency] = useState<'USGS' | 'EMSC'>(() =>
@@ -115,7 +111,10 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
               <p className="earthquake-interpretation">
                 Both agencies agreed on magnitude. Their depth estimates differed by about 16 km.
               </p>
-              <a className="featured-text-action" href={storyHref('everythingisfine', { agency })}>
+              <a
+                className="featured-text-action"
+                href={evidenceHref('everythingisfine', { agency })}
+              >
                 See how I matched the reports <ControlIcon name="arrow" />
               </a>
             </section>
@@ -137,7 +136,7 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
           <div className="earthquake-intro earthquake-detail">
             <div className="quake-journey-copy">
               <p className="creative-quake-hook">
-                Same quake, <strong>16.3 km apart.</strong>
+                Same quake. <strong>Depth estimates differ by 16.3 km.</strong>
               </p>
               <QuakeReadings />
             </div>
@@ -154,17 +153,19 @@ export function EarthquakeFeature({ item, preview, onOpen }: Props) {
         {!comparing && (
           <div className="earthquake-footer">
             <span className="earthquake-record">
-              USGS snapshot · <time dateTime={snapshotDate}>Nov 17, 2026</time> · NOAA aurora
+              Recorded layers · USGS · NOAA ·{' '}
+              <a href="https://www.rainviewer.com/" target="_blank" rel="noopener noreferrer">
+                Radar by RainViewer
+              </a>
             </span>
             <div className="earthquake-links">
-              <button
-                type="button"
+              <a
                 className="featured-text-action"
-                aria-label="How I built it: meanwhile."
-                onClick={(event) => onOpen(item, event.currentTarget)}
+                aria-label="Read the meanwhile. case study"
+                href={evidenceHref('everythingisfine', { agency })}
               >
-                How I built it <ControlIcon name="arrow" />
-              </button>
+                Case study <ControlIcon name="arrow" />
+              </a>
               {item.link && (
                 <a
                   className="earthquake-app"

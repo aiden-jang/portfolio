@@ -148,7 +148,7 @@ for (const width of [1440, 390]) {
     await expect(thumbnail.locator('img')).toHaveAttribute('aria-busy', 'false');
     const originalFrame = (await thumbnail.boundingBox())!;
     await page.route(
-      /\/projects\/(everythingisfine\.jpg|globe-opening-(desktop|mobile)\.webp)$/,
+      /\/projects\/(everythingisfine\.jpg|atlas-globe-(desktop|phone)\.webp)$/,
       (route) => route.fulfill({ status: 404, body: 'Not found' }),
     );
     await page.reload();
@@ -161,8 +161,8 @@ for (const width of [1440, 390]) {
     const failedFrame = (await thumbnail.boundingBox())!;
     expect(failedFrame.width).toBeCloseTo(originalFrame.width, 0);
     expect(failedFrame.height).toBeCloseTo(originalFrame.height, 0);
-    await project.getByRole('button', { name: 'How I built it: meanwhile.', exact: true }).click();
-    await expect(page.locator('#work-modal-title')).toContainText('meanwhile.');
+    await project.getByRole('link', { name: 'Read the meanwhile. case study' }).click();
+    await expect(page.getByRole('heading', { name: 'One quake. Two depths.' })).toBeVisible();
   });
 }
 
@@ -182,7 +182,11 @@ test('reader keeps the current identity and named next project after scrolling',
   await expect(image).toBeInViewport({ ratio: 0.99 });
   await expect(image).toHaveAttribute('src', '/projects/everythingisfine.jpg');
   await page.keyboard.press('Escape');
-  await project.getByRole('button', { name: 'How I built it: meanwhile.', exact: true }).click();
+  const legacy = await page.evaluate(() => {
+    location.hash = 'work/everythingisfine';
+    return location.hash;
+  });
+  expect(legacy).toBe('#work/everythingisfine');
   const title = page.locator('#work-modal-title');
   const top = (await title.boundingBox())!.y;
   await page.locator('.story-scroll-area').evaluate((element) => {

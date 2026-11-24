@@ -25,6 +25,8 @@ import { vector, type GlobeEvent, type GlobePose } from './data';
 import { createMarkers } from './markers';
 import { lightSurface } from './surfaceMaterial';
 import { ATMOSPHERE } from './surfaceLight';
+import type { RecordedWeather } from './recordedWeatherAssets';
+import { createRecordedWeather } from './recordedWeather';
 
 const AURORA_WIDTH = 180;
 const AURORA_HEIGHT = 91;
@@ -55,8 +57,14 @@ export function createGlobeScene(
   featured: GlobeEvent,
   sun: Vector3,
   auroraGrid: Uint8Array<ArrayBuffer>,
+  weather?: RecordedWeather,
 ) {
-  const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
+  const renderer = new WebGLRenderer({
+    canvas,
+    antialias: true,
+    alpha: true,
+    preserveDrawingBuffer: new URLSearchParams(location.search).has('poster'),
+  });
   renderer.setClearAlpha(0);
   const scene = new Scene(),
     camera = new PerspectiveCamera(32, 1, 0.1, 100),
@@ -91,8 +99,9 @@ export function createGlobeScene(
   aurora.wrapS = RepeatWrapping;
   aurora.magFilter = aurora.minFilter = LinearFilter;
   aurora.needsUpdate = true;
-  lightSurface(oceanMaterial, sun, { value: 0 }, true, { value: 1 }, aurora);
-  lightSurface(landMaterial, sun, { value: 0 }, false, { value: 1 }, aurora);
+  const terminatorStrength = weather ? 0.28 : 1;
+  lightSurface(oceanMaterial, sun, { value: 0 }, true, { value: 1 }, aurora, terminatorStrength);
+  lightSurface(landMaterial, sun, { value: 0 }, false, { value: 1 }, aurora, terminatorStrength);
   for (const [name, color, order] of [
     ['graticule', 0x1d3741, 0.5],
     ['plates', 0x92aeb4, 3],
@@ -128,8 +137,9 @@ export function createGlobeScene(
   scene.add(new Mesh(atmosphereGeometry, atmosphereMaterial));
   geometries.push(atmosphereGeometry);
   materials.push(atmosphereMaterial);
-  const markers = createMarkers(events);
-  const featuredMarker = createMarkers([featured], true);
+  const overlays = weather ? createRecordedWeather(scene, weather) : undefined;
+  const markers = createMarkers(events, false, !!weather);
+  const featuredMarker = createMarkers([featured], true, !!weather);
   scene.add(markers.object, featuredMarker.object);
   const markerPositions = featuredMarker.object.geometry.getAttribute('position');
   const highlight = (event: GlobeEvent = featured) => {
@@ -160,7 +170,14 @@ export function createGlobeScene(
     markers.resize(scale);
     featuredMarker.resize(scale);
   };
-  const render = (pose: GlobePose) => {
+  const render = (pose: GlobePose, journey = 0, pulseTime = 0) => {
+    if (overlays) {
+      const detail = Math.min(1, Math.max(0, (journey - 0.12) / 0.73));
+      const strength = 1 - detail * detail * (3 - 2 * detail);
+      overlays.setStrength(strength);
+      markers.fade(strength);
+      featuredMarker.pulse(pulseTime);
+    }
     camera.position.copy(vector(pose.lon, pose.lat, fit / pose.zoom));
     camera.lookAt(0, 0, 0);
     camera.updateMatrixWorld();
@@ -182,6 +199,7 @@ export function createGlobeScene(
     project,
     highlight,
     dispose: () => {
+      overlays?.dispose();
       markers.dispose();
       featuredMarker.dispose();
       aurora.dispose();

@@ -16,7 +16,6 @@ for (const width of [1440, 390]) {
         .filter({ visible: true });
       await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
       await garage.click();
-      await page.getByRole('option', { name: /^Explore Studio/ }).click();
       const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
       const button = (name: string) =>
         studio.getByRole('button', { name, exact: true }).filter({ visible: true });

@@ -5,6 +5,7 @@ import { clamp } from '../math';
 import { cancelSmoothScroll, smoothScrollTo } from './scrollNavigation';
 import { useAppStore } from '../store';
 import { sectionProgress } from './sectionProgress';
+import { storyAtLocation } from '../ui/creative/storyRoutes';
 import {
   carIsVisibleAt,
   contactIsVisible,
@@ -134,7 +135,10 @@ export function useNavigation(sceneOnly = false) {
 
     const restoreSectionLink = (event?: HashChangeEvent) => {
       // Readers restore their own scroll position when closed through history.
-      if (event?.oldURL && /^#(?:work|quake)\//.test(new URL(event.oldURL).hash)) return;
+      if (event?.oldURL) {
+        const from = new URL(event.oldURL);
+        if (/^#(?:work|quake)\//.test(from.hash) || storyAtLocation(from)) return;
+      }
       const index = SECTION_IDS.indexOf(window.location.hash.slice(1) as SectionId);
       if (index < 0) return;
       const section = document.getElementById(SECTION_IDS[index]);
@@ -158,11 +162,7 @@ export function useNavigation(sceneOnly = false) {
       const link = event.target instanceof Element ? event.target.closest('a') : null;
       if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
       const url = new URL(link.href, location.href);
-      if (
-        url.origin !== location.origin ||
-        (!url.searchParams.has('story') && !/\/cases\/(iodine|meanwhile)\/?$/.test(url.pathname))
-      )
-        return;
+      if (url.origin !== location.origin || !storyAtLocation(url)) return;
       history.replaceState(
         { ...history.state, portfolioCaseReturn: { y: scrollY, href: link.href } },
         '',

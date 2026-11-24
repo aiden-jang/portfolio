@@ -43,11 +43,11 @@ for (const width of [1440, 390]) {
     await expect(recovery).toHaveText('Agent edit');
     await place('#project-iodine .recovery', 0.22);
     const parkedEditor = await page.evaluate(() => scrollY);
-    await expect(recovery).toHaveText('File restored');
+    await expect(recovery).toHaveText('Edit undone');
     await expect(iodine.getByRole('button', { name: /^(Undo|Replay) edit$/ })).toHaveCount(0);
     expect(await page.evaluate(() => scrollY)).toBe(parkedEditor);
     await expect(recovery).toHaveText('Agent edit');
-    await expect(recovery).toHaveText('File restored');
+    await expect(recovery).toHaveText('Edit undone');
 
     const batch = page.locator('.batching-spread');
     await seekScene('.batch-lane', 0.25);
@@ -129,10 +129,10 @@ for (const width of [1440, 390]) {
     await expect(featured).toHaveAttribute('data-map-editor-cut', '');
     await expect.poll(gridOpacity).toBeGreaterThan(0.25);
     await place('#project-iodine .recovery', 0.2);
-    await expect(recovery).toHaveText('File restored');
+    await expect(recovery).toHaveText('Edit undone');
     await expect(featured).not.toHaveAttribute('data-map-editor-cut');
     await approachEditor();
-    await expect(recovery).toHaveText('File restored');
+    await expect(recovery).toHaveText('Edit undone');
     await expect.poll(gridOpacity).toBeGreaterThan(0.25);
     await expect(iodine.getByRole('link', { name: 'Read the iodine case study' })).toHaveAttribute(
       'href',
@@ -183,7 +183,7 @@ for (const width of [1440, 390]) {
     await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');
 
     await place('#project-iodine .recovery', 0.22);
-    await expect(recovery).toHaveText('File restored');
+    await expect(recovery).toHaveText('Edit undone');
     await expect(iodine.getByRole('button', { name: 'Replay edit', exact: true })).toHaveCount(0);
     await expect(garden.locator('.bloom-garden-plant img').first()).toHaveCSS('clip-path', 'none');
     await expect(drawing.getByRole('status')).toHaveText('Guitar');

@@ -55,7 +55,7 @@ for (const width of [1440, 390]) {
       ).toBeEnabled();
       expect(modelRequests).toBe(0);
       const initialSetup = new URL(page.url()).search;
-      await garage.click();
+      await garage.press('Control+k');
       const menu = page.getByRole('dialog', { name: 'Command menu' });
       await expect(menu.getByRole('option', { name: /^Lineup/ })).toBeVisible({ timeout: 5_000 });
       await menu.getByRole('option', { name: /^Lineup/ }).click();

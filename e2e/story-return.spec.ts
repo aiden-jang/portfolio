@@ -20,14 +20,17 @@ for (const width of [1440, 390]) {
     await page.evaluate(() => document.fonts.ready);
     const iodine = page.getByRole('link', { name: 'Read the iodine case study', exact: true });
     await iodine.scrollIntoViewIfNeeded();
+    await iodine.focus();
     const position = await page.evaluate(() => scrollY);
-    await iodine.click();
+    await iodine.press('Enter');
     await expect(page.getByRole('heading', { name: 'An edit you can take back.' })).toBeVisible();
     await page.goBack();
     await expect
       .poll(() => page.evaluate((previous) => Math.abs(scrollY - previous), position))
       .toBeLessThan(2);
     await expect(iodine).toBeInViewport();
+    await expect(iodine).toBeFocused();
+    await expect(iodine).toHaveAttribute('href', /edit=restored$/);
 
     for (const [label, id] of [
       ['How I built it: iguess', 'iguess'],

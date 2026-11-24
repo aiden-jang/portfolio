@@ -48,6 +48,7 @@ export function AboutFraming() {
           progress < 0.43 ? 'Clay' : progress < 0.75 ? 'Changing to paint' : 'Paint',
         );
         lane.style.setProperty('--finish-paint', String(progress));
+        lane.style.setProperty('--study-close', String(Math.sin(Math.PI * progress) ** 2));
       }
       seek();
     }
@@ -126,28 +127,6 @@ export function AboutFraming() {
 
   return (
     <figure className="about-framing-study" aria-labelledby="finish-study-title">
-      <figcaption className="about-framing-notes">
-        <span>
-          Model by{' '}
-          <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">vecarz</a>, CC
-          BY 4.0.
-        </span>
-        <div className="about-framing-actions">
-          {!sceneUnavailable && (
-            <button
-              className="creative-about-action"
-              type="button"
-              aria-label="Open this shot in Studio"
-              onClick={(event) => openAboutShot(event.currentTarget)}
-            >
-              Studio
-            </button>
-          )}
-          <a className="creative-about-action" href="/cases/showroom/">
-            How I built the showroom <ControlIcon name="arrow" />
-          </a>
-        </div>
-      </figcaption>
       <div className="scroll-film-track" ref={track}>
         <div className="scroll-film">
           <FinishPoster finish="clay" />
@@ -172,6 +151,28 @@ export function AboutFraming() {
             />
             <span aria-hidden="true">Paint</span>
           </div>
+        </div>
+      </div>
+      <div className="about-framing-notes">
+        <span>
+          Model by{' '}
+          <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">vecarz</a>, CC
+          BY 4.0.
+        </span>
+        <div className="about-framing-actions">
+          {!sceneUnavailable && (
+            <button
+              className="creative-about-action"
+              type="button"
+              aria-label="Open this shot in Studio"
+              onClick={(event) => openAboutShot(event.currentTarget)}
+            >
+              Open this shot in Studio
+            </button>
+          )}
+          <a className="creative-about-action" href="/cases/showroom/">
+            How I built the showroom <ControlIcon name="arrow" />
+          </a>
         </div>
       </div>
     </figure>

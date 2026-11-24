@@ -6,6 +6,7 @@ import { ScreenshotViewer } from '../ScreenshotViewer';
 import { GlobeArtwork } from './GlobeArtwork';
 import { previewLink } from '../previewLinks';
 import { setQuakeManual, syncQuakeCamera } from './quakeProgress';
+import { loadRecordedWeather } from './globe/recordedWeatherAssets';
 
 type Engine = ReturnType<(typeof import('./globe-engine'))['createOrbitGlobe']>;
 const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
@@ -129,14 +130,21 @@ export function InteractiveGlobe({ image, caption, onCompare, journey }: GlobePr
         ]);
         return { engine, geography, aurora };
       }),
-      fetch('/projects/orbit-snapshot.json', { signal: abort.signal }).then((response) => {
+      fetch('/projects/atlas-events.json', {
+        signal: abort.signal,
+      }).then((response) => {
         if (!response.ok) throw Error('Snapshot unavailable');
         return response.json();
       }),
+      loadRecordedWeather(abort.signal).catch(() => undefined),
     ])
-      .then(([{ engine, geography, aurora }, snapshot]) => {
-        if (disposed) return;
+      .then(([{ engine, geography, aurora }, snapshot, weather]) => {
+        if (disposed) {
+          weather?.radar.close();
+          return;
+        }
         handle.current = engine.createOrbitGlobe(target, snapshot, geography, aurora, {
+          weather,
           autoRotate: mode === 'auto',
           onManual: journey ? () => setQuakeManual(target, true) : undefined,
           onRotation: setRotating,
@@ -187,7 +195,7 @@ export function InteractiveGlobe({ image, caption, onCompare, journey }: GlobePr
         data-globe-phase={phase}
         data-has-event={ready && !!selected}
       >
-        <div className="project-preview orbit-preview" data-project="everythingisfine">
+        <div className="project-preview orbit-preview" data-project="everythingisfine" data-atlas>
           <GlobeArtwork
             image={image}
             fallback={posterUnavailable}
@@ -268,7 +276,7 @@ export function InteractiveGlobe({ image, caption, onCompare, journey }: GlobePr
           {phase === 'error'
             ? 'The globe could not start. Retry it, view the screenshot, or open Compare agency reports.'
             : ready
-              ? `Drag to rotate and select a marker for details. Recorded USGS events${captured ? ' · ' + captured + ' UTC' : ''}, with a recorded NOAA aurora.`
+              ? `Drag to rotate and select a marker. Recorded USGS earthquakes${captured ? ' · ' + captured + ' UTC' : ''}, NOAA wind and aurora, and RainViewer radar.`
               : phase === 'loading'
                 ? 'Preparing globe…'
                 : 'Recorded Kamchatka earthquake. Explore the globe to browse more recorded events.'}

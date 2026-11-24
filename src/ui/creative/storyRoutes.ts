@@ -1,23 +1,30 @@
 export const storyIds = ['everythingisfine', 'iodine', 'ad-slot-details-120-1-api-call'] as const;
 export type StoryId = (typeof storyIds)[number];
 
-export function storyHref(id: StoryId, state?: { edit?: 'restored'; agency?: 'USGS' | 'EMSC' }) {
+export function storyHref(
+  id: StoryId,
+  state?: { edit?: 'restored' | 'edited'; agency?: 'USGS' | 'EMSC' },
+) {
   const query = new URLSearchParams({ story: id });
   if (state?.edit) query.set('edit', state.edit);
   if (state?.agency) query.set('agency', state.agency);
   return portfolioPath(window.location.pathname) + '?' + query.toString();
 }
 
-const caseSlugs = { everythingisfine: 'meanwhile', iodine: 'iodine' } as const;
+const caseSlugs = {
+  everythingisfine: 'meanwhile',
+  iodine: 'iodine',
+  'ad-slot-details-120-1-api-call': 'request-batching',
+} as const;
 type FeaturedStory = keyof typeof caseSlugs;
 
 function caseRoute(path: string) {
-  return /\/cases\/(meanwhile|iodine)(?:\/index\.html|\/)?$/.exec(path);
+  return /\/cases\/(meanwhile|iodine|request-batching)(?:\/index\.html|\/)?$/.exec(path);
 }
 
-export function storyAtLocation({ pathname, search }: Location) {
+export function storyAtLocation({ pathname, search }: Pick<Location, 'pathname' | 'search'>) {
   const slug = caseRoute(pathname)?.[1];
-  if (slug) return slug === 'meanwhile' ? 'everythingisfine' : 'iodine';
+  if (slug) return storyIds.find((id) => caseSlugs[id] === slug);
   const query = new URLSearchParams(search).get('story');
   return storyIds.find((id) => id === query);
 }

@@ -1,0 +1,57 @@
+#sec-more-work {
+  --worth-frame-inset: clamp(12px, 1.7vw, 27px);
+  --paper-inset: calc(var(--worth-frame-inset) + 1px);
+}
+
+#sec-more-work .project-scenes {
+  margin-bottom: clamp(16px, 2.3vw, 32px);
+}
+#sec-more-work #project-worth {
+  border-top-color: transparent;
+}
+#sec-more-work .worth-ranking {
+  padding: var(--worth-frame-inset);
+}
+#sec-more-work .worth-ranking .worth-ranking-verdict {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  margin-inline-start: 0;
+  opacity: 1;
+  transform: none;
+}
+#sec-more-work .worth-ranking .worth-ranking-verdict img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 302 / 299;
+}
+#project-wherever .dinner-exit-shade {
+  position: absolute;
+  z-index: 0;
+  inset: auto 0 0;
+  height: clamp(55px, 17svh, 154px);
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--color-bg));
+  opacity: var(--bill-arrival, 0);
+}
+@media (prefers-reduced-motion: no-preference) and (min-height: 610px) {
+  #sec-more-work #project-wherever .bill {
+    margin-right: calc(var(--portfolio-gutter) + var(--paper-inset));
+  }
+}
+@media (width >= 768px) and (prefers-reduced-motion: no-preference) and (min-height: 610px) {
+  #sec-more-work #project-wherever .bill {
+    align-self: end;
+    margin-bottom: clamp(94px, 13svh, 125px);
+  }
+}
+@media (width < 768px) and (prefers-reduced-motion: no-preference) and (min-height: 610px) {
+  #sec-more-work #project-wherever .bill {
+    justify-self: end;
+    width: min(calc(100vw - 2 * (var(--portfolio-gutter) + var(--paper-inset))), 450px);
+    margin-bottom: clamp(68px, 10svh, 88px);
+  }
+}

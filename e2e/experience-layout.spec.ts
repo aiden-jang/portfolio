@@ -61,7 +61,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       expect(globe!.y).toBeGreaterThanOrEqual(title!.y + title!.height);
       expect(detail!.y).toBeGreaterThanOrEqual(globe!.y + globe!.height);
     }
-    const lead = section.getByRole('link', { name: 'Read the case study', exact: true });
+    const lead = section.getByRole('link', { name: 'How I cut load time to 2s', exact: true });
     await expect(lead).toBeVisible();
     const history = section.locator('.experience-history');
     await expect(history.getByText('LiveIntent', { exact: true })).toHaveCount(1);
@@ -138,6 +138,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await expect(after).toBeHidden();
       await expect(comparison.getByRole('button', { name: 'Replay batching' })).toHaveCount(0);
       await scrollToBatch(0.34);
+      await expect(comparison.getByText('Batching requests', { exact: true })).toBeVisible();
       await expect(marks).not.toHaveCSS('transform', 'none');
       await scrollToBatch(0.85);
       await expect(batchedRequest).toBeVisible();
@@ -158,7 +159,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await page.getByRole('button', { name: 'Copy evidence link' }).click();
       await expect(page.getByRole('button', { name: 'Link copied', exact: true })).toBeVisible();
       expect(await page.evaluate(() => sessionStorage.getItem('copied-case'))).toMatch(
-        /story=ad-slot-details-120-1-api-call$/,
+        /\/cases\/request-batching\/$/,
       );
       await page.goBack();
       const trigger = section.getByRole('button', { name: /Replaced a live PHP backend/ });
@@ -214,13 +215,12 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         );
         const frame = await study.boundingBox();
         const reel = await target.locator('.about-reel').boundingBox();
-        const story = await target.locator('.about-story').boundingBox();
+        const lead = await target.locator('.about-lead').boundingBox();
         const details = await target.locator('.about-details').boundingBox();
-        if (width >= 900) expect(story!.x).toBeGreaterThan(reel!.x + reel!.width);
-        else expect(story!.y).toBeGreaterThan(reel!.y + reel!.height);
-        expect(frame!.y).toBeGreaterThan(story!.y + story!.height);
-        const aboutBody = await target.locator('.about-body').boundingBox();
-        expect(details!.y).toBeGreaterThan(aboutBody!.y + aboutBody!.height);
+        if (width >= 900) expect(lead!.x).toBeGreaterThan(reel!.x + reel!.width);
+        else expect(reel!.y).toBeGreaterThan(lead!.y + lead!.height);
+        expect(frame!.y).toBeGreaterThan(details!.y + details!.height);
+        expect(details!.y).toBeGreaterThan(lead!.y + lead!.height);
         const contribution = target.getByRole('link', { name: 'iodine', exact: true });
         await expect(contribution).toHaveAccessibleDescription('Opens in a new tab');
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(

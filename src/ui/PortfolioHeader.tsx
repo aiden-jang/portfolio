@@ -6,6 +6,7 @@ import { Brand } from './Brand';
 import { Nav } from './Nav';
 import { ResumeButton } from './ResumeButton';
 import { ControlIcon } from './ControlIcon';
+import { COMMAND_MENU_EVENT } from './useCommandMenuEvents';
 
 export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void }) {
   const active = useAppStore((state) => state.sectionIndex);
@@ -94,6 +95,15 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
                 <ControlIcon name="arrow" />
               </a>
             ))}
+            <button
+              type="button"
+              onClick={() => {
+                closeAndFocus();
+                window.dispatchEvent(new Event(COMMAND_MENU_EVENT));
+              }}
+            >
+              Search controls <ControlIcon name="arrow" />
+            </button>
           </nav>
         </div>
         <ResumeButton />

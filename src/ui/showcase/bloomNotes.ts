@@ -39,9 +39,7 @@ export function localBloomNotes(sentence: string) {
   const quote = (part: string) => '“' + part + '”';
   return [
     parts.length >= 2 ? quote(parts[0]!) : quote(words),
-    parts.length >= 3
-      ? quote(parts.slice(1, -1).join(', '))
-      : 'I wanted to put this into words, because the little things matter to me.',
-    parts.length >= 2 ? quote(parts.at(-1)!) : 'I’d keep this moment exactly as it was.',
+    parts.length >= 3 ? quote(parts.slice(1, -1).join(', ')) : 'A detail I wanted to remember.',
+    parts.length >= 2 ? quote(parts.at(-1)!) : 'A flower to keep with the note.',
   ];
 }

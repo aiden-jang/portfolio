@@ -42,7 +42,13 @@ const stories = {
   },
 } as const;
 
-export function StoryPage({ id }: { id: StoryId }) {
+export function StoryPage({
+  id,
+  returnToPortfolio,
+}: {
+  id: StoryId;
+  returnToPortfolio?: () => void;
+}) {
   const item = WORK_ITEMS.find((candidate) => workId(candidate) === id)!;
   const story = stories[id];
   const redesigned = id === 'iodine' || id === 'everythingisfine';
@@ -55,7 +61,7 @@ export function StoryPage({ id }: { id: StoryId }) {
   );
   const [share, setShare] = useState<'idle' | 'copied' | 'failed'>('idle');
   const evidenceState = {
-    edit: id === 'iodine' && phase === 'restored' ? ('restored' as const) : undefined,
+    edit: id === 'iodine' ? phase : undefined,
     agency: id === 'everythingisfine' ? agency : undefined,
   };
   const shareUrl = new URL(evidenceHref(id, evidenceState), location.origin).href;
@@ -70,13 +76,26 @@ export function StoryPage({ id }: { id: StoryId }) {
   const next =
     story.next === 'publisher-account-migrations'
       ? root + '#work/' + story.next
-      : storyHref(story.next);
+      : evidenceHref(story.next, undefined);
   const section =
     id === 'ad-slot-details-120-1-api-call'
       ? '#sec-experience'
       : id === 'iodine'
         ? '#project-iodine'
         : '#project-everythingisfine';
+  const returnClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (
+      !returnToPortfolio ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    )
+      return;
+    event.preventDefault();
+    returnToPortfolio();
+  };
   return (
     <IodineSession.Provider value={{ phase, setPhase }}>
       <div
@@ -85,22 +104,28 @@ export function StoryPage({ id }: { id: StoryId }) {
         data-opening={redesigned ? 'evidence' : undefined}
       >
         <header className="creative-case-nav">
-          <a href={root + section}>
+          <a href={root + section} onClick={returnClick}>
             <ControlIcon name="arrow" /> Portfolio
           </a>
           {redesigned && <span className="case-opening-label">{story.label}</span>}
           <ResumeButton />
         </header>
         <main className="story-scroll-area creative-case-content">
-          <header className="creative-case-heading">
+          <header
+            className={
+              id === 'iodine'
+                ? 'creative-case-heading iodine-case-heading'
+                : 'creative-case-heading'
+            }
+          >
             {!redesigned && <p>{story.label}</p>}
-            <h1>{story.title}</h1>
-            <p>{story.role}</p>
+            <h1 tabIndex={id === 'iodine' ? -1 : undefined}>{story.title}</h1>
+            {id !== 'iodine' && <p>{story.role}</p>}
           </header>
           {id === 'everythingisfine' ? (
             <QuakeCaseOpening agency={agency} onSelect={setAgency} />
           ) : id === 'iodine' ? (
-            <IodineCaseOpening />
+            <IodineCaseOpening role={story.role} />
           ) : (
             <WorkStoryOpening item={item} />
           )}
@@ -128,7 +153,9 @@ export function StoryPage({ id }: { id: StoryId }) {
           </aside>
           <footer className="creative-case-footer">
             <a href={root + '#sec-contact'}>Contact Aiden</a>
-            <a href={root + section}>Back to the portfolio</a>
+            <a href={root + section} onClick={returnClick}>
+              Back to the portfolio
+            </a>
           </footer>
         </main>
       </div>

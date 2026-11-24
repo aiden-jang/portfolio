@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { BatchingSpread } from './BatchingSpread';
-import { storyHref } from '../creative/storyRoutes';
+import { evidenceHref } from '../creative/storyRoutes';
 import { workId, WORK_ITEMS } from '../../data/workItems';
 import { isPortfolioProject } from '../../data/workBrowsing';
 import './experience.css';
@@ -72,7 +72,7 @@ const loadTime = { before: 60, after: 2 };
 const supportingIds = [
   'monolith-django-rest-react-rewrite',
   'sponsorships-audience-extension-blackout-periods',
-  'agentic-ai-playwright-framework',
+  'publisher-account-migrations',
 ];
 const work = WORK_ITEMS.filter((item) => !isPortfolioProject(item));
 const lead = work.find((item) => workId(item) === leadId);
@@ -154,11 +154,11 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
           </p>
           <div className="experience-lead-actions">
             <a
-              href={storyHref('ad-slot-details-120-1-api-call')}
+              href={evidenceHref('ad-slot-details-120-1-api-call', undefined)}
               className="experience-case"
               aria-describedby="experience-lead-title"
             >
-              Read the case study <ControlIcon name="arrow" />
+              How I cut load time to 2s <ControlIcon name="arrow" />
             </a>
             <span>{item.context}</span>
           </div>

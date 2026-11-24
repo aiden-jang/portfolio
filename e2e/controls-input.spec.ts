@@ -8,7 +8,7 @@ test('control search leaves composition keys to the input before running a comma
   await page
     .getByRole('button', { name: 'Garage controls', exact: true })
     .filter({ visible: true })
-    .click();
+    .press('Control+k');
   const dialog = page.getByRole('dialog', { name: 'Command menu', exact: true });
   const search = dialog.getByRole('combobox', { name: 'Search portfolio controls' });
   const active = await search.getAttribute('aria-activedescendant');

@@ -50,9 +50,8 @@ export function ProjectScene({
   }, []);
   useTimedScene(body, draw, {
     enabled: theme === 'dinner' && !actionFocused,
-    duration: 3280,
-    startThreshold: 0.25,
-    restartAfterExit: true,
+    duration: 3400,
+    startThreshold: 0.12,
   });
   useEffect(() => {
     const stage = scene.current;
@@ -154,7 +153,6 @@ function DinnerTicket() {
         <strong>Neighborhood Pizza Kitchen</strong>
         <div className="dinner-ticket-decisions">
           <div className="dinner-ticket-vote dinner-ticket-actions">
-            <span>Nope</span>
             <button type="button" onClick={(event) => choose(event, 0.47)}>
               Vote yes
             </button>
@@ -232,6 +230,7 @@ export function DinnerScene() {
     <div className="dinner-sequence" ref={track}>
       <DinnerTicket />
       <p className="dinner-match-recap">Alex and Maya matched on pizza</p>
+      <div className="dinner-exit-shade" aria-hidden="true" />
       <div className="bill" id="project-owewell">
         <div className="paper total">
           <span>Neighborhood Pizza Kitchen</span>

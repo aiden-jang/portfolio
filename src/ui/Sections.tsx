@@ -116,10 +116,10 @@ export function Sections() {
   return (
     <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
       <IntroSection />
-      <WorkSection onOpen={openWork} />
+      <WorkSection />
       <ExperienceSection onOpen={openWork} />
       <MoreProjectsSection onOpen={openWork} />
-      <AboutSection onOpen={openWork} />
+      <AboutSection />
       <ContactSection />
       <WorkModal
         item={activeWork}

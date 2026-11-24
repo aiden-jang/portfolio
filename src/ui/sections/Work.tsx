@@ -8,6 +8,7 @@ import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
 import { IodinePresentation } from '../showcase/IodinePresentation';
 import '../project-gallery.css';
 import '../showcase/project-scene-flow.css';
+import '../showcase/receipt-worth.css';
 import { PREVIEWS } from '../../data/projectPreviews';
 import { FEATURED_PROJECTS, visibleProjects } from '../../data/workBrowsing';
 import { workId } from '../../data/workItems';
@@ -15,6 +16,7 @@ import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
 import { ControlIcon } from '../ControlIcon';
+import { PlatformHandoff } from '../showcase/PlatformHandoff';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
@@ -26,7 +28,7 @@ const orderedCollection = editorialOrder
   .filter((item): item is WorkDetail => !!item)
   .concat(collection.filter((item) => !editorialOrder.includes(workId(item))));
 
-export function WorkSection({ onOpen }: Props) {
+export function WorkSection() {
   const featuredGroup = useRef<HTMLDivElement>(null);
   useMapEditorCut(featuredGroup);
   return (
@@ -40,12 +42,7 @@ export function WorkSection({ onOpen }: Props) {
         >
           {featured.map((item) =>
             item.mark === 'everythingisfine' ? (
-              <EarthquakeFeature
-                key={item.title}
-                item={item}
-                preview={PREVIEWS.everythingisfine}
-                onOpen={onOpen}
-              />
+              <EarthquakeFeature key={item.title} item={item} preview={PREVIEWS.everythingisfine} />
             ) : (
               <IodinePresentation key={item.title} />
             ),
@@ -182,7 +179,19 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
   );
   return (
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
-      <div className="project-card-media">{media}</div>
+      <div className="project-card-media">
+        {item.mark === 'auth' && !location.search.includes('preview=platform') ? (
+          <>
+            <PlatformHandoff />
+            <details className="platform-screenshots">
+              <summary>View screenshots</summary>
+              {media}
+            </details>
+          </>
+        ) : (
+          media
+        )}
+      </div>
       {copy}
     </article>
   );

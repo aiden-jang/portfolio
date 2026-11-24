@@ -14,7 +14,6 @@ for (const width of [1440, 390]) {
         .getByRole('button', { name: 'Garage controls', exact: true })
         .filter({ visible: true })
         .click();
-      await page.getByRole('option', { name: /^Explore Studio/ }).click();
       const studio = page.getByRole('dialog', { name: 'Garage Studio', exact: true });
       const button = (name: string) => studio.getByRole('button', { name, exact: true });
       const picker = button('Studio exhibits');

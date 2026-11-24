@@ -1,0 +1,5950 @@
+{
+  "metadata": { "generated": 1794876959000 },
+  "features": [
+    {
+      "id": "us7000tymu",
+      "properties": {
+        "mag": 6.6,
+        "place": "148 km WSW of Tual, Indonesia",
+        "magType": "mww",
+        "time": 1794863480515
+      },
+      "geometry": { "coordinates": [131.4868, -6.0804, 68] }
+    },
+    {
+      "id": "us7000tykh",
+      "properties": {
+        "mag": 5.4,
+        "place": "95 km WSW of Changuillo, Peru",
+        "magType": "mww",
+        "time": 1794845805265
+      },
+      "geometry": { "coordinates": [-76.0259, -15.0306, 10] }
+    },
+    {
+      "id": "us7000tyil",
+      "properties": {
+        "mag": 5,
+        "place": "68 km S of Sarangani, Philippines",
+        "magType": "mb",
+        "time": 1794813254483
+      },
+      "geometry": { "coordinates": [125.4267, 4.7842, 10] }
+    },
+    {
+      "id": "us7000tyhr",
+      "properties": {
+        "mag": 5.4,
+        "place": "20 km NW of Anamizu, Japan",
+        "magType": "mww",
+        "time": 1794803051718
+      },
+      "geometry": { "coordinates": [136.7444, 37.3664, 273.644] }
+    },
+    {
+      "id": "us7000tyg6",
+      "properties": {
+        "mag": 5,
+        "place": "256 km SSE of Ambon, Indonesia",
+        "magType": "mb",
+        "time": 1794775916298
+      },
+      "geometry": { "coordinates": [128.7523, -5.9449, 305.989] }
+    },
+    {
+      "id": "us7000tyfh",
+      "properties": {
+        "mag": 5,
+        "place": "74 km N of P\u0101r\u016bn, Afghanistan",
+        "magType": "mww",
+        "time": 1794764916959
+      },
+      "geometry": { "coordinates": [70.9503, 36.0947, 100.728] }
+    },
+    {
+      "id": "us7000tyf4",
+      "properties": {
+        "mag": 5.1,
+        "place": "169 km NW of Gorontalo, Indonesia",
+        "magType": "mb",
+        "time": 1794757274978
+      },
+      "geometry": { "coordinates": [122.1345, 1.7527, 487.384] }
+    },
+    {
+      "id": "us7000tyek",
+      "properties": {
+        "mag": 5.5,
+        "place": "9 km E of Union, Philippines",
+        "magType": "mb",
+        "time": 1794750095701
+      },
+      "geometry": { "coordinates": [126.2, 9.7595, 9.971] }
+    },
+    {
+      "id": "us7000tyca",
+      "properties": { "mag": 5.5, "place": "Fiji region", "magType": "mww", "time": 1794719702697 },
+      "geometry": { "coordinates": [-177.8215, -19.5554, 469.881] }
+    },
+    {
+      "id": "us7000ty84",
+      "properties": {
+        "mag": 5.5,
+        "place": "northern Mid-Atlantic Ridge",
+        "magType": "mww",
+        "time": 1794648373073
+      },
+      "geometry": { "coordinates": [-42.6346, 30.122, 10] }
+    },
+    {
+      "id": "us7000ty7d",
+      "properties": {
+        "mag": 5.2,
+        "place": "State of Yap, Federated States of Micronesia",
+        "magType": "mb",
+        "time": 1794639146706
+      },
+      "geometry": { "coordinates": [147.3631, 9.7032, 10] }
+    },
+    {
+      "id": "us7000ty6n",
+      "properties": {
+        "mag": 5.2,
+        "place": "off the west coast of northern Sumatra",
+        "magType": "mb",
+        "time": 1794625169180
+      },
+      "geometry": { "coordinates": [92.8261, 3.304, 10] }
+    },
+    {
+      "id": "us7000ty56",
+      "properties": {
+        "mag": 5.1,
+        "place": "153 km NW of Kavieng, Papua New Guinea",
+        "magType": "mb",
+        "time": 1794612638320
+      },
+      "geometry": { "coordinates": [149.92, -1.5038, 10] }
+    },
+    {
+      "id": "us7000ty3q",
+      "properties": {
+        "mag": 5.1,
+        "place": "South Sandwich Islands region",
+        "magType": "mb",
+        "time": 1794596647703
+      },
+      "geometry": { "coordinates": [-25.7253, -58.962, 63.81] }
+    },
+    {
+      "id": "us7000ty1a",
+      "properties": {
+        "mag": 5.8,
+        "place": "79 km WSW of Changuillo, Peru",
+        "magType": "mww",
+        "time": 1794588182131
+      },
+      "geometry": { "coordinates": [-75.8807, -14.9934, 10] }
+    },
+    {
+      "id": "us7000ty14",
+      "properties": {
+        "mag": 5.2,
+        "place": "79 km NE of Kuqa, China",
+        "magType": "mb",
+        "time": 1794586671680
+      },
+      "geometry": { "coordinates": [83.6657, 42.1734, 10] }
+    },
+    {
+      "id": "us7000ty0s",
+      "properties": {
+        "mag": 5.2,
+        "place": "West Chile Rise",
+        "magType": "mww",
+        "time": 1794579167843
+      },
+      "geometry": { "coordinates": [-97.9785, -36.4434, 10] }
+    },
+    {
+      "id": "us7000txxl",
+      "properties": {
+        "mag": 5,
+        "place": "85 km W of Mwene-Ditu, Democratic Republic of the Congo",
+        "magType": "mb",
+        "time": 1794532366186
+      },
+      "geometry": { "coordinates": [22.68, -6.9392, 10] }
+    },
+    {
+      "id": "us7000txx9",
+      "properties": {
+        "mag": 5.1,
+        "place": "39 km S of Mo\u00edres, Greece",
+        "magType": "mb",
+        "time": 1794528304104
+      },
+      "geometry": { "coordinates": [24.8798, 34.6967, 43.358] }
+    },
+    {
+      "id": "us7000txwp",
+      "properties": {
+        "mag": 5.8,
+        "place": "148 km NW of Kavieng, Papua New Guinea",
+        "magType": "mww",
+        "time": 1794521046729
+      },
+      "geometry": { "coordinates": [149.8877, -1.5882, 10] }
+    },
+    {
+      "id": "us7000txw9",
+      "properties": {
+        "mag": 5.1,
+        "place": "western Indian-Antarctic Ridge",
+        "magType": "mww",
+        "time": 1794517754685
+      },
+      "geometry": { "coordinates": [139.5909, -51.4273, 10] }
+    },
+    {
+      "id": "us7000txqr",
+      "properties": {
+        "mag": 5.4,
+        "place": "South Sandwich Islands region",
+        "magType": "mb",
+        "time": 1794455156644
+      },
+      "geometry": { "coordinates": [-26.0288, -59.0326, 121.557] }
+    },
+    {
+      "id": "us7000txm8",
+      "properties": {
+        "mag": 5.1,
+        "place": "81 km W of Panguna, Papua New Guinea",
+        "magType": "mww",
+        "time": 1794418704225
+      },
+      "geometry": { "coordinates": [154.7513, -6.3292, 74.384] }
+    },
+    {
+      "id": "us7000txjg",
+      "properties": {
+        "mag": 5.1,
+        "place": "South Sandwich Islands region",
+        "magType": "mb",
+        "time": 1794411565949
+      },
+      "geometry": { "coordinates": [-27.7366, -56.0247, 104.66] }
+    },
+    {
+      "id": "us7000txis",
+      "properties": {
+        "mag": 5.1,
+        "place": "27 km WSW of Calama, Chile",
+        "magType": "mb",
+        "time": 1794397011281
+      },
+      "geometry": { "coordinates": [-69.1693, -22.5427, 91.309] }
+    },
+    {
+      "id": "us7000txir",
+      "properties": {
+        "mag": 5.1,
+        "place": "Pulau Pulau Tanimbar, Indonesia",
+        "magType": "mb",
+        "time": 1794396744685
+      },
+      "geometry": { "coordinates": [130.2513, -7.9445, 14.704] }
+    },
+    {
+      "id": "us7000txhi",
+      "properties": {
+        "mag": 5.1,
+        "place": "Balleny Islands region",
+        "magType": "mww",
+        "time": 1794378105383
+      },
+      "geometry": { "coordinates": [155.0206, -62.4284, 10] }
+    },
+    {
+      "id": "us7000txgv",
+      "properties": {
+        "mag": 5,
+        "place": "152 km SE of Kuril\u2019sk, Russia",
+        "magType": "mww",
+        "time": 1794374788222
+      },
+      "geometry": { "coordinates": [149.4063, 44.3915, 30.338] }
+    },
+    {
+      "id": "us7000txc0",
+      "properties": {
+        "mag": 5.2,
+        "place": "21 km WNW of Popondetta, Papua New Guinea",
+        "magType": "mww",
+        "time": 1794332209391
+      },
+      "geometry": { "coordinates": [148.0429, -8.7206, 124.245] }
+    },
+    {
+      "id": "us7000txc3",
+      "properties": {
+        "mag": 5.2,
+        "place": "Mid-Indian Ridge",
+        "magType": "mww",
+        "time": 1794332188861
+      },
+      "geometry": { "coordinates": [68.4755, -20.7528, 10] }
+    },
+    {
+      "id": "us7000txbi",
+      "properties": {
+        "mag": 5.1,
+        "place": "139 km ESE of Labuha, Indonesia",
+        "magType": "mww",
+        "time": 1794325895658
+      },
+      "geometry": { "coordinates": [128.701, -0.9034, 10] }
+    },
+    {
+      "id": "us7000txb8",
+      "properties": {
+        "mag": 5.5,
+        "place": "40 km S of Puerto San Jos\u00e9, Guatemala",
+        "magType": "mww",
+        "time": 1794322459977
+      },
+      "geometry": { "coordinates": [-90.8534, 13.5622, 59.652] }
+    },
+    {
+      "id": "us7000tx9z",
+      "properties": {
+        "mag": 5,
+        "place": "58 km NE of Fef, Indonesia",
+        "magType": "mb",
+        "time": 1794299647131
+      },
+      "geometry": { "coordinates": [132.859, -0.4928, 35] }
+    },
+    {
+      "id": "us7000tx8s",
+      "properties": {
+        "mag": 5.2,
+        "place": "19 km WSW of Lata, Solomon Islands",
+        "magType": "mww",
+        "time": 1794281866152
+      },
+      "geometry": { "coordinates": [165.6239, -10.7818, 10] }
+    },
+    {
+      "id": "us7000tx8d",
+      "properties": {
+        "mag": 5.4,
+        "place": "Pulau Pulau Tanimbar, Indonesia",
+        "magType": "mb",
+        "time": 1794275604195
+      },
+      "geometry": { "coordinates": [130.2935, -7.8742, 10] }
+    },
+    {
+      "id": "us7000tx38",
+      "properties": {
+        "mag": 5.3,
+        "place": "80 km ENE of Lagunas, Peru",
+        "magType": "mb",
+        "time": 1794219833528
+      },
+      "geometry": { "coordinates": [-75.0002, -4.9495, 11.49] }
+    },
+    {
+      "id": "us7000tx32",
+      "properties": {
+        "mag": 5.4,
+        "place": "160 km E of Masohi, Indonesia",
+        "magType": "mww",
+        "time": 1794217707794
+      },
+      "geometry": { "coordinates": [130.3905, -3.0627, 10] }
+    },
+    {
+      "id": "us7000tx1f",
+      "properties": {
+        "mag": 5.7,
+        "place": "106 km ENE of Hasaki, Japan",
+        "magType": "mww",
+        "time": 1794199971519
+      },
+      "geometry": { "coordinates": [141.8299, 36.2471, 24.173] }
+    },
+    {
+      "id": "us7000tx16",
+      "properties": {
+        "mag": 6.4,
+        "place": "30 km WSW of Lata, Solomon Islands",
+        "magType": "mww",
+        "time": 1794195299466
+      },
+      "geometry": { "coordinates": [165.5616, -10.8669, 17] }
+    },
+    {
+      "id": "us7000tx0f",
+      "properties": {
+        "mag": 5.1,
+        "place": "south of the Fiji Islands",
+        "magType": "mb",
+        "time": 1794185219021
+      },
+      "geometry": { "coordinates": [179.2119, -23.6774, 535.494] }
+    },
+    {
+      "id": "us7000twus",
+      "properties": {
+        "mag": 5.1,
+        "place": "91 km ENE of Hihifo, Tonga",
+        "magType": "mb",
+        "time": 1794094029444
+      },
+      "geometry": { "coordinates": [-172.9847, -15.6837, 10] }
+    },
+    {
+      "id": "us7000twun",
+      "properties": {
+        "mag": 5.8,
+        "place": "central Mid-Atlantic Ridge",
+        "magType": "mww",
+        "time": 1794093425477
+      },
+      "geometry": { "coordinates": [-36.8221, 7.4618, 10] }
+    },
+    {
+      "id": "us7000twt0",
+      "properties": {
+        "mag": 5.5,
+        "place": "8 km E of Shinshiro, Japan",
+        "magType": "mww",
+        "time": 1794067475288
+      },
+      "geometry": { "coordinates": [137.5969, 34.8969, 37.07] }
+    },
+    {
+      "id": "us7000twrq",
+      "properties": {
+        "mag": 5.5,
+        "place": "77 km NE of Hasaki, Japan",
+        "magType": "mww",
+        "time": 1794049662734
+      },
+      "geometry": { "coordinates": [141.4515, 36.2184, 28] }
+    },
+    {
+      "id": "us7000twg9",
+      "properties": {
+        "mag": 6.1,
+        "place": "144 km SE of Hasaki, Japan",
+        "magType": "mww",
+        "time": 1793961567869
+      },
+      "geometry": { "coordinates": [142.1175, 34.9677, 29] }
+    },
+    {
+      "id": "us7000tw8r",
+      "properties": { "mag": 6.1, "place": "Fiji region", "magType": "mww", "time": 1793899305305 },
+      "geometry": { "coordinates": [-178.7145, -21.1984, 535] }
+    },
+    {
+      "id": "us7000tw8p",
+      "properties": {
+        "mag": 5,
+        "place": "135 km ENE of Thang, India",
+        "magType": "mb",
+        "time": 1793897786175
+      },
+      "geometry": { "coordinates": [78.0343, 35.6054, 85.287] }
+    },
+    {
+      "id": "us7000tw76",
+      "properties": {
+        "mag": 5.1,
+        "place": "19 km NNW of Masumbwe, Tanzania",
+        "magType": "mb",
+        "time": 1793870552714
+      },
+      "geometry": { "coordinates": [32.149, -3.4641, 10] }
+    },
+    {
+      "id": "us7000tvwj",
+      "properties": {
+        "mag": 5,
+        "place": "207 km ESE of Sarangani, Philippines",
+        "magType": "mb",
+        "time": 1793778012288
+      },
+      "geometry": { "coordinates": [127.0325, 4.3895, 49.074] }
+    },
+    {
+      "id": "us7000tvtj",
+      "properties": {
+        "mag": 5.2,
+        "place": "98 km ESE of Kyzyl-Eshme, Kyrgyzstan",
+        "magType": "mww",
+        "time": 1793741648472
+      },
+      "geometry": { "coordinates": [73.3772, 39.3453, 10] }
+    },
+    {
+      "id": "us7000tvs3",
+      "properties": {
+        "mag": 5.2,
+        "place": "Mid-Indian Ridge",
+        "magType": "mb",
+        "time": 1793730072440
+      },
+      "geometry": { "coordinates": [78.2931, -35.6679, 10] }
+    },
+    {
+      "id": "us7000tvie",
+      "properties": {
+        "mag": 5.2,
+        "place": "Volcano Islands, Japan region",
+        "magType": "mww",
+        "time": 1793724492006
+      },
+      "geometry": { "coordinates": [141.6688, 24.1773, 129.171] }
+    },
+    {
+      "id": "us7000tv5i",
+      "properties": {
+        "mag": 5,
+        "place": "South Sandwich Islands region",
+        "magType": "mb",
+        "time": 1793712844565
+      },
+      "geometry": { "coordinates": [-26.2903, -58.7979, 133.113] }
+    },
+    {
+      "id": "us7000tv4i",
+      "properties": {
+        "mag": 5.4,
+        "place": "24 km NNW of Rioblanco, Colombia",
+        "magType": "mww",
+        "time": 1793697194972
+      },
+      "geometry": { "coordinates": [-75.7198, 3.7386, 10] }
+    },
+    {
+      "id": "us7000tuxy",
+      "properties": {
+        "mag": 5.1,
+        "place": "89 km S of Palekastro, Greece",
+        "magType": "mww",
+        "time": 1793638156419
+      },
+      "geometry": { "coordinates": [26.4401, 34.4088, 36.316] }
+    },
+    {
+      "id": "us7000tuxg",
+      "properties": {
+        "mag": 5.1,
+        "place": "43 km W of Huarmey, Peru",
+        "magType": "mb",
+        "time": 1793633293110
+      },
+      "geometry": { "coordinates": [-78.5445, -10.135, 55.388] }
+    },
+    {
+      "id": "us7000tuuy",
+      "properties": {
+        "mag": 5.1,
+        "place": "19 km WNW of Tomohon, Indonesia",
+        "magType": "mb",
+        "time": 1793607194014
+      },
+      "geometry": { "coordinates": [124.6476, 1.392, 196.646] }
+    },
+    {
+      "id": "us7000tut4",
+      "properties": {
+        "mag": 5.1,
+        "place": "Kermadec Islands region",
+        "magType": "mb",
+        "time": 1793582296369
+      },
+      "geometry": { "coordinates": [-177.7236, -31.2244, 10] }
+    },
+    {
+      "id": "us7000tusv",
+      "properties": { "mag": 5.1, "place": "Banda Sea", "magType": "mb", "time": 1793580789737 },
+      "geometry": { "coordinates": [129.957, -6.9162, 86.673] }
+    },
+    {
+      "id": "us7000tuqx",
+      "properties": {
+        "mag": 5,
+        "place": "Mid-Indian Ridge",
+        "magType": "mb",
+        "time": 1793558079200
+      },
+      "geometry": { "coordinates": [69.5217, -23.8735, 10] }
+    },
+    {
+      "id": "us7000tuqk",
+      "properties": {
+        "mag": 5.1,
+        "place": "South Sandwich Islands region",
+        "magType": "mb",
+        "time": 1793553116053
+      },
+      "geometry": { "coordinates": [-27.1985, -56.2566, 108.234] }
+    },
+    {
+      "id": "us7000txcq",
+      "properties": {
+        "mag": 5.1,
+        "place": "162 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1793533841218
+      },
+      "geometry": { "coordinates": [165.8514, -14.1749, 10] }
+    },
+    {
+      "id": "us7000tupl",
+      "properties": {
+        "mag": 6,
+        "place": "165 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793533623778
+      },
+      "geometry": { "coordinates": [165.8242, -14.1689, 10] }
+    },
+    {
+      "id": "us7000tund",
+      "properties": {
+        "mag": 5.1,
+        "place": "202 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1793516454231
+      },
+      "geometry": { "coordinates": [165.6138, -13.8856, 10] }
+    },
+    {
+      "id": "us7000tun8",
+      "properties": {
+        "mag": 5.4,
+        "place": "198 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793514401928
+      },
+      "geometry": { "coordinates": [165.6971, -13.8538, 10] }
+    },
+    {
+      "id": "us7000tuky",
+      "properties": {
+        "mag": 5.2,
+        "place": "200 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1793486559540
+      },
+      "geometry": { "coordinates": [165.6456, -13.8729, 10] }
+    },
+    {
+      "id": "us7000tuku",
+      "properties": {
+        "mag": 6,
+        "place": "58 km SSE of Shima, Japan",
+        "magType": "mww",
+        "time": 1793484902901
+      },
+      "geometry": { "coordinates": [136.9854, 33.822, 352.449] }
+    },
+    {
+      "id": "us7000tukm",
+      "properties": {
+        "mag": 5,
+        "place": "115 km SE of Bushehr, Iran",
+        "magType": "mb",
+        "time": 1793481639173
+      },
+      "geometry": { "coordinates": [51.5076, 28.114, 10] }
+    },
+    {
+      "id": "us7000tujf",
+      "properties": {
+        "mag": 5.2,
+        "place": "2 km SSW of Nuario, Panama",
+        "magType": "mww",
+        "time": 1793461818484
+      },
+      "geometry": { "coordinates": [-80.3268, 7.506, 10] }
+    },
+    {
+      "id": "us7000tuif",
+      "properties": {
+        "mag": 5,
+        "place": "202 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793446272432
+      },
+      "geometry": { "coordinates": [165.606, -13.8985, 10] }
+    },
+    {
+      "id": "us7000tu7j",
+      "properties": {
+        "mag": 5.1,
+        "place": "Balleny Islands region",
+        "magType": "mb",
+        "time": 1793355148219
+      },
+      "geometry": { "coordinates": [155.2618, -62.4457, 10] }
+    },
+    {
+      "id": "us7000tu5q",
+      "properties": {
+        "mag": 5.1,
+        "place": "97 km NNE of Finschhafen, Papua New Guinea",
+        "magType": "mb",
+        "time": 1793329457406
+      },
+      "geometry": { "coordinates": [148.3151, -5.8137, 116.297] }
+    },
+    {
+      "id": "us7000tu4f",
+      "properties": {
+        "mag": 6.2,
+        "place": "43 km ESE of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793310404786
+      },
+      "geometry": { "coordinates": [167.4523, -15.1891, 142.833] }
+    },
+    {
+      "id": "us7000tu3u",
+      "properties": {
+        "mag": 5,
+        "place": "130 km N of Tual, Indonesia",
+        "magType": "mb",
+        "time": 1793305931498
+      },
+      "geometry": { "coordinates": [132.5656, -4.4622, 10] }
+    },
+    {
+      "id": "us7000tu3j",
+      "properties": {
+        "mag": 5,
+        "place": "145 km SSE of False Pass, Alaska",
+        "magType": "mww",
+        "time": 1793304872733
+      },
+      "geometry": { "coordinates": [-162.9551, 53.5747, 17.865] }
+    },
+    {
+      "id": "us7000tty7",
+      "properties": {
+        "mag": 5.2,
+        "place": "214 km NNW of Bamboo Flat, India",
+        "magType": "mb",
+        "time": 1793263782262
+      },
+      "geometry": { "coordinates": [91.6285, 13.3213, 10] }
+    },
+    {
+      "id": "us7000ttxz",
+      "properties": {
+        "mag": 6.4,
+        "place": "southeast of Easter Island",
+        "magType": "mww",
+        "time": 1793260190096
+      },
+      "geometry": { "coordinates": [-98.0105, -36.4649, 10] }
+    },
+    {
+      "id": "us7000ttxn",
+      "properties": {
+        "mag": 5.4,
+        "place": "106 km ENE of Barcelona, Philippines",
+        "magType": "mww",
+        "time": 1793259090384
+      },
+      "geometry": { "coordinates": [127.3621, 8.4379, 10] }
+    },
+    {
+      "id": "us7000ttx8",
+      "properties": {
+        "mag": 5.1,
+        "place": "Balleny Islands region",
+        "magType": "mb",
+        "time": 1793252016298
+      },
+      "geometry": { "coordinates": [161.3619, -61.2539, 10] }
+    },
+    {
+      "id": "us7000ttx0",
+      "properties": {
+        "mag": 5.4,
+        "place": "South Sandwich Islands region",
+        "magType": "mww",
+        "time": 1793250408057
+      },
+      "geometry": { "coordinates": [-27.8685, -60.278, 8.388] }
+    },
+    {
+      "id": "us7000ttw5",
+      "properties": {
+        "mag": 5.7,
+        "place": "82 km NE of Kiunga, Papua New Guinea",
+        "magType": "mb",
+        "time": 1793244402275
+      },
+      "geometry": { "coordinates": [141.9018, -5.6991, 10] }
+    },
+    {
+      "id": "us7000ttw3",
+      "properties": {
+        "mag": 5.8,
+        "place": "110 km ENE of Barcelona, Philippines",
+        "magType": "mww",
+        "time": 1793243945288
+      },
+      "geometry": { "coordinates": [127.4204, 8.3638, 10] }
+    },
+    {
+      "id": "us7000ttw2",
+      "properties": {
+        "mag": 5.4,
+        "place": "113 km ENE of Barcelona, Philippines",
+        "magType": "mb",
+        "time": 1793243874507
+      },
+      "geometry": { "coordinates": [127.4427, 8.3695, 10] }
+    },
+    {
+      "id": "us7000ttvf",
+      "properties": {
+        "mag": 5.4,
+        "place": "109 km ENE of Luganville, Vanuatu",
+        "magType": "mww",
+        "time": 1793232500933
+      },
+      "geometry": { "coordinates": [168.0994, -15.1213, 10] }
+    },
+    {
+      "id": "us7000ttua",
+      "properties": {
+        "mag": 5.7,
+        "place": "271 km WSW of Tual, Indonesia",
+        "magType": "mww",
+        "time": 1793225205772
+      },
+      "geometry": { "coordinates": [130.4138, -6.3599, 142] }
+    },
+    {
+      "id": "us7000tttl",
+      "properties": {
+        "mag": 5.3,
+        "place": "161 km WNW of Tobelo, Indonesia",
+        "magType": "mb",
+        "time": 1793217407901
+      },
+      "geometry": { "coordinates": [126.7433, 2.4345, 35] }
+    },
+    {
+      "id": "us7000ttth",
+      "properties": {
+        "mag": 5.2,
+        "place": "Reykjanes Ridge",
+        "magType": "mww",
+        "time": 1793216732912
+      },
+      "geometry": { "coordinates": [-32.1058, 58.1064, 10] }
+    },
+    {
+      "id": "us7000ttpe",
+      "properties": {
+        "mag": 5.5,
+        "place": "2 km E of Y\u014dkaichiba, Japan",
+        "magType": "mww",
+        "time": 1793200073185
+      },
+      "geometry": { "coordinates": [140.5751, 35.701, 49.935] }
+    },
+    {
+      "id": "us7000ttnz",
+      "properties": {
+        "mag": 5,
+        "place": "Reykjanes Ridge",
+        "magType": "mb",
+        "time": 1793191628927
+      },
+      "geometry": { "coordinates": [-32.3348, 58.2153, 10] }
+    },
+    {
+      "id": "us7000ttnk",
+      "properties": {
+        "mag": 5,
+        "place": "Reykjanes Ridge",
+        "magType": "mb",
+        "time": 1793188577454
+      },
+      "geometry": { "coordinates": [-32.2398, 58.3556, 10] }
+    },
+    {
+      "id": "us7000ttnc",
+      "properties": {
+        "mag": 5.5,
+        "place": "Reykjanes Ridge",
+        "magType": "mww",
+        "time": 1793187469980
+      },
+      "geometry": { "coordinates": [-32.1508, 58.1005, 10] }
+    },
+    {
+      "id": "us7000ttmb",
+      "properties": {
+        "mag": 5,
+        "place": "195 km SSE of Vilyuchinsk, Russia",
+        "magType": "mb",
+        "time": 1793167968111
+      },
+      "geometry": { "coordinates": [159.6224, 51.3453, 10] }
+    },
+    {
+      "id": "us7000ttm2",
+      "properties": {
+        "mag": 5,
+        "place": "204 km W of Sola, Vanuatu",
+        "magType": "mb",
+        "time": 1793161863797
+      },
+      "geometry": { "coordinates": [165.6634, -13.7499, 10] }
+    },
+    {
+      "id": "us7000ttlt",
+      "properties": {
+        "mag": 5.6,
+        "place": "180 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793156387908
+      },
+      "geometry": { "coordinates": [165.7269, -14.0653, 10] }
+    },
+    {
+      "id": "us7000ttlm",
+      "properties": {
+        "mag": 6,
+        "place": "208 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793154104755
+      },
+      "geometry": { "coordinates": [165.5942, -13.8296, 10] }
+    },
+    {
+      "id": "us7000ttlk",
+      "properties": {
+        "mag": 5.1,
+        "place": "216 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1793153836627
+      },
+      "geometry": { "coordinates": [165.4177, -13.934, 10] }
+    },
+    {
+      "id": "us7000ttld",
+      "properties": {
+        "mag": 5.5,
+        "place": "218 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793151550604
+      },
+      "geometry": { "coordinates": [165.4489, -13.8601, 10] }
+    },
+    {
+      "id": "us7000ttlc",
+      "properties": {
+        "mag": 5.1,
+        "place": "3 km SSE of Pangyan, Philippines",
+        "magType": "mb",
+        "time": 1793149916955
+      },
+      "geometry": { "coordinates": [125.288, 5.6662, 67.176] }
+    },
+    {
+      "id": "us7000ttkk",
+      "properties": {
+        "mag": 5.1,
+        "place": "8 km WNW of Sugal, Philippines",
+        "magType": "mww",
+        "time": 1793144631477
+      },
+      "geometry": { "coordinates": [125.3993, 5.7035, 57.448] }
+    },
+    {
+      "id": "us7000ttke",
+      "properties": {
+        "mag": 5.4,
+        "place": "192 km WSW of Merizo Village, Guam",
+        "magType": "mww",
+        "time": 1793142856849
+      },
+      "geometry": { "coordinates": [142.97, 12.7576, 94.59] }
+    },
+    {
+      "id": "us7000ttis",
+      "properties": {
+        "mag": 5.4,
+        "place": "206 km ENE of Nagqu, China",
+        "magType": "mb",
+        "time": 1793127472912
+      },
+      "geometry": { "coordinates": [93.9084, 32.4692, 10] }
+    },
+    {
+      "id": "us7000ttgm",
+      "properties": {
+        "mag": 5,
+        "place": "29 km W of R\u00edo Grande, Panama",
+        "magType": "mww",
+        "time": 1793114763024
+      },
+      "geometry": { "coordinates": [-81.6012, 7.684, 10] }
+    },
+    {
+      "id": "us7000ttgf",
+      "properties": {
+        "mag": 5.4,
+        "place": "126 km S of Pundong, Indonesia",
+        "magType": "mb",
+        "time": 1793112241219
+      },
+      "geometry": { "coordinates": [110.3861, -9.0977, 10] }
+    },
+    {
+      "id": "us7000ttfk",
+      "properties": {
+        "mag": 5.2,
+        "place": "191 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1793098235418
+      },
+      "geometry": { "coordinates": [165.6479, -14.0067, 10] }
+    },
+    {
+      "id": "us7000ttfj",
+      "properties": {
+        "mag": 5,
+        "place": "184 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1793095591916
+      },
+      "geometry": { "coordinates": [165.7876, -13.9437, 10] }
+    },
+    {
+      "id": "us7000ttfe",
+      "properties": {
+        "mag": 5,
+        "place": "206 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1793092855730
+      },
+      "geometry": { "coordinates": [165.5556, -13.9006, 10] }
+    },
+    {
+      "id": "us7000ttfc",
+      "properties": {
+        "mag": 5,
+        "place": "95 km NNE of Hihifo, Tonga",
+        "magType": "mb",
+        "time": 1793092065122
+      },
+      "geometry": { "coordinates": [-173.4094, -15.1739, 10] }
+    },
+    {
+      "id": "us7000ttfb",
+      "properties": {
+        "mag": 5.8,
+        "place": "199 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793091323294
+      },
+      "geometry": { "coordinates": [165.6113, -13.9356, 11] }
+    },
+    {
+      "id": "us6000u4zb",
+      "properties": {
+        "mag": 5.2,
+        "place": "206 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793016810646
+      },
+      "geometry": { "coordinates": [165.583, -13.8617, 10] }
+    },
+    {
+      "id": "us6000u4z6",
+      "properties": {
+        "mag": 5,
+        "place": "221 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1793013474421
+      },
+      "geometry": { "coordinates": [165.4443, -13.824, 10] }
+    },
+    {
+      "id": "us6000u4yr",
+      "properties": {
+        "mag": 5.5,
+        "place": "283 km E of Levuka, Fiji",
+        "magType": "mww",
+        "time": 1793009581285
+      },
+      "geometry": { "coordinates": [-178.0144, -18.2557, 641.983] }
+    },
+    {
+      "id": "us6000u4y1",
+      "properties": {
+        "mag": 5,
+        "place": "45 km NNW of Ende, Indonesia",
+        "magType": "mb",
+        "time": 1792990420479
+      },
+      "geometry": { "coordinates": [121.5729, -8.443, 10] }
+    },
+    {
+      "id": "us6000u4xa",
+      "properties": {
+        "mag": 5,
+        "place": "204 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792977741243
+      },
+      "geometry": { "coordinates": [165.5797, -13.8979, 10] }
+    },
+    {
+      "id": "us6000u4we",
+      "properties": {
+        "mag": 5.3,
+        "place": "Bonin Islands, Japan region",
+        "magType": "mww",
+        "time": 1792966455989
+      },
+      "geometry": { "coordinates": [139.6767, 27.861, 483.675] }
+    },
+    {
+      "id": "us6000u4va",
+      "properties": {
+        "mag": 5.2,
+        "place": "56 km SW of Ashk\u0101sham, Afghanistan",
+        "magType": "mww",
+        "time": 1792950264344
+      },
+      "geometry": { "coordinates": [71.1332, 36.2899, 118.444] }
+    },
+    {
+      "id": "us6000u4ty",
+      "properties": {
+        "mag": 5.9,
+        "place": "214 km ENE of Nagqu, China",
+        "magType": "mww",
+        "time": 1792927557039
+      },
+      "geometry": { "coordinates": [94.0105, 32.4675, 7] }
+    },
+    {
+      "id": "us6000u4tx",
+      "properties": {
+        "mag": 5,
+        "place": "197 km ENE of Nagqu, China",
+        "magType": "mb",
+        "time": 1792927453959
+      },
+      "geometry": { "coordinates": [93.863, 32.3733, 10] }
+    },
+    {
+      "id": "us6000u4tq",
+      "properties": {
+        "mag": 5.4,
+        "place": "27 km ESE of Ambunti, Papua New Guinea",
+        "magType": "mww",
+        "time": 1792924227151
+      },
+      "geometry": { "coordinates": [143.0291, -4.3452, 67.188] }
+    },
+    {
+      "id": "us6000u4tc",
+      "properties": {
+        "mag": 5.4,
+        "place": "203 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792917659900
+      },
+      "geometry": { "coordinates": [165.5871, -13.9038, 10] }
+    },
+    {
+      "id": "us6000u4s5",
+      "properties": {
+        "mag": 5.1,
+        "place": "63 km NNE of Lae, Papua New Guinea",
+        "magType": "mb",
+        "time": 1792898950489
+      },
+      "geometry": { "coordinates": [147.1973, -6.1894, 81.234] }
+    },
+    {
+      "id": "us6000u4rr",
+      "properties": {
+        "mag": 5,
+        "place": "Bonin Islands, Japan region",
+        "magType": "mb",
+        "time": 1792895792398
+      },
+      "geometry": { "coordinates": [139.6534, 27.6622, 492.421] }
+    },
+    {
+      "id": "us6000u4rf",
+      "properties": {
+        "mag": 6.1,
+        "place": "22 km ENE of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792895040630
+      },
+      "geometry": { "coordinates": [167.2727, -14.9726, 116] }
+    },
+    {
+      "id": "us7000tw0y",
+      "properties": {
+        "mag": 6,
+        "place": "Bonin Islands, Japan region",
+        "magType": "mb",
+        "time": 1792894184027
+      },
+      "geometry": { "coordinates": [139.8079, 27.7325, 472.952] }
+    },
+    {
+      "id": "us6000u4r9",
+      "properties": {
+        "mag": 6.5,
+        "place": "Bonin Islands, Japan region",
+        "magType": "mww",
+        "time": 1792894162321
+      },
+      "geometry": { "coordinates": [139.7102, 27.8093, 475] }
+    },
+    {
+      "id": "us6000u4r7",
+      "properties": {
+        "mag": 5.1,
+        "place": "157 km WNW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792893970032
+      },
+      "geometry": { "coordinates": [165.7382, -14.4563, 10] }
+    },
+    {
+      "id": "us6000u4r3",
+      "properties": {
+        "mag": 5.1,
+        "place": "162 km WNW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792892783054
+      },
+      "geometry": { "coordinates": [165.7409, -14.3559, 10] }
+    },
+    {
+      "id": "us6000u4qq",
+      "properties": {
+        "mag": 5.1,
+        "place": "46 km ESE of Miyazaki, Japan",
+        "magType": "mww",
+        "time": 1792886377247
+      },
+      "geometry": { "coordinates": [131.8868, 31.7892, 10] }
+    },
+    {
+      "id": "us6000u4qp",
+      "properties": {
+        "mag": 5,
+        "place": "198 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792885498084
+      },
+      "geometry": { "coordinates": [165.6721, -13.8822, 10] }
+    },
+    {
+      "id": "us6000u4q8",
+      "properties": {
+        "mag": 5,
+        "place": "229 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792882029061
+      },
+      "geometry": { "coordinates": [165.3454, -13.8318, 10] }
+    },
+    {
+      "id": "us6000u4pa",
+      "properties": {
+        "mag": 5.3,
+        "place": "104 km SSE of Vilyuchinsk, Russia",
+        "magType": "mb",
+        "time": 1792874102864
+      },
+      "geometry": { "coordinates": [159.1639, 52.1169, 54.088] }
+    },
+    {
+      "id": "us6000u4mn",
+      "properties": {
+        "mag": 5.9,
+        "place": "Bouvet Island region",
+        "magType": "mwb",
+        "time": 1792855459358
+      },
+      "geometry": { "coordinates": [7.044, -54.0337, 10] }
+    },
+    {
+      "id": "us6000u4m6",
+      "properties": {
+        "mag": 5,
+        "place": "141 km NNW of Kilmia, Yemen",
+        "magType": "mb",
+        "time": 1792840827025
+      },
+      "geometry": { "coordinates": [51.5236, 13.2533, 10] }
+    },
+    {
+      "id": "us6000u4m5",
+      "properties": {
+        "mag": 5.1,
+        "place": "210 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792840440464
+      },
+      "geometry": { "coordinates": [165.5598, -13.8446, 10] }
+    },
+    {
+      "id": "us6000u4lr",
+      "properties": {
+        "mag": 5.1,
+        "place": "170 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792834728917
+      },
+      "geometry": { "coordinates": [165.7637, -14.1749, 10] }
+    },
+    {
+      "id": "us6000u4lp",
+      "properties": {
+        "mag": 5,
+        "place": "224 km WNW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792832820273
+      },
+      "geometry": { "coordinates": [165.2295, -14.0911, 10] }
+    },
+    {
+      "id": "us6000u4lm",
+      "properties": {
+        "mag": 5.9,
+        "place": "193 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792832188907
+      },
+      "geometry": { "coordinates": [165.657, -13.9649, 10] }
+    },
+    {
+      "id": "us6000u4lg",
+      "properties": {
+        "mag": 5.3,
+        "place": "218 km ENE of Nagqu, China",
+        "magType": "mb",
+        "time": 1792831193065
+      },
+      "geometry": { "coordinates": [94.0081, 32.539, 10] }
+    },
+    {
+      "id": "us6000u4lc",
+      "properties": {
+        "mag": 5.1,
+        "place": "212 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792830482064
+      },
+      "geometry": { "coordinates": [165.5876, -13.7848, 10] }
+    },
+    {
+      "id": "us6000u4l9",
+      "properties": {
+        "mag": 5.1,
+        "place": "218 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792830166710
+      },
+      "geometry": { "coordinates": [165.4281, -13.8865, 10] }
+    },
+    {
+      "id": "us6000u4kq",
+      "properties": {
+        "mag": 5.5,
+        "place": "52 km NNE of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792824189665
+      },
+      "geometry": { "coordinates": [167.2962, -14.6223, 195.305] }
+    },
+    {
+      "id": "us6000u4kj",
+      "properties": {
+        "mag": 5.3,
+        "place": "174 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792821856340
+      },
+      "geometry": { "coordinates": [165.7322, -14.1547, 10] }
+    },
+    {
+      "id": "us7000tv6a",
+      "properties": {
+        "mag": 5.1,
+        "place": "147 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792819574750
+      },
+      "geometry": { "coordinates": [166.005, -14.2074, 10] }
+    },
+    {
+      "id": "us6000u4k6",
+      "properties": {
+        "mag": 5.8,
+        "place": "176 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792819420632
+      },
+      "geometry": { "coordinates": [165.7692, -14.0765, 10] }
+    },
+    {
+      "id": "us6000u4jy",
+      "properties": {
+        "mag": 5.2,
+        "place": "203 km W of Sola, Vanuatu",
+        "magType": "mb",
+        "time": 1792815578543
+      },
+      "geometry": { "coordinates": [165.6755, -13.6959, 10] }
+    },
+    {
+      "id": "us6000u4jw",
+      "properties": {
+        "mag": 5.9,
+        "place": "206 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792815124978
+      },
+      "geometry": { "coordinates": [165.6167, -13.8244, 10] }
+    },
+    {
+      "id": "us6000u4ju",
+      "properties": {
+        "mag": 5.7,
+        "place": "203 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792814736679
+      },
+      "geometry": { "coordinates": [165.5748, -13.9218, 10] }
+    },
+    {
+      "id": "us6000u4jl",
+      "properties": {
+        "mag": 5.2,
+        "place": "203 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792811875646
+      },
+      "geometry": { "coordinates": [165.6033, -13.8861, 10] }
+    },
+    {
+      "id": "us7000tv64",
+      "properties": {
+        "mag": 5.1,
+        "place": "161 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792811694126
+      },
+      "geometry": { "coordinates": [165.8652, -14.1702, 10] }
+    },
+    {
+      "id": "us6000u4ji",
+      "properties": {
+        "mag": 5.1,
+        "place": "163 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792811325141
+      },
+      "geometry": { "coordinates": [165.8232, -14.2088, 10] }
+    },
+    {
+      "id": "us7000tv65",
+      "properties": {
+        "mag": 5,
+        "place": "194 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792811145926
+      },
+      "geometry": { "coordinates": [165.6728, -13.9377, 10] }
+    },
+    {
+      "id": "us7000tv5z",
+      "properties": {
+        "mag": 5.1,
+        "place": "202 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792810023057
+      },
+      "geometry": { "coordinates": [165.6685, -13.8279, 10] }
+    },
+    {
+      "id": "us6000u4jb",
+      "properties": {
+        "mag": 6.1,
+        "place": "163 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792809357344
+      },
+      "geometry": { "coordinates": [165.8938, -14.1107, 10] }
+    },
+    {
+      "id": "us6000u4j2",
+      "properties": {
+        "mag": 6.8,
+        "place": "203 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792809088880
+      },
+      "geometry": { "coordinates": [165.5629, -13.9369, 16] }
+    },
+    {
+      "id": "us6000u4h7",
+      "properties": {
+        "mag": 5.1,
+        "place": "206 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792793111235
+      },
+      "geometry": { "coordinates": [165.5628, -13.9002, 10] }
+    },
+    {
+      "id": "us6000u4e2",
+      "properties": {
+        "mag": 5.1,
+        "place": "73 km ENE of Noda, Japan",
+        "magType": "mb",
+        "time": 1792771670626
+      },
+      "geometry": { "coordinates": [142.6211, 40.3463, 31.83] }
+    },
+    {
+      "id": "us6000u4dc",
+      "properties": {
+        "mag": 5.2,
+        "place": "50 km WNW of Malfa, Italy",
+        "magType": "mww",
+        "time": 1792763736119
+      },
+      "geometry": { "coordinates": [14.3074, 38.768, 10] }
+    },
+    {
+      "id": "us6000u4bk",
+      "properties": {
+        "mag": 5.7,
+        "place": "61 km WNW of Leni, Italy",
+        "magType": "mww",
+        "time": 1792750756729
+      },
+      "geometry": { "coordinates": [14.152, 38.7199, 10] }
+    },
+    {
+      "id": "us6000u473",
+      "properties": {
+        "mag": 5,
+        "place": "158 km S of Kokopo, Papua New Guinea",
+        "magType": "mb",
+        "time": 1792699503657
+      },
+      "geometry": { "coordinates": [152.1893, -5.7787, 10] }
+    },
+    {
+      "id": "us6000u45j",
+      "properties": {
+        "mag": 5,
+        "place": "213 km ENE of Nagqu, China",
+        "magType": "mb",
+        "time": 1792692403845
+      },
+      "geometry": { "coordinates": [94.0527, 32.3865, 10] }
+    },
+    {
+      "id": "us6000u44n",
+      "properties": {
+        "mag": 5.2,
+        "place": "197 km ENE of Nagqu, China",
+        "magType": "mb",
+        "time": 1792681924407
+      },
+      "geometry": { "coordinates": [93.8437, 32.4058, 10] }
+    },
+    {
+      "id": "us6000u43g",
+      "properties": {
+        "mag": 7,
+        "place": "189 km ENE of Nagqu, China",
+        "magType": "mww",
+        "time": 1792679620289
+      },
+      "geometry": { "coordinates": [93.7837, 32.3376, 18] }
+    },
+    {
+      "id": "us6000u3zp",
+      "properties": {
+        "mag": 5,
+        "place": "South Sandwich Islands region",
+        "magType": "mb",
+        "time": 1792628738804
+      },
+      "geometry": { "coordinates": [-27.1072, -55.9779, 59.265] }
+    },
+    {
+      "id": "us6000u3yp",
+      "properties": {
+        "mag": 5.1,
+        "place": "Reykjanes Ridge",
+        "magType": "mb",
+        "time": 1792619927808
+      },
+      "geometry": { "coordinates": [-34.1158, 56.8261, 10] }
+    },
+    {
+      "id": "us6000u3yj",
+      "properties": {
+        "mag": 5.4,
+        "place": "Reykjanes Ridge",
+        "magType": "mww",
+        "time": 1792618734747
+      },
+      "geometry": { "coordinates": [-34.1891, 56.7745, 10] }
+    },
+    {
+      "id": "us6000u3y1",
+      "properties": {
+        "mag": 5,
+        "place": "72 km NNW of Khorixas, Namibia",
+        "magType": "mb",
+        "time": 1792614890487
+      },
+      "geometry": { "coordinates": [14.689, -19.7657, 10] }
+    },
+    {
+      "id": "us6000u3x2",
+      "properties": {
+        "mag": 5,
+        "place": "Reykjanes Ridge",
+        "magType": "mww",
+        "time": 1792609565577
+      },
+      "geometry": { "coordinates": [-34.2408, 56.9733, 10] }
+    },
+    {
+      "id": "us6000u3xx",
+      "properties": {
+        "mag": 5,
+        "place": "188 km WNW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792608065009
+      },
+      "geometry": { "coordinates": [165.6003, -14.1201, 10] }
+    },
+    {
+      "id": "us6000u3wh",
+      "properties": {
+        "mag": 5.1,
+        "place": "south of Africa",
+        "magType": "mb",
+        "time": 1792606355392
+      },
+      "geometry": { "coordinates": [27.5179, -52.7747, 10] }
+    },
+    {
+      "id": "us6000u3ue",
+      "properties": {
+        "mag": 5,
+        "place": "191 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792594587467
+      },
+      "geometry": { "coordinates": [165.5941, -14.0862, 10] }
+    },
+    {
+      "id": "us6000u3t6",
+      "properties": {
+        "mag": 5.2,
+        "place": "63 km NNE of Cabatuan, Philippines",
+        "magType": "mb",
+        "time": 1792571860876
+      },
+      "geometry": { "coordinates": [125.5407, 13.0045, 10] }
+    },
+    {
+      "id": "us6000u3t4",
+      "properties": {
+        "mag": 5.1,
+        "place": "173 km NE of Lospalos, Timor Leste",
+        "magType": "mb",
+        "time": 1792568654384
+      },
+      "geometry": { "coordinates": [128.2234, -7.541, 106.632] }
+    },
+    {
+      "id": "us6000u3rr",
+      "properties": {
+        "mag": 5,
+        "place": "south of Panama",
+        "magType": "mww",
+        "time": 1792545602044
+      },
+      "geometry": { "coordinates": [-82.7987, 4.7032, 10] }
+    },
+    {
+      "id": "us6000u3p1",
+      "properties": {
+        "mag": 5.1,
+        "place": "41 km WNW of Mosteiros, Portugal",
+        "magType": "mww",
+        "time": 1792519637921
+      },
+      "geometry": { "coordinates": [-26.2782, 37.9753, 10] }
+    },
+    {
+      "id": "us6000u3nl",
+      "properties": {
+        "mag": 5.4,
+        "place": "210 km S of Burica, Panama",
+        "magType": "mww",
+        "time": 1792515947182
+      },
+      "geometry": { "coordinates": [-82.522, 6.1629, 10] }
+    },
+    {
+      "id": "us6000u3nc",
+      "properties": {
+        "mag": 5,
+        "place": "19 km SW of Meulaboh, Indonesia",
+        "magType": "mww",
+        "time": 1792513777949
+      },
+      "geometry": { "coordinates": [96.0035, 4.0171, 65.336] }
+    },
+    {
+      "id": "us6000u3lf",
+      "properties": {
+        "mag": 5.1,
+        "place": "90 km S of Sand Point, Alaska",
+        "magType": "mww",
+        "time": 1792492840627
+      },
+      "geometry": { "coordinates": [-160.2495, 54.5346, 35] }
+    },
+    {
+      "id": "us6000u3ka",
+      "properties": {
+        "mag": 5.1,
+        "place": "266 km WSW of Yanglong, China",
+        "magType": "mb",
+        "time": 1792478483230
+      },
+      "geometry": { "coordinates": [95.6513, 37.8278, 10] }
+    },
+    {
+      "id": "us6000u3k5",
+      "properties": {
+        "mag": 5.2,
+        "place": "204 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792477762498
+      },
+      "geometry": { "coordinates": [165.5946, -13.8803, 10] }
+    },
+    {
+      "id": "us6000u3jl",
+      "properties": {
+        "mag": 6.3,
+        "place": "202 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792470038782
+      },
+      "geometry": { "coordinates": [165.5746, -13.9347, 16] }
+    },
+    {
+      "id": "us6000u3j1",
+      "properties": {
+        "mag": 5,
+        "place": "193 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792456707904
+      },
+      "geometry": { "coordinates": [165.6147, -14.0283, 10] }
+    },
+    {
+      "id": "us6000u3ge",
+      "properties": {
+        "mag": 5.5,
+        "place": "206 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792436137428
+      },
+      "geometry": { "coordinates": [165.493, -13.981, 10] }
+    },
+    {
+      "id": "us6000u3ga",
+      "properties": {
+        "mag": 5.7,
+        "place": "197 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792435956088
+      },
+      "geometry": { "coordinates": [165.5726, -14.0187, 8] }
+    },
+    {
+      "id": "us6000u3ft",
+      "properties": {
+        "mag": 5.1,
+        "place": "South Sandwich Islands region",
+        "magType": "mb",
+        "time": 1792431950994
+      },
+      "geometry": { "coordinates": [-27.0359, -56.2815, 107.256] }
+    },
+    {
+      "id": "us6000u3ct",
+      "properties": {
+        "mag": 5.3,
+        "place": "106 km WNW of H\u00f6fn, Iceland",
+        "magType": "mww",
+        "time": 1792421064457
+      },
+      "geometry": { "coordinates": [-17.3415, 64.5104, 10] }
+    },
+    {
+      "id": "us6000u3c7",
+      "properties": {
+        "mag": 5,
+        "place": "15 km WNW of Jiangyou, China",
+        "magType": "mb",
+        "time": 1792407427571
+      },
+      "geometry": { "coordinates": [104.5592, 31.8166, 10] }
+    },
+    {
+      "id": "us7000ttse",
+      "properties": {
+        "mag": 5.3,
+        "place": "231 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792406447779
+      },
+      "geometry": { "coordinates": [165.314, -13.8344, 10] }
+    },
+    {
+      "id": "us6000u3c6",
+      "properties": {
+        "mag": 5.5,
+        "place": "195 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792406420566
+      },
+      "geometry": { "coordinates": [165.6692, -13.9233, 10] }
+    },
+    {
+      "id": "us6000u3bk",
+      "properties": {
+        "mag": 5.2,
+        "place": "195 km NW of Port-Olry, Vanuatu",
+        "magType": "mb",
+        "time": 1792398106093
+      },
+      "geometry": { "coordinates": [165.6284, -13.9711, 10] }
+    },
+    {
+      "id": "us6000u3bi",
+      "properties": {
+        "mag": 5.3,
+        "place": "187 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792397558153
+      },
+      "geometry": { "coordinates": [165.6499, -14.0703, 10] }
+    },
+    {
+      "id": "us6000u3be",
+      "properties": {
+        "mag": 5.3,
+        "place": "205 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792396536597
+      },
+      "geometry": { "coordinates": [165.4947, -14.0028, 10] }
+    },
+    {
+      "id": "us6000u3bc",
+      "properties": {
+        "mag": 6,
+        "place": "184 km NW of Port-Olry, Vanuatu",
+        "magType": "mww",
+        "time": 1792396144693
+      },
+      "geometry": { "coordinates": [165.7158, -14.0203, 10] }
+    },
+    {
+      "id": "us6000u38g",
+      "properties": {
+        "mag": 5.1,
+        "place": "127 km SSE of Kokopo, Papua New Guinea",
+        "magType": "mww",
+        "time": 1792362703253
+      },
+      "geometry": { "coordinates": [152.6203, -5.4388, 10] }
+    },
+    {
+      "id": "us6000u37h",
+      "properties": {
+        "mag": 5.1,
+        "place": "79 km ENE of \u2018Ohonua, Tonga",
+        "magType": "mb",
+        "time": 1792351945880
+      },
+      "geometry": { "coordinates": [-174.2183, -21.1523, 10] }
+    },
+    {
+      "id": "us6000u34e",
+      "properties": {
+        "mag": 5.2,
+        "place": "60 km NNW of Ruteng, Indonesia",
+        "magType": "mb",
+        "time": 1792310405896
+      },
+      "geometry": { "coordinates": [120.2865, -8.0974, 10] }
+    },
+    {
+      "id": "us7000tyny",
+      "geometry": { "type": "Point", "coordinates": [50.7721, 13.1425, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "130 km N of Caluula, Somalia",
+        "time": 1794867685970
+      }
+    },
+    {
+      "id": "us7000tynx",
+      "geometry": { "type": "Point", "coordinates": [131.7057, -5.9708, 35] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "121 km WSW of Tual, Indonesia",
+        "time": 1794867452469
+      }
+    },
+    {
+      "id": "us7000tyns",
+      "geometry": { "type": "Point", "coordinates": [169.9015, -20.8029, 114.74] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "153 km SSE of Isangel, Vanuatu",
+        "time": 1794866158036
+      }
+    },
+    {
+      "id": "us7000tymg",
+      "geometry": { "type": "Point", "coordinates": [-72.1955, -33.0095, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "52 km W of Valpara\u00edso, Chile",
+        "time": 1794858715895
+      }
+    },
+    {
+      "id": "us7000tyme",
+      "geometry": { "type": "Point", "coordinates": [-76.0946, -15.0591, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "103 km WSW of Changuillo, Peru",
+        "time": 1794858294003
+      }
+    },
+    {
+      "id": "us7000tymc",
+      "geometry": { "type": "Point", "coordinates": [149.8061, -1.7205, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "144 km NW of Kavieng, Papua New Guinea",
+        "time": 1794857580666
+      }
+    },
+    {
+      "id": "us7000tym8",
+      "geometry": { "type": "Point", "coordinates": [-75.8684, -14.9779, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "77 km WSW of Changuillo, Peru",
+        "time": 1794857194776
+      }
+    },
+    {
+      "id": "aka2026wsrgct",
+      "geometry": { "type": "Point", "coordinates": [-156.341, 62.344, 5] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "63 km NNE of Stony River, Alaska",
+        "time": 1794856040534
+      }
+    },
+    {
+      "id": "us7000tyma",
+      "geometry": { "type": "Point", "coordinates": [-166.203, 53.3316, 27.968] },
+      "properties": {
+        "mag": 3.6,
+        "magType": "ml",
+        "place": "64 km SSE of Unalaska, Alaska",
+        "time": 1794852496110
+      }
+    },
+    {
+      "id": "us7000tykx",
+      "geometry": { "type": "Point", "coordinates": [70.7503, 36.4773, 202.737] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "43 km S of Jurm, Afghanistan",
+        "time": 1794852145427
+      }
+    },
+    {
+      "id": "aka2026wslxjs",
+      "geometry": { "type": "Point", "coordinates": [179.175, 51.018, 17.1] },
+      "properties": {
+        "mag": 3.9,
+        "magType": "ml",
+        "place": "Rat Islands, Aleutian Islands, Alaska",
+        "time": 1794846452660
+      }
+    },
+    {
+      "id": "us7000tykk",
+      "geometry": { "type": "Point", "coordinates": [-75.4229, -14.8364, 39.085] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "28 km SW of Changuillo, Peru",
+        "time": 1794846198453
+      }
+    },
+    {
+      "id": "us7000tyk2",
+      "geometry": { "type": "Point", "coordinates": [-126.0997, 41.1499, 10] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "164 km W of Trinidad, California",
+        "time": 1794837750072
+      }
+    },
+    {
+      "id": "us7000tyjz",
+      "geometry": { "type": "Point", "coordinates": [129.6312, 26.8491, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "113 km ESE of Wadomari, Japan",
+        "time": 1794835945974
+      }
+    },
+    {
+      "id": "us7000tyjy",
+      "geometry": { "type": "Point", "coordinates": [50.742, 13.474, 10] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "166 km N of Caluula, Somalia",
+        "time": 1794835833980
+      }
+    },
+    {
+      "id": "us7000tyjx",
+      "geometry": { "type": "Point", "coordinates": [155.9172, 49.9837, 85.011] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "78 km S of Severo-Kuril\u2019sk, Russia",
+        "time": 1794835521731
+      }
+    },
+    {
+      "id": "aka2026wsedpt",
+      "geometry": { "type": "Point", "coordinates": [-153.2, 59.985, 139] },
+      "properties": {
+        "mag": 3.7,
+        "magType": "ml",
+        "place": "55 km ENE of Pedro Bay, Alaska",
+        "time": 1794832569545
+      }
+    },
+    {
+      "id": "us7000tyii",
+      "geometry": { "type": "Point", "coordinates": [129.9952, -5.807, 138.691] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "297 km SSE of Amahai, Indonesia",
+        "time": 1794812889864
+      }
+    },
+    {
+      "id": "us7000tyie",
+      "geometry": { "type": "Point", "coordinates": [-68.57, -13.6058, 626.486] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "124 km NE of Quiaca, Peru",
+        "time": 1794811654187
+      }
+    },
+    {
+      "id": "aka2026wrlepm",
+      "geometry": { "type": "Point", "coordinates": [-149.264, 55.825, 32.8] },
+      "properties": {
+        "mag": 3.6,
+        "magType": "ml",
+        "place": "271 km SE of Chiniak, Alaska",
+        "time": 1794798386067
+      }
+    },
+    {
+      "id": "us7000tyh5",
+      "geometry": { "type": "Point", "coordinates": [-97.9283, 16.2825, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "2 km SW of Santa Mar\u00eda Huazolotitl\u00e1n, Mexico",
+        "time": 1794791340831
+      }
+    },
+    {
+      "id": "hv75070882",
+      "geometry": { "type": "Point", "coordinates": [-156.6045, 19.8355, 42.4] },
+      "properties": {
+        "mag": 3.09,
+        "magType": "ml",
+        "place": "66 km W of Kalaoa, Hawaii",
+        "time": 1794789721020
+      }
+    },
+    {
+      "id": "us6000ud0n",
+      "geometry": { "type": "Point", "coordinates": [127.5503, -6.7275, 406.282] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "207 km NNE of Lospalos, Timor Leste",
+        "time": 1794786852341
+      }
+    },
+    {
+      "id": "us7000tygl",
+      "geometry": { "type": "Point", "coordinates": [-66.3771, -22.5837, 240.343] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "71 km WNW of Abra Pampa, Argentina",
+        "time": 1794783861682
+      }
+    },
+    {
+      "id": "us7000tygk",
+      "geometry": { "type": "Point", "coordinates": [160.5263, 52.4669, 10] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "144 km ESE of Petropavlovsk-Kamchatsky, Russia",
+        "time": 1794782298982
+      }
+    },
+    {
+      "id": "us6000ud0l",
+      "geometry": { "type": "Point", "coordinates": [173.7312, 52.5633, 59.807] },
+      "properties": {
+        "mag": 4,
+        "magType": "mb",
+        "place": "48 km SE of Attu Station, Alaska",
+        "time": 1794780418246
+      }
+    },
+    {
+      "id": "us7000tyga",
+      "geometry": { "type": "Point", "coordinates": [70.8326, 36.4923, 196.642] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mww",
+        "place": "41 km S of Jurm, Afghanistan",
+        "time": 1794778641794
+      }
+    },
+    {
+      "id": "nn00927024",
+      "geometry": { "type": "Point", "coordinates": [-119.0525, 39.31, 7.1651] },
+      "properties": {
+        "mag": 3.05,
+        "magType": "ml",
+        "place": "18 km SE of Silver Springs, Nevada",
+        "time": 1794772687107
+      }
+    },
+    {
+      "id": "us7000tyg0",
+      "geometry": { "type": "Point", "coordinates": [126.2715, 4.9457, 96.271] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "102 km ESE of Sarangani, Philippines",
+        "time": 1794771519971
+      }
+    },
+    {
+      "id": "us7000tyfr",
+      "geometry": { "type": "Point", "coordinates": [-69.7721, -17.5342, 170.709] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "26 km E of Estique, Peru",
+        "time": 1794768741570
+      }
+    },
+    {
+      "id": "aka2026wqrlbd",
+      "geometry": { "type": "Point", "coordinates": [-149.461, 62.2, 9.4] },
+      "properties": {
+        "mag": 3.5,
+        "magType": "ml",
+        "place": "20 km ENE of Susitna North, Alaska",
+        "time": 1794762829968
+      }
+    },
+    {
+      "id": "us7000tyfb",
+      "geometry": { "type": "Point", "coordinates": [130.3237, -6.0924, 121.411] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "273 km W of Tual, Indonesia",
+        "time": 1794758774983
+      }
+    },
+    {
+      "id": "pr71539328",
+      "geometry": { "type": "Point", "coordinates": [-67.8496666666667, 19.467, 49.52] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "md",
+        "place": "114 km NNE of Punta Cana, Dominican Republic",
+        "time": 1794757964490
+      }
+    },
+    {
+      "id": "us7000tyeu",
+      "geometry": { "type": "Point", "coordinates": [94.7157, 19.9786, 81.566] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "27 km SW of Minbu, Burma (Myanmar)",
+        "time": 1794753123788
+      }
+    },
+    {
+      "id": "us7000tyet",
+      "geometry": { "type": "Point", "coordinates": [-106.8072, 36.2595, 9.921] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "3 km N of Capulin, New Mexico",
+        "time": 1794752996330
+      }
+    },
+    {
+      "id": "us7000tyes",
+      "geometry": { "type": "Point", "coordinates": [126.3512, 9.6916, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "27 km ESE of Union, Philippines",
+        "time": 1794752272535
+      }
+    },
+    {
+      "id": "aka2026wqjupw",
+      "geometry": { "type": "Point", "coordinates": [-144.284, 67.242, 1.9] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "69 km NNW of Chalkyitsik, Alaska",
+        "time": 1794749076555
+      }
+    },
+    {
+      "id": "ok2026wjws",
+      "geometry": { "type": "Point", "coordinates": [-98.04283333, 35.61283333, 6.34] },
+      "properties": {
+        "mag": 3.06,
+        "magType": "ml",
+        "place": "6 km E of Calumet, Oklahoma",
+        "time": 1794742148070
+      }
+    },
+    {
+      "id": "us7000tye3",
+      "geometry": { "type": "Point", "coordinates": [-70.311, -20.6143, 27.161] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mwr",
+        "place": "41 km SSW of La Tirana, Chile",
+        "time": 1794741836246
+      }
+    },
+    {
+      "id": "us7000tydr",
+      "geometry": { "type": "Point", "coordinates": [-72.2191, -33.0263, 19.435] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mwr",
+        "place": "55 km W of Valpara\u00edso, Chile",
+        "time": 1794738551748
+      }
+    },
+    {
+      "id": "us7000tydm",
+      "geometry": { "type": "Point", "coordinates": [120.659, -8.6791, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "22 km ESE of Ruteng, Indonesia",
+        "time": 1794734690714
+      }
+    },
+    {
+      "id": "us7000tyde",
+      "geometry": { "type": "Point", "coordinates": [179.8113, -23.9733, 545.344] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1794732606639
+      }
+    },
+    {
+      "id": "us7000tyd3",
+      "geometry": { "type": "Point", "coordinates": [-175.9354, -20.589, 177.524] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "92 km NW of Houma, Tonga",
+        "time": 1794728197211
+      }
+    },
+    {
+      "id": "pr2026319000",
+      "geometry": { "type": "Point", "coordinates": [-64.9756, 19.2088, 29] },
+      "properties": {
+        "mag": 3.65,
+        "magType": "md",
+        "place": "96 km N of Charlotte Amalie, U.S. Virgin Islands",
+        "time": 1794726077140
+      }
+    },
+    {
+      "id": "aka2026wptmlc",
+      "geometry": { "type": "Point", "coordinates": [-147.799, 60.073, 14.4] },
+      "properties": {
+        "mag": 3.9,
+        "magType": "ml",
+        "place": "11 km E of Chenega, Alaska",
+        "time": 1794719740008
+      }
+    },
+    {
+      "id": "us7000tyc3",
+      "geometry": { "type": "Point", "coordinates": [-67.904, -23.5305, 151.745] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "75 km SSE of San Pedro de Atacama, Chile",
+        "time": 1794717508360
+      }
+    },
+    {
+      "id": "ok2026wjiy",
+      "geometry": { "type": "Point", "coordinates": [-98.047, 35.61016667, 6.77] },
+      "properties": {
+        "mag": 3.44,
+        "magType": "ml",
+        "place": "6 km E of Calumet, Oklahoma",
+        "time": 1794717134160
+      }
+    },
+    {
+      "id": "us7000tyc0",
+      "geometry": { "type": "Point", "coordinates": [-67.0737, -23.446, 254.527] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "115 km NW of San Antonio de los Cobres, Argentina",
+        "time": 1794716627869
+      }
+    },
+    {
+      "id": "us7000tybx",
+      "geometry": { "type": "Point", "coordinates": [-68.6822, -31.3221, 108.94] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "19 km NW of Albard\u00f3n, Argentina",
+        "time": 1794715199682
+      }
+    },
+    {
+      "id": "us7000tybv",
+      "geometry": { "type": "Point", "coordinates": [-68.9801, -21.2619, 126.164] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "75 km W of Ollag\u00fce, Chile",
+        "time": 1794714829679
+      }
+    },
+    {
+      "id": "us7000tybs",
+      "geometry": { "type": "Point", "coordinates": [179.3034, 50.9127, 16.905] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "Rat Islands, Aleutian Islands, Alaska",
+        "time": 1794711764244
+      }
+    },
+    {
+      "id": "us7000tybq",
+      "geometry": { "type": "Point", "coordinates": [-83.0217, 8.6125, 9.561] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "8 km WSW of Corredor, Costa Rica",
+        "time": 1794711702502
+      }
+    },
+    {
+      "id": "tx2026wlxsjc",
+      "geometry": { "type": "Point", "coordinates": [-103.801, 32.011, 8.0865] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "34 km SE of Malaga, New Mexico",
+        "time": 1794709479644
+      }
+    },
+    {
+      "id": "us7000tybj",
+      "geometry": { "type": "Point", "coordinates": [-80.0144, -44.3607, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "Off the coast of Aisen, Chile",
+        "time": 1794709041755
+      }
+    },
+    {
+      "id": "uu80164656",
+      "geometry": { "type": "Point", "coordinates": [-111.647833333333, 41.189, 12.07] },
+      "properties": {
+        "mag": 3.41,
+        "magType": "ml",
+        "place": "12 km NE of Enterprise, Utah",
+        "time": 1794706803000
+      }
+    },
+    {
+      "id": "pr71539283",
+      "geometry": { "type": "Point", "coordinates": [-67.8105, 19.156, 3.37] },
+      "properties": {
+        "mag": 3.09,
+        "magType": "md",
+        "place": "89 km NE of Punta Cana, Dominican Republic",
+        "time": 1794705989010
+      }
+    },
+    {
+      "id": "us7000tyb5",
+      "geometry": { "type": "Point", "coordinates": [-125.6473, 42.0686, 10] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "106 km WSW of Pistol River, Oregon",
+        "time": 1794698523473
+      }
+    },
+    {
+      "id": "us6000ubwm",
+      "geometry": { "type": "Point", "coordinates": [-171.3466, 52.0141, 35] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "196 km E of Atka, Alaska",
+        "time": 1794695604252
+      }
+    },
+    {
+      "id": "us7000tyay",
+      "geometry": { "type": "Point", "coordinates": [-99.113, 3.7323, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "east central Pacific Ocean",
+        "time": 1794695026411
+      }
+    },
+    {
+      "id": "aka2026wpeyzd",
+      "geometry": { "type": "Point", "coordinates": [-147.394, 60.009, 2] },
+      "properties": {
+        "mag": 3.5,
+        "magType": "ml",
+        "place": "35 km E of Chenega, Alaska",
+        "time": 1794693618823
+      }
+    },
+    {
+      "id": "us7000tyan",
+      "geometry": { "type": "Point", "coordinates": [120.443, -8.3823, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "25 km N of Ruteng, Indonesia",
+        "time": 1794691460159
+      }
+    },
+    {
+      "id": "us7000ty9z",
+      "geometry": { "type": "Point", "coordinates": [-63.653, -22.2364, 506.268] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "24 km S of Yacuiba, Bolivia",
+        "time": 1794679441078
+      }
+    },
+    {
+      "id": "us7000ty9x",
+      "geometry": { "type": "Point", "coordinates": [176.3623, -40.0345, 27.863] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "29 km NE of Dannevirke, New Zealand",
+        "time": 1794678689113
+      }
+    },
+    {
+      "id": "us7000ty9v",
+      "geometry": { "type": "Point", "coordinates": [126.6097, 5.5982, 65.399] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "96 km SSE of Pondaguitan, Philippines",
+        "time": 1794675399533
+      }
+    },
+    {
+      "id": "us7000ty9n",
+      "geometry": { "type": "Point", "coordinates": [-66.9029, -24.049, 197.571] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "62 km WNW of San Antonio de los Cobres, Argentina",
+        "time": 1794674179635
+      }
+    },
+    {
+      "id": "us7000ty9l",
+      "geometry": { "type": "Point", "coordinates": [126.2112, 8.3996, 154.123] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "7 km SE of Tagbina, Philippines",
+        "time": 1794672262205
+      }
+    },
+    {
+      "id": "aka2026wootgz",
+      "geometry": { "type": "Point", "coordinates": [-179.362, 51.182, 15.8] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "204 km WSW of Adak, Alaska",
+        "time": 1794664439361
+      }
+    },
+    {
+      "id": "aka2026wonuxw",
+      "geometry": { "type": "Point", "coordinates": [-169.239, 52.041, 10] },
+      "properties": {
+        "mag": 3.9,
+        "magType": "ml",
+        "place": "103 km SSW of Nikolski, Alaska",
+        "time": 1794662758258
+      }
+    },
+    {
+      "id": "us7000ty90",
+      "geometry": { "type": "Point", "coordinates": [-178.3404, -33.0019, 12.019] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "south of the Kermadec Islands",
+        "time": 1794662240799
+      }
+    },
+    {
+      "id": "us7000ty8u",
+      "geometry": { "type": "Point", "coordinates": [160.2984, 52.3603, 17.439] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "137 km SE of Petropavlovsk-Kamchatsky, Russia",
+        "time": 1794659280653
+      }
+    },
+    {
+      "id": "ci41361927",
+      "geometry": { "type": "Point", "coordinates": [-115.46217, 32.81, 12.03] },
+      "properties": {
+        "mag": 3.01,
+        "magType": "ml",
+        "place": "8 km W of Holtville, CA",
+        "time": 1794654567950
+      }
+    },
+    {
+      "id": "us6000uccd",
+      "geometry": { "type": "Point", "coordinates": [52.422, 28.225, 10] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "70 km SSW of F\u012br\u016bz\u0101b\u0101d, Iran",
+        "time": 1794654312268
+      }
+    },
+    {
+      "id": "us7000tyv2",
+      "geometry": { "type": "Point", "coordinates": [-168.1382, 53.2784, 105.13] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "61 km NE of Nikolski, Alaska",
+        "time": 1794645656956
+      }
+    },
+    {
+      "id": "uw714139181",
+      "geometry": { "type": "Point", "coordinates": [-119.922333333333, 48.486, 8.09] },
+      "properties": {
+        "mag": 3.42,
+        "magType": "ml",
+        "place": "15 km WSW of Conconully, Washington",
+        "time": 1794645007520
+      }
+    },
+    {
+      "id": "pr2026318000",
+      "geometry": { "type": "Point", "coordinates": [-67.2648, 19.5083, 28] },
+      "properties": {
+        "mag": 3.55,
+        "magType": "md",
+        "place": "113 km N of San Antonio, Puerto Rico",
+        "time": 1794641951520
+      }
+    },
+    {
+      "id": "us7000ty7m",
+      "geometry": { "type": "Point", "coordinates": [136.9561, 30.1062, 510.099] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "southeast of Shikoku, Japan",
+        "time": 1794641099626
+      }
+    },
+    {
+      "id": "us7000ty7h",
+      "geometry": { "type": "Point", "coordinates": [-173.447, -15.0768, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "104 km NNE of Hihifo, Tonga",
+        "time": 1794639742520
+      }
+    },
+    {
+      "id": "us7000tyir",
+      "geometry": { "type": "Point", "coordinates": [-98.0213, -36.4497, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "southeast of Easter Island",
+        "time": 1794639479932
+      }
+    },
+    {
+      "id": "us7000ty72",
+      "geometry": { "type": "Point", "coordinates": [76.392, 34.3601, 10] },
+      "properties": {
+        "mag": 4,
+        "magType": "mb",
+        "place": "32 km SE of Kargil, India",
+        "time": 1794632367508
+      }
+    },
+    {
+      "id": "us7000ty73",
+      "geometry": { "type": "Point", "coordinates": [139.6657, -50.3735, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "western Indian-Antarctic Ridge",
+        "time": 1794632340633
+      }
+    },
+    {
+      "id": "us7000ty6u",
+      "geometry": { "type": "Point", "coordinates": [74.7283, 21.1258, 10] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "25 km NNW of Dh\u016blia, India",
+        "time": 1794627927019
+      }
+    },
+    {
+      "id": "us7000ty6p",
+      "geometry": { "type": "Point", "coordinates": [-66.7642, -23.9436, 216.092] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "54 km NW of San Antonio de los Cobres, Argentina",
+        "time": 1794626306652
+      }
+    },
+    {
+      "id": "us7000ty6e",
+      "geometry": { "type": "Point", "coordinates": [-177.739, -19.5803, 587.447] },
+      "properties": { "mag": 4.5, "magType": "mb", "place": "Fiji region", "time": 1794622867393 }
+    },
+    {
+      "id": "us7000ty5b",
+      "geometry": { "type": "Point", "coordinates": [126.6692, 7.8529, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "22 km NE of Kinablangan, Philippines",
+        "time": 1794614303875
+      }
+    },
+    {
+      "id": "us7000ty59",
+      "geometry": { "type": "Point", "coordinates": [-74.7229, -37.922, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "100 km WSW of Lebu, Chile",
+        "time": 1794614115232
+      }
+    },
+    {
+      "id": "aka2026wnlsfa",
+      "geometry": { "type": "Point", "coordinates": [-151.055, 58.365, 28.2] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "ml",
+        "place": "98 km ENE of Ouzinkie, Alaska",
+        "time": 1794612379108
+      }
+    },
+    {
+      "id": "us7000ty53",
+      "geometry": { "type": "Point", "coordinates": [130.4805, 29.5604, 40.852] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "74 km S of Yudomari, Japan",
+        "time": 1794612174402
+      }
+    },
+    {
+      "id": "us7000ty4w",
+      "geometry": { "type": "Point", "coordinates": [-178.6351, -32.746, 36.931] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "south of the Kermadec Islands",
+        "time": 1794607842124
+      }
+    },
+    {
+      "id": "tx2026wjsbol",
+      "geometry": { "type": "Point", "coordinates": [-104.436, 31.67, 6.0999] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "56 km S of Whites City, New Mexico",
+        "time": 1794605133084
+      }
+    },
+    {
+      "id": "us7000ty4n",
+      "geometry": { "type": "Point", "coordinates": [-89.4564, 13.2186, 59.125] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "33 km SSW of La Libertad, El Salvador",
+        "time": 1794604795905
+      }
+    },
+    {
+      "id": "aka2026wnfdnx",
+      "geometry": { "type": "Point", "coordinates": [-144.019, 69.512, 17.2] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "70 km SSW of Kaktovik, Alaska",
+        "time": 1794600396688
+      }
+    },
+    {
+      "id": "us7000ty44",
+      "geometry": { "type": "Point", "coordinates": [-75.6814, 3.9065, 9.684] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "14 km SW of Roncesvalles, Colombia",
+        "time": 1794600101936
+      }
+    },
+    {
+      "id": "us7000ty43",
+      "geometry": { "type": "Point", "coordinates": [149.9613, -1.4671, 10] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mww",
+        "place": "153 km NW of Kavieng, Papua New Guinea",
+        "time": 1794599361768
+      }
+    },
+    {
+      "id": "us7000ty3x",
+      "geometry": { "type": "Point", "coordinates": [-75.5584, 3.6793, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "9 km WSW of Chaparral, Colombia",
+        "time": 1794598997748
+      }
+    },
+    {
+      "id": "us7000ty3g",
+      "geometry": { "type": "Point", "coordinates": [178.9205, -23.1808, 563.277] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1794596140754
+      }
+    },
+    {
+      "id": "aka2026wnccgo",
+      "geometry": { "type": "Point", "coordinates": [-152.86, 59.422, 91.8] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "53 km W of Nanwalek, Alaska",
+        "time": 1794595011302
+      }
+    },
+    {
+      "id": "us7000ty1d",
+      "geometry": { "type": "Point", "coordinates": [-159.583, 55.1116, 35] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "63 km ESE of Sand Point, Alaska",
+        "time": 1794588930862
+      }
+    },
+    {
+      "id": "us7000ty16",
+      "geometry": { "type": "Point", "coordinates": [-69.0533, 18.5286, 136.742] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "10 km SW of Guaymate, Dominican Republic",
+        "time": 1794587758400
+      }
+    },
+    {
+      "id": "nn00926962",
+      "geometry": { "type": "Point", "coordinates": [-115.3039, 38.9792, 5.716] },
+      "properties": {
+        "mag": 3.38,
+        "magType": "ml",
+        "place": "22 km WNW of Preston, Nevada",
+        "time": 1794584073470
+      }
+    },
+    {
+      "id": "nn00926957",
+      "geometry": { "type": "Point", "coordinates": [-115.2534, 38.901, 1.0409] },
+      "properties": {
+        "mag": 3.55,
+        "magType": "ml",
+        "place": "16 km W of Preston, Nevada",
+        "time": 1794582628133
+      }
+    },
+    {
+      "id": "us7000ty0j",
+      "geometry": { "type": "Point", "coordinates": [-74.6131, -10.5256, 125.786] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "52 km NE of Santa Rosa, Peru",
+        "time": 1794573469644
+      }
+    },
+    {
+      "id": "us7000ty0g",
+      "geometry": { "type": "Point", "coordinates": [126.6864, 7.3953, 79.163] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "12 km ESE of Baculin, Philippines",
+        "time": 1794571977241
+      }
+    },
+    {
+      "id": "us7000txzd",
+      "geometry": { "type": "Point", "coordinates": [-175.8541, -21.3036, 162.78] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "59 km WSW of Houma, Tonga",
+        "time": 1794568692734
+      }
+    },
+    {
+      "id": "us7000txza",
+      "geometry": { "type": "Point", "coordinates": [-75.3275, -4.5227, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "86 km NNE of Lagunas, Peru",
+        "time": 1794567312777
+      }
+    },
+    {
+      "id": "us7000txz8",
+      "geometry": { "type": "Point", "coordinates": [-74.2837, -9.1322, 131.684] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "51 km ESE of Tournavista, Peru",
+        "time": 1794565925619
+      }
+    },
+    {
+      "id": "us7000txz7",
+      "geometry": { "type": "Point", "coordinates": [68.3878, 36.2047, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "29 km WNW of Baghl\u0101n, Afghanistan",
+        "time": 1794565039293
+      }
+    },
+    {
+      "id": "us7000txz5",
+      "geometry": { "type": "Point", "coordinates": [70.2408, 36.0578, 10] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "66 km SSE of Farkh\u0101r, Afghanistan",
+        "time": 1794564456127
+      }
+    },
+    {
+      "id": "us7000txz3",
+      "geometry": { "type": "Point", "coordinates": [173.4492, -22.3729, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "southeast of the Loyalty Islands",
+        "time": 1794563745053
+      }
+    },
+    {
+      "id": "aka2026wmkmus",
+      "geometry": { "type": "Point", "coordinates": [-151.123, 60.651, 61.3] },
+      "properties": {
+        "mag": 3.3,
+        "magType": "ml",
+        "place": "10 km ESE of Nikiski, Alaska",
+        "time": 1794563239137
+      }
+    },
+    {
+      "id": "us7000txz0",
+      "geometry": { "type": "Point", "coordinates": [127.2035, 8.2136, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "84 km E of Barcelona, Philippines",
+        "time": 1794562847087
+      }
+    },
+    {
+      "id": "us7000txyr",
+      "geometry": { "type": "Point", "coordinates": [-81.5127, 7.7368, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "19 km W of R\u00edo Grande, Panama",
+        "time": 1794556917672
+      }
+    },
+    {
+      "id": "us7000txyq",
+      "geometry": { "type": "Point", "coordinates": [131.19, -3.5977, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "143 km WSW of Fakfak, Indonesia",
+        "time": 1794556535583
+      }
+    },
+    {
+      "id": "us7000txy5",
+      "geometry": { "type": "Point", "coordinates": [116.7507, -8.262, 9.626] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "27 km NNE of Labuan Lombok, Indonesia",
+        "time": 1794545373549
+      }
+    },
+    {
+      "id": "aka2026wlxvxl",
+      "geometry": { "type": "Point", "coordinates": [-161.58, 54.394, 0] },
+      "properties": {
+        "mag": 3.5,
+        "magType": "ml",
+        "place": "88 km SSE of King Cove, Alaska",
+        "time": 1794540477345
+      }
+    },
+    {
+      "id": "us7000txy0",
+      "geometry": { "type": "Point", "coordinates": [-67.263, -24.2106, 176.658] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "95 km W of San Antonio de los Cobres, Argentina",
+        "time": 1794539475340
+      }
+    },
+    {
+      "id": "us7000txxy",
+      "geometry": { "type": "Point", "coordinates": [145.6025, 18.8925, 219.572] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "Pagan region, Northern Mariana Islands",
+        "time": 1794538503370
+      }
+    },
+    {
+      "id": "us7000txxv",
+      "geometry": { "type": "Point", "coordinates": [-178.0523, -17.9443, 527.134] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "278 km E of Levuka, Fiji",
+        "time": 1794536783505
+      }
+    },
+    {
+      "id": "us7000txxp",
+      "geometry": { "type": "Point", "coordinates": [-67.2224, -24.1797, 207.347] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "91 km W of San Antonio de los Cobres, Argentina",
+        "time": 1794534272807
+      }
+    },
+    {
+      "id": "pr71539148",
+      "geometry": { "type": "Point", "coordinates": [-66.1013333333333, 19.3588333333333, 29.27] },
+      "properties": {
+        "mag": 3.36,
+        "magType": "md",
+        "place": "98 km N of San Juan, Puerto Rico",
+        "time": 1794533827490
+      }
+    },
+    {
+      "id": "us7000txx4",
+      "geometry": { "type": "Point", "coordinates": [-128.9794, 44.0917, 10] },
+      "properties": {
+        "mag": 3.5,
+        "magType": "ml",
+        "place": "off the coast of Oregon",
+        "time": 1794527207427
+      }
+    },
+    {
+      "id": "us7000txwi",
+      "geometry": { "type": "Point", "coordinates": [-17.6047, 64.6502, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "117 km S of Akureyri, Iceland",
+        "time": 1794520422535
+      }
+    },
+    {
+      "id": "us7000txyl",
+      "geometry": { "type": "Point", "coordinates": [139.7962, -51.4999, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mww",
+        "place": "western Indian-Antarctic Ridge",
+        "time": 1794518156584
+      }
+    },
+    {
+      "id": "us7000txvw",
+      "geometry": { "type": "Point", "coordinates": [104.1911, 27.2239, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "41 km N of Weining, China",
+        "time": 1794513794062
+      }
+    },
+    {
+      "id": "aka2026wlhnqh",
+      "geometry": { "type": "Point", "coordinates": [-156.786, 67.394, 2.2] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "54 km N of Kobuk, Alaska",
+        "time": 1794511118831
+      }
+    },
+    {
+      "id": "aka2026wlajid",
+      "geometry": { "type": "Point", "coordinates": [-152.075, 59.035, 54.9] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "36 km SSW of Nanwalek, Alaska",
+        "time": 1794498234833
+      }
+    },
+    {
+      "id": "us6000ucah",
+      "geometry": { "type": "Point", "coordinates": [-93.1628, 14.2033, 10] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "98 km SW of Puerto Madero, Mexico",
+        "time": 1794497684495
+      }
+    },
+    {
+      "id": "us7000txtd",
+      "geometry": { "type": "Point", "coordinates": [126.1566, 1.1155, 50.434] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "119 km ESE of Bitung, Indonesia",
+        "time": 1794495513521
+      }
+    },
+    {
+      "id": "us6000ucaf",
+      "geometry": { "type": "Point", "coordinates": [124.9806, 5.4229, 22.427] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "44 km SW of Burias, Philippines",
+        "time": 1794493429076
+      }
+    },
+    {
+      "id": "us7000txst",
+      "geometry": { "type": "Point", "coordinates": [178.7626, 51.3114, 35] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "Rat Islands, Aleutian Islands, Alaska",
+        "time": 1794490797544
+      }
+    },
+    {
+      "id": "us7000txsu",
+      "geometry": { "type": "Point", "coordinates": [140.4573, 26.6533, 469] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "Bonin Islands, Japan region",
+        "time": 1794490674108
+      }
+    },
+    {
+      "id": "us7000txsr",
+      "geometry": { "type": "Point", "coordinates": [140.8035, 35.7429, 42.488] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "2 km WNW of Hasaki, Japan",
+        "time": 1794490038232
+      }
+    },
+    {
+      "id": "us7000txs5",
+      "geometry": { "type": "Point", "coordinates": [120.9934, -8.0655, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "83 km NE of Ruteng, Indonesia",
+        "time": 1794482189434
+      }
+    },
+    {
+      "id": "tx2026wgyidv",
+      "geometry": { "type": "Point", "coordinates": [-98.941, 28.874, 7.4904] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "15 km E of Pearsall, Texas",
+        "time": 1794475218804
+      }
+    },
+    {
+      "id": "us7000txrm",
+      "geometry": { "type": "Point", "coordinates": [-130.1063, 50.1892, 10] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "219 km WSW of Port McNeill, Canada",
+        "time": 1794472000018
+      }
+    },
+    {
+      "id": "us7000txrk",
+      "geometry": { "type": "Point", "coordinates": [-129.63, 44.448, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "off the coast of Oregon",
+        "time": 1794471448248
+      }
+    },
+    {
+      "id": "aka2026wkgnee",
+      "geometry": { "type": "Point", "coordinates": [-145.021, 69.334, 4.4] },
+      "properties": {
+        "mag": 3.7,
+        "magType": "ml",
+        "place": "104 km SSW of Kaktovik, Alaska",
+        "time": 1794462508757
+      }
+    },
+    {
+      "id": "us7000txus",
+      "geometry": { "type": "Point", "coordinates": [-175.4137, 51.0953, 18.742] },
+      "properties": {
+        "mag": 4,
+        "magType": "mb",
+        "place": "121 km SE of Adak, Alaska",
+        "time": 1794461926602
+      }
+    },
+    {
+      "id": "us6000uca5",
+      "geometry": { "type": "Point", "coordinates": [-178.0792, -17.9916, 612.36] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "275 km E of Levuka, Fiji",
+        "time": 1794459995034
+      }
+    },
+    {
+      "id": "us7000txqx",
+      "geometry": { "type": "Point", "coordinates": [143.6115, 40.3593, 33.039] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "155 km E of Noda, Japan",
+        "time": 1794456452379
+      }
+    },
+    {
+      "id": "aka2026wkcjcz",
+      "geometry": { "type": "Point", "coordinates": [-151.171, 60.246, 61.2] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "11 km SSE of Kasilof, Alaska",
+        "time": 1794455031447
+      }
+    },
+    {
+      "id": "us7000txqa",
+      "geometry": { "type": "Point", "coordinates": [156.6137, 50.4399, 74.47] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "43 km SE of Severo-Kuril\u2019sk, Russia",
+        "time": 1794446324576
+      }
+    },
+    {
+      "id": "us7000txpv",
+      "geometry": { "type": "Point", "coordinates": [-164.8071, 53.637, 37.007] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "84 km SE of Akutan, Alaska",
+        "time": 1794441646340
+      }
+    },
+    {
+      "id": "us7000txpu",
+      "geometry": { "type": "Point", "coordinates": [-164.7435, 53.5338, 36.874] },
+      "properties": {
+        "mag": 3.9,
+        "magType": "mb",
+        "place": "95 km SE of Akutan, Alaska",
+        "time": 1794441580557
+      }
+    },
+    {
+      "id": "us7000txpk",
+      "geometry": { "type": "Point", "coordinates": [87.8857, 27.8692, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "73 km NNW of Gyalshing, India",
+        "time": 1794438022433
+      }
+    },
+    {
+      "id": "us7000txpa",
+      "geometry": { "type": "Point", "coordinates": [-13.5344, -8.0337, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "97 km E of Georgetown, Saint Helena",
+        "time": 1794434621753
+      }
+    },
+    {
+      "id": "us7000txns",
+      "geometry": { "type": "Point", "coordinates": [-92.8416, 13.8629, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "99 km SW of Brisas Barra de Suchiate, Mexico",
+        "time": 1794431722202
+      }
+    },
+    {
+      "id": "us7000txni",
+      "geometry": { "type": "Point", "coordinates": [-69.3312, -19.6783, 112.957] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "41 km SSE of Cami\u00f1a, Chile",
+        "time": 1794429904390
+      }
+    },
+    {
+      "id": "us7000txnf",
+      "geometry": { "type": "Point", "coordinates": [-177.9398, -21.3542, 392.607] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "274 km W of Houma, Tonga",
+        "time": 1794429502718
+      }
+    },
+    {
+      "id": "aka2026wjnswr",
+      "geometry": { "type": "Point", "coordinates": [-152.443, 56.125, 5.8] },
+      "properties": {
+        "mag": 3.3,
+        "magType": "ml",
+        "place": "131 km SSE of Old Harbor, Alaska",
+        "time": 1794428686192
+      }
+    },
+    {
+      "id": "us7000txmx",
+      "geometry": { "type": "Point", "coordinates": [-179.8474, -23.5023, 527.582] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1794426621669
+      }
+    },
+    {
+      "id": "us7000txmq",
+      "geometry": { "type": "Point", "coordinates": [-74.2133, -41.5454, 18.804] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mww",
+        "place": "48 km NW of Ancud, Chile",
+        "time": 1794424875400
+      }
+    },
+    {
+      "id": "aka2026wjlejc",
+      "geometry": { "type": "Point", "coordinates": [-152.489, 56.136, 20.1] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "128 km SSE of Old Harbor, Alaska",
+        "time": 1794424099738
+      }
+    },
+    {
+      "id": "us7000txmi",
+      "geometry": { "type": "Point", "coordinates": [-70.4194, -28.6411, 113.235] },
+      "properties": {
+        "mag": 3.9,
+        "magType": "mb",
+        "place": "34 km ESE of Vallenar, Chile",
+        "time": 1794422516682
+      }
+    },
+    {
+      "id": "us7000txrd",
+      "geometry": { "type": "Point", "coordinates": [-80.0408, 7.2776, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "27 km S of Pedas\u00ed, Panama",
+        "time": 1794418599888
+      }
+    },
+    {
+      "id": "us7000txj0",
+      "geometry": { "type": "Point", "coordinates": [127.9126, -7.5532, 157.376] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "147 km NE of Lospalos, Timor Leste",
+        "time": 1794402485862
+      }
+    },
+    {
+      "id": "us7000txiz",
+      "geometry": { "type": "Point", "coordinates": [167.2586, -14.5029, 149.444] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "62 km NNE of Port-Olry, Vanuatu",
+        "time": 1794401106171
+      }
+    },
+    {
+      "id": "us7000txiw",
+      "geometry": { "type": "Point", "coordinates": [130.7831, -3.0211, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "168 km W of Fakfak, Indonesia",
+        "time": 1794399443633
+      }
+    },
+    {
+      "id": "us7000txiv",
+      "geometry": { "type": "Point", "coordinates": [130.1356, -3.1593, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "130 km E of Masohi, Indonesia",
+        "time": 1794399012680
+      }
+    },
+    {
+      "id": "pr71539058",
+      "geometry": { "type": "Point", "coordinates": [-64.9921666666667, 18.7298333333333, 35.89] },
+      "properties": {
+        "mag": 3.04,
+        "magType": "md",
+        "place": "43 km N of Charlotte Amalie, U.S. Virgin Islands",
+        "time": 1794396910000
+      }
+    },
+    {
+      "id": "us7000txim",
+      "geometry": { "type": "Point", "coordinates": [-97.7421, 16.4699, 35] },
+      "properties": {
+        "mag": 4,
+        "magType": "mb",
+        "place": "10 km NE of San Agust\u00edn Chayuco, Mexico",
+        "time": 1794394899315
+      }
+    },
+    {
+      "id": "us7000txil",
+      "geometry": { "type": "Point", "coordinates": [167.9671, -17.2615, 42.696] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "64 km NW of Port-Vila, Vanuatu",
+        "time": 1794394657101
+      }
+    },
+    {
+      "id": "us7000txi6",
+      "geometry": { "type": "Point", "coordinates": [34.7217, 29.4748, 10] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "23 km WSW of Eilat, Israel",
+        "time": 1794389092651
+      }
+    },
+    {
+      "id": "aka2026wiqmvw",
+      "geometry": { "type": "Point", "coordinates": [-135.225, 55.895, 3.4] },
+      "properties": {
+        "mag": 3.7,
+        "magType": "ml",
+        "place": "53 km SW of Port Alexander, Alaska",
+        "time": 1794386923021
+      }
+    },
+    {
+      "id": "us7000txi2",
+      "geometry": { "type": "Point", "coordinates": [86.5462, 34.149, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "western Xizang",
+        "time": 1794386872006
+      }
+    },
+    {
+      "id": "us7000txi0",
+      "geometry": { "type": "Point", "coordinates": [143.3322, 12.8418, 137.374] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "152 km WSW of Merizo Village, Guam",
+        "time": 1794386235449
+      }
+    },
+    {
+      "id": "us7000txhv",
+      "geometry": { "type": "Point", "coordinates": [-97.7508, 16.5979, 35] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "9 km W of La Humedad, Mexico",
+        "time": 1794384337278
+      }
+    },
+    {
+      "id": "aka2026wioent",
+      "geometry": { "type": "Point", "coordinates": [-150.562, 58.534, 40.2] },
+      "properties": {
+        "mag": 3.7,
+        "magType": "ml",
+        "place": "116 km SE of Port Graham, Alaska",
+        "time": 1794382725752
+      }
+    },
+    {
+      "id": "us7000txhn",
+      "geometry": { "type": "Point", "coordinates": [-72.2667, -33.2527, 26.346] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "64 km WSW of Valpara\u00edso, Chile",
+        "time": 1794380249738
+      }
+    },
+    {
+      "id": "us7000txgq",
+      "geometry": { "type": "Point", "coordinates": [14.2589, 38.7563, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mww",
+        "place": "54 km WNW of Malfa, Italy",
+        "time": 1794373928509
+      }
+    },
+    {
+      "id": "us7000txgi",
+      "geometry": { "type": "Point", "coordinates": [-169.6878, 52.5525, 42.206] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "70 km SW of Nikolski, Alaska",
+        "time": 1794370859883
+      }
+    },
+    {
+      "id": "us7000txgg",
+      "geometry": { "type": "Point", "coordinates": [142.185, 36.1492, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "130 km ENE of Hasaki, Japan",
+        "time": 1794369412372
+      }
+    },
+    {
+      "id": "us7000txfz",
+      "geometry": { "type": "Point", "coordinates": [-127.6912, 49.0876, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "130 km W of Tofino, Canada",
+        "time": 1794361527859
+      }
+    },
+    {
+      "id": "pr71539018",
+      "geometry": { "type": "Point", "coordinates": [-65.4208333333333, 18.7766666666667, 49.46] },
+      "properties": {
+        "mag": 3.09,
+        "magType": "md",
+        "place": "53 km NNW of Culebra, Puerto Rico",
+        "time": 1794361300180
+      }
+    },
+    {
+      "id": "us7000txfx",
+      "geometry": { "type": "Point", "coordinates": [159.2964, 53.2952, 92.146] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "51 km ENE of Petropavlovsk-Kamchatsky, Russia",
+        "time": 1794358881525
+      }
+    },
+    {
+      "id": "us7000txf9",
+      "geometry": { "type": "Point", "coordinates": [119.5624, 32.639, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "20 km SE of Gaoyou, China",
+        "time": 1794348910031
+      }
+    },
+    {
+      "id": "us7000txf8",
+      "geometry": { "type": "Point", "coordinates": [97.3387, 4.0067, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "63 km ENE of Blangpidie, Indonesia",
+        "time": 1794348546672
+      }
+    },
+    {
+      "id": "us7000tz2n",
+      "geometry": { "type": "Point", "coordinates": [-178.4211, -33.193, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "south of the Kermadec Islands",
+        "time": 1794346708014
+      }
+    },
+    {
+      "id": "us7000tz2m",
+      "geometry": { "type": "Point", "coordinates": [126.1367, 8.8879, 95.585] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "13 km SSW of Gamut, Philippines",
+        "time": 1794344869603
+      }
+    },
+    {
+      "id": "us7000tz2l",
+      "geometry": { "type": "Point", "coordinates": [-80.6047, -6.3301, 87.57] },
+      "properties": {
+        "mag": 4,
+        "magType": "mb",
+        "place": "69 km WNW of M\u00f3rrope, Peru",
+        "time": 1794343044664
+      }
+    },
+    {
+      "id": "us7000tz2h",
+      "geometry": { "type": "Point", "coordinates": [126.29, 9.6943, 78.212] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "20 km ESE of Union, Philippines",
+        "time": 1794338625792
+      }
+    },
+    {
+      "id": "us7000tz2c",
+      "geometry": { "type": "Point", "coordinates": [145.8037, 18.2933, 24.235] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "Pagan region, Northern Mariana Islands",
+        "time": 1794333002555
+      }
+    },
+    {
+      "id": "us7000tz2b",
+      "geometry": { "type": "Point", "coordinates": [155.3019, -8.0706, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "169 km W of Gizo, Solomon Islands",
+        "time": 1794331779023
+      }
+    },
+    {
+      "id": "us7000txbj",
+      "geometry": { "type": "Point", "coordinates": [165.7366, -10.8979, 48.333] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "20 km SSW of Lata, Solomon Islands",
+        "time": 1794325975256
+      }
+    },
+    {
+      "id": "us7000txbc",
+      "geometry": { "type": "Point", "coordinates": [-90.8183, 13.6248, 58.303] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mww",
+        "place": "33 km S of Puerto San Jos\u00e9, Guatemala",
+        "time": 1794324238640
+      }
+    },
+    {
+      "id": "us7000txb6",
+      "geometry": { "type": "Point", "coordinates": [106.9355, -6.9525, 101.214] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "3 km SSE of Sukabumi, Indonesia",
+        "time": 1794321096388
+      }
+    },
+    {
+      "id": "us7000txay",
+      "geometry": { "type": "Point", "coordinates": [-17.2814, 64.7124, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "111 km WNW of H\u00f6fn, Iceland",
+        "time": 1794317873102
+      }
+    },
+    {
+      "id": "us7000txbm",
+      "geometry": { "type": "Point", "coordinates": [-170.4818, 52.306, 35] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "130 km WSW of Nikolski, Alaska",
+        "time": 1794308678179
+      }
+    },
+    {
+      "id": "us7000txbk",
+      "geometry": { "type": "Point", "coordinates": [-170.4282, 52.3049, 35] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "127 km SW of Nikolski, Alaska",
+        "time": 1794305127307
+      }
+    },
+    {
+      "id": "pr2026314000",
+      "geometry": { "type": "Point", "coordinates": [-65.2388, 18.9285, 14] },
+      "properties": {
+        "mag": 3.68,
+        "magType": "md",
+        "place": "69 km N of Culebra, Puerto Rico",
+        "time": 1794300484860
+      }
+    },
+    {
+      "id": "uw714136981",
+      "geometry": { "type": "Point", "coordinates": [-117.038, 45.2591666666667, 11.67] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "ml",
+        "place": "18 km SE of Joseph, Oregon",
+        "time": 1794296572650
+      }
+    },
+    {
+      "id": "us7000tx9i",
+      "geometry": { "type": "Point", "coordinates": [140.106, 34.2001, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "89 km SSE of Tateyama, Japan",
+        "time": 1794292608820
+      }
+    },
+    {
+      "id": "pr71538948",
+      "geometry": { "type": "Point", "coordinates": [-68.5245, 18.446, 52.01] },
+      "properties": {
+        "mag": 3.41,
+        "magType": "md",
+        "place": "11 km NE of Boca de Yuma, Dominican Republic",
+        "time": 1794290213630
+      }
+    },
+    {
+      "id": "us7000tz1x",
+      "geometry": { "type": "Point", "coordinates": [165.8126, -10.7674, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "4 km SSE of Lata, Solomon Islands",
+        "time": 1794289422955
+      }
+    },
+    {
+      "id": "us7000tx96",
+      "geometry": { "type": "Point", "coordinates": [141.5321, 36.3452, 35] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "83 km ESE of Takahagi, Japan",
+        "time": 1794288008393
+      }
+    },
+    {
+      "id": "pr71538938",
+      "geometry": { "type": "Point", "coordinates": [-66.2018333333333, 18.9285, 23.42] },
+      "properties": {
+        "mag": 3.01,
+        "magType": "md",
+        "place": "52 km N of San Juan, Puerto Rico",
+        "time": 1794285184260
+      }
+    },
+    {
+      "id": "us7000tx8z",
+      "geometry": { "type": "Point", "coordinates": [165.3377, -11.1105, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "65 km SW of Lata, Solomon Islands",
+        "time": 1794285017109
+      }
+    },
+    {
+      "id": "us7000txs8",
+      "geometry": { "type": "Point", "coordinates": [84.6465, -41.7288, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "southeast Indian Ridge",
+        "time": 1794284038010
+      }
+    },
+    {
+      "id": "aka2026wgjfnu",
+      "geometry": { "type": "Point", "coordinates": [-136.446, 66.22, 16.8] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "265 km SSW of Inuvik, Canada",
+        "time": 1794280213167
+      }
+    },
+    {
+      "id": "pr71538933",
+      "geometry": { "type": "Point", "coordinates": [-65.0016666666667, 18.8905, 21.89] },
+      "properties": {
+        "mag": 3.07,
+        "magType": "md",
+        "place": "61 km N of Charlotte Amalie, U.S. Virgin Islands",
+        "time": 1794276933390
+      }
+    },
+    {
+      "id": "us7000tx8i",
+      "geometry": { "type": "Point", "coordinates": [65.2936, 86.7236, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "north of Franz Josef Land",
+        "time": 1794276003024
+      }
+    },
+    {
+      "id": "us7000tx8b",
+      "geometry": { "type": "Point", "coordinates": [-68.7883, 19.4347, 10] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "56 km NNE of Miches, Dominican Republic",
+        "time": 1794275530427
+      }
+    },
+    {
+      "id": "us7000tz1r",
+      "geometry": { "type": "Point", "coordinates": [123.8294, -0.3148, 80.987] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "108 km SW of Modisi, Indonesia",
+        "time": 1794271753305
+      }
+    },
+    {
+      "id": "us7000txa7",
+      "geometry": { "type": "Point", "coordinates": [138.8149, -2.3778, 35] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "203 km W of Abepura, Indonesia",
+        "time": 1794269482956
+      }
+    },
+    {
+      "id": "us7000tx9y",
+      "geometry": { "type": "Point", "coordinates": [-23.7994, -56.7322, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "South Sandwich Islands region",
+        "time": 1794267612774
+      }
+    },
+    {
+      "id": "us7000tx7n",
+      "geometry": { "type": "Point", "coordinates": [71.7181, 37.4777, 138.715] },
+      "properties": {
+        "mag": 4,
+        "magType": "mb",
+        "place": "14 km E of Khorugh, Tajikistan",
+        "time": 1794266104191
+      }
+    },
+    {
+      "id": "us7000tx7h",
+      "geometry": { "type": "Point", "coordinates": [171.727, 52.9178, 10] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "98 km W of Attu Station, Alaska",
+        "time": 1794261788409
+      }
+    },
+    {
+      "id": "us7000tx9s",
+      "geometry": { "type": "Point", "coordinates": [123.9077, -8.5095, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "92 km NW of Pante Makasar, Timor Leste",
+        "time": 1794258394706
+      }
+    },
+    {
+      "id": "aka2026wfwbix",
+      "geometry": { "type": "Point", "coordinates": [-152.193, 62.693, 5] },
+      "properties": {
+        "mag": 3.3,
+        "magType": "ml",
+        "place": "76 km WNW of Petersville, Alaska",
+        "time": 1794256578548
+      }
+    },
+    {
+      "id": "us7000tx6m",
+      "geometry": { "type": "Point", "coordinates": [165.9539, -14.2428, 10] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "149 km NW of Port-Olry, Vanuatu",
+        "time": 1794252474236
+      }
+    },
+    {
+      "id": "us7000tx6l",
+      "geometry": { "type": "Point", "coordinates": [-179.9613, -23.675, 519.944] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1794251387863
+      }
+    },
+    {
+      "id": "us7000tx6j",
+      "geometry": { "type": "Point", "coordinates": [163.8048, -10.5301, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "206 km E of Kirakira, Solomon Islands",
+        "time": 1794250305515
+      }
+    },
+    {
+      "id": "aka2026wfslmi",
+      "geometry": { "type": "Point", "coordinates": [-140.269, 59.986, 8.8] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "57 km NNW of Yakutat, Alaska",
+        "time": 1794250088388
+      }
+    },
+    {
+      "id": "aka2026wfqnyl",
+      "geometry": { "type": "Point", "coordinates": [-153.911, 57.407, 23.5] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "15 km SSE of Larsen Bay, Alaska",
+        "time": 1794246655148
+      }
+    },
+    {
+      "id": "pr2026313001",
+      "geometry": { "type": "Point", "coordinates": [-68.7958, 17.974, 79] },
+      "properties": {
+        "mag": 3.63,
+        "magType": "md",
+        "place": "48 km SSW of Boca de Yuma, Dominican Republic",
+        "time": 1794245568450
+      }
+    },
+    {
+      "id": "us7000tx4r",
+      "geometry": { "type": "Point", "coordinates": [130.4053, -3.1826, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "160 km E of Masohi, Indonesia",
+        "time": 1794243162473
+      }
+    },
+    {
+      "id": "us7000txa8",
+      "geometry": { "type": "Point", "coordinates": [130.1979, -3.1166, 10] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "138 km E of Masohi, Indonesia",
+        "time": 1794241563076
+      }
+    },
+    {
+      "id": "us7000tx4g",
+      "geometry": { "type": "Point", "coordinates": [140.1851, 43.7978, 221.769] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "68 km NNW of Furubira, Japan",
+        "time": 1794240373273
+      }
+    },
+    {
+      "id": "tx2026wbxhyh",
+      "geometry": { "type": "Point", "coordinates": [-104.415, 31.655, 5.5872] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "57 km S of Whites City, New Mexico",
+        "time": 1794238066066
+      }
+    },
+    {
+      "id": "us7000tx47",
+      "geometry": { "type": "Point", "coordinates": [74.3722, -28.1489, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "Mid-Indian Ridge",
+        "time": 1794236673857
+      }
+    },
+    {
+      "id": "us7000tz0q",
+      "geometry": { "type": "Point", "coordinates": [74.2467, -28.1333, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "Mid-Indian Ridge",
+        "time": 1794236504684
+      }
+    },
+    {
+      "id": "us7000tx48",
+      "geometry": { "type": "Point", "coordinates": [130.4662, -3.1994, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "166 km E of Masohi, Indonesia",
+        "time": 1794236147929
+      }
+    },
+    {
+      "id": "us7000tz0p",
+      "geometry": { "type": "Point", "coordinates": [147.4068, -5.7489, 144.748] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "101 km NNW of Finschhafen, Papua New Guinea",
+        "time": 1794235802489
+      }
+    },
+    {
+      "id": "us7000tz0n",
+      "geometry": { "type": "Point", "coordinates": [165.6646, -10.87, 35] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "21 km SW of Lata, Solomon Islands",
+        "time": 1794232620586
+      }
+    },
+    {
+      "id": "us7000txfs",
+      "geometry": { "type": "Point", "coordinates": [178.3639, 52.0309, 10.238] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "Rat Islands, Aleutian Islands, Alaska",
+        "time": 1794229924601
+      }
+    },
+    {
+      "id": "us7000tx3n",
+      "geometry": { "type": "Point", "coordinates": [35.576, 37.4655, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mww",
+        "place": "18 km ESE of Alada\u011f, Turkey",
+        "time": 1794227298768
+      }
+    },
+    {
+      "id": "us7000tx3c",
+      "geometry": { "type": "Point", "coordinates": [127.8171, 4.1806, 88.455] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "272 km N of Tobelo, Indonesia",
+        "time": 1794223506307
+      }
+    },
+    {
+      "id": "us7000tx3a",
+      "geometry": { "type": "Point", "coordinates": [73.1537, 38.0801, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "71 km W of Murghob, Tajikistan",
+        "time": 1794220397133
+      }
+    },
+    {
+      "id": "us7000tx39",
+      "geometry": { "type": "Point", "coordinates": [-178.2609, -18.1132, 603.808] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "256 km E of Levuka, Fiji",
+        "time": 1794219673070
+      }
+    },
+    {
+      "id": "us7000tx36",
+      "geometry": { "type": "Point", "coordinates": [179.4402, -25.6095, 536.772] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1794218926122
+      }
+    },
+    {
+      "id": "us7000tx34",
+      "geometry": { "type": "Point", "coordinates": [130.5501, -2.9862, 10] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "179 km E of Masohi, Indonesia",
+        "time": 1794218018186
+      }
+    },
+    {
+      "id": "us7000tz0h",
+      "geometry": { "type": "Point", "coordinates": [129.8692, -4.792, 163.314] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "192 km SSE of Amahai, Indonesia",
+        "time": 1794216872919
+      }
+    },
+    {
+      "id": "us7000tx2y",
+      "geometry": { "type": "Point", "coordinates": [86.1193, 33.7546, 10] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "western Xizang",
+        "time": 1794215476115
+      }
+    },
+    {
+      "id": "aka2026wexuhj",
+      "geometry": { "type": "Point", "coordinates": [-150.64, 62.926, 112.3] },
+      "properties": {
+        "mag": 3.5,
+        "magType": "ml",
+        "place": "48 km N of Petersville, Alaska",
+        "time": 1794212915483
+      }
+    },
+    {
+      "id": "us7000tx2q",
+      "geometry": { "type": "Point", "coordinates": [-67.707, -27.868, 10] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "23 km SSW of Fiambal\u00e1, Argentina",
+        "time": 1794212533253
+      }
+    },
+    {
+      "id": "pr2026313000",
+      "geometry": { "type": "Point", "coordinates": [-67.4155, 18.9358, 18] },
+      "properties": {
+        "mag": 3.51,
+        "magType": "md",
+        "place": "59 km NW of San Antonio, Puerto Rico",
+        "time": 1794208755990
+      }
+    },
+    {
+      "id": "us7000tx2g",
+      "geometry": { "type": "Point", "coordinates": [160.9753, 55.8343, 154.988] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "54 km S of Klyuchi, Russia",
+        "time": 1794207853845
+      }
+    },
+    {
+      "id": "us7000tx1w",
+      "geometry": { "type": "Point", "coordinates": [177.6746, -36.6221, 169.371] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "121 km NNW of Hicks Bay, New Zealand",
+        "time": 1794203417844
+      }
+    },
+    {
+      "id": "us7000tx1p",
+      "geometry": { "type": "Point", "coordinates": [165.6396, -10.912, 10] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "26 km SW of Lata, Solomon Islands",
+        "time": 1794201416823
+      }
+    },
+    {
+      "id": "us7000tx1i",
+      "geometry": { "type": "Point", "coordinates": [141.4485, 36.4941, 35] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "69 km ESE of Takahagi, Japan",
+        "time": 1794200513640
+      }
+    },
+    {
+      "id": "aka2026weques",
+      "geometry": { "type": "Point", "coordinates": [-166.568, 53.077, 6.2] },
+      "properties": {
+        "mag": 3.3,
+        "magType": "ml",
+        "place": "88 km S of Unalaska, Alaska",
+        "time": 1794200312908
+      }
+    },
+    {
+      "id": "us7000tx1d",
+      "geometry": { "type": "Point", "coordinates": [-127.149, 40.908, 10] },
+      "properties": {
+        "mag": 3.8,
+        "magType": "mb",
+        "place": "246 km W of Ferndale, California",
+        "time": 1794199764543
+      }
+    },
+    {
+      "id": "us7000tx11",
+      "geometry": { "type": "Point", "coordinates": [73.2982, 39.2878, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "93 km ESE of Kyzyl-Eshme, Kyrgyzstan",
+        "time": 1794192030825
+      }
+    },
+    {
+      "id": "us7000txn4",
+      "geometry": { "type": "Point", "coordinates": [-176.7581, 51.2107, 35] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "74 km S of Adak, Alaska",
+        "time": 1794190925529
+      }
+    },
+    {
+      "id": "us7000tx0x",
+      "geometry": { "type": "Point", "coordinates": [-176.9956, -25.1858, 136.311] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1794190917196
+      }
+    },
+    {
+      "id": "us7000tx0v",
+      "geometry": { "type": "Point", "coordinates": [130.3789, 29.603, 51.061] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "70 km S of Yudomari, Japan",
+        "time": 1794190338837
+      }
+    },
+    {
+      "id": "us7000tx0p",
+      "geometry": { "type": "Point", "coordinates": [38.9032, 16.1882, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "66 km NE of Keren, Eritrea",
+        "time": 1794186691598
+      }
+    },
+    {
+      "id": "us7000tyzz",
+      "geometry": { "type": "Point", "coordinates": [-177.719, -20.0508, 552.073] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "280 km WNW of Houma, Tonga",
+        "time": 1794185957827
+      }
+    },
+    {
+      "id": "us7000tym1",
+      "geometry": { "type": "Point", "coordinates": [179.6314, -26.1874, 506.144] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1794181841510
+      }
+    },
+    {
+      "id": "us7000tym2",
+      "geometry": { "type": "Point", "coordinates": [144.9626, 20.8272, 142.919] },
+      "properties": {
+        "mag": 4,
+        "magType": "mb",
+        "place": "Maug Islands region, Northern Mariana Islands",
+        "time": 1794181718098
+      }
+    },
+    {
+      "id": "us7000twzn",
+      "geometry": { "type": "Point", "coordinates": [151.5084, -5.1157, 122.994] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "120 km SW of Kokopo, Papua New Guinea",
+        "time": 1794177010471
+      }
+    },
+    {
+      "id": "us7000twzl",
+      "geometry": { "type": "Point", "coordinates": [141.6855, 36.18, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "91 km ENE of Hasaki, Japan",
+        "time": 1794176740259
+      }
+    },
+    {
+      "id": "us7000twzm",
+      "geometry": { "type": "Point", "coordinates": [143.7332, 21.5499, 227.968] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "Mariana Islands region",
+        "time": 1794176646435
+      }
+    },
+    {
+      "id": "us7000tx42",
+      "geometry": { "type": "Point", "coordinates": [32.3057, -3.6055, 10] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "13 km ENE of Masumbwe, Tanzania",
+        "time": 1794175639580
+      }
+    },
+    {
+      "id": "us7000tylw",
+      "geometry": { "type": "Point", "coordinates": [46.5819, -39.2119, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "Southwest Indian Ridge",
+        "time": 1794172265194
+      }
+    },
+    {
+      "id": "us7000twz2",
+      "geometry": { "type": "Point", "coordinates": [141.937, 38.3782, 55.699] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mwr",
+        "place": "43 km E of Onagawa Ch\u014d, Japan",
+        "time": 1794168990347
+      }
+    },
+    {
+      "id": "aka2026wdzewo",
+      "geometry": { "type": "Point", "coordinates": [-147.838, 62.191, 22.9] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "43 km NNW of Glacier View, Alaska",
+        "time": 1794168669968
+      }
+    },
+    {
+      "id": "us7000twyw",
+      "geometry": { "type": "Point", "coordinates": [-128.5405, 44.0286, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "off the coast of Oregon",
+        "time": 1794165631718
+      }
+    },
+    {
+      "id": "us7000twyd",
+      "geometry": { "type": "Point", "coordinates": [128.7305, 2.5843, 227.092] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "124 km NE of Tobelo, Indonesia",
+        "time": 1794156313041
+      }
+    },
+    {
+      "id": "us7000twyc",
+      "geometry": { "type": "Point", "coordinates": [-36.996, 7.6558, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "central Mid-Atlantic Ridge",
+        "time": 1794155605064
+      }
+    },
+    {
+      "id": "pr71538833",
+      "geometry": { "type": "Point", "coordinates": [-64.262, 18.9528333333333, 21.53] },
+      "properties": {
+        "mag": 3.42,
+        "magType": "md",
+        "place": "88 km NE of Cruz Bay, U.S. Virgin Islands",
+        "time": 1794149546630
+      }
+    },
+    {
+      "id": "aka2026wdoizt",
+      "geometry": { "type": "Point", "coordinates": [-150.093, 60.696, 33.3] },
+      "properties": {
+        "mag": 3.5,
+        "magType": "ml",
+        "place": "27 km NNW of Cooper Landing, Alaska",
+        "time": 1794149163379
+      }
+    },
+    {
+      "id": "nn00926785",
+      "geometry": { "type": "Point", "coordinates": [-115.3064, 38.9507, 4.7569] },
+      "properties": {
+        "mag": 3.54,
+        "magType": "ml",
+        "place": "21 km W of Preston, Nevada",
+        "time": 1794146117032
+      }
+    },
+    {
+      "id": "us7000tyll",
+      "geometry": { "type": "Point", "coordinates": [141.5835, 30.6398, 35] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "Izu Islands, Japan region",
+        "time": 1794144118376
+      }
+    },
+    {
+      "id": "us7000tylj",
+      "geometry": { "type": "Point", "coordinates": [64.3044, -27.8029, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "Southwest Indian Ridge",
+        "time": 1794142921104
+      }
+    },
+    {
+      "id": "pr71538818",
+      "geometry": { "type": "Point", "coordinates": [-65.1911666666667, 19.4585, 46.62] },
+      "properties": {
+        "mag": 3.37,
+        "magType": "md",
+        "place": "126 km NNW of Charlotte Amalie, U.S. Virgin Islands",
+        "time": 1794141442680
+      }
+    },
+    {
+      "id": "us7000twxn",
+      "geometry": { "type": "Point", "coordinates": [64.3365, -27.791, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "Southwest Indian Ridge",
+        "time": 1794140957107
+      }
+    },
+    {
+      "id": "us7000twxf",
+      "geometry": { "type": "Point", "coordinates": [-70.0799, -19.6581, 67.912] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mww",
+        "place": "49 km NW of Huara, Chile",
+        "time": 1794139112215
+      }
+    },
+    {
+      "id": "aka2026wdhdwc",
+      "geometry": { "type": "Point", "coordinates": [-154.807, 57.129, 5] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "43 km WNW of Akhiok, Alaska",
+        "time": 1794136208645
+      }
+    },
+    {
+      "id": "pr2026312001",
+      "geometry": { "type": "Point", "coordinates": [-65.3985, 19.4673, 71] },
+      "properties": {
+        "mag": 3.58,
+        "magType": "md",
+        "place": "124 km NNE of Vieques, Puerto Rico",
+        "time": 1794135420380
+      }
+    },
+    {
+      "id": "us7000twx5",
+      "geometry": { "type": "Point", "coordinates": [-104.9792, 37.0716, 7.007] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "10 km SSE of Stonewall Gap, Colorado",
+        "time": 1794134065804
+      }
+    },
+    {
+      "id": "us7000twx1",
+      "geometry": { "type": "Point", "coordinates": [143.5255, 39.8848, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "138 km E of Miyako, Japan",
+        "time": 1794129815771
+      }
+    },
+    {
+      "id": "pr71538788",
+      "geometry": { "type": "Point", "coordinates": [-66.8491666666667, 17.9146666666667, 8.36] },
+      "properties": {
+        "mag": 3,
+        "magType": "md",
+        "place": "8 km SSE of Maria Antonia, Puerto Rico",
+        "time": 1794123958440
+      }
+    },
+    {
+      "id": "us7000twwm",
+      "geometry": { "type": "Point", "coordinates": [47.311, 33.2384, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "12 km NNW of Darreh Shahr, Iran",
+        "time": 1794123111776
+      }
+    },
+    {
+      "id": "us7000twwg",
+      "geometry": { "type": "Point", "coordinates": [-66.8332, -24.0848, 221.639] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "54 km WNW of San Antonio de los Cobres, Argentina",
+        "time": 1794121369673
+      }
+    },
+    {
+      "id": "pr2026312000",
+      "geometry": { "type": "Point", "coordinates": [-67.7595, 19.5271, 16] },
+      "properties": {
+        "mag": 3.7,
+        "magType": "md",
+        "place": "124 km NNE of Punta Cana, Dominican Republic",
+        "time": 1794119419740
+      }
+    },
+    {
+      "id": "aka2026wcwnow",
+      "geometry": { "type": "Point", "coordinates": [-150.696, 61.423, 71.2] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "16 km SW of Susitna, Alaska",
+        "time": 1794117095337
+      }
+    },
+    {
+      "id": "aka2026wcvkhi",
+      "geometry": { "type": "Point", "coordinates": [-144.309, 67.269, 3.5] },
+      "properties": {
+        "mag": 3.8,
+        "magType": "ml",
+        "place": "73 km NNW of Chalkyitsik, Alaska",
+        "time": 1794115058948
+      }
+    },
+    {
+      "id": "aka2026wcrggv",
+      "geometry": { "type": "Point", "coordinates": [-172.499, 51.942, 29.2] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "120 km ESE of Atka, Alaska",
+        "time": 1794107579026
+      }
+    },
+    {
+      "id": "us7000twvh",
+      "geometry": { "type": "Point", "coordinates": [73.1675, 38.4508, 95.394] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "76 km WNW of Murghob, Tajikistan",
+        "time": 1794106210197
+      }
+    },
+    {
+      "id": "aka2026wcpkkr",
+      "geometry": { "type": "Point", "coordinates": [-161.533, 54.332, 0.8] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "95 km SSE of King Cove, Alaska",
+        "time": 1794104280336
+      }
+    },
+    {
+      "id": "us7000twvb",
+      "geometry": { "type": "Point", "coordinates": [130.4721, 32.5014, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "11 km W of Honmachi, Japan",
+        "time": 1794102796193
+      }
+    },
+    {
+      "id": "us7000twuw",
+      "geometry": { "type": "Point", "coordinates": [73.2495, 39.3576, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "87 km ESE of Kyzyl-Eshme, Kyrgyzstan",
+        "time": 1794095888562
+      }
+    },
+    {
+      "id": "us7000twur",
+      "geometry": { "type": "Point", "coordinates": [123.6541, 6.706, 607.007] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "41 km WSW of Gadung, Philippines",
+        "time": 1794093935852
+      }
+    },
+    {
+      "id": "us7000twuq",
+      "geometry": { "type": "Point", "coordinates": [-91.4602, 13.5083, 34.237] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "77 km SW of La Gomera, Guatemala",
+        "time": 1794093755649
+      }
+    },
+    {
+      "id": "us7000twum",
+      "geometry": { "type": "Point", "coordinates": [73.2801, 39.3146, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "91 km ESE of Kyzyl-Eshme, Kyrgyzstan",
+        "time": 1794093273811
+      }
+    },
+    {
+      "id": "pr71538728",
+      "geometry": { "type": "Point", "coordinates": [-67.0623333333333, 17.9668333333333, 8.03] },
+      "properties": {
+        "mag": 3.02,
+        "magType": "md",
+        "place": "1 km WSW of La Parguera, Puerto Rico",
+        "time": 1794088034980
+      }
+    },
+    {
+      "id": "us7000twu1",
+      "geometry": { "type": "Point", "coordinates": [128.5121, -3.905, 136.656] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "43 km ESE of Ambon, Indonesia",
+        "time": 1794084938512
+      }
+    },
+    {
+      "id": "us7000twtv",
+      "geometry": { "type": "Point", "coordinates": [-87.0544, 11.526, 37.054] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "65 km WSW of Masachapa, Nicaragua",
+        "time": 1794081310891
+      }
+    },
+    {
+      "id": "aka2026wcchuf",
+      "geometry": { "type": "Point", "coordinates": [-164.782, 52.377, 27.9] },
+      "properties": {
+        "mag": 4,
+        "magType": "ml",
+        "place": "203 km SE of Unalaska, Alaska",
+        "time": 1794080708410
+      }
+    },
+    {
+      "id": "us7000ty2u",
+      "geometry": { "type": "Point", "coordinates": [-178.646, -20.816, 587.935] },
+      "properties": { "mag": 4, "magType": "mb", "place": "Fiji region", "time": 1794077700377 }
+    },
+    {
+      "id": "uu80163521",
+      "geometry": { "type": "Point", "coordinates": [-112.895166666667, 38.4783333333333, 3.5] },
+      "properties": {
+        "mag": 3.12,
+        "magType": "ml",
+        "place": "13 km NE of Milford, Utah",
+        "time": 1794075056160
+      }
+    },
+    {
+      "id": "us7000twt8",
+      "geometry": { "type": "Point", "coordinates": [-81.1439, -1.8505, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "45 km NNW of Salinas, Ecuador",
+        "time": 1794071858931
+      }
+    },
+    {
+      "id": "us7000twsy",
+      "geometry": { "type": "Point", "coordinates": [-79.921, 7.5067, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "11 km ESE of Pedas\u00ed, Panama",
+        "time": 1794067312257
+      }
+    },
+    {
+      "id": "us7000twsz",
+      "geometry": { "type": "Point", "coordinates": [170.0629, -22.5556, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "251 km ESE of Tadine, New Caledonia",
+        "time": 1794066900079
+      }
+    },
+    {
+      "id": "us7000twss",
+      "geometry": { "type": "Point", "coordinates": [14.7685, -19.7325, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "73 km NNW of Khorixas, Namibia",
+        "time": 1794064970507
+      }
+    },
+    {
+      "id": "us7000twsp",
+      "geometry": { "type": "Point", "coordinates": [-178.7119, -20.8363, 571.898] },
+      "properties": { "mag": 4.5, "magType": "mb", "place": "Fiji region", "time": 1794063945113 }
+    },
+    {
+      "id": "ok2026vvhm",
+      "geometry": { "type": "Point", "coordinates": [-98.043, 35.61033333, 5.8] },
+      "properties": {
+        "mag": 3.38,
+        "magType": "ml",
+        "place": "6 km E of Calumet, Oklahoma",
+        "time": 1794052423259
+      }
+    },
+    {
+      "id": "us7000twrt",
+      "geometry": { "type": "Point", "coordinates": [-12.8595, -18.1601, 10] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "southern Mid-Atlantic Ridge",
+        "time": 1794051338547
+      }
+    },
+    {
+      "id": "us7000ty2j",
+      "geometry": { "type": "Point", "coordinates": [141.3659, 36.395, 55.383] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "68 km ESE of Hitachi, Japan",
+        "time": 1794049521202
+      }
+    },
+    {
+      "id": "us7000twrp",
+      "geometry": { "type": "Point", "coordinates": [-68.6701, -21.6315, 106.801] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "62 km SW of Ollag\u00fce, Chile",
+        "time": 1794048792538
+      }
+    },
+    {
+      "id": "us7000twrh",
+      "geometry": { "type": "Point", "coordinates": [125.7724, 0.0089, 36.811] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "156 km ESE of Modisi, Indonesia",
+        "time": 1794044852997
+      }
+    },
+    {
+      "id": "us7000ty2h",
+      "geometry": { "type": "Point", "coordinates": [152.7886, -5.4363, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "133 km SSE of Kokopo, Papua New Guinea",
+        "time": 1794043362204
+      }
+    },
+    {
+      "id": "pr71538678",
+      "geometry": { "type": "Point", "coordinates": [-65.4421666666667, 18.5723333333333, 71.09] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "md",
+        "place": "33 km NNW of Culebra, Puerto Rico",
+        "time": 1794040851000
+      }
+    },
+    {
+      "id": "pr71538673",
+      "geometry": { "type": "Point", "coordinates": [-67.4431666666667, 19.0335, 21.17] },
+      "properties": {
+        "mag": 3.23,
+        "magType": "md",
+        "place": "70 km NNW of San Antonio, Puerto Rico",
+        "time": 1794040690080
+      }
+    },
+    {
+      "id": "us7000twx2",
+      "geometry": { "type": "Point", "coordinates": [-37.0988, 7.8995, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "central Mid-Atlantic Ridge",
+        "time": 1794037591713
+      }
+    },
+    {
+      "id": "us7000twqw",
+      "geometry": { "type": "Point", "coordinates": [-25.8077, -57.9857, 102.798] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "South Sandwich Islands region",
+        "time": 1794035650751
+      }
+    },
+    {
+      "id": "us7000twqr",
+      "geometry": { "type": "Point", "coordinates": [94.8483, 6.0594, 83.138] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "55 km WNW of Sabang, Indonesia",
+        "time": 1794034447341
+      }
+    },
+    {
+      "id": "us7000twqe",
+      "geometry": { "type": "Point", "coordinates": [-75.8536, -9.9059, 112.587] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "32 km ESE of Churubamba, Peru",
+        "time": 1794029815336
+      }
+    },
+    {
+      "id": "uu80163296",
+      "geometry": { "type": "Point", "coordinates": [-109.886166666667, 41.5646666666667, -1.97] },
+      "properties": {
+        "mag": 3.13,
+        "magType": "ml",
+        "place": "3 km NW of Little America, Wyoming",
+        "time": 1794011863880
+      }
+    },
+    {
+      "id": "us7000twp3",
+      "geometry": { "type": "Point", "coordinates": [148.1062, 44.5682, 78.827] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "75 km SSE of Kuril\u2019sk, Russia",
+        "time": 1794006945408
+      }
+    },
+    {
+      "id": "us7000ty27",
+      "geometry": { "type": "Point", "coordinates": [127.2777, 1.6398, 79.947] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "82 km W of Tobelo, Indonesia",
+        "time": 1794006591771
+      }
+    },
+    {
+      "id": "us7000ty25",
+      "geometry": { "type": "Point", "coordinates": [171.5283, -23.2554, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "southeast of the Loyalty Islands",
+        "time": 1794005856054
+      }
+    },
+    {
+      "id": "us7000twqm",
+      "geometry": { "type": "Point", "coordinates": [144.9958, 13.6294, 122.971] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "15 km NE of Yigo Village, Guam",
+        "time": 1794004675815
+      }
+    },
+    {
+      "id": "aka2026waikur",
+      "geometry": { "type": "Point", "coordinates": [178.343, 52.043, 13] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "Rat Islands, Aleutian Islands, Alaska",
+        "time": 1793998154526
+      }
+    },
+    {
+      "id": "aka2026wahwse",
+      "geometry": { "type": "Point", "coordinates": [-173.194, 51.713, 33.6] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "87 km SE of Atka, Alaska",
+        "time": 1793997178099
+      }
+    },
+    {
+      "id": "aka2026wahreq",
+      "geometry": { "type": "Point", "coordinates": [-151.887, 59.469, 58.3] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "10 km WNW of Seldovia, Alaska",
+        "time": 1793996795721
+      }
+    },
+    {
+      "id": "us7000twp1",
+      "geometry": { "type": "Point", "coordinates": [-175.6674, 52.3935, 246.155] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "87 km NE of Adak, Alaska",
+        "time": 1793995213886
+      }
+    },
+    {
+      "id": "us7000twmr",
+      "geometry": { "type": "Point", "coordinates": [120.4589, -1.2393, 10] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "36 km WNW of Poso, Indonesia",
+        "time": 1793992021269
+      }
+    },
+    {
+      "id": "us7000twmq",
+      "geometry": { "type": "Point", "coordinates": [-79.9371, 7.5079, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "10 km ESE of Pedas\u00ed, Panama",
+        "time": 1793992014642
+      }
+    },
+    {
+      "id": "us7000txp4",
+      "geometry": { "type": "Point", "coordinates": [-163.86, 53.7254, 35] },
+      "properties": {
+        "mag": 3.3,
+        "magType": "ml",
+        "place": "128 km SSW of False Pass, Alaska",
+        "time": 1793990296594
+      }
+    },
+    {
+      "id": "us7000txp0",
+      "geometry": { "type": "Point", "coordinates": [-160.5033, 54.4871, 10] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "94 km S of Sand Point, Alaska",
+        "time": 1793988304843
+      }
+    },
+    {
+      "id": "us7000twkp",
+      "geometry": { "type": "Point", "coordinates": [-178.191, -18.0741, 567.218] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "263 km E of Levuka, Fiji",
+        "time": 1793987605873
+      }
+    },
+    {
+      "id": "us7000twwz",
+      "geometry": { "type": "Point", "coordinates": [-124.6868, -55.9706, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "southern East Pacific Rise",
+        "time": 1793983535606
+      }
+    },
+    {
+      "id": "us7000twhq",
+      "geometry": { "type": "Point", "coordinates": [26.4639, 34.2194, 38.196] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "110 km SE of Ier\u00e1petra, Greece",
+        "time": 1793978817295
+      }
+    },
+    {
+      "id": "us7000twhh",
+      "geometry": { "type": "Point", "coordinates": [140.3258, 26.8889, 441.316] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "Bonin Islands, Japan region",
+        "time": 1793973175780
+      }
+    },
+    {
+      "id": "pr71538608",
+      "geometry": { "type": "Point", "coordinates": [-65.4766666666667, 18.8921666666667, 60.24] },
+      "properties": {
+        "mag": 3.15,
+        "magType": "md",
+        "place": "62 km NNE of Luquillo, Puerto Rico",
+        "time": 1793962781730
+      }
+    },
+    {
+      "id": "aka2026vzoqkz",
+      "geometry": { "type": "Point", "coordinates": [-162.871, 53.597, 7.3] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "144 km SSE of False Pass, Alaska",
+        "time": 1793962565128
+      }
+    },
+    {
+      "id": "us7000twg8",
+      "geometry": { "type": "Point", "coordinates": [98.719, -2.0748, 10] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "96 km W of Tuapejat, Indonesia",
+        "time": 1793961047009
+      }
+    },
+    {
+      "id": "us7000twg3",
+      "geometry": { "type": "Point", "coordinates": [157.9848, 52.1543, 100.853] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "91 km SSW of Vilyuchinsk, Russia",
+        "time": 1793959978285
+      }
+    },
+    {
+      "id": "us7000twfu",
+      "geometry": { "type": "Point", "coordinates": [169.328, -18.6911, 240.017] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "94 km N of Isangel, Vanuatu",
+        "time": 1793952847284
+      }
+    },
+    {
+      "id": "aka2026vzftyy",
+      "geometry": { "type": "Point", "coordinates": [-154.926, 57.967, 90.2] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "52 km NNW of Karluk, Alaska",
+        "time": 1793946613260
+      }
+    },
+    {
+      "id": "us7000twfk",
+      "geometry": { "type": "Point", "coordinates": [125.0977, 5.2999, 35] },
+      "properties": {
+        "mag": 4.9,
+        "magType": "mb",
+        "place": "41 km SW of Balangonan, Philippines",
+        "time": 1793946506156
+      }
+    },
+    {
+      "id": "aka2026vzckrc",
+      "geometry": { "type": "Point", "coordinates": [-162.925, 53.645, 5.3] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "138 km SSE of False Pass, Alaska",
+        "time": 1793940576969
+      }
+    },
+    {
+      "id": "us7000twf2",
+      "geometry": { "type": "Point", "coordinates": [122.649, 2.1669, 510.384] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "185 km NNW of Gorontalo, Indonesia",
+        "time": 1793938395747
+      }
+    },
+    {
+      "id": "pr2026310000",
+      "geometry": { "type": "Point", "coordinates": [-67.1223, 18.4006, 59] },
+      "properties": {
+        "mag": 3.45,
+        "magType": "md",
+        "place": "1 km NW of Moca, Puerto Rico",
+        "time": 1793937824220
+      }
+    },
+    {
+      "id": "us7000twey",
+      "geometry": { "type": "Point", "coordinates": [-127.0289, 43.1127, 10] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "210 km W of Port Orford, Oregon",
+        "time": 1793937469352
+      }
+    },
+    {
+      "id": "us7000twet",
+      "geometry": { "type": "Point", "coordinates": [-70.5945, -20.3905, 25.803] },
+      "properties": {
+        "mag": 3.6,
+        "magType": "ml",
+        "place": "49 km WSW of Puerto, Chile",
+        "time": 1793934574434
+      }
+    },
+    {
+      "id": "aka2026vyycgh",
+      "geometry": { "type": "Point", "coordinates": [-162.782, 53.608, 19.1] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "144 km SSE of False Pass, Alaska",
+        "time": 1793932796829
+      }
+    },
+    {
+      "id": "us7000tweq",
+      "geometry": { "type": "Point", "coordinates": [-162.9502, 53.6347, 27.963] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "139 km SSE of False Pass, Alaska",
+        "time": 1793932525631
+      }
+    },
+    {
+      "id": "us7000tweb",
+      "geometry": { "type": "Point", "coordinates": [168.7529, -19.3647, 83.271] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "58 km WNW of Isangel, Vanuatu",
+        "time": 1793929059847
+      }
+    },
+    {
+      "id": "aka2026vyvjtl",
+      "geometry": { "type": "Point", "coordinates": [-162.904, 53.634, 4.4] },
+      "properties": {
+        "mag": 3.3,
+        "magType": "ml",
+        "place": "139 km SSE of False Pass, Alaska",
+        "time": 1793927918349
+      }
+    },
+    {
+      "id": "us7000txby",
+      "geometry": { "type": "Point", "coordinates": [-162.9711, 53.6608, 10] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "135 km SSE of False Pass, Alaska",
+        "time": 1793926425502
+      }
+    },
+    {
+      "id": "us7000twdk",
+      "geometry": { "type": "Point", "coordinates": [121.1628, 22.6722, 10] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "76 km ENE of Donggang, Taiwan",
+        "time": 1793925460930
+      }
+    },
+    {
+      "id": "us7000twdd",
+      "geometry": { "type": "Point", "coordinates": [146.658, -5.9347, 110.478] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "94 km NNW of Lae, Papua New Guinea",
+        "time": 1793923346266
+      }
+    },
+    {
+      "id": "us7000twdf",
+      "geometry": { "type": "Point", "coordinates": [-162.8696, 53.6215, 10] },
+      "properties": {
+        "mag": 3.6,
+        "magType": "ml",
+        "place": "141 km SSE of False Pass, Alaska",
+        "time": 1793921365283
+      }
+    },
+    {
+      "id": "us7000tx9e",
+      "geometry": { "type": "Point", "coordinates": [-162.9277, 53.6518, 10] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "137 km SSE of False Pass, Alaska",
+        "time": 1793920338836
+      }
+    },
+    {
+      "id": "us7000twd4",
+      "geometry": { "type": "Point", "coordinates": [-162.8519, 53.5463, 9.201] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "150 km SSE of False Pass, Alaska",
+        "time": 1793919896465
+      }
+    },
+    {
+      "id": "us7000twcy",
+      "geometry": { "type": "Point", "coordinates": [-179.9841, -23.6177, 530.34] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1793918088820
+      }
+    },
+    {
+      "id": "us7000ty02",
+      "geometry": { "type": "Point", "coordinates": [-179.2318, -21.1657, 613.802] },
+      "properties": { "mag": 4.2, "magType": "mb", "place": "Fiji region", "time": 1793911690656 }
+    },
+    {
+      "id": "us7000twb9",
+      "geometry": { "type": "Point", "coordinates": [49.196, 31.6395, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "34 km SSW of Masjed Soleym\u0101n, Iran",
+        "time": 1793905141960
+      }
+    },
+    {
+      "id": "us7000twaq",
+      "geometry": { "type": "Point", "coordinates": [141.4153, 37.9642, 85.796] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "46 km ENE of S\u014dma, Japan",
+        "time": 1793901943170
+      }
+    },
+    {
+      "id": "us7000ty06",
+      "geometry": { "type": "Point", "coordinates": [165.5873, -13.9187, 10] },
+      "properties": {
+        "mag": 4.7,
+        "magType": "mb",
+        "place": "202 km NW of Port-Olry, Vanuatu",
+        "time": 1793899855666
+      }
+    },
+    {
+      "id": "us7000ty08",
+      "geometry": { "type": "Point", "coordinates": [-178.9004, -20.6565, 567.745] },
+      "properties": { "mag": 4.2, "magType": "mb", "place": "Fiji region", "time": 1793899613183 }
+    },
+    {
+      "id": "us7000ty07",
+      "geometry": { "type": "Point", "coordinates": [-178.8743, -21.0032, 559.797] },
+      "properties": { "mag": 4.5, "magType": "mb", "place": "Fiji region", "time": 1793899576614 }
+    },
+    {
+      "id": "us7000tw8m",
+      "geometry": { "type": "Point", "coordinates": [-178.6592, -17.6788, 558.78] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "218 km ENE of Levuka, Fiji",
+        "time": 1793897085764
+      }
+    },
+    {
+      "id": "us7000txzz",
+      "geometry": { "type": "Point", "coordinates": [143.1421, 21.4338, 293.488] },
+      "properties": {
+        "mag": 4,
+        "magType": "mb",
+        "place": "Mariana Islands region",
+        "time": 1793893669982
+      }
+    },
+    {
+      "id": "us7000txzx",
+      "geometry": { "type": "Point", "coordinates": [179.9661, -23.7182, 518.738] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1793885084170
+      }
+    },
+    {
+      "id": "aka2026vxslfj",
+      "geometry": { "type": "Point", "coordinates": [-164.271, 53.697, 16] },
+      "properties": {
+        "mag": 3.3,
+        "magType": "ml",
+        "place": "110 km ESE of Akutan, Alaska",
+        "time": 1793875847825
+      }
+    },
+    {
+      "id": "us7000tw7b",
+      "geometry": { "type": "Point", "coordinates": [147.7534, 49.2594, 554.419] },
+      "properties": {
+        "mag": 4.8,
+        "magType": "mb",
+        "place": "Sea of Okhotsk",
+        "time": 1793873373723
+      }
+    },
+    {
+      "id": "aka2026vxqixu",
+      "geometry": { "type": "Point", "coordinates": [-170.052, 52.13, 19.4] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "120 km SW of Nikolski, Alaska",
+        "time": 1793872085032
+      }
+    },
+    {
+      "id": "aka2026vxqfum",
+      "geometry": { "type": "Point", "coordinates": [-170.133, 52.217, 32.3] },
+      "properties": {
+        "mag": 3.5,
+        "magType": "ml",
+        "place": "117 km SW of Nikolski, Alaska",
+        "time": 1793871920748
+      }
+    },
+    {
+      "id": "aka2026vxqftg",
+      "geometry": { "type": "Point", "coordinates": [-170.152, 52.193, 20.4] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "120 km SW of Nikolski, Alaska",
+        "time": 1793871863400
+      }
+    },
+    {
+      "id": "us7000twbd",
+      "geometry": { "type": "Point", "coordinates": [-170.23, 52.3045, 28.739] },
+      "properties": {
+        "mag": 3.8,
+        "magType": "ml",
+        "place": "116 km SW of Nikolski, Alaska",
+        "time": 1793870084556
+      }
+    },
+    {
+      "id": "us7000twbb",
+      "geometry": { "type": "Point", "coordinates": [-170.0969, 52.199, 28.088] },
+      "properties": {
+        "mag": 3.8,
+        "magType": "mb",
+        "place": "117 km SW of Nikolski, Alaska",
+        "time": 1793869169067
+      }
+    },
+    {
+      "id": "us7000twb4",
+      "geometry": { "type": "Point", "coordinates": [-166.5022, 53.2569, 43.021] },
+      "properties": {
+        "mag": 3.9,
+        "magType": "mb",
+        "place": "68 km S of Unalaska, Alaska",
+        "time": 1793867522817
+      }
+    },
+    {
+      "id": "us7000txzq",
+      "geometry": { "type": "Point", "coordinates": [-177.5558, -19.3178, 571.528] },
+      "properties": { "mag": 4.1, "magType": "mb", "place": "Fiji region", "time": 1793862269887 }
+    },
+    {
+      "id": "us7000txzp",
+      "geometry": { "type": "Point", "coordinates": [124.9383, 5.3181, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "54 km WSW of Balangonan, Philippines",
+        "time": 1793859624699
+      }
+    },
+    {
+      "id": "us7000txzm",
+      "geometry": { "type": "Point", "coordinates": [148.5759, -6.1076, 101.523] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "94 km ENE of Finschhafen, Papua New Guinea",
+        "time": 1793856132773
+      }
+    },
+    {
+      "id": "nc75462637",
+      "geometry": { "type": "Point", "coordinates": [-125.585333333333, 40.4073333333333, 10] },
+      "properties": {
+        "mag": 4.96,
+        "magType": "mw",
+        "place": "111 km W of Petrolia, CA",
+        "time": 1793854562670
+      }
+    },
+    {
+      "id": "aka2026vxgahe",
+      "geometry": { "type": "Point", "coordinates": [-157.175, 53.733, 20] },
+      "properties": {
+        "mag": 3.5,
+        "magType": "ml",
+        "place": "273 km SSE of Perryville, Alaska",
+        "time": 1793853493455
+      }
+    },
+    {
+      "id": "aka2026vxflhk",
+      "geometry": { "type": "Point", "coordinates": [-150.78, 60.303, 64.5] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "22 km S of Funny River, Alaska",
+        "time": 1793852456983
+      }
+    },
+    {
+      "id": "us7000twh9",
+      "geometry": { "type": "Point", "coordinates": [-87.6046, -40.6911, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "West Chile Rise",
+        "time": 1793842551731
+      }
+    },
+    {
+      "id": "us7000tw53",
+      "geometry": { "type": "Point", "coordinates": [94.1224, 32.5065, 10] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "226 km ENE of Nagqu, China",
+        "time": 1793839755589
+      }
+    },
+    {
+      "id": "us7000tw4z",
+      "geometry": { "type": "Point", "coordinates": [30.0682, 38.0156, 10] },
+      "properties": {
+        "mag": 4.1,
+        "magType": "mb",
+        "place": "10 km WSW of Dinar, Turkey",
+        "time": 1793838197796
+      }
+    },
+    {
+      "id": "pr71538513",
+      "geometry": { "type": "Point", "coordinates": [-66.9053333333333, 19.4543333333333, 26.44] },
+      "properties": {
+        "mag": 3.23,
+        "magType": "md",
+        "place": "106 km N of Isabela, Puerto Rico",
+        "time": 1793836550740
+      }
+    },
+    {
+      "id": "hv75068576",
+      "geometry": { "type": "Point", "coordinates": [-155.621333333333, 19.3953333333333, -2.1] },
+      "properties": {
+        "mag": 3.12,
+        "magType": "ml",
+        "place": "26 km NW of P\u0101hala, Hawaii",
+        "time": 1793829595690
+      }
+    },
+    {
+      "id": "us7000txur",
+      "geometry": { "type": "Point", "coordinates": [127.6216, 8.4824, 10] },
+      "properties": {
+        "mag": 4.4,
+        "magType": "mb",
+        "place": "135 km ENE of Barcelona, Philippines",
+        "time": 1793829521944
+      }
+    },
+    {
+      "id": "us7000tw43",
+      "geometry": { "type": "Point", "coordinates": [179.9439, -25.1576, 499.745] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "south of the Fiji Islands",
+        "time": 1793827464314
+      }
+    },
+    {
+      "id": "us7000tw3n",
+      "geometry": { "type": "Point", "coordinates": [88.0827, -1.4064, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "South Indian Ocean",
+        "time": 1793822766968
+      }
+    },
+    {
+      "id": "us7000tw3k",
+      "geometry": { "type": "Point", "coordinates": [-87.1544, 12.6311, 159.022] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "2 km W of Chinandega, Nicaragua",
+        "time": 1793822126313
+      }
+    },
+    {
+      "id": "aka2026vwoake",
+      "geometry": { "type": "Point", "coordinates": [178.091, 51.644, 66.5] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "Rat Islands, Aleutian Islands, Alaska",
+        "time": 1793821323314
+      }
+    },
+    {
+      "id": "us7000tw4w",
+      "geometry": { "type": "Point", "coordinates": [-176.6581, 51.5984, 74.504] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "30 km S of Adak, Alaska",
+        "time": 1793820140560
+      }
+    },
+    {
+      "id": "ci41358343",
+      "geometry": { "type": "Point", "coordinates": [-117.3925, 35.958, 2.64] },
+      "properties": {
+        "mag": 3.12,
+        "magType": "ml",
+        "place": "21 km N of Searles Valley, CA",
+        "time": 1793818770920
+      }
+    },
+    {
+      "id": "us7000tw2x",
+      "geometry": { "type": "Point", "coordinates": [70.7177, 36.446, 199.264] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "47 km SSW of Jurm, Afghanistan",
+        "time": 1793818489398
+      }
+    },
+    {
+      "id": "pr2026308002",
+      "geometry": { "type": "Point", "coordinates": [-68.0753, 19.4948, 10] },
+      "properties": {
+        "mag": 3.49,
+        "magType": "md",
+        "place": "106 km NNE of Punta Cana, Dominican Republic",
+        "time": 1793812191240
+      }
+    },
+    {
+      "id": "pr2026308001",
+      "geometry": { "type": "Point", "coordinates": [-68.1008, 19.4396, 11] },
+      "properties": {
+        "mag": 4.21,
+        "magType": "md",
+        "place": "100 km NNE of Punta Cana, Dominican Republic",
+        "time": 1793811563360
+      }
+    },
+    {
+      "id": "us7000tw6s",
+      "geometry": { "type": "Point", "coordinates": [125.0065, 11.4748, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "7 km ENE of Santa Rita, Philippines",
+        "time": 1793808873475
+      }
+    },
+    {
+      "id": "us7000txum",
+      "geometry": { "type": "Point", "coordinates": [78.3129, -35.5981, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "Mid-Indian Ridge",
+        "time": 1793807649946
+      }
+    },
+    {
+      "id": "us7000twh7",
+      "geometry": { "type": "Point", "coordinates": [137.5908, 8.6384, 10] },
+      "properties": {
+        "mag": 4.6,
+        "magType": "mb",
+        "place": "113 km SSW of Colonia, Micronesia",
+        "time": 1793804174934
+      }
+    },
+    {
+      "id": "us7000tvxn",
+      "geometry": { "type": "Point", "coordinates": [-168.7427, 52.1108, 11.184] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "92 km S of Nikolski, Alaska",
+        "time": 1793794968918
+      }
+    },
+    {
+      "id": "us7000tvxj",
+      "geometry": { "type": "Point", "coordinates": [152.1047, -5.5189, 10] },
+      "properties": {
+        "mag": 4.5,
+        "magType": "mb",
+        "place": "131 km S of Kokopo, Papua New Guinea",
+        "time": 1793794485479
+      }
+    },
+    {
+      "id": "aka2026vvwlys",
+      "geometry": { "type": "Point", "coordinates": [-161.364, 55.578, 182.3] },
+      "properties": {
+        "mag": 3.1,
+        "magType": "ml",
+        "place": "48 km SSW of Nelson Lagoon, Alaska",
+        "time": 1793789532096
+      }
+    },
+    {
+      "id": "aka2026vvrwqb",
+      "geometry": { "type": "Point", "coordinates": [-147.48, 63.503, 5] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "74 km E of Cantwell, Alaska",
+        "time": 1793781274002
+      }
+    },
+    {
+      "id": "aka2026vvqqoe",
+      "geometry": { "type": "Point", "coordinates": [-169.314, 52.102, 10.1] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "98 km SSW of Nikolski, Alaska",
+        "time": 1793779062787
+      }
+    },
+    {
+      "id": "aka2026vvoqoh",
+      "geometry": { "type": "Point", "coordinates": [-153.179, 59.894, 132] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "53 km ENE of Pedro Bay, Alaska",
+        "time": 1793775455313
+      }
+    },
+    {
+      "id": "aka2026vvnaod",
+      "geometry": { "type": "Point", "coordinates": [-136.659, 59.248, 5] },
+      "properties": {
+        "mag": 3.2,
+        "magType": "ml",
+        "place": "40 km WSW of Covenant Life, Alaska",
+        "time": 1793772529254
+      }
+    },
+    {
+      "id": "pr71538433",
+      "geometry": { "type": "Point", "coordinates": [-67.327, 18.7898333333333, 14.09] },
+      "properties": {
+        "mag": 3.05,
+        "magType": "md",
+        "place": "40 km NW of San Antonio, Puerto Rico",
+        "time": 1793769227530
+      }
+    },
+    {
+      "id": "pr71538428",
+      "geometry": { "type": "Point", "coordinates": [-67.2831666666667, 18.7273333333333, 15.43] },
+      "properties": {
+        "mag": 3.03,
+        "magType": "md",
+        "place": "32 km NW of San Antonio, Puerto Rico",
+        "time": 1793769160710
+      }
+    },
+    {
+      "id": "us7000tvw3",
+      "geometry": { "type": "Point", "coordinates": [-159.9536, 53.5345, 35] },
+      "properties": {
+        "mag": 3,
+        "magType": "ml",
+        "place": "203 km S of Sand Point, Alaska",
+        "time": 1793767767438
+      }
+    },
+    {
+      "id": "aka2026vvhhsm",
+      "geometry": { "type": "Point", "coordinates": [-151.172, 61.741, 83] },
+      "properties": {
+        "mag": 3.4,
+        "magType": "ml",
+        "place": "30 km SSE of Skwentna, Alaska",
+        "time": 1793762255367
+      }
+    },
+    {
+      "id": "us7000tvvc",
+      "geometry": { "type": "Point", "coordinates": [140.2929, 27.0774, 429.393] },
+      "properties": {
+        "mag": 4.2,
+        "magType": "mb",
+        "place": "Bonin Islands, Japan region",
+        "time": 1793760029495
+      }
+    },
+    {
+      "id": "pr2026308000",
+      "geometry": { "type": "Point", "coordinates": [-68.9866, 19.4611, 26] },
+      "properties": {
+        "mag": 3.56,
+        "magType": "md",
+        "place": "46 km NE of Saman\u00e1, Dominican Republic",
+        "time": 1793758515910
+      }
+    },
+    {
+      "id": "ok2026vozy",
+      "geometry": { "type": "Point", "coordinates": [-98.15433333, 36.36333333, 6.47] },
+      "properties": {
+        "mag": 3.18,
+        "magType": "ml",
+        "place": "3 km SE of Meno, Oklahoma",
+        "time": 1793754943509
+      }
+    },
+    {
+      "id": "us7000txu6",
+      "geometry": { "type": "Point", "coordinates": [120.8976, -7.8888, 10] },
+      "properties": {
+        "mag": 4.3,
+        "magType": "mb",
+        "place": "93 km NNE of Ruteng, Indonesia",
+        "time": 1793753433953
+      }
+    },
+    {
+      "id": "ok2026vozb",
+      "geometry": { "type": "Point", "coordinates": [-98.15366667, 36.36316667, 6.79] },
+      "properties": {
+        "mag": 3.57,
+        "magType": "ml",
+        "place": "3 km SE of Meno, Oklahoma",
+        "time": 1793753310789
+      }
+    },
+    {
+      "id": "us7000tvuv",
+      "geometry": { "type": "Point", "coordinates": [-177.4833, -19.216, 562.894] },
+      "properties": { "mag": 4.6, "magType": "mb", "place": "Fiji region", "time": 1793752380270 }
+    }
+  ]
+}

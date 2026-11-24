@@ -1,0 +1,21 @@
+@media (prefers-reduced-motion: no-preference) and (min-height: 610px) {
+  html:root .duet {
+    height: calc(var(--desk-height) + 110svh);
+  }
+}
+
+.experience-content .batch-lane {
+  --batch-travel: min(44svh, 420px);
+}
+
+@media (max-width: 767px) {
+  .experience-content .batch-lane {
+    --batch-travel: min(30svh, 245px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (610px <= height) and (width <= 767px) {
+  html:root .duet {
+    height: calc(var(--desk-height) + 100svh);
+  }
+}

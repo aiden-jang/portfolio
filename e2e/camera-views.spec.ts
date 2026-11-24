@@ -10,7 +10,7 @@ function cameraControls(page: Page) {
   return {
     reset,
     async select(name: string) {
-      await garage.click();
+      await garage.press('Control+k');
       await expect(dialog).toHaveCSS('--garage-anchor-y', '24px');
       await dialog.getByRole('option', { name: new RegExp(name) }).click();
       await expect(dialog).toHaveCount(0);

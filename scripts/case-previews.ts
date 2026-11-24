@@ -4,6 +4,12 @@ import type { Plugin } from 'vite';
 
 const origin = 'https://www.aidenjang.com';
 const cases = {
+  'request-batching': {
+    title: '120 calls became one. | Aiden Jang',
+    description: 'How a batched API response cut page load from 60 seconds to 2.',
+    image: '/projects/batch-share.png',
+    alt: '120 requests collapse into one. 60 seconds to 2 seconds.',
+  },
   meanwhile: {
     title: 'One quake. Two depths. | Aiden Jang',
     description: 'How meanwhile. matches two agencies’ earthquake reports and keeps both readings.',

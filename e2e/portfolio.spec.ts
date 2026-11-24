@@ -93,7 +93,7 @@ for (const width of [1440, 390]) {
       await reset.press('Enter');
       await expect(reset).toBeFocused();
       await expect(reset).toBeEnabled();
-      await controls.click();
+      await controls.press('Control+k');
       await page.getByRole('combobox', { name: 'Search portfolio controls' }).fill('share');
       await expect(page.getByRole('option', { name: /Share this garage/ })).toBeVisible();
       await page.keyboard.press('Escape');
@@ -198,25 +198,15 @@ for (const width of [1440, 390]) {
       await accessible(page);
 
       await page.emulateMedia({ reducedMotion: 'no-preference' });
-      const story = page.getByRole('button', {
-        name: 'How I built it: meanwhile.',
-        exact: true,
-      });
+      const story = page.getByRole('link', { name: 'Read the meanwhile. case study' });
       await story.click();
-      await expect(page.getByRole('dialog')).toBeVisible();
-      const closeStory = page.getByRole('button', { name: 'Close', exact: true });
-      await expect(closeStory).toBeFocused();
-      await page.keyboard.press('Shift+Tab');
-      await expect(page.getByLabel('Source and sharing')).toBeFocused();
-      await page.keyboard.press('Tab');
-      await expect(closeStory).toBeFocused();
+      await expect(page.getByRole('heading', { name: 'One quake. Two depths.' })).toBeVisible();
+      await expect(page).toHaveURL(/\/cases\/meanwhile\//);
       await accessible(page);
-      expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('hidden');
       const shared = page.url();
-      await page.keyboard.press('Escape');
-      await expect(story).toBeFocused();
+      await page.goBack();
+      await expect(story).toBeVisible();
       await expect(page.getByRole('dialog')).toHaveCount(0);
-      expect(await page.evaluate(() => document.documentElement.style.overflow)).not.toBe('hidden');
 
       const screenshot = page.getByRole('button', {
         name: 'View full garden',
@@ -308,7 +298,7 @@ for (const width of [1440, 390]) {
 
       const cold = await context.newPage();
       await cold.goto(shared);
-      await expect(cold.getByRole('dialog')).toBeVisible();
+      await expect(cold.getByRole('heading', { name: 'One quake. Two depths.' })).toBeVisible();
       await cold.close();
       expect(errors).toEqual([]);
     });
