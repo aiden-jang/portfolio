@@ -30,10 +30,14 @@ for (const viewport of [
   });
 }
 
-test('both lighting labels fit the dock without shifting its controls', async ({ page }) => {
+test('both lighting labels are centered without shifting the dock controls', async ({ page }) => {
   await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
-  await page.goto('/?car=10');
-  await page.evaluate(() => document.fonts.ready);
+  // Keep the lazy 3D scene pending so this layout check does not depend on GPU rendering.
+  await page.route('**/assets/Scene-*.js', () => {});
+  await page.goto('/?car=10', { waitUntil: 'domcontentloaded' });
+  await page.evaluate(async () => {
+    await document.fonts.load('12px Geist');
+  });
   const lighting = page.getByRole('button', { name: /^Lighting:/ }).filter({ visible: true });
 
   const measure = () =>
@@ -46,6 +50,8 @@ test('both lighting labels fit the dock without shifting its controls', async ({
       return {
         width: bounds.width,
         x: bounds.x,
+        leftInset: button.querySelector('svg')!.getBoundingClientRect().left - bounds.left,
+        rightInset: bounds.right - text.getBoundingClientRect().right,
         textRight: text.getBoundingClientRect().right,
         contentRight: bounds.right - parseFloat(getComputedStyle(button).paddingRight),
         dockRight: dock.right,
@@ -68,12 +74,14 @@ test('both lighting labels fit the dock without shifting its controls', async ({
     await page.setViewportSize({ width, height });
     await expect(lighting).toHaveAccessibleName('Lighting: Studio. Switch to After Hours');
     const studio = await measure();
+    expect(Math.abs(studio.leftInset - studio.rightInset)).toBeLessThanOrEqual(1);
     expect(studio.required, `Studio label at ${width}×${height}`).toBeLessThanOrEqual(
       studio.available + 1,
     );
     await lighting.click();
     await expect(lighting).toHaveAccessibleName('Lighting: After Hours. Switch to Studio');
     const afterHours = await measure();
+    expect(Math.abs(afterHours.leftInset - afterHours.rightInset)).toBeLessThanOrEqual(1);
     expect(afterHours.required, `After Hours label at ${width}×${height}`).toBeLessThanOrEqual(
       afterHours.available + 1,
     );

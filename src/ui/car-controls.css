@@ -127,7 +127,8 @@
 #desktop-dock button[aria-label^='Lighting:'] {
   width: var(--lighting-button-width);
   display: grid;
-  grid-template-columns: 16px minmax(0, 1fr);
+  grid-template-columns: 16px minmax(0, max-content);
+  justify-content: center;
   text-align: left;
 }
 #desktop-dock button[aria-label^='Lighting:'] .control-group-label {
@@ -198,7 +199,8 @@
   }
   #mobile-bar button[aria-label^='Lighting:'] {
     flex: 0 0 104px;
-    grid-template-columns: 16px minmax(0, 1fr);
+    grid-template-columns: 16px minmax(0, max-content);
+    justify-content: center;
   }
   #mobile-bar :is(.mobile-paint-name, .mobile-light-name) {
     position: static;
