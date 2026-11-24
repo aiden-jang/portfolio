@@ -5,6 +5,30 @@
 .garage-studio-dock > :is(.garage-study, .garage-exhibit) {
   position: fixed;
 }
+@media (min-width: 768px) and (min-height: 551px), (min-width: 768px) and (orientation: portrait) {
+  .garage-studio {
+    --studio-controls-width: clamp(280px, 36vw, 520px);
+    --studio-heading-gap: clamp(16px, 2vw, 36px);
+  }
+  .garage-studio:not([data-studio-tool]) .garage-studio-title {
+    width: calc(100% - 2 * var(--edge) - var(--studio-controls-width) - var(--studio-heading-gap));
+    container-type: inline-size;
+  }
+  .garage-studio:not([data-studio-tool]) .garage-studio-title h2 {
+    font-size: clamp(34px, min(7.25vw, 12cqw), 102px);
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+  .garage-studio[data-chapter='lineup']:not([data-studio-tool]) .garage-studio-title h2 {
+    font-size: clamp(34px, min(6.4vw, 12cqw), 87px);
+  }
+  .garage-studio-dock > .garage-study {
+    max-width: var(--studio-controls-width);
+  }
+  .garage-studio-dock > .garage-exhibit {
+    max-width: min(420px, var(--studio-controls-width));
+  }
+}
 @media (max-width: 767px), (max-height: 550px) and (orientation: landscape) {
   .studio-original-title {
     display: none;
@@ -89,6 +113,12 @@
   }
 }
 @media (min-width: 740px) and (max-height: 465px) and (orientation: landscape) {
+  .garage-studio {
+    --studio-side-dock: 180px;
+  }
+  .garage-studio:not([data-studio-tool])[data-controls-open='true'] .garage-studio-title {
+    width: calc(100% - var(--edge) - var(--studio-side-dock) - 28px);
+  }
   .garage-studio:not([data-studio-tool]) .garage-studio-footer {
     width: auto;
     inset-inline: 12px;
@@ -97,7 +127,7 @@
     position: absolute;
     right: 0;
     bottom: 58px;
-    width: 180px;
+    width: var(--studio-side-dock);
     max-height: calc(100dvh - 116px);
     align-content: start;
     justify-content: stretch;
