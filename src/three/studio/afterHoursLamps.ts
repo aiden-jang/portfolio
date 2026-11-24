@@ -71,10 +71,11 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
     if (!(node instanceof Mesh)) return;
     for (const material of Array.isArray(node.material) ? node.material : [node.material]) {
       if (!(material instanceof MeshStandardMaterial) || visited.has(material)) continue;
-      const lens = (shaders?.[material.name] ?? '') + (exterior?.[material.name] ?? '');
+      const lens = shaders?.[material.name];
+      const auxiliary = exterior?.[material.name];
       const mask = masks?.[material.name];
       const reflection = studioLensReflection[file]?.[material.name];
-      if (!lens && !mask && !reflection) continue;
+      if (!lens && !auxiliary && !mask && !reflection) continue;
       visited.add(material);
       const compile = material.onBeforeCompile.bind(material);
       const key = material.customProgramCacheKey();
@@ -136,6 +137,7 @@ export function prepareAfterHoursLamps(model: Object3D, file: string) {
             ${lens ? 'vec3 unlitColor = outgoingLight;' : ''}
             ${lens ?? ''}
             ${lens ? 'outgoingLight += .58 * max(vec3(0.),outgoingLight-unlitColor);' : ''}
+            ${auxiliary ?? ''}
           }
           #include <opaque_fragment>
         `,
@@ -159,8 +161,9 @@ export function updateVehicleLights(
 ) {
   const boost = 1 + pulse * 0.8;
   for (const { light, baseIntensity, isHeadlight } of lamps) {
+    // The presets use fitted lens emission and floor spill. Generic points hit nearby bodywork.
     const scale = followPreset
-      ? lampLevel * (isHeadlight ? 0.08 : 0.053)
+      ? 0
       : isHeadlight
         ? 0.035 * (1 - lampLevel * 0.24)
         : 0.14 * (1 - lampLevel * 0.74);
