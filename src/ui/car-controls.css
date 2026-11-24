@@ -114,7 +114,7 @@
 #desktop-dock .car-paint-slot[data-fixed-livery] {
   width: 112px;
 }
-#desktop-dock .all-controls-trigger {
+#desktop-dock .garage-dock-actions {
   width: 100px;
 }
 #desktop-dock .desktop-paint-swatches > .paint-swatches {
@@ -148,7 +148,7 @@
   #desktop-dock .desktop-paint-swatches > .paint-swatches {
     gap: 4px;
   }
-  #desktop-dock .all-controls-trigger {
+  #desktop-dock .garage-dock-actions {
     width: 92px;
   }
   #desktop-dock button[aria-label^='Lighting:'] {
@@ -279,4 +279,41 @@
   font: 12px/1.4 var(--font-display);
   letter-spacing: 0;
   text-transform: none;
+}
+
+.garage-dock-actions {
+  display: flex;
+  flex-shrink: 0;
+}
+.garage-dock-actions > button {
+  flex: 1 0 44px;
+  padding-inline: 5px;
+}
+.car-action-slot > .intro-headlight-button {
+  display: block;
+  text-align: center;
+  line-height: 1.15;
+}
+.car-action-slot > .intro-headlight-button > svg {
+  display: none;
+}
+@media (max-width: 767px) {
+  #mobile-bar .car-control-buttons:has(.intro-headlight-button) .car-paint-slot {
+    flex: 0 0 44px;
+  }
+  #mobile-bar .car-control-buttons:has(.intro-headlight-button) .car-paint-slot > button {
+    display: flex;
+    justify-content: center;
+  }
+  #mobile-bar .car-control-buttons:has(.intro-headlight-button) .mobile-paint-name {
+    display: none;
+  }
+}
+@media (max-width: 359px) {
+  #mobile-bar .car-control-buttons {
+    flex-wrap: wrap;
+  }
+  #mobile-bar .car-paint-slot {
+    flex: 0 1 auto;
+  }
 }

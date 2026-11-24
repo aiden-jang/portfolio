@@ -262,7 +262,9 @@ export function Car() {
       app.isContactVisible && !review.active && group.visible,
       studio && !review.active && group.visible && !reduced ? motionState.openingOrbitProgress : 0,
     );
-    headlights.current?.setGarageActive?.(review.active && finished && review.chapter !== 'lineup');
+    headlights.current?.setActive?.(
+      studio && group.visible && (!review.active || (finished && review.chapter !== 'lineup')),
+    );
     headlights.current?.setRaised(app.headlightsRaised, reduced);
     headlights.current?.update(dt, lampLevel, lampPreset);
     const { refs } = app;

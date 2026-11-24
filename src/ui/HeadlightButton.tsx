@@ -1,26 +1,45 @@
-import { CARS } from '../config';
+import { CARS, F40_INDEX } from '../config';
 import { useAppStore } from '../store';
 import { ControlIcon } from './ControlIcon';
 
-export function HeadlightButton() {
+export function HeadlightButton({
+  studio = false,
+  waiting = false,
+  onChange,
+}: {
+  studio?: boolean;
+  waiting?: boolean;
+  onChange?: () => void;
+} = {}) {
   const carIndex = useAppStore((state) => state.carIndex);
   const raised = useAppStore((state) => state.headlightsRaised);
   const loading = useAppStore((state) => state.isCarLoading);
   const available = useAppStore((state) => state.hasPopupHeadlights);
   const toggle = useAppStore((state) => state.toggleHeadlights);
-  if (!CARS[carIndex].popupHeadlights) return null;
+  const isF40 = carIndex === F40_INDEX;
+  if (!isF40 && !CARS[carIndex].popupHeadlights) return null;
+  const action = raised ? 'Lower headlights' : 'Raise headlights';
   return (
     <button
       type="button"
-      onClick={toggle}
-      disabled={loading || !available}
-      aria-label="Pop-up headlights"
+      onClick={() => {
+        toggle();
+        onChange?.();
+      }}
+      disabled={loading || waiting || !available}
+      aria-label={isF40 ? action : 'Pop-up headlights'}
       aria-pressed={raised}
-      title={raised ? 'Lower headlights' : 'Raise headlights'}
-      className="scene-control-button"
+      title={action}
+      className={
+        studio
+          ? undefined
+          : isF40
+            ? 'scene-control-button intro-headlight-button'
+            : 'scene-control-button'
+      }
     >
       <ControlIcon name="headlights" />
-      <span>Lights</span>
+      <span>{isF40 ? action : 'Lights'}</span>
     </button>
   );
 }

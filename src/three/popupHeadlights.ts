@@ -126,7 +126,7 @@ export function createPopupHeadlights(
 }
 
 type HeadlightController = ReturnType<typeof createPopupHeadlights> & {
-  setGarageActive?: (active: boolean) => void;
+  setActive?: (active: boolean) => void;
   readonly beam?: number;
 };
 

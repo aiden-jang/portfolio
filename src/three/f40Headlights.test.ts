@@ -3,7 +3,7 @@ import { expect, it, vi } from 'vitest';
 import { modelFixture } from '../test/modelFixture';
 import { createF40Headlights } from './f40Headlights';
 
-it('hinges both F40 housings in place and restores the stock geometry outside Garage', async () => {
+it('hinges both F40 housings in place and restores the stock geometry outside the showroom', async () => {
   const { model } = await modelFixture('ferrari-f120-f40.glb', true);
   const parent = model.children[0];
   const hood = parent.children.find(
@@ -15,7 +15,7 @@ it('hinges both F40 housings in place and restores the stock geometry outside Ga
   expect(hood.geometry).toBe(original);
   expect(parent.children.filter((object) => object instanceof Group)).toHaveLength(0);
 
-  controller.setGarageActive(true);
+  controller.setActive(true);
   const pivots = parent.children.filter((object) => object instanceof Group);
   expect(pivots).toHaveLength(2);
   expect(hood.geometry).not.toBe(original);
@@ -83,7 +83,7 @@ it('hinges both F40 housings in place and restores the stock geometry outside Ga
     expect(bulbs.every((bulb) => bulb.emissiveIntensity === 0)).toBe(true);
   } finally {
     clock.mockRestore();
-    controller.setGarageActive(false);
+    controller.setActive(false);
     expect(hood.geometry).toBe(original);
     expect(pivots.every((pivot) => !pivot.visible)).toBe(true);
     controller.dispose();

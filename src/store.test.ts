@@ -191,8 +191,16 @@ it('guards headlight controls while unavailable or loading and resets the next M
   expect(useAppStore.getState().headlightsRaised).toBe(false);
   state.setCarIndex(0);
   state.toggleHeadlights();
-  expect(useAppStore.getState().headlightsRaised).toBe(true);
+  expect(useAppStore.getState().headlightsRaised).toBe(false);
   expect(useAppStore.getState().hasPopupHeadlights).toBe(false);
+  useAppStore.setState({ hasPopupHeadlights: true, isCarLoading: false });
+  state.toggleHeadlights();
+  state.setThemeName('studio');
+  expect(useAppStore.getState().headlightsRaised).toBe(true);
+  state.setThemeName('night');
+  expect(useAppStore.getState().headlightsRaised).toBe(true);
+  state.setThemeName('studio');
+  expect(useAppStore.getState().headlightsRaised).toBe(false);
   state.setCarIndex(10);
   expect(useAppStore.getState().headlightsRaised).toBe(true);
 });

@@ -122,7 +122,7 @@ export function createF40Headlights(model: Object3D) {
   let duration = 0;
   let beam = 1;
 
-  const setGarageActive = (value: boolean) => {
+  const setActive = (value: boolean) => {
     if (active === value) return;
     active = value;
     rig ??= splitHeadlights(surfaces, parent);
@@ -133,7 +133,7 @@ export function createF40Headlights(model: Object3D) {
   };
 
   return {
-    setGarageActive,
+    setActive,
     setRaised(raised: boolean, immediate = false) {
       const next = Number(raised);
       if (immediate || !active) {
@@ -162,7 +162,7 @@ export function createF40Headlights(model: Object3D) {
       return active ? beam : undefined;
     },
     dispose() {
-      setGarageActive(false);
+      setActive(false);
       if (!rig) return;
       for (const { separated } of rig.stationary) separated.dispose();
       for (const material of rig.ownedMaterials) material.dispose();

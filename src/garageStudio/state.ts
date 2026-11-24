@@ -108,7 +108,6 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
       detailOrbit: pose(),
       pairOrbit: pose(window.innerWidth < 768 ? -0.58 : 0.72),
     });
-    applyF40HeadlightPreset();
   },
   close: () => {
     clearStudioCut();

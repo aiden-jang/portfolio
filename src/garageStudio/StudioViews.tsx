@@ -4,6 +4,7 @@ import { resetStudyCamera, useGarageStudy } from '../garageStudy/state';
 import { CARS, F40_INDEX } from '../config';
 import { useAppStore } from '../store';
 import { ControlIcon } from '../ui/ControlIcon';
+import { HeadlightButton } from '../ui/HeadlightButton';
 import { clamp } from '../math';
 import {
   activeOrbit,
@@ -170,17 +171,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
             <ControlIcon name="zoom" />
           </button>
           {id === F40_INDEX && chapter === 'walk' && (
-            <button
-              aria-pressed={raised}
-              disabled={!hasHeadlights || waiting}
-              onClick={() => {
-                useAppStore.getState().toggleHeadlights();
-                repaintStudio();
-              }}
-            >
-              <ControlIcon name="headlights" />
-              {raised ? 'Lower headlights' : 'Raise headlights'}
-            </button>
+            <HeadlightButton studio waiting={waiting} onChange={repaintStudio} />
           )}
         </div>
       )}

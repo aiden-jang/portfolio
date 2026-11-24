@@ -120,7 +120,7 @@
     display: grid;
     gap: 6px;
   }
-  html:root #desktop-dock .all-controls-trigger {
+  html:root #desktop-dock .garage-dock-actions {
     grid-column: 4;
     grid-row: 2;
     width: 100px;
@@ -140,7 +140,7 @@
     button[aria-label^='Lighting:'] {
     grid-column: 2;
   }
-  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .all-controls-trigger {
+  html:root #desktop-dock .car-controls-row:has(.car-action-slot:empty) .garage-dock-actions {
     grid-column: 3;
   }
   .desktop-paint-swatches {
@@ -217,7 +217,7 @@
   html:root #desktop-dock .control-group-label {
     display: inline;
   }
-  html:root #desktop-dock .all-controls-trigger {
+  html:root #desktop-dock .garage-dock-actions {
     width: 88px;
   }
   .desktop-paint-swatches {

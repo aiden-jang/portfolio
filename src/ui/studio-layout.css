@@ -72,8 +72,8 @@ html:root #desktop-dock .car-paint-slot:not([data-fixed-livery]) {
 html:root #desktop-dock .desktop-paint-swatches .control-group-label {
   display: none;
 }
-html:root #desktop-dock .all-controls-trigger {
-  width: 82px;
+html:root #desktop-dock .garage-dock-actions {
+  width: 92px;
 }
 html:root #desktop-dock .car-browse-trigger {
   width: 144px;
@@ -377,7 +377,7 @@ html:root :is(a, button, summary):focus-visible {
   html:root #desktop-dock .car-browse-trigger {
     width: 152px;
   }
-  html:root #desktop-dock .all-controls-trigger {
+  html:root #desktop-dock .garage-dock-actions {
     width: 88px;
   }
 }

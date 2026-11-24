@@ -4,7 +4,7 @@ import { CARS, DEFAULT_CAR_INDEX, F40_INDEX, GARAGE_INDICES, adjacentCar } from 
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
 import { cameraViews, isFerrariView, type CameraView } from './three/cameraViews';
-import { DEFAULT_LIGHTING, LIGHTING_MODES, nextLighting, parseLighting } from './lighting';
+import * as lighting from './lighting';
 import { clampCarZoom } from './three/carZoom';
 
 type Refs = {
@@ -104,13 +104,11 @@ function initialCarIndex() {
 }
 
 const initialIndex = initialCarIndex();
+const initialTheme = lighting.readOpeningTheme();
 
 export const useAppStore = create<AppState>((set, get) => ({
   carIndex: initialIndex,
-  themeName:
-    typeof location === 'undefined'
-      ? DEFAULT_LIGHTING
-      : parseLighting(new URLSearchParams(location.search).get('light')),
+  themeName: initialTheme,
   sectionIndex: 0,
   isContactVisible: false,
   renderFinish: null,
@@ -178,7 +176,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (CARS[state.carIndex].drs && state.hasDRS && !state.isCarLoading && !state.carLoadError)
       set({ drsOpen: !state.drsOpen });
   },
-  headlightsRaised: true,
+  headlightsRaised: lighting.openingHeadlights(initialIndex, initialTheme),
   hasPopupHeadlights: false,
   toggleHeadlights: () => {
     const { carIndex, hasPopupHeadlights, isCarLoading, headlightsRaised } = get();
@@ -206,7 +204,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({
       drsOpen: false,
       hasDRS: false,
-      headlightsRaised: true,
+      headlightsRaised: lighting.openingHeadlights(i, get().themeName),
       hasPopupHeadlights: false,
       carIndex: i,
       cameraZoom: 1,
@@ -225,21 +223,23 @@ export const useAppStore = create<AppState>((set, get) => ({
     const choices = GARAGE_INDICES.filter((index) => index !== currentIndex);
     const nextIndex = choices[Math.floor(Math.random() * choices.length)];
     const colors = paintChoices(CARS[nextIndex]).map(({ value }) => value);
+    const themeName =
+      lighting.LIGHTING_MODES[Math.floor(Math.random() * lighting.LIGHTING_MODES.length)];
     set({
       carIndex: nextIndex,
       cameraZoom: 1,
       ...resetFerrariView(get()),
       drsOpen: false,
       hasDRS: false,
-      headlightsRaised: true,
+      headlightsRaised: lighting.openingHeadlights(nextIndex, themeName),
       hasPopupHeadlights: false,
-      themeName: LIGHTING_MODES[Math.floor(Math.random() * LIGHTING_MODES.length)],
+      themeName,
       activeBodyColor: colors[Math.floor(Math.random() * colors.length)] ?? 'original',
       hasBodyMaterial: false,
     });
   },
-  setThemeName: (theme) => set({ themeName: theme }),
-  toggleTheme: () => get().setThemeName(nextLighting(get().themeName)),
+  setThemeName: (theme) => set(lighting.openingLighting(get(), theme)),
+  toggleTheme: () => get().setThemeName(lighting.nextLighting(get().themeName)),
   setSectionIndex: (i) => set({ sectionIndex: i }),
   setContactVisible: (isContactVisible) => set({ isContactVisible }),
   pulseCarLights: () => {

@@ -20,7 +20,8 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
-  useDialogFocus(open, dialogRef, inputRef);
+  const openedByTouch = origin && window.matchMedia('(pointer: coarse)').matches;
+  useDialogFocus(open, dialogRef, openedByTouch ? dialogRef : inputRef);
   const sceneUnavailable = useAppStore((state) => state.sceneUnavailable);
   const commands = buildCommands({ onSection, setNotice, sceneUnavailable });
 
@@ -78,6 +79,7 @@ export function CommandMenu({ onSection }: { onSection: (id: SectionId) => void 
           >
             <section
               ref={dialogRef}
+              tabIndex={-1}
               style={panelStyle}
               role="dialog"
               aria-modal="true"

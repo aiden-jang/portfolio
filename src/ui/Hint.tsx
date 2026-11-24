@@ -6,21 +6,34 @@ import './all-controls.css';
 
 export function AllControlsButton() {
   return (
-    <button
-      type="button"
-      className="all-controls-trigger"
-      aria-label="Garage controls"
-      title="Garage controls"
-      onClick={(event) => {
-        event.currentTarget.focus({ preventScroll: true });
-        if (useAppStore.getState().sceneUnavailable)
+    <div className="garage-dock-actions">
+      <button
+        type="button"
+        className="all-controls-trigger"
+        aria-label="Garage controls"
+        title="Garage controls"
+        onClick={(event) => {
+          event.currentTarget.focus({ preventScroll: true });
+          if (useAppStore.getState().sceneUnavailable)
+            window.dispatchEvent(new Event(COMMAND_MENU_EVENT));
+          else useGarageStudio.getState().open();
+        }}
+      >
+        <span>Garage</span>
+      </button>
+      <button
+        type="button"
+        className="scene-control-button"
+        aria-label="Garage tools"
+        aria-haspopup="dialog"
+        onClick={(event) => {
+          event.currentTarget.focus({ preventScroll: true });
           window.dispatchEvent(new Event(COMMAND_MENU_EVENT));
-        else useGarageStudio.getState().open();
-      }}
-    >
-      <span aria-hidden="true">···</span>
-      <span>Garage</span>
-    </button>
+        }}
+      >
+        Tools
+      </button>
+    </div>
   );
 }
 
