@@ -13,7 +13,7 @@ import { CARS, F40_INDEX, THEMES } from '../config';
 import { prefersReducedMotion } from '../hooks/reducedMotion';
 import { smoothTowards } from '../math';
 import { useCarDetails } from './useCarDetails';
-import { createPopupHeadlights } from './popupHeadlights';
+import { prepareModelHeadlights } from './popupHeadlights';
 import { prepareModelFinish } from './modelFinishes';
 import { scheduleCompanionPrefetch } from './modelPrefetch';
 import { useShowroomModel } from './useShowroomModel';
@@ -52,7 +52,7 @@ export function Car() {
   const armIntro = useAppStore((s) => s.armIntro);
 
   const headlightsRaised = useAppStore((s) => s.headlightsRaised);
-  const headlights = useRef<ReturnType<typeof createPopupHeadlights>>(null);
+  const headlights = useRef<ReturnType<typeof prepareModelHeadlights>>(null);
 
   useEffect(() => {
     headlights.current?.setRaised(headlightsRaised, prefersReducedMotion());
@@ -153,7 +153,7 @@ export function Car() {
         studioFinish.current = carIndex === 0 ? tuneStudioFerrari(model) : null;
         studioFinish.current?.(isOpeningStudio(useAppStore.getState()));
         afterHoursSurfaces.current = prepareAfterHoursSurfaces(model, spec.file);
-        headlights.current = createPopupHeadlights(model, gltf.animations, spec.popupHeadlights);
+        headlights.current = prepareModelHeadlights(model, gltf.animations, spec);
         headlights.current?.setRaised(useAppStore.getState().headlightsRaised, true);
         useAppStore.setState({ hasPopupHeadlights: !!headlights.current });
         group.add(model);
@@ -164,7 +164,7 @@ export function Car() {
         refs.lamps =
           spec.roadLights === false
             ? []
-            : buildLamps(group, orientedSize, scale, !headlights.current);
+            : buildLamps(group, orientedSize, scale, !spec.popupHeadlights || !headlights.current);
         attachDetails(model, spec);
         const app = useAppStore.getState();
         refs.bodyMaterial =
@@ -248,10 +248,8 @@ export function Car() {
       ? worn
       : THREE.MathUtils.lerp(wearAmount.current, worn, Math.min(dt * 8, 1));
     wear.current?.(wearAmount.current);
-    const refinements =
-      review.active &&
-      (!review.study || review.study === 'finished') &&
-      useGarageStudy.getState().refined;
+    const finished = !review.study || review.study === 'finished';
+    const refinements = review.active && finished && useGarageStudy.getState().refined;
     reviewFinish.current?.(refinements);
     const studio = review.active || isOpeningStudio(app);
     const lampPreset = usesVehicleLampPreset(app, review, exhibit.exhibit);
@@ -264,9 +262,11 @@ export function Car() {
       app.isContactVisible && !review.active && group.visible,
       studio && !review.active && group.visible && !reduced ? motionState.openingOrbitProgress : 0,
     );
+    headlights.current?.setGarageActive?.(review.active && finished && review.chapter !== 'lineup');
     headlights.current?.setRaised(app.headlightsRaised, reduced);
     headlights.current?.update(dt, lampLevel, lampPreset);
     const { refs } = app;
+    refs.f40HeadlightBeam = headlights.current?.beam;
     const target = THEMES.studio;
     const k = Math.min(1, dt * TRANSITION_RATE);
 

@@ -11,6 +11,7 @@ import {
   type Object3D,
 } from 'three';
 import type { CarSpec } from '../types';
+import { createF40Headlights } from './f40Headlights';
 
 const BULB_COLOR = 0xfff2d8;
 
@@ -122,4 +123,18 @@ export function createPopupHeadlights(
       mixer.uncacheRoot(model);
     },
   };
+}
+
+type HeadlightController = ReturnType<typeof createPopupHeadlights> & {
+  setGarageActive?: (active: boolean) => void;
+  readonly beam?: number;
+};
+
+export function prepareModelHeadlights(
+  model: Object3D,
+  clips: AnimationClip[],
+  spec: CarSpec,
+): HeadlightController | null {
+  if (spec.file === 'ferrari-f120-f40.glb') return createF40Headlights(model);
+  return createPopupHeadlights(model, clips, spec.popupHeadlights);
 }

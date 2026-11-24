@@ -39,7 +39,11 @@ export type Model = {
     };
   }[];
   meshes: {
-    primitives: { attributes: { POSITION: number }; indices: number; material: number }[];
+    primitives: {
+      attributes: { POSITION: number; NORMAL?: number };
+      indices: number;
+      material: number;
+    }[];
   }[];
   nodes: {
     name?: string;
@@ -55,7 +59,7 @@ export type Model = {
 
 // Decode actual positions, triangle indices and hierarchy for material and moving-part checks.
 // Texture presence is retained without image decoding.
-export async function modelFixture(file: string) {
+export async function modelFixture(file: string, withNormals = false) {
   const bytes = readFileSync(new URL(`../../public/models/${file}`, import.meta.url));
   const jsonLength = bytes.readUInt32LE(12);
   const data: Model = JSON.parse(bytes.subarray(20, 20 + jsonLength).toString());
@@ -85,9 +89,9 @@ export async function modelFixture(file: string) {
     }
     const reader = new DataView(decoded.buffer, decoded.byteOffset, decoded.byteLength);
     const type = accessor.componentType;
-    if (![5122, 5123, 5125, 5126].includes(type))
+    if (![5120, 5122, 5123, 5125, 5126].includes(type))
       throw new Error('Unsupported fixture component type');
-    const bytes = type === 5126 || type === 5125 ? 4 : 2;
+    const bytes = type === 5126 || type === 5125 ? 4 : type === 5120 ? 1 : 2;
     const stride = view.byteStride ?? compressed?.byteStride ?? width * bytes;
     const result =
       width === 1
@@ -103,11 +107,13 @@ export async function modelFixture(file: string) {
           ? reader.getFloat32(offset, true)
           : type === 5125
             ? reader.getUint32(offset, true)
-            : type === 5122
-              ? reader.getInt16(offset, true)
-              : reader.getUint16(offset, true);
+            : type === 5120
+              ? reader.getInt8(offset)
+              : type === 5122
+                ? reader.getInt16(offset, true)
+                : reader.getUint16(offset, true);
       result[i] = accessor.normalized
-        ? Math.max(value / (type === 5122 ? 32767 : 65535), -1)
+        ? Math.max(value / (type === 5120 ? 127 : type === 5122 ? 32767 : 65535), -1)
         : value;
     }
     return result;
@@ -142,6 +148,10 @@ export async function modelFixture(file: string) {
         'position',
         new THREE.Float32BufferAttribute(values(primitive.attributes.POSITION, 3), 3),
       );
+      const normal = primitive.attributes.NORMAL;
+      if (withNormals && normal !== undefined) {
+        geometry.setAttribute('normal', new THREE.Float32BufferAttribute(values(normal, 3), 3));
+      }
       geometry.setIndex(new THREE.BufferAttribute(values(primitive.indices, 1), 1));
       group.add(new THREE.Mesh(geometry, materials[primitive.material]));
     }

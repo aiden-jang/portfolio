@@ -129,9 +129,9 @@ export function Floor({
       const car = CARS[state.carIndex];
       const lamps = afterHoursLampStyles[car.file];
       const lampActive = afterHours && !!lamps && !state.isCarLoading;
-      const headsOn =
-        lampActive && !!lamps.head && (!car.popupHeadlights || state.headlightsRaised);
-      head.x = smoothTowards(head.x, Number(headsOn) * 2.35, settle);
+      const beam = refs.f40HeadlightBeam ?? Number(!car.popupHeadlights || state.headlightsRaised);
+      const headLevel = lampActive && lamps.head ? beam * 2.35 : 0;
+      head.x = smoothTowards(head.x, headLevel, settle);
       tail.x = smoothTowards(tail.x, Number(lampActive) * 1.38, settle);
       if (lamps) {
         head.y = lamps.head?.spacing ?? 0;

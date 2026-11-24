@@ -1,7 +1,7 @@
 import { matchedRearYaw } from './matchedSwap';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { resetStudyCamera, useGarageStudy } from '../garageStudy/state';
-import { CARS } from '../config';
+import { CARS, F40_INDEX } from '../config';
 import { useAppStore } from '../store';
 import { ControlIcon } from '../ui/ControlIcon';
 import { clamp } from '../math';
@@ -169,6 +169,21 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
           <button aria-label="Zoom in" onClick={() => zoom(-0.1)}>
             <ControlIcon name="zoom" />
           </button>
+          {id === F40_INDEX && chapter === 'walk' && (
+            <button
+              aria-label="Pop-up headlights"
+              aria-pressed={raised}
+              title={raised ? 'Lower headlights' : 'Raise headlights'}
+              disabled={!hasHeadlights || waiting}
+              onClick={() => {
+                useAppStore.getState().toggleHeadlights();
+                repaintStudio();
+              }}
+            >
+              <ControlIcon name="headlights" />
+              Lights
+            </button>
+          )}
         </div>
       )}
     </>

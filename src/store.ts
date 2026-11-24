@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type * as THREE from 'three';
-import { CARS, DEFAULT_CAR_INDEX, GARAGE_INDICES, adjacentCar } from './config';
+import { CARS, DEFAULT_CAR_INDEX, F40_INDEX, GARAGE_INDICES, adjacentCar } from './config';
 import { paintChoices, type ActiveBodyColor } from './paint';
 import type { ColorMaterial, Lamp, ThemeName } from './types';
 import { cameraViews, isFerrariView, type CameraView } from './three/cameraViews';
@@ -11,6 +11,7 @@ type Refs = {
   bodyMaterial: ColorMaterial | null;
   bodyOriginalColor: THREE.Color | null;
   lamps: Lamp[];
+  f40HeadlightBeam?: number;
   exposureCurrent: number;
   floorReflection: number;
   lightPulseT: number;
@@ -180,9 +181,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   headlightsRaised: true,
   hasPopupHeadlights: false,
   toggleHeadlights: () => {
-    const state = get();
-    if (CARS[state.carIndex].popupHeadlights && state.hasPopupHeadlights && !state.isCarLoading)
-      set({ headlightsRaised: !state.headlightsRaised });
+    const { carIndex, hasPopupHeadlights, isCarLoading, headlightsRaised } = get();
+    const supportsHeadlights = carIndex === F40_INDEX || CARS[carIndex].popupHeadlights;
+    if (supportsHeadlights && hasPopupHeadlights && !isCarLoading)
+      set({ headlightsRaised: !headlightsRaised });
   },
   refs: {
     bodyMaterial: null,
