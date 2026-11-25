@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import { easedProgress } from '../../hooks/useScrollStudy';
 import { ScreenshotImage } from '../ScreenshotImage';
@@ -8,10 +8,20 @@ export function WorthRanking({ onUnavailable }: { onUnavailable: () => void }) {
   const draw = useCallback((progress: number) => {
     const node = panel.current;
     if (!node) return;
-    node.style.setProperty('--rank-progress', String(easedProgress(progress, 0.24, 0.73)));
+    node.toggleAttribute('data-ranked', progress >= 0.56);
     node.style.setProperty('--verdict-progress', String(easedProgress(progress, 0.7, 0.92)));
   }, []);
-  useTimedScene(panel, draw, { duration: 1980, hold: 1400 });
+  const finish = useTimedScene(panel, draw, { duration: 1980, hold: 1400 });
+  useEffect(() => {
+    const preview = panel.current?.closest('button');
+    const settle = () => finish(1, 1000);
+    preview?.addEventListener('pointerenter', settle);
+    preview?.addEventListener('focus', settle);
+    return () => {
+      preview?.removeEventListener('pointerenter', settle);
+      preview?.removeEventListener('focus', settle);
+    };
+  }, [finish]);
 
   return (
     <span ref={panel} className="worth-focus worth-ranking" aria-hidden="true">

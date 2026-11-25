@@ -33,5 +33,6 @@ export const Cat: ComponentType<{
   roomPlay: {
     action: { kind: RoomAction; count: number } | null;
     onPositions: (points: RoomPositions) => void;
+    toy?: { current: { x: number; held: boolean } | null };
   };
 }>;

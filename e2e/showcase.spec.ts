@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 for (const width of [1440, 390]) {
-  test(`room reveal follows a scroll nudge without jumping at ${width}px`, async ({ page }) => {
+  test(`the drawn cat jumps into the interactive room at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -18,27 +18,17 @@ for (const width of [1440, 390]) {
           behavior: 'instant',
         });
       }, progress);
-    await seek(0.6);
-    await expect(duet).toHaveAttribute('data-duet-progress', '0.53');
-    const step = duet.evaluate(async (stage) => {
-      const room = stage.querySelector<HTMLElement>('#project-mrrp')!;
-      const radius = () => parseFloat(room.style.getPropertyValue('--iris'));
-      let previous = radius();
-      let largest = 0;
-      const end = performance.now() + 400;
-      do {
-        await new Promise(requestAnimationFrame);
-        const current = radius();
-        largest = Math.max(largest, Math.abs(current - previous));
-        previous = current;
-      } while (performance.now() < end);
-      return largest / radius();
-    });
-    await seek(0.665);
-    expect(await step).toBeLessThan(0.28);
-    await expect(duet).toHaveAttribute('data-duet-progress', '0.75');
-    await seek(0.52);
-    await expect(duet.locator('#project-mrrp')).toHaveAttribute('inert', '');
+    await seek(0.32);
+    await expect(duet).toHaveAttribute('data-match', 'draw');
+    const room = duet.locator('#project-mrrp');
+    await expect(room).toHaveAttribute('inert', '');
+    await seek(0.51);
+    await expect(duet.locator('.bean-match')).toBeVisible();
+    await expect(duet).toHaveAttribute('data-match', 'room');
+    await expect(room).not.toHaveAttribute('inert');
+    await seek(0.25);
+    await expect(duet).toHaveAttribute('data-match', 'draw');
+    await expect(room).toHaveAttribute('inert', '');
   });
 
   test(`Bean's visible controls work at ${width}px`, async ({ page }) => {
@@ -46,13 +36,13 @@ for (const width of [1440, 390]) {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.goto('/#project-mrrp', { waitUntil: 'domcontentloaded' });
     const room = page.locator('#project-mrrp');
-    const controls = room.getByRole('group', { name: 'Spend a moment with Bean' });
+    const controls = room.getByRole('group', { name: 'Play in Bean’s room' });
     const status = room.getByRole('status');
-    await controls.getByRole('button', { name: 'Pet', exact: true }).click();
+    await controls.getByRole('button', { name: 'Pet Bean', exact: true }).click();
     await expect(status).toHaveText('Bean leans in and gives you a little mrrp.');
-    await controls.getByRole('button', { name: 'Toy mouse' }).click();
+    await controls.getByRole('button', { name: 'Play with the toy mouse' }).click();
     await expect(status).toHaveText('Bean crouches and pounces on the toy mouse.');
-    const box = controls.getByRole('button', { name: 'Box', exact: true });
+    const box = controls.getByRole('button', { name: 'Cardboard box', exact: true });
     await box.click();
     await expect(box).toHaveAttribute('aria-pressed', 'true');
   });
@@ -87,7 +77,7 @@ for (const width of [1440, 390]) {
     await expect(canvas).toHaveCount(0);
     const iodine = page.locator('#project-iodine');
     await expect(iodine.getByRole('status')).toHaveText('Edit undone');
-    await expect(iodine.getByRole('button', { name: /^(Undo|Replay) edit$/ })).toHaveCount(0);
+    await expect(iodine.getByRole('button', { name: 'Play Iodine demo' })).toBeVisible();
     const room = page.locator('#project-mrrp');
     await room.locator('.bean-window').scrollIntoViewIfNeeded();
     await room.getByRole('button', { name: 'Pet Bean', exact: true }).click();
@@ -135,8 +125,8 @@ for (const width of [1440, 390]) {
     await page.keyboard.press('Escape');
     await expect(worth).toBeFocused();
 
-    const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
-    await expect(drawing.getByRole('status')).toHaveText('Guitar');
+    const drawing = page.getByRole('figure', { name: 'Interactive cat drawing round' });
+    await expect(drawing.getByRole('status')).toHaveText('Cat');
     await page.getByRole('button', { name: 'How I built it: iguess', exact: true }).click();
     await page.getByRole('button', { name: 'Follow the flow' }).click();
     await expect(page.locator('.flow-explanation')).toContainText('AI Worker');
@@ -172,7 +162,7 @@ for (const width of [1440, 390]) {
       await page.keyboard.press('Escape');
     }
     await expect(
-      page.locator(':is(.project-featured-group, #sec-more-work) article[id^="project-"]'),
+      page.locator(':is(.work-exhibit, #sec-more-work) article[id^="project-"]'),
     ).toHaveCount(8);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
     expect(errors).toEqual([]);

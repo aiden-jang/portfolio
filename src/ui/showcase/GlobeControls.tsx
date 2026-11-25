@@ -80,3 +80,35 @@ export function GlobeControls({
     </>
   );
 }
+
+export function GlobeScreenshotButton({
+  buttonRef,
+  unavailable,
+  onInspect,
+}: {
+  buttonRef: Ref<HTMLButtonElement>;
+  unavailable: boolean;
+  onInspect: () => void;
+}) {
+  return (
+    <button
+      ref={buttonRef}
+      type="button"
+      className="orbit-screenshot"
+      disabled={unavailable}
+      aria-label="Inspect screenshot: meanwhile."
+      title="View full screenshot"
+      onClick={onInspect}
+    >
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
+        <path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" />
+      </svg>
+    </button>
+  );
+}

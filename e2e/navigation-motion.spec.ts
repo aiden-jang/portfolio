@@ -52,7 +52,7 @@ test('the desktop underline tracks the section and fits after resize', async ({ 
 
   await nav.getByRole('link', { name: 'Featured work', exact: true }).click();
   await expect(nav.locator('a[aria-current]')).toHaveText('Featured work');
-  await expect(page.getByRole('heading', { name: 'Featured work', exact: true })).toBeFocused();
+  await expect(page.getByRole('heading', { name: 'meanwhile.', exact: true })).toBeFocused();
   await expect.poll(markerFollowsActive).toBe(true);
   await expect(header).toHaveCSS('background-color', 'rgba(16, 16, 20, 0.76)');
   await expect(header).toHaveCSS('backdrop-filter', 'blur(10px)');

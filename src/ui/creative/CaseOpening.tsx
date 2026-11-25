@@ -9,6 +9,7 @@ import { IodineSession } from '../showcase/iodine-session';
 import { RecoveryEditor } from '../showcase/IodinePresentation';
 import { BatchingGraphic } from '../sections/BatchingSpread';
 import './case-opening.css';
+import type { EvidenceFrame } from './evidenceNavigation';
 
 export function BatchingCaseOpening() {
   return (
@@ -83,9 +84,11 @@ export function IodineCaseOpening({ role }: { role: string }) {
 export function QuakeCaseOpening({
   agency,
   onSelect,
+  frame,
 }: {
   agency: Agency;
   onSelect: (agency: Agency) => void;
+  frame?: EvidenceFrame;
 }) {
   const report = kamchatkaExample.sources.find((source) => source.name === agency);
   return (
@@ -96,7 +99,13 @@ export function QuakeCaseOpening({
         data-agency={agency}
       >
         <figure className="quake-opening-globe">
-          <EarthquakeGlobeStill />
+          {frame ? (
+            <div className="case-carried-globe" data-evidence-frame>
+              <img src={frame.image} alt={`Globe view from the portfolio. ${frame.place}`} />
+            </div>
+          ) : (
+            <EarthquakeGlobeStill />
+          )}
           <figcaption>
             <strong>Off the east coast of Kamchatka</strong>
             <span>

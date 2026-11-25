@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { App } from '../../App';
 import { StoryPage } from './StoryPage';
-import { OpenEvidence } from './evidenceNavigation';
+import { OpenEvidence, type EvidenceFrame, type OpenEvidenceLink } from './evidenceNavigation';
 import { type StoryId } from './storyRoutes';
 import './iodine-route.css';
 
@@ -24,6 +24,7 @@ export function EvidenceRoute() {
     link: HTMLAnchorElement;
     title: string;
     restoration: ScrollRestoration;
+    frame?: EvidenceFrame;
   } | null>(null);
 
   const show = (value: StoryId | null) => {
@@ -62,7 +63,7 @@ export function EvidenceRoute() {
     };
   }, []);
 
-  const enter = (event: MouseEvent<HTMLAnchorElement>, id: StoryId) => {
+  const enter: OpenEvidenceLink = (event, id, capture) => {
     if (
       event.defaultPrevented ||
       event.button !== 0 ||
@@ -73,11 +74,15 @@ export function EvidenceRoute() {
     )
       return false;
     event.preventDefault();
+    origin.current?.frame?.source.removeAttribute('data-evidence-frame');
+    const frame = capture?.();
+    frame?.source.setAttribute('data-evidence-frame', '');
     origin.current = {
       link: event.currentTarget,
       scrollY: window.scrollY,
       title: document.title,
       restoration: history.scrollRestoration,
+      frame,
     };
     history.pushState({ portfolioEvidence: id }, '', event.currentTarget.href);
     show(id);
@@ -89,7 +94,14 @@ export function EvidenceRoute() {
       <div hidden={Boolean(open)} className="evidence-portfolio">
         <App />
       </div>
-      {open && <StoryPage key={open} id={open} returnToPortfolio={() => history.back()} />}
+      {open && (
+        <StoryPage
+          key={open}
+          id={open}
+          frame={origin.current?.frame}
+          returnToPortfolio={() => history.back()}
+        />
+      )}
     </OpenEvidence.Provider>
   );
 }

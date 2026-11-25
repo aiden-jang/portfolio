@@ -51,16 +51,14 @@ and [NOAA SWPC aurora forecast](https://www.swpc.noaa.gov/products/aurora-30-min
 
 ## Project scenes
 
-Iodine’s recorded edit recovery loops and holds the restored file in view. Its
-case study opens on the same editor and preserves its scroll, focus and restored
-line on Back. Undo, Replay, saved states and the clickable file reference remain
-available in the case study. Its scope control compares the approved folder
-with a folder outside it.
+Iodine pairs a muted screen recording with an interactive edit recovery. The case
+study keeps the selected edit and restores the source frame, scroll position, and
+focus on Back. Reduced motion keeps the recording on demand.
 
-The mrrp scene uses Bean’s native room canvas. Visitors can pet Bean, play with her toy
-mouse, and invite her into the cardboard box using the room itself or keyboard controls.
-Sit together and Morning light stay available below the room. The initial light warms
-the room at golden hour, then changes as visitors scroll through the scene.
+The mrrp scene uses Bean’s native room canvas. Visitors can pet Bean, drag the toy
+mouse, and invite her into the box. The room also responds to keyboard input. On
+larger viewports, the iguess cat jumps into the room. Reduced motion presents the
+two scenes in reading order.
 
 The canvas loads near the viewport and unmounts when it leaves. Reduced motion uses
 still reactions. The room is silent and uses local examples. To rebuild the checked-in
@@ -69,8 +67,8 @@ renderer, run `node scripts/vendor-mrrp.mjs /path/to/mrrp` with a clean checkout
 The script applies the [room patch](../scripts/patches/mrrp-room.patch) to a temporary copy.
 The original [MIT license](../public/projects/mrrp-license.txt) ships with the renderer.
 
-The iguess scene draws the recorded round, shows the wrong guess, then holds the
-answer before restarting. The worth preview moves Goose Island IPA ahead of
+The iguess scene draws a cat round and holds the answer before restarting.
+Visitors can take over the drawing while it is playing. The worth preview moves Goose Island IPA ahead of
 Brooklyn Kura Sake Junmai and holds the verdict. These demos pause offscreen and
 in hidden tabs. Reduced motion shows their finished states.
 
@@ -79,7 +77,7 @@ becomes a match and the $48 owewell receipt arrives. It runs once and holds the
 bill on return. The saved owewell link goes straight to the receipt. Reduced
 motion shows the match and receipt together.
 
-The request-batching diagram follows scroll. Its static Before and After controls
+The request-batching diagram gathers 120 marks into one moving pulse as the visitor scrolls. Its static Before and After controls
 are available on short viewports and with reduced motion.
 
 The bloomnote garden reveals its three blooms once, then holds the view from the
@@ -100,5 +98,5 @@ red paint and rises over the louvers in one take. Scrolling in either direction
 scrubs the recorded turn. Phones draw frames from the same recording as three compact image sheets.
 The scrubber follows the scroll and supports manual control, with stills for reduced motion.
 The About reel pairs local project captures
-with a tighter mobile view for Iodine. It loops while in view, is tappable to pause, and
-plays on request when reduced motion is enabled.
+with a tighter mobile view for Iodine. It loops while in view,
+pauses while held and plays on request when reduced motion is enabled.

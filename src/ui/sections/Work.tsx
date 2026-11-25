@@ -1,9 +1,8 @@
-import { useRef } from 'react';
-import { useMapEditorCut } from '../showcase/useMapEditorCut';
+import { DinnerScene } from '../showcase/DinnerScene';
 import { BloomPreview } from '../showcase/BloomPreview';
 import { Duet } from '../showcase/Duet';
 
-import { ProjectScene, SceneAppLink, DinnerScene } from '../showcase/ProjectScene';
+import { ProjectScene, SceneAppLink } from '../showcase/ProjectScene';
 import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
 import { IodinePresentation } from '../showcase/IodinePresentation';
 import '../project-gallery.css';
@@ -16,10 +15,13 @@ import type { WorkDetail } from '../../types';
 import { Section } from './shared';
 import { ProjectPreview } from '../ProjectPreview';
 import { ControlIcon } from '../ControlIcon';
+import '../showcase/live-project-index.css';
+import '../showcase/editorial-motion.css';
+import './editorial-cut.css';
 
 type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
-const featured = projects.filter((item) => FEATURED_PROJECTS.includes(workId(item)));
+const meanwhile = projects.find((item) => item.mark === 'everythingisfine')!;
 const collection = projects.filter((item) => !FEATURED_PROJECTS.includes(workId(item)));
 const editorialOrder = ['bloomnote', 'mrrp', 'worth', 'wherever', 'owewell', 'iguess', 'platform'];
 const orderedCollection = editorialOrder
@@ -28,24 +30,13 @@ const orderedCollection = editorialOrder
   .concat(collection.filter((item) => !editorialOrder.includes(workId(item))));
 
 export function WorkSection() {
-  const featuredGroup = useRef<HTMLDivElement>(null);
-  useMapEditorCut(featuredGroup);
   return (
     <Section id="sec-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="garage-work pointer-events-auto">
-        <h2 className="featured-work-heading">Featured work</h2>
-        <div
-          ref={featuredGroup}
-          className="garage-project-list project-featured-group"
-          aria-label="Featured projects"
-        >
-          {featured.map((item) =>
-            item.mark === 'everythingisfine' ? (
-              <EarthquakeFeature key={item.title} item={item} preview={PREVIEWS.everythingisfine} />
-            ) : (
-              <IodinePresentation key={item.title} />
-            ),
-          )}
+        <h2 className="sr-only">Featured work</h2>
+        <div className="work-exhibit">
+          <EarthquakeFeature item={meanwhile} preview={PREVIEWS.everythingisfine} />
+          <IodinePresentation />
         </div>
       </div>
     </Section>
@@ -112,7 +103,7 @@ export function MoreProjectsSection({ onOpen }: Props) {
               }
               links={null}
             >
-              <DinnerScene />
+              <DinnerScene onRead={(button) => onOpen(owewell, button)} />
             </ProjectScene>
           </div>
           <div className="project-gallery gallery-companions">
@@ -173,21 +164,23 @@ function Project({ item, onOpen }: { item: WorkDetail } & Props) {
         {link}
       </div>
       {item.contribution && <p className="project-role">Open-source contributor</p>}
-      <p>{description}</p>
+      <p>{item.mark === 'auth' ? 'One sign-in across the apps.' : description}</p>
     </div>
   );
   return (
     <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
       <div className="project-card-media">
         {item.mark === 'auth' && !location.search.includes('preview=platform') ? (
-          <img
-            className="platform-cover"
-            src="/projects/platform-hub.webp"
-            width={1050}
-            height={740}
-            alt="The shared accounts hub and its connected apps"
-            loading="lazy"
-          />
+          <div className="platform-viewport">
+            <img
+              className="platform-cover"
+              src="/projects/platform-hub.webp"
+              width={1050}
+              height={740}
+              alt="The shared accounts hub and its connected apps"
+              loading="lazy"
+            />
+          </div>
         ) : (
           media
         )}

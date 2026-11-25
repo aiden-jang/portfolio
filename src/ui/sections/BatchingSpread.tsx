@@ -10,6 +10,8 @@ import { lastScrollInput, useScrollArrival } from '../../hooks/scrollArrival';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
 import './batching-spread.css';
 
+import { RequestPulse } from './RequestPulse';
+
 const replayDuration = 960;
 const marks = Array.from({ length: 120 }, (_, index) => ({
   x: 50 + (index % 12) * 47,
@@ -64,6 +66,7 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
     if (active) {
       element.dataset.driver = 'scroll';
       element.style.setProperty('--batch-scroll-time', replayDuration + 'ms');
+      paintRequestPulse(element, 1, true);
       setPhase('after');
     }
   }, []);
@@ -72,7 +75,10 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
 
   function show(next: typeof phase) {
     manual.current = window.scrollY;
-    if (figure.current) figure.current.dataset.driver = 'controls';
+    if (figure.current) {
+      figure.current.dataset.driver = 'controls';
+      paintRequestPulse(figure.current, next === 'after' ? 1 : 0, true);
+    }
     setPhase(next);
   }
 
@@ -88,6 +94,8 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
     const update = (event: Event) => {
       if (!hasScrollPlayback()) {
         delete element.dataset.driver;
+        paintRequestPulse(element, 1, true);
+        setPhase('after');
         return;
       }
       const p = (event as CustomEvent<number>).detail;
@@ -106,7 +114,8 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
         '--batch-scroll-time',
         Math.round(progress * replayDuration) + 'ms',
       );
-      setPhase(progress >= 0.76 ? 'after' : progress >= 0.32 ? 'batching' : 'before');
+      paintRequestPulse(element, progress);
+      setPhase(progress >= 0.96 ? 'after' : progress >= 0.32 ? 'batching' : 'before');
     };
     stage.addEventListener('batching-progress', update);
     return () => stage.removeEventListener('batching-progress', update);
@@ -120,7 +129,7 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       data-phase={phase}
       aria-label="Request batching comparison"
     >
-      <BatchingGraphic shared />
+      <RequestPulse />
       <div className="batching-readout">
         {after
           ? '1 batched request'
@@ -147,4 +156,9 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       </figcaption>
     </figure>
   );
+}
+
+function paintRequestPulse(figure: HTMLElement, value: number, instant = false) {
+  figure.dataset.pulse = String(value);
+  figure.dispatchEvent(new CustomEvent('pulse-position', { detail: { value, instant } }));
 }

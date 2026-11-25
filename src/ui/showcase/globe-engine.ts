@@ -30,9 +30,14 @@ const featured: GlobeEvent = {
   lon: 159.7106,
   lat: 53.024,
 };
-const openingZoom = () => (matchMedia('(max-width: 767px)').matches ? 1.32 : 1.24);
+const openingZoom = (compact?: boolean) => {
+  const phone = matchMedia('(max-width: 767px)').matches;
+  if (compact) return phone ? 1.04 : 0.99;
+  return phone ? 1.32 : 1.24;
+};
 
 type Options = {
+  compact?: boolean;
   autoRotate: boolean;
   onRotation: (rotating: boolean) => void;
   onManual?: () => void;
@@ -66,7 +71,7 @@ export function createOrbitGlobe(
   const initial = {
     lon: 165,
     lat: 42,
-    zoom: openingZoom(),
+    zoom: openingZoom(options.compact),
   };
   const pose: GlobePose = { ...initial };
   const art = canvas.closest<HTMLElement>('.orbit-art');
@@ -79,6 +84,9 @@ export function createOrbitGlobe(
   let lastShown: string | undefined;
   let journey = 0;
   let origin: GlobePose | undefined;
+  let retained = false;
+  let lastPulse = 0;
+  let lastSweep = 0;
   options.onRotation(rotating);
   const draw = (time: number) => {
     frame = 0;
@@ -87,7 +95,8 @@ export function createOrbitGlobe(
       return;
     }
     try {
-      if (rotating && previous && time - previous < ROTATION_FRAME_MS) {
+      const idle = Boolean(options.weather) && !reduced.matches && !retained;
+      if (previous && time - previous < (rotating ? ROTATION_FRAME_MS : 42) && (rotating || idle)) {
         frame = requestAnimationFrame(draw);
         return;
       }
@@ -96,11 +105,11 @@ export function createOrbitGlobe(
       const moving = journey === 0 && input.step(dt);
       if (journey === 0 && rotating && time > holdUntil)
         pose.lon = (pose.lon + ROTATION_RATE * dt) % 360;
-      globe.render(
-        pose,
-        journey,
-        reduced.matches || (lastShown && lastShown !== featured.id) ? 0 : time / 1000,
-      );
+      if (!retained) {
+        lastPulse = reduced.matches || (lastShown && lastShown !== featured.id) ? 0 : time / 1000;
+        lastSweep = reduced.matches ? 0 : time / 1000;
+      }
+      globe.render(pose, journey, lastPulse, lastSweep);
       if (art && journey > 0 && journey < 1) {
         const surface = canvas.getBoundingClientRect();
         const marker = globe.project(featured.lon, featured.lat, surface);
@@ -115,7 +124,7 @@ export function createOrbitGlobe(
           );
         }
       }
-      if (moving || (rotating && journey === 0)) frame = requestAnimationFrame(draw);
+      if (moving || (rotating && journey === 0) || idle) frame = requestAnimationFrame(draw);
       else previous = 0;
     } catch {
       options.failed();
@@ -156,6 +165,7 @@ export function createOrbitGlobe(
     wake();
   };
   const undirect = () => {
+    retained = false;
     journey = 0;
     origin = undefined;
     options.onManual?.();
@@ -192,7 +202,7 @@ export function createOrbitGlobe(
   };
   const steer = (event: Event) => {
     const t = (event as CustomEvent<number>).detail;
-    if (t === journey) return;
+    if (retained || t === journey) return;
     journey = t;
     if (journey > 0) {
       if (!origin) origin = { ...pose };
@@ -213,7 +223,7 @@ export function createOrbitGlobe(
   canvas.addEventListener('quake-journey', steer);
   canvas.addEventListener('globe-reset', reset);
   const resize = new ResizeObserver(() => {
-    const zoom = openingZoom();
+    const zoom = openingZoom(options.compact);
     pose.zoom *= zoom / initial.zoom;
     initial.zoom = zoom;
     globe.resize();
@@ -230,6 +240,17 @@ export function createOrbitGlobe(
   holdUntil = performance.now() + OPENING_HOLD_MS;
   wake();
   return {
+    capture: () => {
+      if (!art || disposed || !canvas.width) return;
+      setRotating(false);
+      retained = true;
+      globe.render(pose, journey, lastPulse, lastSweep);
+      return {
+        image: canvas.toDataURL('image/png'),
+        place: selectable.find((event) => event.id === lastShown)?.place ?? featured.place,
+        source: art,
+      };
+    },
     reset,
     setRotating,
     toggleRotation: () => {

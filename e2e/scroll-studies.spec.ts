@@ -41,10 +41,11 @@ for (const width of [1440, 390]) {
     await place('.orbit-feature', 0.2);
     await expect(page.getByRole('button', { name: 'Retry globe', exact: true })).toBeVisible();
     await expect(recovery).toHaveText('Agent edit');
-    await place('#project-iodine .recovery', 0.22);
+    await place('#project-iodine', 0.1);
     const parkedEditor = await page.evaluate(() => scrollY);
     await expect(recovery).toHaveText('Edit undone');
-    await expect(iodine.getByRole('button', { name: /^(Undo|Replay) edit$/ })).toHaveCount(0);
+    const recording = iodine.getByRole('button', { name: 'Pause Iodine demo' });
+    await expect(recording).toBeVisible();
     expect(await page.evaluate(() => scrollY)).toBe(parkedEditor);
     await expect(recovery).toHaveText('Agent edit');
     await expect(recovery).toHaveText('Edit undone');
@@ -69,9 +70,9 @@ for (const width of [1440, 390]) {
     await place('#project-bloomnote .bloom-garden-plot', 0.6);
     await expect(garden).toHaveAttribute('data-study-progress', '1.000');
 
-    const drawing = page.getByRole('figure', { name: 'Recorded iguess drawing round' });
-    await seekScene('.duet', 0.45);
-    await expect(drawing.getByRole('status')).toHaveText('Guitar');
+    const drawing = page.getByRole('figure', { name: 'Interactive cat drawing round' });
+    await seekScene('.duet', 0.19);
+    await expect(drawing.getByRole('status')).toHaveText('Cat');
     const drawingPin = page.locator('.duet [data-study-pin]');
     expect(
       await drawingPin.evaluate((el) =>
@@ -80,13 +81,13 @@ for (const width of [1440, 390]) {
     ).toBeLessThan(2);
     const parkedDrawing = await page.evaluate(() => scrollY);
     await expect(drawing.getByRole('status')).toHaveText('What is it?');
-    await expect(drawing.getByRole('status')).toContainText('A rocket');
-    await expect(drawing.getByRole('status')).toHaveText('Guitar');
+    await expect(drawing.getByRole('status')).toHaveText('Two ears…');
+    await expect(drawing.getByRole('status')).toHaveText('Cat');
     expect(await page.evaluate(() => scrollY)).toBe(parkedDrawing);
     const room = page.locator('#project-mrrp .bean-window');
-    await seekScene('.duet', 0.94);
+    await seekScene('.duet', 0.99);
     await expect(room).toHaveAttribute('data-light', 'morning');
-    await seekScene('.duet', 0.71);
+    await seekScene('.duet', 0.83);
     await expect(room).toHaveAttribute('data-light', 'evening');
     const verdict = page.locator('#project-everythingisfine .quake-journey-readings');
     await seekScene('#project-everythingisfine', 0.78);
@@ -119,23 +120,10 @@ for (const width of [1440, 390]) {
       'globe',
     );
 
-    const featured = page.locator('.project-featured-group');
-    const gridOpacity = () =>
-      iodine
-        .locator('.recovery-source')
-        .evaluate((el) => Number(getComputedStyle(el, '::before').opacity));
-    const approachEditor = () => place('#project-iodine .recovery', 0.69);
-    await seekScene('#project-everythingisfine', 0.96);
-    await expect(quake).toHaveAttribute('data-quake-view', 'map');
-    await approachEditor();
-    await expect(featured).toHaveAttribute('data-map-editor-cut', '');
-    await expect.poll(gridOpacity).toBeGreaterThan(0.25);
-    await place('#project-iodine .recovery', 0.2);
+    await expect(iodine.locator('video')).toHaveJSProperty('paused', true);
+    await place('#project-iodine', 0.11);
+    await expect(iodine.locator('video')).toHaveJSProperty('paused', false);
     await expect(recovery).toHaveText('Edit undone');
-    await expect(featured).not.toHaveAttribute('data-map-editor-cut');
-    await approachEditor();
-    await expect(recovery).toHaveText('Edit undone');
-    await expect.poll(gridOpacity).toBeGreaterThan(0.25);
     await expect(iodine.getByRole('link', { name: 'Read the iodine case study' })).toHaveAttribute(
       'href',
       /edit=restored/,
@@ -197,7 +185,6 @@ for (const width of [1440, 390]) {
     await expect(track.locator('.finish-detail')).toHaveCount(0);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect(featured).not.toHaveAttribute('data-map-editor-cut');
     await expect(video).not.toHaveAttribute('src', /mp4/);
     await expect(track.locator('canvas')).toBeHidden();
     await slider.fill('100');
@@ -206,8 +193,8 @@ for (const width of [1440, 390]) {
 
     await place('#project-iodine .recovery', 0.22);
     await expect(recovery).toHaveText('Edit undone');
-    await expect(iodine.getByRole('button', { name: 'Replay edit', exact: true })).toHaveCount(0);
+    await expect(iodine.locator('video')).toHaveJSProperty('paused', true);
     await expect(garden.locator('.bloom-garden-plant img').first()).toHaveCSS('clip-path', 'none');
-    await expect(drawing.getByRole('status')).toHaveText('Guitar');
+    await expect(drawing.getByRole('status')).toHaveText('Cat');
   });
 }

@@ -28,14 +28,16 @@ export function createRecordedWeather(scene: Scene, data: RecordedWeather) {
   texture.flipY = false;
   texture.needsUpdate = true;
   const strength = { value: 1 };
+  const sweep = { value: 0 };
   const radarGeometry = new SphereGeometry(1.002, 96, 64);
   const radarMaterial = new ShaderMaterial({
     transparent: true,
     depthWrite: false,
-    uniforms: { uRadar: { value: texture }, uStrength: strength },
+    uniforms: { uRadar: { value: texture }, uStrength: strength, uSweep: sweep },
     vertexShader: vertex,
     fragmentShader: `
       uniform float uStrength;
+      uniform float uSweep;
       uniform sampler2D uRadar;
       varying vec3 vSurface;
       void main() {
@@ -46,7 +48,8 @@ export function createRecordedWeather(scene: Scene, data: RecordedWeather) {
         float v = 0.5 - 0.5 * log((1.0 + latitude) / (1.0 - latitude)) / 6.2831853;
         vec4 radar = texture2D(uRadar, vec2(u, v));
         float edge = smoothstep(0.02, 0.27, facing);
-        gl_FragColor = vec4(radar.rgb, radar.a * edge * uStrength * 0.86);
+        float band = 1.0 - smoothstep(0.01, 0.24, abs(n.y - uSweep));
+        gl_FragColor = vec4(radar.rgb, radar.a * edge * uStrength * (0.78 + band * 0.22));
         #include <colorspace_fragment>
       }`,
   });
@@ -89,6 +92,9 @@ export function createRecordedWeather(scene: Scene, data: RecordedWeather) {
   wind.renderOrder = 7;
   scene.add(radar, wind);
   return {
+    setSweep: (time: number) => {
+      sweep.value = time > 0 ? (time % 12) / 6 - 1 : -2;
+    },
     setStrength: (value: number) => {
       strength.value = value;
     },

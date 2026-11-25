@@ -11,30 +11,14 @@ export function AboutSection() {
         <div className="about-reel-story">
           <AboutReel />
           <div className="about-story">
-            <p className="about-lead">Most of my side projects start with something ordinary.</p>
+            <p className="about-lead">
+              I make the next step easier, from recovering an edit to picking dinner.
+            </p>
             <div className="about-profile">
               <dl className="about-details">
                 <div>
                   <dt>Background</dt>
                   <dd>Computer Engineering at Rutgers</dd>
-                </div>
-                <div>
-                  <dt>Open source</dt>
-                  <dd>
-                    <a
-                      href="https://github.com/hyunwookshin/iodine/commits/main/?author=aiden-jang"
-                      target="_blank"
-                      aria-describedby="external-link-hint"
-                      rel="noopener noreferrer"
-                      className="about-contribution-link"
-                    >
-                      iodine <span aria-hidden="true">↗</span>
-                    </a>
-                    <p>
-                      Scoped terminal approvals, agent edit recovery, and clickable file paths in
-                      agent replies.
-                    </p>
-                  </dd>
                 </div>
               </dl>
             </div>

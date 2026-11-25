@@ -5,35 +5,41 @@ import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './iodine-timed.css';
 import { ProjectScene } from './ProjectScene';
+import { IodineDemo } from './IodineDemo';
 import { OpenEvidence } from '../creative/evidenceNavigation';
 import { ControlIcon } from '../ControlIcon';
 
 export function IodinePresentation() {
   const frame = useRef<HTMLDivElement>(null);
-  const result = useRef(false);
-  const latest = useRef(0);
   const holdForReturn = useRef(false);
+  const manual = useRef(false);
+  const settled = useRef(false);
   const openCase = useContext(OpenEvidence);
   const [restored, restore] = useState(false);
-  const draw = useCallback((progress: number) => {
-    latest.current = progress;
+  const showEdit = useCallback((phase: 'ready' | 'reviewing' | 'restored') => {
     const editor = frame.current;
-    if (!editor || holdForReturn.current) return;
-    progress = result.current ? 1 : progress;
-    const phase = progress === 0 ? 'ready' : progress < 0.56 ? 'reviewing' : 'restored';
-    if (editor.dataset.playback === phase) return;
+    if (!editor || editor.dataset.playback === phase) return;
     editor.dataset.playback = phase;
     restore(phase === 'restored');
   }, []);
-  const showResult = useCallback(
-    (active: boolean) => {
-      result.current = active;
-      draw(latest.current);
+  const draw = useCallback(
+    (progress: number) => {
+      if (holdForReturn.current || manual.current) return;
+      showEdit(
+        settled.current || progress >= 0.68 ? 'restored' : progress < 0.23 ? 'ready' : 'reviewing',
+      );
     },
-    [draw],
+    [showEdit],
   );
-  useScrollArrival(frame, true, showResult);
-  useTimedScene(frame, draw, { duration: 1720, hold: 1320 });
+  const arrive = useCallback(
+    (active: boolean) => {
+      settled.current = active;
+      if (active && !holdForReturn.current && !manual.current) showEdit('restored');
+    },
+    [showEdit],
+  );
+  useScrollArrival(frame, true, arrive);
+  useTimedScene(frame, draw, { duration: 2600, hold: 1480, startThreshold: 0.32 });
   useEffect(() => {
     const node = frame.current;
     if (!node) return;
@@ -65,7 +71,17 @@ export function IodinePresentation() {
       }
       links={null}
     >
-      <RecoveryEditor restored={restored} frame={frame} />
+      <div className="iodine-scene-content">
+        <IodineDemo />
+        <RecoveryEditor
+          restored={restored}
+          frame={frame}
+          onToggleEdit={() => {
+            manual.current = true;
+            showEdit(restored ? 'ready' : 'restored');
+          }}
+        />
+      </div>
     </ProjectScene>
   );
 }
@@ -74,10 +90,12 @@ export function RecoveryEditor({
   restored,
   frame,
   inspectable = false,
+  onToggleEdit,
 }: {
   restored: boolean;
   frame?: Ref<HTMLDivElement>;
   inspectable?: boolean;
+  onToggleEdit?: () => void;
 }) {
   const source = useRef<HTMLDivElement>(null);
   const [first, second, last] = example.after.trimEnd().split('\n');
@@ -112,13 +130,10 @@ export function RecoveryEditor({
       </div>
       <div className="recovery-bottom">
         <span>{restored ? 'Original line restored' : 'Snapshot saved'}</span>
-        {frame && (
-          <span className="recovery-edit-trace" hidden={!restored}>
-            Removed{' '}
-            <del>
-              <code>.trim()</code>
-            </del>
-          </span>
+        {onToggleEdit && (
+          <button type="button" onClick={onToggleEdit}>
+            {restored ? 'Reset edit' : 'Undo edit'}
+          </button>
         )}
       </div>
     </div>

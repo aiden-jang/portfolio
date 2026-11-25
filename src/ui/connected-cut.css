@@ -1,0 +1,318 @@
+html:root {
+  --cut-night: #101116;
+  --cut-contact: #0b0a08;
+  --proof-title: clamp(38px, 4.6vw, 68px);
+  --proof-inset: clamp(18px, 4svh, 36px);
+}
+
+html:root .portfolio-chrome #sec-work {
+  margin-top: 0;
+  padding-block: 0;
+  background: linear-gradient(180deg, var(--cut-night), #101820 46svh, var(--color-bg) 142svh);
+}
+html:root .portfolio-chrome #sec-work .project-featured-group {
+  gap: 0;
+}
+html:root .portfolio-chrome #sec-work .earthquake-feature[data-comparing='false']::before {
+  inset: 0 auto 0 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: url('/projects/atlas-stars-desktop.svg') center / 100% 100% no-repeat;
+  mask-image: linear-gradient(transparent, #000 10% 86%, transparent);
+  opacity: 0.86;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-showroom-handoff]
+    body:has(.portfolio-chrome:not([inert]))
+    :is(.portfolio-scene, .opening-poster, .car-type-overlap) {
+    translate: 0 var(--intro-exit-offset);
+  }
+  html[data-showroom-handoff] body:has(.portfolio-chrome:not([inert])) .portfolio-scene::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: clamp(78px, 16svh, 155px);
+    background: linear-gradient(transparent, var(--cut-night));
+    pointer-events: none;
+  }
+}
+
+html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-title h3,
+html:root .portfolio-chrome #sec-work #project-iodine .project-scene-heading h3,
+html:root #sec-experience .experience-batch-copy h2 {
+  color: #eeeee9;
+  font: 450 var(--proof-title)/0.99 var(--font-display);
+  letter-spacing: -0.04em;
+}
+html:root .portfolio-chrome #sec-work #project-iodine .project-scene-body {
+  padding-block: var(--proof-inset) clamp(30px, 5svh, 52px);
+  background:
+    radial-gradient(ellipse at 66% 66%, #18241f, transparent 70%),
+    linear-gradient(var(--color-bg), #131915);
+}
+html:root .portfolio-chrome #sec-work #project-iodine .recovery {
+  width: min(100%, 1068px);
+  margin-inline: auto;
+}
+html:root #sec-experience .experience-content .batch-lane::before {
+  background:
+    radial-gradient(ellipse at 71% 47%, #213028 0%, transparent 70%),
+    linear-gradient(#131915 0%, #141a16 69%, var(--color-bg) 100%);
+}
+html:root #sec-experience .experience-batch-copy .experience-measure {
+  margin-block-start: clamp(14px, 3.2svh, 30px);
+}
+.earthquake-detail > .featured-text-action {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 14px;
+  min-height: 44px;
+}
+.earthquake-detail > .earthquake-compare {
+  min-height: 44px;
+}
+html:root .portfolio-chrome #sec-work .earthquake-feature[data-comparing='false'] {
+  padding-block-start: 9px;
+}
+
+html:root .portfolio-chrome #sec-more-work .gallery-companions {
+  gap: clamp(28px, 5vw, 74px);
+  padding-block: clamp(24px, 6svh, 64px);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.86fr);
+}
+html:root
+  .portfolio-chrome
+  #sec-more-work
+  .gallery-companions
+  :is(#project-worth, #project-platform) {
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  align-content: start;
+  gap: 14px;
+  background: none;
+}
+html:root .portfolio-chrome #sec-more-work .gallery-companions .project-card-media {
+  width: 100%;
+  max-width: none;
+  order: 1;
+}
+html:root .portfolio-chrome #sec-more-work .gallery-companions .garage-project-copy {
+  order: 2;
+  white-space: normal;
+}
+html:root .portfolio-chrome #sec-more-work .gallery-companions #project-worth .preview-thumbnail {
+  aspect-ratio: 1.89;
+}
+#project-platform .platform-viewport {
+  width: 100%;
+  aspect-ratio: 1.52;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+html:root .portfolio-chrome #sec-more-work #project-platform .platform-cover {
+  position: absolute;
+  width: 139%;
+  max-width: none;
+  height: auto;
+  transform: translate(-19.5%, -23.6%);
+}
+html:root .portfolio-chrome #sec-more-work #project-worth .worth-ranking {
+  min-height: 100%;
+  aspect-ratio: auto;
+  gap: 8px 12px;
+  padding: clamp(12px, 2.25vw, 28px);
+}
+html:root .portfolio-chrome #sec-more-work #project-worth .worth-ranking-row {
+  font: 530 clamp(13px, 1.14vw, 17px)/1.16 var(--font-display);
+  min-height: 38px;
+  text-wrap: pretty;
+}
+html:root .portfolio-chrome #project-iguess .iguess-replay {
+  position: relative;
+}
+.connect-draw-cue,
+.connect-reel-cue {
+  position: absolute;
+  z-index: 1;
+  right: 4%;
+  bottom: 19%;
+  color: #ddd8cd;
+  background: #141414c9;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font: 500 12px/1.4 var(--font-display);
+  pointer-events: none;
+}
+.connect-draw-cue span:last-child {
+  display: none;
+}
+.connect-reel-cue {
+  bottom: 14px;
+  right: 14px;
+  animation: reel-cue 5s ease both;
+}
+html:root #project-mrrp .bean-room:not([data-bean-used]) .bean-target[data-object='bean'] span {
+  left: 69%;
+  top: 50%;
+  opacity: 1;
+  background: #391f18eb;
+  border: 0;
+  box-shadow: 0 3px 12px #25151058;
+  color: #fff3df;
+}
+.bloom-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+}
+#project-wherever .dinner-case {
+  position: absolute;
+  z-index: 2;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  right: var(--portfolio-gutter);
+  min-height: 44px;
+  color: #fff3e0;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+#project-wherever .dinner-case[hidden] {
+  display: none;
+}
+
+html:root #sec-about .about-framing-study {
+  margin-bottom: 0;
+}
+html:root #sec-about .scroll-film {
+  grid-template-rows: 1fr auto auto;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+}
+html:root #sec-about .scroll-film::before {
+  background:
+    linear-gradient(180deg, #100f0b9e, #100f0b14 26%, transparent 49%),
+    linear-gradient(0deg, var(--cut-contact), #0c0b08bd 7%, transparent 24%);
+}
+html:root #sec-about .about-framing-notes {
+  margin: 0;
+  padding: 0;
+  justify-self: end;
+  color: #d4cab8;
+  font-size: 11px;
+  line-height: 1.4;
+}
+html:root #sec-about .about-framing-notes a {
+  min-height: 24px;
+}
+html:root .portfolio-chrome #sec-contact::after {
+  background: linear-gradient(var(--cut-contact), transparent);
+}
+html:root .portfolio-chrome #sec-about {
+  padding-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  html:root {
+    --proof-title: clamp(34px, 9.6vw, 50px);
+  }
+  html:root .portfolio-chrome #sec-work .earthquake-feature[data-comparing='false']::before {
+    background-image: url('/projects/atlas-stars-phone.svg');
+  }
+  html:root .portfolio-chrome #sec-more-work .gallery-companions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html:root .portfolio-chrome #sec-more-work #project-worth .preview-thumbnail {
+    aspect-ratio: 1.58;
+  }
+  .earthquake-detail > .featured-text-action {
+    margin-inline-start: 10px;
+  }
+  .connect-draw-cue {
+    right: var(--portfolio-gutter);
+    bottom: 24%;
+  }
+  .connect-draw-cue span:first-child {
+    display: none;
+  }
+  .connect-draw-cue span:last-child {
+    display: inline;
+  }
+}
+@media (max-height: 699px) and (max-width: 767px) {
+  html:root .portfolio-chrome #project-wherever .dinner-sequence {
+    padding-bottom: 59px;
+  }
+}
+@media (prefers-reduced-motion: reduce), (max-height: 609px) {
+  html:root .portfolio-chrome #project-wherever .dinner-sequence {
+    padding-bottom: 59px;
+  }
+}
+
+@keyframes reel-cue {
+  0%,
+  79% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .connect-reel-cue {
+    display: none;
+  }
+}
+
+html:root .portfolio-chrome #sec-more-work #project-worth .worth-ranking-list {
+  height: clamp(84px, 8.2vw, 112px);
+  gap: 4px;
+}
+html:root .portfolio-chrome #sec-more-work #project-worth .worth-ranking-list > span {
+  grid-column: 1;
+  transform: none;
+}
+#project-worth .worth-ranking:not([data-ranked]) .worth-ranking-sake,
+#project-worth .worth-ranking[data-ranked] .worth-ranking-ipa {
+  grid-row: 1;
+}
+#project-worth .worth-ranking:not([data-ranked]) .worth-ranking-ipa,
+#project-worth .worth-ranking[data-ranked] .worth-ranking-sake {
+  grid-row: 2;
+}
+
+@media (min-width: 980px) {
+  html:root .portfolio-chrome #sec-work #project-iodine .project-scene-body {
+    min-height: 61svh;
+    align-items: center;
+  }
+}
+
+/* Use the earlier Iodine player and keep the headings on the shared reading line. */
+html:root .portfolio-chrome #sec-work .work-exhibit #project-iodine .project-scene-body {
+  min-height: auto;
+  align-items: stretch;
+  background: linear-gradient(#151919, #131915);
+}
+html:root .portfolio-chrome #sec-work .work-exhibit {
+  margin-block: 0;
+}
+html:root .portfolio-chrome #sec-work #project-iodine .iodine-scene-content .recovery {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #project-wherever .dinner-ticket-photo {
+    translate: var(--dinner-flick, 0px) 0;
+    transition: translate 210ms ease-out;
+    touch-action: pan-y pinch-zoom;
+    cursor: grab;
+  }
+  #project-wherever .dinner-ticket[data-flicking] .dinner-ticket-photo {
+    transition: none;
+    cursor: grabbing;
+  }
+}

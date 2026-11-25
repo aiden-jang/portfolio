@@ -138,7 +138,9 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
     <div className="batch-lane" id="batching-study" ref={lane}>
       <article className="experience-lead" data-study-pin aria-labelledby="experience-lead-title">
         <div className="experience-batch-copy">
-          <h2 id="experience-lead-title">120 calls became one.</h2>
+          <h2 id="experience-lead-title">
+            120 calls <span>→</span> 1
+          </h2>
           <p className="experience-measure">
             <span className="sr-only">
               Page load went from {loadTime.before} seconds to {loadTime.after} seconds.
@@ -151,9 +153,7 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
             </span>
             <span aria-hidden="true">{loadTime.after}s</span>
           </p>
-          <p className="experience-batch-description">
-            I combined the linked line items into one API response.
-          </p>
+
           <div className="experience-lead-actions">
             <a
               href={evidenceHref(leadId, undefined)}
@@ -161,7 +161,7 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
               className="experience-case"
               aria-describedby="experience-lead-title"
             >
-              How I cut load time to 2s <ControlIcon name="arrow" />
+              How I batched the requests <ControlIcon name="arrow" />
             </a>
             <span>{item.context}</span>
           </div>

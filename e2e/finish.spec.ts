@@ -34,7 +34,7 @@ test('both lighting labels are centered without shifting the dock controls', asy
   await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
   // Keep the lazy 3D scene pending so this layout check does not depend on GPU rendering.
   await page.route('**/assets/Scene-*.js', () => {});
-  await page.goto('/?car=10', { waitUntil: 'domcontentloaded' });
+  await page.goto('/?car=10&light=studio', { waitUntil: 'domcontentloaded' });
   await page.evaluate(async () => {
     await document.fonts.load('12px Geist');
   });

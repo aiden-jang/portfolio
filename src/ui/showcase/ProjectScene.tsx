@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { easedProgress } from '../../hooks/useScrollStudy';
-import { shortPhoneQuery, useScrollArrival } from '../../hooks/scrollArrival';
+import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './project-scene.css';
-import './dinner-scene.css';
-
-const isShortDinner = () => matchMedia(shortPhoneQuery).matches;
-
-type DinnerStep = { progress: number; focus?: string };
+import type { DinnerStep } from './DinnerScene';
 
 function presentScene(stage: HTMLElement, progress: number) {
   const phase = progress >= 0.56 ? 'bill' : progress >= 0.32 ? 'match' : 'vote';
@@ -19,11 +15,13 @@ function presentScene(stage: HTMLElement, progress: number) {
     stage.querySelector('.dinner-split')?.toggleAttribute('inert', phase !== 'match');
     stage.querySelector('.dinner-total')?.setAttribute('aria-hidden', String(phase !== 'bill'));
     stage.querySelector('.dinner-stubs')?.setAttribute('aria-hidden', String(phase !== 'bill'));
+    stage.querySelector('.dinner-case')?.toggleAttribute('hidden', phase !== 'bill');
   }
   const match = easedProgress(progress, 0.24, 0.43);
   stage.toggleAttribute('data-dinner-before-match', match === 0);
   stage.toggleAttribute('data-dinner-after-vote', match === 1);
   stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
+  stage.style.setProperty('--vote-swipe', String(easedProgress(progress, 0.09, 0.31)));
   stage.style.setProperty('--vote-match', String(match));
   stage.style.setProperty('--bill-arrival', String(easedProgress(progress, 0.55, 0.9)));
   stage.dataset.sceneProgress = progress.toFixed(3);
@@ -46,9 +44,10 @@ export function ProjectScene({
   const body = useRef<HTMLDivElement>(null);
   const manual = useRef(0);
   const manualFrame = useRef(0);
+  const gesture = useRef(false);
   const [actionFocused, setActionFocused] = useState(false);
   const draw = useCallback((progress: number) => {
-    if (!scene.current || manualFrame.current) return;
+    if (!scene.current || manualFrame.current || gesture.current) return;
     const compact = matchMedia('(height < 610px)').matches;
     presentScene(scene.current, compact ? 1 : Math.max(manual.current, progress));
   }, []);
@@ -63,10 +62,10 @@ export function ProjectScene({
       if (
         active &&
         !manualFrame.current &&
-        !matchMedia('(height < 610px)').matches &&
-        !isShortDinner()
+        !gesture.current &&
+        !matchMedia('(height < 610px)').matches
       ) {
-        fastForward(0.47, 1200);
+        fastForward(1, 0);
       }
     },
     [fastForward],
@@ -83,7 +82,15 @@ export function ProjectScene({
       presentScene(stage, 1);
     };
     const select = (event: Event) => {
-      const { progress, focus } = (event as CustomEvent<DinnerStep>).detail;
+      const { progress, focus, animate, reset } = (event as CustomEvent<DinnerStep>).detail;
+      if (reset && !preference.matches) {
+        cancelAnimationFrame(manualFrame.current);
+        manualFrame.current = 0;
+        manual.current = 0;
+        gesture.current = true;
+        presentScene(stage, 0);
+        return;
+      }
       const from = Number(stage.dataset.sceneProgress) || 0;
       const target = Math.max(manual.current, from, progress);
       const finish = () => {
@@ -93,7 +100,7 @@ export function ProjectScene({
         if (focus) stage.querySelector<HTMLElement>(focus)?.focus({ preventScroll: true });
       };
       cancelAnimationFrame(manualFrame.current);
-      if (!focus || preference.matches || from === target) {
+      if ((!focus && !animate) || preference.matches || from === target) {
         finish();
         return;
       }
@@ -140,132 +147,6 @@ export function ProjectScene({
         {children}
       </div>
     </article>
-  );
-}
-
-function DinnerTicket() {
-  const choose = (event: React.MouseEvent<HTMLButtonElement>, phase: number) => {
-    const stage = event.currentTarget.closest('article');
-    stage?.dispatchEvent(
-      new CustomEvent<DinnerStep>('dinner-preview-step', {
-        detail: {
-          progress: phase,
-          focus: phase === 1 ? '.dinner-title-bill a' : '.dinner-split',
-        },
-      }),
-    );
-  };
-  return (
-    <div className="dinner-ticket">
-      <img
-        className="dinner-ticket-photo"
-        src="/projects/scenes/wherever-pizza.jpg"
-        alt=""
-        loading="lazy"
-        decoding="async"
-      />
-      <div className="dinner-receipt" id="project-owewell">
-        <div className="dinner-ticket-paper paper">
-          <div className="dinner-ticket-state">
-            <span className="dinner-ticket-vote">Pick your dinner</span>
-            <span className="dinner-ticket-match">Tonight’s plan</span>
-          </div>
-          <strong>Neighborhood Pizza Kitchen</strong>
-          <div className="dinner-ticket-decisions">
-            <div className="dinner-ticket-vote dinner-ticket-actions">
-              <button type="button" onClick={(event) => choose(event, 0.47)}>
-                Vote yes
-              </button>
-            </div>
-            <div className="dinner-ticket-match dinner-ticket-count">
-              <span>
-                Alex <b>✓</b>
-              </span>
-              <span>
-                Maya <b>✓</b>
-              </span>
-              <button className="dinner-split" type="button" onClick={(event) => choose(event, 1)}>
-                Split $48
-              </button>
-            </div>
-            <div className="dinner-total" aria-hidden="true">
-              <small>Dinner for two</small>
-              <strong>$48.00</strong>
-            </div>
-          </div>
-        </div>
-        <div className="stubs dinner-stubs" aria-hidden="true">
-          <div className="paper stub">
-            <small>Your share</small>
-            <strong>$24.00</strong>
-          </div>
-          <div className="paper stub due">
-            <small>Alex owes you</small>
-            <strong>$24.00</strong>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function DinnerScene() {
-  const track = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const stage = track.current;
-    const section = stage?.closest('article');
-    const body = stage?.parentElement;
-    if (!stage || !section || !body) return;
-    const animated = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 610px)');
-    const seekSecond = () => {
-      if (location.hash !== '#project-owewell') return;
-      section.dispatchEvent(
-        new CustomEvent<DinnerStep>('dinner-preview-step', {
-          detail: { progress: 1 },
-        }),
-      );
-      if (!animated.matches || isShortDinner()) {
-        stage
-          .querySelector('#project-owewell')
-          ?.scrollIntoView({ block: 'center', behavior: 'instant' });
-        return;
-      }
-      const top = window.scrollY + section.getBoundingClientRect().top;
-      const inset = Number.parseFloat(getComputedStyle(body).top);
-      const travel = section.offsetHeight - body.offsetHeight;
-      window.scrollTo({ top: top - inset + travel * 0.9, behavior: 'instant' });
-    };
-    let frame = 0;
-    let active = true;
-    const queueSeek = () => {
-      cancelAnimationFrame(frame);
-      // Reload can restore the old scroll offset after the first layout.
-      frame = requestAnimationFrame(() => {
-        frame = requestAnimationFrame(seekSecond);
-      });
-    };
-    const restoreLink = (event: PageTransitionEvent) => {
-      if (!event.persisted) queueSeek();
-    };
-    queueSeek();
-    void document.fonts?.ready.then(() => {
-      if (active) queueSeek();
-    });
-    addEventListener('pageshow', restoreLink);
-    addEventListener('hashchange', queueSeek);
-    return () => {
-      active = false;
-      cancelAnimationFrame(frame);
-      removeEventListener('pageshow', restoreLink);
-      removeEventListener('hashchange', queueSeek);
-    };
-  }, []);
-
-  return (
-    <div className="dinner-sequence" ref={track}>
-      <DinnerTicket />
-      <div className="dinner-exit-shade" aria-hidden="true" />
-    </div>
   );
 }
 

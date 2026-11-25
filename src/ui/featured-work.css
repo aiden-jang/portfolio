@@ -10,20 +10,9 @@ html:root .portfolio-chrome #sec-work {
   margin-top: -15svh;
   padding-block: 0;
   overflow-x: clip;
-  background: linear-gradient(180deg, var(--feature-night) 0 72svh, var(--color-bg) 145svh);
 }
 html:root #sec-work .project-featured-group {
   gap: clamp(18px, 3svh, 30px);
-}
-@media (prefers-reduced-motion: no-preference) and (min-height: 620px) {
-  html:root .portfolio-chrome #sec-work {
-    background: linear-gradient(
-      180deg,
-      transparent,
-      var(--feature-night) 24px 72svh,
-      var(--color-bg) 145svh
-    );
-  }
 }
 .featured-work-heading {
   margin: 0;

@@ -3,6 +3,7 @@ import { ScreenshotImage } from '../ScreenshotImage';
 import { QuakeMap } from './quakeJourney';
 
 type Props = {
+  canvasId?: string;
   image: string;
   fallback: boolean;
   canvas: Ref<HTMLCanvasElement>;
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export function GlobeArtwork({
+  canvasId = 'globe-view',
   image,
   fallback,
   canvas,
@@ -47,7 +49,7 @@ export function GlobeArtwork({
           <div className="orbit-viewport" aria-busy={loading}>
             <canvas
               ref={canvas}
-              id="globe-view"
+              id={canvasId}
               tabIndex={ready ? 0 : -1}
               role="img"
               aria-label="Interactive globe. Drag or use arrow keys to rotate. Press zero to reset, Escape to finish."

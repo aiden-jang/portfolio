@@ -1,14 +1,9 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { useScrollArrival } from '../../hooks/scrollArrival';
 import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import { BeanRoom } from './BeanRoom';
+import { BeanMatch } from './BeanMatch';
 import { IguessReplay } from './IguessReplay';
-
-const revealRange = [0.53, 0.69] as const;
-
-function settleDuet(progress: number) {
-  if (progress <= 0.53 || progress >= 0.73) return progress;
-  return progress < 0.64 ? 0.53 : 0.75;
-}
 
 export function Duet({
   drawTitle,
@@ -24,31 +19,120 @@ export function Duet({
   const drawing = useRef<HTMLElement>(null);
   const room = useRef<HTMLElement>(null);
   const held = useRef(false);
-  const layout = useRef({ radius: 0, sticky: false });
-  const lastLight = useRef<number>();
+  const sticky = useRef(false);
+  const frame = useRef(0);
+  const step = useRef(0);
+  const destination = useRef(0);
+  const previous = useRef(-1);
+  const lastLight = useRef(-1);
   const [drawingActive, setDrawingActive] = useState(true);
   const paint = useCallback((laneElement: HTMLElement, t: number) => {
-    if (!room.current || !drawing.current || !pin.current) return;
+    const scene = room.current!,
+      sketch = drawing.current!,
+      stage = pin.current!;
     laneElement.dataset.duetProgress = String(t);
-    const { sticky: animated, radius } = layout.current;
-    if (held.current && animated) return;
-    const reveal = animated ? easedProgress(t, ...revealRange) : 1;
-    const light = animated ? Math.min(1, Math.max(0, (t - 0.69) / 0.31)) : 1;
-    room.current.style.setProperty('--iris', reveal * radius + 'px');
-    const covered = animated && reveal >= 0.92;
-    if (drawing.current.inert !== covered) {
-      drawing.current.inert = covered;
-      setDrawingActive(!covered);
+    if (held.current && sticky.current) return;
+    const direct = previous.current < 0 || Math.abs(t - previous.current) > 0.38;
+    previous.current = t;
+    const finish = sticky.current && t >= 0.34;
+    if (finish && laneElement.dataset.finishCat !== 'true')
+      laneElement.dispatchEvent(new Event('finish-cat'));
+    laneElement.dataset.finishCat = String(finish);
+    const light = sticky.current ? easedProgress(t, 0.78, 1) : 1;
+    const updateRoom = () => {
+      scene.dataset.sceneProgress = String(light);
+      scene.dispatchEvent(new CustomEvent('project-scene-progress', { detail: light }));
+    };
+    if (lastLight.current !== light) {
+      lastLight.current = light;
+      updateRoom();
     }
-    const roomInert = animated && reveal < 0.92;
-    const interactionChanged = room.current.inert !== roomInert;
-    if (interactionChanged) room.current.inert = roomInert;
-    if (lastLight.current === light && !interactionChanged) return;
-    lastLight.current = light;
-    room.current.dataset.sceneProgress = String(light);
-    room.current.dispatchEvent(new CustomEvent('project-scene-progress', { detail: light }));
+    function state(next: 'static' | 'draw' | 'jump' | 'room') {
+      laneElement.dataset.match = next;
+      const hideSketch = next === 'room';
+      if (sketch.inert !== hideSketch) {
+        sketch.inert = hideSketch;
+        setDrawingActive(!hideSketch);
+      }
+      const locked = next === 'draw' || next === 'jump';
+      if (scene.inert !== locked) {
+        scene.inert = locked;
+        updateRoom();
+      }
+    }
+    const fast = laneElement.hasAttribute('data-scene-arrival');
+    const target = !sticky.current
+      ? 1
+      : t >= (fast ? 0.4 : 0.49)
+        ? 1
+        : t < 0.32
+          ? 0
+          : destination.current;
+    if (
+      !sticky.current ||
+      direct ||
+      fast ||
+      (target === 0 && t === 0) ||
+      (target === 1 && t >= 0.96)
+    ) {
+      cancelAnimationFrame(frame.current);
+      frame.current = 0;
+      destination.current = step.current = target;
+      state(sticky.current ? (target ? 'room' : 'draw') : 'static');
+      return;
+    }
+    if (destination.current === target && (frame.current || step.current === target)) return;
+    destination.current = target;
+    cancelAnimationFrame(frame.current);
+    const box = stage.getBoundingClientRect();
+    const board = sketch.querySelector('canvas')!.getBoundingClientRect();
+    const bean = scene.querySelector('[data-object="bean"]')?.getBoundingClientRect();
+    const sx = board.left + board.width / 2 - box.left,
+      sy = board.top + board.height / 2 - box.top;
+    const ex = bean ? bean.left + bean.width / 2 - box.left : box.width * 0.5;
+    const ey = bean ? bean.top + bean.height / 2 - box.top : box.height * 0.7;
+    const sw = 360 * Math.min(board.width / 960, board.height / 605);
+    const ew = Math.max(55, Math.min(box.width * 0.26, box.height * 0.19));
+    const from = step.current,
+      start = performance.now(),
+      duration = 640 * Math.abs(target - from);
+    const radius = Math.hypot(Math.max(ex, box.width - ex), Math.max(ey, box.height - ey));
+    state('jump');
+    function tick(now: number) {
+      const time = Math.min(1, (now - start) / Math.max(duration, 1));
+      const p = from + (target - from) * time;
+      step.current = p;
+      const flight = Math.min(1, Math.max(0, (p - 0.1) / 0.64));
+      const x = sx + (ex - sx) * flight;
+      const y = sy + (ey - sy) * flight - 4 * flight * (1 - flight) * box.height * 0.11;
+      const beanWidth = sw + (ew - sw) * flight;
+      const sprite = stage.querySelector<SVGElement>('.bean-match')!;
+      sprite.style.transform =
+        'translate3d(' + x + 'px,' + y + 'px,0) translate(-50%,-50%) scale(' + beanWidth / sw + ')';
+      sprite.style.width = sw + 'px';
+      sprite.style.visibility = p > 0.84 ? 'hidden' : 'visible';
+      laneElement.dataset.blink = String(p < 0.12);
+      const open = easedProgress(p, 0.7, 1);
+      scene.style.clipPath = 'circle(' + open * radius + 'px at ' + ex + 'px ' + ey + 'px)';
+      if (time < 1) frame.current = requestAnimationFrame(tick);
+      else {
+        frame.current = 0;
+        state(target ? 'room' : 'draw');
+      }
+    }
+    tick(start);
   }, []);
-  useScrollStudy(lane, true, paint, settleDuet, revealRange, 0.025);
+  useScrollStudy(lane, true, paint);
+  const arrive = useCallback(
+    (active: boolean) => {
+      const el = lane.current;
+      if (!el || held.current) return;
+      if (active) el.dispatchEvent(new Event('settle-drawing'));
+      paint(el, Number(el.dataset.duetProgress) || 0);
+    },
+    [paint],
+  );
+  useScrollArrival(lane, true, arrive);
   useEffect(() => {
     const el = lane.current!,
       stage = pin.current!,
@@ -59,16 +143,8 @@ export function Duet({
     };
     el.addEventListener('drawing-grip', grip);
     const measure = () => {
-      const a = stage.getBoundingClientRect(),
-        b = canvas.getBoundingClientRect();
-      const x = b.left - a.left + b.width * 0.43,
-        y = b.top - a.top + b.height * 0.53;
-      layout.current = {
-        radius: Math.hypot(Math.max(x, a.width - x), Math.max(y, a.height - y)) + 2,
-        sticky: getComputedStyle(stage).position === 'sticky',
-      };
-      el.style.setProperty('--iris-x', x + 'px');
-      el.style.setProperty('--iris-y', y + 'px');
+      sticky.current = getComputedStyle(stage).position === 'sticky';
+      previous.current = -1;
       if (el.dataset.duetProgress !== undefined) paint(el, Number(el.dataset.duetProgress));
     };
     const observer = new ResizeObserver(measure);
@@ -88,13 +164,14 @@ export function Duet({
           scrollY +
           el.getBoundingClientRect().top -
           parseFloat(getComputedStyle(stage).top) +
-          (el.offsetHeight - stage.offsetHeight) * 0.7,
+          (el.offsetHeight - stage.offsetHeight) * 0.83,
         behavior: 'instant',
       });
     };
     const initial = requestAnimationFrame(seek);
     addEventListener('hashchange', seek);
     return () => {
+      cancelAnimationFrame(frame.current);
       observer.disconnect();
       el.removeEventListener('drawing-grip', grip);
       preference.removeEventListener('change', measure);
@@ -112,6 +189,7 @@ export function Duet({
           </header>
           <IguessReplay active={drawingActive} />
         </article>
+        <BeanMatch />
         <article ref={room} id="project-mrrp" className="room-shot">
           <header className="cut-id">
             <h3>mrrp</h3>

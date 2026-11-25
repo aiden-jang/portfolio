@@ -1,0 +1,100 @@
+.case-carried-globe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  overflow: hidden;
+  background: #0e171e url('/projects/atlas-stars-desktop.svg') center / cover;
+}
+html:root .quake-opening-globe .case-carried-globe img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+@media (max-width: 767px) {
+  .case-carried-globe {
+    background-image: url('/projects/atlas-stars-phone.svg');
+  }
+  .quake-opening[data-agency] .quake-opening-globe:has(.case-carried-globe) {
+    min-height: clamp(218px, 36svh, 306px);
+  }
+  .quake-opening[data-agency] .quake-opening-globe:has(.case-carried-globe) figcaption {
+    background: linear-gradient(transparent, #101c24 83%);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-evidence-frame] {
+    view-transition-name: meanwhile-frame;
+  }
+  ::view-transition-group(meanwhile-frame) {
+    animation-duration: 340ms;
+    animation-timing-function: cubic-bezier(0.2, 0.72, 0.25, 1);
+  }
+  ::view-transition-old(meanwhile-frame),
+  ::view-transition-new(meanwhile-frame) {
+    animation-duration: 340ms;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bean-room .bean-window::before {
+    position: absolute;
+    inset: 4% 25% 5% -21%;
+    content: '';
+    pointer-events: none;
+    background: linear-gradient(
+      125deg,
+      transparent 14%,
+      #ffe1a432 42%,
+      #f7b86818 53%,
+      transparent 71%
+    );
+    mix-blend-mode: screen;
+    mask-image: radial-gradient(ellipse at 63% 64%, #000, transparent 74%);
+    animation: room-window-light 10s ease-in-out 1.5s infinite alternate;
+    animation-play-state: paused;
+  }
+  .bean-room[data-idle-visible] .bean-window::before {
+    animation-play-state: running;
+  }
+  .bloom-garden-study[data-study-progress='1.000'] .bloom-garden-plot .bloom-garden-plant img {
+    transform-origin: 50% 95%;
+    animation: garden-idle-sway 5.6s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  .bloom-garden-study[data-study-progress='1.000']
+    .bloom-garden-plot[data-idle-visible]
+    .bloom-garden-plant
+    img {
+    animation-play-state: running;
+  }
+  .bloom-garden-study .bloom-garden-flower-1 .bloom-garden-plant img {
+    animation-delay: -1.2s;
+  }
+  .bloom-garden-study .bloom-garden-flower-2 .bloom-garden-plant img {
+    animation-delay: -2.4s;
+  }
+}
+@keyframes room-window-light {
+  0%,
+  14% {
+    transform: translateX(0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(21%);
+    opacity: 0.95;
+  }
+}
+@keyframes garden-idle-sway {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  38% {
+    transform: rotate(1.9deg);
+  }
+  76% {
+    transform: rotate(-0.9deg);
+  }
+}

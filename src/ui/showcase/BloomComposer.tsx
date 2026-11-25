@@ -9,10 +9,12 @@ export function BloomComposer({
   titleRef,
   hidden,
   onBack,
+  onRead,
 }: {
   titleRef: Ref<HTMLHeadingElement>;
   hidden: boolean;
   onBack: () => void;
+  onRead: (button: HTMLElement) => void;
 }) {
   const [sentence, setSentence] = useState(bloomExamples[0]!.sentence);
   const [bouquet, setBouquet] = useState<{ text: string; version: number }>();
@@ -161,16 +163,25 @@ export function BloomComposer({
             </blockquote>
           </div>
           {lines && (
-            <button
-              type="button"
-              className="bloom-edit"
-              onClick={() => {
-                input.current?.scrollIntoView({ block: 'center', behavior: 'instant' });
-                input.current?.focus({ preventScroll: true });
-              }}
-            >
-              Edit sentence
-            </button>
+            <div className="bloom-result-actions">
+              <button
+                type="button"
+                className="bloom-edit"
+                onClick={() => {
+                  input.current?.scrollIntoView({ block: 'center', behavior: 'instant' });
+                  input.current?.focus({ preventScroll: true });
+                }}
+              >
+                Edit sentence
+              </button>
+              <button
+                type="button"
+                className="bloom-edit"
+                onClick={(event) => onRead(event.currentTarget)}
+              >
+                Case study <span aria-hidden="true">↗</span>
+              </button>
+            </div>
           )}
         </section>
       </div>

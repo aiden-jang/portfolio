@@ -180,6 +180,7 @@ it.each([
 
 it('guards headlight controls while unavailable or loading and resets the next Miata visit', () => {
   const state = useAppStore.getState();
+  state.setThemeName('studio');
   state.setCarIndex(10);
   state.toggleHeadlights();
   expect(useAppStore.getState().headlightsRaised).toBe(true);

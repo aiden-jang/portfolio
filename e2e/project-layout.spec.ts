@@ -25,7 +25,7 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       'bloomnote',
       'iguess',
       'mrrp',
-      /^wherever\s*owewell$/,
+      /^wherever.*owewell.*$/,
       'worth',
       'platform',
     ]);
@@ -37,7 +37,9 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       await expect(worth.locator('.garage-project-links a')).toHaveAttribute('target', '_blank');
     } else {
       await expect(worth.getByText('Brooklyn Kura Sake Junmai', { exact: true })).toBeVisible();
-      await expect(worth.locator('.worth-ranking')).toHaveCSS('--worth-rise', '1');
+      const favorite = worth.getByText('Goose Island IPA', { exact: true });
+      await expect(favorite).toBeVisible();
+      await expect(favorite).toHaveCSS('grid-row-start', '1');
     }
     const bloom = page.locator('#project-bloomnote');
     await expect(bloom.getByRole('blockquote')).toContainText('For that brilliant laugh');
@@ -76,7 +78,7 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       items.map((item) => ({
         name: item.id,
         frame: item
-          .querySelector('.preview-thumbnail, .worth-focus, .project-pair')!
+          .querySelector('.preview-thumbnail, .worth-focus, .project-pair, .platform-viewport')!
           .getBoundingClientRect()
           .toJSON(),
         copy: item.querySelector('.garage-project-copy')!.getBoundingClientRect().toJSON(),
@@ -88,19 +90,19 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       expect.soft(frame.height, name + ' has a readable image').toBeGreaterThanOrEqual(105);
       expect.soft(frame.width, name + ' media fits the viewport').toBeLessThanOrEqual(width);
       expect.soft(app.left, name + ' action clears its title').toBeGreaterThanOrEqual(title.right);
-      if (width >= 768) {
-        expect.soft(frame.left, name + ' media clears the copy column').toBeGreaterThan(copy.right);
-        expect.soft((frame.top + frame.bottom) / 2).toBeCloseTo((copy.top + copy.bottom) / 2, 0);
-      } else {
-        expect
-          .soft(frame.top - copy.bottom, name + ' media follows the copy')
-          .toBeGreaterThanOrEqual(0);
-        expect.soft(frame.top - copy.bottom, name + ' copy-to-media gap').toBeLessThan(34);
-      }
+      expect
+        .soft(copy.top - frame.bottom, name + ' copy follows the media')
+        .toBeGreaterThanOrEqual(0);
+      expect.soft(copy.top - frame.bottom, name + ' media-to-copy gap').toBeLessThan(36);
     }
-    expect.soft(cards[0]!.frame.width).toBeCloseTo(cards[1]!.frame.width, 0);
-    expect.soft(cards[0]!.frame.left).toBeCloseTo(cards[1]!.frame.left, 0);
-    expect.soft(cards[1]!.frame.top).toBeGreaterThan(cards[0]!.frame.bottom);
+    if (width >= 768) {
+      expect.soft(cards[0]!.frame.top).toBeCloseTo(cards[1]!.frame.top, 0);
+      expect.soft(cards[1]!.frame.left).toBeGreaterThan(cards[0]!.frame.right);
+    } else {
+      expect.soft(cards[0]!.frame.width).toBeCloseTo(cards[1]!.frame.width, 0);
+      expect.soft(cards[0]!.frame.left).toBeCloseTo(cards[1]!.frame.left, 0);
+      expect.soft(cards[1]!.frame.top).toBeGreaterThan(cards[0]!.frame.bottom);
+    }
     const scenes = await page
       .locator('.project-scenes > article')
       .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().toJSON()));
@@ -108,10 +110,7 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       expect(scenes[index]!.top).toBeGreaterThan(scenes[index - 1]!.bottom);
       expect(scenes[index]!.width).toBe(scenes[0]!.width);
     }
-    await expect(page.locator('.project-featured-group article h3')).toHaveText([
-      'meanwhile.',
-      'iodine',
-    ]);
+    await expect(page.locator('.work-exhibit article h3')).toHaveText(['meanwhile.', 'iodine']);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );

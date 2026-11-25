@@ -163,14 +163,14 @@ export function AboutFraming() {
             />
             <span aria-hidden="true">Paint</span>
           </div>
+          <div className="about-framing-notes">
+            <span>
+              Model by{' '}
+              <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">vecarz</a>,
+              CC BY 4.0.
+            </span>
+          </div>
         </div>
-      </div>
-      <div className="about-framing-notes">
-        <span>
-          Model by{' '}
-          <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">vecarz</a>, CC
-          BY 4.0.
-        </span>
       </div>
     </figure>
   );

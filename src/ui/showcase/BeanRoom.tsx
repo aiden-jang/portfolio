@@ -2,9 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { RoomAction, RoomPositions } from './mrrp/renderer.js';
 import { useReducedMotion } from '../../hooks/reducedMotion';
 import './bean-room.css';
-import { BeanRoomButtons, BeanRoomTargets } from './BeanRoomTargets';
+import { BeanRoomTargets } from './BeanRoomTargets';
 import { useRoomCamera } from './roomCamera';
 import { useBeanRoomRenderer } from './useBeanRoomRenderer';
+import { useBeanToyDrag } from './useBeanToyDrag';
+import { useIdleDetail } from './useIdleDetail';
 
 const bean = {
   name: 'Bean',
@@ -26,6 +28,7 @@ function roomClock(hour: number) {
 
 export function BeanRoom() {
   const room = useRef<HTMLDivElement>(null);
+  useIdleDetail(room);
   const live = useRef<HTMLDivElement>(null);
   const fade = useRef<HTMLCanvasElement>(null);
   const hotspots = useRef<HTMLDivElement>(null);
@@ -166,6 +169,11 @@ export function BeanRoom() {
     setStatus('Bean crouches and pounces on the toy mouse.');
   }
 
+  const { toy, toyDrag, onMouse } = useBeanToyDrag(hotspots, playWithMouse, () => {
+    toyCue.current = 'manual';
+    setAction(null);
+  });
+
   function playWithBox() {
     if (boxed) {
       setAction(null);
@@ -180,10 +188,15 @@ export function BeanRoom() {
     boxed,
     onPet: pet,
     onBox: playWithBox,
-    onMouse: playWithMouse,
+    onMouse,
   };
   return (
-    <div className="bean-room" data-light={morning ? 'morning' : 'evening'} ref={room}>
+    <div
+      className="bean-room"
+      data-bean-used={pets > 0 || undefined}
+      data-light={morning ? 'morning' : 'evening'}
+      ref={room}
+    >
       <div className="bean-window" data-light={morning ? 'morning' : 'evening'}>
         <picture className="bean-room-poster" aria-hidden={!!Renderer && near}>
           <source media="(max-width: 700px)" srcSet="/projects/scenes/mrrp-room-art-mobile.webp" />
@@ -201,7 +214,7 @@ export function BeanRoom() {
             <Renderer
               label="Bean’s room."
               key={String(reduced)}
-              roomPlay={{ action, onPositions }}
+              roomPlay={{ action, onPositions, toy }}
               look={bean}
               clock={clock}
               mood={null}
@@ -217,7 +230,7 @@ export function BeanRoom() {
               spot={together ? 0.42 : null}
             />
             <canvas className="bean-light-fade" ref={fade} aria-hidden="true" />
-            <BeanRoomTargets ref={hotspots} {...targets} />
+            <BeanRoomTargets ref={hotspots} {...targets} toyDrag={toyDrag} />
           </div>
         )}
       </div>
@@ -227,7 +240,7 @@ export function BeanRoom() {
         </span>
       ) : (
         <div className="bean-room-controls" role="group" aria-label="Spend a moment with Bean">
-          <BeanRoomButtons disabled={!Renderer} {...targets} />
+          {!status && <span className="bean-cue">Pet Bean or drag her toy.</span>}
           <button
             type="button"
             disabled={!Renderer}

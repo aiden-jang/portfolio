@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { clamp, lerp } from '../math';
+import { clamp } from '../math';
 import { useAppStore } from '../store';
 
 const ART = '.orbit-art[data-poster="true"]';
@@ -67,18 +67,13 @@ export function useShowroomTransition() {
       const contactTop = contact.getBoundingClientRect().top;
       const contactProgress = (h - contactTop) / h;
       const inContact = contactProgress > 0;
-      refs.floorReflection =
-        reduced || inContact ? 1 : lerp(1, 0.07, smoothProgress(progress, 0.08, 0.52));
+      const workTop = work.getBoundingClientRect().top;
+      const handingOff = !reduced && !inContact && workTop > 1 && workTop < h;
+      refs.floorReflection = 1;
+      root.toggleAttribute('data-showroom-handoff', handingOff);
+      root.style.setProperty('--intro-exit-offset', handingOff ? workTop - h + 'px' : '0px');
 
-      const fadeEnd = 0.91;
-      root.toggleAttribute(
-        'data-showroom-handoff',
-        !reduced && !inContact && progress > 0.09 && progress < fadeEnd,
-      );
-
-      let stage = 1;
       if (!reduced) {
-        stage = inContact ? 1 : 1 - smoothProgress(progress, 0.79, fadeEnd);
         // Finish the fade where the dock stops fitting in the Intro viewport.
         const dockEnd = Math.max(0.015, (intro.offsetHeight + 0.5) / h - 1);
         const dock = 1 - smoothProgress(progress, dockEnd * 0.64, dockEnd);
@@ -91,7 +86,7 @@ export function useShowroomTransition() {
       const rect = poster?.getBoundingClientRect();
 
       root.style.setProperty('--header-scrim', String(headerScrim));
-      root.style.setProperty('--stage-opacity', String(stage));
+      root.style.setProperty('--stage-opacity', '1');
 
       if (pulsingPoster && (pulsingPoster !== poster || !movingForward)) clearPulse();
       if (
@@ -131,7 +126,12 @@ export function useShowroomTransition() {
       clearPulse();
       refs.floorReflection = 1;
       root.removeAttribute('data-showroom-handoff');
-      for (const name of ['--header-scrim', '--stage-opacity', '--garage-controls-opacity']) {
+      for (const name of [
+        '--header-scrim',
+        '--stage-opacity',
+        '--garage-controls-opacity',
+        '--intro-exit-offset',
+      ]) {
         root.style.removeProperty(name);
       }
     };

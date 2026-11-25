@@ -23,7 +23,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     await page.evaluate(() => document.fonts.ready);
     const section = page.locator('#sec-experience');
     const replayHeading = section.getByRole('heading', {
-      name: '120 calls became one.',
+      name: '120 calls → 1',
       exact: true,
     });
     await expect(replayHeading).toBeVisible({ timeout: 3000 });
@@ -49,7 +49,11 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       header!.y + header!.height,
     );
     if (width === 1440 || width < 768) {
-      for (const selector of ['#sec-intro h1', '#sec-work h2', '#project-iodine']) {
+      for (const selector of [
+        '#sec-intro h1',
+        '#project-everythingisfine .earthquake-title',
+        '#project-iodine',
+      ]) {
         const chapter = await page.locator(selector).boundingBox();
         expect(chapter!.x, selector + ' shares the Experience gutter').toBeCloseTo(heading!.x, 0);
       }
@@ -61,7 +65,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       expect(globe!.y).toBeGreaterThanOrEqual(title!.y + title!.height);
       expect(detail!.y).toBeGreaterThanOrEqual(globe!.y + globe!.height);
     }
-    const lead = section.getByRole('link', { name: 'How I cut load time to 2s', exact: true });
+    const lead = section.getByRole('link', { name: 'How I batched the requests', exact: true });
     await expect(lead).toBeVisible();
     const history = section.locator('.experience-history');
     await expect(history.getByText('LiveIntent', { exact: true })).toHaveCount(1);
@@ -122,10 +126,15 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       const after = comparison.getByRole('button', { name: 'After', exact: true });
       const requestGrid = comparison.getByText('120 separate requests', { exact: true });
       const batchedRequest = comparison.getByText('1 batched request', { exact: true });
+      const pulse = comparison.locator('canvas.request-pulse');
+      const frameAtRest = () => pulse.evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL());
       await expect(batchedRequest).toBeVisible();
+      const reducedAfter = await frameAtRest();
       await before.click();
       await expect(requestGrid).toBeVisible();
-      await expect(comparison.locator('.batching-marks rect')).toHaveCount(120);
+      const reducedBefore = await frameAtRest();
+      expect(reducedBefore).not.toBe(reducedAfter);
+      await expect(pulse).toHaveCSS('animation-name', 'none');
       await page.emulateMedia({ reducedMotion: 'no-preference' });
       const scrollToBatch = (progress: number) =>
         section.locator('.batch-lane').evaluate((lane, amount) => {
@@ -137,7 +146,6 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
             behavior: 'instant',
           });
         }, progress);
-      const marks = comparison.locator('.batching-marks rect').first();
       await scrollToBatch(-0.08);
       await expect(requestGrid).toBeVisible();
       await expect(before).toBeHidden();
@@ -145,16 +153,18 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await expect(comparison.getByRole('button', { name: 'Replay batching' })).toHaveCount(0);
       await scrollToBatch(0.34);
       await expect(comparison.getByText('Batching requests', { exact: true })).toBeVisible();
-      await expect(marks).not.toHaveCSS('transform', 'none');
+      const middle = await frameAtRest();
+      await scrollToBatch(0.85);
+      await expect.poll(frameAtRest).not.toBe(middle);
       await scrollToBatch(0.85);
       await expect(batchedRequest).toBeVisible();
       await expect(section.locator('.experience-measure')).toBeVisible();
       await scrollToBatch(-0.08);
       await expect(requestGrid).toBeVisible();
-      await expect(marks).toHaveCSS('transform', 'none');
+      await expect.poll(frameAtRest).toBe(reducedBefore);
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await expect(before).toBeVisible();
-      await expect(marks).toHaveCSS('animation-name', 'none');
+      await expect(pulse).toHaveCSS('animation-name', 'none');
       await after.click();
       await expect(after).toHaveAttribute('aria-pressed', 'true');
       await expect(batchedRequest).toBeVisible();
@@ -239,8 +249,10 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         else expect(reel!.y).toBeGreaterThan(lead!.y + lead!.height);
         expect(frame!.y).toBeGreaterThan(details!.y + details!.height);
         expect(details!.y).toBeGreaterThan(lead!.y + lead!.height);
-        const contribution = target.getByRole('link', { name: 'iodine', exact: true });
-        await expect(contribution).toHaveAccessibleDescription('Opens in a new tab');
+        await expect(target.locator('.about-lead')).toContainText('recovering an edit');
+        await expect(
+          target.getByText('Computer Engineering at Rutgers', { exact: true }),
+        ).toBeVisible();
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
           true,
         );

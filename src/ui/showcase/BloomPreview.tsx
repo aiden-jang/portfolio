@@ -10,7 +10,9 @@ import './bloom-garden.css';
 import { BloomComposer } from './BloomComposer';
 import { BloomPlot } from './BloomPlot';
 import { bloomFlowers } from './bloomFlowers';
+import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useTimedScene } from '../../hooks/useTimedScene';
+import { useIdleDetail } from './useIdleDetail';
 import { advanceGarden } from './gardenFocus';
 
 export function BloomPreview({
@@ -58,10 +60,18 @@ export function BloomPreview({
   const article = useRef<HTMLElement>(null);
   const write = useRef<HTMLButtonElement>(null);
   const plot = useRef<HTMLDivElement>(null);
+  useIdleDetail(plot);
   const draw = useCallback((progress: number) => {
     if (article.current) advanceGarden(article.current, progress);
   }, []);
-  useTimedScene(plot, draw, { enabled: !composing, duration: 1650 });
+  const finishOnArrival = useTimedScene(plot, draw, { enabled: !composing, duration: 1650 });
+  const settle = useCallback(
+    (active: boolean) => {
+      if (active) finishOnArrival(1, 0);
+    },
+    [finishOnArrival],
+  );
+  useScrollArrival(article, !composing, settle);
   const composerTitle = useRef<HTMLHeadingElement>(null);
   useLayoutEffect(() => {
     if (!hasOpenedComposer) return;
@@ -141,6 +151,7 @@ export function BloomPreview({
           titleRef={composerTitle}
           hidden={!composing}
           onBack={() => setComposing(false)}
+          onRead={onRead}
         />
       )}
 

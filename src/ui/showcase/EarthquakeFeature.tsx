@@ -6,7 +6,7 @@ import { EarthquakeGlobeStill } from './EarthquakeEvidence';
 import { DepthSection } from './DepthSection';
 import { InteractiveGlobe } from './InteractiveGlobe';
 import { ControlIcon } from '../ControlIcon';
-import { OpenEvidence } from '../creative/evidenceNavigation';
+import { OpenEvidence, type EvidenceFrame } from '../creative/evidenceNavigation';
 import { evidenceHref } from '../creative/storyRoutes';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
 import { QuakeReadings } from './quakeJourney';
@@ -20,6 +20,7 @@ type Props = {
 
 export function EarthquakeFeature({ item, preview }: Props) {
   const openEvidence = useContext(OpenEvidence);
+  const globeFrame = useRef<{ capture: () => EvidenceFrame | undefined }>(null);
   const compareRoute = '#quake/kamchatka';
   const [comparing, setComparing] = useState(() => location.hash.startsWith(compareRoute));
   const [agency, setAgency] = useState<'USGS' | 'EMSC'>(() =>
@@ -143,6 +144,7 @@ export function EarthquakeFeature({ item, preview }: Props) {
             caption={preview.caption}
             onCompare={launchComparison}
             journey
+            frameRef={globeFrame}
             evidence={{ agency, setAgency, openEvidence }}
           />
         </div>
@@ -162,6 +164,16 @@ export function EarthquakeFeature({ item, preview }: Props) {
             >
               Compare the Kamchatka reports <ControlIcon name="arrow" />
             </button>
+            <a
+              className="featured-text-action"
+              aria-label="Read the meanwhile. case study"
+              href={evidenceHref('everythingisfine', { agency })}
+              onClick={(event) =>
+                openEvidence?.(event, 'everythingisfine', () => globeFrame.current?.capture())
+              }
+            >
+              Case study <ControlIcon name="arrow" />
+            </a>
           </div>
         )}
         {!comparing && (
@@ -173,14 +185,6 @@ export function EarthquakeFeature({ item, preview }: Props) {
               </a>
             </span>
             <div className="earthquake-links">
-              <a
-                className="featured-text-action"
-                aria-label="Read the meanwhile. case study"
-                href={evidenceHref('everythingisfine', { agency })}
-                onClick={(event) => openEvidence?.(event, 'everythingisfine')}
-              >
-                Case study <ControlIcon name="arrow" />
-              </a>
               {item.link && (
                 <a
                   className="earthquake-app"

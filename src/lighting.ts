@@ -1,7 +1,7 @@
 import { F40_INDEX } from './cars';
 import type { ThemeName } from './types';
 
-export const DEFAULT_LIGHTING = 'studio';
+export const DEFAULT_LIGHTING = 'night';
 export const STUDIO_TALL_ASPECT = 0.43;
 export const LIGHTING_MODES = ['studio', 'night'] as const;
 export const LIGHTING_LABELS: Record<ThemeName, string> = {
@@ -11,23 +11,12 @@ export const LIGHTING_LABELS: Record<ThemeName, string> = {
 };
 
 export function parseLighting(value: string | null): ThemeName {
-  // The old Night link selects After Hours. Dusk links open the default Studio.
-  return value === 'night' ? 'night' : DEFAULT_LIGHTING;
+  if (value === 'studio' || value === 'dusk') return 'studio';
+  return DEFAULT_LIGHTING;
 }
 
 export function readOpeningTheme() {
-  const url = globalThis.location;
-  const params = new URLSearchParams(url?.search);
-  if (
-    url &&
-    (!url.hash || url.hash === '#sec-intro') &&
-    !params.has('light') &&
-    !params.has('car') &&
-    !params.has('garage')
-  ) {
-    return 'night';
-  }
-  return parseLighting(params.get('light'));
+  return parseLighting(new URLSearchParams(globalThis.location?.search).get('light'));
 }
 
 export function nextLighting(theme: ThemeName) {

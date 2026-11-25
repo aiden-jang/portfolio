@@ -1,18 +1,18 @@
 import { useGlobeCardPosition } from './useGlobeCardPosition';
-import { GlobeControls } from './GlobeControls';
+import { GlobeControls, GlobeScreenshotButton } from './GlobeControls';
 import { GlobeEventCard, type GlobeEvidence } from './GlobeEventCard';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import { GlobeArtwork } from './GlobeArtwork';
 import { previewLink } from '../previewLinks';
 import { setQuakeManual, syncQuakeCamera } from './quakeProgress';
 import { loadRecordedWeather } from './globe/recordedWeatherAssets';
+import type { EvidenceFrame } from '../creative/evidenceNavigation';
 
 type Engine = ReturnType<(typeof import('./globe-engine'))['createOrbitGlobe']>;
-const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const START_THRESHOLD = 0.12;
-
 type GlobeProps = {
+  frameRef?: Ref<{ capture: () => EvidenceFrame | undefined }>;
   image: string;
   caption: string;
   journey?: boolean;
@@ -20,7 +20,14 @@ type GlobeProps = {
   onCompare?: (trigger: HTMLButtonElement) => void;
 };
 
-export function InteractiveGlobe({ image, caption, onCompare, journey, evidence }: GlobeProps) {
+export function InteractiveGlobe({
+  image,
+  caption,
+  onCompare,
+  journey,
+  evidence,
+  frameRef,
+}: GlobeProps) {
   const figure = useRef<HTMLElement>(null),
     canvas = useRef<HTMLCanvasElement>(null),
     launch = useRef<HTMLButtonElement>(null),
@@ -29,10 +36,14 @@ export function InteractiveGlobe({ image, caption, onCompare, journey, evidence 
     visible = useRef(false),
     mayAutoStart = useRef(true),
     requestedFocus = useRef(false);
+  const capture = useCallback(() => handle.current?.capture(), []);
+  useImperativeHandle(frameRef, () => ({ capture }), [capture]);
   const [mode, setMode] = useState<'auto' | 'manual' | null>(null),
     [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [inView, setInView] = useState(false);
-  const [reduced, setReduced] = useState(() => matchMedia(MOTION_QUERY).matches);
+  const [reduced, setReduced] = useState(
+    () => matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
   const [rotating, setRotating] = useState(false);
   const [selected, setSelected] = useState<import('./globe-engine').PickedEvent | null>(null);
   const show = useRef<HTMLButtonElement>(null);
@@ -53,7 +64,7 @@ export function InteractiveGlobe({ image, caption, onCompare, journey, evidence 
     requestAnimationFrame(() => launch.current?.focus({ preventScroll: true }));
   };
   useEffect(() => {
-    const media = matchMedia(MOTION_QUERY);
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => {
       setReduced(media.matches);
       if (media.matches) handle.current?.setRotating(false);
@@ -159,14 +170,8 @@ export function InteractiveGlobe({ image, caption, onCompare, journey, evidence 
           select: setSelected,
           exit: () => exitRef.current(),
         });
-        setCaptured(
-          new Date(snapshot.metadata.generated).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            timeZone: 'UTC',
-          }),
-        );
+        const date = new Date(snapshot.metadata.generated);
+        setCaptured(date.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' }));
         setPhase('ready');
         if (journey && mode === 'auto') syncQuakeCamera(target);
       })
@@ -242,30 +247,24 @@ export function InteractiveGlobe({ image, caption, onCompare, journey, evidence 
                 onDone={() => exitRef.current()}
               />
             )}
-            <button
-              ref={inspect}
-              type="button"
-              className="orbit-screenshot"
-              disabled={screenshotUnavailable}
-              aria-label="Inspect screenshot: meanwhile."
-              title="View full screenshot"
-              onClick={() => setViewer(true)}
-            >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" />
-              </svg>
-            </button>
+            <GlobeScreenshotButton
+              buttonRef={inspect}
+              unavailable={screenshotUnavailable}
+              onInspect={() => setViewer(true)}
+            />
           </div>
           {ready && selected && (
             <GlobeEventCard
               event={selected}
-              evidence={selected.id === 'usd0015edq' ? evidence : undefined}
+              evidence={
+                selected.id === 'usd0015edq' && evidence
+                  ? {
+                      ...evidence,
+                      openEvidence: (event, id) =>
+                        evidence.openEvidence?.(event, id, capture) ?? false,
+                    }
+                  : undefined
+              }
               onCompare={selected.id === 'usd0015edq' ? onCompare : undefined}
               onClose={() => {
                 handle.current?.clearSelection();

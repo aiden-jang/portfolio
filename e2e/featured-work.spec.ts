@@ -45,7 +45,7 @@ for (const viewport of [
     await expect(art).not.toHaveAttribute('data-kamchatka-pulse');
 
     await page.evaluate(() => scrollTo({ top: innerHeight * 1.1, behavior: 'instant' }));
-    await expect(page.locator('html')).toHaveCSS('--stage-opacity', '0');
+    await expect(page.locator('html')).not.toHaveAttribute('data-showroom-handoff');
     await scroll(0);
     await expect(page.locator('html')).toHaveCSS('--stage-opacity', '1');
     await scroll(1);
@@ -78,6 +78,7 @@ for (const [width, height] of [
       } as typeof get;
     });
     await page.goto('/#sec-work');
+    await expect(page.locator('body')).toHaveAttribute('data-theme', 'night');
     await page.evaluate(() => document.fonts.ready);
     const inspect = page.getByRole('button', {
       name: 'Compare the Kamchatka reports',

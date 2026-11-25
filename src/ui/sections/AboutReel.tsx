@@ -26,6 +26,7 @@ export function AboutReel() {
   const [format, setFormat] = useState<'desktop' | 'phone'>();
   const video = useRef<HTMLVideoElement>(null);
   const pending = useRef(false);
+  const [heldOnce, setHeldOnce] = useState(false);
   const [held, setHeld] = useState(false);
   const grip = useRef<number | null>(null);
   const resumeAfterHold = useRef(false);
@@ -44,6 +45,7 @@ export function AboutReel() {
     grip.current = event.pointerId;
     event.currentTarget.setPointerCapture(event.pointerId);
     setHeld(true);
+    setHeldOnce(true);
     player.pause();
   }
 
@@ -178,6 +180,11 @@ export function AboutReel() {
             <source media={phoneViewport} srcSet={media.phone.poster} />
             <img src={media.desktop.poster} alt="" loading="lazy" decoding="async" />
           </picture>
+        )}
+        {!heldOnce && phase === 'playing' && (
+          <span className="connect-reel-cue" aria-hidden="true">
+            Hold to pause
+          </span>
         )}
         <button
           type="button"

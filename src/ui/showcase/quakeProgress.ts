@@ -7,7 +7,7 @@ function showReadings(el: HTMLElement) {
 
 function quakeTravel(el: HTMLElement) {
   const t = Number(el.dataset.studyProgress ?? 0);
-  if (showReadings(el)) return 0.55;
+  if (showReadings(el)) return 0;
   return easedProgress(t, 0.01, 0.6);
 }
 
@@ -15,10 +15,10 @@ export function advanceQuake(el: HTMLElement, progress: number) {
   const result = showReadings(el);
   const mapReveal = result ? 0 : easedProgress(progress, 0.68, 0.94);
   const depths = result ? 1 : easedProgress(progress, 0.26, 0.54);
-  el.style.setProperty('--agency-reveal', (depths * (1 - mapReveal)).toFixed(3));
+  el.style.setProperty('--agency-reveal', (result ? 0 : depths * (1 - mapReveal)).toFixed(3));
   el.style.setProperty(
     '--journey-pin',
-    (result ? 1 : easedProgress(progress, 0.18, 0.42)).toFixed(3),
+    (result ? 0 : easedProgress(progress, 0.18, 0.42)).toFixed(3),
   );
 
   el.style.setProperty('--directed-map-reveal', mapReveal.toFixed(3));

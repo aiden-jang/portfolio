@@ -1,3 +1,4 @@
+import './connected-cut.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { caseStudyLane, isPortfolioProject } from '../data/workBrowsing';
 import { WORK_ITEMS, workId } from '../data/workItems';

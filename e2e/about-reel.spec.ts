@@ -81,7 +81,9 @@ test('the reel keeps playing at the viewport edge and resumes after leaving it',
   await expect(video).toHaveJSProperty('paused', false);
   await expect(video).toHaveJSProperty('loop', true);
 
-  const stage = await video.boundingBox();
+  const holdTarget = page.getByRole('button', { name: 'Pause reel', exact: true });
+  await holdTarget.scrollIntoViewIfNeeded();
+  const stage = await holdTarget.boundingBox();
   expect(stage).not.toBeNull();
   await page.mouse.move(stage!.x + stage!.width / 2, stage!.y + stage!.height / 2);
   await page.mouse.down();

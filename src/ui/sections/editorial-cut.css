@@ -1,0 +1,298 @@
+/* The recording and working buffer share the editor surface. */
+html:root #sec-work .work-exhibit #project-iodine .project-scene-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(12px, 2vh, 22px);
+  padding-block: clamp(18px, 3vh, 34px);
+  background: #151919;
+}
+#project-iodine .iodine-scene-content {
+  display: block;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  overflow: hidden;
+  background: #1e1e1e;
+  border: 1px solid #53605b;
+  border-radius: 6px;
+}
+#project-iodine .iodine-demo {
+  border: 0;
+  border-radius: 0;
+}
+#project-iodine .iodine-demo video {
+  height: clamp(235px, 48svh, 610px);
+  object-fit: cover;
+  object-position: center 42%;
+}
+html:root #project-iodine .iodine-scene-content .recovery {
+  border: 0;
+  border-top: 1px solid #516056;
+  border-radius: 0;
+  background: #1c2220;
+  --editor-edge: clamp(14px, 2vw, 34px);
+  display: grid;
+  grid-template: auto auto / minmax(0, 1fr) auto;
+}
+#project-iodine .recovery-meta {
+  grid-column: 1/-1;
+  min-height: 34px;
+}
+#project-iodine .iodine-scene-content .recovery-source {
+  padding-block: 10px;
+  font-size: 12px;
+}
+html:root #project-iodine .iodine-scene-content .recovery-line {
+  margin-block: 4px;
+  font-size: clamp(16px, 2vw, 30px);
+}
+#project-iodine .recovery-bottom {
+  border: 0;
+  align-content: center;
+  align-items: end;
+  flex-direction: column;
+  justify-content: center;
+}
+#project-iodine .recovery-bottom > span {
+  display: none;
+}
+#project-iodine .recovery-bottom button {
+  padding: 0 12px;
+  color: #d5eee0;
+  background: #29362f;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+/* The result and its evidence share a baseline and a single field. */
+#sec-experience .experience-content .batch-lane .experience-lead {
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  gap: clamp(14px, 3svh, 32px);
+}
+#batching-study .experience-batch-copy {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 8px 24px;
+}
+#batching-study .experience-batch-copy h2 {
+  max-width: none;
+  font-size: clamp(40px, 7.5vw, 118px);
+}
+#batching-study .experience-batch-copy h2 span {
+  color: #96c3ab;
+}
+#batching-study .experience-measure {
+  margin: 0;
+  font-size: clamp(27px, 3.2vw, 54px);
+}
+#batching-study .experience-lead-actions {
+  grid-column: 1/-1;
+  margin: 0;
+}
+#batching-study .batching-spread {
+  width: 100%;
+  max-width: none;
+}
+#batching-study .batching-spread :is(svg, .request-pulse) {
+  width: 100%;
+  height: clamp(180px, 41svh, 456px);
+}
+
+/* Leave the floor clear around the cat, mouse and box. */
+html:root #project-mrrp.room-shot .bean-window {
+  height: 100%;
+}
+html:root #project-mrrp.room-shot .bean-room-controls {
+  bottom: max(12px, env(safe-area-inset-bottom));
+  right: var(--portfolio-gutter);
+  left: var(--portfolio-gutter);
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+#project-mrrp.room-shot .bean-room-controls button {
+  pointer-events: auto;
+  border: 0;
+  border-radius: 0;
+  padding-inline: 9px;
+  background: #302722df;
+}
+.bean-cue {
+  margin-right: auto;
+  color: #fff8ec;
+  font-size: 13px;
+  text-shadow: 0 1px 4px #201710;
+}
+#project-mrrp.room-shot .bean-window::after {
+  background: linear-gradient(0deg, #251c1bc9, transparent 15%, transparent 87%, #251c1b70);
+}
+
+html:root #sec-more-work .gallery-companions {
+  display: grid;
+  gap: 0;
+}
+html:root #sec-more-work .gallery-companions .garage-project-compact {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.42fr) minmax(0, 1fr);
+  gap: clamp(18px, 4vw, 64px);
+  align-items: center;
+  padding-block: clamp(18px, 3.4svh, 36px);
+  border-top: 1px solid #373938;
+}
+html:root #sec-more-work .gallery-companions .project-card-media {
+  width: 100%;
+  max-width: 340px;
+  order: 0;
+}
+html:root #sec-more-work .gallery-companions .garage-project-copy {
+  width: 100%;
+  order: 1;
+}
+html:root #sec-more-work .gallery-companions .garage-project-copy p {
+  max-width: 45ch;
+}
+#sec-about .about-reel-story {
+  align-items: center;
+}
+@media (min-width: 800px) {
+  html:root #sec-about .about-reel-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) minmax(230px, 0.8fr);
+    gap: var(--portfolio-gutter);
+  }
+}
+@media (max-width: 700px) {
+  #project-iodine .iodine-demo video {
+    height: clamp(195px, 36svh, 350px);
+    object-position: 20% 45%;
+  }
+  html:root #project-iodine .iodine-scene-content .recovery {
+    display: block;
+  }
+  #project-iodine .recovery-bottom {
+    align-items: flex-end;
+    padding-block: 4px 10px;
+  }
+  html:root #project-iodine .iodine-scene-content .recovery-line {
+    font-size: clamp(13px, 4.65cqi, 19px);
+  }
+  #batching-study .experience-batch-copy {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  #batching-study .experience-batch-copy h2 {
+    font-size: clamp(42px, 12.5vw, 76px);
+  }
+  #batching-study .batching-spread :is(svg, .request-pulse) {
+    height: clamp(170px, 30svh, 280px);
+  }
+  html:root #project-mrrp.room-shot .bean-room-controls {
+    gap: 4px;
+  }
+  #project-mrrp.room-shot .bean-room-controls button {
+    font-size: 12px;
+    padding-inline: 7px;
+  }
+  .bean-cue {
+    max-width: 13ch;
+    font-size: 12px;
+  }
+  html:root #sec-more-work .gallery-companions .garage-project-compact {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  html:root #sec-more-work .gallery-companions .project-card-media {
+    max-width: 100%;
+  }
+}
+
+.bean-match {
+  display: none;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) and (min-height: 600px) {
+  html:root #sec-more-work .duet {
+    height: calc(var(--desk-height) + 110svh);
+  }
+  html:root .duet .duet-stage {
+    position: sticky;
+    top: var(--portfolio-header-height);
+    height: var(--desk-height);
+    overflow: hidden;
+  }
+  html:root .duet .sketch {
+    min-height: var(--desk-height);
+  }
+  html:root .duet .room-shot {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(var(--room-reveal, 100%) 0 0);
+  }
+  .duet[data-match='jump'] .bean-match {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    left: var(--match-x);
+    top: var(--match-y);
+    width: var(--match-w);
+    height: auto;
+    transform: translate(-50%, -50%);
+  }
+  .duet[data-match='jump'] .sketch .iguess-replay,
+  .duet[data-match='jump'] .sketch .cut-id {
+    visibility: hidden;
+  }
+  .duet[data-blink='true'] .match-lid {
+    fill: #fbefdb;
+  }
+  .duet[data-blink='true'] .match-eye {
+    fill: #634337;
+    transform: scaleY(0.4);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+.request-pulse .pulse-lines {
+  fill: none;
+  stroke: #739e87;
+  stroke-width: 1;
+  opacity: 0.21;
+}
+.request-pulse .pulse-requests {
+  fill: #ddbd8f;
+}
+.request-pulse .pulse-output,
+.request-pulse .pulse-time {
+  opacity: 0;
+}
+.request-pulse .pulse-time text {
+  fill: #ceead8;
+  font: 480 41px var(--font-display);
+  letter-spacing: -2px;
+}
+@media (prefers-reduced-motion: no-preference) and (min-height: 600px) {
+  .duet[data-match='jump'] .bean-match {
+    top: 0;
+    left: 0;
+    will-change: transform;
+  }
+  html:root .duet[data-match='draw'] .room-shot {
+    clip-path: inset(100% 0 0) !important;
+  }
+  html:root .duet[data-match='room'] .room-shot {
+    clip-path: none !important;
+  }
+}
+
+#batching-study canvas.request-pulse {
+  display: block;
+}
+.duet[data-match='static'] .room-shot {
+  clip-path: none !important;
+}

@@ -1,12 +1,12 @@
 import { kamchatkaExample } from '../../data/kamchatkaExample';
-import { evidenceHref, type StoryId } from '../creative/storyRoutes';
-import type { MouseEvent } from 'react';
+import { evidenceHref } from '../creative/storyRoutes';
+import type { OpenEvidenceLink } from '../creative/evidenceNavigation';
 import type { PickedEvent } from './globe/data';
 type Agency = (typeof kamchatkaExample.sources)[number]['name'];
 export type GlobeEvidence = {
   agency: Agency;
   setAgency: (agency: Agency) => void;
-  openEvidence: ((event: MouseEvent<HTMLAnchorElement>, id: StoryId) => boolean) | null;
+  openEvidence: OpenEvidenceLink | null;
 };
 
 export function GlobeEventCard({

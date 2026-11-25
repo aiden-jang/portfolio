@@ -11,6 +11,7 @@ import { ResumeButton } from '../ResumeButton';
 import { evidenceHref, portfolioPath, storyHref, type StoryId } from './storyRoutes';
 import './creative.css';
 import './case-continuity.css';
+import type { EvidenceFrame } from './evidenceNavigation';
 
 const stories = {
   everythingisfine: {
@@ -44,9 +45,11 @@ const stories = {
 
 export function StoryPage({
   id,
+  frame,
   returnToPortfolio,
 }: {
   id: StoryId;
+  frame?: EvidenceFrame;
   returnToPortfolio?: () => void;
 }) {
   const item = WORK_ITEMS.find((candidate) => workId(candidate) === id)!;
@@ -117,7 +120,7 @@ export function StoryPage({
             {id !== 'iodine' && <p>{story.role}</p>}
           </header>
           {id === 'everythingisfine' ? (
-            <QuakeCaseOpening agency={agency} onSelect={setAgency} />
+            <QuakeCaseOpening agency={agency} onSelect={setAgency} frame={frame} />
           ) : id === 'iodine' ? (
             <IodineCaseOpening role={story.role} />
           ) : (

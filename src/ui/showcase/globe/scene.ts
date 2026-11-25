@@ -173,11 +173,12 @@ export function createGlobeScene(
     markers.resize(scale);
     featuredMarker.resize(scale);
   };
-  const render = (pose: GlobePose, journey = 0, pulseTime = 0) => {
+  const render = (pose: GlobePose, journey = 0, pulseTime = 0, sweepTime = 0) => {
     if (overlays) {
       const detail = Math.min(1, Math.max(0, (journey - 0.04) / 0.6));
       const strength = 1 - detail * detail * (3 - 2 * detail);
       overlays.setStrength(0.12 + strength * 0.88);
+      overlays.setSweep(sweepTime);
       markers.fade(strength * strength);
       featuredMarker.pulse(pulseTime);
     }
