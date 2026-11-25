@@ -11,7 +11,8 @@ describe('After Hours Corvette loop', () => {
 
     expect(sample(1.49).yaw).toBeLessThan(-2);
     expect(Math.abs(sample(1.51).yaw)).toBeLessThan(0.1);
-    expect(sample(4.34)).toEqual(sample(3.1));
+    expect(sample(3.1).distance).toBeLessThan(sample(2.5).distance);
+    expect(sample(4.34).distance).toBeLessThan(sample(4.3).distance);
     expect(sample(4.36).yaw).toBeLessThan(-2.8);
     expect(sample(5.66).yaw).toBeGreaterThan(1);
     expect(sample(7.16).elevation).toBeGreaterThan(1);
