@@ -16,7 +16,18 @@ export function parseLighting(value: string | null): ThemeName {
 }
 
 export function readOpeningTheme() {
-  return parseLighting(new URLSearchParams(globalThis.location?.search).get('light'));
+  const url = globalThis.location;
+  const params = new URLSearchParams(url?.search);
+  if (
+    url &&
+    (!url.hash || url.hash === '#sec-intro') &&
+    !params.has('light') &&
+    !params.has('car') &&
+    !params.has('garage')
+  ) {
+    return 'night';
+  }
+  return parseLighting(params.get('light'));
 }
 
 export function nextLighting(theme: ThemeName) {

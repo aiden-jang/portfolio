@@ -1,24 +1,20 @@
 import { phoneOpeningFrame } from '../three/phoneOpeningFrame';
 import { useLayoutEffect, useRef, useState } from 'react';
-import { parseLighting } from '../lighting';
 import { CORVETTE_POSTER, StudioPosterSources, STUDIO_POSTER } from './StudioPosterSources';
 import { DEFAULT_CAR_INDEX, F40_INDEX } from '../config';
 import { useAppStore } from '../store';
-import { framingDistanceMultiplier } from '../three/cameraPose';
 import './opening-poster.css';
 
 function openingPosterLighting() {
   const params = new URLSearchParams(location.search);
-  const lighting = parseLighting(params.get('light'));
-  const { carIndex } = useAppStore.getState();
+  const { carIndex, themeName: lighting } = useAppStore.getState();
   const hasPoster =
-    carIndex === F40_INDEX || (carIndex === DEFAULT_CAR_INDEX && lighting === 'studio');
+    carIndex === DEFAULT_CAR_INDEX || (carIndex === F40_INDEX && lighting === 'studio');
   return scrollY <= 1 &&
     (!location.hash || location.hash === '#sec-intro') &&
     hasPoster &&
     !params.has('garage') &&
-    (params.get('paint') ?? 'original') === 'original' &&
-    lighting !== 'night'
+    (params.get('paint') ?? 'original') === 'original'
     ? lighting
     : null;
 }
@@ -27,7 +23,6 @@ function fitOpeningPoster(
   picture: HTMLPictureElement | null,
   photo: HTMLImageElement | null,
   corvette: boolean,
-  studio: boolean,
 ) {
   const mobile = innerWidth < 768;
   const frame = mobile ? phoneOpeningFrame(innerWidth, innerHeight) : { scale: 1, lift: 0 };
@@ -46,20 +41,18 @@ function fitOpeningPoster(
   }
   picture?.style.setProperty('--opening-reframe', String(scale));
   picture?.style.setProperty('--opening-lift', -lift + 'px');
-  if (studio) return;
-  const referenceAspect = mobile ? 390 / 844 : 1440 / 900;
-  const distanceScale =
-    framingDistanceMultiplier(referenceAspect) /
-    framingDistanceMultiplier(innerWidth / innerHeight);
-  picture?.style.setProperty('--opening-poster-scale', String(distanceScale));
 }
 
 export function OpeningPoster() {
   const [lighting] = useState(openingPosterLighting);
   const [carIndex] = useState(() => useAppStore.getState().carIndex);
   const corvette = carIndex === DEFAULT_CAR_INDEX;
-  const studio = lighting === 'studio';
-  const poster = corvette ? CORVETTE_POSTER : STUDIO_POSTER;
+  const afterHours = lighting === 'night';
+  const poster = afterHours
+    ? '/showroom/corvette/after-hours-desktop.webp'
+    : corvette
+      ? CORVETTE_POSTER
+      : STUDIO_POSTER;
   const [phase, setPhase] = useState<'loading' | 'fading' | 'done'>('loading');
   const picture = useRef<HTMLPictureElement>(null);
   const photo = useRef<HTMLImageElement>(null);
@@ -74,7 +67,7 @@ export function OpeningPoster() {
     let finished = false;
     body.dataset.openingMedia = '';
     refs.holdOpeningPose = true;
-    const fit = () => fitOpeningPoster(picture.current, photo.current, corvette, studio);
+    const fit = () => fitOpeningPoster(picture.current, photo.current, corvette);
     const end = () => {
       if (finished) return;
       finished = true;
@@ -96,7 +89,7 @@ export function OpeningPoster() {
       // The effects pass has rendered at the poster pose. Let the browser present
       // that frame before removing the still and releasing the opening orbit.
       frame = requestAnimationFrame(() => {
-        if (matchMedia('(prefers-reduced-motion: reduce)').matches) end();
+        if (afterHours || matchMedia('(prefers-reduced-motion: reduce)').matches) end();
         else {
           setPhase('fading');
           timer = window.setTimeout(end, corvette ? 170 : 210);
@@ -139,14 +132,14 @@ export function OpeningPoster() {
       refs.holdOpeningPose = false;
       finish.current = undefined;
     };
-  }, [carIndex, corvette, lighting, studio]);
+  }, [afterHours, carIndex, corvette, lighting]);
 
   if (!lighting || phase === 'done') return null;
 
   return (
     <picture
       ref={picture}
-      className={studio ? 'opening-poster studio-media' : 'opening-poster'}
+      className="opening-poster studio-media"
       aria-hidden="true"
       data-corvette={corvette || undefined}
       data-fading={phase === 'fading' || undefined}
@@ -154,30 +147,26 @@ export function OpeningPoster() {
         if (phase === 'fading' && event.propertyName === 'opacity') finish.current?.();
       }}
     >
-      {studio ? (
-        <StudioPosterSources opening corvette={corvette} />
-      ) : (
+      {afterHours ? (
         <>
           <source
-            media="(width < 768px) and (prefers-reduced-motion: reduce)"
-            srcSet="/showroom/f40-mobile-settled.webp"
+            media="(width < 768px) and (min-aspect-ratio: 1/2)"
+            srcSet="/showroom/corvette/after-hours-phone-short.webp"
           />
-          <source media="(width < 768px)" srcSet="/showroom/f40-mobile-opening.webp" />
-          <source
-            media="(prefers-reduced-motion: reduce)"
-            srcSet="/showroom/f40-desktop-settled.webp"
-          />
+          <source media="(width < 768px)" srcSet="/showroom/corvette/after-hours-phone.webp" />
         </>
+      ) : (
+        <StudioPosterSources opening corvette={corvette} />
       )}
       <img
         ref={photo}
-        src={studio ? poster : '/showroom/f40-desktop-opening.webp'}
+        src={poster}
         fetchPriority="high"
         width={1440}
         height={900}
         alt=""
         onLoad={() => {
-          fitOpeningPoster(picture.current, photo.current, corvette, studio);
+          fitOpeningPoster(picture.current, photo.current, corvette);
           if (finish.current) document.body.dataset.openingPoster = '';
         }}
         onError={() => finish.current?.()}

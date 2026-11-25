@@ -226,6 +226,7 @@ async function withOpeningCamera(
   useAppStore.setState(
     {
       ...initial,
+      themeName: 'studio',
       refs: { ...initial.refs, carModel: null, introArmed: false },
     },
     true,

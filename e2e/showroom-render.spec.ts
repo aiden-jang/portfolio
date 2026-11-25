@@ -3,13 +3,15 @@ import { expect, test } from '@playwright/test';
 for (const viewport of [
   { width: 1440, height: 900 },
   { width: 390, height: 844 },
-  { width: 320, height: 844 },
+  { width: 375, height: 667 },
 ]) {
   const phone = viewport.width < 768;
-  const narrow = viewport.width === 320;
-  const device = narrow ? 'narrow mobile' : phone ? 'mobile' : 'desktop';
-  const poster = narrow ? 'phone-tall' : phone ? 'phone' : 'desktop-motion';
-  test(`the ${device} Corvette poster hands off to the live garage`, async ({ page }) => {
+  const short = viewport.height === 667;
+  const device = short ? 'short mobile' : phone ? 'mobile' : 'desktop';
+  const poster = short ? 'phone-short' : phone ? 'phone' : 'desktop';
+  test(`the ${device} After Hours Corvette poster hands off to the live garage`, async ({
+    page,
+  }) => {
     await page.setViewportSize(viewport);
     await page.emulateMedia({ reducedMotion: phone ? 'reduce' : 'no-preference' });
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
@@ -37,7 +39,7 @@ for (const viewport of [
       await expect(art).toBeVisible({ timeout: 8_000 });
       await expect
         .poll(() => art.evaluate((photo) => (photo as HTMLImageElement).currentSrc))
-        .toContain(`corvette-${poster}.webp`);
+        .toContain(`/corvette/after-hours-${poster}.webp`);
       const firstPosition = await title.boundingBox();
       await expect(page.locator('.car-choice-status').first()).toContainText(/loading/i);
       resume();

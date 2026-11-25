@@ -25,12 +25,13 @@ export function observeOpeningOrbit(listener: (phase: Phase) => void) {
 }
 
 function openingState() {
-  const { carIndex, cameraResetVersion, refs } = useAppStore.getState();
+  const { carIndex, cameraResetVersion, refs, themeName } = useAppStore.getState();
   return {
     phase: 'waiting' as Phase,
     version: getOpeningReplayVersion(),
     carIndex,
     cameraResetVersion,
+    themeName,
     elapsed: 0,
     offset: 0,
     lastShot: undefined as ReturnType<typeof sampleCorvetteLoop> | undefined,
@@ -112,10 +113,28 @@ export function useOpeningOrbit() {
     }
     let shot: ReturnType<typeof sampleCorvetteLoop> | undefined;
     const unfinished = motion.phase === 'waiting' || motion.phase === 'playing';
+    const readyModel = !motion.awaitingSwap && !store.carLoadError && store.refs.carModel;
+    if (corvette && motion.themeName !== store.themeName && playback !== 'paused' && !photo) {
+      motion.themeName = store.themeName;
+      motion.elapsed = 0;
+    }
+    const afterHours = corvette && motion.themeName === 'night';
 
     if (reduced) {
       motion.phase = 'reduced';
       motion.offset = 0;
+      if (
+        afterHours &&
+        atIntro &&
+        readyModel &&
+        store.carIndex === motion.carIndex &&
+        !store.isContactVisible &&
+        !rig.isDown &&
+        !store.hasManualView &&
+        !photo
+      ) {
+        shot = sampleCorvetteLoop(0, phone, aspect, true);
+      }
     } else if (store.isContactVisible || store.cameraResetVersion !== motion.cameraResetVersion) {
       if (unfinished) motion.phase = 'interrupted';
       motion.offset = 0;
@@ -131,13 +150,7 @@ export function useOpeningOrbit() {
       rig.idleSpin += motion.offset;
       motion.offset = 0;
       motion.phase = 'interrupted';
-    } else if (
-      unfinished &&
-      !motion.awaitingSwap &&
-      !store.carLoadError &&
-      store.refs.introArmed &&
-      store.refs.carModel
-    ) {
+    } else if (unfinished && readyModel && store.refs.introArmed) {
       // Frame the first visible paint at the start angle, then wait for the load signal.
       if (!store.isCarLoading && !store.refs.holdOpeningPose) {
         motion.phase = 'playing';
@@ -150,7 +163,10 @@ export function useOpeningOrbit() {
           motion.elapsed += Math.min(dt, 0.2);
       }
       const elapsed = motion.elapsed - HOLD_SECONDS;
-      if (corvette && elapsed >= 0) {
+      if (afterHours) {
+        shot = sampleCorvetteLoop(Math.max(0, elapsed), phone, aspect, true);
+        motion.offset = shot.yaw - KEYFRAMES[0].azimuth;
+      } else if (corvette && elapsed >= 0) {
         shot = sampleCorvetteLoop(elapsed, phone, aspect);
         const opening = KEYFRAMES[0];
         if (elapsed < 0.48) {
@@ -169,7 +185,7 @@ export function useOpeningOrbit() {
       } else if (!corvette && motion.phase === 'playing' && elapsed >= 0) {
         const framed = sampleSharedGarageCamera(
           elapsed,
-          store.refs.carModel,
+          readyModel,
           width,
           aspect,
           phone ? 34 : 32,
@@ -183,8 +199,10 @@ export function useOpeningOrbit() {
       }
     }
 
-    if (shot && playback === 'off' && atIntro) useOpeningPlayback.setState({ playback: 'playing' });
-    else if (!shot && playback !== 'off') useOpeningPlayback.setState({ playback: 'off' });
+    if (shot && motion.phase === 'playing' && playback === 'off' && atIntro)
+      useOpeningPlayback.setState({ playback: 'playing' });
+    else if ((!shot || reduced) && playback !== 'off')
+      useOpeningPlayback.setState({ playback: 'off' });
     motionState.openingOrbitProgress =
       !corvette && motion.phase === 'playing' ? clamp(1 + motion.offset / arc, 0, 1) : 0;
     if (observer && motion.reportedPhase !== motion.phase) {

@@ -198,6 +198,7 @@ it('shows accessible headlight toggles for the Miata and F40 and disables them u
   try {
     useAppStore.setState({
       carIndex: 10,
+      themeName: 'studio',
       hasPopupHeadlights: true,
       isCarLoading: true,
       headlightsRaised: true,
