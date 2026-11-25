@@ -1,13 +1,28 @@
+import { kamchatkaExample } from '../../data/kamchatkaExample';
+import { evidenceHref, type StoryId } from '../creative/storyRoutes';
+import type { MouseEvent } from 'react';
 import type { PickedEvent } from './globe/data';
+type Agency = (typeof kamchatkaExample.sources)[number]['name'];
+export type GlobeEvidence = {
+  agency: Agency;
+  setAgency: (agency: Agency) => void;
+  openEvidence: ((event: MouseEvent<HTMLAnchorElement>, id: StoryId) => boolean) | null;
+};
+
 export function GlobeEventCard({
   event,
   onClose,
   onCompare,
+  evidence,
 }: {
   event: PickedEvent;
   onClose: () => void;
+  evidence?: GlobeEvidence;
   onCompare?: (trigger: HTMLButtonElement) => void;
 }) {
+  const selectedReport = evidence
+    ? kamchatkaExample.sources.find((report) => report.name === evidence.agency)
+    : undefined;
   return (
     <aside
       className="orbit-event"
@@ -32,7 +47,8 @@ export function GlobeEventCard({
         </svg>
       </button>
       <h4>
-        M{event.magnitude} <span>{event.scale === 'unknown' ? '' : event.scale}</span>
+        M{event.magnitude}{' '}
+        <span>{selectedReport?.scale ?? (event.scale === 'unknown' ? '' : event.scale)}</span>
       </h4>
       <p className="orbit-event-place">{event.place}</p>
       <p>
@@ -44,9 +60,37 @@ export function GlobeEventCard({
           minute: '2-digit',
           timeZone: 'UTC',
         })}{' '}
-        UTC · USGS ·{' '}
-        {Number.isFinite(event.depth) ? event.depth + ' km deep' : 'Depth not reported'}
+        UTC
+        {!evidence && (
+          <>
+            {' '}
+            · USGS ·{' '}
+            {Number.isFinite(event.depth) ? event.depth + ' km deep' : 'Depth not reported'}
+          </>
+        )}
       </p>
+      {evidence && (
+        <div className="orbit-evidence">
+          <div role="group" aria-label="Choose a Kamchatka reading">
+            {kamchatkaExample.sources.map(({ name, depthKm }) => (
+              <button
+                key={name}
+                type="button"
+                aria-pressed={name === evidence.agency}
+                onClick={() => evidence.setAgency(name)}
+              >
+                {name} <strong>{depthKm.toFixed(1)} km</strong>
+              </button>
+            ))}
+          </div>
+          <a
+            href={evidenceHref('everythingisfine', { agency: evidence.agency })}
+            onClick={(event) => evidence.openEvidence?.(event, 'everythingisfine')}
+          >
+            Read case study <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      )}
       {onCompare && (
         <button
           className="orbit-compare-event"

@@ -188,6 +188,22 @@ test('the globe keeps the narrow-phone composition while WebGL loads', async ({ 
     await expect(globe.getByRole('complementary', { name: 'Selected earthquake' })).toContainText(
       'Kamchatka',
     );
+    const eventCard = globe.getByRole('complementary', { name: 'Selected earthquake' });
+    const emsc = eventCard.getByRole('button', { name: 'EMSC 71.0 km', exact: true });
+    const caseLink = eventCard.getByRole('link', { name: 'Read case study', exact: true });
+    await emsc.click();
+    await caseLink.scrollIntoViewIfNeeded();
+    const globePosition = await page.evaluate(() => scrollY);
+    await caseLink.click();
+    await expect(page).toHaveURL(/\/cases\/meanwhile\/\?agency=EMSC$/);
+    await expect(page.getByRole('heading', { name: 'One quake. Two depths.' })).toBeFocused();
+    await expect(page.locator('.quake-case-chosen')).toContainText('71.0');
+    await page.goBack();
+    await expect(caseLink).toBeFocused();
+    await expect(emsc).toHaveAttribute('aria-pressed', 'true');
+    await expect
+      .poll(() => page.evaluate((position) => Math.abs(scrollY - position), globePosition))
+      .toBeLessThan(2);
   } finally {
     releaseGeography();
   }

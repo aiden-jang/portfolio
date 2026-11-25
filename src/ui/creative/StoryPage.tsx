@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { WORK_ITEMS, workId } from '../../data/workItems';
 import { copyText } from '../../browserSharing';
-import { WorkStoryOpening } from '../WorkStoryOpening';
 import { WorkStory } from '../WorkStory';
 import { WorkStoryEnding } from '../WorkStoryEnding';
 import { IodineSession, type IodinePhase } from '../showcase/iodine-session';
-import { IodineCaseOpening, QuakeCaseOpening } from './CaseOpening';
+import { BatchingCaseOpening, IodineCaseOpening, QuakeCaseOpening } from './CaseOpening';
 import { ScopedApprovals } from '../showcase/ScopedApprovals';
 import { ControlIcon } from '../ControlIcon';
 import { ResumeButton } from '../ResumeButton';
 import { evidenceHref, portfolioPath, storyHref, type StoryId } from './storyRoutes';
 import './creative.css';
+import './case-continuity.css';
 
 const stories = {
   everythingisfine: {
@@ -51,7 +51,6 @@ export function StoryPage({
 }) {
   const item = WORK_ITEMS.find((candidate) => workId(candidate) === id)!;
   const story = stories[id];
-  const redesigned = id === 'iodine' || id === 'everythingisfine';
   const root = portfolioPath(location.pathname);
   const [phase, setPhase] = useState<IodinePhase>(() =>
     new URLSearchParams(location.search).get('edit') === 'restored' ? 'restored' : 'edited',
@@ -98,16 +97,12 @@ export function StoryPage({
   };
   return (
     <IodineSession.Provider value={{ phase, setPhase }}>
-      <div
-        className="creative-case"
-        data-case={id}
-        data-opening={redesigned ? 'evidence' : undefined}
-      >
+      <div className="creative-case" data-case={id} data-opening="evidence">
         <header className="creative-case-nav">
           <a href={root + section} onClick={returnClick}>
             <ControlIcon name="arrow" /> Portfolio
           </a>
-          {redesigned && <span className="case-opening-label">{story.label}</span>}
+          <span className="case-opening-label">{story.label}</span>
           <ResumeButton />
         </header>
         <main className="story-scroll-area creative-case-content">
@@ -118,8 +113,7 @@ export function StoryPage({
                 : 'creative-case-heading'
             }
           >
-            {!redesigned && <p>{story.label}</p>}
-            <h1 tabIndex={id === 'iodine' ? -1 : undefined}>{story.title}</h1>
+            <h1 tabIndex={-1}>{story.title}</h1>
             {id !== 'iodine' && <p>{story.role}</p>}
           </header>
           {id === 'everythingisfine' ? (
@@ -127,7 +121,7 @@ export function StoryPage({
           ) : id === 'iodine' ? (
             <IodineCaseOpening role={story.role} />
           ) : (
-            <WorkStoryOpening item={item} />
+            <BatchingCaseOpening />
           )}
           <div className="creative-case-share">
             <button type="button" onClick={() => void copyText(shareUrl).then(setShare)}>

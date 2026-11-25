@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
+import { OpenEvidence, batchingStory } from '../creative/evidenceNavigation';
 import { BatchingSpread } from './BatchingSpread';
 import { evidenceHref } from '../creative/storyRoutes';
 import { workId, WORK_ITEMS } from '../../data/workItems';
@@ -67,7 +68,7 @@ type Props = {
   onOpen: (item: WorkDetail, el: HTMLElement) => void;
 };
 
-const leadId = 'ad-slot-details-120-1-api-call';
+const leadId = batchingStory;
 const loadTime = { before: 60, after: 2 };
 const supportingIds = [
   'monolith-django-rest-react-rewrite',
@@ -132,6 +133,7 @@ export function ExperienceSection({ onOpen }: Props) {
 
 function LeadOutcome({ item }: { item: WorkDetail }) {
   const lane = useRef<HTMLDivElement>(null);
+  const open = useContext(OpenEvidence);
   return (
     <div className="batch-lane" ref={lane}>
       <article className="experience-lead" data-study-pin aria-labelledby="experience-lead-title">
@@ -154,7 +156,8 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
           </p>
           <div className="experience-lead-actions">
             <a
-              href={evidenceHref('ad-slot-details-120-1-api-call', undefined)}
+              href={evidenceHref(leadId, undefined)}
+              onClick={(event) => open?.(event, leadId)}
               className="experience-case"
               aria-describedby="experience-lead-title"
             >

@@ -8,6 +8,38 @@ const marks = Array.from({ length: 120 }, (_, index) => ({
   y: 36 + Math.floor(index / 12) * 24,
 }));
 
+export function BatchingGraphic({ shared = false }: { shared?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 640 288"
+      aria-hidden="true"
+      className={shared ? 'batch-handoff-graphic' : undefined}
+    >
+      <g className="batching-marks">
+        {marks.map(({ x, y }) => (
+          <rect
+            key={x + ':' + y}
+            x={x}
+            y={y}
+            width="22"
+            height="5"
+            rx="2"
+            style={
+              {
+                '--merge-x': `${309 - x}px`,
+                '--merge-y': `${141 - y}px`,
+              } as CSSProperties
+            }
+          />
+        ))}
+      </g>
+      <g className="batching-packet">
+        <path d="M225 144h190" />
+      </g>
+    </svg>
+  );
+}
+
 function relayBatchProgress(stage: HTMLElement, progress: number) {
   stage.dispatchEvent(new CustomEvent('batch-preview-progress', { detail: progress }));
 }
@@ -60,24 +92,7 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       data-phase={phase}
       aria-label="Request batching comparison"
     >
-      <svg viewBox="0 0 640 288" aria-hidden="true">
-        <g className="batching-marks">
-          {marks.map(({ x, y }) => (
-            <rect
-              key={x + ':' + y}
-              x={x}
-              y={y}
-              width="22"
-              height="5"
-              rx="2"
-              style={{ '--merge-x': `${309 - x}px`, '--merge-y': `${141 - y}px` } as CSSProperties}
-            />
-          ))}
-        </g>
-        <g className="batching-packet">
-          <path d="M225 144h190" />
-        </g>
-      </svg>
+      <BatchingGraphic shared />
       <div className="batching-readout">
         {after
           ? '1 batched request'

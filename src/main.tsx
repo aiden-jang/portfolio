@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { IodineRoute } from './ui/creative/IodineRoute';
+import { EvidenceRoute } from './ui/creative/EvidenceRoute';
 import { StoryPage } from './ui/creative/StoryPage';
 import { storyAtLocation } from './ui/creative/storyRoutes';
 import './ui/composition-polish.css';
@@ -14,5 +14,5 @@ if (!root) throw new Error('#root element not found');
 const story = storyAtLocation(location);
 
 createRoot(root).render(
-  <StrictMode>{story ? <StoryPage id={story} /> : <IodineRoute />}</StrictMode>,
+  <StrictMode>{story ? <StoryPage id={story} /> : <EvidenceRoute />}</StrictMode>,
 );

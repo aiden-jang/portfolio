@@ -154,14 +154,22 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       await expect(batchedRequest).toBeVisible();
       await before.click();
       await expect(requestGrid).toBeVisible();
+      await lead.scrollIntoViewIfNeeded();
+      const batchPosition = await page.evaluate(() => scrollY);
       await lead.click();
-      await expect(page.getByRole('heading', { name: '120 API calls became one.' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: '120 API calls became one.' })).toBeFocused();
+      await expect(page.locator('.batch-case-opening')).toContainText('1 batched request');
       await page.getByRole('button', { name: 'Copy evidence link' }).click();
       await expect(page.getByRole('button', { name: 'Link copied', exact: true })).toBeVisible();
       expect(await page.evaluate(() => sessionStorage.getItem('copied-case'))).toMatch(
         /\/cases\/request-batching\/$/,
       );
       await page.goBack();
+      await expect(lead).toBeFocused();
+      await expect(before).toHaveAttribute('aria-pressed', 'true');
+      await expect
+        .poll(() => page.evaluate((position) => Math.abs(scrollY - position), batchPosition))
+        .toBeLessThan(2);
       const trigger = section.getByRole('button', { name: /Replaced a live PHP backend/ });
       await trigger.evaluate((button) => {
         button.scrollIntoView({ block: 'center', behavior: 'instant' });

@@ -4,13 +4,13 @@ import { evidenceHref } from '../creative/storyRoutes';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './iodine-timed.css';
 import { ProjectScene } from './ProjectScene';
-import { OpenIodine } from './iodine-session';
+import { OpenEvidence } from '../creative/evidenceNavigation';
 import { ControlIcon } from '../ControlIcon';
 
 export function IodinePresentation() {
   const frame = useRef<HTMLDivElement>(null);
   const holdForReturn = useRef(false);
-  const openCase = useContext(OpenIodine);
+  const openCase = useContext(OpenEvidence);
   const [restored, restore] = useState(false);
   const draw = useCallback((progress: number) => {
     const editor = frame.current;
@@ -44,7 +44,7 @@ export function IodinePresentation() {
           aria-label="Read the iodine case study"
           href={href}
           onClick={(event) => {
-            if (openCase?.(event, restored)) holdForReturn.current = true;
+            if (openCase?.(event, 'iodine')) holdForReturn.current = true;
           }}
         >
           iodine <ControlIcon name="arrow" />

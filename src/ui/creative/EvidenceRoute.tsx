@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { flushSync } from 'react-dom';
 import { App } from '../../App';
 import { StoryPage } from './StoryPage';
-import { evidenceHref } from './storyRoutes';
-import { OpenIodine } from '../showcase/iodine-session';
+import { OpenEvidence } from './evidenceNavigation';
+import { type StoryId } from './storyRoutes';
 import './iodine-route.css';
 
 function animateRoute(update: () => void) {
@@ -15,9 +15,9 @@ function animateRoute(update: () => void) {
   void transition.ready.catch(() => {});
 }
 
-export function IodineRoute() {
-  const [open, setOpen] = useState(false);
-  const active = useRef(false);
+export function EvidenceRoute() {
+  const [open, setOpen] = useState<StoryId | null>(null);
+  const active = useRef<StoryId | null>(null);
   const restoreFrame = useRef(0);
   const origin = useRef<{
     scrollY: number;
@@ -26,7 +26,7 @@ export function IodineRoute() {
     restoration: ScrollRestoration;
   } | null>(null);
 
-  const show = (value: boolean) => {
+  const show = (value: StoryId | null) => {
     if (active.current === value) return;
     active.current = value;
     cancelAnimationFrame(restoreFrame.current);
@@ -36,7 +36,7 @@ export function IodineRoute() {
       if (value) {
         window.scrollTo({ top: 0, behavior: 'instant' });
         document
-          .querySelector<HTMLElement>('.iodine-case-heading h1')
+          .querySelector<HTMLElement>('.creative-case-heading h1')
           ?.focus({ preventScroll: true });
       } else if (origin.current) {
         const bookmark = origin.current;
@@ -53,7 +53,8 @@ export function IodineRoute() {
   };
 
   useEffect(() => {
-    const traverse = () => show(history.state?.iodineCase === true);
+    const traverse = () =>
+      show(history.state?.portfolioEvidence ?? (history.state?.iodineCase ? 'iodine' : null));
     window.addEventListener('popstate', traverse);
     return () => {
       window.removeEventListener('popstate', traverse);
@@ -61,7 +62,7 @@ export function IodineRoute() {
     };
   }, []);
 
-  const enter = (event: MouseEvent<HTMLAnchorElement>, restored: boolean) => {
+  const enter = (event: MouseEvent<HTMLAnchorElement>, id: StoryId) => {
     if (
       event.defaultPrevented ||
       event.button !== 0 ||
@@ -78,23 +79,17 @@ export function IodineRoute() {
       title: document.title,
       restoration: history.scrollRestoration,
     };
-    history.pushState(
-      { iodineCase: true },
-      '',
-      evidenceHref('iodine', {
-        edit: restored ? 'restored' : 'edited',
-      }),
-    );
-    show(true);
+    history.pushState({ portfolioEvidence: id }, '', event.currentTarget.href);
+    show(id);
     return true;
   };
 
   return (
-    <OpenIodine.Provider value={enter}>
-      <div hidden={open} className="iodine-portfolio">
+    <OpenEvidence.Provider value={enter}>
+      <div hidden={Boolean(open)} className="evidence-portfolio">
         <App />
       </div>
-      {open && <StoryPage id="iodine" returnToPortfolio={() => history.back()} />}
-    </OpenIodine.Provider>
+      {open && <StoryPage key={open} id={open} returnToPortfolio={() => history.back()} />}
+    </OpenEvidence.Provider>
   );
 }

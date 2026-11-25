@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import type { WorkDetail } from '../../types';
 import type { ProductPreview } from '../../data/projectPreviews';
 import { kamchatkaExample as example } from '../../data/kamchatkaExample';
@@ -6,6 +6,7 @@ import { EarthquakeGlobeStill } from './EarthquakeEvidence';
 import { DepthSection } from './DepthSection';
 import { InteractiveGlobe } from './InteractiveGlobe';
 import { ControlIcon } from '../ControlIcon';
+import { OpenEvidence } from '../creative/evidenceNavigation';
 import { evidenceHref } from '../creative/storyRoutes';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
 import { QuakeReadings } from './quakeJourney';
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export function EarthquakeFeature({ item, preview }: Props) {
+  const openEvidence = useContext(OpenEvidence);
   const compareRoute = '#quake/kamchatka';
   const [comparing, setComparing] = useState(() => location.hash.startsWith(compareRoute));
   const [agency, setAgency] = useState<'USGS' | 'EMSC'>(() =>
@@ -31,7 +33,8 @@ export function EarthquakeFeature({ item, preview }: Props) {
   useLayoutEffect(() => {
     const sync = () => {
       setComparing(location.hash.startsWith(compareRoute));
-      setAgency(location.hash.endsWith('/EMSC') ? 'EMSC' : 'USGS');
+      if (location.hash.startsWith(compareRoute))
+        setAgency(location.hash.endsWith('/EMSC') ? 'EMSC' : 'USGS');
     };
     window.addEventListener('popstate', sync);
     window.addEventListener('hashchange', sync);
@@ -42,7 +45,10 @@ export function EarthquakeFeature({ item, preview }: Props) {
   }, []);
   useLayoutEffect(() => {
     if (comparing) {
-      heading.current?.parentElement?.scrollIntoView({ block: 'start', behavior: 'instant' });
+      heading.current?.parentElement?.scrollIntoView({
+        block: 'start',
+        behavior: 'instant',
+      });
       heading.current?.focus({ preventScroll: true });
     } else if (returnScroll.current !== null) {
       const position = returnScroll.current;
@@ -114,6 +120,7 @@ export function EarthquakeFeature({ item, preview }: Props) {
               <a
                 className="featured-text-action"
                 href={evidenceHref('everythingisfine', { agency })}
+                onClick={(event) => openEvidence?.(event, 'everythingisfine')}
               >
                 See how I matched the reports <ControlIcon name="arrow" />
               </a>
@@ -130,6 +137,7 @@ export function EarthquakeFeature({ item, preview }: Props) {
             caption={preview.caption}
             onCompare={launchComparison}
             journey
+            evidence={{ agency, setAgency, openEvidence }}
           />
         </div>
         {!comparing && (
@@ -163,6 +171,7 @@ export function EarthquakeFeature({ item, preview }: Props) {
                 className="featured-text-action"
                 aria-label="Read the meanwhile. case study"
                 href={evidenceHref('everythingisfine', { agency })}
+                onClick={(event) => openEvidence?.(event, 'everythingisfine')}
               >
                 Case study <ControlIcon name="arrow" />
               </a>

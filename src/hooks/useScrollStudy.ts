@@ -78,6 +78,7 @@ export function useScrollStudy(
       }, 130);
     };
     const measure = () => {
+      if (!stage.getClientRects().length) return;
       const style = getComputedStyle(pinned);
       sticky = style.position === 'sticky';
       inset = Number.parseFloat(style.top) || 0;
@@ -86,6 +87,7 @@ export function useScrollStudy(
     };
     const update = () => {
       frame = 0;
+      if (!stage.getClientRects().length) return;
       const t =
         preference.matches || !sticky
           ? 1

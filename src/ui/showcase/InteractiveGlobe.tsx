@@ -1,6 +1,6 @@
 import { useGlobeCardPosition } from './useGlobeCardPosition';
 import { GlobeControls } from './GlobeControls';
-import { GlobeEventCard } from './GlobeEventCard';
+import { GlobeEventCard, type GlobeEvidence } from './GlobeEventCard';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import { GlobeArtwork } from './GlobeArtwork';
@@ -16,10 +16,11 @@ type GlobeProps = {
   image: string;
   caption: string;
   journey?: boolean;
+  evidence?: GlobeEvidence;
   onCompare?: (trigger: HTMLButtonElement) => void;
 };
 
-export function InteractiveGlobe({ image, caption, onCompare, journey }: GlobeProps) {
+export function InteractiveGlobe({ image, caption, onCompare, journey, evidence }: GlobeProps) {
   const figure = useRef<HTMLElement>(null),
     canvas = useRef<HTMLCanvasElement>(null),
     launch = useRef<HTMLButtonElement>(null),
@@ -264,6 +265,7 @@ export function InteractiveGlobe({ image, caption, onCompare, journey }: GlobePr
           {ready && selected && (
             <GlobeEventCard
               event={selected}
+              evidence={selected.id === 'usd0015edq' ? evidence : undefined}
               onCompare={selected.id === 'usd0015edq' ? onCompare : undefined}
               onClose={() => {
                 handle.current?.clearSelection();

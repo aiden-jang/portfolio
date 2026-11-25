@@ -7,7 +7,39 @@ import { useContext } from 'react';
 import example from '../../data/iodineExample.json';
 import { IodineSession } from '../showcase/iodine-session';
 import { RecoveryEditor } from '../showcase/IodinePresentation';
+import { BatchingGraphic } from '../sections/BatchingSpread';
 import './case-opening.css';
+
+export function BatchingCaseOpening() {
+  return (
+    <section className="batch-case-opening" aria-labelledby="batch-case-result">
+      <div className="batch-case-top">
+        <div id="batch-case-result" className="batch-case-result">
+          <p className="batch-case-time" aria-label="60 seconds to 2 seconds">
+            <span>60s</span>
+            <span aria-hidden="true">→</span>
+            <strong>2s</strong>
+          </p>
+          <p>Ad Slot Details load time</p>
+        </div>
+        <figure className="batching-spread batch-case-figure" data-phase="after">
+          <BatchingGraphic shared />
+          <figcaption className="batching-readout">1 batched request</figcaption>
+        </figure>
+      </div>
+      <dl className="batch-case-contract">
+        <div>
+          <dt>Before</dt>
+          <dd>One request for each linked line item.</dd>
+        </div>
+        <div>
+          <dt>After</dt>
+          <dd>One response with the linked line items already joined.</dd>
+        </div>
+      </dl>
+    </section>
+  );
+}
 
 type Agency = (typeof kamchatkaExample.sources)[number]['name'];
 export function IodineCaseOpening({ role }: { role: string }) {
@@ -61,6 +93,7 @@ export function QuakeCaseOpening({
       <section
         className="case-opening-evidence quake-opening"
         aria-label="Kamchatka depth comparison"
+        data-agency={agency}
       >
         <figure className="quake-opening-globe">
           <EarthquakeGlobeStill />
@@ -72,6 +105,12 @@ export function QuakeCaseOpening({
           </figcaption>
         </figure>
         <div className="quake-opening-readings">
+          <div className="quake-case-chosen">
+            <span>{agency} reading</span>
+            <strong>
+              {report?.depthKm.toFixed(1)} <small>km</small>
+            </strong>
+          </div>
           <DepthSection selected={agency} onSelect={onSelect} controlsFirst />
           <p className="quake-opening-record" aria-live="polite">
             {agency} report <code>{report?.reportId}</code>
