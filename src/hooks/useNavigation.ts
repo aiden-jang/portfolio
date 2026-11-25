@@ -1,4 +1,4 @@
-import { prepareSectionArrival } from './scrollArrival';
+import { lastScrollInput, prepareSectionArrival } from './scrollArrival';
 import { handleNavigationKey } from './navigationKeyboard';
 import { useCallback, useEffect, useRef } from 'react';
 import { SECTION_IDS, type SectionId } from '../config';
@@ -222,29 +222,40 @@ export function useNavigation(sceneOnly = false) {
       if (active) onScroll();
     };
     const initialHash = location.hash;
+    const initialInput = lastScrollInput();
     let initialLanding: number | undefined;
     const linkFrame = requestAnimationFrame(() => {
       if (!restoreCaseReturn()) {
         restoreSectionLink();
-        if (initialHash) initialLanding = window.scrollY;
+        if (SECTION_IDS.includes(initialHash.slice(1) as SectionId)) {
+          initialLanding = window.scrollY;
+        }
       }
       refreshLayout();
     });
     void document.fonts?.ready.then(() => {
-      if (!active) return;
-      // A font swap can move all the sections above a saved link.
-      if (
-        !restoreCaseReturn() &&
-        location.hash === initialHash &&
-        window.scrollY === initialLanding
-      ) {
-        restoreSectionLink();
+      if (active) {
+        restoreCaseReturn();
+        refreshLayout();
       }
-      refreshLayout();
     });
     onScroll();
-    // WebKit can finish its first layout after effects run, without a scroll event.
-    const layoutObserver = new ResizeObserver(onScroll);
+    // WebKit can reflow after fonts.ready without a scroll event.
+    const layoutObserver = new ResizeObserver(() => {
+      if (initialLanding !== undefined) {
+        if (
+          location.hash !== initialHash ||
+          window.scrollY !== initialLanding ||
+          lastScrollInput() !== initialInput
+        ) {
+          initialLanding = undefined;
+        } else {
+          restoreSectionLink();
+          initialLanding = window.scrollY;
+        }
+      }
+      onScroll();
+    });
     for (const id of SECTION_IDS) {
       const section = document.getElementById(id);
       if (section) layoutObserver.observe(section);
