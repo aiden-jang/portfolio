@@ -9,6 +9,10 @@ export function QuakeMap() {
         <div className="quake-map-image" style={{ backgroundImage: `url(${map})` }} />
       </div>
       <span className="quake-map-pin" />
+      <span className="quake-agencies">
+        <span>USGS</span>
+        <span>EMSC</span>
+      </span>
       <span className="quake-map-magnitude">M{kamchatkaExample.sources[0].magnitude}</span>
     </div>
   );

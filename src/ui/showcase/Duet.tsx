@@ -46,7 +46,7 @@ export function Duet({
     room.current.dataset.sceneProgress = String(light);
     room.current.dispatchEvent(new CustomEvent('project-scene-progress', { detail: light }));
   }, []);
-  useScrollStudy(lane, true, paint, settleDuet, revealRange);
+  useScrollStudy(lane, true, paint, settleDuet, revealRange, 0.025);
   useEffect(() => {
     const el = lane.current!,
       stage = pin.current!,

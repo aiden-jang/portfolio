@@ -75,7 +75,10 @@ export function createGlobeScene(
     return new BufferAttribute(new Float32Array(data, a.offset, a.count), 3);
   };
   const oceanGeometry = new SphereGeometry(1, 96, 64),
-    oceanMaterial = new MeshBasicMaterial({ color: 0x102730, side: DoubleSide });
+    oceanMaterial = new MeshBasicMaterial({
+      color: 0x102730,
+      side: DoubleSide,
+    });
   const ocean = new Mesh(oceanGeometry, oceanMaterial);
   scene.add(ocean);
   geometries.push(oceanGeometry);
@@ -172,10 +175,10 @@ export function createGlobeScene(
   };
   const render = (pose: GlobePose, journey = 0, pulseTime = 0) => {
     if (overlays) {
-      const detail = Math.min(1, Math.max(0, (journey - 0.12) / 0.73));
+      const detail = Math.min(1, Math.max(0, (journey - 0.04) / 0.6));
       const strength = 1 - detail * detail * (3 - 2 * detail);
-      overlays.setStrength(strength);
-      markers.fade(strength);
+      overlays.setStrength(0.12 + strength * 0.88);
+      markers.fade(strength * strength);
       featuredMarker.pulse(pulseTime);
     }
     camera.position.copy(vector(pose.lon, pose.lat, fit / pose.zoom));

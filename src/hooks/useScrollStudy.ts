@@ -12,6 +12,7 @@ export function useScrollStudy(
   draw: (el: HTMLElement, t: number) => void,
   settle?: (t: number) => number,
   follow?: readonly [start: number, end: number],
+  reverseBuffer = 0,
 ) {
   useEffect(() => {
     const stage = ref.current;
@@ -29,6 +30,8 @@ export function useScrollStudy(
     let lastFrame = 0;
     let finish = 0;
     let settlingToward: number | undefined;
+    let lastDirectionChange = -1;
+    let reversing = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const paint = (t: number) => {
       displayed = t;
@@ -93,9 +96,18 @@ export function useScrollStudy(
           ? 1
           : clamp((inset - stage.getBoundingClientRect().top) / span, 0, 1);
       if (t === last) return;
+      const backwards = t < last;
+      if (backwards !== reversing) {
+        lastDirectionChange = last;
+        reversing = backwards;
+      }
       last = t;
       stopSettling();
       const target = settle?.(t) ?? t;
+      if (reverseBuffer && backwards && displayed > 0 && lastDirectionChange - t < reverseBuffer) {
+        settleAfterScroll(settlingToward ?? displayed);
+        return;
+      }
       if (follow) {
         if (displayed === -1 || preference.matches || !sticky) {
           cancelAnimationFrame(nextFrame);
@@ -136,5 +148,5 @@ export function useScrollStudy(
       preference.removeEventListener('change', measure);
       size.disconnect();
     };
-  }, [ref, enabled, draw, settle, follow]);
+  }, [ref, enabled, draw, settle, follow, reverseBuffer]);
 }

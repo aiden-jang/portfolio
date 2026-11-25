@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, type RefObject } from 'react';
 
 export function useTimedScene(
   subject: RefObject<HTMLElement | null>,
@@ -19,6 +19,11 @@ export function useTimedScene(
 ) {
   const clock = useRef({ elapsed: 0, remainingHold: hold, started: false });
 
+  const seek = useRef<(progress: number, linger: number) => void>();
+  const fastForward = useCallback((progress: number, linger: number) => {
+    seek.current?.(progress, linger);
+  }, []);
+
   useEffect(() => {
     const node = subject.current;
     if (!node || !enabled) return;
@@ -29,6 +34,17 @@ export function useTimedScene(
     let holdStarted = 0;
     let previous: number | undefined;
     let visible = false;
+    let cueUntil = 0;
+    let cueTimer = 0;
+    seek.current = (progress, linger) => {
+      if (preference.matches || timeline.elapsed >= duration * progress) return;
+      stop();
+      timeline.elapsed = duration * progress;
+      timeline.started = true;
+      cueUntil = performance.now() + linger;
+      draw(progress);
+      schedule();
+    };
 
     function render(now: number) {
       frame = 0;
@@ -43,6 +59,8 @@ export function useTimedScene(
 
     function stop() {
       cancelAnimationFrame(frame);
+      clearTimeout(cueTimer);
+      cueTimer = 0;
       if (timer) {
         clearTimeout(timer);
         timeline.remainingHold = Math.max(
@@ -65,6 +83,12 @@ export function useTimedScene(
         !(hold > 0 && reading);
       if (!running) {
         stop();
+      } else if (performance.now() < cueUntil) {
+        if (!cueTimer)
+          cueTimer = window.setTimeout(() => {
+            cueTimer = 0;
+            schedule();
+          }, cueUntil - performance.now());
       } else if (timeline.elapsed < duration && !frame) {
         frame = requestAnimationFrame(render);
       } else if (timeline.elapsed >= duration && hold > 0 && !timer) {
@@ -87,6 +111,7 @@ export function useTimedScene(
         if (!visible && restartAfterExit && timeline.elapsed >= duration) {
           timeline.elapsed = 0;
           timeline.started = false;
+          cueUntil = 0;
           draw(0);
         }
         if (visible && !preference.matches && entry.intersectionRatio >= startThreshold)
@@ -115,6 +140,7 @@ export function useTimedScene(
     document.addEventListener('focusin', schedule);
     document.addEventListener('focusout', wake);
     return () => {
+      seek.current = undefined;
       observer.disconnect();
       stop();
       preference.removeEventListener('change', preferenceChanged);
@@ -123,4 +149,5 @@ export function useTimedScene(
       document.removeEventListener('focusout', wake);
     };
   }, [subject, draw, enabled, duration, hold, startThreshold, restartAfterExit]);
+  return fastForward;
 }

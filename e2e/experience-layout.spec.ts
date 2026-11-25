@@ -88,12 +88,15 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
           history: box(history),
           lead: box(el.querySelector('.experience-lead')!),
           proof: box(proof),
+          outcomes: box(el.querySelector('.experience-proof-strip')!),
           rows: [...el.querySelectorAll('.experience-outcome')]
             .filter((e) => e.getClientRects().length)
             .map(box),
         };
       });
-      const { history, lead, proof, rows } = boxes;
+      const { history, lead, proof, outcomes, rows } = boxes;
+      expect(outcomes.y).toBeGreaterThanOrEqual(lead.bottom - 1);
+      expect(outcomes.bottom).toBeLessThanOrEqual(Math.min(history.y, proof.y) + 1);
       expect(lead.bottom).toBeLessThanOrEqual(Math.min(history.y, proof.y) + 1);
       if (width > 900) {
         expect(proof.x).toBeGreaterThanOrEqual(history.right - 1);
@@ -102,8 +105,10 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       } else {
         expect(proof.y).toBeGreaterThanOrEqual(history.bottom - 1);
       }
-      for (let i = 1; i < rows.length; i++)
-        expect(rows[i].y).toBeGreaterThanOrEqual(rows[i - 1].bottom - 1);
+      for (let i = 1; i < rows.length; i++) {
+        const [previous, next] = [rows[i - 1], rows[i]];
+        expect(next.y >= previous.bottom - 1 || next.x >= previous.right - 1).toBe(true);
+      }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,
       );
@@ -117,8 +122,9 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       const after = comparison.getByRole('button', { name: 'After', exact: true });
       const requestGrid = comparison.getByText('120 separate requests', { exact: true });
       const batchedRequest = comparison.getByText('1 batched request', { exact: true });
+      await expect(batchedRequest).toBeVisible();
+      await before.click();
       await expect(requestGrid).toBeVisible();
-      await expect(batchedRequest).toBeHidden();
       await expect(comparison.locator('.batching-marks rect')).toHaveCount(120);
       await page.emulateMedia({ reducedMotion: 'no-preference' });
       const scrollToBatch = (progress: number) =>
@@ -198,9 +204,11 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       const target = page.locator('#' + id);
       if (width >= 768)
         await expect(nav.locator('a[aria-current]')).toHaveAttribute('href', '#' + id);
-      await expect
-        .poll(() => target.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
-        .toBeLessThan(2);
+      if (id === 'sec-about') {
+        await expect
+          .poll(() => target.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
+          .toBeLessThan(2);
+      }
       const title = await target
           .getByRole('heading', {
             name: id === 'sec-more-work' ? 'More projects' : 'About',
@@ -211,6 +219,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       expect(title!.y, id + ' clears the fixed header').toBeGreaterThanOrEqual(
         banner!.y + banner!.height,
       );
+      if (id === 'sec-more-work') expect(title!.y - banner!.height).toBeLessThan(20);
       if (id === 'sec-about') {
         await expect(target.locator('h2')).toHaveText('About', { timeout: 3000 });
         const study = target.getByRole('figure', { name: 'Framing the showroom' });
@@ -226,6 +235,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         const lead = await target.locator('.about-lead').boundingBox();
         const details = await target.locator('.about-details').boundingBox();
         if (width >= 900) expect(lead!.x).toBeGreaterThan(reel!.x + reel!.width);
+        else if (width >= 768) expect(lead!.y).toBeGreaterThan(reel!.y + reel!.height);
         else expect(reel!.y).toBeGreaterThan(lead!.y + lead!.height);
         expect(frame!.y).toBeGreaterThan(details!.y + details!.height);
         expect(details!.y).toBeGreaterThan(lead!.y + lead!.height);

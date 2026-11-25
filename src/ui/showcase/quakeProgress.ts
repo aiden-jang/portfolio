@@ -1,18 +1,30 @@
+import { shortPhoneQuery } from '../../hooks/scrollArrival';
 import { easedProgress } from '../../hooks/useScrollStudy';
 
+function showReadings(el: HTMLElement) {
+  return Boolean(el.dataset.sceneArrival) || matchMedia(shortPhoneQuery).matches;
+}
+
 function quakeTravel(el: HTMLElement) {
-  return easedProgress(Number(el.dataset.studyProgress ?? 0), 0.02, 0.56);
+  const t = Number(el.dataset.studyProgress ?? 0);
+  if (showReadings(el)) return 0.55;
+  return easedProgress(t, 0.01, 0.6);
 }
 
 export function advanceQuake(el: HTMLElement, progress: number) {
-  const mapReveal = easedProgress(progress, 0.56, 0.82);
-  const depths = easedProgress(progress, 0.83, 0.94);
-  const pin = easedProgress(progress, 0.3, 0.55);
-  el.style.setProperty('--journey-pin', pin.toFixed(3));
+  const result = showReadings(el);
+  const mapReveal = result ? 0 : easedProgress(progress, 0.68, 0.94);
+  const depths = result ? 1 : easedProgress(progress, 0.26, 0.54);
+  el.style.setProperty('--agency-reveal', (depths * (1 - mapReveal)).toFixed(3));
+  el.style.setProperty(
+    '--journey-pin',
+    (result ? 1 : easedProgress(progress, 0.18, 0.42)).toFixed(3),
+  );
+
   el.style.setProperty('--directed-map-reveal', mapReveal.toFixed(3));
   el.style.setProperty('--directed-depth-reveal', depths.toFixed(3));
   el.style.setProperty('--map-scale', (0.76 + mapReveal * 0.24).toFixed(3));
-  el.toggleAttribute('data-quake-locked', progress >= 0.56);
+  el.toggleAttribute('data-quake-locked', !result && progress >= 0.68);
   el.dataset.studyProgress = progress.toFixed(3);
   const view = mapReveal >= 1 ? 'map' : 'globe';
   if (el.dataset.quakeView !== view) el.dataset.quakeView = view;
@@ -31,6 +43,6 @@ export function syncQuakeCamera(canvas: HTMLCanvasElement) {
 }
 
 export function settleQuake(progress: number) {
-  if (progress <= 0.43 || progress >= 0.94) return progress;
-  return progress < 0.69 ? 0.43 : 0.94;
+  if (progress <= 0.26 || progress >= 0.94) return progress;
+  return progress < 0.71 ? 0.57 : 0.94;
 }

@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { easedProgress } from '../../hooks/useScrollStudy';
+import { shortPhoneQuery, useScrollArrival } from '../../hooks/scrollArrival';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './project-scene.css';
 import './dinner-scene.css';
+
+const isShortDinner = () => matchMedia(shortPhoneQuery).matches;
 
 type DinnerStep = { progress: number; focus?: string };
 
@@ -45,20 +48,35 @@ export function ProjectScene({
   const [actionFocused, setActionFocused] = useState(false);
   const draw = useCallback((progress: number) => {
     if (!scene.current || manualFrame.current) return;
-    const compact = matchMedia('(height < 610px)').matches;
+    const compact = isShortDinner() || matchMedia('(height < 610px)').matches;
     presentScene(scene.current, compact ? 1 : Math.max(manual.current, progress));
   }, []);
-  useTimedScene(body, draw, {
+  const fastForward = useTimedScene(body, draw, {
     enabled: theme === 'dinner' && !actionFocused,
     duration: 3400,
     startThreshold: 0.12,
+    restartAfterExit: true,
   });
+  const landing = useCallback(
+    (active: boolean) => {
+      if (
+        active &&
+        !manualFrame.current &&
+        !matchMedia('(height < 610px)').matches &&
+        !isShortDinner()
+      ) {
+        fastForward(0.47, 1200);
+      }
+    },
+    [fastForward],
+  );
+  useScrollArrival(scene, theme === 'dinner', landing);
   useEffect(() => {
     const stage = scene.current;
     if (!stage || theme !== 'dinner') return;
     const preference = matchMedia('(prefers-reduced-motion: reduce), (height < 610px)');
     const settle = () => {
-      if (!preference.matches) return;
+      if (!preference.matches && !isShortDinner()) return;
       cancelAnimationFrame(manualFrame.current);
       manualFrame.current = 0;
       presentScene(stage, 1);
@@ -189,7 +207,7 @@ export function DinnerScene() {
           detail: { progress: 1 },
         }),
       );
-      if (!animated.matches) {
+      if (!animated.matches || isShortDinner()) {
         stage
           .querySelector('#project-owewell')
           ?.scrollIntoView({ block: 'center', behavior: 'instant' });

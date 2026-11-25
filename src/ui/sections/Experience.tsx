@@ -90,6 +90,11 @@ export function ExperienceSection({ onOpen }: Props) {
       <div data-nosnippet className="experience-content pointer-events-auto">
         {lead && <LeadOutcome item={lead} />}
         <h2 id="experience-history-title">Experience</h2>
+        <div className="experience-proof-strip" aria-label="Selected engineering outcomes">
+          {supporting.map((item) => (
+            <HighlightRow key={item.title} item={item} onOpen={onOpen} />
+          ))}
+        </div>
         <div className="experience-grid">
           <div className="experience-history">
             <ol role="list">
@@ -109,11 +114,6 @@ export function ExperienceSection({ onOpen }: Props) {
             </ol>
           </div>
           <div className="experience-proof">
-            <div>
-              {supporting.map((item) => (
-                <HighlightRow key={item.title} item={item} onOpen={onOpen} />
-              ))}
-            </div>
             {additional.length > 0 && (
               <details className="experience-more">
                 <summary>
@@ -135,7 +135,7 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
   const lane = useRef<HTMLDivElement>(null);
   const open = useContext(OpenEvidence);
   return (
-    <div className="batch-lane" ref={lane}>
+    <div className="batch-lane" id="batching-study" ref={lane}>
       <article className="experience-lead" data-study-pin aria-labelledby="experience-lead-title">
         <div className="experience-batch-copy">
           <h2 id="experience-lead-title">120 calls became one.</h2>

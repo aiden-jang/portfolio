@@ -109,13 +109,15 @@ for (const width of [1440, 390]) {
     await nudgeSettledReading(0.8);
     await nudgeSettledReading(0.82);
     await seekScene('#project-everythingisfine', 0.56);
+    await expect(quake).toHaveAttribute('data-study-progress', '0.570');
+    await expect(verdict).toHaveCSS('opacity', '1');
+    await nudgeSettledReading(0.54);
+    await seekScene('#project-everythingisfine', 0.16);
     await expect(verdict).toHaveCSS('opacity', '0');
     await expect(page.locator('#project-everythingisfine')).toHaveAttribute(
       'data-quake-view',
       'globe',
     );
-    await expect(quake).toHaveAttribute('data-study-progress', '0.430');
-    await nudgeSettledReading(0.54);
 
     const featured = page.locator('.project-featured-group');
     const gridOpacity = () =>

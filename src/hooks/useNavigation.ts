@@ -1,3 +1,4 @@
+import { prepareSectionArrival } from './scrollArrival';
 import { handleNavigationKey } from './navigationKeyboard';
 import { useCallback, useEffect, useRef } from 'react';
 import { SECTION_IDS, type SectionId } from '../config';
@@ -18,6 +19,22 @@ const SNAP_LOCK_MS = 900;
 const CAR_LOCK_MS = 600;
 // Below this, a mouse's horizontal jitter would cycle the car on its own.
 const MIN_WHEEL_DELTA = 10;
+
+function sectionLanding(section: HTMLElement) {
+  if (section.id === 'sec-more-work') {
+    const heading = section.querySelector('.project-gallery-heading');
+    const header = document.querySelector('.portfolio-header');
+    if (heading) {
+      return (
+        heading.getBoundingClientRect().top +
+        scrollY -
+        (header?.getBoundingClientRect().height ?? 0) -
+        14
+      );
+    }
+  }
+  return section.getBoundingClientRect().top + scrollY;
+}
 
 export function useNavigation(sceneOnly = false) {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
@@ -55,8 +72,15 @@ export function useNavigation(sceneOnly = false) {
       snapLockUntil.current = performance.now() + SNAP_LOCK_MS;
       const el = document.getElementById(SECTION_IDS[next]);
       if (!el) return;
-      const targetY = el.getBoundingClientRect().top + window.scrollY;
-      smoothScrollTo(targetY);
+      const targetY = sectionLanding(el);
+      prepareSectionArrival(el.id);
+      if (
+        ['sec-work', 'sec-experience', 'sec-more-work'].includes(el.id) &&
+        (matchMedia('(pointer: coarse)').matches || Math.abs(targetY - scrollY) > innerHeight * 1.6)
+      ) {
+        cancelSmoothScroll();
+        window.scrollTo({ top: targetY, behavior: 'instant' });
+      } else smoothScrollTo(targetY);
       setSectionIndex(next);
     },
     [setSectionIndex],
@@ -145,7 +169,11 @@ export function useNavigation(sceneOnly = false) {
       if (!section) return;
       cancelSmoothScroll();
       snapLockUntil.current = 0;
-      window.scrollTo({ top: section.offsetTop, behavior: 'instant' });
+      prepareSectionArrival(section.id);
+      window.scrollTo({
+        top: section.id === 'sec-more-work' ? sectionLanding(section) : section.offsetTop,
+        behavior: 'instant',
+      });
       currentSection.current = index;
       setSectionIndex(index);
     };
@@ -164,7 +192,10 @@ export function useNavigation(sceneOnly = false) {
       const url = new URL(link.href, location.href);
       if (url.origin !== location.origin || !storyAtLocation(url)) return;
       history.replaceState(
-        { ...history.state, portfolioCaseReturn: { y: scrollY, href: link.href } },
+        {
+          ...history.state,
+          portfolioCaseReturn: { y: scrollY, href: link.href },
+        },
         '',
       );
     };
@@ -190,15 +221,26 @@ export function useNavigation(sceneOnly = false) {
     const refreshLayout = () => {
       if (active) onScroll();
     };
+    const initialHash = location.hash;
+    let initialLanding: number | undefined;
     const linkFrame = requestAnimationFrame(() => {
-      if (!restoreCaseReturn()) restoreSectionLink();
+      if (!restoreCaseReturn()) {
+        restoreSectionLink();
+        if (initialHash) initialLanding = window.scrollY;
+      }
       refreshLayout();
     });
     void document.fonts?.ready.then(() => {
-      if (active) {
-        restoreCaseReturn();
-        refreshLayout();
+      if (!active) return;
+      // A font swap can move all the sections above a saved link.
+      if (
+        !restoreCaseReturn() &&
+        location.hash === initialHash &&
+        window.scrollY === initialLanding
+      ) {
+        restoreSectionLink();
       }
+      refreshLayout();
     });
     onScroll();
     // WebKit can finish its first layout after effects run, without a scroll event.

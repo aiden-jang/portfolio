@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState, type Ref } from 'react';
 import example from '../../data/iodineExample.json';
 import { evidenceHref } from '../creative/storyRoutes';
+import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './iodine-timed.css';
 import { ProjectScene } from './ProjectScene';
@@ -9,17 +10,29 @@ import { ControlIcon } from '../ControlIcon';
 
 export function IodinePresentation() {
   const frame = useRef<HTMLDivElement>(null);
+  const result = useRef(false);
+  const latest = useRef(0);
   const holdForReturn = useRef(false);
   const openCase = useContext(OpenEvidence);
   const [restored, restore] = useState(false);
   const draw = useCallback((progress: number) => {
+    latest.current = progress;
     const editor = frame.current;
     if (!editor || holdForReturn.current) return;
+    progress = result.current ? 1 : progress;
     const phase = progress === 0 ? 'ready' : progress < 0.56 ? 'reviewing' : 'restored';
     if (editor.dataset.playback === phase) return;
     editor.dataset.playback = phase;
     restore(phase === 'restored');
   }, []);
+  const showResult = useCallback(
+    (active: boolean) => {
+      result.current = active;
+      draw(latest.current);
+    },
+    [draw],
+  );
+  useScrollArrival(frame, true, showResult);
   useTimedScene(frame, draw, { duration: 1720, hold: 1320 });
   useEffect(() => {
     const node = frame.current;
@@ -99,6 +112,14 @@ export function RecoveryEditor({
       </div>
       <div className="recovery-bottom">
         <span>{restored ? 'Original line restored' : 'Snapshot saved'}</span>
+        {frame && (
+          <span className="recovery-edit-trace" hidden={!restored}>
+            Removed{' '}
+            <del>
+              <code>.trim()</code>
+            </del>
+          </span>
+        )}
       </div>
     </div>
   );
