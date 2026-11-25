@@ -15,9 +15,15 @@ describe('After Hours Corvette loop', () => {
     const lateTravel = sample(4.24).distance - sample(4.34).distance;
     expect(earlyTravel).toBeGreaterThan(0);
     expect(lateTravel).toBeCloseTo(earlyTravel, 8);
-    expect(sample(4.36).yaw).toBeLessThan(-2.8);
+    expect(sample(4.36).yaw).toBeLessThan(-2.7);
     expect(sample(5.66).yaw).toBeGreaterThan(1);
-    expect(sample(7.16).elevation).toBeGreaterThan(1);
+    expect(sample(7.14).wheel).toBe(false);
+    expect(sample(7.16).wheel).toBe(true);
+    expect(Math.abs(sample(7.16).elevation)).toBeLessThan(0.05);
+    const earlyTrack = sample(7.25).yaw - sample(7.35).yaw;
+    const lateTrack = sample(8.35).yaw - sample(8.45).yaw;
+    expect(earlyTrack).toBeGreaterThan(0);
+    expect(lateTrack).toBeCloseTo(earlyTrack, 8);
     expect(sample(8.6)).toEqual(sample(0));
   });
 

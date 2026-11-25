@@ -120,10 +120,27 @@ const afterHoursViews: Shot[] = [
     travel: -0.2,
     shiftX: -0.5,
     shiftY: -0.1,
-    mobile: { distance: 6.6, shiftY: -0.17, shiftX: 0 },
+    mobile: { yaw: -2.78, distance: 8.9, shiftY: -0.1, shiftX: 0 },
   },
-  { ...sideProfile, duration: 1.5 },
-  { ...overhead, duration: 1.45 },
+  {
+    ...sideProfile,
+    duration: 1.5,
+    mobile: { ...sideProfile.mobile, distance: 18.5 },
+  },
+  {
+    yaw: 0.98,
+    elevation: -0.013,
+    distance: 3.55,
+    targetY: 0.49,
+    duration: 1.45,
+    slide: -0.28,
+    travel: -0.15,
+    shiftX: -0.2,
+    driftX: 0.26,
+    shiftY: -0.06,
+    wheel: true,
+    mobile: { distance: 5.75, shiftX: -0.29, driftX: 0.18, shiftY: -0.08 },
+  },
 ];
 const totalDuration = (shots: Shot[]) => shots.reduce((total, view) => total + view.duration, 0);
 const cycle = totalDuration(views);
