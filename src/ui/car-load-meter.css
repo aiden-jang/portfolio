@@ -1,0 +1,12 @@
+.car-load-meter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.car-load-meter progress {
+  width: 74px;
+  height: 4px;
+  accent-color: #eed7b5;
+}

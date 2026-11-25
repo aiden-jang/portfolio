@@ -28,6 +28,7 @@ for (const width of [1440, 390]) {
         await expect(picker).toBeHidden();
         const status = studio.getByRole('status').filter({ hasText: 'Loading Mercedes 300 SL' });
         await expect(status).toBeVisible();
+        await expect(status.getByRole('progressbar', { name: 'Car download' })).toBeVisible();
         const title = studio
           .getByRole('heading', { name: 'Ferrari F40', exact: true })
           .filter({ visible: true });
@@ -46,6 +47,7 @@ for (const width of [1440, 390]) {
           timeout: 60_000,
         });
         await expect(studio).toHaveAttribute('data-ready', 'true');
+        await expect(status).toHaveCount(0);
         await clickStudioAdvanced(studio, 'Share shot');
         const url = new URL(
           await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue(),

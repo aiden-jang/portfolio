@@ -28,7 +28,7 @@ const NIGHT_KEY_FLOOR = 0.2;
 
 export function Lights() {
   const { gl, scene } = useThree();
-  const studioEnvironment = useStudioEnvironment(gl);
+  const { getEnvironment, canFade } = useStudioEnvironment(gl);
   const afterHoursProgress = useRef<number | null>(null);
   const baseEnvironmentIntensity = useRef(0.22);
   const duskMix = useRef(0);
@@ -100,7 +100,9 @@ export function Lights() {
     );
     const studio = lineup || preview.active || isOpeningStudio(state);
     const afterHoursAvailable = studio && !lineup && !dark && !dusk;
-    const targetLevel = Number(afterHoursAvailable && isAfterHoursScene(state, preview));
+    const targetLevel = Number(
+      afterHoursAvailable && canFade() && isAfterHoursScene(state, preview),
+    );
     const low = sampleAfterHours(afterHoursProgress, targetLevel, afterHoursAvailable, dt);
     state.refs.afterHoursBlend = low;
     dim.current = THREE.MathUtils.lerp(dim.current, Number(dark), Math.min(1, dt * 12));
@@ -111,7 +113,7 @@ export function Lights() {
       (!preview.study || preview.study === 'finished') &&
       useGarageStudy.getState().refined;
     const preset = dusk ? 'dusk' : dark ? 'blackout' : optics ? 'optics' : 'studio';
-    scene.environment = studio ? studioEnvironment(preset, low) : defaultMap.current;
+    scene.environment = studio ? getEnvironment(preset, low) : defaultMap.current;
     const lighting = studio ? 'studio' : 'dusk';
     const target = THEMES[lighting];
     const progress = lineup || preview.active ? 1 : motionState.progress;
@@ -142,7 +144,7 @@ export function Lights() {
     scene.environmentIntensity = baseEnvironmentIntensity.current - 0.095 * low;
     updateMiataPaintReflection(
       !lineup && !dark && !dusk && (preview.active || isOpeningStudio(state))
-        ? () => studioEnvironment('miata', low)
+        ? () => getEnvironment('miata', low)
         : null,
       THREE.MathUtils.lerp(0.55, scene.environmentIntensity, low),
     );
@@ -225,8 +227,8 @@ export function Lights() {
     ambient.current.intensity *= 1 + (0.08 + shadow * 0.28) * low;
     hemi.current.intensity *= 1 + shadow * 0.3 * low;
     fill.current.intensity += (0.025 + shadow * 0.135) * low;
+    // Changing the visible light count would compile new car shaders during the fade.
     rearFill.current.intensity = (0.04 + shadow * 0.29) * low;
-    rearFill.current.visible = rearFill.current.intensity > 0.002;
     fill.current.intensity *= 1 - (darkPaint ? 0.53 : 0.78) * amount;
     key.current.intensity *= 1 - 0.65 * amount;
     rim.current.intensity *= 1 - (brightLivery ? 0.69 : 0.52) * amount;
@@ -244,13 +246,7 @@ export function Lights() {
   const init = current.current;
   return (
     <>
-      <directionalLight
-        ref={rearFill}
-        visible={false}
-        position={[3.3, 1.65, -5.8]}
-        color="#cbdfff"
-        intensity={0}
-      />
+      <directionalLight ref={rearFill} position={[3.3, 1.65, -5.8]} color="#cbdfff" intensity={0} />
       <pointLight
         ref={cabin}
         visible={false}

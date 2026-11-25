@@ -101,3 +101,33 @@ it('does not decode a stale response body or a failed download', async () => {
   expect(finished).toHaveBeenCalledTimes(2);
   expect(failed).toHaveBeenCalledOnce();
 });
+
+it('reports progress for the incoming model and stays indeterminate without a usable size', async () => {
+  const manager = new LoadingManager();
+  const parseAsync = vi.fn().mockResolvedValue({ scene: 'model' });
+  const signal = new AbortController().signal;
+  const report = vi.fn();
+  const model = new Uint8Array([1, 2, 3, 4]);
+  const body = () =>
+    new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(model.subarray(0, 2));
+        controller.enqueue(model.subarray(2));
+        controller.close();
+      },
+    });
+
+  vi.stubGlobal(
+    'fetch',
+    vi
+      .fn()
+      .mockResolvedValueOnce(new Response(body(), { headers: { 'Content-Length': '4' } }))
+      .mockResolvedValueOnce(new Response(body())),
+  );
+  await loadCarModel({ manager, parseAsync }, '/models/ferrari-f120-f40.glb', signal, report);
+  expect(report.mock.calls).toEqual([[50], [99], [100]]);
+  expect(parseAsync).toHaveBeenCalledWith(model.buffer, '/models/');
+  report.mockClear();
+  await loadCarModel({ manager, parseAsync }, '/models/ferrari-f120-f40.glb', signal, report);
+  expect(report.mock.calls).toEqual([[100]]);
+});

@@ -95,9 +95,6 @@
   }
 }
 
-body:has(.garage-studio[data-exhibit]:not([data-exhibit='free'])) .car-loading-progress {
-  visibility: hidden;
-}
 @media (max-width: 359px) and (orientation: portrait) {
   .garage-studio[data-exhibit]:not([data-exhibit='free']) .garage-studio-title h2 {
     font-size: 35px;

@@ -17,6 +17,7 @@ import { prepareModelHeadlights } from './popupHeadlights';
 import { prepareModelFinish } from './modelFinishes';
 import { scheduleCompanionPrefetch } from './modelPrefetch';
 import { useShowroomModel } from './useShowroomModel';
+import { reportCarDownload } from './carDownload';
 import { loadCarModel } from './loadCarModel';
 import { smoothColorHex } from './colorMath';
 import { useAppStore } from '../store';
@@ -120,7 +121,10 @@ export function Car() {
     let prefetchTimer = 0;
     let readyFrame = 0;
 
-    void loadCarModel(loader, `/models/${modelFile}`, controller.signal).then(
+    reportCarDownload(carIndex, null);
+    void loadCarModel(loader, `/models/${modelFile}`, controller.signal, (percent) => {
+      if (!cancelled) reportCarDownload(carIndex, percent);
+    }).then(
       (gltf) => {
         if (cancelled) {
           disposeModel(gltf.scene);

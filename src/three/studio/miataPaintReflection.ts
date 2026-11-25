@@ -14,7 +14,6 @@ export function updateMiataPaintReflection(environment: (() => Texture) | null, 
 
   const envMap = environment?.() ?? null;
   paint.envMapIntensity = envMap ? intensity : 1;
-  if (paint.envMap === envMap) return;
+  if (Boolean(paint.envMap) !== Boolean(envMap)) paint.needsUpdate = true;
   paint.envMap = envMap;
-  paint.needsUpdate = true;
 }

@@ -12,9 +12,6 @@
   height: auto;
   border-radius: 4px;
 }
-body:has(.garage-studio .studio-matched-status) .car-loading-progress {
-  visibility: hidden;
-}
 @media (max-width: 767px) {
   .studio-scene-status.studio-matched-status:has(picture) {
     bottom: clamp(205px, 28vh, 270px);
@@ -59,6 +56,10 @@ body:has(.garage-studio .studio-matched-status) .car-loading-progress {
 }
 
 .garage-studio-title .studio-swap-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
   min-height: 20px;
   margin-top: 8px;
   pointer-events: none;

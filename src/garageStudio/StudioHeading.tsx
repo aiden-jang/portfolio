@@ -1,4 +1,7 @@
 import type { RefObject } from 'react';
+import { CARS } from '../config';
+import { CarLoadMeter } from '../ui/CarLoadMeter';
+import { useSlowCarLoad } from '../ui/useSlowCarLoad';
 import { ControlIcon } from '../ui/ControlIcon';
 import { useAppStore } from '../store';
 import { useGarageStudy } from '../garageStudy/state';
@@ -9,13 +12,14 @@ import { StudioShortcuts } from './StudioShortcuts';
 type Props = {
   title: string;
   car: string;
-  incoming?: string;
+  incoming?: number;
   leadWithCar: boolean;
   exit: RefObject<HTMLButtonElement>;
   onExit: () => void;
 };
 
 export function StudioHeading({ title, car, incoming, leadWithCar, exit, onExit }: Props) {
+  const loading = useSlowCarLoad(incoming !== undefined, incoming);
   const theme = useAppStore((state) => state.themeName);
   const look = useGarageStudy((state) => state.look);
   const afterHours = useGarageStudio((state) => isGarageAfterHours(theme, state, look));
@@ -39,7 +43,12 @@ export function StudioHeading({ title, car, incoming, leadWithCar, exit, onExit 
         </h2>
         {!leadWithCar && <p className="studio-compact-title">{car}</p>}
         <p className="studio-swap-name" role="status">
-          {incoming ? `Loading ${incoming}…` : null}
+          {loading && incoming !== undefined && (
+            <>
+              <span>Loading {CARS[incoming].name}…</span>
+              <CarLoadMeter index={incoming} />
+            </>
+          )}
         </p>
       </div>
     </>

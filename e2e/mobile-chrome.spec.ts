@@ -84,7 +84,7 @@ test('phone controls have a touch close action and omit keyboard instructions', 
   await page.getByRole('button', { name: 'Close car browser', exact: true }).click();
 });
 
-test('a slow car swap keeps loading in the car-name slot', async ({ page }) => {
+test('a slow car swap keeps its loading feedback above the dock', async ({ page }) => {
   let release!: () => void;
   const held = new Promise<void>((resolve) => {
     release = resolve;
@@ -118,7 +118,13 @@ test('a slow car swap keeps loading in the car-name slot', async ({ page }) => {
       expect(label.x).toBeGreaterThanOrEqual(slot.x);
       expect(label.y).toBeGreaterThanOrEqual(slot.y);
       expect(label.y + label.height).toBeLessThanOrEqual(slot.y + slot.height + 1);
-      await expect(page.locator('.car-loading-progress')).toHaveAttribute('aria-hidden', 'true');
+      const progress = page.getByRole('status', { name: 'Loading Porsche 911 GT3 RS' });
+      await expect(progress.getByRole('progressbar')).toBeInViewport();
+      const progressBox = (await progress.boundingBox())!;
+      const dockBox = (await dock.boundingBox())!;
+      expect(progressBox.y + progressBox.height).toBeLessThanOrEqual(dockBox.y);
+      expect(progressBox.x).toBeGreaterThanOrEqual(0);
+      expect(progressBox.x + progressBox.width).toBeLessThanOrEqual(width + 1);
       await page.screenshot({ path: test.info().outputPath(`loading-${width}.png`) });
     }
   } finally {

@@ -1,5 +1,6 @@
 import { keepPreviousCar } from './matchedSwap';
 import { CARS } from '../config';
+import { CarLoadMeter } from '../ui/CarLoadMeter';
 import { useLineup } from '../lineup/state';
 import { useAppStore } from '../store';
 import { repaintStudio } from './state';
@@ -37,6 +38,7 @@ export function StudioLoading({ car, pair, pairFailed, error, still, matched, ou
       )}
       <span>
         {status}
+        {!error && !pair && <CarLoadMeter index={car} />}
         {outgoing && !still && !error && <small>Holding the {outgoing} in view</small>}
       </span>
       {error && matched && (

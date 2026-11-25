@@ -8,6 +8,11 @@
   pointer-events: none;
 }
 .car-loading-copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   margin-top: 2px;
   padding-inline: 4px;
   border-radius: 4px;
