@@ -15,7 +15,7 @@ type Shot = Lens & {
   slide: number;
   travel: number;
   wheel?: boolean;
-  extendPushIn?: boolean;
+  motionDuration?: number;
   mobile?: Partial<Lens>;
 };
 
@@ -108,7 +108,7 @@ const afterHoursViews: Shot[] = [
   {
     ...lowFront,
     duration: 2.85,
-    extendPushIn: true,
+    motionDuration: lowFront.duration,
   },
   {
     yaw: -2.93,
@@ -139,7 +139,7 @@ export function sampleCorvetteLoop(elapsed: number, phone: boolean, aspect: numb
   }
   const view = shots[beat];
   const lens = phone && view.mobile ? { ...view, ...view.mobile } : view;
-  const progress = view.extendPushIn ? extendedPushInProgress(time) : time / view.duration;
+  const progress = time / (view.motionDuration ?? view.duration);
   const fitsShortWide = night && phone && aspect >= 0.5 && beat === 0;
   const fit = phone
     ? fitsShortWide
@@ -155,16 +155,4 @@ export function sampleCorvetteLoop(elapsed: number, phone: boolean, aspect: numb
     shiftY: lens.shiftY ?? 0,
     wheel: Boolean(view.wheel),
   };
-}
-
-function extendedPushInProgress(time: number) {
-  const progress = time / lowFront.duration;
-  const slowdownStart = 0.8;
-  if (progress <= slowdownStart) return progress;
-
-  const remaining = progress - slowdownStart;
-  const finalSpeed = 0.25;
-  const slowdownLength = 0.25;
-  const easedTravel = slowdownLength * (1 - Math.exp(-remaining / slowdownLength));
-  return slowdownStart + finalSpeed * remaining + (1 - finalSpeed) * easedTravel;
 }
