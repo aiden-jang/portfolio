@@ -3,10 +3,6 @@ import { CARS } from '../config';
 import { CarLoadMeter } from '../ui/CarLoadMeter';
 import { useSlowCarLoad } from '../ui/useSlowCarLoad';
 import { ControlIcon } from '../ui/ControlIcon';
-import { useAppStore } from '../store';
-import { useGarageStudy } from '../garageStudy/state';
-import { useGarageStudio } from './state';
-import { isGarageAfterHours } from './lighting';
 import { StudioShortcuts } from './StudioShortcuts';
 
 type Props = {
@@ -20,18 +16,14 @@ type Props = {
 
 export function StudioHeading({ title, car, incoming, leadWithCar, exit, onExit }: Props) {
   const loading = useSlowCarLoad(incoming !== undefined, incoming);
-  const theme = useAppStore((state) => state.themeName);
-  const look = useGarageStudy((state) => state.look);
-  const afterHours = useGarageStudio((state) => isGarageAfterHours(theme, state, look));
-  const linkedShot = new URLSearchParams(window.location.search).get('garage') === 'studio';
   return (
     <>
       <header className="garage-studio-header">
-        <span>{afterHours ? 'AJ / After Hours' : 'AJ / Studio'}</span>
+        <span>AJ / Garage</span>
         <div className="studio-header-actions">
           <StudioShortcuts />
           <button ref={exit} type="button" className="studio-return" onClick={onExit}>
-            <ControlIcon name="arrow" /> {linkedShot ? 'Back to portfolio' : 'Back to Garage'}
+            <ControlIcon name="arrow" /> Back to portfolio
           </button>
         </div>
       </header>

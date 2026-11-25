@@ -2,7 +2,8 @@ import { WedgeStudy } from './RecordedStudies';
 import { useId, useRef, useState } from 'react';
 import { openRearLouvers, selectExhibit } from './select';
 import { exhibitNames, useGarageExhibit, type Exhibit } from './state';
-import { repaintStudio } from '../garageStudio/state';
+import { repaintStudio, useGarageStudio } from '../garageStudio/state';
+import { useGarageStudy } from '../garageStudy/state';
 import { alignPorsches } from './mechanical';
 import { useAppStore } from '../store';
 import './exhibit-gallery.css';
@@ -40,6 +41,7 @@ export function ExhibitGallery() {
   const titleId = useId();
   const [wedge, setWedge] = useState(false);
   const gallery = useRef<HTMLDialogElement>(null);
+  const blackout = useGarageStudio((state) => state.chapter === 'light');
   const current = useGarageExhibit((s) => s.exhibit);
   const choose = (open: () => void) => {
     gallery.current?.close();
@@ -89,16 +91,32 @@ export function ExhibitGallery() {
           ))}
         </div>
         <div className="studio-gallery-all" aria-label="All exhibits" role="group">
-          {Object.entries(exhibitNames).map(([id, name]) => (
-            <button
-              key={id}
-              type="button"
-              aria-pressed={id === current}
-              onClick={() => choose(() => selectExhibit(id as Exhibit))}
-            >
-              {id === 'free' ? 'Free orbit' : name}
-            </button>
-          ))}
+          <button
+            type="button"
+            aria-pressed={blackout && current === 'free'}
+            onClick={() =>
+              choose(() => {
+                useGarageStudio.getState().select('light');
+                useGarageStudio.setState({ proposed: true });
+                useGarageStudy.setState({ look: 'blackout' });
+                repaintStudio();
+              })
+            }
+          >
+            Blackout
+          </button>
+          {Object.entries(exhibitNames)
+            .filter(([id]) => id !== 'dusk')
+            .map(([id, name]) => (
+              <button
+                key={id}
+                type="button"
+                aria-pressed={id === current && !blackout}
+                onClick={() => choose(() => selectExhibit(id as Exhibit))}
+              >
+                {id === 'free' ? 'Free orbit' : name}
+              </button>
+            ))}
         </div>
       </dialog>
     </>

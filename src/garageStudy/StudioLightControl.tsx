@@ -1,60 +1,68 @@
-import { useGarageExhibit, type Lighting } from '../garageExhibits/state';
+import { useGarageExhibit } from '../garageExhibits/state';
 import { applyF40HeadlightPreset, isGarageAfterHours } from '../garageStudio/lighting';
 import { activeOrbit, repaintStudio, useGarageStudio } from '../garageStudio/state';
 import { stopOrbitMotion } from '../garageStudio/orbitMotion';
-import { clearStudioCut, stageStudioCut } from '../garageStudio/studioCut';
+import { clearStudioCut } from '../garageStudio/studioCut';
 import { useAppStore } from '../store';
 import { useGarageStudy } from './state';
 
 export function StudioLightControl({ waiting }: { waiting: boolean }) {
-  const look = useGarageStudy((s) => s.look);
-  const theme = useAppStore((s) => s.themeName);
-  const afterHours = useGarageStudio((s) => isGarageAfterHours(theme, s, look));
-  const walkaround = useGarageStudio((s) => s.chapter === 'walk');
-  const blackout = useGarageStudio((s) => s.chapter === 'light' && s.proposed);
-  const exhibit = useGarageExhibit((s) => s.exhibit);
-  const exhibitLook = useGarageExhibit((s) => s.lighting);
-  return (
-    <select
-      className="studio-light-picker"
-      aria-label="Studio lighting"
-      disabled={waiting}
-      value={
-        look ??
-        (exhibit === 'dusk' ? exhibitLook : blackout ? 'blackout' : afterHours ? 'night' : 'studio')
-      }
-      onChange={(event) => {
-        const next = event.target.value;
-        stopOrbitMotion(activeOrbit(), 'requested');
-        useGarageStudy.setState({ playing: false });
-        const applyLighting = () => {
-          if (next === 'night') {
-            useGarageStudy.setState({ look: next });
-          } else if (exhibit === 'dusk') {
-            useGarageExhibit.setState({ lighting: next as Lighting });
-            useGarageStudio.setState({ proposed: next === 'blackout' });
-          } else useGarageStudy.setState({ look: next as Lighting });
+  const look = useGarageStudy((state) => state.look);
+  const theme = useAppStore((state) => state.themeName);
+  const afterHours = useGarageStudio((state) => isGarageAfterHours(theme, state, look));
+  const chapter = useGarageStudio((state) => state.chapter);
+  const exhibit = useGarageExhibit((state) => state.exhibit);
+  if (chapter === 'light') {
+    return (
+      <button
+        className="studio-exhibit-exit"
+        type="button"
+        onClick={(event) => {
+          event.currentTarget
+            .closest('.studio-compact-dock, .garage-study, .garage-exhibit')
+            ?.querySelector<HTMLButtonElement>('.studio-gallery-trigger')
+            ?.focus({ preventScroll: true });
+          useGarageStudio.getState().select('walk');
           repaintStudio();
-        };
-        const inWalkaround = walkaround && exhibit === 'free';
-        const current = look ?? (afterHours ? 'night' : 'studio');
-        const betweenPresets =
-          inWalkaround &&
-          ((current === 'studio' && next === 'night') ||
-            (current === 'night' && next === 'studio'));
-        const movedHeadlights = inWalkaround && applyF40HeadlightPreset(next);
-        // Both presets already share a lighting fade. A still would cover that fade and the hinge.
-        if (betweenPresets || movedHeadlights) {
-          clearStudioCut();
-          applyLighting();
-        } else stageStudioCut(applyLighting, false);
-        repaintStudio();
-      }}
-    >
-      <option value="studio">Studio lighting</option>
-      {walkaround && exhibit === 'free' && <option value="night">After Hours</option>}
-      <option value="dusk">Dusk lighting</option>
-      <option value="blackout">Blackout</option>
-    </select>
+        }}
+      >
+        Back to Walkaround
+      </button>
+    );
+  }
+  if (chapter !== 'walk' || exhibit !== 'free') return null;
+
+  function select(preset: 'studio' | 'night') {
+    if (
+      (look === null || look === 'studio' || look === 'night') &&
+      (preset === 'night') === afterHours
+    )
+      return;
+    stopOrbitMotion(activeOrbit(), 'requested');
+    clearStudioCut();
+    useGarageStudy.setState({ look: preset, playing: false });
+    applyF40HeadlightPreset(preset);
+    repaintStudio();
+  }
+
+  return (
+    <div className="studio-preset-switch" role="group" aria-label="Garage lighting">
+      <button
+        type="button"
+        disabled={waiting}
+        aria-pressed={!afterHours}
+        onClick={() => select('studio')}
+      >
+        Studio
+      </button>
+      <button
+        type="button"
+        disabled={waiting}
+        aria-pressed={afterHours}
+        onClick={() => select('night')}
+      >
+        After Hours
+      </button>
+    </div>
   );
 }

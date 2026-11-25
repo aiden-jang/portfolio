@@ -4,11 +4,9 @@ import { repaintStudio, selectPose, useGarageStudio } from './state';
 import type { MouseEventHandler } from 'react';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { ExhibitGallery } from '../garageExhibits/ExhibitGallery';
-import { StudioSignature } from './StudioSignature';
+import { StudioLightControl } from '../garageStudy/StudioLightControl';
 
 type Props = {
-  car: number;
-  hasSignature: boolean;
   waiting: boolean;
   canChoose: boolean;
   expanded: boolean;
@@ -16,18 +14,12 @@ type Props = {
   onToggle: () => void;
 };
 
-export function StudioCompactDock({
-  car,
-  hasSignature,
-  waiting,
-  canChoose,
-  expanded,
-  onChoose,
-  onToggle,
-}: Props) {
+export function StudioCompactDock({ waiting, canChoose, expanded, onChoose, onToggle }: Props) {
   return (
     <div className="studio-compact-dock">
-      <StudioSignature car={car} available={hasSignature} waiting={waiting} />
+      <div className="studio-compact-lighting">
+        <StudioLightControl waiting={waiting} />
+      </div>
       <ExhibitGallery />
       <button type="button" disabled={!canChoose} onClick={onChoose}>
         Choose car

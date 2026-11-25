@@ -15,10 +15,9 @@ import {
   type Chapter,
 } from './state';
 
-const choices: Record<Chapter, [string, string]> = {
+const choices: Record<Exclude<Chapter, 'light'>, [string, string]> = {
   walk: ['Standard height', 'Wheel height'],
   detail: ['Full car', 'Close-up'],
-  light: ['Studio', 'Blackout'],
   lineup: ['Ground view', 'Overhead'],
 };
 export function StudioViews({ waiting }: { waiting: boolean }) {
@@ -41,10 +40,6 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
   const partReady = popups ? hasHeadlights : hasDRS;
   function switchLook(value: boolean) {
     if (pair) resetStudyCamera();
-    if (chapter === 'light') {
-      useGarageStudy.setState({ look: null });
-      repaintStudio();
-    }
     if (aligned && !value) useGarageExhibit.setState({ aligned: false });
     if (value === proposed) return;
     if (pair && !value) selectPose(window.innerWidth < 768 ? -0.58 : 0.72);
@@ -62,8 +57,23 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
     repaintStudio();
   }
 
+  const zoomButtons = (
+    <>
+      <button aria-label="Zoom out" onClick={() => zoom(0.1)}>
+        <ControlIcon name="zoomOut" />
+      </button>
+      <button aria-label="Zoom in" onClick={() => zoom(-0.1)}>
+        <ControlIcon name="zoom" />
+      </button>
+    </>
+  );
   return (
     <>
+      {chapter !== 'detail' && !pair && (
+        <div className="garage-studio-row studio-zoom-extra" aria-label="Zoom" role="group">
+          {zoomButtons}
+        </div>
+      )}
       {!cockpit && !wheel && chapter !== 'light' && (
         <div className="garage-studio-row studio-compare" aria-label="View options" role="group">
           {choices[chapter].map((name, index) => (
@@ -164,12 +174,7 @@ export function StudioViews({ waiting }: { waiting: boolean }) {
               {activePaint === '#3f464e' ? 'Original paint' : 'Graphite paint'}
             </button>
           )}
-          <button aria-label="Zoom out" onClick={() => zoom(0.1)}>
-            <ControlIcon name="zoomOut" />
-          </button>
-          <button aria-label="Zoom in" onClick={() => zoom(-0.1)}>
-            <ControlIcon name="zoom" />
-          </button>
+          {zoomButtons}
           {id === F40_INDEX && chapter === 'walk' && (
             <HeadlightButton studio waiting={waiting} onChange={repaintStudio} />
           )}

@@ -1,4 +1,3 @@
-import { useGarageExhibit } from '../garageExhibits/state';
 import { chapters, type Chapter } from './state';
 
 export function StudioChapters({
@@ -8,12 +7,11 @@ export function StudioChapters({
   chapter: Chapter;
   onSelect: (chapter: Chapter) => void;
 }) {
-  const exhibit = useGarageExhibit((state) => state.exhibit);
   return (
     <div className="garage-studio-row studio-chapters" aria-label="Garage views" role="group">
-      {(Object.keys(chapters) as Chapter[]).map((name) => (
+      {(['walk', 'detail', 'lineup'] as const).map((name) => (
         <button key={name} aria-pressed={chapter === name} onClick={() => onSelect(name)}>
-          {name === 'light' && exhibit !== 'free' ? 'Lighting' : chapters[name]}
+          {chapters[name]}
         </button>
       ))}
     </div>

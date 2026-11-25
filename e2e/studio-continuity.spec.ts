@@ -70,29 +70,25 @@ for (const width of [1440, 390]) {
         name: 'Signature view',
         exact: true,
       });
-      const lighting = studio.getByRole('combobox', { name: 'Studio lighting' });
+      const lighting = studio
+        .getByRole('group', { name: 'Garage lighting' })
+        .getByRole('button', { name: 'After Hours', exact: true });
       await expect(signature).toBeVisible();
-      await signature.evaluate((preset: HTMLButtonElement) => {
-        const lights = preset
-          .closest('.garage-studio')!
-          .querySelector('select.studio-light-picker') as HTMLSelectElement;
-        preset.click();
-        lights.value = 'dusk';
-        lights.dispatchEvent(new Event('change', { bubbles: true }));
-      });
-      await expect(lighting).toHaveValue('dusk');
+      await signature.click();
+      await lighting.click();
+      await expect(lighting).toHaveAttribute('aria-pressed', 'true');
       await clickStudioAdvanced(studio, 'Share shot');
       const url = new URL(
         await studio.getByRole('textbox', { name: 'Exact shot link' }).inputValue(),
       );
       expect(url.searchParams.get('car')).toBe('3');
       expect(url.searchParams.get('camera')).toBe('wheel');
-      expect(url.searchParams.get('studioLook')).toBe('dusk');
+      expect(url.searchParams.get('studioLook')).toBe('night');
       expect(Number(url.searchParams.get('yaw'))).toBeCloseTo(0.96, 2);
       await page.goto(url.toString());
       await expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       await openStudioControls(studio);
-      await expect(lighting).toHaveValue('dusk');
+      await expect(lighting).toHaveAttribute('aria-pressed', 'true');
       await expect(
         studio.getByText('Porsche 911 RWB', { exact: true }).filter({ visible: true }),
       ).toBeVisible();

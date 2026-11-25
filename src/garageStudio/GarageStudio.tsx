@@ -192,7 +192,7 @@ export function GarageStudio() {
         title={title}
         car={subtitle}
         incoming={swap && waiting && !error ? swap.incoming : undefined}
-        leadWithCar={exhibit === 'free' && !photo && !study && !pair}
+        leadWithCar={exhibit === 'free' && !photo && !study && !pair && chapter !== 'light'}
         exit={exit}
         onExit={() => {
           leaveTool();
@@ -227,8 +227,6 @@ export function GarageStudio() {
               <StudioInvitation dragging={dragging} />
             )}
             <StudioCompactDock
-              car={swap?.outgoing ?? id}
-              hasSignature={exhibit === 'free' && chapter === 'walk'}
               waiting={waiting}
               canChoose={canChoose}
               expanded={controlsOpen}

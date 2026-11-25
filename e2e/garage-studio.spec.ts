@@ -1,5 +1,10 @@
 import { expect, test, type Page } from '@playwright/test';
-import { clickStudioAdvanced, openStudioAdvanced, openStudioControls } from './studioControls';
+import {
+  clickStudioAdvanced,
+  openStudioAdvanced,
+  openStudioControls,
+  selectStudioExhibit,
+} from './studioControls';
 import { readFile } from 'node:fs/promises';
 import { PNG } from 'pngjs';
 
@@ -23,19 +28,28 @@ for (const width of [1440, 390]) {
       await ready();
       for (const angle of ['Front', 'Side', 'Rear']) await expect(button(angle)).toBeEnabled();
       await expect(button('Advanced')).toBeVisible();
+      const frontBefore = phone ? await button('Front').boundingBox() : null;
       await openStudioControls(studio);
+      if (frontBefore) {
+        const frontAfter = (await button('Front').boundingBox())!;
+        expect(Math.abs(frontAfter.x - frontBefore.x)).toBeLessThan(2);
+        expect(Math.abs(frontAfter.y - frontBefore.y)).toBeLessThan(2);
+      }
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeHidden();
       return { studio, button, garage, ready };
     }
 
     test('switches walkaround cameras, render passes and blackout lighting', async ({ page }) => {
       const { studio, button } = await openStudio(page);
-      const looks = studio.getByRole('combobox', { name: 'Studio lighting' });
-      await expect(looks).toHaveValue('night');
-      await looks.selectOption('studio');
-      await expect(studio.getByText('AJ / Studio', { exact: true })).toBeVisible();
-      await looks.selectOption('night');
-      await expect(studio.getByText('AJ / After Hours', { exact: true })).toBeVisible();
+      const looks = studio.getByRole('group', { name: 'Garage lighting' });
+      const day = looks.getByRole('button', { name: 'Studio', exact: true });
+      const night = looks.getByRole('button', { name: 'After Hours', exact: true });
+      await expect(night).toHaveAttribute('aria-pressed', 'true');
+      await day.click();
+      await expect(day).toHaveAttribute('aria-pressed', 'true');
+      await night.click();
+      await expect(night).toHaveAttribute('aria-pressed', 'true');
+      await expect(studio.getByText('AJ / Garage', { exact: true })).toBeVisible();
       await expect(button('Wheel height')).toHaveAttribute('aria-pressed', 'true');
       await button('Standard height').click();
       await expect(button('Standard height')).toHaveAttribute('aria-pressed', 'true');
@@ -60,9 +74,11 @@ for (const width of [1440, 390]) {
         await expect(button(pass)).toHaveAttribute('aria-pressed', 'true');
       }
       await button('Done').click();
-      await button('Blackout').first().click();
-      await looks.selectOption('blackout');
-      await expect(looks).toHaveValue('blackout');
+      await selectStudioExhibit(studio, 'Blackout');
+      await expect(studio.getByRole('heading', { name: 'Blackout', exact: true })).toBeVisible();
+      await button('Back to Walkaround').click();
+      await expect(looks).toBeVisible();
+      await expect(button('Studio exhibits')).toBeFocused();
     });
 
     test('restores a shared mechanical shot and returns to the portfolio', async ({ page }) => {
@@ -120,7 +136,7 @@ for (const width of [1440, 390]) {
       expect(photoWidth / photoHeight).toBeCloseTo(phone ? 16 / 9 : 4 / 5, 2);
 
       await button('Done').click();
-      await button('Back to Garage').click();
+      await button('Back to portfolio').click();
       await expect(studio).toHaveCount(0);
       await expect(garage).toBeFocused();
       await expect(page.getByRole('heading', { name: 'Aiden Jang', exact: true })).toBeVisible();

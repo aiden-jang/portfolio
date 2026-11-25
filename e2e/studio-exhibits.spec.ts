@@ -56,14 +56,12 @@ for (const width of [1440, 390]) {
       ).toBeVisible();
     });
 
-    test('explores Dusk lighting, the Miata cockpit and the brake reveal', async ({ page }) => {
+    test('explores the Miata cockpit and the brake reveal', async ({ page }) => {
       const { studio, button, open } = await openStudio(page);
-      await open('Dusk lighting');
-      const looks = studio.getByRole('combobox', { name: 'Studio lighting' });
-      for (const name of ['studio', 'blackout', 'dusk']) {
-        await looks.selectOption(name);
-        await expect(looks).toHaveValue(name);
-      }
+      await button('Studio exhibits').click();
+      const exhibits = studio.getByRole('dialog', { name: 'Studio exhibits', exact: true });
+      await expect(exhibits.getByRole('button', { name: 'Dusk lighting' })).toHaveCount(0);
+      await exhibits.getByRole('button', { name: 'Close', exact: true }).click();
 
       await open('Miata cockpit');
       await button('Exterior').click();
@@ -99,7 +97,7 @@ for (const width of [1440, 390]) {
       const cars = page.getByRole('dialog', { name: 'Pick your ride.' });
       await expect(cars.locator('.car-option')).toHaveCount(12);
       await page.keyboard.press('Escape');
-      await button('Back to Garage').click();
+      await button('Back to portfolio').click();
       await expect(studio).toHaveCount(0);
       await expect(
         page.getByRole('button', { name: /^Browse cars\. Ferrari F40/ }).filter({ visible: true }),
@@ -113,7 +111,7 @@ for (const width of [1440, 390]) {
       await expect(studio).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       const photo = studio.getByRole('button', { name: 'Photo', exact: true });
       if (phone) {
-        await expect(photo).toBeHidden();
+        await expect(photo).toBeVisible();
         await expect(
           studio.getByRole('heading', { name: 'Ferrari F40', exact: true }),
         ).toBeVisible();
