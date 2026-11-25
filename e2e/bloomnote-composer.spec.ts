@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 for (const [width, height] of [
   [1440, 900],
   [390, 844],
+  [375, 667],
 ] as const) {
   test(`bloomnote grows a local note and preserves the received garden at ${width}px`, async ({
     page,
@@ -24,7 +25,11 @@ for (const [width, height] of [
     await expect(gerbera).toBeDisabled();
     await bloom.getByRole('button', { name: 'Sunday coffee' }).click();
     await expect(sentence).toHaveValue(/favorite record/);
-    await grow.click();
+    await expect(note).toHaveText('You made the coffee before there was anything else to do.');
+    await gerbera.press('Enter');
+    await expect(bloom.locator('mark[data-active="true"]')).toHaveText(
+      'put on our favorite record',
+    );
     await expect(note).toHaveText('Our favorite record made the room feel like ours.');
 
     const edit = bloom.getByRole('button', { name: 'Edit sentence' });

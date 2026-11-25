@@ -279,45 +279,10 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
 #project-wherever h3 i {
   color: #d7caba;
 }
-.bill {
-  grid-area: 1/1;
-  justify-self: end;
-  align-self: center;
-  margin: 0 var(--portfolio-gutter) 0 0;
-  position: relative;
-  width: min(36vw, 450px);
-  z-index: 1;
-  opacity: var(--bill-arrival, 0);
-  transform: translateY(calc(clamp(65px, 14svh, 126px) * (1 - var(--bill-arrival, 0))))
-    rotate(calc(-2deg + 2deg * var(--tear, 1)));
-  color: #303228;
-  font-family: var(--font-mono), monospace;
-  filter: drop-shadow(0 12px 14px #21180e55);
-}
 .paper {
   background: #f2eedf;
   padding: clamp(18px, 2vw, 30px);
   position: relative;
-}
-.paper.total {
-  padding-top: 36px;
-  border-bottom: 1px dashed #aba795;
-}
-.paper.total > span {
-  display: block;
-  font:
-    500 clamp(18px, 2vw, 29px)/1.1 Fraunces,
-    Georgia,
-    serif;
-  max-width: 15ch;
-  margin: 0 0 25px;
-}
-.bill small {
-  display: block;
-  font:
-    450 clamp(11px, 1vw, 14px)/1.4 var(--font-mono),
-    monospace;
-  margin-bottom: 6px;
 }
 .paper strong {
   display: block;
@@ -339,8 +304,7 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
     rotate(calc(3deg * var(--tear, 1)));
   transform-origin: 30% 0;
 }
-.stub::after,
-.paper.total::before {
+.stub::after {
   content: '';
   position: absolute;
   left: 0;
@@ -353,11 +317,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
 }
 .stub.due::after {
   filter: sepia(0.14) hue-rotate(65deg);
-}
-.paper.total::before {
-  bottom: auto;
-  top: -5px;
-  transform: rotate(180deg);
 }
 .stub strong {
   font-size: clamp(25px, 3.25vw, 49px);
@@ -407,19 +366,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever h3 {
   }
   #project-wherever .project-scene-heading {
     gap: 8px;
-  }
-  .bill {
-    width: min(76vw, 400px);
-    align-self: end;
-    margin-bottom: 8svh;
-    margin-right: 9vw;
-  }
-  .paper.total {
-    padding: 15px 21px;
-  }
-  .paper.total > span {
-    font-size: 16px;
-    margin: 0 0 14px;
   }
   .paper strong {
     font-size: 45px;

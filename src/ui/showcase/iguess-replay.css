@@ -51,3 +51,12 @@
     animation: none;
   }
 }
+
+.iguess-draw-board {
+  touch-action: pan-y pinch-zoom;
+  cursor: crosshair;
+}
+.iguess-draw-board:focus-visible {
+  outline: 2px solid #80e8d2;
+  outline-offset: -5px;
+}

@@ -69,6 +69,9 @@
   border: 0;
   color: transparent;
   outline-offset: -4px;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .about-reel[data-phase='playing'] .about-reel-play:focus-visible {
@@ -109,4 +112,20 @@
   .about-reel-play {
     transition: none;
   }
+}
+
+.about-reel[data-held] .about-reel-play,
+.about-reel[data-phase='playing'] .about-reel-play:hover {
+  background: transparent;
+}
+.about-reel[data-held] .about-reel-play svg {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  border-radius: 50%;
+  background: #14100fed;
+  color: #fff2df;
 }

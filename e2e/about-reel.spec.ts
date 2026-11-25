@@ -80,6 +80,20 @@ test('the reel keeps playing at the viewport edge and resumes after leaving it',
   await video.scrollIntoViewIfNeeded();
   await expect(video).toHaveJSProperty('paused', false);
   await expect(video).toHaveJSProperty('loop', true);
+
+  const stage = await video.boundingBox();
+  expect(stage).not.toBeNull();
+  await page.mouse.move(stage!.x + stage!.width / 2, stage!.y + stage!.height / 2);
+  await page.mouse.down();
+  await expect(video).toHaveJSProperty('paused', true);
+  const held = await video.evaluate((player: HTMLVideoElement) => player.currentTime);
+  await page.waitForTimeout(160);
+  await expect(video).toHaveJSProperty('currentTime', held);
+  await page.mouse.up();
+  await expect(video).toHaveJSProperty('paused', false);
+  await expect
+    .poll(() => video.evaluate((player: HTMLVideoElement) => player.currentTime))
+    .toBeGreaterThan(held);
   const scrollToVisibleHeight = (height: number) =>
     video.evaluate((player, height) => {
       scrollBy({

@@ -17,12 +17,13 @@ function presentScene(stage: HTMLElement, progress: number) {
       .querySelector('.dinner-ticket-actions button')
       ?.toggleAttribute('inert', phase !== 'vote');
     stage.querySelector('.dinner-split')?.toggleAttribute('inert', phase !== 'match');
+    stage.querySelector('.dinner-total')?.setAttribute('aria-hidden', String(phase !== 'bill'));
+    stage.querySelector('.dinner-stubs')?.setAttribute('aria-hidden', String(phase !== 'bill'));
   }
   const match = easedProgress(progress, 0.24, 0.43);
   stage.toggleAttribute('data-dinner-before-match', match === 0);
   stage.toggleAttribute('data-dinner-after-vote', match === 1);
   stage.style.setProperty('--tear', String(easedProgress(progress, 0.48, 0.88)));
-  stage.style.setProperty('--vote-swipe', String(easedProgress(progress, 0.09, 0.31)));
   stage.style.setProperty('--vote-match', String(match));
   stage.style.setProperty('--bill-arrival', String(easedProgress(progress, 0.55, 0.9)));
   stage.dataset.sceneProgress = progress.toFixed(3);
@@ -48,7 +49,7 @@ export function ProjectScene({
   const [actionFocused, setActionFocused] = useState(false);
   const draw = useCallback((progress: number) => {
     if (!scene.current || manualFrame.current) return;
-    const compact = isShortDinner() || matchMedia('(height < 610px)').matches;
+    const compact = matchMedia('(height < 610px)').matches;
     presentScene(scene.current, compact ? 1 : Math.max(manual.current, progress));
   }, []);
   const fastForward = useTimedScene(body, draw, {
@@ -76,7 +77,7 @@ export function ProjectScene({
     if (!stage || theme !== 'dinner') return;
     const preference = matchMedia('(prefers-reduced-motion: reduce), (height < 610px)');
     const settle = () => {
-      if (!preference.matches && !isShortDinner()) return;
+      if (!preference.matches) return;
       cancelAnimationFrame(manualFrame.current);
       manualFrame.current = 0;
       presentScene(stage, 1);
@@ -98,7 +99,7 @@ export function ProjectScene({
       }
       const start = performance.now();
       const interpolate = (now: number) => {
-        const mix = easedProgress(now - start, 0, 290);
+        const mix = easedProgress(now - start, 0, target === 1 ? 650 : 300);
         if (mix === 1) finish();
         else {
           presentScene(stage, from + (target - from) * mix);
@@ -163,28 +164,44 @@ function DinnerTicket() {
         loading="lazy"
         decoding="async"
       />
-      <div className="dinner-ticket-paper">
-        <div className="dinner-ticket-state">
-          <span className="dinner-ticket-vote">Pick your dinner</span>
-          <span className="dinner-ticket-match">Tonight’s plan</span>
-        </div>
-        <strong>Neighborhood Pizza Kitchen</strong>
-        <div className="dinner-ticket-decisions">
-          <div className="dinner-ticket-vote dinner-ticket-actions">
-            <button type="button" onClick={(event) => choose(event, 0.47)}>
-              Vote yes
-            </button>
+      <div className="dinner-receipt" id="project-owewell">
+        <div className="dinner-ticket-paper paper">
+          <div className="dinner-ticket-state">
+            <span className="dinner-ticket-vote">Pick your dinner</span>
+            <span className="dinner-ticket-match">Tonight’s plan</span>
           </div>
-          <div className="dinner-ticket-match dinner-ticket-count">
-            <span>
-              Alex <b>✓</b>
-            </span>
-            <span>
-              Maya <b>✓</b>
-            </span>
-            <button className="dinner-split" type="button" onClick={(event) => choose(event, 1)}>
-              Split $48
-            </button>
+          <strong>Neighborhood Pizza Kitchen</strong>
+          <div className="dinner-ticket-decisions">
+            <div className="dinner-ticket-vote dinner-ticket-actions">
+              <button type="button" onClick={(event) => choose(event, 0.47)}>
+                Vote yes
+              </button>
+            </div>
+            <div className="dinner-ticket-match dinner-ticket-count">
+              <span>
+                Alex <b>✓</b>
+              </span>
+              <span>
+                Maya <b>✓</b>
+              </span>
+              <button className="dinner-split" type="button" onClick={(event) => choose(event, 1)}>
+                Split $48
+              </button>
+            </div>
+            <div className="dinner-total" aria-hidden="true">
+              <small>Dinner for two</small>
+              <strong>$48.00</strong>
+            </div>
+          </div>
+        </div>
+        <div className="stubs dinner-stubs" aria-hidden="true">
+          <div className="paper stub">
+            <small>Your share</small>
+            <strong>$24.00</strong>
+          </div>
+          <div className="paper stub due">
+            <small>Alex owes you</small>
+            <strong>$24.00</strong>
           </div>
         </div>
       </div>
@@ -247,25 +264,7 @@ export function DinnerScene() {
   return (
     <div className="dinner-sequence" ref={track}>
       <DinnerTicket />
-      <p className="dinner-match-recap">Alex and Maya matched on pizza</p>
       <div className="dinner-exit-shade" aria-hidden="true" />
-      <div className="bill" id="project-owewell">
-        <div className="paper total">
-          <span>Neighborhood Pizza Kitchen</span>
-          <small>Dinner for two</small>
-          <strong>$48.00</strong>
-        </div>
-        <div className="stubs">
-          <div className="paper stub">
-            <small>Your share</small>
-            <strong>$24.00</strong>
-          </div>
-          <div className="paper stub due">
-            <small>Alex owes you</small>
-            <strong>$24.00</strong>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

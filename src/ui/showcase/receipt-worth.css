@@ -1,6 +1,5 @@
 #sec-more-work {
   --worth-frame-inset: clamp(12px, 1.7vw, 27px);
-  --paper-inset: calc(var(--worth-frame-inset) + 1px);
 }
 
 #sec-more-work .project-scenes {
@@ -36,22 +35,4 @@
   pointer-events: none;
   background: linear-gradient(180deg, transparent, var(--color-bg));
   opacity: var(--bill-arrival, 0);
-}
-@media (prefers-reduced-motion: no-preference) and (min-height: 610px) {
-  #sec-more-work #project-wherever .bill {
-    margin-right: calc(var(--portfolio-gutter) + var(--paper-inset));
-  }
-}
-@media (width >= 768px) and (prefers-reduced-motion: no-preference) and (min-height: 610px) {
-  #sec-more-work #project-wherever .bill {
-    align-self: end;
-    margin-bottom: clamp(94px, 13svh, 125px);
-  }
-}
-@media (width < 768px) and (prefers-reduced-motion: no-preference) and (min-height: 610px) {
-  #sec-more-work #project-wherever .bill {
-    justify-self: end;
-    width: min(calc(100vw - 2 * (var(--portfolio-gutter) + var(--paper-inset))), 450px);
-    margin-bottom: clamp(68px, 10svh, 88px);
-  }
 }

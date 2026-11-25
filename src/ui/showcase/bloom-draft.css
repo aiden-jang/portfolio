@@ -98,7 +98,7 @@
 .bloom-draft-result {
   min-width: 0;
 }
-.bloom-draft-result .bloom-garden-plot {
+.bloom-draft-result {
   scroll-margin-top: calc(var(--portfolio-header-height) + 10px);
 }
 .bloom-draft-result .bloom-garden-flower {
@@ -120,10 +120,10 @@
   animation: local-flower-in 510ms ease-out both;
 }
 .bloom-draft-result .bloom-garden-flower-1 .bloom-garden-plant {
-  animation-delay: 65ms;
+  animation-delay: 430ms;
 }
 .bloom-draft-result .bloom-garden-flower-2 .bloom-garden-plant {
-  animation-delay: 120ms;
+  animation-delay: 860ms;
 }
 @keyframes local-flower-in {
   from {
@@ -175,5 +175,36 @@
 @media (prefers-reduced-motion: reduce) {
   .bloom-draft-result .bloom-garden-plot[data-grown] .bloom-garden-plant {
     animation: none;
+  }
+}
+
+.bloom-source {
+  margin: 0 0 14px;
+  max-width: 44ch;
+  color: var(--garden-ink);
+  font:
+    400 clamp(18px, 2vw, 27px)/1.45 Fraunces,
+    Georgia,
+    serif;
+  overflow-wrap: anywhere;
+}
+.bloom-source mark {
+  background: transparent;
+  color: inherit;
+  border-radius: 3px;
+  transition: background-color 170ms ease;
+}
+.bloom-source [data-flower='0'][data-active='true'] {
+  background-color: #f2d8ce;
+}
+.bloom-source [data-flower='1'][data-active='true'] {
+  background-color: #e8ddb4;
+}
+.bloom-source [data-flower='2'][data-active='true'] {
+  background-color: #d7e3ce;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bloom-source mark {
+    transition: none;
   }
 }

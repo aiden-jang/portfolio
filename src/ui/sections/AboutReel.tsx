@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react';
 import './about-reel.css';
 
 const media = {
@@ -17,7 +17,7 @@ const labels = {
   loading: 'Loading reel',
   playing: 'Pause reel',
   paused: 'Resume reel',
-  ended: 'Play reel',
+  ended: 'Replay reel',
   error: 'Retry reel',
 };
 
@@ -26,6 +26,34 @@ export function AboutReel() {
   const [format, setFormat] = useState<'desktop' | 'phone'>();
   const video = useRef<HTMLVideoElement>(null);
   const pending = useRef(false);
+  const [held, setHeld] = useState(false);
+  const grip = useRef<number | null>(null);
+  const resumeAfterHold = useRef(false);
+  const recheck = useRef<() => void>();
+
+  function hold(event: PointerEvent<HTMLButtonElement>) {
+    const player = video.current;
+    if (
+      event.button !== 0 ||
+      grip.current !== null ||
+      !player ||
+      player.paused ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+      return;
+    grip.current = event.pointerId;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setHeld(true);
+    player.pause();
+  }
+
+  function release(event: PointerEvent<HTMLButtonElement>) {
+    if (grip.current !== event.pointerId) return;
+    grip.current = null;
+    setHeld(false);
+    resumeAfterHold.current = true;
+    recheck.current?.();
+  }
 
   const play = useCallback(async (automatic = false) => {
     const player = video.current;
@@ -69,11 +97,12 @@ export function AboutReel() {
         return;
       }
 
-      if (reduced.matches) return;
+      if (reduced.matches || grip.current !== null) return;
       if (!attempted && !player.src) {
         attempted = true;
         void play(true);
-      } else if (pausedOffscreen && !player.ended) {
+      } else if ((pausedOffscreen || resumeAfterHold.current) && !player.ended) {
+        resumeAfterHold.current = false;
         pausedOffscreen = false;
         void player.play().catch(() => {});
       }
@@ -106,6 +135,7 @@ export function AboutReel() {
       player.src = media[next].video;
       setFormat(next);
     }
+    recheck.current = reconsider;
     observer.observe(player);
     size.addEventListener('change', switchFormat);
     reduced.addEventListener('change', reconsider);
@@ -113,6 +143,7 @@ export function AboutReel() {
     player.addEventListener('playing', pauseWhileHidden);
     reconsider();
     return () => {
+      recheck.current = undefined;
       observer.disconnect();
       size.removeEventListener('change', switchFormat);
       reduced.removeEventListener('change', reconsider);
@@ -122,7 +153,12 @@ export function AboutReel() {
   }, [play]);
 
   return (
-    <figure className="about-reel" aria-labelledby="about-reel-title" data-phase={phase}>
+    <figure
+      className="about-reel"
+      aria-labelledby="about-reel-title"
+      data-phase={phase}
+      data-held={held || undefined}
+    >
       <header className="sr-only">
         <h3 id="about-reel-title">Selected work in motion</h3>
       </header>
@@ -147,8 +183,19 @@ export function AboutReel() {
           type="button"
           className="about-reel-play"
           aria-disabled={phase === 'loading' || undefined}
-          onClick={() => {
+          onPointerDown={hold}
+          onPointerUp={release}
+          onPointerCancel={release}
+          onLostPointerCapture={release}
+          onContextMenu={(event) => {
+            if (phase === 'playing') event.preventDefault();
+          }}
+          title={phase === 'playing' ? 'Hold to pause' : undefined}
+          onClick={(event) => {
             if (phase === 'playing') {
+              if (grip.current !== null) return;
+              if (event.detail > 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches)
+                return;
               video.current?.pause();
               setPhase('paused');
             } else {

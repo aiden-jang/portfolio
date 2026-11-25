@@ -22,7 +22,8 @@ for (const width of [1440, 390]) {
     const match = dinner.locator('.dinner-ticket-state .dinner-ticket-match');
     await expect(bill.getByText('Alex owes you')).toBeInViewport();
     await expect(bill).toHaveCSS('opacity', '1');
-    await expect(dinner.getByText('Alex and Maya matched on pizza')).toBeVisible();
+    await expect(dinner.getByText('Neighborhood Pizza Kitchen', { exact: true })).toHaveCount(1);
+    await expect(dinner.locator('.dinner-total')).toHaveCSS('opacity', '1');
     await expect(bill.getByText('$24.00', { exact: true })).toHaveCount(2);
     await expect
       .poll(() => dinner.evaluate((el) => Number(el.style.getPropertyValue('--tear'))))
@@ -102,7 +103,7 @@ for (const width of [1440, 390]) {
     await page.reload();
     await expect(bill.getByText('Alex owes you')).toBeInViewport();
     await expect(bill).toHaveCSS('transform', 'none');
-    await expect(match).toHaveCSS('opacity', '1');
+    await expect(match).toHaveCSS('opacity', '0');
     await expect(vote).toBeHidden();
   });
 }

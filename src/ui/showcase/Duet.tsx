@@ -23,6 +23,7 @@ export function Duet({
   const pin = useRef<HTMLDivElement>(null);
   const drawing = useRef<HTMLElement>(null);
   const room = useRef<HTMLElement>(null);
+  const held = useRef(false);
   const layout = useRef({ radius: 0, sticky: false });
   const lastLight = useRef<number>();
   const [drawingActive, setDrawingActive] = useState(true);
@@ -30,6 +31,7 @@ export function Duet({
     if (!room.current || !drawing.current || !pin.current) return;
     laneElement.dataset.duetProgress = String(t);
     const { sticky: animated, radius } = layout.current;
+    if (held.current && animated) return;
     const reveal = animated ? easedProgress(t, ...revealRange) : 1;
     const light = animated ? Math.min(1, Math.max(0, (t - 0.69) / 0.31)) : 1;
     room.current.style.setProperty('--iris', reveal * radius + 'px');
@@ -51,6 +53,11 @@ export function Duet({
     const el = lane.current!,
       stage = pin.current!,
       canvas = drawing.current!.querySelector('canvas')!;
+    const grip = (event: Event) => {
+      held.current = (event as CustomEvent<boolean>).detail;
+      if (!held.current) paint(el, Number(el.dataset.duetProgress) || 0);
+    };
+    el.addEventListener('drawing-grip', grip);
     const measure = () => {
       const a = stage.getBoundingClientRect(),
         b = canvas.getBoundingClientRect();
@@ -89,6 +96,7 @@ export function Duet({
     addEventListener('hashchange', seek);
     return () => {
       observer.disconnect();
+      el.removeEventListener('drawing-grip', grip);
       preference.removeEventListener('change', measure);
       cancelAnimationFrame(initial);
       removeEventListener('hashchange', seek);

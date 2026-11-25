@@ -1,20 +1,14 @@
 #project-wherever .dinner-sequence {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
   display: grid;
+  align-items: center;
   height: calc(100svh - var(--portfolio-header-height));
-  min-height: 410px;
-  background: #24201b;
+  overflow: hidden;
+  padding: 74px var(--portfolio-gutter) 24px;
+  background: radial-gradient(ellipse at 52% 43%, #42332a, #24201b 78%);
 }
-.dinner-sequence::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 52% 43%, #42332a, transparent 73%);
-  pointer-events: none;
-  z-index: -2;
-}
+
 #project-wherever .dinner-title-vote {
   color: color-mix(in srgb, #fff9ed, #dbcbba calc(var(--bill-arrival, 0) * 100%));
 }
@@ -22,230 +16,153 @@
   color: color-mix(in srgb, #dbcbba, #fff9ed calc(var(--bill-arrival, 0) * 100%));
 }
 .dinner-ticket {
-  position: relative;
+  width: min(100%, 1030px);
+  margin-inline: auto;
   display: grid;
-  grid-area: 1 / 1;
-  align-self: center;
-  justify-self: center;
-  grid-template-columns: 1.07fr 1fr;
-  width: min(63vw, 760px, calc((100svh - 170px) * 1.76));
-  margin-top: 54px;
-  transform: translateX(calc(-1 * clamp(142px, 18vw, 218px) * var(--bill-arrival, 0)))
-    scale(calc(1 - 0.13 * var(--bill-arrival, 0)));
-  min-height: clamp(292px, 42svh, 396px);
-  overflow: hidden;
-  border-radius: 12px;
-  background: #392319;
-  box-shadow: 0 20px 38px #100a084a;
+  grid-template-columns: minmax(0, 1.4fr) minmax(275px, 1fr);
+  align-items: start;
 }
 .dinner-ticket-photo {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
-  height: 100%;
+  height: clamp(235px, 42svh, 405px);
   object-fit: cover;
-  object-position: 48% 54%;
+  object-position: 53% 48%;
+  border-radius: 9px;
+  box-shadow: 0 16px 36px #100a0857;
 }
-.dinner-match-recap {
-  grid-area: 1 / 1;
-  align-self: center;
-  justify-self: center;
-  z-index: 1;
-  margin: 0;
-  padding: 8px 12px;
-  border-radius: 5px;
-  background: #211914ed;
-  color: #fff9ed;
-  font: 520 clamp(13px, 1.2vw, 16px)/1.4 var(--font-display);
-  transform: translate(calc(-1 * clamp(142px, 18vw, 218px)), clamp(100px, 15svh, 142px));
-  visibility: hidden;
-}
-#project-wherever[data-dinner-state='bill'] .dinner-match-recap {
-  visibility: visible;
-  opacity: var(--bill-arrival, 0);
-}
-.dinner-ticket-paper {
-  grid-column: 2;
+.dinner-receipt {
   position: relative;
   z-index: 1;
-  min-height: 100%;
+  margin: 10px 0 0 -18px;
+  --paper-reveal: var(--bill-arrival, 0);
+  transform: translate(calc(24px * var(--paper-reveal)), calc(16px * (1 - var(--paper-reveal))));
+  filter: drop-shadow(0 14px 21px #120a0866);
+  color: #303228;
+}
+#project-wherever .dinner-ticket-paper {
   display: grid;
-  align-content: center;
-  padding: clamp(20px, 3vw, 45px);
-  color: #252820;
-  background: #f2eedf;
-  transform: translateX(calc(102% * var(--bill-arrival, 0)));
+  align-content: start;
+  transform: none;
+  border-radius: 3px 3px 0 0;
+  padding: clamp(19px, 3vw, 35px);
+}
+#project-wherever .dinner-ticket-paper > strong {
+  max-width: 15ch;
+  font:
+    500 clamp(24px, 3vw, 41px)/1.05 Fraunces,
+    Georgia,
+    serif;
+  letter-spacing: -0.025em;
 }
 .dinner-ticket-state,
 .dinner-ticket-decisions {
-  position: relative;
   display: grid;
 }
 .dinner-ticket-state {
-  margin-block-end: 11px;
-  font: 530 13px/1.35 var(--font-display);
+  grid-template-areas: 'status';
+  min-height: 22px;
+  margin-block-end: 8px;
   color: #514c41;
+  font: 530 12px/1.4 var(--font-display);
 }
-.dinner-ticket-paper > strong {
-  display: block;
-  font: 610 clamp(24px, 3.15vw, 47px)/1.02 var(--font-display);
-  letter-spacing: -0.038em;
-  max-width: 12ch;
+.dinner-ticket-state .dinner-ticket-vote,
+.dinner-ticket-state .dinner-ticket-match {
+  grid-area: status;
+  opacity: calc(1 - var(--paper-reveal));
 }
 .dinner-ticket-decisions {
-  margin-top: clamp(20px, 3.5vw, 40px);
+  grid-template-areas: 'decision';
+  align-items: end;
+  margin-top: clamp(12px, 2.8vh, 26px);
 }
-.dinner-ticket-vote,
-.dinner-ticket-match {
-  grid-area: 1 / 1;
-}
-.dinner-ticket-vote {
-  opacity: calc(1 - var(--vote-match, 0));
-  transform: translateY(calc(-10px * var(--vote-match, 0)));
-}
-.dinner-ticket-match {
-  opacity: var(--vote-match, 0);
-  transform: translateY(calc(10px * (1 - var(--vote-match, 0))));
+.dinner-ticket-actions,
+.dinner-ticket-count,
+.dinner-total {
+  grid-area: decision;
 }
 .dinner-ticket-actions,
 .dinner-ticket-count {
   display: flex;
-  gap: 7px 9px;
   flex-wrap: wrap;
   align-items: center;
+  gap: 6px 9px;
 }
-.dinner-ticket-actions span,
-.dinner-ticket-count span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 1px solid #a8a38f;
-  border-radius: 4px;
-  padding: 8px 12px;
-  font: 560 13px/1.3 var(--font-display);
+.dinner-ticket-vote {
+  opacity: calc(1 - var(--vote-match, 0));
 }
-.dinner-ticket-actions span:first-child {
-  color: #57554a;
-}
-.dinner-ticket-actions > button {
-  transform: translateX(calc(9px * var(--vote-swipe, 0)));
+#project-wherever .dinner-ticket .dinner-ticket-match {
+  opacity: calc(var(--vote-match, 0) * (1 - var(--paper-reveal)));
 }
 .dinner-ticket-count span {
   background: #dce5d7;
-  border-color: #b9c6b1;
+  border-radius: 3px;
+  padding: 6px 9px;
+  font: 560 12px/1.3 var(--font-display);
 }
-.dinner-ticket-count b {
-  font-weight: 650;
+.dinner-total {
+  opacity: var(--paper-reveal);
+  pointer-events: none;
 }
-.dinner-ticket-count small {
-  width: 100%;
-  font: 480 13px/1.3 var(--font-display);
-  color: #4a5145;
+.dinner-receipt small {
+  display: block;
+  margin-bottom: 4px;
+  font:
+    450 12px/1.4 var(--font-mono),
+    monospace;
+}
+.dinner-total strong {
+  font: 450 clamp(40px, 5.2vw, 72px)/0.95 var(--font-display);
+  letter-spacing: -0.05em;
+}
+.dinner-stubs {
+  opacity: var(--tear, 0);
+  border-top: 1px dashed #aba795;
+}
+#project-wherever .dinner-stubs .stub strong {
+  font-size: clamp(24px, 3vw, 47px);
+  letter-spacing: -0.04em;
+}
+#project-wherever .dinner-stubs .stub {
+  padding: clamp(12px, 2vw, 23px);
+  min-width: 0;
+}
+#project-wherever .dinner-stubs .due {
+  background: #d3e3d5;
 }
 
-@media (max-width: 1000px) and (min-width: 701px) {
+@media (max-width: 767px) {
   .dinner-ticket {
-    width: min(58vw, calc((100svh - 170px) * 1.76));
-  }
-}
-@media (max-width: 700px) {
-  .dinner-sequence::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(180deg, #19130cb3, #19130c50 46%, #19130cc9),
-      url('/projects/scenes/wherever-pizza.jpg') 58% center / cover;
-    opacity: calc(0.78 * var(--bill-arrival, 0));
-    pointer-events: none;
-    z-index: -1;
-  }
-  .dinner-ticket {
-    grid-template: clamp(145px, 25svh, 226px) auto / minmax(0, 1fr);
-    min-height: 0;
-    margin-top: 50px;
-    transform: translateY(calc(-33px * var(--bill-arrival, 0)))
-      scale(calc(1 - 0.07 * var(--bill-arrival, 0)));
-    opacity: calc(1 - var(--bill-arrival, 0));
-    width: min(calc(100vw - 2 * var(--portfolio-gutter)), 345px);
+    width: min(100%, 370px);
+    grid-template-columns: minmax(0, 1fr);
   }
   .dinner-ticket-photo {
-    object-position: 58% 43%;
+    height: clamp(150px, 28svh, 245px);
   }
-  .dinner-match-recap {
-    align-self: start;
-    margin: max(82px, 10svh) var(--portfolio-gutter) 0;
-    transform: none;
+  .dinner-receipt {
+    margin: 0 9px;
+    transform: translateY(calc(8px - var(--paper-reveal) * 38px));
   }
-  .dinner-ticket-paper {
-    grid-area: 2 / 1;
-    align-content: start;
-    padding: 21px 22px 22px;
-    transform: translateY(calc(62px * var(--bill-arrival, 0)));
+  #project-wherever .dinner-ticket-paper {
+    padding: 16px 17px;
   }
-  .dinner-ticket-paper > strong {
-    font-size: clamp(25px, 7.6vw, 34px);
+  #project-wherever .dinner-ticket-paper > strong {
+    font-size: clamp(24px, 7vw, 30px);
+    max-width: 18ch;
   }
   .dinner-ticket-decisions {
-    margin-top: 18px;
+    margin-top: 10px;
+  }
+  .dinner-total strong {
+    font-size: 41px;
   }
 }
 @media (prefers-reduced-motion: reduce), (max-height: 609px) {
-  #project-wherever .dinner-sequence {
+  html:root #project-wherever .dinner-sequence {
     height: auto;
-    min-height: 0;
-    padding: 112px var(--portfolio-gutter) 56px;
-    gap: 45px;
+    padding: 92px var(--portfolio-gutter) 36px;
   }
-  #project-wherever :is(.dinner-title-vote, .dinner-title-bill) {
-    color: #fff9ed;
-  }
-  .dinner-sequence::after {
-    display: none;
-  }
-  .dinner-ticket {
-    grid-area: auto;
-    width: min(100%, 760px);
-    margin-top: 0;
-    opacity: 1;
+  .dinner-receipt {
     transform: none;
-  }
-  .dinner-ticket-paper,
-  .dinner-ticket-match {
-    opacity: 1;
-    transform: none;
-  }
-  .dinner-ticket-vote {
-    display: none;
-  }
-  #project-wherever[data-dinner-state='bill'] .dinner-match-recap {
-    display: none;
-  }
-  .dinner-sequence .bill {
-    grid-area: auto;
-    justify-self: center;
-    width: min(100%, 450px);
-    margin: 0;
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (width < 768px) and (610px <= height <= 780px) and (prefers-reduced-motion: no-preference) {
-  #project-wherever .dinner-sequence .bill {
-    width: min(calc(100vw - 2 * var(--portfolio-gutter)), 370px);
-    justify-self: center;
-    margin-inline: 0;
-    margin-bottom: clamp(54px, 9svh, 64px);
-  }
-  #project-wherever .paper.total {
-    padding: 17px 20px 19px;
-  }
-  #project-wherever .paper.total > span {
-    margin-bottom: 9px;
-  }
-  #project-wherever .stub {
-    padding: 12px 16px;
   }
 }

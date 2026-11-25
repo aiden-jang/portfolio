@@ -230,29 +230,8 @@
     gap: 26px;
     min-height: 0;
   }
-  :root .dinner-ticket {
-    grid-area: auto;
-    width: 100%;
-    margin: 0;
-    opacity: 1;
-    transform: none;
-  }
-  :root .dinner-ticket-paper,
-  :root .dinner-ticket-match {
-    opacity: 1;
-    transform: none;
-  }
-  html:root :is(.dinner-ticket-vote, .dinner-match-recap, .dinner-exit-shade),
-  :root .dinner-sequence::after {
+  html:root #project-wherever .dinner-exit-shade {
     display: none;
-  }
-  html:root #project-wherever .dinner-sequence .bill {
-    grid-area: auto;
-    justify-self: center;
-    width: min(100%, 450px);
-    margin: 0;
-    opacity: 1;
-    transform: none;
   }
 }
 @media (prefers-reduced-motion: no-preference) and (590px <= height < 700px) and (max-width: 767px) {
