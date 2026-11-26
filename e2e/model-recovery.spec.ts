@@ -44,6 +44,7 @@ for (const [width, height] of [
       } as typeof get;
     });
     await page.goto('/#f40-study', { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => document.fonts.ready.then(() => {}));
     const track = page.locator('.scroll-film-track');
     const contact = page.locator('#sec-contact');
     const position = (offset: number) =>
@@ -67,6 +68,9 @@ for (const [width, height] of [
       expect(bounds[2] - bounds[0]).toBeGreaterThan(width * 0.32);
       return bounds;
     };
+    await expect
+      .poll(() => track.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
+      .toBeLessThan(2);
     await position(height * 0.4);
     await expect(track).toHaveAttribute('data-study-matched', '');
     await expect(page.locator('body')).toHaveAttribute('data-study-poster', '');
