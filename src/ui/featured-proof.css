@@ -1,0 +1,88 @@
+html:root .portfolio-chrome #sec-work #project-iodine .project-scene-body {
+  min-height: min(65svh, 650px);
+  padding-block: clamp(34px, 5.8svh, 64px) clamp(46px, 8svh, 76px);
+  gap: clamp(21px, 4svh, 36px);
+}
+html:root #project-iodine .iodine-scene-content {
+  display: block;
+  width: min(100%, 940px);
+  max-width: none;
+  align-self: center;
+}
+html:root #project-iodine .iodine-scene-content .recovery {
+  --editor-edge: clamp(12px, 3vw, 36px);
+  border-radius: 7px;
+}
+html:root #project-iodine .iodine-scene-content .recovery-source {
+  padding-block: clamp(28px, 6.8svh, 63px);
+  font-size: clamp(10px, 3.45cqi, 18px);
+  white-space: nowrap;
+}
+html:root #project-iodine .iodine-scene-content .recovery-line {
+  display: block;
+  transition: none;
+  font-size: clamp(12px, 4.65cqi, 37px);
+  letter-spacing: -0.045em;
+}
+html:root #project-iodine .recovery-line .removed {
+  display: inline;
+  transition: none;
+}
+html:root #project-iodine .recovery[data-restored='true'] .removed {
+  display: none;
+}
+#project-iodine .recovery-line mark {
+  background: #5d4033;
+  box-shadow: inset 0 -1px #eab490;
+}
+html:root #project-iodine .recovery[data-restored='true'] .recovery-line {
+  color: #cff3de;
+}
+.iodine-case-screenshot .iodine-demo {
+  margin-block: 12px 0;
+}
+#batching-study .experience-measure > span:last-child {
+  color: #b8c7bf;
+}
+#batching-study:has(.batching-spread[data-phase='after']) .experience-measure > span:last-child {
+  color: #dbffe9;
+}
+#batching-study .batching-line-items[data-loaded='true'] {
+  border-color: #86b99d;
+  background: #15251d;
+}
+#batching-study .batching-line-items[data-loaded='true'] dd {
+  color: #daf5e6;
+}
+@media (max-width: 767px) {
+  html:root .portfolio-chrome #project-everythingisfine .orbit-actions {
+    position: relative;
+    inset: auto;
+    margin: 6px var(--portfolio-gutter) 0;
+  }
+  html:root .portfolio-chrome #sec-work #project-iodine .project-scene-body {
+    min-height: min(60svh, 510px);
+  }
+}
+@media (max-width: 767px) and (620px <= height < 700px) and (prefers-reduced-motion: no-preference) {
+  html:root #sec-work .quake-journey-run::after {
+    display: block;
+    height: 138px;
+  }
+  html:root #sec-work .quake-journey-run > .earthquake-feature {
+    position: sticky;
+    top: calc(var(--portfolio-header-height) + 4px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 600px) {
+  .duet[data-match='jump'] .bean-match {
+    z-index: 3;
+  }
+  .duet[data-match='jump'] .sketch .iguess-replay,
+  .duet[data-match='jump'] .sketch .cut-id {
+    visibility: visible;
+    opacity: var(--ink-visible, 1);
+    pointer-events: none;
+  }
+}

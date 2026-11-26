@@ -9,7 +9,6 @@ import { ControlIcon } from '../ControlIcon';
 import { OpenEvidence, type EvidenceFrame } from '../creative/evidenceNavigation';
 import { evidenceHref } from '../creative/storyRoutes';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
-import { QuakeReadings } from './quakeJourney';
 import { useScrollArrival } from '../../hooks/scrollArrival';
 import { advanceQuake, settleQuake } from './quakeProgress';
 
@@ -154,7 +153,6 @@ export function EarthquakeFeature({ item, preview }: Props) {
               <p className="creative-quake-hook">
                 Same quake. <strong>Depth estimates differ by 16.3 km.</strong>
               </p>
-              <QuakeReadings />
             </div>
             <button
               ref={compareButton}

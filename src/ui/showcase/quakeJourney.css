@@ -2,181 +2,104 @@
   .quake-journey-run::after {
     display: block;
     content: '';
-    height: min(56svh, 470px);
+    height: min(36svh, 330px);
   }
   html:root .quake-journey-run > .earthquake-feature {
     position: sticky;
     top: calc(var(--portfolio-header-height) + 12px);
   }
 }
-.quake-journey-run {
-  --map-reveal: var(--directed-map-reveal, 0);
-  --depth-reveal: var(--directed-depth-reveal, 0);
-  --globe-dim: calc(1 - var(--map-reveal));
-  --map-scale: 1;
-}
-.quake-journey-run .quake-journey-copy {
-  display: grid;
-  align-items: center;
-  max-width: 330px;
-}
-.quake-journey-run .earthquake-compare {
-  margin-top: 12px;
-}
-.quake-journey-copy > * {
-  grid-area: 1 / 1;
-}
-.quake-journey-copy > p {
-  opacity: calc(1 - var(--depth-reveal));
-  color: #d1d7dc;
-  font-size: clamp(16px, 1.5vw, 21px);
-  line-height: 1.5;
-  max-width: 25ch;
-}
-.quake-journey-run .quake-journey-readings {
-  color: #e9f0ec;
-  margin: 2px 0 14px;
-  opacity: var(--depth-reveal);
-  transform: translateY(calc((1 - var(--depth-reveal)) * 10px));
+
+.quake-reading-track {
+  --pin-x: var(--event-x, 52%);
+  --pin-y: var(--event-y, 39%);
+  --reading-width: clamp(174px, 16vw, 236px);
+  --reading-left: clamp(8px, calc(var(--pin-x) + 28px), calc(100% - var(--reading-width) - 8px));
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  visibility: hidden;
+  opacity: var(--depth-reveal, 0);
   pointer-events: none;
 }
+.quake-journey-run[data-depth-readings]:not([data-quake-manual]) .quake-reading-track {
+  visibility: visible;
+}
+.quake-reading-pin {
+  position: absolute;
+  top: var(--pin-y);
+  left: var(--pin-x);
+  width: 12px;
+  height: 12px;
+  border: 1px solid #f5c68f;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.quake-reading-line {
+  position: absolute;
+  top: var(--pin-y);
+  left: calc(var(--pin-x) + 6px);
+  width: max(0px, calc(var(--reading-left) - var(--pin-x) - 6px));
+  border-top: 1px solid #f5c68fad;
+}
+.quake-journey-readings {
+  position: absolute;
+  top: max(14px, calc(var(--pin-y) - 23px));
+  left: var(--reading-left);
+  width: var(--reading-width);
+  padding: 11px 13px 13px;
+  color: #eef5f3;
+  background: #101c22f2;
+  border: 1px solid #6f9797a6;
+  border-radius: 6px;
+}
 .quake-journey-readings p {
-  color: #b0c3c4;
   margin: 0;
-  font-size: 13px;
+  color: #ccdfdf;
+  font-size: 12px;
+  line-height: 1.25;
 }
 .quake-journey-readings dl {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 25px;
-  margin: 10px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 8px 0 0;
   font-variant-numeric: tabular-nums;
 }
 .quake-journey-readings dt {
-  color: #c2cfcb;
+  margin-bottom: 3px;
+  color: #afc9ca;
   font-size: 11px;
 }
 .quake-journey-readings dd {
   margin: 0;
-  font-size: clamp(24px, 3vw, 43px);
-  letter-spacing: -0.045em;
-  line-height: 1.04;
+  font-size: clamp(20px, 2.25vw, 34px);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: nowrap;
 }
 .quake-journey-readings small {
   color: #c6d7d1;
-  font-size: 0.46em;
+  font-size: 0.57em;
   letter-spacing: 0;
 }
-.quake-travel-art {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  --focus-x: 55%;
-  --focus-y: 54%;
-  --pin-x: var(--event-x, var(--focus-x));
-  --pin-y: var(--event-y, var(--focus-y));
-}
-[data-quake-locked] .quake-travel-art {
-  --pin-x: var(--focus-x);
-  --pin-y: var(--focus-y);
-}
-.quake-map {
-  position: absolute;
-  inset: 0;
-  clip-path: circle(calc(105% * var(--map-reveal)) at var(--pin-x) var(--pin-y));
-}
-.quake-map-image {
-  position: absolute;
-  left: var(--pin-x);
-  top: var(--pin-y);
-  width: 170%;
-  height: 175%;
-  max-width: none;
-  background-position: center;
-  background-size: cover;
-  transform: translate(-50%, -50%) scale(var(--map-scale));
-}
-.quake-travel-art :is(.quake-map-pin, .quake-map-magnitude) {
-  opacity: var(--journey-pin, 0);
-  z-index: 1;
-}
-.quake-map-pin::after {
-  content: '';
-  position: absolute;
-  inset: -9px;
-  border: 1px solid #efbc9180;
-  border-radius: 50%;
-}
-[data-quake-manual] .quake-travel-art {
-  visibility: hidden;
-}
-.quake-map-pin {
-  position: absolute;
-  left: var(--pin-x);
-  top: var(--pin-y);
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: #efbc91;
-  box-shadow:
-    0 0 0 4px #df9c6152,
-    0 0 15px #e7ad75;
-}
-.quake-map-magnitude {
-  position: absolute;
-  top: var(--pin-y);
-  left: var(--pin-x);
-  margin: 11px 0 0 12px;
-  color: #f4d0a5;
-  font: 600 12px/1 var(--font-display);
-}
+
 @media (max-width: 767px) {
-  .quake-travel-art {
-    --focus-x: 50%;
-    --focus-y: 50%;
+  .quake-reading-track {
+    --pin-x: var(--event-x, 45%);
+    --pin-y: var(--event-y, 35%);
+    --reading-width: clamp(142px, 42vw, 164px);
+    --reading-left: clamp(
+      12px,
+      calc(var(--pin-x) + 14px),
+      calc(100% - var(--reading-width) - 12px)
+    );
   }
-  .quake-journey-run .quake-journey-copy {
-    max-width: none;
-  }
-  .quake-journey-run .earthquake-compare {
-    margin-top: 4px;
+  .quake-journey-readings {
+    top: clamp(9px, calc(var(--pin-y) - 19px), calc(100% - 94px));
+    padding: 9px 9px 10px;
   }
   .quake-journey-readings dl {
-    margin: 6px 0;
+    margin-top: 6px;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) and (620px <= height) and (width < 768px) {
-  html:root .quake-journey-run > .earthquake-feature {
-    top: calc(var(--portfolio-header-height) + 3px);
-  }
-}
-
-html:root .quake-journey-run[data-quake-view='map']:not([data-quake-manual]) .orbit-viewport {
-  visibility: hidden;
-}
-@media (prefers-reduced-motion: reduce) {
-  .quake-map {
-    clip-path: none;
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  html:root
-    .quake-journey-run:not([data-quake-manual])
-    .orbit-feature[data-globe-phase='ready']
-    .orbit-actions {
-    opacity: var(--globe-dim);
-    transition: none;
-  }
-  .quake-journey-run[data-quake-view='map']:not([data-quake-manual])
-    .orbit-feature[data-globe-phase='ready']
-    .orbit-actions {
-    visibility: hidden;
-  }
-}
-.quake-journey-run[data-quake-manual] {
-  --map-reveal: 0;
-  --depth-reveal: 0;
 }

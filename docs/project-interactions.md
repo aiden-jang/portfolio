@@ -29,7 +29,7 @@ to the live app. Older events can age out of its catalogue.
 The wider scene layers [NOAA GFS wind](../public/projects/atlas-wind.json) valid
 6 November 2026 at 12:00 UTC and [RainViewer](https://www.rainviewer.com/) radar
 recorded 24 November 2026 at 01:10 UTC. The layers come from separate dates and
-recede as the comparison focuses on the recorded Kamchatka reports.
+recede as the globe focuses on Kamchatka and reveals both recorded depths beside its marker.
 
 The day–night boundary, stars and aurora use the same recorded sky time,
 17 November 2026 at 23:00 UTC. The aurora is a 2° grid sampled from a saved NOAA
@@ -51,14 +51,16 @@ and [NOAA SWPC aurora forecast](https://www.swpc.noaa.gov/products/aurora-30-min
 
 ## Project scenes
 
-Iodine pairs a muted screen recording with an interactive edit recovery. The case
-study keeps the selected edit and restores the source frame, scroll position, and
-focus on Back. Reduced motion keeps the recording on demand.
+Iodine shows the agent edit and restored line in the same editor frame, then holds
+the restored line. The case study includes the screen recording and restores the
+source frame, scroll position, and focus on Back. Reduced motion shows the result
+immediately and keeps the recording on demand.
 
 The mrrp scene uses Bean’s native room canvas. Visitors can pet Bean, drag the toy
 mouse, and invite her into the box. The room also responds to keyboard input. On
-larger viewports, the iguess cat jumps into the room. Reduced motion presents the
-two scenes in reading order.
+supported viewports, the finished iguess drawing becomes Bean and jumps as the
+room opens beneath her. A direct link to Bean’s room lands in the room. Reduced
+motion presents the two scenes in reading order.
 
 The canvas loads near the viewport and unmounts when it leaves. Reduced motion uses
 still reactions. The room is silent and uses local examples. To rebuild the checked-in
@@ -77,8 +79,9 @@ becomes a match and the $48 owewell receipt arrives. It runs once and holds the
 bill on return. The saved owewell link goes straight to the receipt. Reduced
 motion shows the match and receipt together.
 
-The request-batching diagram gathers 120 marks into one moving pulse as the visitor scrolls. Its static Before and After controls
-are available on short viewports and with reduced motion.
+The request-batching diagram gathers 120 marks into one moving pulse as the visitor
+scrolls. The sample line items populate when the pulse reaches 2s. Its static Before
+and After controls are available on short viewports and with reduced motion.
 
 The bloomnote garden reveals its three blooms once, then holds the view from the
 [approved recipient capture](../public/projects/bloomnote-garden.jpg). Selecting a flower

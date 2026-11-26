@@ -1,34 +1,22 @@
-import { shortPhoneQuery } from '../../hooks/scrollArrival';
 import { easedProgress } from '../../hooks/useScrollStudy';
 
-function showReadings(el: HTMLElement) {
-  return Boolean(el.dataset.sceneArrival) || matchMedia(shortPhoneQuery).matches;
+function quakeTravel(stage: HTMLElement) {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
+  if (stage.hasAttribute('data-scene-arrival')) return 1;
+  return easedProgress(Number(stage.dataset.studyProgress) || 0, 0.03, 0.6);
 }
 
-function quakeTravel(el: HTMLElement) {
-  const t = Number(el.dataset.studyProgress ?? 0);
-  if (showReadings(el)) return 0;
-  return easedProgress(t, 0.01, 0.6);
-}
-
-export function advanceQuake(el: HTMLElement, progress: number) {
-  const result = showReadings(el);
-  const mapReveal = result ? 0 : easedProgress(progress, 0.68, 0.94);
-  const depths = result ? 1 : easedProgress(progress, 0.26, 0.54);
-  el.style.setProperty('--agency-reveal', (result ? 0 : depths * (1 - mapReveal)).toFixed(3));
-  el.style.setProperty(
-    '--journey-pin',
-    (result ? 0 : easedProgress(progress, 0.18, 0.42)).toFixed(3),
+export function advanceQuake(stage: HTMLElement, progress: number) {
+  const immediate =
+    stage.hasAttribute('data-scene-arrival') ||
+    matchMedia('(prefers-reduced-motion: reduce)').matches;
+  stage.style.setProperty(
+    '--depth-reveal',
+    String(immediate ? 1 : easedProgress(progress, 0.32, 0.49)),
   );
-
-  el.style.setProperty('--directed-map-reveal', mapReveal.toFixed(3));
-  el.style.setProperty('--directed-depth-reveal', depths.toFixed(3));
-  el.style.setProperty('--map-scale', (0.76 + mapReveal * 0.24).toFixed(3));
-  el.toggleAttribute('data-quake-locked', !result && progress >= 0.68);
-  el.dataset.studyProgress = progress.toFixed(3);
-  const view = mapReveal >= 1 ? 'map' : 'globe';
-  if (el.dataset.quakeView !== view) el.dataset.quakeView = view;
-  const canvas = el.querySelector('canvas');
+  stage.toggleAttribute('data-depth-readings', immediate || progress >= 0.32);
+  stage.dataset.studyProgress = progress.toFixed(3);
+  const canvas = stage.querySelector('canvas');
   if (canvas) syncQuakeCamera(canvas);
 }
 
@@ -43,6 +31,5 @@ export function syncQuakeCamera(canvas: HTMLCanvasElement) {
 }
 
 export function settleQuake(progress: number) {
-  if (progress <= 0.26 || progress >= 0.94) return progress;
-  return progress < 0.71 ? 0.57 : 0.94;
+  return progress > 0.16 && progress < 0.6 ? 0.6 : progress;
 }

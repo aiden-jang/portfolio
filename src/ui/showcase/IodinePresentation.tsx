@@ -5,50 +5,42 @@ import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './iodine-timed.css';
 import { ProjectScene } from './ProjectScene';
-import { IodineDemo } from './IodineDemo';
 import { OpenEvidence } from '../creative/evidenceNavigation';
 import { ControlIcon } from '../ControlIcon';
 
 export function IodinePresentation() {
   const frame = useRef<HTMLDivElement>(null);
-  const holdForReturn = useRef(false);
   const manual = useRef(false);
   const settled = useRef(false);
   const openCase = useContext(OpenEvidence);
   const [restored, restore] = useState(false);
-  const showEdit = useCallback((phase: 'ready' | 'reviewing' | 'restored') => {
-    const editor = frame.current;
-    if (!editor || editor.dataset.playback === phase) return;
-    editor.dataset.playback = phase;
-    restore(phase === 'restored');
+  const showEdit = useCallback((done: boolean) => {
+    restore(done);
   }, []);
   const draw = useCallback(
     (progress: number) => {
-      if (holdForReturn.current || manual.current) return;
-      showEdit(
-        settled.current || progress >= 0.68 ? 'restored' : progress < 0.23 ? 'ready' : 'reviewing',
-      );
+      if (!manual.current) showEdit(settled.current || progress >= 1);
     },
     [showEdit],
   );
   const arrive = useCallback(
     (active: boolean) => {
       settled.current = active;
-      if (active && !holdForReturn.current && !manual.current) showEdit('restored');
+      if (active) showEdit(true);
     },
     [showEdit],
   );
   useScrollArrival(frame, true, arrive);
-  useTimedScene(frame, draw, { duration: 2600, hold: 1480, startThreshold: 0.32 });
+  useTimedScene(frame, draw, { duration: 760, startThreshold: 0.4 });
   useEffect(() => {
-    const node = frame.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting && node.getClientRects().length) holdForReturn.current = false;
-    });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    const present = () => {
+      if (preference.matches && !manual.current) showEdit(true);
+    };
+    present();
+    preference.addEventListener('change', present);
+    return () => preference.removeEventListener('change', present);
+  }, [showEdit]);
 
   const href = evidenceHref('iodine', {
     edit: restored ? 'restored' : 'edited',
@@ -62,9 +54,7 @@ export function IodinePresentation() {
           className="iodine-case-link"
           aria-label="Read the iodine case study"
           href={href}
-          onClick={(event) => {
-            if (openCase?.(event, 'iodine')) holdForReturn.current = true;
-          }}
+          onClick={(event) => openCase?.(event, 'iodine')}
         >
           iodine <ControlIcon name="arrow" />
         </a>
@@ -72,13 +62,12 @@ export function IodinePresentation() {
       links={null}
     >
       <div className="iodine-scene-content">
-        <IodineDemo />
         <RecoveryEditor
           restored={restored}
           frame={frame}
           onToggleEdit={() => {
             manual.current = true;
-            showEdit(restored ? 'ready' : 'restored');
+            showEdit(!restored);
           }}
         />
       </div>

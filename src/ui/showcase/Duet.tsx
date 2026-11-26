@@ -24,6 +24,7 @@ export function Duet({
   const step = useRef(0);
   const destination = useRef(0);
   const previous = useRef(-1);
+  const seenDrawing = useRef(false);
   const lastLight = useRef(-1);
   const [drawingActive, setDrawingActive] = useState(true);
   const [print, setPrint] = useState<HTMLCanvasElement | null>(null);
@@ -33,7 +34,8 @@ export function Duet({
       stage = pin.current!;
     laneElement.dataset.duetProgress = String(t);
     if (held.current && sticky.current) return;
-    const direct = previous.current < 0 || Math.abs(t - previous.current) > 0.38;
+    const prior = previous.current;
+    const direct = prior < 0 || Math.abs(t - prior) > 0.38;
     previous.current = t;
     const finish = sticky.current && t >= 0.34;
     if (finish && laneElement.dataset.finishCat !== 'true')
@@ -69,13 +71,17 @@ export function Duet({
         : t < 0.32
           ? 0
           : destination.current;
-    if (
-      !sticky.current ||
-      direct ||
-      fast ||
-      (target === 0 && t === 0) ||
-      (target === 1 && t >= 0.96)
-    ) {
+    const stageBox = stage.getBoundingClientRect();
+    const stageInView = stageBox.top < innerHeight * 0.48 && stageBox.bottom > innerHeight * 0.52;
+    if (!stageInView) seenDrawing.current = false;
+    else if (target === 0 && t <= 0.36) seenDrawing.current = true;
+    const skip = fast || direct || (target === 1 && t >= 0.96);
+    const canShowQuickJump =
+      target === 1 &&
+      stageInView &&
+      location.hash !== '#project-mrrp' &&
+      (frame.current > 0 || (seenDrawing.current && destination.current === 0));
+    if (!sticky.current || (skip && !canShowQuickJump) || (target === 0 && t === 0)) {
       cancelAnimationFrame(frame.current);
       frame.current = 0;
       destination.current = step.current = target;
@@ -85,36 +91,50 @@ export function Duet({
     if (destination.current === target && (frame.current || step.current === target)) return;
     destination.current = target;
     cancelAnimationFrame(frame.current);
-    const box = stage.getBoundingClientRect();
+    const box = stageBox;
     const board = sketch.querySelector('canvas')!.getBoundingClientRect();
     const bean = scene.querySelector('[data-object="bean"]')?.getBoundingClientRect();
     const sx = board.left + board.width / 2 - box.left,
       sy = board.top + board.height / 2 - box.top;
     const ex = bean ? bean.left + bean.width / 2 - box.left : box.width * 0.5;
     const ey = bean ? bean.top + bean.height / 2 - box.top : box.height * 0.7;
-    const sw = 360 * Math.min(board.width / 960, board.height / 605);
+    const sw = Math.max(1, 360 * Math.min(board.width / 960, board.height / 605));
     const ew = Math.max(55, Math.min(box.width * 0.26, box.height * 0.19));
     const from = step.current,
       start = performance.now(),
-      duration = 640 * Math.abs(target - from);
+      duration = (skip ? 910 : 1120) * Math.abs(target - from);
     const radius = Math.hypot(Math.max(ex, box.width - ex), Math.max(ey, box.height - ey));
+    const sprite = stage.querySelector<SVGElement>('.bean-match')!;
+    const side = ex > box.width * 0.58 ? -1 : 1;
+    const hopWidth = Math.min(212, box.width * 0.22);
+    const crest = Math.min(sy, ey) - Math.min(146, box.height * 0.25);
+    let elapsed = 0;
+    let lastFrameAt = start;
     state('jump');
     function tick(now: number) {
-      const time = Math.min(1, (now - start) / Math.max(duration, 1));
+      elapsed += Math.min(50, now - lastFrameAt);
+      lastFrameAt = now;
+      const time = Math.min(1, elapsed / Math.max(duration, 1));
       const p = from + (target - from) * time;
       step.current = p;
-      const flight = Math.min(1, Math.max(0, (p - 0.1) / 0.64));
-      const x = sx + (ex - sx) * flight;
-      const y = sy + (ey - sy) * flight - 4 * flight * (1 - flight) * box.height * 0.11;
+      const flight = easedProgress(p, 0.26, 0.88);
+      const arc = Math.sin(Math.PI * flight);
+      const x = sx + (ex - sx) * flight + side * hopWidth * arc;
+      const y =
+        p < 0.55
+          ? sy + (crest - sy) * easedProgress(p, 0.26, 0.55)
+          : crest + (ey - crest) * easedProgress(p, 0.55, 0.88);
       const beanWidth = sw + (ew - sw) * flight;
-      const sprite = stage.querySelector<SVGElement>('.bean-match')!;
-      sprite.style.transform =
-        'translate3d(' + x + 'px,' + y + 'px,0) translate(-50%,-50%) scale(' + beanWidth / sw + ')';
+      const ink = easedProgress(p, 0.14, 0.26);
+      const landing = easedProgress(p, 0.87, 0.97);
+      const tilt = arc * side * -10;
+      sprite.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%) rotate(${tilt}deg) scale(${beanWidth / sw})`;
       sprite.style.width = sw + 'px';
-      sprite.style.visibility = p > 0.84 ? 'hidden' : 'visible';
-      laneElement.dataset.blink = String(p < 0.12);
-      const open = easedProgress(p, 0.7, 1);
-      scene.style.clipPath = 'circle(' + open * radius + 'px at ' + ex + 'px ' + ey + 'px)';
+      sprite.style.opacity = String(ink * (1 - landing));
+      laneElement.style.setProperty('--ink-visible', String(1 - ink));
+      laneElement.dataset.blink = String(p < 0.27);
+      const open = easedProgress(p, 0.45, 0.96);
+      scene.style.clipPath = `circle(${open * radius}px at ${ex}px ${ey}px)`;
       if (time < 1) frame.current = requestAnimationFrame(tick);
       else {
         frame.current = 0;

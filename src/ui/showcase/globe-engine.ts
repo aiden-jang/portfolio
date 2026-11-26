@@ -74,7 +74,7 @@ export function createOrbitGlobe(
     zoom: openingZoom(options.compact),
   };
   const pose: GlobePose = { ...initial };
-  const art = canvas.closest<HTMLElement>('.orbit-art');
+  const art = canvas.closest<HTMLElement>('.preview-thumbnail');
   let frame = 0,
     previous = 0,
     holdUntil = 0,
@@ -110,7 +110,7 @@ export function createOrbitGlobe(
         lastSweep = reduced.matches ? 0 : time / 1000;
       }
       globe.render(pose, journey, lastPulse, lastSweep);
-      if (art && journey > 0 && journey < 1) {
+      if (art && journey > 0) {
         const surface = canvas.getBoundingClientRect();
         const marker = globe.project(featured.lon, featured.lat, surface);
         if (marker && surface.width && surface.height) {
@@ -123,6 +123,9 @@ export function createOrbitGlobe(
             `${((marker.y - surface.top) / surface.height) * 100}%`,
           );
         }
+      } else if (art?.style.getPropertyValue('--event-x')) {
+        art.style.removeProperty('--event-x');
+        art.style.removeProperty('--event-y');
       }
       if (moving || (rotating && journey === 0) || idle) frame = requestAnimationFrame(draw);
       else previous = 0;
@@ -208,7 +211,7 @@ export function createOrbitGlobe(
       if (!origin) origin = { ...pose };
       input.stop();
       globe.highlight(featured);
-      const close = matchMedia('(max-width: 767px)').matches ? 3.12 : 2.8;
+      const close = matchMedia('(max-width: 767px)').matches ? 1.87 : 1.88;
       pose.lon =
         (lerpAngle((origin.lon * Math.PI) / 180, (featured.lon * Math.PI) / 180, t) * 180) /
         Math.PI;

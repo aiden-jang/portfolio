@@ -44,11 +44,10 @@ for (const width of [1440, 390]) {
     await place('#project-iodine', 0.1);
     const parkedEditor = await page.evaluate(() => scrollY);
     await expect(recovery).toHaveText('Edit undone');
-    const recording = iodine.getByRole('button', { name: 'Pause Iodine demo' });
-    await expect(recording).toBeVisible();
-    expect(await page.evaluate(() => scrollY)).toBe(parkedEditor);
-    await expect(recovery).toHaveText('Agent edit');
+    await expect(iodine.locator('video')).toHaveCount(0);
+    await page.waitForTimeout(1250);
     await expect(recovery).toHaveText('Edit undone');
+    expect(await page.evaluate(() => scrollY)).toBe(parkedEditor);
 
     const batch = page.locator('.batching-spread');
     await seekScene('.batch-lane', 0.25);
@@ -89,40 +88,21 @@ for (const width of [1440, 390]) {
     await expect(room).toHaveAttribute('data-light', 'morning');
     await seekScene('.duet', 0.83);
     await expect(room).toHaveAttribute('data-light', 'evening');
-    const verdict = page.locator('#project-everythingisfine .quake-journey-readings');
-    await seekScene('#project-everythingisfine', 0.78);
+    const quake = page.locator('#project-everythingisfine');
+    const verdict = quake.getByRole('complementary', { name: 'Recorded Kamchatka depth readings' });
+    await seekScene('#project-everythingisfine', 0.41);
     const parkedScroll = await page.evaluate(() => scrollY);
     await expect(verdict).toHaveCSS('opacity', '1');
+    await expect(verdict).toContainText('54.7 km');
+    await expect(verdict).toContainText('71.0 km');
+    await expect(quake).toHaveAttribute('data-study-progress', '0.600');
     expect(await page.evaluate(() => scrollY)).toBe(parkedScroll);
-    const quake = page.locator('#project-everythingisfine');
-    async function nudgeSettledReading(progress: number) {
-      const settled = await quake.getAttribute('data-study-progress');
-      await seekScene('#project-everythingisfine', progress);
-      await page.evaluate(
-        () =>
-          new Promise<void>((done) =>
-            requestAnimationFrame(() => requestAnimationFrame(() => done())),
-          ),
-      );
-      expect(await quake.getAttribute('data-study-progress')).toBe(settled);
-    }
-    await expect(quake).toHaveAttribute('data-study-progress', '0.940');
-    await nudgeSettledReading(0.8);
-    await nudgeSettledReading(0.82);
-    await seekScene('#project-everythingisfine', 0.56);
-    await expect(quake).toHaveAttribute('data-study-progress', '0.570');
-    await expect(verdict).toHaveCSS('opacity', '1');
-    await nudgeSettledReading(0.54);
-    await seekScene('#project-everythingisfine', 0.16);
-    await expect(verdict).toHaveCSS('opacity', '0');
-    await expect(page.locator('#project-everythingisfine')).toHaveAttribute(
-      'data-quake-view',
-      'globe',
-    );
+    await seekScene('#project-everythingisfine', 0.39);
+    await expect(quake).toHaveAttribute('data-study-progress', '0.600');
+    await seekScene('#project-everythingisfine', 0.12);
+    await expect(verdict).toBeHidden();
 
-    await expect(iodine.locator('video')).toHaveJSProperty('paused', true);
     await place('#project-iodine', 0.11);
-    await expect(iodine.locator('video')).toHaveJSProperty('paused', false);
     await expect(recovery).toHaveText('Edit undone');
     await expect(iodine.getByRole('link', { name: 'Read the iodine case study' })).toHaveAttribute(
       'href',
@@ -193,7 +173,7 @@ for (const width of [1440, 390]) {
 
     await place('#project-iodine .recovery', 0.22);
     await expect(recovery).toHaveText('Edit undone');
-    await expect(iodine.locator('video')).toHaveJSProperty('paused', true);
+    await expect(iodine.locator('video')).toHaveCount(0);
     await expect(garden.locator('.bloom-garden-plant img').first()).toHaveCSS('clip-path', 'none');
     await expect(drawing.getByRole('status')).toHaveText('Cat');
   });

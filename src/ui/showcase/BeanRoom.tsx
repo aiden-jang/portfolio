@@ -218,7 +218,6 @@ export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
           <img
             src="/projects/scenes/mrrp-room-art-desktop.webp"
             alt="Bean’s pixel room"
-            loading="lazy"
             decoding="async"
             width="900"
             height="738"

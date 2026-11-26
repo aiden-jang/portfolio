@@ -63,15 +63,22 @@ function render(canvas: HTMLCanvasElement, t: number, tracks: Path2D) {
     ctx.arc(x, 130, r, 0, Math.PI * 2);
     ctx.fill();
   }
-  ctx.globalAlpha = clamp((t - 0.91) / 0.055);
+  ctx.globalAlpha = t >= 0.95 ? 1 : 0;
+  if (ctx.globalAlpha) {
+    ctx.strokeStyle = '#bcebd480';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(588, 130, 8, 0, Math.PI * 2);
+    ctx.stroke();
+  }
   ctx.fillStyle = '#ceead8';
-  ctx.font = '500 40px system-ui';
+  ctx.font = '570 49px system-ui';
   ctx.textAlign = 'end';
   ctx.fillText('2s', 600, 106);
   ctx.globalAlpha = 1;
 }
 
-export function RequestPulse() {
+export function RequestPulse({ onPaint }: { onPaint: (position: number) => void }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useLayoutEffect(() => {
     const canvas = ref.current!;
@@ -94,6 +101,7 @@ export function RequestPulse() {
       current += (target - current) * (1 - Math.exp(-dt / 44));
       if (Math.abs(target - current) < 0.0015) current = target;
       render(canvas, current, tracks);
+      onPaint(current);
       frame = current === target ? 0 : requestAnimationFrame(tick);
     };
     const update = (event: Event) => {
@@ -104,6 +112,7 @@ export function RequestPulse() {
         frame = 0;
         current = target;
         render(canvas, current, tracks);
+        onPaint(current);
       } else if (!frame && target !== current) {
         last = performance.now();
         frame = requestAnimationFrame(tick);
@@ -118,6 +127,6 @@ export function RequestPulse() {
       observer.disconnect();
       owner.removeEventListener('pulse-position', update);
     };
-  }, []);
+  }, [onPaint]);
   return <canvas ref={ref} className="request-pulse" aria-hidden="true" />;
 }

@@ -6,7 +6,7 @@ import {
   type CSSProperties,
   type RefObject,
 } from 'react';
-import { lastScrollInput, useScrollArrival } from '../../hooks/scrollArrival';
+import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
 import './batching-spread.css';
 
@@ -59,11 +59,11 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
   const [phase, setPhase] = useState<'before' | 'batching' | 'after'>('before');
   const figure = useRef<HTMLElement>(null);
   const manual = useRef<number | null>(null);
-  const arrivalTime = useRef<number | null>(null);
+  const settled = useRef(false);
   const landOnBatch = useCallback((active: boolean) => {
+    settled.current = active;
     const element = figure.current;
     if (!element) return;
-    arrivalTime.current = active ? performance.now() : null;
     if (active) {
       element.dataset.driver = 'scroll';
       element.style.setProperty('--batch-scroll-time', replayDuration + 'ms');
@@ -100,14 +100,15 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
         return;
       }
       const p = (event as CustomEvent<number>).detail;
-      if (arrivalTime.current !== null) {
-        if (manual.current === null && lastScrollInput() <= arrivalTime.current) return;
-        arrivalTime.current = null;
-      }
+
       const override = manual.current;
       if (override !== null) {
         if (Math.abs(window.scrollY - override) < 18) return;
         manual.current = null;
+      }
+      if (settled.current) {
+        if (element.dataset.phase !== 'after') paintRequestPulse(element, 1, true);
+        return;
       }
       const progress = Math.min(1, p / 0.72);
       element.dataset.driver = 'scroll';
@@ -116,12 +117,22 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
         Math.round(progress * replayDuration) + 'ms',
       );
       paintRequestPulse(element, progress);
-      setPhase(progress >= 0.96 ? 'after' : progress >= 0.32 ? 'batching' : 'before');
     };
+    const resetArrival = () => {
+      settled.current = false;
+    };
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    preference.addEventListener('change', resetArrival);
     stage.addEventListener('batching-progress', update);
-    return () => stage.removeEventListener('batching-progress', update);
+    return () => {
+      preference.removeEventListener('change', resetArrival);
+      stage.removeEventListener('batching-progress', update);
+    };
   }, [lane]);
 
+  const onPulsePaint = useCallback((position: number) => {
+    setPhase(position >= 0.95 ? 'after' : position >= 0.25 ? 'batching' : 'before');
+  }, []);
   const after = phase === 'after';
   return (
     <figure
@@ -132,7 +143,7 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
     >
       <div className="batching-visuals">
         <div className="batching-pattern">
-          <RequestPulse />
+          <RequestPulse onPaint={onPulsePaint} />
           <div className="batching-readout">
             {after
               ? '1 batched request'

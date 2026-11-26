@@ -1,6 +1,5 @@
 import { kamchatkaExample } from '../../data/kamchatkaExample';
-import { PREVIEWS } from '../../data/projectPreviews';
-import { StoryScreenshot } from '../StoryScreenshot';
+import { IodineDemo } from '../showcase/IodineDemo';
 import { DepthSection } from '../showcase/DepthSection';
 import { EarthquakeGlobeStill, EarthquakeMatchSignals } from '../showcase/EarthquakeEvidence';
 import { useContext } from 'react';
@@ -69,13 +68,8 @@ export function IodineCaseOpening({ role }: { role: string }) {
         </div>
       </div>
       <details className="iodine-case-screenshot">
-        <summary>Iodine’s editor and agent</summary>
-        <StoryScreenshot
-          image={PREVIEWS.iodine.image}
-          name="iodine"
-          caption="Recorded editor session"
-          cover="iodine"
-        />
+        <summary>Editor recording</summary>
+        <IodineDemo />
       </details>
     </section>
   );

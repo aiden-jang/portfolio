@@ -1,6 +1,6 @@
 import type { Ref } from 'react';
 import { ScreenshotImage } from '../ScreenshotImage';
-import { QuakeMap } from './quakeJourney';
+import { QuakeReadings } from './quakeJourney';
 
 type Props = {
   canvasId?: string;
@@ -56,8 +56,8 @@ export function GlobeArtwork({
             />
           </div>
         )}
-        {journey && <QuakeMap />}
       </div>
+      {journey && <QuakeReadings />}
     </div>
   );
 }

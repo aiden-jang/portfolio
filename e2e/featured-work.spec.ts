@@ -119,6 +119,10 @@ for (const [width, height] of [
     await iodine.getByRole('link', { name: 'Read the iodine case study' }).click();
     await expect(page.getByRole('heading', { name: 'An edit you can take back.' })).toBeVisible();
     await expect(page).toHaveURL(/cases\/iodine\/\?edit=restored$/);
+    await page.getByText('Editor recording', { exact: true }).click();
+    const recording = page.getByRole('button', { name: 'Play Iodine demo', exact: true });
+    await expect(recording).toBeVisible();
+    await expect(page.locator('.iodine-case-screenshot video')).toHaveJSProperty('paused', true);
     await page.getByRole('button', { name: 'Replay edit', exact: true }).press('Enter');
     await page.getByRole('button', { name: 'Undo edit', exact: true }).press('Enter');
     await expect(page).toHaveURL(/cases\/iodine\/\?edit=restored$/);

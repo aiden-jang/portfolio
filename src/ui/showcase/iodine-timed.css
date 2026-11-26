@@ -96,31 +96,3 @@ html:root #project-iodine .iodine-scene-content .recovery-line {
     max-width: 600px;
   }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  #project-iodine [data-playback='reviewing'] .recovery-line mark {
-    animation: inspect-edit 930ms cubic-bezier(0.18, 0.75, 0.23, 1) both;
-  }
-  #project-iodine [data-playback='restored'] .recovery-meta [role='status'] {
-    animation: acknowledge-undo 420ms ease-out both;
-  }
-}
-@keyframes inspect-edit {
-  from {
-    background-color: #432e29;
-  }
-  55% {
-    background-color: #774c33;
-  }
-  to {
-    background-color: #614134;
-  }
-}
-@keyframes acknowledge-undo {
-  from {
-    opacity: 0.44;
-  }
-  to {
-    opacity: 1;
-  }
-}
