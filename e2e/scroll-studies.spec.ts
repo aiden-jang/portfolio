@@ -153,9 +153,11 @@ for (const width of [1440, 390]) {
       await scroll(0.88);
       await expect.poll(time).toBeGreaterThan(beforeFinalTurn + 0.21);
       expect(await time()).toBeLessThan(3.95);
-      await scroll(0.95);
-      await expect.poll(time).toBeGreaterThan(3.96);
       await expect(video).toBeVisible();
+      await scroll(0.95);
+      await expect
+        .poll(() => video.evaluate((el: HTMLVideoElement) => el.duration - el.currentTime))
+        .toBeLessThan(0.06);
       await scroll(0.26);
       await expect
         .poll(() => video.evaluate((el: HTMLVideoElement) => el.currentTime))

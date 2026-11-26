@@ -75,16 +75,3 @@ export function blendIntro(
 }
 
 export const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
-
-export function contactArrivalProgress(
-  top: number,
-  height: number,
-  progress: number,
-  dt: number,
-  reduced: boolean,
-): number {
-  const arriving = top <= height * 0.15;
-  if (reduced) return arriving ? 1 : 0;
-  const step = dt / 2.2;
-  return clamp(progress + (arriving ? step : -step), 0, 1);
-}

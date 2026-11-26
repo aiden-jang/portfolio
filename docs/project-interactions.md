@@ -97,10 +97,10 @@ The [desktop](../public/showroom/finish-study/desktop.mp4) and
 Studio renderer and the Ferrari F40 by
 [vecarz](https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95),
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-The full clay profile holds before the camera turns toward the rear, reveals the
-red paint and rises over the louvers in one take. Scrolling in either direction
-scrubs the recorded turn. Phones draw frames from the same recording as three compact image sheets.
-The scrubber follows the scroll and supports manual control, with stills for reduced motion.
+The clay-to-paint study settles into a low front three-quarter view. Contact holds that same
+view as the email appears. The desktop recording and phone image sheets follow the same
+move while the live model loads. The scrubber supports manual control and uses stills
+with reduced motion. The painted still is shared with Contact.
 The About reel pairs local project captures
 with a tighter mobile view for Iodine. It loops while in view,
 pauses while held and plays on request when reduced motion is enabled.

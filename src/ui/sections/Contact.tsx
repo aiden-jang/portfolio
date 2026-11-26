@@ -4,6 +4,7 @@ import { useAppStore } from '../../store';
 import { useShareFeedback } from '../useShareFeedback';
 import { H2, PANEL_BASE, Section } from './shared';
 import { Credits } from './Credits';
+import { ContactPoster } from './ContactPoster';
 
 const EMAIL = 'me@aidenjang.com';
 const SOCIAL_LINKS = [
@@ -15,13 +16,7 @@ export function ContactSection() {
   const needsPoster = useAppStore((s) => s.sceneUnavailable || s.renderedCarIndex !== F40_INDEX);
   return (
     <Section id="sec-contact" side="center">
-      {needsPoster && (
-        <picture className="contact-poster" aria-hidden="true">
-          <source media="(max-width: 599px)" srcSet="/showroom/contact/phone.webp" />
-          <source media="(max-width: 899px)" srcSet="/showroom/contact/tablet.webp" />
-          <img src="/showroom/contact/desktop.webp" alt="" loading="lazy" />
-        </picture>
-      )}
+      {needsPoster && <ContactPoster className="contact-poster" />}
       <div className={PANEL_BASE}>
         <div className="contact-copy-block">
           <h2 className={H2}>Let’s talk.</h2>

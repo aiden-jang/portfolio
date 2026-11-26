@@ -13,11 +13,9 @@ export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady:
     const film = track.current;
     const stage = film?.firstElementChild as HTMLElement | undefined;
     const about = film?.closest<HTMLElement>('#sec-about');
-    const contact = document.getElementById('sec-contact');
-    if (!film || !stage || !about || !contact || !liveReady) return;
+    if (!film || !stage || !about) return;
 
     const motion = matchMedia(finishStudyMotion);
-    let nearby = false;
     let frame = 0;
     function show(active: boolean) {
       document.body.toggleAttribute('data-study-match', active);
@@ -26,16 +24,23 @@ export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady:
 
     const update = () => {
       frame = 0;
+      const contact = document.getElementById('sec-contact');
+      if (!contact) return;
       const bounds = film.getBoundingClientRect();
       const contactTop = contact.getBoundingClientRect().top;
       // A fragment jump can leave the aligned section a fraction of a CSS pixel below the top.
-      const active = motion.matches && bounds.top < innerHeight && contactTop > 1;
-      if (active) {
+      const inStudy = motion.matches && bounds.top < innerHeight && contactTop > 1;
+      const progress = finishStudyProgress(bounds.top, bounds.height - stage.offsetHeight);
+      const active = inStudy && liveReady;
+      const poster =
+        inStudy && !liveReady && progress >= 0.995
+          ? contact.querySelector<HTMLImageElement>('.contact-poster img')
+          : null;
+      const usePoster = Boolean(poster?.complete && poster.naturalWidth);
+      const matching = active || usePoster;
+      if (matching) {
         finishStudyFrame.top = Math.max(0, bounds.top);
-        finishStudyFrame.progress = finishStudyProgress(
-          bounds.top,
-          bounds.height - stage.offsetHeight,
-        );
+        finishStudyFrame.progress = progress;
         about.style.setProperty(
           '--study-start',
           bounds.top - about.getBoundingClientRect().top + 'px',
@@ -45,27 +50,27 @@ export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady:
           contact.style.setProperty('--match-email-mask', 100 * (1 - reveal) + '%');
         }
       }
-      film.toggleAttribute('data-study-matched', active && finishStudyFrame.progress >= 0.995);
-      film.toggleAttribute('data-study-leaving', active && contactTop < innerHeight - 12);
+      film.toggleAttribute('data-study-matched', matching && progress >= 0.995);
+      film.toggleAttribute('data-study-leaving', matching && contactTop < innerHeight - 12);
+      document.body.toggleAttribute('data-study-poster', usePoster);
       show(active);
     };
 
     function schedule() {
-      if (!frame && (nearby || useFinishStudy.getState().active))
-        frame = requestAnimationFrame(update);
+      if (!frame) frame = requestAnimationFrame(update);
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        nearby = entry.isIntersecting;
+    function onPosterLoad(event: Event) {
+      if (event.target instanceof HTMLImageElement && event.target.closest('.contact-poster'))
         schedule();
-      },
-      { rootMargin: '160px 0px' },
-    );
+    }
+
+    const observer = new IntersectionObserver(schedule, { rootMargin: '160px 0px' });
     observer.observe(film);
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     motion.addEventListener('change', schedule);
+    document.addEventListener('load', onPosterLoad, true);
     update();
     return () => {
       observer.disconnect();
@@ -73,6 +78,8 @@ export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady:
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       motion.removeEventListener('change', schedule);
+      document.removeEventListener('load', onPosterLoad, true);
+      document.body.removeAttribute('data-study-poster');
       film.removeAttribute('data-study-matched');
       film.removeAttribute('data-study-leaving');
       show(false);

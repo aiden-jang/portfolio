@@ -51,7 +51,7 @@ export function CameraRig({ getScrollT, lineup }: { getScrollT: () => number; li
 
   useFrame((three, dt) => {
     const { refs, hasManualView, renderFinish } = useAppStore.getState();
-    if (lineup || renderFinish) return contactArrival(null, dt, false);
+    if (lineup || renderFinish) return contactArrival(null, false);
     const s = state.current,
       kf = baseKf.current;
     const { width, height } = three.size;
@@ -59,7 +59,7 @@ export function CameraRig({ getScrollT, lineup }: { getScrollT: () => number; li
       scrollT = getScrollT();
     const aspect = height > 0 ? width / height : FRAME_BASE_ASPECT;
     interpolateKeyframe(KEYFRAMES, scrollT, kf, width < 768 ? 12 : undefined);
-    contactArrival(kf, dt, reduced, isCleanMode ? 1 : scrollT);
+    contactArrival(kf, reduced, isCleanMode ? 1 : scrollT);
     updateIntroFov(camera, width, scrollT);
     const swing = isCleanMode ? 0 : openingOrbit(s, camera, dt, reduced, scrollT, width, aspect);
     const studioShot = updateCameraView(s, dt, reduced, scrollT, width);

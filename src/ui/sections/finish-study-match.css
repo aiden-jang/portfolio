@@ -1,18 +1,29 @@
 @media (prefers-reduced-motion: no-preference) and (min-height: 500px) {
-  html:root body[data-study-match] #sec-about {
+  html:root body[data-study-poster] #sec-contact .contact-poster {
+    position: fixed;
+    height: var(--contact-scene-height);
+  }
+  html:root body:is([data-study-match], [data-study-poster]) #sec-about {
     background: linear-gradient(
       var(--color-bg) 0 var(--study-start),
       transparent var(--study-start)
     );
   }
-  html:root body[data-study-match] #sec-about :is(.scroll-film-track, .scroll-film),
-  html:root body[data-study-match] #sec-about .scroll-film::before {
+  html:root
+    body:is([data-study-match], [data-study-poster])
+    #sec-about
+    :is(.scroll-film-track, .scroll-film),
+  html:root body:is([data-study-match], [data-study-poster]) #sec-about .scroll-film::before {
     background: none;
   }
-  html:root body[data-study-match] #sec-about .scroll-film :is(video, canvas, .finish-poster) {
+  html:root
+    body:is([data-study-match], [data-study-poster])
+    #sec-about
+    .scroll-film
+    :is(video, canvas, .finish-poster) {
     visibility: hidden;
   }
-  html:root body[data-study-match] .portfolio-chrome #sec-contact::after {
+  html:root body:is([data-study-match], [data-study-poster]) .portfolio-chrome #sec-contact::after {
     display: none;
   }
   #sec-about .scroll-film-track[data-study-matched] .film-heading,
@@ -24,7 +35,10 @@
 }
 
 @media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
-  html:root body[data-study-match] #sec-contact .contact-copy-block:not(:focus-within) {
+  html:root
+    body:is([data-study-match], [data-study-poster])
+    #sec-contact
+    .contact-copy-block:not(:focus-within) {
     clip-path: inset(0 var(--match-email-mask, 100%) 0 0);
   }
 }

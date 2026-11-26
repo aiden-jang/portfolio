@@ -6,22 +6,18 @@ import {
   finishStudySpan,
   finishStudyStart,
 } from '../../three/finishStudy';
+import { ContactPoster } from './ContactPoster';
 import { useFinishStudyMatch } from './useFinishStudyMatch';
 import { useEffect, useRef } from 'react';
 import { FINISH_MEDIA, finishFrames } from './finishFrames';
 import './about-framing.css';
 const narrowQuery = '(max-width: 767px)';
 
-function FinishPoster({ finish }: { finish: 'clay' | 'paint' }) {
+function ClayPoster() {
   return (
-    <picture className={'finish-poster finish-poster-' + finish} aria-hidden="true">
-      <source media={narrowQuery} srcSet={FINISH_MEDIA + 'mobile-' + finish + '.webp'} />
-      <img
-        src={FINISH_MEDIA + 'desktop-' + finish + '.webp'}
-        alt=""
-        loading="lazy"
-        decoding="async"
-      />
+    <picture className="finish-poster" aria-hidden="true">
+      <source media={narrowQuery} srcSet={FINISH_MEDIA + 'mobile-clay.webp'} />
+      <img src={FINISH_MEDIA + 'desktop-clay.webp'} alt="" loading="lazy" decoding="async" />
     </picture>
   );
 }
@@ -154,8 +150,8 @@ export function AboutFraming() {
     <figure id="f40-study" className="about-framing-study" aria-labelledby="finish-study-title">
       <div className="scroll-film-track" ref={track}>
         <div className="scroll-film">
-          <FinishPoster finish="clay" />
-          <FinishPoster finish="paint" />
+          <ClayPoster />
+          <ContactPoster className="finish-poster finish-poster-paint" />
           <video ref={video} muted playsInline preload="auto" aria-hidden="true" />
           <canvas ref={canvas} width={352} height={760} hidden aria-hidden="true" />
 

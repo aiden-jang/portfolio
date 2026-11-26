@@ -307,9 +307,6 @@ html:root :is(a, button, summary):focus-visible {
   html:root .garage-project-featured figcaption:not(.project-proof) {
     display: none;
   }
-  html:root #sec-contact {
-    min-height: max(100svh, 780px);
-  }
   html:root #sec-contact h2 {
     font-size: 64px;
   }

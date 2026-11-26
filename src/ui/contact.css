@@ -1,3 +1,7 @@
+.portfolio-chrome {
+  --contact-scene-height: max(100svh, 700px);
+}
+
 .contact-poster,
 .contact-poster img {
   position: absolute;
@@ -6,6 +10,13 @@
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+}
+
+@media (min-width: 900px) {
+  .contact-poster img,
+  .finish-poster-paint img {
+    object-position: right center;
+  }
 }
 
 #sec-contact .panel > * {
@@ -17,7 +28,7 @@
   user-select: text;
   -webkit-user-select: text;
   position: relative;
-  min-height: max(100svh, 700px);
+  min-height: var(--contact-scene-height);
   align-items: center;
   justify-content: center;
   padding: 128px var(--contact-gutter);
@@ -147,9 +158,11 @@
 }
 
 @media (max-width: 899px) {
+  .portfolio-chrome {
+    --contact-scene-height: max(100dvh, 780px);
+  }
   #sec-contact {
     --contact-gutter: 6vw;
-    min-height: max(100svh, 780px);
     align-items: flex-start;
     padding-top: 112px;
   }

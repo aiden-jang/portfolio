@@ -191,7 +191,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         ).toBeVisible();
         await expect(study.locator('.finish-poster-paint img')).toHaveAttribute(
           'src',
-          '/showroom/finish-study/desktop-paint.webp',
+          '/showroom/contact/desktop.webp',
         );
         const frame = await study.boundingBox();
         const reel = await target.locator('.about-reel').boundingBox();

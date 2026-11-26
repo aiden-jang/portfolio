@@ -62,7 +62,7 @@ export const KEYFRAMES: Keyframe[] = [
   { azimuth: 1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // experience: side (right)
   { azimuth: Math.PI, elevation: 0.22, distance: 8.6, targetY: 0.7 }, // more projects: rear
   { azimuth: -1.45, elevation: 0.18, distance: 7.4, targetY: 0.6 }, // about:      side (left)
-  { azimuth: 0, elevation: 0.62, distance: 9, targetY: 0.7 }, // contact:    elevated front
+  { azimuth: 0.55, elevation: 0.099, distance: 9, targetY: 0.7 }, // contact:    low front three-quarter
 ];
 
 export const SECTION_IDS = [

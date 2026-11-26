@@ -1,8 +1,6 @@
 import { finishStudyFrame, useFinishStudy } from './finishStudy';
-import { useRef } from 'react';
 import { KEYFRAMES } from '../config';
 import type { Keyframe } from '../types';
-import { contactArrivalProgress, easeOutCubic } from './cameraPose';
 import { useThree } from '@react-three/fiber';
 import { PerspectiveCamera, type Camera } from 'three';
 import { CONTACT_DESKTOP_MIN_WIDTH, contactFrame } from './contactFrame';
@@ -11,13 +9,10 @@ import { clamp } from '../math';
 
 export function useContactArrival() {
   const { camera, size } = useThree();
-  const arrival = useRef({ progress: 0 });
-  return (pose: Keyframe | null, dt: number, reduced: boolean, scroll = 1) => {
-    const state = arrival.current;
+  return (pose: Keyframe | null, reduced: boolean, scroll = 1) => {
     const study = !reduced && useFinishStudy.getState().active;
     const contact = pose && document.getElementById('sec-contact')?.getBoundingClientRect();
     if (!pose || !contact || (contact.top >= size.height && !study) || contact.bottom <= 0) {
-      state.progress = 0;
       if (pose && applyPhoneOpeningView(camera, size.width, size.height, scroll)) return;
       const aspect = size.width / size.height;
       if (
@@ -29,20 +24,19 @@ export function useContactArrival() {
       }
       return;
     }
-    state.progress = contactArrivalProgress(contact.top, size.height, state.progress, dt, reduced);
     Object.assign(pose, KEYFRAMES.at(-1)!);
-    const fixedArrival = !reduced && size.height >= 500;
-    const t = fixedArrival ? 1 : easeOutCubic(state.progress);
     const view = contactFrame({
       ...size,
       sectionHeight: contact.height,
       sectionTop: study ? finishStudyFrame.top : contact.top,
-      progress: t,
+      progress: 1,
     });
     const desktop = size.width >= CONTACT_DESKTOP_MIN_WIDTH;
     const p = finishStudyFrame.progress;
-    const rise = p * p * (3 - 2 * p);
-    if (study && desktop) view.offsetX += size.width * 0.13 * (1 - rise);
+    const paint = study ? p * p * (3 - 2 * p) : 1;
+    const clay = 1 - paint;
+    if (desktop) view.offsetX += size.width * 0.13 * clay;
+    else view.offsetY += view.fullHeight * 0.043 * paint;
     // Treat a tall Contact section as one scene and show only its current viewport slice.
     if (
       !camera.view?.enabled ||
@@ -62,15 +56,12 @@ export function useContactArrival() {
         view.height,
       );
     }
-    const contactElevation = desktop ? 0.63 : 0.61;
-    pose.azimuth = (desktop ? 0.38 : 0.29) * t;
-    pose.elevation = 0.12 + (contactElevation - 0.12) * t;
-    pose.distance = (10 + (pose.distance - 10) * t) * view.distanceMultiplier;
-    if (study) {
-      pose.azimuth += (desktop ? 0.46 : 0.42) * (1 - rise);
-      pose.elevation -= (desktop ? 0.4 : 0.31) * (1 - rise);
-      pose.distance *= 1 - (desktop ? 0.15 : 0.08) * (1 - rise);
-    }
+    const bearing = desktop ? pose.azimuth : 0.5;
+    const elevation = desktop ? pose.elevation : 0.135;
+    pose.azimuth = bearing + ((desktop ? 0.84 : 0.71) - bearing) * clay;
+    pose.elevation = elevation + ((desktop ? 0.23 : 0.3) - elevation) * clay;
+    pose.distance *= view.distanceMultiplier * (1 - (desktop ? 0.03 : 0.142) * paint);
+    pose.distance *= 1 - (desktop ? 0.15 : 0.08) * clay;
   };
 }
 

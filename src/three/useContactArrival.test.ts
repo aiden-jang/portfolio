@@ -39,26 +39,26 @@ it('restores the viewport projection when Contact leaves the screen', async () =
   const root = createRoot(host);
   try {
     await act(() => root.render(createElement(Probe)));
-    applyArrival({ ...KEYFRAMES.at(-1)! }, 0, true);
+    applyArrival({ ...KEYFRAMES.at(-1)! }, true);
     expect(camera.view?.enabled).toBe(true);
     expect(camera.aspect).toBeCloseTo(320 / 820);
 
     sectionTop = 600;
     const untouched = { ...KEYFRAMES[0] };
-    applyArrival(untouched, 0, true);
+    applyArrival(untouched, true);
     expect(camera.view?.enabled).toBe(false);
     expect(camera.aspect).toBeCloseTo(320 / 568);
     expect(untouched).toEqual(KEYFRAMES[0]);
 
-    applyArrival(untouched, 0, true, 0);
+    applyArrival(untouched, true, 0);
     expect(camera.view?.enabled).toBe(true);
-    applyArrival(null, 0, true);
+    applyArrival(null, true);
     expect(camera.view?.enabled).toBe(false);
     expect(camera.aspect).toBeCloseTo(320 / 568);
 
     Object.assign(size, { width: 390, height: 844 });
     sectionTop = 1000;
-    applyArrival(untouched, 0, true);
+    applyArrival(untouched, true);
     expect(camera.aspect).toBeCloseTo(390 / 844);
   } finally {
     await act(() => root.unmount());
@@ -81,12 +81,12 @@ it('updates the viewport crop when a short phone resizes inside the same tall se
   try {
     await act(() => root.render(createElement(Probe)));
     const pose = { ...KEYFRAMES.at(-1)! };
-    applyArrival(pose, 0, true);
-    expect(pose.azimuth).toBeCloseTo(0.29);
-    expect(pose.elevation).toBeCloseTo(0.61);
+    applyArrival(pose, true);
+    expect(pose.azimuth).toBeCloseTo(0.5);
+    expect(pose.elevation).toBeCloseTo(0.135);
     expect(camera.view?.height).toBe(740);
     size.height = 568;
-    applyArrival({ ...KEYFRAMES.at(-1)! }, 0, true);
+    applyArrival({ ...KEYFRAMES.at(-1)! }, true);
     expect(camera.view?.height).toBe(568);
     expect(camera.view?.fullHeight).toBe(820);
   } finally {
@@ -117,19 +117,46 @@ it('matches the fixed Contact pose at the end of the study on all three layouts'
       sectionTop = 0;
       useFinishStudy.setState({ active: false });
       const contact = { ...KEYFRAMES[0] };
-      applyArrival(contact, 0, false);
+      applyArrival(contact, false);
       const contactView = { ...camera.view };
       const study = { ...KEYFRAMES[0] };
       sectionTop = 1;
       useFinishStudy.setState({ active: true });
       Object.assign(finishStudyFrame, { progress: 1, top: 0 });
-      applyArrival(study, 0, false);
+      applyArrival(study, false);
       expect(study).toEqual(contact);
       expect(camera.view).toEqual(contactView);
       finishStudyFrame.progress = 0;
-      applyArrival(study, 0, false);
-      expect(study.elevation).toBeLessThan(contact.elevation);
+      applyArrival(study, false);
+      expect(study.elevation).toBeGreaterThan(contact.elevation);
     }
+  } finally {
+    await act(() => root.unmount());
+  }
+});
+
+it('keeps Contact fixed when motion is reduced or the window is too short for the live study', async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  Object.assign(size, { width: 844, height: 390 });
+  const section = document.createElement('section');
+  section.id = 'sec-contact';
+  let top = 150;
+  vi.spyOn(section, 'getBoundingClientRect').mockImplementation(
+    () => ({ top, bottom: top + 780, height: 780 }) as DOMRect,
+  );
+  const host = document.createElement('div');
+  document.body.append(section, host);
+  const root = createRoot(host);
+  try {
+    await act(() => root.render(createElement(Probe)));
+    const entering = { ...KEYFRAMES[0] };
+    applyArrival(entering, false);
+    const enteringView = { ...camera.view! };
+    top = 0;
+    const shown = { ...KEYFRAMES[0] };
+    applyArrival(shown, true);
+    expect(shown).toEqual(entering);
+    expect(camera.view?.offsetY).toBeCloseTo(enteringView.offsetY + 150);
   } finally {
     await act(() => root.unmount());
   }

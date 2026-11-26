@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { PNG } from 'pngjs';
 
 test('Contact shows its fixed car and email while the F40 is loading', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -20,6 +21,79 @@ test('Contact shows its fixed car and email while the F40 is loading', async ({ 
   }
   await expect(poster).toHaveCount(0);
 });
+
+for (const [width, height] of [
+  [1440, 900],
+  [390, 844],
+  [375, 667],
+]) {
+  test(`the F40 fallback holds through the Contact handoff at ${width} × ${height}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.addInitScript(() => {
+      const get = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (
+        this: HTMLCanvasElement,
+        type: string,
+        ...args: unknown[]
+      ) {
+        if (type.startsWith('webgl')) return null;
+        return Reflect.apply(get, this, [type, ...args]);
+      } as typeof get;
+    });
+    await page.goto('/#f40-study', { waitUntil: 'domcontentloaded' });
+    const track = page.locator('.scroll-film-track');
+    const contact = page.locator('#sec-contact');
+    const position = (offset: number) =>
+      contact.evaluate((el, distance) => {
+        scrollBy({ top: el.getBoundingClientRect().top - distance, behavior: 'instant' });
+      }, offset);
+    const outline = async () => {
+      const image = PNG.sync.read(await page.screenshot());
+      const bounds = [width, height, 0, 0];
+      for (let y = Math.floor(height * 0.25); y < height; y += 2) {
+        for (let x = 0; x < width; x += 2) {
+          const i = (image.width * y + x) * 4;
+          const [r, g, b] = image.data.subarray(i, i + 3);
+          if (r < 130 || r < g * 1.9 || r < b * 1.7) continue;
+          bounds[0] = Math.min(x, bounds[0]);
+          bounds[1] = Math.min(y, bounds[1]);
+          bounds[2] = Math.max(x, bounds[2]);
+          bounds[3] = Math.max(y, bounds[3]);
+        }
+      }
+      expect(bounds[2] - bounds[0]).toBeGreaterThan(width * 0.32);
+      return bounds;
+    };
+    await position(height * 0.4);
+    await expect(track).toHaveAttribute('data-study-matched', '');
+    await expect(page.locator('body')).toHaveAttribute('data-study-poster', '');
+    const held = await outline();
+    await position(0);
+    await expect(page.locator('body')).not.toHaveAttribute('data-study-poster');
+    await expect(contact.getByRole('link', { name: /me@aidenjang.com/ })).toBeInViewport();
+    const after = await outline();
+    expect(Math.max(...held.map((edge, axis) => Math.abs(edge - after[axis])))).toBeLessThanOrEqual(
+      2,
+    );
+
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await track.scrollIntoViewIfNeeded();
+    await track.getByRole('slider').fill('100');
+    const painted = track.locator('.finish-poster-paint img');
+    await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');
+    await expect(track.locator('video')).not.toHaveAttribute('src', /mp4/);
+    await expect
+      .poll(() => painted.evaluate((img: HTMLImageElement) => img.currentSrc))
+      .toBe(
+        await contact
+          .locator('.contact-poster img')
+          .evaluate((img: HTMLImageElement) => img.currentSrc),
+      );
+  });
+}
 
 test('a failed car download preserves the portfolio and can retry the original model', async ({
   page,

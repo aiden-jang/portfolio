@@ -84,7 +84,6 @@ html:root #sec-contact .contact-policy-links a {
 }
 @media (max-width: 767px) {
   html:root .portfolio-chrome #sec-contact {
-    min-height: max(100dvh, 780px);
     padding-top: max(calc(var(--portfolio-header-height) + 36px), 20svh);
   }
   html:root #sec-contact .contact-email-link {
