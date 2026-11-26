@@ -3,7 +3,7 @@ import { PhotoCapture } from './PhotoCapture';
 import { LoadingBar } from '../ui/LoadingBar';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
-import { SECTION_IDS, THEMES } from '../config';
+import { F40_INDEX, SECTION_IDS, THEMES } from '../config';
 import { Car } from './Car';
 import { CameraRig } from './CameraRig';
 import { lazy, Suspense } from 'react';
@@ -30,6 +30,10 @@ type Props = {
 };
 
 export function Scene({ getScrollT }: Props) {
+  // Let the F40 download and decode before compiling the showroom and its reflection.
+  const loadingInitialF40 = useAppStore(
+    (state) => state.carIndex === F40_INDEX && state.isCarLoading && !state.refs.carModel,
+  );
   const paused = useScenePaused();
   const active = useSceneActivity();
   const contactVisible = useAppStore((state) => state.isContactVisible);
@@ -45,11 +49,13 @@ export function Scene({ getScrollT }: Props) {
       <Canvas
         aria-hidden="true"
         frameloop={
-          paused ||
-          !active ||
-          (sectionIndex > 0 && sectionIndex < SECTION_IDS.length - 1 && !closing)
-            ? 'demand'
-            : 'always'
+          loadingInitialF40
+            ? 'never'
+            : paused ||
+                !active ||
+                (sectionIndex > 0 && sectionIndex < SECTION_IDS.length - 1 && !closing)
+              ? 'demand'
+              : 'always'
         }
         className="portfolio-scene !fixed inset-0 z-0"
         gl={{ antialias: true, powerPreference: 'high-performance' }}
@@ -66,20 +72,20 @@ export function Scene({ getScrollT }: Props) {
         <SceneHealth />
         <PhotoCapture />
         <Lights />
-        {studio && <StudioRoom />}
+        {studio && !loadingInitialF40 && <StudioRoom />}
         {lineup ? (
           <Suspense fallback={<Floor studio lineup={null} />}>
             <LineupScene />
           </Suspense>
         ) : (
-          <Floor studio={studio || closing} closing={closing && !garageStudio} />
+          !loadingInitialF40 && (
+            <Floor studio={studio || closing} closing={closing && !garageStudio} />
+          )
         )}
         <Car />
         <CameraRig getScrollT={getScrollT} lineup={lineup || garageStudio} />
         {garageStudio && <StudioRig />}
-        <Suspense fallback={null}>
-          <Effects />
-        </Suspense>
+        <Suspense fallback={null}>{!loadingInitialF40 && <Effects />}</Suspense>
       </Canvas>
       <LoadingBar />
     </>

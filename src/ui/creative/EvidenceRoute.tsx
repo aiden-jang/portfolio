@@ -6,19 +6,12 @@ import { OpenEvidence, type EvidenceFrame, type OpenEvidenceLink } from './evide
 import { type StoryId } from './storyRoutes';
 import './iodine-route.css';
 
-function animateRoute(update: () => void) {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !document.startViewTransition) {
-    update();
-    return;
-  }
-  const transition = document.startViewTransition(update);
-  void transition.ready.catch(() => {});
-}
-
 export function EvidenceRoute() {
   const [open, setOpen] = useState<StoryId | null>(null);
   const active = useRef<StoryId | null>(null);
   const restoreFrame = useRef(0);
+  const routeToken = useRef<symbol>();
+  const transition = useRef<ViewTransition | null>(null);
   const origin = useRef<{
     scrollY: number;
     link: HTMLAnchorElement;
@@ -30,27 +23,54 @@ export function EvidenceRoute() {
   const show = (value: StoryId | null) => {
     if (active.current === value) return;
     active.current = value;
+    const token = Symbol();
+    routeToken.current = token;
+    const previous = transition.current;
+    previous?.skipTransition();
+    transition.current = null;
     cancelAnimationFrame(restoreFrame.current);
     history.scrollRestoration = 'manual';
-    animateRoute(() => {
+    const bookmark = origin.current;
+    const restoreFocus = () => {
+      if (!bookmark || token !== routeToken.current) return;
+      restoreFrame.current = requestAnimationFrame(() => {
+        if (token !== routeToken.current) return;
+        window.scrollTo({ top: bookmark.scrollY, behavior: 'instant' });
+        bookmark.link.focus({ preventScroll: true });
+        document.title = bookmark.title;
+        history.scrollRestoration = bookmark.restoration;
+      });
+    };
+    const update = () => {
+      if (token !== routeToken.current) return;
       flushSync(() => setOpen(value));
       if (value) {
         window.scrollTo({ top: 0, behavior: 'instant' });
         document
           .querySelector<HTMLElement>('.creative-case-heading h1')
           ?.focus({ preventScroll: true });
-      } else if (origin.current) {
-        const bookmark = origin.current;
+      } else if (bookmark) {
         window.scrollTo({ top: bookmark.scrollY, behavior: 'instant' });
-        restoreFrame.current = requestAnimationFrame(() => {
-          if (active.current) return;
-          window.scrollTo({ top: bookmark.scrollY, behavior: 'instant' });
-          bookmark.link.focus({ preventScroll: true });
-          document.title = bookmark.title;
-          history.scrollRestoration = bookmark.restoration;
-        });
       }
-    });
+    };
+    if (
+      previous ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !document.startViewTransition
+    ) {
+      update();
+      if (!value) restoreFocus();
+      return;
+    }
+    const animation = document.startViewTransition(update);
+    transition.current = animation;
+    void animation.ready.catch(() => {});
+    // WebKit can still suppress focus while the outgoing case snapshot is on screen.
+    const finish = () => {
+      if (transition.current === animation) transition.current = null;
+      if (!value) restoreFocus();
+    };
+    void animation.finished.then(finish, finish);
   };
 
   useEffect(() => {
@@ -59,6 +79,8 @@ export function EvidenceRoute() {
     window.addEventListener('popstate', traverse);
     return () => {
       window.removeEventListener('popstate', traverse);
+      routeToken.current = undefined;
+      transition.current?.skipTransition();
       cancelAnimationFrame(restoreFrame.current);
     };
   }, []);
