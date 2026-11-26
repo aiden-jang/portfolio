@@ -33,7 +33,7 @@ export const Cat: ComponentType<{
   spot: number | null;
   roomPlay: {
     action: { kind: RoomAction; count: number } | null;
-    print?: readonly boolean[] | null;
+    print?: HTMLCanvasElement | null;
     onFirstFrame?: () => void;
     onPositions: (points: RoomPositions) => void;
     toy?: { current: { x: number; held: boolean } | null };

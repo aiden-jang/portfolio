@@ -11,6 +11,7 @@ const TOUCH_TAP_THRESHOLD_PX = 12;
 const HOLD_MS = 300;
 const HOLD_MOVE_TOLERANCE = 10;
 const SWIPE_DIRECTION_RATIO = 1.3;
+const TOUCH_SCROLL_INTENT_PX = 6;
 const DRAG_YAW_SENSITIVITY = 0.01;
 const DRAG_PITCH_SENSITIVITY = 0.006;
 const MIN_ELEVATION_FREE = -0.4;
@@ -142,9 +143,21 @@ export function useOrbitGesture(
         MAX_ELEVATION_FREE,
       );
     };
-    // Registered non-passive below, so an engaged hold can suppress the page scroll.
+    // Claim a horizontal drag before Safari can cancel its pointer stream.
     const onTouchMove = (e: TouchEvent) => {
-      if (startsWithHold && state.current.orbitHold && e.cancelable) e.preventDefault();
+      const s = state.current;
+      const finger = e.touches[0];
+      if (!e.cancelable || !s.isDown || !s.isTouch || e.touches.length !== 1 || !finger) return;
+      const horizontal = Math.abs(finger.clientX - s.startX);
+      const vertical = Math.abs(finger.clientY - s.startY);
+      if (
+        s.orbitHold ||
+        (!startsWithHold &&
+          horizontal >= TOUCH_SCROLL_INTENT_PX &&
+          horizontal >= vertical * SWIPE_DIRECTION_RATIO)
+      ) {
+        e.preventDefault();
+      }
     };
     const onPointerUp = (e: PointerEvent) => {
       if (activePointer !== e.pointerId) return;

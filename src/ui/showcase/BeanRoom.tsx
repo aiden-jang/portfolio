@@ -26,7 +26,7 @@ function roomClock(hour: number) {
   };
 }
 
-export function BeanRoom({ print }: { print?: readonly boolean[] | null }) {
+export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
   const room = useRef<HTMLDivElement>(null);
   useIdleDetail(room);
   const live = useRef<HTMLDivElement>(null);
@@ -89,7 +89,7 @@ export function BeanRoom({ print }: { print?: readonly boolean[] | null }) {
     const frame = live.current;
     if (!layer || !frame) return;
     const center = String(positions.center);
-    const artCenter = String((positions.center + positions.picture) / 2 + 0.012);
+    const artCenter = String((positions.center + positions.picture) / 2 + 0.004);
     if (frame.style.getPropertyValue('--bean-picture-focus-x') !== artCenter)
       frame.style.setProperty('--bean-picture-focus-x', artCenter);
     if (frame.style.getPropertyValue('--bean-focus-x') !== center)

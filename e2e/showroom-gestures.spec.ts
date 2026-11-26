@@ -4,19 +4,23 @@ test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true
 
 type Point = { x: number; y: number };
 
-async function swipe(device: CDPSession, from: Point, to: Point, during?: () => Promise<void>) {
-  await device.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [from] });
+async function swipe(device: CDPSession, path: Point[], during?: () => Promise<void>) {
+  await device.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [path[0]!] });
   try {
-    for (let step = 1; step <= 8; step++) {
-      await device.send('Input.dispatchTouchEvent', {
-        type: 'touchMove',
-        touchPoints: [
-          {
-            x: from.x + ((to.x - from.x) * step) / 8,
-            y: from.y + ((to.y - from.y) * step) / 8,
-          },
-        ],
-      });
+    for (let i = 1; i < path.length; i++) {
+      const from = path[i - 1]!;
+      const to = path[i]!;
+      for (let step = 1; step <= 8; step++) {
+        await device.send('Input.dispatchTouchEvent', {
+          type: 'touchMove',
+          touchPoints: [
+            {
+              x: from.x + ((to.x - from.x) * step) / 8,
+              y: from.y + ((to.y - from.y) * step) / 8,
+            },
+          ],
+        });
+      }
     }
     await during?.();
   } finally {
@@ -24,7 +28,7 @@ async function swipe(device: CDPSession, from: Point, to: Point, during?: () => 
   }
 }
 
-test('a phone can orbit on the first sideways swipe and still scroll vertically', async ({
+test('a phone keeps an orbit through a vertical turn and still scrolls on a new swipe', async ({
   page,
   context,
   browserName,
@@ -34,12 +38,23 @@ test('a phone can orbit on the first sideways swipe and still scroll vertically'
   await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
   await expect(page.getByText('Swipe sideways to orbit.')).toBeVisible();
   const input = await context.newCDPSession(page);
-  await swipe(input, { x: 280, y: 480 }, { x: 116, y: 481 }, async () => {
-    await expect(page.locator('body')).toHaveClass(/orbiting/);
-    expect(await page.evaluate(() => scrollY)).toBeLessThan(5);
-  });
+  await swipe(
+    input,
+    [
+      { x: 280, y: 480 },
+      { x: 160, y: 481 },
+      { x: 116, y: 370 },
+    ],
+    async () => {
+      await expect(page.locator('body')).toHaveClass(/orbiting/);
+      expect(await page.evaluate(() => scrollY)).toBeLessThan(5);
+    },
+  );
   await expect(page.locator('body')).not.toHaveClass(/orbiting/);
-  await swipe(input, { x: 340, y: 600 }, { x: 344, y: 365 });
+  await swipe(input, [
+    { x: 340, y: 600 },
+    { x: 344, y: 365 },
+  ]);
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(80);
   await expect(page.locator('body')).not.toHaveClass(/orbiting/);
 });

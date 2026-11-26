@@ -631,9 +631,6 @@ html:root #sec-contact {
   .batch-lane .batching-controls button {
     font-size: 12px;
   }
-  html:root #sec-contact {
-    padding-top: calc(var(--portfolio-header-height) + 24px);
-  }
   .about-framing-notes {
     padding-block: 5px 10px;
   }

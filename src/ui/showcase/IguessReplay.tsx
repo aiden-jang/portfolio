@@ -119,7 +119,7 @@ export function IguessReplay({
   onPrint,
 }: {
   active: boolean;
-  onPrint: (print: readonly boolean[] | null) => void;
+  onPrint: (print: HTMLCanvasElement | null) => void;
 }) {
   const demo = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);

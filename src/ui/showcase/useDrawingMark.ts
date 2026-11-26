@@ -70,14 +70,15 @@ export function useDrawingMark(canvas: RefObject<HTMLCanvasElement>) {
       const width = Math.max(1, Math.max(...points.map(([x]) => x)) - minX);
       const height = Math.max(1, Math.max(...points.map(([, y]) => y)) - minY);
       const paper = document.createElement('canvas');
-      paper.width = 15;
-      paper.height = 9;
+      paper.width = 300;
+      paper.height = 180;
       const ink = paper.getContext('2d');
       if (!ink) return null;
-      const scale = Math.min(12 / width, 6 / height);
+      const scale = Math.min(220 / width, 138 / height);
       const xOffset = (paper.width - width * scale) / 2;
       const yOffset = (paper.height - height * scale) / 2;
-      ink.lineWidth = 1.5;
+      ink.strokeStyle = '#493966';
+      ink.lineWidth = Math.max(4, Math.min(12, 6 * scale));
       ink.lineCap = 'round';
       ink.lineJoin = 'round';
       for (const path of paths.current) {
@@ -93,11 +94,7 @@ export function useDrawingMark(canvas: RefObject<HTMLCanvasElement>) {
         });
         ink.stroke();
       }
-      const rgba = ink.getImageData(0, 0, paper.width, paper.height).data;
-      return Array.from(
-        { length: paper.width * paper.height },
-        (_, index) => rgba[index * 4 + 3] > 92,
-      );
+      return paper;
     },
     start: (redraw: () => void) => (event: PointerEvent<HTMLCanvasElement>) => {
       if (event.button !== 0 || pointer.current !== null) return;

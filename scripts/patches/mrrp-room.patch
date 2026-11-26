@@ -54,7 +54,7 @@ diff --git a/Cat.tsx b/Cat.tsx
    collectionKey?: string;
 +  roomPlay?: {
 +    action: RoomPlayAction | null;
-+    print?: readonly boolean[] | null;
++    print?: HTMLCanvasElement | null;
 +    onFirstFrame?: () => void;
 +    onPositions: (points: RoomPlayPositions) => void;
 +    toy?: { current: { x: number; held: boolean } | null };
@@ -161,24 +161,25 @@ diff --git a/Cat.tsx b/Cat.tsx
          const steamAge = t - mugSteamedAt.current;
          if (!reduce && steamAge >= 0 && steamAge < MUG_STEAM_MS) {
            const p = steamAge / MUG_STEAM_MS;
-@@ -1753,7 +1832,15 @@
+@@ -1753,7 +1832,16 @@
        rect(18, 14, FRAME.w, FRAME.h, mixHex(sc.wallBottom, INK, 0.12));
        const fx = FRAME_X + shake("frame");
        const drawn = doodleRef.current;
 -      if (drawn) {
 +      if (room?.print) {
 +        blit(FRAME_EMPTY, fx, 12, { w: INK, f: "#c69a63", h: "#ffeac8" });
-+        for (let dy = 0; dy < FRAME_HOLE.h; dy++) {
-+          for (let dx = 0; dx < FRAME_HOLE.w; dx++) {
-+            if (room.print[dy * FRAME_HOLE.w + dx])
-+              px(fx + FRAME_HOLE.x + dx, 12 + FRAME_HOLE.y + dy, "#493966");
-+          }
-+        }
++        g.drawImage(
++          room.print,
++          Math.round((fx + FRAME_HOLE.x - cam) * raster.scale),
++          Math.round((12 + FRAME_HOLE.y) * raster.scale),
++          FRAME_HOLE.w * raster.scale,
++          FRAME_HOLE.h * raster.scale,
++        );
 +      } else if (drawn) {
          blit(FRAME_EMPTY, fx, 12, { w: INK, f: "#c69a63", h: "#cfe0e4" });
          for (let dy = 0; dy < FRAME_HOLE.h; dy++) {
            for (let dx = 0; dx < FRAME_HOLE.w; dx++) {
-@@ -1912,6 +1999,14 @@
+@@ -1912,6 +2000,14 @@
        const boxPlaying = !reduce && boxHere && t < boxTaps.current.playUntil;
        if (boxHere) {
          blit(BOX_BACK, BOX_X + shake("box"), BOX_Y, { w: INK, k: "#c69a63", s: "#a97f4d" });
@@ -193,7 +194,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        }
 
        if (!reduce) {
-@@ -2032,9 +2127,23 @@
+@@ -2032,9 +2128,23 @@
                                    ? warmSeat(sc.catX * GW)
                                    : sc.catX * GW;
        const bounded = (x: number) => Math.max(CAT_REACH_LEFT, Math.min(GW - CAT_REACH_RIGHT, x));
@@ -219,7 +220,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        let kx = Math.round(catX.current);
 
        const m = reduce ? null : mothAt(t, beamX);
-@@ -2114,12 +2223,18 @@
+@@ -2114,12 +2224,18 @@
          slowBlink.current.until = t + SLOW_BLINK_MS;
        }
 
@@ -239,7 +240,7 @@ diff --git a/Cat.tsx b/Cat.tsx
          eyesRef.current ||
          nameCalled ||
          mouseVisiting ||
-@@ -2170,7 +2285,7 @@
+@@ -2170,7 +2286,7 @@
          play("bell");
        }
        wasWalking.current = walking;
@@ -248,7 +249,7 @@ diff --git a/Cat.tsx b/Cat.tsx
          boxPlaying || peeking
            ? "peek"
            : stretching
-@@ -2201,6 +2316,13 @@
+@@ -2201,6 +2317,13 @@
                            : sittingRef.current && !walking
                              ? "loaf"
                              : (sc.pose ?? (sc.atDoor ? "stand" : posed ? "sit" : "loaf"));
@@ -262,7 +263,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const sp = POSES[pose]!;
        const comfort = comfortMoment({
          time: t,
-@@ -2225,10 +2347,33 @@
+@@ -2225,10 +2348,33 @@
            boxPlaying,
            peeking,
            peekUntil: boxPeekUntil.current,
@@ -299,7 +300,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const litSpan =
          sc.lightPhase === "night"
            ? 0
-@@ -2276,6 +2421,22 @@
+@@ -2276,6 +2422,22 @@
          }
        }
 
@@ -322,7 +323,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        polish.cozyLight(rect, sc, kx, ky);
        if (sc.moodVisual === "warm-pool") {
          const warmth = mixHex(sc.floorNear, "#f3c985", 0.62);
-@@ -2316,6 +2477,12 @@
+@@ -2316,6 +2478,12 @@
          px(step.x + 2, ky + 2, ink);
        }
 
@@ -335,7 +336,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const lean = (beamX - WINDOW_CENTER_X) / GW;
        const cast = Math.round(lean * 7 * Math.min(1, sc.sun * 1.4));
        const shadowX = kx - (sp.w >> 1);
-@@ -2328,7 +2495,7 @@
+@@ -2328,7 +2496,7 @@
          : Math.round(Math.sin(t / (620 - sc.play * 380)) * (1 + sc.play * 2 + n) * comfort.tailEase);
        const tailX =
          pose === "loaf" ? kx + 8 : pose === "stretch" ? kx + 14 : pose === "pounce" ? kx + 9 : kx + 5;
@@ -344,7 +345,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        if (pose !== "peek") blit(TAIL, pose === "stand" ? kx - 12 : tailX, tailY + wag, pal, pose === "stand");
        if (raining && atTheGlass && awake) wetPaws.current = t + WET_PAWS_MS;
        if (walking && t < wetPaws.current && t > nextPrint.current) {
-@@ -2557,6 +2724,45 @@
+@@ -2557,6 +2725,45 @@
            rect(hx, hy + 2, 3, 1, c);
            px(hx + 1, hy + 3, c);
          }
@@ -390,7 +391,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        }
        if (boxHere) {
          blit(BOX_FRONT, BOX_X + shake("box"), BOX_Y + 3, { w: INK, k: "#d8ab72" });
-@@ -2642,7 +2848,12 @@
+@@ -2642,7 +2849,12 @@
 
        // Only the cat goes behind BOX_FRONT; otherwise the box hides floor treats.
        if (downRef.current && !trip.mugStillUp) {
@@ -404,7 +405,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        }
        if (treating) {
          const ty = FLOOR + 18;
-@@ -2795,10 +3006,35 @@
+@@ -2795,10 +3007,35 @@
          }
        }
 
@@ -442,7 +443,7 @@ diff --git a/Cat.tsx b/Cat.tsx
          const by = y + sp.oy - 12;
          rect(bx + 1, by, BW - 2, BH, WHITE);
          rect(bx, by + 1, BW, BH - 2, WHITE);
-@@ -2911,6 +3147,10 @@
+@@ -2911,6 +3148,10 @@
        }
 
        captureRef.current.painted();
@@ -453,7 +454,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        raf = requestAnimationFrame(frame);
      };
      raf = requestAnimationFrame(frame);
-@@ -2940,7 +3180,7 @@
+@@ -2940,7 +3181,7 @@
          borderRadius: 12,
          imageRendering: "pixelated",
          userSelect: "none",

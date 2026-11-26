@@ -36,18 +36,27 @@ for (const [width, height] of [
     await expect(page.getByRole('heading', { name: 'Let’s talk.', exact: true })).toBeAttached();
     await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
     await expect(async () => {
-      const copy = await page.locator('.contact-copy-block').boundingBox();
-      // Classic scrollbars reserve layout space that viewportSize includes.
-      const layoutWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      const { copy, contact, header, email, copyButton, layoutWidth } = await page.evaluate(() => {
+        const box = (selector: string) =>
+          document.querySelector(selector)!.getBoundingClientRect().toJSON();
+        return {
+          copy: box('.contact-copy-block'),
+          contact: box('#sec-contact'),
+          header: box('.portfolio-header'),
+          email: box('.contact-email-link'),
+          copyButton: box('.contact-copy'),
+          layoutWidth: document.documentElement.clientWidth,
+        };
+      });
       if (width >= 900) {
-        expect(copy!.x + copy!.width).toBeLessThan(layoutWidth / 2);
+        expect(copy.right).toBeLessThan(layoutWidth / 2);
+        expect(copy.top - contact.top).toBeCloseTo(Math.max(120, height * 0.17), 0);
       } else {
-        expect(Math.abs(copy!.x + copy!.width / 2 - layoutWidth / 2)).toBeLessThan(2);
+        expect(Math.abs(copy.left + copy.width / 2 - layoutWidth / 2)).toBeLessThan(2);
+        expect(email.top - header.bottom).toBeGreaterThanOrEqual(34);
+        expect(email.right).toBeLessThan(copyButton.left);
+        expect(copyButton.right).toBeLessThanOrEqual(layoutWidth);
       }
-      const contact = await page.locator('#sec-contact').boundingBox();
-      const header = await page.locator('.portfolio-header').boundingBox();
-      const inset = width >= 900 ? Math.max(120, height * 0.17) : header!.height + 24;
-      expect(copy!.y - contact!.y).toBeCloseTo(inset, 0);
     }).toPass({ timeout: 5000 });
     const copy = await page.locator('.contact-copy-block').boundingBox();
     const header = await page.locator('.portfolio-header').boundingBox();

@@ -26,7 +26,7 @@ export function Duet({
   const previous = useRef(-1);
   const lastLight = useRef(-1);
   const [drawingActive, setDrawingActive] = useState(true);
-  const [print, setPrint] = useState<readonly boolean[] | null>(null);
+  const [print, setPrint] = useState<HTMLCanvasElement | null>(null);
   const paint = useCallback((laneElement: HTMLElement, t: number) => {
     const scene = room.current!,
       sketch = drawing.current!,
