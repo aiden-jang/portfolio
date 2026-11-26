@@ -26,16 +26,45 @@ export function useBeanRoomRenderer(room: RefObject<HTMLDivElement>, onExit: () 
         },
       );
     }
+    const host = stage.closest('.duet') ?? stage;
+    let openingLink = false;
+    let linkFrame = 0;
+    const openLinkedRoom = () => {
+      if (location.hash !== '#project-mrrp') return;
+      prepareRoom();
+      setNear(true);
+      openingLink = true;
+      cancelAnimationFrame(linkFrame);
+      linkFrame = requestAnimationFrame(() => {
+        linkFrame = requestAnimationFrame(() => {
+          openingLink = false;
+        });
+      });
+    };
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry) return;
-        setNear(entry.isIntersecting);
-        if (entry.isIntersecting) prepareRoom();
-        else onExit();
+        if (entry.isIntersecting) {
+          setNear(true);
+          prepareRoom();
+        } else {
+          // The initial observer notification can precede the fragment scroll.
+          if (openingLink) return;
+          const bounds = stage.getBoundingClientRect();
+          if (
+            location.hash === '#project-mrrp' &&
+            bounds.bottom > -160 &&
+            bounds.top < innerHeight + 160
+          )
+            return;
+          setNear(false);
+          onExit();
+        }
       },
       { rootMargin: '160px 0px' },
     );
-    const host = stage.closest('.duet') ?? stage;
+    openLinkedRoom();
+    addEventListener('hashchange', openLinkedRoom);
     observer.observe(host);
     const approaching = new IntersectionObserver(
       ([entry]) => {
@@ -48,6 +77,8 @@ export function useBeanRoomRenderer(room: RefObject<HTMLDivElement>, onExit: () 
     approaching.observe(host);
     return () => {
       disposed = true;
+      cancelAnimationFrame(linkFrame);
+      removeEventListener('hashchange', openLinkedRoom);
       observer.disconnect();
       approaching.disconnect();
     };

@@ -53,6 +53,17 @@ for (const [width, height] of [
   });
 }
 
+test('a direct room link works on a short phone with reduced motion', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/#project-mrrp', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.duet')).toHaveAttribute('data-match', 'static');
+  const room = page.locator('#project-mrrp');
+  await room.getByRole('button', { name: 'Pet Bean', exact: true }).click();
+  await expect(room.getByRole('status')).toContainText('Bean leans in');
+  await expect(room.locator('.bean-room-canvas')).toHaveCSS('transform', 'none');
+});
+
 for (const width of [1440, 390]) {
   test(`Bean's visible controls work at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
