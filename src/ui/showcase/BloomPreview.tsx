@@ -59,12 +59,18 @@ export function BloomPreview({
   const [hasOpenedComposer, setHasOpenedComposer] = useState(false);
   const article = useRef<HTMLElement>(null);
   const write = useRef<HTMLButtonElement>(null);
+  const scene = useRef<HTMLDivElement>(null);
   const plot = useRef<HTMLDivElement>(null);
   useIdleDetail(plot);
   const draw = useCallback((progress: number) => {
     if (article.current) advanceGarden(article.current, progress);
   }, []);
-  const finishOnArrival = useTimedScene(plot, draw, { enabled: !composing, duration: 1650 });
+  // The flower close-up can be wider than its clipping area. Use the unscaled scene for visibility.
+  const finishOnArrival = useTimedScene(scene, draw, {
+    enabled: !composing,
+    duration: 1650,
+    startThreshold: 0.3,
+  });
   const settle = useCallback(
     (active: boolean) => {
       if (active) finishOnArrival(1, 0);
@@ -119,7 +125,7 @@ export function BloomPreview({
           <p className="sr-only">{description}</p>
         </header>
 
-        <div className="bloom-garden-scene">
+        <div ref={scene} className="bloom-garden-scene">
           <figure className="bloom-garden-letter" aria-live="polite" aria-atomic="true">
             <figcaption>{flower.name}</figcaption>
             <blockquote key={flower.name}>“{flower.meaning}”</blockquote>
