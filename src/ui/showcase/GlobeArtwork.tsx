@@ -42,7 +42,6 @@ export function GlobeArtwork({
               ? 'meanwhile. product interface'
               : 'Globe centered on the North Pacific, with the Kamchatka earthquake marked'
           }
-          lazy
           onReady={fallback ? undefined : onPosterReady}
           onUnavailable={fallback ? onScreenshotUnavailable : onPosterUnavailable}
         />
