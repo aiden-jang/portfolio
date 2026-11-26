@@ -150,7 +150,7 @@ for (const width of [1440, 390]) {
     const worth = page.getByRole('button', { name: 'Inspect screenshot: worth', exact: true });
     await expect(worth.locator('img').last()).toHaveAttribute(
       'src',
-      '/projects/worth-verdict.webp',
+      '/projects/scenes/wherever-pizza.jpg',
     );
     await worth.click();
     await expect(

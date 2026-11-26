@@ -1,3 +1,4 @@
+import { DinnerRating } from './showcase/DinnerRating';
 import { ProjectPair } from './showcase/ProjectPair';
 import { WorthRanking } from './showcase/WorthRanking';
 import { copyText } from '../browserSharing';
@@ -30,6 +31,7 @@ function ScreenshotProjectPreview({
   const image = states?.[selected]?.image ?? initialImage;
   const caption = states?.[selected]?.caption ?? initialCaption;
   const [open, setOpen] = useState(false);
+  const [dinnerUnavailable, setDinnerUnavailable] = useState(false);
   const [cropUnavailable, setCropUnavailable] = useState(false);
   const showWorthCrop = name === 'worth' && !cropUnavailable;
   const onCropUnavailable = useCallback(() => setCropUnavailable(true), []);
@@ -78,7 +80,9 @@ function ScreenshotProjectPreview({
           }}
           aria-label={`Inspect screenshot: ${name}`}
         >
-          {showWorthCrop ? (
+          {name === 'worth' && !dinnerUnavailable ? (
+            <DinnerRating onUnavailable={() => setDinnerUnavailable(true)} />
+          ) : showWorthCrop ? (
             <WorthRanking onUnavailable={onCropUnavailable} />
           ) : (
             <div className="preview-thumbnail">

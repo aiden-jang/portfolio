@@ -1,3 +1,4 @@
+import { ProjectHandoffs } from './showcase/ProjectHandoffs';
 import './connected-cut.css';
 import { RequestMatch } from './sections/RequestMatch';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -124,6 +125,7 @@ export function Sections() {
       <AboutSection />
       <ContactSection />
       <RequestMatch />
+      <ProjectHandoffs />
       <WorkModal
         item={activeWork}
         onClose={closeWork}

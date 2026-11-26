@@ -1,0 +1,199 @@
+.project-handoffs-art {
+  position: fixed;
+  inset: 0;
+  z-index: 28;
+  overflow: hidden;
+  pointer-events: none;
+}
+.project-handoffs-art > div {
+  position: absolute;
+  inset: 0 auto auto 0;
+  contain: layout paint;
+}
+.project-handoffs-art [hidden] {
+  display: none !important;
+}
+[data-carry='quake'] {
+  --depth-out: clamp(0, calc((0.24 - var(--pass)) * 8), 1);
+  --code-in: clamp(0, calc((var(--pass) - 0.53) * 4.2), 1);
+  background: color-mix(in srgb, #101c22, #20372b calc(var(--pass) * 100%));
+  border: 1px solid color-mix(in srgb, #638e91, #71a589 calc(var(--pass) * 100%));
+  border-radius: 6px;
+  color: #daeee6;
+  overflow: hidden;
+}
+.carried-depth {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  opacity: var(--depth-out);
+  font: 500 12px/1.3 var(--font-display);
+}
+.carried-depth > small {
+  color: #c4dfde;
+}
+.carried-depth-values {
+  display: flex;
+  gap: 14px;
+  padding-top: 8px;
+}
+.carried-depth-values span {
+  display: grid;
+  gap: 2px;
+}
+.carried-depth-values b {
+  font-size: clamp(19px, 2vw, 27px);
+  white-space: nowrap;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.carried-depth-values em {
+  font-size: 0.58em;
+  font-style: normal;
+}
+.carried-code {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  opacity: var(--code-in);
+  font: 550 var(--code-type-size, 20px)/1.2 var(--font-mono);
+  white-space: nowrap;
+  letter-spacing: -0.045em;
+  color: #ccecdc;
+}
+[data-carry='receipt'] {
+  border-radius: calc(9px * (1 - var(--pass)));
+  overflow: hidden;
+}
+[data-carry='receipt'] > img,
+.dinner-rating-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 53% 48%;
+}
+html #project-wherever .dinner-receipt {
+  opacity: calc(1 - var(--dinner-paper-exit, 0));
+}
+.dinner-rating {
+  display: grid;
+  grid-template-columns: minmax(0, 1.29fr) minmax(0, 1fr);
+  aspect-ratio: 2.42;
+  min-height: 154px;
+  overflow: hidden;
+  background: #29291f;
+  color: #29291f;
+  border-radius: 8px;
+  text-align: left;
+}
+.dinner-rating-media {
+  position: relative;
+  min-height: 0;
+}
+html:root #project-worth .project-preview img.dinner-rating-photo {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+  object-position: 53% 48%;
+}
+.dinner-rating-note {
+  display: flex;
+  background: #ebe5d4;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(10px, 2.8cqi, 22px);
+  text-align: center;
+}
+.dinner-rating-name {
+  font: 560 clamp(13px, 3.5cqi, 23px)/1.17 var(--font-display);
+  text-wrap: balance;
+}
+.dinner-rating-character {
+  flex: none;
+  width: clamp(44px, 15cqi, 94px);
+  height: auto;
+  margin-block: clamp(3px, 0.9cqi, 8px) 1px;
+}
+.dinner-rating-verdict {
+  font: 540 clamp(22px, 6.1cqi, 42px)/1 var(--font-display);
+  letter-spacing: -0.035em;
+}
+.dinner-rating-status {
+  margin-top: 5px;
+  color: #605b49;
+  font-size: clamp(11px, 2.3cqi, 14px);
+}
+@media (max-width: 767px) {
+  .dinner-rating {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    aspect-ratio: 1.94;
+  }
+}
+[data-carry='flower'] {
+  overflow: visible;
+  contain: none !important;
+}
+[data-carry='flower'] > i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 99px;
+  background: color-mix(in srgb, #71885f, #f6eed9 calc(var(--pass) * 100%));
+  transform: rotate(calc(39deg * var(--pass)));
+  opacity: clamp(0, calc((1 - var(--pass)) * 12), 1);
+}
+[data-carried-source],
+[data-carried-target] {
+  opacity: 0 !important;
+}
+
+html .portfolio-chrome #sec-work {
+  background: linear-gradient(180deg, #0c1117, #101b24 52svh, var(--color-bg) 144svh);
+}
+html #sec-work .earthquake-feature[data-comparing='false']::before {
+  mask-image: linear-gradient(transparent, #000 6% 88%, transparent);
+  opacity: 1;
+}
+html #sec-work #project-iodine .project-scene-body {
+  background:
+    radial-gradient(ellipse at 60% 52%, #192720, transparent 63%),
+    linear-gradient(#10181c, #131915 54%);
+}
+html #project-iodine .recovery-line[data-cut-landing] {
+  box-shadow: 0 0 0 5px #79ac8f20;
+  background: #618b6f24;
+  border-radius: 2px;
+}
+html #sec-more-work #project-bloomnote {
+  box-shadow: none;
+  border-top: 0;
+}
+html #project-bloomnote {
+  --garden-entry: clamp(24px, 4svh, 48px);
+  background: linear-gradient(180deg, var(--color-bg), var(--garden-paper) var(--garden-entry));
+}
+html #project-bloomnote .bloom-garden-inner {
+  padding-block-start: calc(var(--garden-entry) + clamp(17px, 2svh, 28px));
+}
+html #sec-more-work .bloom-gallery-rest {
+  background: linear-gradient(#191a19, #131317 190px);
+}
+html #sec-more-work #project-wherever .dinner-sequence {
+  background:
+    radial-gradient(ellipse at 70% 6%, #49352355, transparent 65%),
+    linear-gradient(180deg, #251c1b, #292019 52%, #1c1d15);
+}
+html #project-wherever .dinner-ticket-photo {
+  filter: brightness(calc(1 - 0.1 * var(--room-light-on-pizza, 0)))
+    sepia(calc(0.22 * var(--room-light-on-pizza, 0)));
+}
+html #sec-more-work .gallery-companions #project-worth {
+  background:
+    radial-gradient(ellipse at 76% 52%, #2b2a1c, transparent 64%), linear-gradient(#1c1d15, #171911);
+}

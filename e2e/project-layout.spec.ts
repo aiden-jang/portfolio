@@ -15,6 +15,9 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       } as typeof get;
     });
     if (width === 320) {
+      await page.route('**/projects/scenes/wherever-pizza.jpg', (route) =>
+        route.fulfill({ status: 404 }),
+      );
       await page.route('**/projects/worth-verdict.webp', (route) => route.fulfill({ status: 404 }));
       await page.route('**/projects/worth.jpg', (route) => route.fulfill({ status: 404 }));
     }
@@ -36,10 +39,12 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       await expect(worth.getByRole('button', { name: 'Inspect screenshot: worth' })).toBeDisabled();
       await expect(worth.locator('.garage-project-links a')).toHaveAttribute('target', '_blank');
     } else {
-      await expect(worth.getByText('Brooklyn Kura Sake Junmai', { exact: true })).toBeVisible();
-      const favorite = worth.getByText('Goose Island IPA', { exact: true });
-      await expect(favorite).toBeVisible();
-      await expect(favorite).toHaveCSS('grid-row-start', '1');
+      await expect(worth.getByText('Neighborhood Pizza Kitchen', { exact: true })).toBeVisible();
+      await expect(worth.getByText('Favorite.', { exact: true })).toBeVisible();
+      const character = await worth.locator('.dinner-rating-character').boundingBox();
+      const card = await worth.locator('.dinner-rating').boundingBox();
+      expect(character!.y).toBeGreaterThan(card!.y);
+      expect(character!.y + character!.height).toBeLessThan(card!.y + card!.height);
     }
     const bloom = page.locator('#project-bloomnote');
     await expect(bloom.getByRole('blockquote')).toContainText('For that brilliant laugh');
@@ -78,7 +83,9 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       items.map((item) => ({
         name: item.id,
         frame: item
-          .querySelector('.preview-thumbnail, .worth-focus, .project-pair, .platform-viewport')!
+          .querySelector(
+            '.preview-thumbnail, .dinner-rating, .worth-focus, .project-pair, .platform-viewport',
+          )!
           .getBoundingClientRect()
           .toJSON(),
         copy: item.querySelector('.garage-project-copy')!.getBoundingClientRect().toJSON(),
