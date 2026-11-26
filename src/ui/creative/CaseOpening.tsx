@@ -6,7 +6,6 @@ import { useContext } from 'react';
 import example from '../../data/iodineExample.json';
 import { IodineSession } from '../showcase/iodine-session';
 import { RecoveryEditor } from '../showcase/IodinePresentation';
-import { BatchingGraphic } from '../sections/BatchingSpread';
 import './case-opening.css';
 import type { EvidenceFrame } from './evidenceNavigation';
 
@@ -23,7 +22,9 @@ export function BatchingCaseOpening() {
           <p>Ad Slot Details load time</p>
         </div>
         <figure className="batching-spread batch-case-figure" data-phase="after">
-          <BatchingGraphic shared />
+          <svg viewBox="0 0 640 288" aria-hidden="true" className="batch-handoff-graphic">
+            <path d="M225 144h190" stroke="#c2e2d0" strokeWidth="5" strokeLinecap="round" />
+          </svg>
           <figcaption className="batching-readout">1 batched request</figcaption>
         </figure>
       </div>

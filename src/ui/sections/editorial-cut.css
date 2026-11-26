@@ -96,7 +96,8 @@ html:root #project-iodine .iodine-scene-content .recovery-line {
   width: 100%;
   max-width: none;
 }
-#batching-study .batching-spread :is(svg, .request-pulse) {
+#batching-study .request-pulse {
+  display: block;
   width: 100%;
   height: clamp(180px, 41svh, 456px);
 }
@@ -189,7 +190,7 @@ html:root #sec-more-work .gallery-companions .garage-project-copy p {
   #batching-study .experience-batch-copy h2 {
     font-size: clamp(42px, 12.5vw, 76px);
   }
-  #batching-study .batching-spread :is(svg, .request-pulse) {
+  #batching-study .request-pulse {
     height: clamp(170px, 30svh, 280px);
   }
   html:root #project-mrrp.room-shot .bean-room-controls {
@@ -231,24 +232,6 @@ html:root #sec-more-work .gallery-companions .garage-project-copy p {
     clip-path: inset(100% 0 0);
   }
 }
-.request-pulse .pulse-lines {
-  fill: none;
-  stroke: #739e87;
-  stroke-width: 1;
-  opacity: 0.21;
-}
-.request-pulse .pulse-requests {
-  fill: #ddbd8f;
-}
-.request-pulse .pulse-output,
-.request-pulse .pulse-time {
-  opacity: 0;
-}
-.request-pulse .pulse-time text {
-  fill: #ceead8;
-  font: 480 41px var(--font-display);
-  letter-spacing: -2px;
-}
 @media (prefers-reduced-motion: no-preference) and (min-height: 600px) {
   html:root .duet[data-match='draw'] .room-shot {
     clip-path: inset(100% 0 0) !important;
@@ -258,9 +241,6 @@ html:root #sec-more-work .gallery-companions .garage-project-copy p {
   }
 }
 
-#batching-study canvas.request-pulse {
-  display: block;
-}
 .duet[data-match='static'] .room-shot {
   clip-path: none !important;
 }

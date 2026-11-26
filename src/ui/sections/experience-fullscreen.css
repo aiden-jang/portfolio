@@ -3,7 +3,7 @@ html:root #sec-experience:has(.batch-lane) {
   overflow-x: clip;
 }
 .experience-content .batch-lane {
-  --batch-travel: min(64svh, 600px);
+  --batch-travel: min(35svh, 355px);
   position: relative;
   margin-top: 0;
   border: 0;
@@ -49,15 +49,6 @@ html:root #sec-experience:has(.batch-lane) {
 .batch-lane:has([data-phase='after']) .experience-batch-copy .experience-measure > span:last-child {
   color: #d9f1d7;
 }
-.experience-batch-description {
-  max-width: 35ch;
-  margin: 18px 0 4px;
-  color: #c8c9be;
-  font-size: clamp(14px, 1.25vw, 18px);
-}
-.experience-content .batching-spread .batching-controls {
-  padding: 10px 0 0;
-}
 #experience-history-title {
   margin-block: clamp(40px, 7svh, 80px) clamp(19px, 3.5svh, 40px);
   font-size: clamp(38px, 5vw, 70px);
@@ -71,14 +62,20 @@ html:root #sec-experience:has(.batch-lane) {
 .experience-content .experience-grid {
   padding-bottom: clamp(32px, 6svh, 58px);
 }
-@media (prefers-reduced-motion: no-preference) and (min-height: 700px) {
+@media (prefers-reduced-motion: no-preference) {
+  .experience-content .batch-lane .experience-lead {
+    position: sticky;
+    top: calc(var(--portfolio-header-height) + 4px);
+  }
   .experience-content .batch-lane::after {
+    content: '';
+    display: block;
     height: var(--batch-travel);
   }
 }
 @media (max-width: 767px) {
   .experience-content .batch-lane {
-    --batch-travel: min(39svh, 315px);
+    --batch-travel: min(24svh, 205px);
   }
   .experience-content .batch-lane .experience-lead {
     grid-template-columns: minmax(0, 1fr);
@@ -93,15 +90,17 @@ html:root #sec-experience:has(.batch-lane) {
     margin-top: 20px;
     font-size: clamp(48px, 15vw, 68px);
   }
-  .experience-batch-description {
-    margin-top: 11px;
-  }
   .experience-content .experience-employer {
     padding-block: 10px 12px;
   }
 }
 
-@media (prefers-reduced-motion: reduce), (max-height: 699px) {
+@media (max-height: 699px) {
+  .experience-content .batch-lane {
+    --batch-travel: min(29svh, 175px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
   html:root #sec-experience:has(.batch-lane) {
     padding-block-start: var(--portfolio-header-height);
   }

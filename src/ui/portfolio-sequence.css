@@ -522,16 +522,6 @@ html:root #sec-work #project-iodine .project-scene-body {
   border: 0;
   background: transparent;
 }
-.batch-lane .batching-controls {
-  padding: 0 0 8px;
-}
-.batch-lane .batching-plot {
-  padding: clamp(12px, 2.4vw, 36px);
-  gap: 8px;
-}
-.batch-lane .batching-graphic {
-  min-height: clamp(84px, 13svh, 155px);
-}
 html:root #sec-experience {
   padding-bottom: 0;
 }
@@ -579,15 +569,6 @@ html:root #sec-contact {
   margin-top: 8px;
 }
 @media (prefers-reduced-motion: no-preference) and (min-height: 700px) {
-  .batch-lane::after {
-    display: block;
-    content: '';
-    height: min(78svh, 660px);
-  }
-  .batch-lane .experience-lead {
-    position: sticky;
-    top: calc(var(--portfolio-header-height) + 4px);
-  }
   .scroll-film .film-heading {
     transition: opacity 0.2s;
   }
@@ -612,24 +593,8 @@ html:root #sec-contact {
   .gallery-companions .project-card-media {
     max-width: none;
   }
-  .batch-lane .batching-plot {
-    padding: 12px 10px;
-  }
-  .batch-lane .batching-plot h4 {
-    font-size: 15px;
-  }
-  .batch-lane .batching-plot p {
-    font-size: 12px;
-  }
-  .batch-lane .experience-spread-heading {
-    margin-bottom: 12px;
-    row-gap: 8px;
-  }
   .batch-lane .experience-lead {
     padding-top: 12px;
-  }
-  .batch-lane .batching-controls button {
-    font-size: 12px;
   }
   .about-framing-notes {
     padding-block: 5px 10px;

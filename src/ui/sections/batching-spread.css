@@ -8,16 +8,6 @@
   width: 100%;
   padding: clamp(7px, 2vw, 21px);
 }
-.batching-marks rect {
-  fill: #ddc49f;
-}
-.batching-packet {
-  opacity: 0;
-  stroke: #c2e2d0;
-  stroke-width: 5;
-  stroke-linecap: round;
-  transform-origin: 320px 144px;
-}
 .batching-spread .batching-readout {
   color: #d4b993;
   font: 480 clamp(12px, 1.35vw, 16px)/1.3 var(--font-mono);
@@ -26,85 +16,6 @@
 .batching-spread[data-phase='after'] .batching-readout {
   color: #c2e2d0;
 }
-.batching-spread[data-phase='after'] .batching-marks {
-  opacity: 0;
-}
-.batching-spread[data-phase='after'] .batching-packet {
-  opacity: 1;
-}
-.batching-controls,
-.batching-states {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.batching-controls {
-  justify-content: space-between;
-  padding-top: 12px;
-}
-.batching-controls button {
-  min-height: 44px;
-  padding-inline: clamp(9px, 1.45vw, 16px);
-  border-radius: 5px;
-  color: #c5c7bf;
-  font-size: 13px;
-  white-space: nowrap;
-}
-.batching-states button[aria-pressed='true'],
-.batching-controls button:hover {
-  background: #29362e;
-  color: #eff2ea;
-}
-.batching-controls button:focus-visible {
-  outline: 2px solid #d6ecdf;
-  outline-offset: 2px;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .batching-spread[data-driver='scroll'] .batching-marks {
-    opacity: 1;
-  }
-  .batching-spread[data-driver='scroll'] .batching-marks rect {
-    animation: batch-converge 960ms calc(0ms - var(--batch-scroll-time)) both paused;
-  }
-  .batching-spread[data-driver='scroll'] .batching-packet {
-    animation: batch-unify 960ms calc(0ms - var(--batch-scroll-time)) both paused;
-  }
-}
-@keyframes batch-converge {
-  0%,
-  12% {
-    opacity: 1;
-    transform: none;
-  }
-  55% {
-    opacity: 0.78;
-    transform: translate(var(--merge-x), var(--merge-y));
-  }
-  68%,
-  100% {
-    opacity: 0;
-    transform: translate(var(--merge-x), var(--merge-y));
-  }
-}
-@keyframes batch-unify {
-  0%,
-  53% {
-    opacity: 0;
-    transform: scaleX(0.12) scaleY(0.08);
-  }
-  76%,
-  100% {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) and (min-height: 700px) {
-  .batching-controls {
-    display: none;
-  }
-}
-
 #batching-study .batching-readout {
   text-align: center;
   padding: 0;

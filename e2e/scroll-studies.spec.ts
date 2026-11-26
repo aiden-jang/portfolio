@@ -51,9 +51,8 @@ for (const width of [1440, 390]) {
 
     const batch = page.locator('.batching-spread');
     await seekScene('.batch-lane', 0.25);
-    const position = () =>
-      batch.evaluate((el) => parseInt(el.style.getPropertyValue('--batch-scroll-time')));
-    await expect.poll(position).toBeGreaterThan(250);
+    const position = () => batch.evaluate((el) => Number(el.getAttribute('data-pulse')));
+    await expect.poll(position).toBeGreaterThan(0.25);
     const partialBatch = await position();
     // Wait longer than the former settle animation to catch a diagram that still moves at rest.
     await page.waitForTimeout(460);

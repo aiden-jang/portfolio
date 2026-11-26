@@ -121,55 +121,9 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     if (width === 1440 || width === 390) {
       const comparison = section.getByRole('figure', { name: 'Request batching comparison' });
       await expect(comparison).toHaveCSS('border-top-width', '0px');
-      await expect(comparison.locator('.batching-packet rect')).toHaveCount(0);
-      const before = comparison.getByRole('button', { name: 'Before', exact: true });
-      const after = comparison.getByRole('button', { name: 'After', exact: true });
-      const requestGrid = comparison.getByText('120 separate requests', { exact: true });
-      const batchedRequest = comparison.getByText('1 request · 2s load time', { exact: true });
-      const pulse = comparison.locator('canvas.request-pulse');
-      const frameAtRest = () => pulse.evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL());
-      await expect(batchedRequest).toBeVisible();
-      const reducedAfter = await frameAtRest();
-      await before.click();
-      await expect(requestGrid).toBeVisible();
-      const reducedBefore = await frameAtRest();
-      expect(reducedBefore).not.toBe(reducedAfter);
-      await expect(pulse).toHaveCSS('animation-name', 'none');
-      await page.emulateMedia({ reducedMotion: 'no-preference' });
-      const scrollToBatch = (progress: number) =>
-        section.locator('.batch-lane').evaluate((lane, amount) => {
-          const pinned = lane.firstElementChild as HTMLElement;
-          const inset = parseFloat(getComputedStyle(pinned).top) || 85;
-          const travel = (lane as HTMLElement).offsetHeight - pinned.offsetHeight;
-          scrollTo({
-            top: scrollY + lane.getBoundingClientRect().top - inset + travel * amount,
-            behavior: 'instant',
-          });
-        }, progress);
-      await scrollToBatch(-0.08);
-      await expect(requestGrid).toBeVisible();
-      await expect(before).toBeHidden();
-      await expect(after).toBeHidden();
-      await expect(comparison.getByRole('button', { name: 'Replay batching' })).toHaveCount(0);
-      await scrollToBatch(0.34);
-      await expect(comparison.getByText('Batching requests', { exact: true })).toBeVisible();
-      const middle = await frameAtRest();
-      await scrollToBatch(0.85);
-      await expect.poll(frameAtRest).not.toBe(middle);
-      await scrollToBatch(0.85);
-      await expect(batchedRequest).toBeVisible();
-      await expect(section.locator('.experience-measure')).toBeVisible();
-      await scrollToBatch(-0.08);
-      await expect(requestGrid).toBeVisible();
-      await expect.poll(frameAtRest).toBe(reducedBefore);
-      await page.emulateMedia({ reducedMotion: 'reduce' });
-      await expect(before).toBeVisible();
-      await expect(pulse).toHaveCSS('animation-name', 'none');
-      await after.click();
-      await expect(after).toHaveAttribute('aria-pressed', 'true');
-      await expect(batchedRequest).toBeVisible();
-      await before.click();
-      await expect(requestGrid).toBeVisible();
+      const result = comparison.getByText('1 request · 2s load time', { exact: true });
+      await expect(result).toBeVisible();
+      await expect(comparison.getByRole('button', { includeHidden: true })).toHaveCount(0);
       await lead.scrollIntoViewIfNeeded();
       const batchPosition = await page.evaluate(() => scrollY);
       await lead.click();
@@ -182,7 +136,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       );
       await page.goBack();
       await expect(lead).toBeFocused();
-      await expect(before).toHaveAttribute('aria-pressed', 'true');
+      await expect(result).toBeVisible();
       await expect
         .poll(() => page.evaluate((position) => Math.abs(scrollY - position), batchPosition))
         .toBeLessThan(2);
