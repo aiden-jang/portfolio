@@ -13,57 +13,6 @@
 .project-handoffs-art [hidden] {
   display: none !important;
 }
-[data-carry='quake'] {
-  --depth-out: clamp(0, calc((0.24 - var(--pass)) * 8), 1);
-  --code-in: clamp(0, calc((var(--pass) - 0.53) * 4.2), 1);
-  background: color-mix(in srgb, #101c22, #20372b calc(var(--pass) * 100%));
-  border: 1px solid color-mix(in srgb, #638e91, #71a589 calc(var(--pass) * 100%));
-  border-radius: 6px;
-  color: #daeee6;
-  overflow: hidden;
-}
-.carried-depth {
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  right: 12px;
-  opacity: var(--depth-out);
-  font: 500 12px/1.3 var(--font-display);
-}
-.carried-depth > small {
-  color: #c4dfde;
-}
-.carried-depth-values {
-  display: flex;
-  gap: 14px;
-  padding-top: 8px;
-}
-.carried-depth-values span {
-  display: grid;
-  gap: 2px;
-}
-.carried-depth-values b {
-  font-size: clamp(19px, 2vw, 27px);
-  white-space: nowrap;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.carried-depth-values em {
-  font-size: 0.58em;
-  font-style: normal;
-}
-.carried-code {
-  position: absolute;
-  left: 9px;
-  top: 50%;
-  right: 6px;
-  transform: translateY(-50%);
-  opacity: var(--code-in);
-  font: 550 var(--code-type-size, 20px)/1.2 var(--font-mono);
-  white-space: nowrap;
-  letter-spacing: -0.045em;
-  color: #ccecdc;
-}
 [data-carry='receipt'] {
   border-radius: calc(9px * (1 - var(--pass)));
   overflow: hidden;
@@ -164,11 +113,6 @@ html #sec-work #project-iodine .project-scene-body {
   background:
     radial-gradient(ellipse at 60% 52%, #192720, transparent 63%),
     linear-gradient(#10181c, #131915 54%);
-}
-html #project-iodine .recovery-line[data-cut-landing] {
-  box-shadow: 0 0 0 5px #79ac8f20;
-  background: #618b6f24;
-  border-radius: 2px;
 }
 html #sec-more-work #project-bloomnote {
   box-shadow: none;

@@ -38,7 +38,9 @@ export function useShowroomTransition() {
     if (!intro || !work || !contact) return;
 
     const root = document.documentElement;
+    root.setAttribute('data-featured-globe-cut', '');
     const { refs } = useAppStore.getState();
+    let workOffset = 0;
     let frame = 0;
     let visitedIntro = false;
     let highlighted = !!location.hash && location.hash !== '#sec-intro';
@@ -67,11 +69,14 @@ export function useShowroomTransition() {
       const contactTop = contact.getBoundingClientRect().top;
       const contactProgress = (h - contactTop) / h;
       const inContact = contactProgress > 0;
-      const workTop = work.getBoundingClientRect().top;
+      const workTop = work.getBoundingClientRect().top - workOffset;
       const handingOff = !reduced && !inContact && workTop > 1 && workTop < h;
       refs.floorReflection = 1;
       root.toggleAttribute('data-showroom-handoff', handingOff);
-      root.style.setProperty('--intro-exit-offset', handingOff ? workTop - h + 'px' : '0px');
+      const beforeCut = !reduced && workTop > h * 0.34;
+      root.toggleAttribute('data-before-globe-cut', beforeCut);
+      workOffset = !reduced && !beforeCut ? -Math.max(0, workTop - (phone ? 84 : 88)) : 0;
+      root.style.setProperty('--globe-cut-offset', workOffset + 'px');
 
       if (!reduced) {
         // Finish the fade where the dock stops fitting in the Intro viewport.
@@ -126,11 +131,13 @@ export function useShowroomTransition() {
       clearPulse();
       refs.floorReflection = 1;
       root.removeAttribute('data-showroom-handoff');
+      root.removeAttribute('data-featured-globe-cut');
+      root.removeAttribute('data-before-globe-cut');
       for (const name of [
         '--header-scrim',
         '--stage-opacity',
         '--garage-controls-opacity',
-        '--intro-exit-offset',
+        '--globe-cut-offset',
       ]) {
         root.style.removeProperty(name);
       }

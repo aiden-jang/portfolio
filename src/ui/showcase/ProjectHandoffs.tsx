@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { kamchatkaExample } from '../../data/kamchatkaExample';
 import { lerp } from '../../math';
 import { easedProgress } from '../../hooks/useScrollStudy';
 import './project-handoffs.css';
@@ -7,7 +6,7 @@ import { dinnerPhoto } from './DinnerRating';
 
 type Frame = { x: number; y: number; w: number; h: number };
 type Cut = {
-  id: 'quake' | 'receipt' | 'flower';
+  id: 'receipt' | 'flower';
   source: string;
   destination: string;
   ready: string;
@@ -16,14 +15,6 @@ type Cut = {
 };
 
 const cuts: Cut[] = [
-  {
-    id: 'quake',
-    source: '.quake-journey-readings',
-    destination: '#project-iodine .recovery-line',
-    ready: '.quake-journey-run[data-depth-readings]:not([data-quake-manual])',
-    start: 1.23,
-    end: 0.57,
-  },
   {
     id: 'receipt',
     source: '#project-wherever .dinner-ticket-photo',
@@ -51,20 +42,7 @@ function fit(element: HTMLElement, cut: Cut, from: boolean): Frame {
     const y = r.top + (r.height - 605 * k) / 2 + 137 * k;
     return { x, y, w: 9 * k, h: 46 * k };
   }
-  if (!from && cut.id === 'quake') {
-    return { x: r.left - 9, y: r.top - 8, w: r.width + 18, h: r.height + 16 };
-  }
   return { x: r.left, y: r.top, w: r.width, h: r.height };
-}
-
-function artwork(el: HTMLElement, cut: Cut, target: HTMLElement, p: number) {
-  el.style.setProperty('--pass', String(p));
-  if (cut.id === 'quake') {
-    const line = el.querySelector('.carried-code')!;
-    const text = target.innerText.trim();
-    el.style.setProperty('--code-type-size', getComputedStyle(target).fontSize);
-    if (line.textContent !== text) line.textContent = text ?? '';
-  }
 }
 
 export function ProjectHandoffs() {
@@ -126,47 +104,21 @@ export function ProjectHandoffs() {
           '--dinner-paper-exit',
           String(dinnerCarried ? easedProgress(p, 0.21, 0.54) : 0),
         );
-        source.toggleAttribute(
-          'data-carried-source',
-          (dinnerCarried && p > 0.01) || (!!floating && cut.id === 'quake'),
-        );
-        target.toggleAttribute(
-          'data-carried-target',
-          !!floating && (isDinner || (cut.id === 'quake' && p > 0.67)),
-        );
-        if (cut.id === 'quake') {
-          target.toggleAttribute(
-            'data-cut-landing',
-            motion.matches && !!origin && p > 0.8 && end.y > -80,
-          );
-        }
+        source.toggleAttribute('data-carried-source', dinnerCarried && p > 0.01);
+        target.toggleAttribute('data-carried-target', !!floating && isDinner);
         if (!floating || !origin) continue;
         const blend = easedProgress(p, 0.06, 0.99);
         const destinationY = isDinner ? height * cut.end : Math.min(end.y, height * 0.69);
-        const depthStrip = cut.id === 'quake';
-        const vertical = isDinner
-          ? easedProgress(p, 0.36, 0.99)
-          : depthStrip
-            ? easedProgress(p, 0.28, 0.99)
-            : blend;
-        const stripHeight = depthStrip
-          ? lerp(
-              lerp(origin.h, 4, easedProgress(p, 0.04, 0.25)),
-              end.h,
-              easedProgress(p, 0.53, 0.94),
-            )
-          : lerp(origin.h, end.h, blend);
+        const vertical = isDinner ? easedProgress(p, 0.36, 0.99) : blend;
         const x = lerp(origin.x, end.x, blend);
-        const sourceY = isDinner
-          ? Math.max(height * 0.11, start.y)
-          : origin.y + (depthStrip ? (origin.h - stripHeight) * 0.5 : 0);
+        const sourceY = isDinner ? Math.max(height * 0.11, start.y) : origin.y;
         const y =
           lerp(sourceY, destinationY, vertical) +
           (isDinner ? (end.y - destinationY) * easedProgress(p, 0.85, 1) : 0);
         item.style.transform = `translate3d(${x}px,${y}px,0)`;
         item.style.width = lerp(origin.w, end.w, blend) + 'px';
-        item.style.height = stripHeight + 'px';
-        artwork(item, cut, target, p);
+        item.style.height = lerp(origin.h, end.h, blend) + 'px';
+        item.style.setProperty('--pass', String(p));
       }
       const dinner = document.getElementById('project-wherever');
       if (dinner) {
@@ -222,29 +174,12 @@ export function ProjectHandoffs() {
       for (const scene of scenes) {
         scene.source?.removeAttribute('data-carried-source');
         scene.target?.removeAttribute('data-carried-target');
-        scene.target?.removeAttribute('data-cut-landing');
       }
     };
   }, []);
 
   return (
     <div ref={ref} className="project-handoffs-art" aria-hidden="true">
-      <div data-carry="quake" hidden>
-        <div className="carried-depth">
-          <small>Kamchatka · M{kamchatkaExample.sources[0].magnitude}</small>
-          <div className="carried-depth-values">
-            {kamchatkaExample.sources.map(({ name, depthKm }) => (
-              <span key={name}>
-                <small>{name}</small>
-                <b>
-                  {depthKm.toFixed(1)} <em>km</em>
-                </b>
-              </span>
-            ))}
-          </div>
-        </div>
-        <code className="carried-code" />
-      </div>
       <div data-carry="flower" hidden>
         <i />
       </div>

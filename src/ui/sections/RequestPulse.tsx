@@ -15,7 +15,7 @@ function requestTracks() {
   return tracks;
 }
 
-function render(canvas: HTMLCanvasElement, t: number, tracks: Path2D, population: number) {
+function render(canvas: HTMLCanvasElement, t: number, tracks: Path2D) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const scale = Math.min(canvas.width / 640, canvas.height / 268);
@@ -31,7 +31,7 @@ function render(canvas: HTMLCanvasElement, t: number, tracks: Path2D, population
   );
   ctx.strokeStyle = '#739e8738';
   ctx.lineWidth = 1;
-  ctx.globalAlpha = population;
+  ctx.globalAlpha = 1;
   ctx.stroke(tracks);
   for (let i = 0; i < 120; i++) {
     const row = Math.floor(i / 12),
@@ -44,8 +44,7 @@ function render(canvas: HTMLCanvasElement, t: number, tracks: Path2D, population
     const u = clamp((x - 330) / 98);
     const y = mix(startY, 130, u * u * (3 - 2 * u));
     const wave = clamp(1 - Math.abs(t - (col * 0.009 + row * 0.009 + 0.038)) / 0.052);
-    const introduced = clamp((population - (col + row * 0.6) * 0.033) * 4.6);
-    ctx.globalAlpha = introduced * (1 - clamp((p - 0.95) / 0.05));
+    ctx.globalAlpha = 1 - clamp((p - 0.95) / 0.05);
     ctx.strokeStyle = wave > 0.43 ? '#fff2cf' : u > 0.2 ? '#abd9c1' : '#ddbd8f';
     ctx.lineWidth = 4;
     ctx.lineCap = 'round';
@@ -92,7 +91,7 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
       last = 0;
     let catchingUp = false;
     let visible = false;
-    const draw = () => render(canvas, current, tracks, Number(owner.dataset.matchPopulation ?? 1));
+    const draw = () => render(canvas, current, tracks);
     const resize = () => {
       const box = canvas.getBoundingClientRect();
       const dpr = Math.min(devicePixelRatio, 2);
@@ -137,7 +136,6 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
       } else wake();
     };
     owner.addEventListener('pulse-position', update);
-    owner.addEventListener('match-population', draw);
     document.addEventListener('visibilitychange', wake);
     const visibility = new IntersectionObserver(
       ([entry]) => {
@@ -155,7 +153,6 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
       observer.disconnect();
       visibility.disconnect();
       owner.removeEventListener('pulse-position', update);
-      owner.removeEventListener('match-population', draw);
       document.removeEventListener('visibilitychange', wake);
     };
   }, [onPaint]);

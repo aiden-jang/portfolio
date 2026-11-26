@@ -1,6 +1,6 @@
 import { ProjectHandoffs } from './showcase/ProjectHandoffs';
 import './connected-cut.css';
-import { RequestMatch } from './sections/RequestMatch';
+import { OriginalGlobeOpening } from './showcase/opening/OriginalGlobeOpening';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { caseStudyLane, isPortfolioProject } from '../data/workBrowsing';
 import { WORK_ITEMS, workId } from '../data/workItems';
@@ -124,7 +124,7 @@ export function Sections() {
       <MoreProjectsSection onOpen={openWork} />
       <AboutSection />
       <ContactSection />
-      <RequestMatch />
+      <OriginalGlobeOpening />
       <ProjectHandoffs />
       <WorkModal
         item={activeWork}

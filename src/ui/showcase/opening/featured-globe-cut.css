@@ -1,0 +1,123 @@
+html[data-featured-globe-cut] #project-iodine .iodine-scene-content .recovery {
+  container-type: inline-size;
+  --editor-edge: clamp(12px, 2.8vw, 34px);
+}
+html[data-featured-globe-cut]
+  #project-iodine
+  .iodine-scene-content
+  .recovery-source
+  .recovery-line {
+  white-space: pre;
+  font-size: clamp(12px, 5.6cqi, 42px);
+  line-height: 1.35;
+}
+html[data-featured-globe-cut]
+  #project-iodine
+  .iodine-scene-content
+  .recovery-source
+  > div:not(.recovery-line) {
+  white-space: pre-wrap;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-featured-globe-cut][data-before-globe-cut] #sec-work {
+    opacity: 0;
+    pointer-events: none;
+  }
+  html[data-featured-globe-cut][data-showroom-handoff]
+    :is(.portfolio-scene, .opening-poster, .car-type-overlap) {
+    --intro-exit-offset: 0px;
+  }
+  html[data-featured-globe-cut][data-showroom-handoff] .portfolio-scene::after {
+    display: none;
+  }
+  html[data-featured-globe-cut] .portfolio-chrome #sec-work {
+    overflow: visible;
+    z-index: 8;
+    translate: 0 var(--globe-cut-offset, 0px);
+  }
+  html[data-featured-globe-cut] #sec-work .earthquake-feature[data-comparing='false'] {
+    min-height: calc(100svh - var(--portfolio-header-height) - 12px);
+    isolation: isolate;
+  }
+}
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  html[data-featured-globe-cut] .portfolio-chrome #project-everythingisfine .orbit-feature {
+    width: min(80vw, calc(83svh * 1120 / 732), 1320px);
+    margin-inline-end: calc(-1 * var(--portfolio-gutter));
+  }
+  html[data-featured-globe-cut] #project-everythingisfine .earthquake-title {
+    z-index: 1;
+  }
+  html[data-featured-globe-cut] #project-everythingisfine .orbit-feature {
+    position: relative;
+    z-index: 2;
+  }
+  html[data-featured-globe-cut] #project-everythingisfine .earthquake-detail {
+    z-index: 3;
+  }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  html[data-featured-globe-cut] .portfolio-chrome #project-everythingisfine .preview-thumbnail {
+    height: clamp(255px, 46svh, 410px);
+  }
+  html[data-featured-globe-cut] #project-everythingisfine .creative-quake-hook {
+    font-size: clamp(18px, 5.4vw, 26px);
+    max-width: 22ch;
+  }
+}
+@media (max-width: 767px) {
+  html[data-featured-globe-cut]
+    #project-iodine
+    .iodine-scene-content
+    .recovery-source
+    .recovery-line {
+    font-size: clamp(12px, 4.75cqi, 17px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-featured-globe-cut]:root .portfolio-chrome #sec-work {
+    background: #091219;
+  }
+  html[data-featured-globe-cut]:root
+    .portfolio-chrome
+    #sec-work
+    .earthquake-feature[data-comparing='false']::before {
+    inset: calc(-1 * var(--portfolio-header-height)) auto 0 50%;
+    width: 100vw;
+    opacity: 1;
+    background: url('/projects/globe-stars-desktop.svg') center / cover;
+    mask-image: none;
+  }
+  html[data-featured-globe-cut]:root
+    .portfolio-chrome
+    #sec-work
+    #project-everythingisfine
+    .earthquake-title
+    h3 {
+    font-size: clamp(54px, 9vw, 132px);
+    letter-spacing: -0.075em;
+  }
+  html[data-featured-globe-cut]:root
+    .portfolio-chrome
+    #sec-work
+    #project-everythingisfine
+    .orbit-art[data-poster='true'] {
+    mask-image: none;
+  }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  html[data-featured-globe-cut]:root
+    .portfolio-chrome
+    #sec-work
+    .earthquake-feature[data-comparing='false']::before {
+    background-image: url('/projects/globe-stars-mobile.svg');
+  }
+  html[data-featured-globe-cut]:root
+    .portfolio-chrome
+    #sec-work
+    #project-everythingisfine
+    .earthquake-title
+    h3 {
+    font-size: clamp(45px, 13.5vw, 64px);
+  }
+}

@@ -157,13 +157,14 @@ export function createGlobeScene(
     if (!clientWidth || !clientHeight) return;
     const mobile = clientWidth < clientHeight;
     // Scale the rendered frame and its still together, including coastlines and marker strokes.
-    const width = mobile ? 390 : 1120;
-    const height = mobile ? 440 : 732;
-    if (frameWidth === width) return;
+    const cinema = canvas.hasAttribute('data-cinema');
+    const width = cinema ? Math.min(clientWidth, 1600) : mobile ? 390 : 1120;
+    const height = cinema ? Math.round((width * clientHeight) / clientWidth) : mobile ? 440 : 732;
+    if (frameWidth === width && (!cinema || height === canvas.height)) return;
     frameWidth = width;
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    if (width >= height)
+    if (!cinema && width >= height)
       camera.setViewOffset(width, height, -width * 0.05, -height * 0.04, width, height);
     else camera.clearViewOffset();
     camera.updateProjectionMatrix();

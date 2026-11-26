@@ -76,7 +76,7 @@ export function InteractiveGlobe({
     observer.observe(figure.current!);
     const warm = new IntersectionObserver(
       ([entry]) => setApproaching(!!entry?.isIntersecting && !document.hidden),
-      { rootMargin: '260px 0px' },
+      { rootMargin: '110% 0px' },
     );
     warm.observe(figure.current!);
     const sync = () => handle.current?.sync();
