@@ -74,7 +74,7 @@ for (const viewport of [
     await travelTo('#batching-study', 0.63);
     await expect(batch.getByText('Batching requests', { exact: true })).toBeInViewport();
     await expect(batch.getByText('1 batched request', { exact: true })).toBeInViewport();
-    await expect(batch.locator('.batching-line-items')).toHaveAttribute('data-loaded', 'true');
+    await expect(batch.getByText('Line items', { exact: true })).toHaveCount(0);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await editor.scrollIntoViewIfNeeded();

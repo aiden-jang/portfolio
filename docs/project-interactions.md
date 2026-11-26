@@ -81,8 +81,7 @@ bill on return. The saved owewell link goes straight to the receipt. Reduced
 motion shows the match and receipt together.
 
 The request-batching diagram gathers 120 marks into one moving pulse as the visitor
-scrolls. After a fast landing, the marks animate to the result once in view. The
-sample line items populate when the pulse reaches 2s. Its static Before
+scrolls. After a fast landing, the marks animate to the 2s result once in view. Its static Before
 and After controls are available on short viewports and with reduced motion.
 
 The bloomnote garden reveals its three blooms once, then holds the view from the

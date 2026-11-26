@@ -10,7 +10,6 @@ import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
 import './batching-spread.css';
 
-import { BatchingLineItems } from './BatchingLineItems';
 import { RequestPulse } from './RequestPulse';
 
 const replayDuration = 960;
@@ -144,18 +143,13 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       data-phase={phase}
       aria-label="Request batching comparison"
     >
-      <div className="batching-visuals">
-        <div className="batching-pattern">
-          <RequestPulse onPaint={onPulsePaint} />
-          <div className="batching-readout">
-            {after
-              ? '1 batched request'
-              : phase === 'batching'
-                ? 'Batching requests'
-                : '120 separate requests'}
-          </div>
-        </div>
-        <BatchingLineItems loaded={after} />
+      <RequestPulse onPaint={onPulsePaint} />
+      <div className="batching-readout">
+        {after
+          ? '1 batched request'
+          : phase === 'batching'
+            ? 'Batching requests'
+            : '120 separate requests'}
       </div>
       <div className="batching-controls">
         <div className="batching-states" role="group" aria-label="Compare request patterns">

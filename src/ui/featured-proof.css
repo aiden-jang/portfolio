@@ -47,13 +47,6 @@ html:root #project-iodine .recovery[data-restored='true'] .recovery-line {
 #batching-study:has(.batching-spread[data-phase='after']) .experience-measure > span:last-child {
   color: #dbffe9;
 }
-#batching-study .batching-line-items[data-loaded='true'] {
-  border-color: #86b99d;
-  background: #15251d;
-}
-#batching-study .batching-line-items[data-loaded='true'] dd {
-  color: #daf5e6;
-}
 @media (max-width: 767px) {
   html:root .portfolio-chrome #project-everythingisfine .orbit-actions {
     position: relative;
