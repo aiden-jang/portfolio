@@ -23,6 +23,7 @@ export function Duet({
   const frame = useRef(0);
   const step = useRef(0);
   const destination = useRef(0);
+  const returnAt = useRef(0.32);
   const previous = useRef(-1);
   const seenDrawing = useRef(false);
   const lastLight = useRef(-1);
@@ -37,7 +38,21 @@ export function Duet({
     const prior = previous.current;
     const direct = prior < 0 || Math.abs(t - prior) > 0.38;
     previous.current = t;
-    const finish = sticky.current && t >= 0.34;
+    const stageBox = stage.getBoundingClientRect();
+    const stageInView = stageBox.top < innerHeight * 0.48 && stageBox.bottom > innerHeight * 0.52;
+    const answerOnScreen =
+      seenDrawing.current &&
+      stageInView &&
+      prior >= 0 &&
+      t > prior &&
+      sketch.querySelector('.iguess-replay-controls[data-verdict="true"]');
+    let target = destination.current;
+    if (!sticky.current || t >= 0.4 || (target === 0 && answerOnScreen)) target = 1;
+    else if (t <= returnAt.current) target = 0;
+    if (target === 1 && destination.current === 0)
+      returnAt.current = Math.min(0.32, Math.max(0, t - 0.1));
+
+    const finish = sticky.current && (t >= 0.34 || target === 1);
     if (finish && laneElement.dataset.finishCat !== 'true')
       laneElement.dispatchEvent(new Event('finish-cat'));
     laneElement.dataset.finishCat = String(finish);
@@ -64,15 +79,6 @@ export function Duet({
       }
     }
     const fast = laneElement.hasAttribute('data-scene-arrival');
-    const target = !sticky.current
-      ? 1
-      : t >= (fast ? 0.4 : 0.49)
-        ? 1
-        : t < 0.32
-          ? 0
-          : destination.current;
-    const stageBox = stage.getBoundingClientRect();
-    const stageInView = stageBox.top < innerHeight * 0.48 && stageBox.bottom > innerHeight * 0.52;
     if (!stageInView) seenDrawing.current = false;
     else if (target === 0 && t <= 0.36) seenDrawing.current = true;
     const skip = fast || direct || (target === 1 && t >= 0.96);
@@ -108,6 +114,7 @@ export function Duet({
     const side = ex > box.width * 0.58 ? -1 : 1;
     const hopWidth = Math.min(212, box.width * 0.22);
     const crest = Math.min(sy, ey) - Math.min(146, box.height * 0.25);
+    const launch = 0.14;
     let elapsed = 0;
     let lastFrameAt = start;
     state('jump');
@@ -117,15 +124,15 @@ export function Duet({
       const time = Math.min(1, elapsed / Math.max(duration, 1));
       const p = from + (target - from) * time;
       step.current = p;
-      const flight = easedProgress(p, 0.26, 0.88);
+      const flight = easedProgress(p, launch, 0.88);
       const arc = Math.sin(Math.PI * flight);
       const x = sx + (ex - sx) * flight + side * hopWidth * arc;
       const y =
         p < 0.55
-          ? sy + (crest - sy) * easedProgress(p, 0.26, 0.55)
+          ? sy + (crest - sy) * easedProgress(p, launch, 0.55)
           : crest + (ey - crest) * easedProgress(p, 0.55, 0.88);
       const beanWidth = sw + (ew - sw) * flight;
-      const ink = easedProgress(p, 0.14, 0.26);
+      const ink = easedProgress(p, 0.04, launch);
       const landing = easedProgress(p, 0.87, 0.97);
       const tilt = arc * side * -10;
       sprite.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%) rotate(${tilt}deg) scale(${beanWidth / sw})`;

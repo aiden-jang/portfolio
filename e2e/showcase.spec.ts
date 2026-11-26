@@ -1,7 +1,11 @@
 import { expect, test } from '@playwright/test';
-for (const width of [1440, 390]) {
-  test(`the drawn cat jumps into the interactive room at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 844 });
+for (const [width, height] of [
+  [1440, 900],
+  [390, 844],
+  [375, 667],
+]) {
+  test(`the cat jumps after one small scroll at ${width}×${height}`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     const duet = page.locator('.duet');
@@ -18,19 +22,23 @@ for (const width of [1440, 390]) {
           behavior: 'instant',
         });
       }, progress);
-    await seek(0.32);
+    await seek(0.2);
     await expect(duet).toHaveAttribute('data-match', 'draw');
+    await expect(duet.locator('#project-iguess').getByRole('status').first()).toHaveText('Cat');
     const room = duet.locator('#project-mrrp');
     await expect(room).toHaveAttribute('inert', '');
-    await seek(0.51);
-    await expect(duet.locator('.bean-match')).toBeVisible();
+    await page.mouse.move(20, 200);
+    await page.mouse.wheel(0, 18);
+    await expect(duet.locator('.bean-match')).toBeVisible({ timeout: 1800 });
     await expect(duet).toHaveAttribute('data-match', 'room');
     await expect(room).not.toHaveAttribute('inert');
-    await seek(0.25);
+    await seek(0.1);
     await expect(duet).toHaveAttribute('data-match', 'draw');
     await expect(room).toHaveAttribute('inert', '');
   });
+}
 
+for (const width of [1440, 390]) {
   test(`Bean's visible controls work at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
