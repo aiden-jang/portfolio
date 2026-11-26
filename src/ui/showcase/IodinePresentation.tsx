@@ -98,7 +98,7 @@ export function RecoveryEditor({
         <div aria-hidden="true">{last}</div>
       </div>
       <div className="recovery-bottom">
-        <span>{restored ? 'Original line restored' : 'Snapshot saved'}</span>
+        {inspectable && <span>{restored ? 'Original line restored' : 'Snapshot saved'}</span>}
         {onToggleEdit && (
           <button type="button" onClick={onToggleEdit}>
             {restored ? 'Reset edit' : 'Undo edit'}

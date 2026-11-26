@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { ControlIcon } from '../ControlIcon';
+
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import type { PreviewState } from '../../data/projectPreviews';
 import { usePreviewSelection } from '../usePreviewSelection';
@@ -72,6 +72,25 @@ export function BloomPreview({
     [finishOnArrival],
   );
   useScrollArrival(article, !composing, settle);
+  useEffect(() => {
+    const node = article.current;
+    if (!node) return;
+    let previous = -1;
+    function position() {
+      const top = node!.getBoundingClientRect().top;
+      const close = Math.min(1, Math.max(0, (top / innerHeight - 0.04) / 0.52));
+      if (close === previous) return;
+      previous = close;
+      node!.style.setProperty('--flower-close', String(close));
+    }
+    position();
+    addEventListener('scroll', position, { passive: true });
+    addEventListener('resize', position);
+    return () => {
+      removeEventListener('scroll', position);
+      removeEventListener('resize', position);
+    };
+  }, []);
   const composerTitle = useRef<HTMLHeadingElement>(null);
   useLayoutEffect(() => {
     if (!hasOpenedComposer) return;
@@ -89,15 +108,31 @@ export function BloomPreview({
     >
       <div className="bloom-garden-inner" data-study-pin hidden={composing}>
         <header className="bloom-garden-heading">
-          <h2 id="bloom-garden-title">bloomnote</h2>
-          <p>{description}</p>
+          <h2 id="bloom-garden-title">
+            <button
+              onClick={(event) => onRead(event.currentTarget)}
+              aria-label="How I built it: bloomnote"
+            >
+              bloomnote <span aria-hidden="true">↗</span>
+            </button>
+          </h2>
+          <p className="sr-only">{description}</p>
         </header>
 
         <div className="bloom-garden-scene">
           <figure className="bloom-garden-letter" aria-live="polite" aria-atomic="true">
             <figcaption>{flower.name}</figcaption>
             <blockquote key={flower.name}>“{flower.meaning}”</blockquote>
-            <p>A garden from Maya to Sarah</p>
+            <p>
+              <button
+                type="button"
+                aria-label="View full garden"
+                ref={inspector}
+                onClick={() => setShowGarden(true)}
+              >
+                A garden from Maya to Sarah
+              </button>
+            </p>
           </figure>
           <BloomPlot
             plotRef={plot}
@@ -121,16 +156,6 @@ export function BloomPreview({
             }}
           >
             Write a note
-          </button>
-          <button
-            type="button"
-            aria-label="How I built it: bloomnote"
-            onClick={(event) => onRead(event.currentTarget)}
-          >
-            How I built it <ControlIcon name="arrow" />
-          </button>
-          <button type="button" ref={inspector} onClick={() => setShowGarden(true)}>
-            View full garden <ControlIcon name="fit" />
           </button>
           {url && (
             <a

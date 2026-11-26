@@ -146,7 +146,7 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       <RequestPulse onPaint={onPulsePaint} />
       <div className="batching-readout">
         {after
-          ? '1 batched request'
+          ? '1 request · 2s load time'
           : phase === 'batching'
             ? 'Batching requests'
             : '120 separate requests'}

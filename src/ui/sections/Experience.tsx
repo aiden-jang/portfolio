@@ -138,6 +138,7 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
     <div className="batch-lane" id="batching-study" ref={lane}>
       <article className="experience-lead" data-study-pin aria-labelledby="experience-lead-title">
         <div className="experience-batch-copy">
+          <p className="batch-owner">{item.context}</p>
           <h2 id="experience-lead-title">
             120 calls <span>→</span> 1
           </h2>
@@ -163,7 +164,6 @@ function LeadOutcome({ item }: { item: WorkDetail }) {
             >
               How I batched the requests <ControlIcon name="arrow" />
             </a>
-            <span>{item.context}</span>
           </div>
         </div>
         <BatchingSpread lane={lane} />

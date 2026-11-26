@@ -21,7 +21,9 @@ const CAR_LOCK_MS = 600;
 const MIN_WHEEL_DELTA = 10;
 function sectionLanding(section: HTMLElement) {
   if (section.id === 'sec-more-work') {
-    const heading = section.querySelector('.project-gallery-heading');
+    const heading = section.querySelector(
+      '.bloom-garden-inner:not([hidden]) #bloom-garden-title, .bloom-draft:not([hidden]) #bloom-draft-title',
+    );
     const header = document.querySelector('.portfolio-header');
     if (heading) {
       return (

@@ -111,7 +111,11 @@ for (const width of [1440, 390]) {
     await expect(canvas).toHaveCount(0);
     const iodine = page.locator('#project-iodine');
     await expect(iodine.getByRole('status')).toHaveText('Edit undone');
-    await expect(iodine.getByRole('button', { name: 'Play Iodine demo' })).toBeVisible();
+    await iodine.getByRole('button', { name: 'Reset edit' }).click();
+    await expect(iodine.getByRole('status')).toHaveText('Agent edit');
+    await expect(iodine.locator('.recovery-line mark')).toHaveText('.trim()');
+    await iodine.getByRole('button', { name: 'Undo edit' }).click();
+    await expect(iodine.getByRole('status')).toHaveText('Edit undone');
     const room = page.locator('#project-mrrp');
     await room.locator('.bean-window').scrollIntoViewIfNeeded();
     await room.getByRole('button', { name: 'Pet Bean', exact: true }).click();
@@ -195,9 +199,19 @@ for (const width of [1440, 390]) {
       await expect(trigger).toBeFocused();
       await page.keyboard.press('Escape');
     }
-    await expect(
-      page.locator(':is(.work-exhibit, #sec-more-work) article[id^="project-"]'),
-    ).toHaveCount(8);
+    for (const id of [
+      'everythingisfine',
+      'iodine',
+      'bloomnote',
+      'iguess',
+      'mrrp',
+      'wherever',
+      'owewell',
+      'worth',
+      'platform',
+    ]) {
+      await expect(page.locator(`#project-${id}`)).toHaveCount(1);
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
     expect(errors).toEqual([]);
     await page.screenshot({ path: test.info().outputPath(`showcase-${width}.png`) });

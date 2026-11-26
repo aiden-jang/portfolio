@@ -1,8 +1,8 @@
-import { DinnerScene } from '../showcase/DinnerScene';
+import { DinnerTable } from '../showcase/DinnerTable';
 import { BloomPreview } from '../showcase/BloomPreview';
 import { Duet } from '../showcase/Duet';
 
-import { ProjectScene, SceneAppLink } from '../showcase/ProjectScene';
+import { SceneAppLink } from '../showcase/ProjectScene';
 import { EarthquakeFeature } from '../showcase/EarthquakeFeature';
 import { IodinePresentation } from '../showcase/IodinePresentation';
 import '../project-gallery.css';
@@ -48,8 +48,9 @@ const iguess = orderedCollection.find((item) => item.mark === 'iguess')!;
 const mrrp = orderedCollection.find((item) => item.mark === 'mrrp')!;
 const wherever = orderedCollection.find((item) => item.mark === 'wherever')!;
 const owewell = orderedCollection.find((item) => item.mark === 'owewell')!;
+const worth = orderedCollection.find((item) => item.mark === 'worth')!;
 const supportingProjects = orderedCollection.filter(
-  (item) => ![bloomnote, iguess, mrrp, wherever, owewell].includes(item),
+  (item) => ![bloomnote, iguess, mrrp, wherever, owewell, worth].includes(item),
 );
 function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
   if (!item.link) return null;
@@ -64,13 +65,13 @@ export function MoreProjectsSection({ onOpen }: Props) {
   return (
     <Section id="sec-more-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="bloom-gallery pointer-events-auto">
+        <h2 className="sr-only">More projects</h2>
         <BloomPreview
           {...PREVIEWS.bloomnote}
           url={bloomnote.link?.url}
           onRead={(trigger) => onOpen(bloomnote, trigger)}
         />
         <div className="garage-work bloom-gallery-rest">
-          <h2 className="project-gallery-heading">More projects</h2>
           <div className="project-scenes">
             <Duet
               drawTitle={
@@ -85,26 +86,13 @@ export function MoreProjectsSection({ onOpen }: Props) {
               drawLink={<AppLink item={iguess} />}
               roomLink={<AppLink item={mrrp} />}
             />
-            <ProjectScene
-              id="project-wherever"
-              theme="dinner"
-              title={
-                <>
-                  <span className="dinner-title-vote">
-                    <AppLink item={wherever} label="wherever" />
-                  </span>
-                  <span className="dinner-handoff" aria-hidden="true">
-                    /
-                  </span>
-                  <span className="dinner-title-bill">
-                    <AppLink item={owewell} label="owewell" />
-                  </span>
-                </>
-              }
-              links={null}
-            >
-              <DinnerScene onRead={(button) => onOpen(owewell, button)} />
-            </ProjectScene>
+            <DinnerTable
+              dinner={wherever.link!.url}
+              bill={owewell.link!.url}
+              worth={worth.link!.url}
+              onReadBill={(trigger) => onOpen(owewell, trigger)}
+              onReadWorth={(trigger) => onOpen(worth, trigger)}
+            />
           </div>
           <div className="project-gallery gallery-companions">
             {supportingProjects.map((item) => (

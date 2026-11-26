@@ -117,9 +117,11 @@ function paint(canvas: HTMLCanvasElement, visible: number, ink = '#f7f0df') {
 
 export function IguessReplay({
   active,
+  onAnswer,
   onPrint,
 }: {
   active: boolean;
+  onAnswer: () => void;
   onPrint: (print: HTMLCanvasElement | null) => void;
 }) {
   const demo = useRef<HTMLElement>(null);
@@ -163,7 +165,7 @@ export function IguessReplay({
       const visible =
         element.closest('.duet')?.getAttribute('data-finish-cat') === 'true'
           ? pointCount
-          : Math.round(pointCount * (0.085 + 0.915 * easedProgress(progress, 0, 0.59)));
+          : Math.round(pointCount * (0.18 + 0.82 * easedProgress(progress, 0, 0.59)));
       if (cache.current.drawn !== visible) {
         paint(element, visible);
         paintMarks();
@@ -178,9 +180,10 @@ export function IguessReplay({
       if (next !== cache.current.label) {
         cache.current.label = next;
         setResult(next);
+        if (next === answer) onAnswer();
       }
     },
-    [paintMarks],
+    [onAnswer, paintMarks],
   );
   const redraw = useCallback(() => {
     if (!canvas.current) return;

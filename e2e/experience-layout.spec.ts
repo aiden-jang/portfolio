@@ -125,7 +125,7 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
       const before = comparison.getByRole('button', { name: 'Before', exact: true });
       const after = comparison.getByRole('button', { name: 'After', exact: true });
       const requestGrid = comparison.getByText('120 separate requests', { exact: true });
-      const batchedRequest = comparison.getByText('1 batched request', { exact: true });
+      const batchedRequest = comparison.getByText('1 request · 2s load time', { exact: true });
       const pulse = comparison.locator('canvas.request-pulse');
       const frameAtRest = () => pulse.evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL());
       await expect(batchedRequest).toBeVisible();
@@ -219,12 +219,11 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
           .poll(() => target.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
           .toBeLessThan(2);
       }
-      const title = await target
-          .getByRole('heading', {
-            name: id === 'sec-more-work' ? 'More projects' : 'About',
-            exact: true,
-          })
-          .boundingBox(),
+      const title = await (
+          id === 'sec-more-work'
+            ? target.locator('#bloom-garden-title')
+            : target.getByRole('heading', { name: 'About', exact: true })
+        ).boundingBox(),
         banner = await page.locator('.portfolio-header').boundingBox();
       expect(title!.y, id + ' clears the fixed header').toBeGreaterThanOrEqual(
         banner!.y + banner!.height,

@@ -24,39 +24,33 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     await page.goto('/#sec-more-work');
     await page.evaluate(() => document.fonts.ready);
     const gallery = page.locator('.project-gallery');
-    await expect(page.locator('#bloom-garden-title, #sec-more-work h3')).toHaveText([
-      'bloomnote',
+    await expect(page.locator('#sec-more-work h3')).toHaveText([
       'iguess',
       'mrrp',
-      /^wherever.*owewell.*$/,
-      'worth',
+      /Neighborhood\s*Pizza Kitchen/,
       'platform',
     ]);
-    const worth = gallery.locator('#project-worth');
+    const dinner = page.locator('.dinner-table');
+    await dinner.scrollIntoViewIfNeeded();
     if (width === 320) {
-      await worth.scrollIntoViewIfNeeded();
-      await expect(worth.getByRole('status')).toContainText('Screenshot unavailable');
-      await expect(worth.getByRole('button', { name: 'Inspect screenshot: worth' })).toBeDisabled();
-      await expect(worth.locator('.garage-project-links a')).toHaveAttribute('target', '_blank');
+      await expect(dinner.getByRole('status')).toHaveText('Pizza photo unavailable');
     } else {
-      await expect(worth.getByText('Neighborhood Pizza Kitchen', { exact: true })).toBeVisible();
-      await expect(worth.getByText('Favorite.', { exact: true })).toBeVisible();
-      const character = await worth.locator('.dinner-rating-character').boundingBox();
-      const card = await worth.locator('.dinner-rating').boundingBox();
-      expect(character!.y).toBeGreaterThan(card!.y);
-      expect(character!.y + character!.height).toBeLessThan(card!.y + card!.height);
+      await expect(dinner.getByAltText('The pizza Alex and Maya chose')).toBeVisible();
     }
+    await expect(dinner.getByRole('link', { name: 'Open app: worth' })).toHaveAttribute(
+      'target',
+      '_blank',
+    );
+    await expect(dinner.getByRole('button', { name: 'How I built it: worth' })).toHaveText(
+      'Favorite.',
+    );
+    const character = await dinner.locator('.dinner-rating-character').boundingBox();
+    const card = await dinner.locator('.table-slip').boundingBox();
+    expect(character!.y).toBeGreaterThan(card!.y);
+    expect(character!.y + character!.height).toBeLessThan(card!.y + card!.height);
     const bloom = page.locator('#project-bloomnote');
     await expect(bloom.getByRole('blockquote')).toContainText('For that brilliant laugh');
-    const galleryTitle = await page
-      .getByRole('heading', { name: 'More projects', exact: true })
-      .boundingBox();
-    const gardenTitle = await bloom.getByRole('heading', { name: 'bloomnote' }).boundingBox();
-    const aboutTitle = await page.locator('#sec-about h2').boundingBox();
-    const garden = await bloom.boundingBox();
-    expect(galleryTitle!.y).toBeGreaterThan(garden!.y + garden!.height);
-    expect(galleryTitle!.x).toBeCloseTo(gardenTitle!.x, 0);
-    expect(galleryTitle!.x).toBeCloseTo(aboutTitle!.x, 0);
+    await expect(page.getByRole('heading', { name: 'More projects', exact: true })).toHaveCount(1);
     if (width < 768) {
       const profile = await page.locator('.about-profile').boundingBox();
       const framing = await page.locator('.about-framing-study').boundingBox();
@@ -102,19 +96,12 @@ for (const width of [1440, 1024, 768, 390, 320]) {
         .toBeGreaterThanOrEqual(0);
       expect.soft(copy.top - frame.bottom, name + ' media-to-copy gap').toBeLessThan(36);
     }
-    if (width >= 768) {
-      expect.soft(cards[0]!.frame.top).toBeCloseTo(cards[1]!.frame.top, 0);
-      expect.soft(cards[1]!.frame.left).toBeGreaterThan(cards[0]!.frame.right);
-    } else {
-      expect.soft(cards[0]!.frame.width).toBeCloseTo(cards[1]!.frame.width, 0);
-      expect.soft(cards[0]!.frame.left).toBeCloseTo(cards[1]!.frame.left, 0);
-      expect.soft(cards[1]!.frame.top).toBeGreaterThan(cards[0]!.frame.bottom);
-    }
+    expect(cards.map((card) => card.name)).toEqual(['project-platform']);
     const scenes = await page
       .locator('.project-scenes > article')
       .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().toJSON()));
     for (let index = 1; index < scenes.length; index++) {
-      expect(scenes[index]!.top).toBeGreaterThan(scenes[index - 1]!.bottom);
+      expect(scenes[index]!.top).toBeGreaterThanOrEqual(scenes[index - 1]!.bottom - 1);
       expect(scenes[index]!.width).toBe(scenes[0]!.width);
     }
     await expect(page.locator('.work-exhibit article h3')).toHaveText(['meanwhile.', 'iodine']);

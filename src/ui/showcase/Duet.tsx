@@ -26,6 +26,10 @@ export function Duet({
   const returnAt = useRef(0.32);
   const previous = useRef(-1);
   const seenDrawing = useRef(false);
+  const seenAnswer = useRef(false);
+  const markAnswer = useCallback(() => {
+    if (seenDrawing.current) seenAnswer.current = true;
+  }, []);
   const lastLight = useRef(-1);
   const [drawingActive, setDrawingActive] = useState(true);
   const [print, setPrint] = useState<HTMLCanvasElement | null>(null);
@@ -45,7 +49,8 @@ export function Duet({
       stageInView &&
       prior >= 0 &&
       t > prior &&
-      sketch.querySelector('.iguess-replay-controls[data-verdict="true"]');
+      (seenAnswer.current ||
+        sketch.querySelector('.iguess-replay-controls[data-verdict="true"], canvas[data-marked]'));
     let target = destination.current;
     if (!sticky.current || t >= 0.4 || (target === 0 && answerOnScreen)) target = 1;
     else if (t <= returnAt.current) target = 0;
@@ -85,6 +90,7 @@ export function Duet({
     const fast = laneElement.hasAttribute('data-scene-arrival');
     if (!stageInView) seenDrawing.current = false;
     else if (target === 0 && t <= 0.36) seenDrawing.current = true;
+    if (!stageInView || target === 1) seenAnswer.current = false;
     const skip = fast || direct || (target === 1 && t >= 0.96);
     const canShowQuickJump =
       target === 1 &&
@@ -102,7 +108,7 @@ export function Duet({
     destination.current = target;
     cancelAnimationFrame(frame.current);
     const from = step.current;
-    const duration = 2350 * Math.abs(target - from);
+    const duration = 1720 * Math.abs(target - from);
     const requestedAt = performance.now();
     let startedAt: number | undefined;
     function tick(now: number) {
@@ -138,12 +144,12 @@ export function Duet({
       const frameX = layer.offsetLeft + art.offsetLeft + art.offsetWidth / 2;
       const frameY = layer.offsetTop + art.offsetTop + art.offsetHeight / 2;
       const { clientWidth: width, clientHeight: height } = camera;
-      const frameShare = width > 700 ? 0.48 : 0.72;
+      const frameShare = width > 700 ? 0.45 : 0.65;
       const close = Math.max(
         1.1,
         Math.min((width * frameShare) / art.offsetWidth, (height * 0.5) / art.offsetHeight, 8),
       );
-      const pullback = easedProgress(progress, 0.18, 0.98);
+      const pullback = easedProgress(progress, 0.16, 0.84);
       const zoom = close ** (1 - pullback);
       const offset = (zoom - 1) / (close - 1);
       const x = (width * 0.5 - close * frameX) * offset;
@@ -239,7 +245,7 @@ export function Duet({
             <h3>{drawTitle}</h3>
             {drawLink}
           </header>
-          <IguessReplay active={drawingActive} onPrint={setPrint} />
+          <IguessReplay active={drawingActive} onAnswer={markAnswer} onPrint={setPrint} />
           <span className="sr-only" role="status">
             {print?.hasAttribute('data-personalized') && 'Your drawing is framed in Bean’s room.'}
           </span>

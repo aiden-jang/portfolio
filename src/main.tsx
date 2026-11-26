@@ -9,6 +9,7 @@ import './ui/shorter-timing.css';
 import './ui/portfolio-finish.css';
 import './ui/scroll-choreography.css';
 import './ui/featured-proof.css';
+import './ui/showcase/work-sequence.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('#root element not found');
