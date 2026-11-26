@@ -5,7 +5,7 @@ import { useCallback, useEffect, useImperativeHandle, useRef, useState, type Ref
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import { GlobeArtwork } from './GlobeArtwork';
 import { previewLink } from '../previewLinks';
-import { setQuakeManual, syncQuakeCamera } from './quakeProgress';
+import { setQuakeManual, useQuakeOpening } from './quakeProgress';
 import { loadRecordedWeather } from './globe/recordedWeatherAssets';
 import type { EvidenceFrame } from '../creative/evidenceNavigation';
 
@@ -174,7 +174,6 @@ export function InteractiveGlobe({
         const date = new Date(snapshot.metadata.generated);
         setCaptured(date.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' }));
         setPhase('ready');
-        if (journey && mode === 'auto') syncQuakeCamera(target);
       })
       .catch((error) => {
         if (error?.name !== 'AbortError') failed();
@@ -187,6 +186,7 @@ export function InteractiveGlobe({
     };
   }, [mode, journey]);
   const ready = !!mode && phase === 'ready';
+  useQuakeOpening(figure, !!journey && mode === 'auto' && !reduced, ready);
   useGlobeCardPosition(figure, ready && !!selected);
   useEffect(() => {
     if (ready && requestedFocus.current) {

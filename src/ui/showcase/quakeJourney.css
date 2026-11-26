@@ -19,7 +19,7 @@
   inset: 0;
   z-index: 2;
   visibility: hidden;
-  opacity: var(--depth-reveal, 0);
+  opacity: min(var(--depth-reveal, 0), var(--globe-depth-reveal, 1));
   pointer-events: none;
 }
 .quake-journey-run[data-depth-readings]:not([data-quake-manual]) .quake-reading-track {

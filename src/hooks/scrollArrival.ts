@@ -4,6 +4,7 @@ export const shortPhoneQuery = '(max-width: 767px) and (max-height: 699px)';
 
 type Scene = {
   stage: HTMLElement;
+  visibleArea?: RefObject<HTMLElement>;
   showResult: (active: boolean) => void;
   settled: boolean;
   seen: boolean;
@@ -51,9 +52,9 @@ function update(now: number) {
     rapidUntil = now + 240;
 
   for (const scene of scenes) {
-    if (!scene.stage.getClientRects().length || scene.stage.hasAttribute('data-quake-manual'))
-      continue;
-    const panel = scene.stage.querySelector('[data-study-pin]') ?? scene.stage;
+    if (!scene.stage.getClientRects().length) continue;
+    const panel =
+      scene.visibleArea?.current ?? scene.stage.querySelector('[data-study-pin]') ?? scene.stage;
     const box = panel.getBoundingClientRect();
     const visible = box.bottom > height * 0.24 && box.top < height * 0.71;
     if (!scene.settled && visible && now < rapidUntil) setResult(scene, true);
@@ -70,29 +71,21 @@ function schedule() {
 export function prepareSectionArrival(id: string) {
   navigationUntil = performance.now() + 1050;
   rapidUntil = 0;
-  const subject =
-    id === 'sec-work'
-      ? 'project-everythingisfine'
-      : id === 'sec-experience'
-        ? 'batching-study'
-        : id;
+  const subject = id === 'sec-experience' ? 'batching-study' : id;
   for (const scene of scenes)
-    if (
-      (scene.stage.id || scene.stage.closest('article')?.id) === subject &&
-      !scene.stage.hasAttribute('data-quake-manual')
-    )
-      setResult(scene, true);
+    if ((scene.stage.id || scene.stage.closest('article')?.id) === subject) setResult(scene, true);
 }
 
 export function useScrollArrival(
   target: RefObject<HTMLElement>,
   enabled: boolean,
   showResult: Scene['showResult'],
+  visibleArea?: RefObject<HTMLElement>,
 ) {
   useEffect(() => {
     const stage = target.current;
     if (!enabled || !stage) return;
-    const scene = { stage, showResult, settled: false, seen: false };
+    const scene = { stage, visibleArea, showResult, settled: false, seen: false };
     if (!scenes.size) {
       previous = scrollY;
       previousAt = performance.now();
@@ -116,7 +109,7 @@ export function useScrollArrival(
         frame = 0;
       }
     };
-  }, [target, enabled, showResult]);
+  }, [target, enabled, showResult, visibleArea]);
 }
 
 // Project deep links can change independently of section navigation.

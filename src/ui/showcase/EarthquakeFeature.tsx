@@ -1,4 +1,4 @@
-import { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import type { WorkDetail } from '../../types';
 import type { ProductPreview } from '../../data/projectPreviews';
 import { kamchatkaExample as example } from '../../data/kamchatkaExample';
@@ -9,7 +9,6 @@ import { ControlIcon } from '../ControlIcon';
 import { OpenEvidence, type EvidenceFrame } from '../creative/evidenceNavigation';
 import { evidenceHref } from '../creative/storyRoutes';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
-import { useScrollArrival } from '../../hooks/scrollArrival';
 import { advanceQuake, settleQuake } from './quakeProgress';
 
 type Props = {
@@ -31,11 +30,6 @@ export function EarthquakeFeature({ item, preview }: Props) {
   const heading = useRef<HTMLHeadingElement>(null);
   const journey = useRef<HTMLElement>(null);
   useScrollStudy(journey, !comparing, advanceQuake, settleQuake, undefined, 0.055);
-  const landOnReadings = useCallback(() => {
-    const stage = journey.current;
-    if (stage) advanceQuake(stage, Number(stage.dataset.studyProgress) || 0);
-  }, []);
-  useScrollArrival(journey, !comparing, landOnReadings);
   useLayoutEffect(() => {
     const sync = () => {
       setComparing(location.hash.startsWith(compareRoute));

@@ -14,6 +14,9 @@ import { BatchingLineItems } from './BatchingLineItems';
 import { RequestPulse } from './RequestPulse';
 
 const replayDuration = 960;
+const scrollPlayback =
+  '(prefers-reduced-motion: no-preference) and (min-height: 700px), ' +
+  '(prefers-reduced-motion: no-preference) and (590px <= height < 700px) and (max-width: 767px)';
 const marks = Array.from({ length: 120 }, (_, index) => ({
   x: 50 + (index % 12) * 47,
   y: 36 + Math.floor(index / 12) * 24,
@@ -59,26 +62,23 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
   const [phase, setPhase] = useState<'before' | 'batching' | 'after'>('before');
   const figure = useRef<HTMLElement>(null);
   const manual = useRef<number | null>(null);
-  const settled = useRef(false);
+  const arrivalProgress = useRef<number | null>(null);
   const landOnBatch = useCallback((active: boolean) => {
-    settled.current = active;
     const element = figure.current;
-    if (!element) return;
-    if (active) {
-      element.dataset.driver = 'scroll';
-      element.style.setProperty('--batch-scroll-time', replayDuration + 'ms');
-      paintRequestPulse(element, 1, true);
-      setPhase('after');
-    }
+    arrivalProgress.current = active ? 0 : null;
+    if (!active || !element || !matchMedia(scrollPlayback).matches) return;
+    element.dataset.driver = 'scroll';
+    element.style.setProperty('--batch-scroll-time', replayDuration + 'ms');
+    paintRequestPulse(element, 1, { catchUp: true });
   }, []);
-  useScrollArrival(lane, true, landOnBatch);
+  useScrollArrival(lane, true, landOnBatch, figure);
   useScrollStudy(lane, true, relayBatchProgress);
 
   function show(next: typeof phase) {
     manual.current = window.scrollY;
     if (figure.current) {
       figure.current.dataset.driver = 'controls';
-      paintRequestPulse(figure.current, next === 'after' ? 1 : 0, true);
+      paintRequestPulse(figure.current, next === 'after' ? 1 : 0, { instant: true });
     }
     setPhase(next);
   }
@@ -87,16 +87,15 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
     const stage = lane.current;
     const element = figure.current;
     if (!stage || !element) return;
-    const motion = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 700px)');
-    const shortMotion = matchMedia(
-      '(prefers-reduced-motion: no-preference) and (590px <= height < 700px) and (max-width: 767px)',
-    );
-    const hasScrollPlayback = () => motion.matches || shortMotion.matches;
+    const motion = matchMedia(scrollPlayback);
+    const showStill = () => {
+      delete element.dataset.driver;
+      paintRequestPulse(element, 1, { instant: true });
+      setPhase('after');
+    };
     const update = (event: Event) => {
-      if (!hasScrollPlayback()) {
-        delete element.dataset.driver;
-        paintRequestPulse(element, 1, true);
-        setPhase('after');
+      if (!motion.matches) {
+        showStill();
         return;
       }
       const p = (event as CustomEvent<number>).detail;
@@ -106,9 +105,13 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
         if (Math.abs(window.scrollY - override) < 18) return;
         manual.current = null;
       }
-      if (settled.current) {
-        if (element.dataset.phase !== 'after') paintRequestPulse(element, 1, true);
-        return;
+      const arrival = arrivalProgress.current;
+      if (arrival !== null) {
+        if (p >= arrival - 0.04) {
+          arrivalProgress.current = Math.max(p, arrival);
+          return;
+        }
+        arrivalProgress.current = null;
       }
       const progress = Math.min(1, p / 0.72);
       element.dataset.driver = 'scroll';
@@ -119,13 +122,13 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       paintRequestPulse(element, progress);
     };
     const resetArrival = () => {
-      settled.current = false;
+      arrivalProgress.current = null;
+      if (!motion.matches) showStill();
     };
-    const preference = matchMedia('(prefers-reduced-motion: reduce)');
-    preference.addEventListener('change', resetArrival);
+    motion.addEventListener('change', resetArrival);
     stage.addEventListener('batching-progress', update);
     return () => {
-      preference.removeEventListener('change', resetArrival);
+      motion.removeEventListener('change', resetArrival);
       stage.removeEventListener('batching-progress', update);
     };
   }, [lane]);
@@ -175,7 +178,11 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
   );
 }
 
-function paintRequestPulse(figure: HTMLElement, value: number, instant = false) {
+function paintRequestPulse(
+  figure: HTMLElement,
+  value: number,
+  options?: { instant?: boolean; catchUp?: boolean },
+) {
   figure.dataset.pulse = String(value);
-  figure.dispatchEvent(new CustomEvent('pulse-position', { detail: { value, instant } }));
+  figure.dispatchEvent(new CustomEvent('pulse-position', { detail: { value, ...options } }));
 }

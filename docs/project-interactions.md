@@ -15,7 +15,8 @@ include the source IDs, original precision and measured separation.
 
 As Featured work comes into view, the still gives way to a slow orbit from the
 same camera position. Pause, drag, arrow keys and event selection stop the
-automatic orbit. Done restores the still. Vertical swipes and the mouse wheel
+automatic orbit. The opening orbit has time to play before the camera follows
+scroll into the Kamchatka reading. Done restores the still. Vertical swipes and the mouse wheel
 scroll the page. The renderer pauses offscreen, behind a dialog and in a hidden
 tab. Reduced motion keeps the still until the visitor chooses Explore globe and
 turns off both automatic rotation and coasting.
@@ -51,8 +52,8 @@ and [NOAA SWPC aurora forecast](https://www.swpc.noaa.gov/products/aurora-30-min
 
 ## Project scenes
 
-Iodine shows the agent edit and restored line in the same editor frame, then holds
-the restored line. The case study includes the screen recording and restores the
+Iodine loops the agent edit and restored line in the same editor frame while visible.
+Using Undo edit takes control of the demo. The case study includes the screen recording and restores the
 source frame, scroll position, and focus on Back. Reduced motion shows the result
 immediately and keeps the recording on demand.
 
@@ -80,7 +81,8 @@ bill on return. The saved owewell link goes straight to the receipt. Reduced
 motion shows the match and receipt together.
 
 The request-batching diagram gathers 120 marks into one moving pulse as the visitor
-scrolls. The sample line items populate when the pulse reaches 2s. Its static Before
+scrolls. After a fast landing, the marks animate to the result once in view. The
+sample line items populate when the pulse reaches 2s. Its static Before
 and After controls are available on short viewports and with reduced motion.
 
 The bloomnote garden reveals its three blooms once, then holds the view from the

@@ -4,9 +4,6 @@
 :root .quake-journey-readings dl > :last-child dd {
   color: #bbebdf;
 }
-:root .quake-journey-run[data-scene-arrival] .orbit-actions {
-  visibility: visible;
-}
 :root .recovery-bottom {
   display: flex;
   justify-content: space-between;
@@ -20,9 +17,6 @@
 }
 :root #project-iodine .recovery[data-restored='true'] .recovery-line {
   box-shadow: inset 2px 0 #89c5a2;
-}
-#project-iodine [data-scene-arrival] .recovery-meta [role='status'] {
-  animation: none;
 }
 #project-wherever[data-scene-arrival][data-dinner-state='match'] .dinner-ticket-paper {
   box-shadow: -12px 0 40px #21170f38;
@@ -115,10 +109,6 @@
     align-self: start;
     margin-top: 3px;
   }
-}
-
-#project-iodine [data-scene-arrival][data-restored='true'] .removed {
-  display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-height: 700px) {

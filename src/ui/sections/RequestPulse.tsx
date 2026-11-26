@@ -88,6 +88,8 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
       target = current,
       frame = 0,
       last = 0;
+    let catchingUp = false;
+    let visible = false;
     const resize = () => {
       const box = canvas.getBoundingClientRect();
       const dpr = Math.min(devicePixelRatio, 2);
@@ -96,36 +98,60 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
       render(canvas, current, tracks);
     };
     const tick = (now: number) => {
+      frame = 0;
+      if (catchingUp && (!visible || document.hidden)) return;
       const dt = Math.min(64, Math.max(1, now - last));
       last = now;
-      current += (target - current) * (1 - Math.exp(-dt / 44));
+      const step = (target - current) * (1 - Math.exp(-dt / 44));
+      current += catchingUp ? Math.min(step, dt / 740) : step;
       if (Math.abs(target - current) < 0.0015) current = target;
       render(canvas, current, tracks);
       onPaint(current);
-      frame = current === target ? 0 : requestAnimationFrame(tick);
+      if (current === target) catchingUp = false;
+      else frame = requestAnimationFrame(tick);
+    };
+    const wake = () => {
+      if (frame || target === current || (catchingUp && (!visible || document.hidden))) return;
+      last = performance.now();
+      frame = requestAnimationFrame(tick);
     };
     const update = (event: Event) => {
-      const { value, instant } = (event as CustomEvent<{ value: number; instant: boolean }>).detail;
+      const { value, instant, catchUp } = (
+        event as CustomEvent<{ value: number; instant?: boolean; catchUp?: boolean }>
+      ).detail;
+      const jumpsForward = value - current > 0.6;
+      catchingUp =
+        value !== current &&
+        !instant &&
+        (!!catchUp || jumpsForward || (catchingUp && value >= target));
       target = value;
-      if (instant || Math.abs(target - current) > 0.6) {
+      if (instant || (!catchingUp && current - target > 0.6)) {
         cancelAnimationFrame(frame);
         frame = 0;
         current = target;
         render(canvas, current, tracks);
         onPaint(current);
-      } else if (!frame && target !== current) {
-        last = performance.now();
-        frame = requestAnimationFrame(tick);
-      }
+      } else wake();
     };
     owner.addEventListener('pulse-position', update);
+    document.addEventListener('visibilitychange', wake);
+    const visibility = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting && entry.intersectionRatio >= 0.6;
+        wake();
+      },
+      { threshold: 0.6 },
+    );
+    visibility.observe(canvas);
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     resize();
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      visibility.disconnect();
       owner.removeEventListener('pulse-position', update);
+      document.removeEventListener('visibilitychange', wake);
     };
   }, [onPaint]);
   return <canvas ref={ref} className="request-pulse" aria-hidden="true" />;

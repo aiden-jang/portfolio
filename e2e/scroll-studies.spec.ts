@@ -45,7 +45,7 @@ for (const width of [1440, 390]) {
     const parkedEditor = await page.evaluate(() => scrollY);
     await expect(recovery).toHaveText('Edit undone');
     await expect(iodine.locator('video')).toHaveCount(0);
-    await page.waitForTimeout(1250);
+    await expect(recovery).toHaveText('Agent edit');
     await expect(recovery).toHaveText('Edit undone');
     expect(await page.evaluate(() => scrollY)).toBe(parkedEditor);
 

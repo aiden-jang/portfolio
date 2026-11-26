@@ -1,7 +1,6 @@
-import { useCallback, useContext, useEffect, useRef, useState, type Ref } from 'react';
+import { useCallback, useContext, useRef, useState, type Ref } from 'react';
 import example from '../../data/iodineExample.json';
 import { evidenceHref } from '../creative/storyRoutes';
-import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './iodine-timed.css';
 import { ProjectScene } from './ProjectScene';
@@ -10,37 +9,18 @@ import { ControlIcon } from '../ControlIcon';
 
 export function IodinePresentation() {
   const frame = useRef<HTMLDivElement>(null);
-  const manual = useRef(false);
-  const settled = useRef(false);
   const openCase = useContext(OpenEvidence);
   const [restored, restore] = useState(false);
-  const showEdit = useCallback((done: boolean) => {
-    restore(done);
+  const [manual, setManual] = useState(false);
+  const draw = useCallback((progress: number) => {
+    restore(progress >= 1);
   }, []);
-  const draw = useCallback(
-    (progress: number) => {
-      if (!manual.current) showEdit(settled.current || progress >= 1);
-    },
-    [showEdit],
-  );
-  const arrive = useCallback(
-    (active: boolean) => {
-      settled.current = active;
-      if (active) showEdit(true);
-    },
-    [showEdit],
-  );
-  useScrollArrival(frame, true, arrive);
-  useTimedScene(frame, draw, { duration: 760, startThreshold: 0.4 });
-  useEffect(() => {
-    const preference = matchMedia('(prefers-reduced-motion: reduce)');
-    const present = () => {
-      if (preference.matches && !manual.current) showEdit(true);
-    };
-    present();
-    preference.addEventListener('change', present);
-    return () => preference.removeEventListener('change', present);
-  }, [showEdit]);
+  useTimedScene(frame, draw, {
+    enabled: !manual,
+    duration: 900,
+    hold: 1450,
+    startThreshold: 0.4,
+  });
 
   const href = evidenceHref('iodine', {
     edit: restored ? 'restored' : 'edited',
@@ -66,8 +46,8 @@ export function IodinePresentation() {
           restored={restored}
           frame={frame}
           onToggleEdit={() => {
-            manual.current = true;
-            showEdit(!restored);
+            setManual(true);
+            restore(!restored);
           }}
         />
       </div>
