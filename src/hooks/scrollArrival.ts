@@ -116,3 +116,10 @@ export function useScrollArrival(
 function onHashChange() {
   prepareSectionArrival(location.hash.slice(1));
 }
+
+export const projectArrivalAnchors = [
+  'project-everythingisfine',
+  'project-iodine',
+  'batching-study',
+  'f40-study',
+];

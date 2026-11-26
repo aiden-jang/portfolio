@@ -1,9 +1,16 @@
+import { F40_INDEX } from '../../config';
+import { useAppStore } from '../../store';
+import {
+  finishStudyMotion,
+  finishStudyProgress,
+  finishStudySpan,
+  finishStudyStart,
+} from '../../three/finishStudy';
+import { useFinishStudyMatch } from './useFinishStudyMatch';
 import { useEffect, useRef } from 'react';
 import { FINISH_MEDIA, finishFrames } from './finishFrames';
 import './about-framing.css';
 const narrowQuery = '(max-width: 767px)';
-const scrollStart = 0.16;
-const scrollSpan = 0.76;
 
 function FinishPoster({ finish }: { finish: 'clay' | 'paint' }) {
   return (
@@ -20,7 +27,11 @@ function FinishPoster({ finish }: { finish: 'clay' | 'paint' }) {
 }
 
 export function AboutFraming() {
+  const liveReady = useAppStore(
+    (state) => state.renderedCarIndex === F40_INDEX && !state.sceneUnavailable,
+  );
   const track = useRef<HTMLDivElement>(null);
+  useFinishStudyMatch(track, liveReady);
   const video = useRef<HTMLVideoElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const range = useRef<HTMLInputElement>(null);
@@ -31,6 +42,7 @@ export function AboutFraming() {
     const slider = range.current!;
     const motion = matchMedia('(prefers-reduced-motion: no-preference)');
     const narrow = matchMedia(narrowQuery);
+    const liveMotion = matchMedia(finishStudyMotion);
     const short = matchMedia('(max-height: 490px)');
     let nearby = false;
     let progress = 0;
@@ -56,7 +68,8 @@ export function AboutFraming() {
       else seek();
     }
     function configure() {
-      const moving = nearby && motion.matches && !short.matches;
+      const moving =
+        nearby && motion.matches && !short.matches && !(liveReady && liveMotion.matches);
       if (moving && narrow.matches) phoneFrames.load();
       else phoneFrames.clear();
       if (!moving || narrow.matches) {
@@ -79,8 +92,7 @@ export function AboutFraming() {
       if (!nearby || !motion.matches || short.matches) return;
       const travel = scrollTravel();
       if (travel > 0) {
-        const position = -lane.getBoundingClientRect().top / travel;
-        apply(Math.min(1, Math.max(0, (position - scrollStart) / scrollSpan)));
+        apply(finishStudyProgress(lane.getBoundingClientRect().top, travel));
       }
     }
     function schedule() {
@@ -100,7 +112,7 @@ export function AboutFraming() {
       if (motion.matches && !short.matches) {
         const start = scrollY + lane.getBoundingClientRect().top;
         scrollTo({
-          top: start + scrollTravel() * (scrollStart + progress * scrollSpan),
+          top: start + scrollTravel() * (finishStudyStart + progress * finishStudySpan),
           behavior: 'instant',
         });
       }
@@ -113,7 +125,8 @@ export function AboutFraming() {
       { rootMargin: '720px' },
     );
     observer.observe(lane);
-    for (const query of [motion, narrow, short]) query.addEventListener('change', updateMedia);
+    for (const query of [motion, narrow, short, liveMotion])
+      query.addEventListener('change', updateMedia);
     addEventListener('scroll', schedule, { passive: true });
     addEventListener('resize', schedule);
     player.addEventListener('loadedmetadata', seek);
@@ -125,7 +138,8 @@ export function AboutFraming() {
       observer.disconnect();
       phoneFrames.clear();
       cancelAnimationFrame(frame);
-      for (const query of [motion, narrow, short]) query.removeEventListener('change', updateMedia);
+      for (const query of [motion, narrow, short, liveMotion])
+        query.removeEventListener('change', updateMedia);
       removeEventListener('scroll', schedule);
       removeEventListener('resize', schedule);
       player.removeEventListener('loadedmetadata', seek);
@@ -134,10 +148,10 @@ export function AboutFraming() {
       player.removeEventListener('seeked', seek);
       slider.removeEventListener('input', useSlider);
     };
-  }, []);
+  }, [liveReady]);
 
   return (
-    <figure className="about-framing-study" aria-labelledby="finish-study-title">
+    <figure id="f40-study" className="about-framing-study" aria-labelledby="finish-study-title">
       <div className="scroll-film-track" ref={track}>
         <div className="scroll-film">
           <FinishPoster finish="clay" />

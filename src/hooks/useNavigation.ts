@@ -1,4 +1,4 @@
-import { lastScrollInput, prepareSectionArrival } from './scrollArrival';
+import { lastScrollInput, prepareSectionArrival, projectArrivalAnchors } from './scrollArrival';
 import { handleNavigationKey } from './navigationKeyboard';
 import { useCallback, useEffect, useRef } from 'react';
 import { SECTION_IDS, type SectionId } from '../config';
@@ -19,8 +19,6 @@ const SNAP_LOCK_MS = 900;
 const CAR_LOCK_MS = 600;
 // Below this, a mouse's horizontal jitter would cycle the car on its own.
 const MIN_WHEEL_DELTA = 10;
-const projectAnchors = ['project-everythingisfine', 'project-iodine', 'batching-study'];
-
 function sectionLanding(section: HTMLElement) {
   if (section.id === 'sec-more-work') {
     const heading = section.querySelector('.project-gallery-heading');
@@ -167,7 +165,7 @@ export function useNavigation(sceneOnly = false) {
       const anchor = location.hash.slice(1);
       const index = SECTION_IDS.indexOf(anchor as SectionId);
       if (index < 0) {
-        if (projectAnchors.includes(anchor)) {
+        if (projectArrivalAnchors.includes(anchor)) {
           cancelSmoothScroll();
           prepareSectionArrival(anchor);
           document.getElementById(anchor)?.scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -237,7 +235,7 @@ export function useNavigation(sceneOnly = false) {
       if (!restoreCaseReturn()) {
         restoreSectionLink();
         const anchor = initialHash.slice(1);
-        if (SECTION_IDS.includes(anchor as SectionId) || projectAnchors.includes(anchor)) {
+        if (SECTION_IDS.includes(anchor as SectionId) || projectArrivalAnchors.includes(anchor)) {
           initialLanding = window.scrollY;
         }
       }

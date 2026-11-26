@@ -1,3 +1,4 @@
+import { useFinishStudy } from './finishStudy';
 import { exhibitWheel } from '../garageExhibits/geometry';
 import { useGarageExhibit } from '../garageExhibits/state';
 import { prepareBrakePivot } from '../garageExhibits/parts';
@@ -234,9 +235,10 @@ export function Car() {
   useFrame((state, dt) => {
     const app = useAppStore.getState();
     const review = useGarageStudio.getState();
+    const closing = app.isContactVisible || useFinishStudy.getState().active;
     group.visible =
       !useLineup.getState().active &&
-      (!app.isContactVisible || review.active || displayedIndex.current === F40_INDEX);
+      (!closing || review.active || displayedIndex.current === F40_INDEX);
     const exhibit = useGarageExhibit.getState();
     const onStage = review.active && review.chapter === 'walk' && displayedIndex.current === 20;
     const reduced = prefersReducedMotion();
@@ -260,7 +262,7 @@ export function Car() {
       studio,
       studio ? getStudioProjection(state.size.width < 768) : undefined,
       refinements,
-      app.isContactVisible && !review.active && group.visible,
+      closing && !review.active && group.visible,
       studio && !review.active && group.visible && !reduced ? motionState.openingOrbitProgress : 0,
     );
     headlights.current?.setActive?.(

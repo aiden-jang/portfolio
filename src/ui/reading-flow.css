@@ -6,7 +6,7 @@ body:not([data-car-controls='visible']) .orbit-status {
   pointer-events: none;
 }
 html:not([data-showroom-handoff])
-  body[data-car-view='reading']:not([data-contact-view='visible'])
+  body[data-car-view='reading']:not([data-contact-view='visible'], [data-study-match])
   .portfolio-scene,
 body[data-car-view='reading'] #desktop-dock,
 body[data-car-view='reading'] #mobile-bar,

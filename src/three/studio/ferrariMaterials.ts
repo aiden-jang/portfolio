@@ -1,3 +1,5 @@
+import { addStudyMaterial } from './finishStudyMaterial';
+import { useFinishStudy } from '../finishStudy';
 import * as THREE from 'three';
 import { ferrariDetailShader } from './ferrariDetailShaders';
 import { studioSurfaces } from './ferrariSurfaces';
@@ -245,6 +247,7 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
       };
     }
   });
+  const applyStudy = addStudyMaterial(model);
   let active = false;
   return (
     next: boolean,
@@ -254,6 +257,7 @@ export function tuneStudioFerrari(model: THREE.Object3D) {
     opening = 0,
   ) => {
     closingReflection.value = Number(closing);
+    applyStudy(closing && useFinishStudy.getState().active);
     openingReflection.value = opening;
     optics.value = Number(next && refined);
     if (room) {

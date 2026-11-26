@@ -1,3 +1,4 @@
+import { finishStudyFrame, useFinishStudy } from './finishStudy';
 import { useRef } from 'react';
 import { KEYFRAMES } from '../config';
 import type { Keyframe } from '../types';
@@ -13,8 +14,9 @@ export function useContactArrival() {
   const arrival = useRef({ progress: 0 });
   return (pose: Keyframe | null, dt: number, reduced: boolean, scroll = 1) => {
     const state = arrival.current;
+    const study = !reduced && useFinishStudy.getState().active;
     const contact = pose && document.getElementById('sec-contact')?.getBoundingClientRect();
-    if (!pose || !contact || contact.top >= size.height || contact.bottom <= 0) {
+    if (!pose || !contact || (contact.top >= size.height && !study) || contact.bottom <= 0) {
       state.progress = 0;
       if (pose && applyPhoneOpeningView(camera, size.width, size.height, scroll)) return;
       const aspect = size.width / size.height;
@@ -34,9 +36,13 @@ export function useContactArrival() {
     const view = contactFrame({
       ...size,
       sectionHeight: contact.height,
-      sectionTop: contact.top,
+      sectionTop: study ? finishStudyFrame.top : contact.top,
       progress: t,
     });
+    const desktop = size.width >= CONTACT_DESKTOP_MIN_WIDTH;
+    const p = finishStudyFrame.progress;
+    const rise = p * p * (3 - 2 * p);
+    if (study && desktop) view.offsetX += size.width * 0.13 * (1 - rise);
     // Treat a tall Contact section as one scene and show only its current viewport slice.
     if (
       !camera.view?.enabled ||
@@ -56,11 +62,15 @@ export function useContactArrival() {
         view.height,
       );
     }
-    const desktop = size.width >= CONTACT_DESKTOP_MIN_WIDTH;
     const contactElevation = desktop ? 0.63 : 0.61;
     pose.azimuth = (desktop ? 0.38 : 0.29) * t;
     pose.elevation = 0.12 + (contactElevation - 0.12) * t;
     pose.distance = (10 + (pose.distance - 10) * t) * view.distanceMultiplier;
+    if (study) {
+      pose.azimuth += (desktop ? 0.46 : 0.42) * (1 - rise);
+      pose.elevation -= (desktop ? 0.4 : 0.31) * (1 - rise);
+      pose.distance *= 1 - (desktop ? 0.15 : 0.08) * (1 - rise);
+    }
   };
 }
 

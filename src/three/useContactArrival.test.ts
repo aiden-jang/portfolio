@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { afterEach, expect, it, vi } from 'vitest';
 import { PerspectiveCamera } from 'three';
 import { KEYFRAMES } from '../config';
+import { finishStudyFrame, useFinishStudy } from './finishStudy';
 import { useContactArrival } from './useContactArrival';
 
 const camera = new PerspectiveCamera(35, 1440 / 900, 0.1, 200);
@@ -18,6 +19,7 @@ function Probe() {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  useFinishStudy.setState({ active: false });
   camera.clearViewOffset();
   Object.assign(size, { width: 1440, height: 900 });
   document.body.replaceChildren();
@@ -87,6 +89,47 @@ it('updates the viewport crop when a short phone resizes inside the same tall se
     applyArrival({ ...KEYFRAMES.at(-1)! }, 0, true);
     expect(camera.view?.height).toBe(568);
     expect(camera.view?.fullHeight).toBe(820);
+  } finally {
+    await act(() => root.unmount());
+  }
+});
+
+it('matches the fixed Contact pose at the end of the study on all three layouts', async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  const section = document.createElement('section');
+  section.id = 'sec-contact';
+  let sectionTop = 0;
+  vi.spyOn(section, 'getBoundingClientRect').mockImplementation(() => {
+    const height = Math.max(size.height, 780);
+    return { top: sectionTop, bottom: sectionTop + height, height } as DOMRect;
+  });
+  const host = document.createElement('div');
+  document.body.append(section, host);
+  const root = createRoot(host);
+  try {
+    await act(() => root.render(createElement(Probe)));
+    for (const [width, height] of [
+      [1440, 900],
+      [390, 844],
+      [375, 667],
+    ]) {
+      Object.assign(size, { width, height });
+      sectionTop = 0;
+      useFinishStudy.setState({ active: false });
+      const contact = { ...KEYFRAMES[0] };
+      applyArrival(contact, 0, false);
+      const contactView = { ...camera.view };
+      const study = { ...KEYFRAMES[0] };
+      sectionTop = 1;
+      useFinishStudy.setState({ active: true });
+      Object.assign(finishStudyFrame, { progress: 1, top: 0 });
+      applyArrival(study, 0, false);
+      expect(study).toEqual(contact);
+      expect(camera.view).toEqual(contactView);
+      finishStudyFrame.progress = 0;
+      applyArrival(study, 0, false);
+      expect(study.elevation).toBeLessThan(contact.elevation);
+    }
   } finally {
     await act(() => root.unmount());
   }
