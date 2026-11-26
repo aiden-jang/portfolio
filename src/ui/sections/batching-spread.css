@@ -104,3 +104,104 @@
     display: none;
   }
 }
+
+#batching-study .batching-visuals {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.9fr);
+  align-items: center;
+  gap: clamp(22px, 6vw, 96px);
+}
+#batching-study .batching-pattern canvas.request-pulse {
+  height: clamp(150px, 28svh, 300px);
+}
+.batching-pattern .batching-readout {
+  text-align: center;
+  padding: 0;
+}
+.batching-line-items {
+  min-width: 0;
+  padding: clamp(13px, 2.1vw, 30px);
+  background: #101a16c9;
+  border: 1px solid #384d43;
+  border-radius: 9px;
+  color: #e4ece6;
+}
+.batching-line-items[data-loaded='true'] {
+  border-color: #658a76;
+}
+.batching-line-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.batching-line-heading strong {
+  font-size: clamp(17px, 2.2vw, 32px);
+  font-weight: 520;
+}
+.batching-line-heading > span {
+  color: #aac0b3;
+  font-size: 12px;
+}
+.batching-placement-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin: 12px 0 0;
+}
+.batching-placement-list button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 4px;
+  text-wrap: balance;
+  font-size: clamp(11px, 1.24vw, 15px);
+  border-radius: 4px;
+}
+.batching-line-items[data-loaded='true'] button:is([aria-pressed='true'], :hover) {
+  background: #aecdbb24;
+  color: #e4f8ec;
+}
+.batching-placement-list button[aria-disabled='true'] {
+  color: #95aa9d;
+  cursor: default;
+}
+.batching-placement-detail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 5px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid #3d5247;
+  text-align: center;
+}
+.batching-placement-detail dt {
+  color: #aac0b3;
+  font-size: clamp(10px, 1vw, 13px);
+}
+.batching-placement-detail dd {
+  margin: 4px 0 0;
+  font-size: clamp(12px, 1.3vw, 17px);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 767px) {
+  #batching-study .batching-visuals {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  #batching-study .batching-pattern canvas.request-pulse {
+    height: clamp(76px, 15svh, 150px);
+  }
+  .batching-placement-list {
+    margin-top: 4px;
+  }
+}
+@media (max-width: 767px) and (max-height: 699px) {
+  #batching-study .experience-batch-copy h2 {
+    font-size: clamp(34px, 10.5vw, 48px);
+  }
+  #batching-study .experience-batch-copy {
+    gap: 4px;
+  }
+  #batching-study .batching-visuals {
+    gap: 7px;
+  }
+}

@@ -4,6 +4,7 @@ import { SECTION_IDS, SECTION_LABELS, type SectionId } from '../config';
 import { useAppStore } from '../store';
 import { Brand } from './Brand';
 import { Nav } from './Nav';
+import { jumpToWork, workJumps } from './workJumps';
 import { ResumeButton } from './ResumeButton';
 import { ControlIcon } from './ControlIcon';
 import { COMMAND_MENU_EVENT } from './useCommandMenuEvents';
@@ -95,6 +96,22 @@ export function PortfolioHeader({ onLink }: { onLink: (id: SectionId) => void })
                 <ControlIcon name="arrow" />
               </a>
             ))}
+            <div className="mobile-work-jumps" aria-label="Jump to a project" role="group">
+              {workJumps.map(({ label, href }) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={(event) => {
+                    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                    event.preventDefault();
+                    closeAndFocus();
+                    jumpToWork(href);
+                  }}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
             <button
               type="button"
               onClick={() => {

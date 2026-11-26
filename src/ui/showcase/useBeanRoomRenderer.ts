@@ -42,7 +42,7 @@ export function useBeanRoomRenderer(room: RefObject<HTMLDivElement>, onExit: () 
         prepareRoom();
         approaching.disconnect();
       },
-      { rootMargin: '220px 0px' },
+      { rootMargin: '360px 0px' },
     );
     approaching.observe(stage.closest('.duet-stage') ?? stage);
     return () => {

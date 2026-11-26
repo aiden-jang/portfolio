@@ -17,7 +17,7 @@ export function useRoomCamera(host: RefObject<HTMLDivElement>, active: boolean, 
       box.style.setProperty('--camera-h', renderedHeight + 'px');
       box.style.setProperty(
         '--camera-x',
-        'clamp(calc(100% - var(--camera-w)), calc(50% - var(--camera-w) * var(--bean-focus-x, .55)), 0px)',
+        'clamp(calc(100% - var(--camera-w)), calc(50% - var(--camera-w) * var(--bean-camera-focus, var(--bean-focus-x, .55))), 0px)',
       );
       box.style.setProperty(
         '--camera-y',

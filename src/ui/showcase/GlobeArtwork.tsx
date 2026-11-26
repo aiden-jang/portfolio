@@ -36,6 +36,7 @@ export function GlobeArtwork({
           key={fallback ? 'screenshot' : 'poster'}
           src={fallback ? image : '/projects/atlas-globe-desktop.webp'}
           narrowSrc={fallback ? undefined : '/projects/atlas-globe-phone.webp'}
+          shortSrc={fallback ? undefined : '/projects/atlas-globe-short.webp'}
           alt={
             fallback
               ? 'meanwhile. product interface'

@@ -26,10 +26,12 @@ function roomClock(hour: number) {
   };
 }
 
-export function BeanRoom() {
+export function BeanRoom({ print }: { print?: readonly boolean[] | null }) {
   const room = useRef<HTMLDivElement>(null);
   useIdleDetail(room);
   const live = useRef<HTMLDivElement>(null);
+  const [painted, setPainted] = useState(false);
+  const onFirstFrame = useCallback(() => setPainted(true), []);
   const fade = useRef<HTMLCanvasElement>(null);
   const hotspots = useRef<HTMLDivElement>(null);
   const welcomed = useRef(false);
@@ -50,6 +52,7 @@ export function BeanRoom() {
   const clock = useMemo(() => roomClock(morning ? 9 : 18), [morning]);
 
   const leaveRoom = useCallback(() => {
+    setPainted(false);
     setAction((current) => (current?.kind === 'box' || current?.kind === 'sit' ? current : null));
     setPetAt(null);
   }, []);
@@ -86,6 +89,9 @@ export function BeanRoom() {
     const frame = live.current;
     if (!layer || !frame) return;
     const center = String(positions.center);
+    const artCenter = String((positions.center + positions.picture) / 2 + 0.012);
+    if (frame.style.getPropertyValue('--bean-picture-focus-x') !== artCenter)
+      frame.style.setProperty('--bean-picture-focus-x', artCenter);
     if (frame.style.getPropertyValue('--bean-focus-x') !== center)
       frame.style.setProperty('--bean-focus-x', center);
     for (const name of ['bean', 'mouse', 'box'] as const) {
@@ -197,8 +203,17 @@ export function BeanRoom() {
       data-light={morning ? 'morning' : 'evening'}
       ref={room}
     >
-      <div className="bean-window" data-light={morning ? 'morning' : 'evening'}>
-        <picture className="bean-room-poster" aria-hidden={!!Renderer && near}>
+      <div
+        className="bean-window"
+        data-light={morning ? 'morning' : 'evening'}
+        data-painted={painted && near}
+        data-has-print={!!print}
+      >
+        <picture className="bean-room-poster" aria-hidden={painted && near}>
+          <source
+            media="(max-width: 700px) and (max-height: 699px)"
+            srcSet="/projects/scenes/mrrp-room-art-short.webp"
+          />
           <source media="(max-width: 700px)" srcSet="/projects/scenes/mrrp-room-art-mobile.webp" />
           <img
             src="/projects/scenes/mrrp-room-art-desktop.webp"
@@ -214,7 +229,7 @@ export function BeanRoom() {
             <Renderer
               label="Bean’s room."
               key={String(reduced)}
-              roomPlay={{ action, onPositions, toy }}
+              roomPlay={{ action, onPositions, toy, print, onFirstFrame }}
               look={bean}
               clock={clock}
               mood={null}
@@ -240,7 +255,11 @@ export function BeanRoom() {
         </span>
       ) : (
         <div className="bean-room-controls" role="group" aria-label="Spend a moment with Bean">
-          {!status && <span className="bean-cue">Pet Bean or drag her toy.</span>}
+          {!status && (
+            <span className="bean-cue">
+              {print ? 'Your drawing is on the wall.' : 'Pet Bean or drag her toy.'}
+            </span>
+          )}
           <button
             type="button"
             disabled={!Renderer}

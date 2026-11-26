@@ -1,13 +1,14 @@
 diff --git a/Cat.tsx b/Cat.tsx
 --- a/Cat.tsx
 +++ b/Cat.tsx
-@@ -208,6 +208,37 @@
+@@ -208,6 +208,38 @@
 
  const EAR_FLICK_MS = 110;
 
 +type RoomPlayAction = { kind: "welcome" | "pet" | "mouse" | "box" | "sit"; count: number };
 +type RoomPlayPositions = {
 +  center: number;
++  picture: number;
 +  bean: [number, number];
 +  mouse: [number, number];
 +  box: [number, number];
@@ -39,7 +40,7 @@ diff --git a/Cat.tsx b/Cat.tsx
  export function Cat({
    label,
    look,
-@@ -264,6 +295,7 @@
+@@ -264,6 +296,7 @@
    dreamContext,
    onDream,
    collectionKey,
@@ -47,12 +48,14 @@ diff --git a/Cat.tsx b/Cat.tsx
  }: {
    label: string;
    look: CatLook;
-@@ -320,7 +352,14 @@
+@@ -320,7 +353,16 @@
    dreamContext?: DreamContext;
    onDream?: (dream: Dream) => void;
    collectionKey?: string;
 +  roomPlay?: {
 +    action: RoomPlayAction | null;
++    print?: readonly boolean[] | null;
++    onFirstFrame?: () => void;
 +    onPositions: (points: RoomPlayPositions) => void;
 +    toy?: { current: { x: number; held: boolean } | null };
 +  };
@@ -62,16 +65,17 @@ diff --git a/Cat.tsx b/Cat.tsx
    const ref = useRef<HTMLCanvasElement>(null);
    const capture = useCanvasCapture(ref, onCapture);
    const captureRef = useRef(capture);
-@@ -1260,6 +1299,8 @@
+@@ -1260,6 +1302,9 @@
 
      let raf = 0;
      const minFrameMs = reduce ? 250 : 0;
++    let notifiedFirstFrame = false;
 +    let previousAction: RoomPlayAction | null = null;
 +    let actionStartedAt = -Infinity;
      let lastFrame = -Infinity;
 
      const frame = (t: number) => {
-@@ -1268,6 +1309,32 @@
+@@ -1268,6 +1313,32 @@
          return;
        }
        lastFrame = t;
@@ -98,13 +102,13 @@ diff --git a/Cat.tsx b/Cat.tsx
 +          ? 2 * smooth((age - 200) / 420) - 8 * smooth((age - 690) / 350) + 6 * smooth((age - 1950) / 560)
 +          : 0;
 +      const toy = room?.toy?.current;
-+      const toyX = (toy ? Math.round(cam + toy.x * viewport) : PLAY_MOUSE.x) + Math.round(scoot);
-+      const toyY = PLAY_MOUSE.y - (crouch && Math.floor(age / 115) % 2 === 0 ? 1 : 0);
++      const toyX = (toy ? Math.round(cam + toy.x * viewport) : room?.print && (box?.clientWidth ?? 800) < 700 ? 59 : PLAY_MOUSE.x) + Math.round(scoot);
++      const toyY = PLAY_MOUSE.y + (room?.print && (box?.clientWidth ?? 800) < 700 ? 5 : 0) - (crouch && Math.floor(age / 115) % 2 === 0 ? 1 : 0);
 +      const peekUp = reduce ? 1 : smooth((age - 1130) / 270) * (1 - smooth((age - 3160) / 500));
        const nowMs = Date.now();
        const openAt = doorRef.current;
        let doorProg: number;
-@@ -1284,7 +1351,10 @@
+@@ -1284,7 +1355,10 @@
            ? (GW - viewport) / 2
            : Math.max(
                0,
@@ -116,7 +120,7 @@ diff --git a/Cat.tsx b/Cat.tsx
              );
        const pull = doorProg / 3;
        cam = raster.camera = Math.round((camBase * (1 - pull) + Math.min(camBase, 2) * pull) * 2) / 2;
-@@ -1292,7 +1362,7 @@
+@@ -1292,7 +1366,7 @@
        const L = lookRef.current;
        const hourly = decorateScene(
          sceneFor(clockRef.current, Date.now(), moodRef.current, togetherRef.current, spotRef.current),
@@ -125,7 +129,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        );
        const sc = waitingRef.current ? { ...hourly, catX: DOOR_X, atDoor: true, sleepy: 0.1 } : hourly;
        const beamX = Math.round(sc.beam * GW);
-@@ -1314,7 +1384,7 @@
+@@ -1314,7 +1388,7 @@
        sceneArt.joinery(rect, sc);
        sceneArt.floor(rect, sc);
 
@@ -134,7 +138,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const under = rugBody;
        polish.rugSurface(rect, sc, rugBody, rugEdge);
 
-@@ -1326,7 +1396,7 @@
+@@ -1326,7 +1400,7 @@
          rect(wx - 5, FLOOR + 21, 11, 1, worn);
        }
 
@@ -143,7 +147,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const occupied = togetherRef.current && sittingRef.current ? 1 : 0;
        companionDepth.current = reduce
          ? occupied
-@@ -1694,7 +1764,12 @@
+@@ -1694,7 +1768,12 @@
          px(90, FLOOR - 29, "#ffd79a");
        }
        if (!downRef.current || trip.mugStillUp) {
@@ -157,7 +161,24 @@ diff --git a/Cat.tsx b/Cat.tsx
          const steamAge = t - mugSteamedAt.current;
          if (!reduce && steamAge >= 0 && steamAge < MUG_STEAM_MS) {
            const p = steamAge / MUG_STEAM_MS;
-@@ -1912,6 +1987,14 @@
+@@ -1753,7 +1832,15 @@
+       rect(18, 14, FRAME.w, FRAME.h, mixHex(sc.wallBottom, INK, 0.12));
+       const fx = FRAME_X + shake("frame");
+       const drawn = doodleRef.current;
+-      if (drawn) {
++      if (room?.print) {
++        blit(FRAME_EMPTY, fx, 12, { w: INK, f: "#c69a63", h: "#ffeac8" });
++        for (let dy = 0; dy < FRAME_HOLE.h; dy++) {
++          for (let dx = 0; dx < FRAME_HOLE.w; dx++) {
++            if (room.print[dy * FRAME_HOLE.w + dx])
++              px(fx + FRAME_HOLE.x + dx, 12 + FRAME_HOLE.y + dy, "#493966");
++          }
++        }
++      } else if (drawn) {
+         blit(FRAME_EMPTY, fx, 12, { w: INK, f: "#c69a63", h: "#cfe0e4" });
+         for (let dy = 0; dy < FRAME_HOLE.h; dy++) {
+           for (let dx = 0; dx < FRAME_HOLE.w; dx++) {
+@@ -1912,6 +1999,14 @@
        const boxPlaying = !reduce && boxHere && t < boxTaps.current.playUntil;
        if (boxHere) {
          blit(BOX_BACK, BOX_X + shake("box"), BOX_Y, { w: INK, k: "#c69a63", s: "#a97f4d" });
@@ -172,7 +193,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        }
 
        if (!reduce) {
-@@ -2032,9 +2115,23 @@
+@@ -2032,9 +2127,23 @@
                                    ? warmSeat(sc.catX * GW)
                                    : sc.catX * GW;
        const bounded = (x: number) => Math.max(CAT_REACH_LEFT, Math.min(GW - CAT_REACH_RIGHT, x));
@@ -198,7 +219,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        let kx = Math.round(catX.current);
 
        const m = reduce ? null : mothAt(t, beamX);
-@@ -2114,12 +2211,18 @@
+@@ -2114,12 +2223,18 @@
          slowBlink.current.until = t + SLOW_BLINK_MS;
        }
 
@@ -218,7 +239,7 @@ diff --git a/Cat.tsx b/Cat.tsx
          eyesRef.current ||
          nameCalled ||
          mouseVisiting ||
-@@ -2170,7 +2273,7 @@
+@@ -2170,7 +2285,7 @@
          play("bell");
        }
        wasWalking.current = walking;
@@ -227,7 +248,7 @@ diff --git a/Cat.tsx b/Cat.tsx
          boxPlaying || peeking
            ? "peek"
            : stretching
-@@ -2201,6 +2304,13 @@
+@@ -2201,6 +2316,13 @@
                            : sittingRef.current && !walking
                              ? "loaf"
                              : (sc.pose ?? (sc.atDoor ? "stand" : posed ? "sit" : "loaf"));
@@ -241,7 +262,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const sp = POSES[pose]!;
        const comfort = comfortMoment({
          time: t,
-@@ -2225,10 +2335,32 @@
+@@ -2225,10 +2347,33 @@
            boxPlaying,
            peeking,
            peekUntil: boxPeekUntil.current,
@@ -264,6 +285,7 @@ diff --git a/Cat.tsx b/Cat.tsx
 +        const point = (px: number, py: number): [number, number] => [(px - cam) / viewport, py / GH];
 +        room.onPositions({
 +          center: (PLAY_CENTER - cam) / viewport,
++          picture: (fx + FRAME.w / 2 - cam) / viewport,
 +          bean: tucked
 +            ? point(PLAY_BOX.x + 8, PLAY_BOX.y - 4 - 5 * peekUp)
 +            : point(kx, y + sp.oy + Math.min(7, sp.h / 2)),
@@ -277,7 +299,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const litSpan =
          sc.lightPhase === "night"
            ? 0
-@@ -2276,6 +2408,22 @@
+@@ -2276,6 +2421,22 @@
          }
        }
 
@@ -300,7 +322,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        polish.cozyLight(rect, sc, kx, ky);
        if (sc.moodVisual === "warm-pool") {
          const warmth = mixHex(sc.floorNear, "#f3c985", 0.62);
-@@ -2316,6 +2464,12 @@
+@@ -2316,6 +2477,12 @@
          px(step.x + 2, ky + 2, ink);
        }
 
@@ -313,7 +335,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const lean = (beamX - WINDOW_CENTER_X) / GW;
        const cast = Math.round(lean * 7 * Math.min(1, sc.sun * 1.4));
        const shadowX = kx - (sp.w >> 1);
-@@ -2328,7 +2482,7 @@
+@@ -2328,7 +2495,7 @@
          : Math.round(Math.sin(t / (620 - sc.play * 380)) * (1 + sc.play * 2 + n) * comfort.tailEase);
        const tailX =
          pose === "loaf" ? kx + 8 : pose === "stretch" ? kx + 14 : pose === "pounce" ? kx + 9 : kx + 5;
@@ -322,7 +344,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        if (pose !== "peek") blit(TAIL, pose === "stand" ? kx - 12 : tailX, tailY + wag, pal, pose === "stand");
        if (raining && atTheGlass && awake) wetPaws.current = t + WET_PAWS_MS;
        if (walking && t < wetPaws.current && t > nextPrint.current) {
-@@ -2557,6 +2711,45 @@
+@@ -2557,6 +2724,45 @@
            rect(hx, hy + 2, 3, 1, c);
            px(hx + 1, hy + 3, c);
          }
@@ -368,7 +390,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        }
        if (boxHere) {
          blit(BOX_FRONT, BOX_X + shake("box"), BOX_Y + 3, { w: INK, k: "#d8ab72" });
-@@ -2642,7 +2835,12 @@
+@@ -2642,7 +2848,12 @@
 
        // Only the cat goes behind BOX_FRONT; otherwise the box hides floor treats.
        if (downRef.current && !trip.mugStillUp) {
@@ -382,7 +404,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        }
        if (treating) {
          const ty = FLOOR + 18;
-@@ -2795,10 +2993,35 @@
+@@ -2795,10 +3006,35 @@
          }
        }
 
@@ -420,7 +442,18 @@ diff --git a/Cat.tsx b/Cat.tsx
          const by = y + sp.oy - 12;
          rect(bx + 1, by, BW - 2, BH, WHITE);
          rect(bx, by + 1, BW, BH - 2, WHITE);
-@@ -2940,7 +3163,7 @@
+@@ -2911,6 +3147,10 @@
+       }
+
+       captureRef.current.painted();
++      if (room && !notifiedFirstFrame) {
++        notifiedFirstFrame = true;
++        room.onFirstFrame?.();
++      }
+       raf = requestAnimationFrame(frame);
+     };
+     raf = requestAnimationFrame(frame);
+@@ -2940,7 +3180,7 @@
          borderRadius: 12,
          imageRendering: "pixelated",
          userSelect: "none",

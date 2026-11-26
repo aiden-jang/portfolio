@@ -10,7 +10,6 @@ import { loadRecordedWeather } from './globe/recordedWeatherAssets';
 import type { EvidenceFrame } from '../creative/evidenceNavigation';
 
 type Engine = ReturnType<(typeof import('./globe-engine'))['createOrbitGlobe']>;
-const START_THRESHOLD = 0.12;
 type GlobeProps = {
   frameRef?: Ref<{ capture: () => EvidenceFrame | undefined }>;
   image: string;
@@ -40,7 +39,7 @@ export function InteractiveGlobe({
   useImperativeHandle(frameRef, () => ({ capture }), [capture]);
   const [mode, setMode] = useState<'auto' | 'manual' | null>(null),
     [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
-  const [inView, setInView] = useState(false);
+  const [approaching, setApproaching] = useState(false);
   const [reduced, setReduced] = useState(
     () => matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
@@ -70,23 +69,24 @@ export function InteractiveGlobe({
       if (media.matches) handle.current?.setRotating(false);
     };
     media.addEventListener('change', update);
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        visible.current = !!entry?.isIntersecting;
-        setInView(
-          visible.current && entry!.intersectionRatio >= START_THRESHOLD && !document.hidden,
-        );
-        handle.current?.sync();
-      },
-      { threshold: [0, START_THRESHOLD] },
-    );
+    const observer = new IntersectionObserver(([entry]) => {
+      visible.current = !!entry?.isIntersecting;
+      handle.current?.sync();
+    });
     observer.observe(figure.current!);
+    const warm = new IntersectionObserver(
+      ([entry]) => setApproaching(!!entry?.isIntersecting && !document.hidden),
+      { rootMargin: '260px 0px' },
+    );
+    warm.observe(figure.current!);
     const sync = () => handle.current?.sync();
     const onVisibility = () => {
       sync();
       // Re-observe so a foreground tab can start when the figure was already in view.
       observer.disconnect();
       observer.observe(figure.current!);
+      warm.disconnect();
+      warm.observe(figure.current!);
     };
     document.addEventListener('visibilitychange', onVisibility);
     const dialogs = new MutationObserver(sync);
@@ -99,6 +99,7 @@ export function InteractiveGlobe({
     return () => {
       media.removeEventListener('change', update);
       observer.disconnect();
+      warm.disconnect();
       dialogs.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
     };
@@ -106,7 +107,7 @@ export function InteractiveGlobe({
   useEffect(() => {
     if (
       mayAutoStart.current &&
-      inView &&
+      approaching &&
       !reduced &&
       !document.hidden &&
       (posterReady || posterUnavailable)
@@ -114,7 +115,7 @@ export function InteractiveGlobe({
       mayAutoStart.current = false;
       setMode('auto');
     }
-  }, [inView, posterReady, posterUnavailable, reduced]);
+  }, [approaching, posterReady, posterUnavailable, reduced]);
   useEffect(() => {
     if (!mode || !canvas.current) return;
     const target = canvas.current;

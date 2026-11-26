@@ -26,6 +26,7 @@ export function Duet({
   const previous = useRef(-1);
   const lastLight = useRef(-1);
   const [drawingActive, setDrawingActive] = useState(true);
+  const [print, setPrint] = useState<readonly boolean[] | null>(null);
   const paint = useCallback((laneElement: HTMLElement, t: number) => {
     const scene = room.current!,
       sketch = drawing.current!,
@@ -154,9 +155,17 @@ export function Duet({
     preference.addEventListener('change', measure);
     measure();
     const seek = () => {
-      if (location.hash !== '#project-mrrp') return;
+      const draw = location.hash === '#project-iguess';
+      if (!draw && location.hash !== '#project-mrrp') return;
       if (getComputedStyle(stage).position !== 'sticky') {
-        room.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
+        const shot = draw ? drawing.current : room.current;
+        const header =
+          document.querySelector('.portfolio-header')?.getBoundingClientRect().height ?? 0;
+        if (shot)
+          scrollTo({
+            top: scrollY + shot.getBoundingClientRect().top - header,
+            behavior: 'instant',
+          });
         return;
       }
       scrollTo({
@@ -164,19 +173,27 @@ export function Duet({
           scrollY +
           el.getBoundingClientRect().top -
           parseFloat(getComputedStyle(stage).top) +
-          (el.offsetHeight - stage.offsetHeight) * 0.83,
+          (el.offsetHeight - stage.offsetHeight) * (draw ? 0.14 : 0.83),
         behavior: 'instant',
       });
     };
-    const initial = requestAnimationFrame(seek);
-    addEventListener('hashchange', seek);
+    let jumpFrame = 0;
+    const queueSeek = () => {
+      cancelAnimationFrame(jumpFrame);
+      // Wait for the browser's native fragment scroll and any new project layout.
+      jumpFrame = requestAnimationFrame(() => {
+        jumpFrame = requestAnimationFrame(seek);
+      });
+    };
+    queueSeek();
+    addEventListener('hashchange', queueSeek);
     return () => {
       cancelAnimationFrame(frame.current);
       observer.disconnect();
       el.removeEventListener('drawing-grip', grip);
       preference.removeEventListener('change', measure);
-      cancelAnimationFrame(initial);
-      removeEventListener('hashchange', seek);
+      cancelAnimationFrame(jumpFrame);
+      removeEventListener('hashchange', queueSeek);
     };
   }, [paint]);
   return (
@@ -187,7 +204,10 @@ export function Duet({
             <h3>{drawTitle}</h3>
             {drawLink}
           </header>
-          <IguessReplay active={drawingActive} />
+          <IguessReplay active={drawingActive} onPrint={setPrint} />
+          <span className="sr-only" role="status">
+            {print && 'Your drawing is framed in Bean’s room.'}
+          </span>
         </article>
         <BeanMatch />
         <article ref={room} id="project-mrrp" className="room-shot">
@@ -195,7 +215,7 @@ export function Duet({
             <h3>mrrp</h3>
             {roomLink}
           </header>
-          <BeanRoom />
+          <BeanRoom print={print} />
         </article>
       </div>
     </div>

@@ -114,7 +114,13 @@ function paint(canvas: HTMLCanvasElement, visible: number) {
   }
 }
 
-export function IguessReplay({ active }: { active: boolean }) {
+export function IguessReplay({
+  active,
+  onPrint,
+}: {
+  active: boolean;
+  onPrint: (print: readonly boolean[] | null) => void;
+}) {
   const demo = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [result, setResult] = useState('');
@@ -212,9 +218,16 @@ export function IguessReplay({ active }: { active: boolean }) {
         })}
         onLostPointerCapture={() => {
           strokes.stop();
-          if (grip.current) release();
+          if (grip.current) {
+            release();
+            onPrint(strokes.print());
+          }
         }}
-        onKeyDown={strokes.key(redraw)}
+        onKeyDown={strokes.key(() => {
+          setUsed(true);
+          redraw();
+          onPrint(strokes.print());
+        })}
       />
       {!used && (
         <span className="connect-draw-cue" aria-hidden="true">

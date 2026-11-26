@@ -5,6 +5,7 @@ import './screenshot-image.css';
 type Props = {
   src: string;
   narrowSrc?: string;
+  shortSrc?: string;
   alt: string;
   lazy?: boolean;
   onUnavailable?: () => void;
@@ -15,7 +16,15 @@ export function ScreenshotImage(props: Props) {
   return <ImageResource key={props.src} {...props} />;
 }
 
-function ImageResource({ src, narrowSrc, alt, lazy = false, onUnavailable, onReady }: Props) {
+function ImageResource({
+  src,
+  narrowSrc,
+  shortSrc,
+  alt,
+  lazy = false,
+  onUnavailable,
+  onReady,
+}: Props) {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'failed'>('loading');
   const image = useRef<HTMLImageElement>(null);
   const [width, height] = SCREENSHOT_SIZES[src] ?? [1600, 1000];
@@ -61,6 +70,7 @@ function ImageResource({ src, narrowSrc, alt, lazy = false, onUnavailable, onRea
   );
   return narrowSrc ? (
     <picture>
+      {shortSrc && <source media="(max-width: 767px) and (max-height: 699px)" srcSet={shortSrc} />}
       <source media="(max-width: 767px)" srcSet={narrowSrc} />
       {picture}
     </picture>

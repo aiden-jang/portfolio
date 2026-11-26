@@ -1,4 +1,11 @@
-import { useCallback, useRef, type KeyboardEvent, type PointerEvent, type RefObject } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  type KeyboardEvent,
+  type PointerEvent,
+  type RefObject,
+} from 'react';
 
 type Point = [number, number];
 
@@ -16,6 +23,26 @@ export function useDrawingMark(canvas: RefObject<HTMLCanvasElement>) {
   const pointer = useRef<number | null>(null);
   const touchOrigin = useRef<{ x: number; y: number } | null>(null);
   const keyboard = useRef<Point>([510, 260]);
+  const drawingTouch = useRef(false);
+  useEffect(() => {
+    const board = canvas.current;
+    if (!board) return;
+    const keepDrawing = (event: TouchEvent) => {
+      if (pointer.current === null || event.touches.length !== 1) return;
+      const origin = touchOrigin.current;
+      const finger = event.touches[0]!;
+      if (
+        drawingTouch.current ||
+        (origin &&
+          Math.abs(finger.clientX - origin.x) > 7 &&
+          Math.abs(finger.clientX - origin.x) > Math.abs(finger.clientY - origin.y))
+      ) {
+        if (event.cancelable) event.preventDefault();
+      }
+    };
+    board.addEventListener('touchmove', keepDrawing, { passive: false });
+    return () => board.removeEventListener('touchmove', keepDrawing);
+  }, [canvas]);
   const paint = useCallback(() => {
     const element = canvas.current;
     const ctx = element?.getContext('2d');
@@ -35,6 +62,43 @@ export function useDrawingMark(canvas: RefObject<HTMLCanvasElement>) {
   }, [canvas]);
   return {
     paint,
+    print: () => {
+      const points = paths.current.flat();
+      if (!points.length) return null;
+      const minX = Math.min(...points.map(([x]) => x));
+      const minY = Math.min(...points.map(([, y]) => y));
+      const width = Math.max(1, Math.max(...points.map(([x]) => x)) - minX);
+      const height = Math.max(1, Math.max(...points.map(([, y]) => y)) - minY);
+      const paper = document.createElement('canvas');
+      paper.width = 15;
+      paper.height = 9;
+      const ink = paper.getContext('2d');
+      if (!ink) return null;
+      const scale = Math.min(12 / width, 6 / height);
+      const xOffset = (paper.width - width * scale) / 2;
+      const yOffset = (paper.height - height * scale) / 2;
+      ink.lineWidth = 1.5;
+      ink.lineCap = 'round';
+      ink.lineJoin = 'round';
+      for (const path of paths.current) {
+        ink.beginPath();
+        path.forEach(([x, y], index) => {
+          const px = (x - minX) * scale + xOffset;
+          const py = (y - minY) * scale + yOffset;
+          if (index) ink.lineTo(px, py);
+          else {
+            ink.moveTo(px, py);
+            if (path.length === 1) ink.lineTo(px + 0.01, py);
+          }
+        });
+        ink.stroke();
+      }
+      const rgba = ink.getImageData(0, 0, paper.width, paper.height).data;
+      return Array.from(
+        { length: paper.width * paper.height },
+        (_, index) => rgba[index * 4 + 3] > 92,
+      );
+    },
     start: (redraw: () => void) => (event: PointerEvent<HTMLCanvasElement>) => {
       if (event.button !== 0 || pointer.current !== null) return;
       const element = event.currentTarget;
@@ -62,6 +126,7 @@ export function useDrawingMark(canvas: RefObject<HTMLCanvasElement>) {
           [location(event.currentTarget, origin.x, origin.y)],
         ];
         touchOrigin.current = null;
+        drawingTouch.current = true;
       }
       const path = paths.current.at(-1);
       if (!path || path.length >= 600) return;
@@ -71,6 +136,7 @@ export function useDrawingMark(canvas: RefObject<HTMLCanvasElement>) {
     stop: () => {
       pointer.current = null;
       touchOrigin.current = null;
+      drawingTouch.current = false;
     },
     key: (redraw: () => void) => (event: KeyboardEvent<HTMLCanvasElement>) => {
       const step: Record<string, Point> = {

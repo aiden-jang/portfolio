@@ -3,6 +3,7 @@ import type { ComponentType } from 'react';
 export type RoomAction = 'welcome' | 'pet' | 'mouse' | 'box' | 'sit';
 export type RoomPositions = {
   center: number;
+  picture: number;
   bean: [number, number];
   mouse: [number, number];
   box: [number, number];
@@ -32,6 +33,8 @@ export const Cat: ComponentType<{
   spot: number | null;
   roomPlay: {
     action: { kind: RoomAction; count: number } | null;
+    print?: readonly boolean[] | null;
+    onFirstFrame?: () => void;
     onPositions: (points: RoomPositions) => void;
     toy?: { current: { x: number; held: boolean } | null };
   };

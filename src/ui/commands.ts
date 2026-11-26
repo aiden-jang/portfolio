@@ -1,3 +1,4 @@
+import { jumpToWork, workJumps } from './workJumps';
 import { openRearLouvers } from '../garageExhibits/select';
 import { selectMechanical } from '../garageExhibits/mechanical';
 import { useGarageStudio } from '../garageStudio/state';
@@ -80,6 +81,13 @@ export function buildCommands({
       hint: 'section',
       keywords: `${SECTION_LABELS[id]} navigate`,
       run: () => onSection(id),
+    })),
+    ...workJumps.map(({ label, href, keywords }) => ({
+      id: 'sec-work-' + href.slice(1),
+      label,
+      hint: 'project',
+      keywords,
+      run: () => jumpToWork(href),
     })),
     ...GARAGE_INDICES.map((index, position) => ({
       id: `car-${index}`,

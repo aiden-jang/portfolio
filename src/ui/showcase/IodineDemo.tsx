@@ -27,11 +27,21 @@ export function IodineDemo() {
       },
       { threshold: 0.25 },
     );
+    const warm = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        if (!reduced.matches) player.preload = 'metadata';
+        warm.disconnect();
+      },
+      { rootMargin: '260px 0px' },
+    );
+    warm.observe(player);
     observer.observe(player);
     reduced.addEventListener('change', update);
     document.addEventListener('visibilitychange', update);
     return () => {
       observer.disconnect();
+      warm.disconnect();
       reduced.removeEventListener('change', update);
       document.removeEventListener('visibilitychange', update);
       player.pause();

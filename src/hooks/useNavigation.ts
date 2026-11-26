@@ -19,7 +19,7 @@ const SNAP_LOCK_MS = 900;
 const CAR_LOCK_MS = 600;
 // Below this, a mouse's horizontal jitter would cycle the car on its own.
 const MIN_WHEEL_DELTA = 10;
-const featuredProjectAnchors = ['project-everythingisfine', 'project-iodine'];
+const projectAnchors = ['project-everythingisfine', 'project-iodine', 'batching-study'];
 
 function sectionLanding(section: HTMLElement) {
   if (section.id === 'sec-more-work') {
@@ -167,9 +167,10 @@ export function useNavigation(sceneOnly = false) {
       const anchor = location.hash.slice(1);
       const index = SECTION_IDS.indexOf(anchor as SectionId);
       if (index < 0) {
-        if (!event && featuredProjectAnchors.includes(anchor)) {
-          const project = document.getElementById(anchor);
-          project?.scrollIntoView({ block: 'start', behavior: 'instant' });
+        if (projectAnchors.includes(anchor)) {
+          cancelSmoothScroll();
+          prepareSectionArrival(anchor);
+          document.getElementById(anchor)?.scrollIntoView({ block: 'start', behavior: 'instant' });
         }
         return;
       }
@@ -236,7 +237,7 @@ export function useNavigation(sceneOnly = false) {
       if (!restoreCaseReturn()) {
         restoreSectionLink();
         const anchor = initialHash.slice(1);
-        if (SECTION_IDS.includes(anchor as SectionId) || featuredProjectAnchors.includes(anchor)) {
+        if (SECTION_IDS.includes(anchor as SectionId) || projectAnchors.includes(anchor)) {
           initialLanding = window.scrollY;
         }
       }

@@ -229,7 +229,7 @@ html:root #sec-more-work .gallery-companions .garage-project-copy p {
   html:root .duet .sketch {
     min-height: var(--desk-height);
   }
-  html:root .duet .room-shot {
+  html:root #sec-more-work .duet .room-shot {
     position: absolute;
     inset: 0;
     clip-path: inset(var(--room-reveal, 100%) 0 0);
