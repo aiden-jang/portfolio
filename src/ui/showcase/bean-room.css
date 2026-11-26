@@ -177,3 +177,20 @@ html:root .bean-room .bean-target:focus-visible {
     --bean-camera-focus: var(--bean-picture-focus-x, 0.43);
   }
 }
+
+.bean-hotspots .framed-strokes {
+  position: absolute;
+  left: var(--paper-x);
+  top: var(--paper-y);
+  width: var(--paper-width);
+  height: var(--paper-height);
+  max-width: none;
+  pointer-events: none;
+}
+.duet[data-match='jump'] .bean-room-canvas {
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.duet[data-match='jump'] .room-shot :is(.cut-id, .bean-room-controls) {
+  opacity: var(--room-ui, 0);
+}

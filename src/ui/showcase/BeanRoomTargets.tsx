@@ -1,6 +1,7 @@
 import { forwardRef, type PointerEvent } from 'react';
 
 type Props = {
+  paper?: string;
   boxed: boolean;
   onPet: () => void;
   onBox: () => void;
@@ -14,9 +15,10 @@ type ToyDrag = {
 };
 
 export const BeanRoomTargets = forwardRef<HTMLDivElement, Props & { toyDrag?: ToyDrag }>(
-  function BeanRoomTargets({ boxed, onPet, onBox, onMouse, toyDrag }, ref) {
+  function BeanRoomTargets({ paper, boxed, onPet, onBox, onMouse, toyDrag }, ref) {
     return (
       <div className="bean-hotspots" ref={ref} role="group" aria-label="Play in Bean’s room">
+        {paper && <img className="framed-strokes" src={paper} alt="" />}
         <button
           type="button"
           className="bean-target"

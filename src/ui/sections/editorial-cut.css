@@ -212,10 +212,6 @@ html:root #sec-more-work .gallery-companions .garage-project-copy p {
   }
 }
 
-.bean-match {
-  display: none;
-  pointer-events: none;
-}
 @media (prefers-reduced-motion: no-preference) and (min-height: 600px) {
   html:root #sec-more-work .duet {
     height: calc(var(--desk-height) + min(48svh, 420px));
@@ -232,30 +228,7 @@ html:root #sec-more-work .gallery-companions .garage-project-copy p {
   html:root #sec-more-work .duet .room-shot {
     position: absolute;
     inset: 0;
-    clip-path: inset(var(--room-reveal, 100%) 0 0);
-  }
-  .duet[data-match='jump'] .bean-match {
-    display: block;
-    position: absolute;
-    z-index: 2;
-    left: var(--match-x);
-    top: var(--match-y);
-    width: var(--match-w);
-    height: auto;
-    transform: translate(-50%, -50%);
-  }
-  .duet[data-match='jump'] .sketch .iguess-replay,
-  .duet[data-match='jump'] .sketch .cut-id {
-    visibility: hidden;
-  }
-  .duet[data-blink='true'] .match-lid {
-    fill: #fbefdb;
-  }
-  .duet[data-blink='true'] .match-eye {
-    fill: #634337;
-    transform: scaleY(0.4);
-    transform-box: fill-box;
-    transform-origin: center;
+    clip-path: inset(100% 0 0);
   }
 }
 .request-pulse .pulse-lines {
@@ -277,15 +250,10 @@ html:root #sec-more-work .gallery-companions .garage-project-copy p {
   letter-spacing: -2px;
 }
 @media (prefers-reduced-motion: no-preference) and (min-height: 600px) {
-  .duet[data-match='jump'] .bean-match {
-    top: 0;
-    left: 0;
-    will-change: transform;
-  }
   html:root .duet[data-match='draw'] .room-shot {
     clip-path: inset(100% 0 0) !important;
   }
-  html:root .duet[data-match='room'] .room-shot {
+  html:root .duet:is([data-match='room'], [data-match='jump']) .room-shot {
     clip-path: none !important;
   }
 }

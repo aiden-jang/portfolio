@@ -4,7 +4,9 @@ for (const [width, height] of [
   [390, 844],
   [375, 667],
 ]) {
-  test(`the cat jumps after one small scroll at ${width}×${height}`, async ({ page }) => {
+  test(`the drawing enters Bean’s room after one small scroll at ${width}×${height}`, async ({
+    page,
+  }) => {
     await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -26,12 +28,25 @@ for (const [width, height] of [
     await expect(duet).toHaveAttribute('data-match', 'draw');
     await expect(duet.locator('#project-iguess').getByRole('status').first()).toHaveText('Cat');
     const room = duet.locator('#project-mrrp');
+    const frame = room.locator('.framed-strokes');
+    const original = await frame.getAttribute('src');
+    const board = duet.locator('.iguess-draw-board');
+    await board.evaluate((canvas: HTMLCanvasElement) => canvas.focus({ preventScroll: true }));
+    await page.keyboard.press('ArrowRight');
+    await expect(frame).not.toHaveAttribute('src', original!);
+    const personalized = await frame.getAttribute('src');
     await expect(room).toHaveAttribute('inert', '');
     await page.mouse.move(20, 200);
     await page.mouse.wheel(0, 18);
-    await expect(duet.locator('.bean-match')).toBeVisible({ timeout: 1800 });
+    await expect(duet).toHaveAttribute('data-match', 'jump');
+    await expect(room.locator('.bean-room-canvas')).not.toHaveCSS('transform', 'none');
+    expect((await frame.boundingBox())!.width).toBeGreaterThan(width * 0.33);
+    await expect(room).toHaveAttribute('inert', '');
     await expect(duet).toHaveAttribute('data-match', 'room');
     await expect(room).not.toHaveAttribute('inert');
+    await expect(frame).toHaveAttribute('src', personalized!);
+    await room.getByRole('button', { name: 'Pet Bean', exact: true }).click();
+    await expect(room.getByRole('status')).toContainText('Bean leans in');
     await seek(0.1);
     await expect(duet).toHaveAttribute('data-match', 'draw');
     await expect(room).toHaveAttribute('inert', '');

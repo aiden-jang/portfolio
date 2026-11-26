@@ -3,6 +3,7 @@ import { easedProgress } from '../../hooks/useScrollStudy';
 import { useTimedScene } from '../../hooks/useTimedScene';
 
 import './iguess-replay.css';
+import { frameCatDrawing } from './frameCatDrawing';
 import { useDrawingMark } from './useDrawingMark';
 
 // A playable cat round for the match to Bean. Coordinates share her sitting pose.
@@ -92,14 +93,14 @@ const paths = outlines.map((stroke) =>
 const pointCount = paths.reduce((n, p) => n + p.length, 0);
 const answer = 'Cat';
 const guess = 'Two ears…';
-function paint(canvas: HTMLCanvasElement, visible: number) {
+function paint(canvas: HTMLCanvasElement, visible: number, ink = '#f7f0df') {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   ctx.clearRect(0, 0, 960, 605);
   ctx.lineWidth = 5;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.strokeStyle = '#f7f0df';
+  ctx.strokeStyle = ink;
   for (const path of paths) {
     if (visible <= 0) break;
     ctx.beginPath();
@@ -125,6 +126,16 @@ export function IguessReplay({
   const canvas = useRef<HTMLCanvasElement>(null);
   const [result, setResult] = useState('');
   const { paint: paintMarks, ...strokes } = useDrawingMark(canvas);
+  const frameDrawing = useCallback(() => {
+    const master = document.createElement('canvas');
+    master.width = 960;
+    master.height = 605;
+    paint(master, pointCount, '#504047');
+    paintMarks(master, '#197363');
+    const paper = frameCatDrawing(master);
+    onPrint(paper);
+  }, [paintMarks, onPrint]);
+  useEffect(frameDrawing, [frameDrawing]);
   const grip = useRef(false);
   const [used, setUsed] = useState(false);
   const [holding, setHolding] = useState(false);
@@ -219,14 +230,14 @@ export function IguessReplay({
         onLostPointerCapture={() => {
           strokes.stop();
           if (grip.current) {
+            frameDrawing();
             release();
-            onPrint(strokes.print());
           }
         }}
         onKeyDown={strokes.key(() => {
           setUsed(true);
           redraw();
-          onPrint(strokes.print());
+          frameDrawing();
         })}
       />
       {!used && (

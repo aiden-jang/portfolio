@@ -4,6 +4,7 @@ export type RoomAction = 'welcome' | 'pet' | 'mouse' | 'box' | 'sit';
 export type RoomPositions = {
   center: number;
   picture: number;
+  paper: [number, number, number, number];
   bean: [number, number];
   mouse: [number, number];
   box: [number, number];
@@ -33,6 +34,7 @@ export const Cat: ComponentType<{
   spot: number | null;
   roomPlay: {
     action: { kind: RoomAction; count: number } | null;
+    landing?: { current: number | null };
     print?: HTMLCanvasElement | null;
     onFirstFrame?: () => void;
     onPositions: (points: RoomPositions) => void;

@@ -43,59 +43,27 @@ export function useDrawingMark(canvas: RefObject<HTMLCanvasElement>) {
     board.addEventListener('touchmove', keepDrawing, { passive: false });
     return () => board.removeEventListener('touchmove', keepDrawing);
   }, [canvas]);
-  const paint = useCallback(() => {
-    const element = canvas.current;
-    const ctx = element?.getContext('2d');
-    if (!element || !ctx) return;
-    ctx.strokeStyle = '#80e8d2';
-    ctx.lineWidth = 6;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    for (const points of paths.current) {
-      ctx.beginPath();
-      ctx.moveTo(points[0][0], points[0][1]);
-      if (points.length === 1) ctx.lineTo(points[0][0] + 0.1, points[0][1]);
-      else for (const [x, y] of points.slice(1)) ctx.lineTo(x, y);
-      ctx.stroke();
-    }
-    element.toggleAttribute('data-marked', paths.current.length > 0);
-  }, [canvas]);
+  const paint = useCallback(
+    (element = canvas.current, ink = '#80e8d2') => {
+      const ctx = element?.getContext('2d');
+      if (!element || !ctx) return;
+      ctx.strokeStyle = ink;
+      ctx.lineWidth = 6;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      for (const points of paths.current) {
+        ctx.beginPath();
+        ctx.moveTo(points[0][0], points[0][1]);
+        if (points.length === 1) ctx.lineTo(points[0][0] + 0.1, points[0][1]);
+        else for (const [x, y] of points.slice(1)) ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+      element.toggleAttribute('data-marked', paths.current.length > 0);
+    },
+    [canvas],
+  );
   return {
     paint,
-    print: () => {
-      const points = paths.current.flat();
-      if (!points.length) return null;
-      const minX = Math.min(...points.map(([x]) => x));
-      const minY = Math.min(...points.map(([, y]) => y));
-      const width = Math.max(1, Math.max(...points.map(([x]) => x)) - minX);
-      const height = Math.max(1, Math.max(...points.map(([, y]) => y)) - minY);
-      const paper = document.createElement('canvas');
-      paper.width = 300;
-      paper.height = 180;
-      const ink = paper.getContext('2d');
-      if (!ink) return null;
-      const scale = Math.min(220 / width, 138 / height);
-      const xOffset = (paper.width - width * scale) / 2;
-      const yOffset = (paper.height - height * scale) / 2;
-      ink.strokeStyle = '#493966';
-      ink.lineWidth = Math.max(4, Math.min(12, 6 * scale));
-      ink.lineCap = 'round';
-      ink.lineJoin = 'round';
-      for (const path of paths.current) {
-        ink.beginPath();
-        path.forEach(([x, y], index) => {
-          const px = (x - minX) * scale + xOffset;
-          const py = (y - minY) * scale + yOffset;
-          if (index) ink.lineTo(px, py);
-          else {
-            ink.moveTo(px, py);
-            if (path.length === 1) ink.lineTo(px + 0.01, py);
-          }
-        });
-        ink.stroke();
-      }
-      return paper;
-    },
     start: (redraw: () => void) => (event: PointerEvent<HTMLCanvasElement>) => {
       if (event.button !== 0 || pointer.current !== null) return;
       const element = event.currentTarget;

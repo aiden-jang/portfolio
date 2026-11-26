@@ -8,6 +8,8 @@ import { useBeanRoomRenderer } from './useBeanRoomRenderer';
 import { useBeanToyDrag } from './useBeanToyDrag';
 import { useIdleDetail } from './useIdleDetail';
 
+const paperProperties = ['--paper-x', '--paper-y', '--paper-width', '--paper-height'];
+
 const bean = {
   name: 'Bean',
   fur: '#e39348',
@@ -26,7 +28,14 @@ function roomClock(hour: number) {
   };
 }
 
-export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
+export function BeanRoom({
+  print,
+  landing,
+}: {
+  print?: HTMLCanvasElement | null;
+  landing?: { current: number | null };
+}) {
+  const paperImage = useMemo(() => print?.toDataURL(), [print]);
   const room = useRef<HTMLDivElement>(null);
   useIdleDetail(room);
   const live = useRef<HTMLDivElement>(null);
@@ -34,7 +43,6 @@ export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
   const onFirstFrame = useCallback(() => setPainted(true), []);
   const fade = useRef<HTMLCanvasElement>(null);
   const hotspots = useRef<HTMLDivElement>(null);
-  const welcomed = useRef(false);
   const toyCue = useRef<'waiting' | 'played' | 'manual'>('waiting');
   const [action, setAction] = useState<{
     kind: RoomAction;
@@ -60,34 +68,16 @@ export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
   const reduced = useReducedMotion();
   useRoomCamera(live, near && !!Renderer, reduced);
 
-  useEffect(() => {
-    const article = room.current?.closest('article');
-    if (!Renderer || !near || !article || welcomed.current) return;
-    let inFrame = false;
-    const welcome = () => {
-      if (!inFrame || article.inert || welcomed.current) return;
-      welcomed.current = true;
-      setAction((current) => current ?? { kind: 'welcome', count: 0 });
-    };
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        inFrame = (entry?.intersectionRatio ?? 0) >= 0.47;
-        welcome();
-      },
-      { threshold: 0.47 },
-    );
-    observer.observe(article);
-    article.addEventListener('project-scene-progress', welcome);
-    return () => {
-      observer.disconnect();
-      article.removeEventListener('project-scene-progress', welcome);
-    };
-  }, [Renderer, near]);
-
   const onPositions = useCallback((positions: RoomPositions) => {
     const layer = hotspots.current;
     const frame = live.current;
     if (!layer || !frame) return;
+    positions.paper.forEach((value, index) => {
+      const property = paperProperties[index];
+      const percent = (value * 100).toFixed(4) + '%';
+      if (layer.style.getPropertyValue(property) !== percent)
+        layer.style.setProperty(property, percent);
+    });
     const center = String(positions.center);
     const artCenter = String((positions.center + positions.picture) / 2 + 0.004);
     if (frame.style.getPropertyValue('--bean-picture-focus-x') !== artCenter)
@@ -147,7 +137,7 @@ export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
       progress.current = (event as CustomEvent<number>).detail;
       if (!motion.matches) return;
       if (progress.current < 0.05 && toyCue.current === 'played') toyCue.current = 'waiting';
-      const canPlay = !scene.inert && toyCue.current === 'waiting' && welcomed.current;
+      const canPlay = !scene.inert && live.current && toyCue.current === 'waiting';
       if (progress.current >= 0.18 && canPlay) {
         toyCue.current = 'played';
         setAction((current) => ({
@@ -228,7 +218,7 @@ export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
             <Renderer
               label="Bean’s room."
               key={String(reduced)}
-              roomPlay={{ action, onPositions, toy, print, onFirstFrame }}
+              roomPlay={{ action, onPositions, toy, print, landing, onFirstFrame }}
               look={bean}
               clock={clock}
               mood={null}
@@ -244,7 +234,7 @@ export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
               spot={together ? 0.42 : null}
             />
             <canvas className="bean-light-fade" ref={fade} aria-hidden="true" />
-            <BeanRoomTargets ref={hotspots} {...targets} toyDrag={toyDrag} />
+            <BeanRoomTargets paper={paperImage} ref={hotspots} {...targets} toyDrag={toyDrag} />
           </div>
         )}
       </div>
@@ -256,7 +246,9 @@ export function BeanRoom({ print }: { print?: HTMLCanvasElement | null }) {
         <div className="bean-room-controls" role="group" aria-label="Spend a moment with Bean">
           {!status && (
             <span className="bean-cue">
-              {print ? 'Your drawing is on the wall.' : 'Pet Bean or drag her toy.'}
+              {print?.hasAttribute('data-personalized')
+                ? 'Your drawing is on the wall.'
+                : 'Pet Bean or drag her toy.'}
             </span>
           )}
           <button

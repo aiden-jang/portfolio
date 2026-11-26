@@ -35,7 +35,7 @@ export function useBeanRoomRenderer(room: RefObject<HTMLDivElement>, onExit: () 
       },
       { rootMargin: '160px 0px' },
     );
-    const host = stage.closest('.duet-stage') ?? stage;
+    const host = stage.closest('.duet') ?? stage;
     observer.observe(host);
     const approaching = new IntersectionObserver(
       ([entry]) => {

@@ -67,15 +67,3 @@ html:root #project-iodine .recovery[data-restored='true'] .recovery-line {
     top: calc(var(--portfolio-header-height) + 4px);
   }
 }
-
-@media (prefers-reduced-motion: no-preference) and (min-height: 600px) {
-  .duet[data-match='jump'] .bean-match {
-    z-index: 3;
-  }
-  .duet[data-match='jump'] .sketch .iguess-replay,
-  .duet[data-match='jump'] .sketch .cut-id {
-    visibility: visible;
-    opacity: var(--ink-visible, 1);
-    pointer-events: none;
-  }
-}

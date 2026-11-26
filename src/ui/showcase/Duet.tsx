@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { useScrollArrival } from '../../hooks/scrollArrival';
 import { easedProgress, useScrollStudy } from '../../hooks/useScrollStudy';
 import { BeanRoom } from './BeanRoom';
-import { BeanMatch } from './BeanMatch';
 import { IguessReplay } from './IguessReplay';
 
 export function Duet({
@@ -21,6 +20,7 @@ export function Duet({
   const held = useRef(false);
   const sticky = useRef(false);
   const frame = useRef(0);
+  const landing = useRef<number | null>(null);
   const step = useRef(0);
   const destination = useRef(0);
   const returnAt = useRef(0.32);
@@ -66,6 +66,10 @@ export function Duet({
       updateRoom();
     }
     function state(next: 'static' | 'draw' | 'jump' | 'room') {
+      if (next !== 'jump') {
+        landing.current = null;
+        scene.querySelector<HTMLElement>('.bean-room-canvas')?.style.removeProperty('transform');
+      }
       laneElement.dataset.match = next;
       const hideSketch = next === 'room';
       if (sketch.inert !== hideSketch) {
@@ -97,58 +101,62 @@ export function Duet({
     if (destination.current === target && (frame.current || step.current === target)) return;
     destination.current = target;
     cancelAnimationFrame(frame.current);
-    const box = stageBox;
-    const board = sketch.querySelector('canvas')!.getBoundingClientRect();
-    const bean = scene.querySelector('[data-object="bean"]')?.getBoundingClientRect();
-    const sx = board.left + board.width / 2 - box.left,
-      sy = board.top + board.height / 2 - box.top;
-    const ex = bean ? bean.left + bean.width / 2 - box.left : box.width * 0.5;
-    const ey = bean ? bean.top + bean.height / 2 - box.top : box.height * 0.7;
-    const sw = Math.max(1, 360 * Math.min(board.width / 960, board.height / 605));
-    const ew = Math.max(55, Math.min(box.width * 0.26, box.height * 0.19));
-    const from = step.current,
-      start = performance.now(),
-      duration = (skip ? 910 : 1120) * Math.abs(target - from);
-    const radius = Math.hypot(Math.max(ex, box.width - ex), Math.max(ey, box.height - ey));
-    const sprite = stage.querySelector<SVGElement>('.bean-match')!;
-    const side = ex > box.width * 0.58 ? -1 : 1;
-    const hopWidth = Math.min(212, box.width * 0.22);
-    const crest = Math.min(sy, ey) - Math.min(146, box.height * 0.25);
-    const launch = 0.14;
-    let elapsed = 0;
-    let lastFrameAt = start;
-    state('jump');
+    const from = step.current;
+    const duration = 2350 * Math.abs(target - from);
+    const requestedAt = performance.now();
+    let startedAt: number | undefined;
     function tick(now: number) {
-      elapsed += Math.min(50, now - lastFrameAt);
-      lastFrameAt = now;
-      const time = Math.min(1, elapsed / Math.max(duration, 1));
-      const p = from + (target - from) * time;
-      step.current = p;
-      const flight = easedProgress(p, launch, 0.88);
-      const arc = Math.sin(Math.PI * flight);
-      const x = sx + (ex - sx) * flight + side * hopWidth * arc;
-      const y =
-        p < 0.55
-          ? sy + (crest - sy) * easedProgress(p, launch, 0.55)
-          : crest + (ey - crest) * easedProgress(p, 0.55, 0.88);
-      const beanWidth = sw + (ew - sw) * flight;
-      const ink = easedProgress(p, 0.04, launch);
-      const landing = easedProgress(p, 0.87, 0.97);
-      const tilt = arc * side * -10;
-      sprite.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%) rotate(${tilt}deg) scale(${beanWidth / sw})`;
-      sprite.style.width = sw + 'px';
-      sprite.style.opacity = String(ink * (1 - landing));
-      laneElement.style.setProperty('--ink-visible', String(1 - ink));
-      laneElement.dataset.blink = String(p < 0.27);
-      const open = easedProgress(p, 0.45, 0.96);
-      scene.style.clipPath = `circle(${open * radius}px at ${ex}px ${ey}px)`;
+      const camera = scene.querySelector<HTMLElement>('.bean-room-canvas');
+      const art = camera?.querySelector<HTMLImageElement>('.framed-strokes');
+      const layer = art?.offsetParent as HTMLElement | null;
+      const viewport = camera?.parentElement;
+      if (
+        !camera ||
+        !art?.naturalWidth ||
+        !layer ||
+        !art.offsetWidth ||
+        !layer.hasAttribute('data-positioned') ||
+        viewport?.dataset.painted !== 'true'
+      ) {
+        // Give the live room time to paint when a swipe reaches it before the module loads.
+        if (from === 0 && target === 1 && now - requestedAt < 480) {
+          frame.current = requestAnimationFrame(tick);
+          return;
+        }
+        step.current = target;
+        frame.current = 0;
+        state(target ? 'room' : 'draw');
+        return;
+      }
+      if (startedAt === undefined) {
+        startedAt = now;
+        state('jump');
+      }
+      const time = Math.min(1, (now - startedAt) / Math.max(duration, 1));
+      const progress = from + (target - from) * time;
+      step.current = landing.current = progress;
+      const frameX = layer.offsetLeft + art.offsetLeft + art.offsetWidth / 2;
+      const frameY = layer.offsetTop + art.offsetTop + art.offsetHeight / 2;
+      const { clientWidth: width, clientHeight: height } = camera;
+      const frameShare = width > 700 ? 0.48 : 0.72;
+      const close = Math.max(
+        1.1,
+        Math.min((width * frameShare) / art.offsetWidth, (height * 0.5) / art.offsetHeight, 8),
+      );
+      const pullback = easedProgress(progress, 0.18, 0.98);
+      const zoom = close ** (1 - pullback);
+      const offset = (zoom - 1) / (close - 1);
+      const x = (width * 0.5 - close * frameX) * offset;
+      const y = (height * 0.47 - close * frameY) * offset;
+      camera.style.transform = `matrix(${zoom},0,0,${zoom},${x},${y})`;
+      laneElement.style.setProperty('--room-ui', String(easedProgress(progress, 0.86, 1)));
       if (time < 1) frame.current = requestAnimationFrame(tick);
       else {
         frame.current = 0;
         state(target ? 'room' : 'draw');
       }
     }
-    tick(start);
+    tick(requestedAt);
   }, []);
   useScrollStudy(lane, true, paint);
   const arrive = useCallback(
@@ -233,16 +241,16 @@ export function Duet({
           </header>
           <IguessReplay active={drawingActive} onPrint={setPrint} />
           <span className="sr-only" role="status">
-            {print && 'Your drawing is framed in Bean’s room.'}
+            {print?.hasAttribute('data-personalized') && 'Your drawing is framed in Bean’s room.'}
           </span>
         </article>
-        <BeanMatch />
+
         <article ref={room} id="project-mrrp" className="room-shot">
           <header className="cut-id">
             <h3>mrrp</h3>
             {roomLink}
           </header>
-          <BeanRoom print={print} />
+          <BeanRoom print={print} landing={landing} />
         </article>
       </div>
     </div>
