@@ -112,7 +112,19 @@ export const Effects = memo(function Effects() {
       gl.autoClear = autoClear;
     }
     blendCarSwap(gl.domElement);
-    if (studioActive) paintStudioCut(gl.domElement, isCarLoading, !!carLoadError);
+    if (studioActive) {
+      paintStudioCut(gl.domElement, isCarLoading, !!carLoadError);
+      const app = useAppStore.getState();
+      if (
+        !useGarageStudio.getState().firstFrameShown &&
+        !isCarLoading &&
+        !carLoadError &&
+        app.renderedCarIndex === app.carIndex &&
+        refs.carModel &&
+        studioSurfacesReady(state.size.width < 768)
+      )
+        useGarageStudio.setState({ firstFrameShown: true });
+    }
     if (refs.onOpeningFrame && !isCarLoading && refs.carModel) {
       const studio = isOpeningStudio(useAppStore.getState());
       if (!studio || studioSurfacesReady(state.size.width < 768)) refs.onOpeningFrame();

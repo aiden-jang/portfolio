@@ -1,0 +1,48 @@
+.image-expand {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #101014dd;
+  color: #e8e8e5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms;
+}
+.image-expand svg {
+  width: 18px;
+  height: 18px;
+}
+:is(.project-preview, .story-image-trigger):is(:hover, :focus-visible) .image-expand {
+  opacity: 1;
+}
+:is(.project-preview, .story-image-trigger) :is(.preview-thumbnail, .story-image-crop) {
+  transition: filter 180ms cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+:is(.project-preview, .story-image-trigger):hover :is(.preview-thumbnail, .story-image-crop) {
+  filter: brightness(1.045);
+}
+:is(.project-preview, .story-image-trigger):focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 5px;
+  border-radius: 12px;
+}
+@media (max-width: 767px), (pointer: coarse) {
+  .image-expand {
+    width: 30px;
+    height: 30px;
+    right: 8px;
+    bottom: 8px;
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .image-expand,
+  :is(.project-preview, .story-image-trigger) :is(.preview-thumbnail, .story-image-crop) {
+    transition: none;
+  }
+}

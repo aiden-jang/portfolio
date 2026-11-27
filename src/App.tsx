@@ -6,6 +6,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useNavigation } from './hooks/useNavigation';
+import { useShowroomEntry } from './hooks/useShowroomEntry';
 import { useSceneUrl } from './hooks/useSceneUrl';
 import { CarControls } from './ui/CarControls';
 import { useShowroomTransition } from './hooks/useShowroomTransition';
@@ -53,6 +54,7 @@ export function App() {
   const renderStudy = useAppStore((state) => state.renderFinish !== null);
   const lineup = useLineup((state) => state.active);
   const garageStudio = useGarageStudio((state) => state.active);
+  const showScene = useShowroomEntry(isCleanMode || garageStudio || lineup);
   useSceneUrl();
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -79,17 +81,19 @@ export function App() {
       >
         Skip to content
       </a>
-      <SceneBoundary>
-        <Suspense
-          fallback={
-            <p className="scene-loading-note" role="status">
-              Bringing in the car. Everything else is ready.
-            </p>
-          }
-        >
-          <Scene getScrollT={getScrollT} />
-        </Suspense>
-      </SceneBoundary>
+      {showScene && (
+        <SceneBoundary>
+          <Suspense
+            fallback={
+              <p className="scene-loading-note" role="status">
+                Bringing in the car. Everything else is ready.
+              </p>
+            }
+          >
+            <Scene getScrollT={getScrollT} />
+          </Suspense>
+        </SceneBoundary>
+      )}
       {!isCleanMode && (
         <>
           {!garageStudio && <OpeningPoster />}
@@ -113,8 +117,12 @@ export function App() {
                 }
               }}
             />
-            <CarControls />
-            <OpeningLoopControl />
+            {showScene && (
+              <>
+                <CarControls />
+                <OpeningLoopControl />
+              </>
+            )}
             <Sections />
             <CarLoadNotice />
             <CommandMenu onSection={scrollToSection} />

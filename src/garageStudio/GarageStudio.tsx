@@ -1,6 +1,7 @@
 import { StudioTour } from './StudioTourPanel';
 import { restoreStudioFocus } from './restoreStudioFocus';
 import { useMatchedCar } from './matchedSwap';
+import { GarageArrivalPoster } from './GarageArrivalPoster';
 import { StudioLoading } from './StudioLoading';
 import { isMechanical } from '../garageExhibits/mechanical';
 import { StudioChapters } from './StudioChapters';
@@ -47,10 +48,10 @@ import './compact-studio.css';
 import '../ui/car-picker.css';
 
 export function GarageStudio() {
-  const { chapter, proposed, photo, study, close, select } = useGarageStudio();
+  const { chapter, proposed, photo, study, close, select, firstFrameShown } = useGarageStudio();
   const id = useAppStore((s) => s.carIndex);
   const loading = useAppStore((s) => s.isCarLoading);
-  const error = useAppStore((s) => s.carLoadError);
+  const error = useAppStore((s) => (s.sceneUnavailable ? '3D view unavailable.' : s.carLoadError));
   const swap = useMatchedCar(id, loading, error);
   const pairReady = useLineup((s) => s.status);
   const dialog = useRef<HTMLElement>(null);
@@ -71,7 +72,7 @@ export function GarageStudio() {
   const car = CARS[id];
   const waiting = pair
     ? pairReady !== 'ready'
-    : loading || !!error || (swap !== null && swap.incoming !== id);
+    : !firstFrameShown || loading || !!error || (swap !== null && swap.incoming !== id);
   const canChoose = !pair;
   const openPicker: MouseEventHandler<HTMLButtonElement> = (event) =>
     setPickerTrigger(event.currentTarget);
@@ -187,6 +188,7 @@ export function GarageStudio() {
       data-dragging={dragging}
       data-photo-review={image ? 'true' : undefined}
     >
+      {!firstFrameShown && !pair && !swap && <GarageArrivalPoster car={id} />}
       <StudioOrbit enabled={!waiting && !image} onDrag={setDragging} />
       <StudioHeading
         title={title}

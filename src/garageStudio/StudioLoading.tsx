@@ -50,7 +50,9 @@ export function StudioLoading({ car, pair, pairFailed, error, still, matched, ou
         <button
           type="button"
           onClick={() => {
-            retry();
+            const app = useAppStore.getState();
+            if (app.sceneUnavailable) app.retryScene();
+            else retry();
             repaintStudio();
           }}
         >

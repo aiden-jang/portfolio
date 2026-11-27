@@ -62,6 +62,7 @@ function restoreCameraAndCar(saved: ReturnType<typeof setup>) {
 
 const pose = (yaw = 0.65): Orbit => ({ yaw, shownYaw: yaw, pitch: 0, zoom: 1 });
 type StudioState = {
+  firstFrameShown: boolean;
   active: boolean;
   chapter: Chapter;
   proposed: boolean;
@@ -79,13 +80,18 @@ type StudioState = {
   selectCar: (id: number) => void;
 };
 
-export const useGarageStudio = create<StudioState>((set, get) => ({
-  active: false,
-  chapter: 'walk',
+const openingView = {
+  firstFrameShown: false,
+  chapter: 'walk' as const,
   proposed: true,
   guides: false,
   photo: null,
   study: null,
+};
+
+export const useGarageStudio = create<StudioState>((set, get) => ({
+  active: false,
+  ...openingView,
   orbit: pose(),
   detailOrbit: pose(),
   pairOrbit: pose(),
@@ -97,11 +103,7 @@ export const useGarageStudio = create<StudioState>((set, get) => ({
     useGarageStudy.setState({ refined: true, look: null });
     set({
       active: true,
-      chapter: 'walk',
-      proposed: true,
-      photo: null,
-      study: null,
-      guides: false,
+      ...openingView,
       saved: setup(),
       beforeDetail: null,
       orbit: pose(),

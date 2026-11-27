@@ -69,3 +69,26 @@
 .studio-swap-name:empty {
   visibility: hidden;
 }
+
+.garage-arrival-poster {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: #08090b;
+}
+.garage-arrival-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.garage-arrival-thumbnail {
+  display: grid;
+  place-items: center;
+}
+.garage-arrival-thumbnail img {
+  width: min(70vw, 620px);
+  height: auto;
+  max-height: 50%;
+  object-fit: contain;
+}
