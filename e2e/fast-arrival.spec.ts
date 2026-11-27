@@ -88,14 +88,14 @@ for (const viewport of [
 test.describe('Iodine on a short phone', () => {
   test.use({ viewport: { width: 375, height: 667 }, isMobile: true, hasTouch: true });
 
-  test('the first tap keeps the automatic Undo result', async ({ page }) => {
+  test('the first tap reapplies an automatically undone edit', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.goto('/#project-iodine', { waitUntil: 'domcontentloaded' });
     const editor = page.locator('#project-iodine');
     await expect(editor.getByRole('status')).toHaveText('Edit undone');
+    await editor.getByRole('button', { name: 'Reapply edit' }).tap({ timeout: 5000 });
+    await expect(editor.getByRole('status')).toHaveText('Agent edit');
     await editor.getByRole('button', { name: 'Undo edit' }).tap();
     await expect(editor.getByRole('status')).toHaveText('Edit undone');
-    await editor.getByRole('button', { name: 'Reset edit' }).tap();
-    await expect(editor.getByRole('status')).toHaveText('Agent edit');
   });
 });

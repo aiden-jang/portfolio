@@ -2,7 +2,6 @@ import { useCallback, useContext, useRef, useState, type Ref } from 'react';
 import example from '../../data/iodineExample.json';
 import { evidenceHref } from '../creative/storyRoutes';
 import { useScrollArrival } from '../../hooks/scrollArrival';
-import { useReducedMotion } from '../../hooks/reducedMotion';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './iodine-timed.css';
 import './playable-iodine.css';
@@ -19,8 +18,6 @@ export function IodinePresentation() {
   const openCase = useContext(OpenEvidence);
   const [restored, restore] = useState(false);
   const [manual, setManual] = useState(false);
-  const reducedMotion = useReducedMotion();
-  const canReset = restored && (manual || reducedMotion);
   const draw = useCallback((progress: number) => {
     restore(progress >= 1);
   }, []);
@@ -95,13 +92,13 @@ export function IodinePresentation() {
           <div className="undo-actions">
             <button
               type="button"
-              data-action={canReset ? 'reset' : 'undo'}
+              data-action={restored ? 'reset' : 'undo'}
               onClick={() => {
                 setManual(true);
-                restore(!canReset);
+                restore((wasRestored) => !wasRestored);
               }}
             >
-              {canReset ? (
+              {restored ? (
                 <ControlIcon name="reset" />
               ) : (
                 <svg
@@ -118,7 +115,7 @@ export function IodinePresentation() {
                   <path d="m9 4.5-5 5 5 5M4.5 9.5H14a5 5 0 0 1 0 10H9" />
                 </svg>
               )}
-              {canReset ? 'Reset edit' : 'Undo edit'}
+              {restored ? 'Reapply edit' : 'Undo edit'}
             </button>
             <p>
               {restored ? (

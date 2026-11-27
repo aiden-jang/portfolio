@@ -176,7 +176,15 @@ html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
   html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
     font-size: clamp(65px, 21vw, 120px);
   }
+  html:root .portfolio-chrome #sec-work #project-iodine.portfolio-undo .undo-buffer {
+    grid-template-rows: auto auto auto;
+    align-content: center;
+  }
+  #project-iodine .undo-lines {
+    padding-block: clamp(18px, 3svh, 28px) 8px;
+  }
   #project-iodine .undo-actions {
+    padding-block-start: 8px;
     gap: 8px;
   }
   #project-iodine .undo-actions p {

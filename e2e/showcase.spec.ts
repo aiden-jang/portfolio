@@ -90,7 +90,7 @@ for (const width of [1440, 390]) {
     await expect(canvas).toHaveCount(0);
     const iodine = page.locator('#project-iodine');
     await expect(iodine.getByRole('status')).toHaveText('Edit undone');
-    await iodine.getByRole('button', { name: 'Reset edit' }).click();
+    await iodine.getByRole('button', { name: 'Reapply edit' }).click();
     await expect(iodine.getByRole('status')).toHaveText('Agent edit');
     await expect(iodine.locator('.recovery-line mark')).toHaveText('.trim()');
     await iodine.getByRole('button', { name: 'Undo edit' }).click();
