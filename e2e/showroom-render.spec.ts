@@ -98,7 +98,9 @@ for (const width of [1440, 390]) {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
     await page.goto('/#sec-about', { waitUntil: 'domcontentloaded' });
-    const study = page.getByRole('figure', { name: 'Framing the showroom' });
+    const study = page.getByRole('figure', {
+      name: 'I build tools that make complex work easier.',
+    });
     const slider = study.getByRole('slider', { name: 'Ferrari finish' });
     await slider.scrollIntoViewIfNeeded();
     await slider.focus();

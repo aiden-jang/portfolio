@@ -20,7 +20,9 @@ for (const [width, height] of [
       await expect(page.locator('#project-everythingisfine h3')).toBeInViewport();
       await page.screenshot({ path: test.info().outputPath(`projects-${width}.png`) });
       await page.evaluate(() => (location.hash = 'f40-study'));
-      await expect(page.getByRole('heading', { name: 'Framing the showroom' })).toBeInViewport();
+      await expect(
+        page.getByRole('heading', { name: 'I build tools that make complex work easier.' }),
+      ).toBeInViewport();
       await page.screenshot({ path: test.info().outputPath(`about-${width}.png`) });
     }
     await page.evaluate(() => (location.hash = 'sec-contact'));

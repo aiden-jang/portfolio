@@ -168,7 +168,7 @@ export function AboutFraming() {
           <canvas ref={canvas} width={352} height={760} hidden aria-hidden="true" />
 
           <div className="film-heading">
-            <h3 id="finish-study-title">Framing the showroom</h3>
+            <h3 id="finish-study-title">I build tools that make complex work easier.</h3>
             <p className="finish-cue">Scroll to reveal the paint.</p>
             <p className="finish-cue-manual">Slide to reveal the paint.</p>
           </div>

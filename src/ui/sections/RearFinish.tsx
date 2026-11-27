@@ -207,7 +207,7 @@ export function RearFinish() {
             <div className="scroll-film-track" ref={track}>
               <div className="scroll-film">
                 <div className="film-heading">
-                  <h3 id="finish-study-title">Framing the showroom</h3>
+                  <h3 id="finish-study-title">I build tools that make complex work easier.</h3>
                 </div>
                 <div className="scroll-film-range">
                   <span aria-hidden="true">Clay</span>

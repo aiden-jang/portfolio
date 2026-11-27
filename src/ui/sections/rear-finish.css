@@ -55,6 +55,11 @@ html:root .portfolio-chrome .rear-finish #sec-contact::after {
 .rear-finish .film-heading {
   opacity: clamp(0, calc((1 - var(--finish-paint, 0)) * 4), 1);
 }
+html:root .rear-finish .film-heading h3 {
+  max-width: 19ch;
+  font-size: clamp(30px, 6.6vw, 65px);
+  line-height: 1.03;
+}
 .rear-finish .scroll-film-range {
   max-width: 640px;
 }
