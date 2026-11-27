@@ -19,8 +19,8 @@ test('phone navigation exposes Work without intro-only section dots', async ({ p
     page.getByRole('navigation', { name: 'Section progress' }).filter({ visible: true }),
   ).toHaveCount(0);
   await page.getByRole('link', { name: 'Work index' }).tap();
-  await expect(page.getByRole('heading', { name: 'Work index.' })).toBeVisible();
-  await page.getByRole('link', { name: 'bloomnote Grow a note' }).tap();
+  await expect(page.getByRole('heading', { name: 'Work index', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'bloomnote — Grow a note' }).tap();
   await expect(page.getByRole('heading', { name: 'How I built it: bloomnote' })).toBeInViewport();
   await page.getByRole('button', { name: 'Aiden Jang, back to the top' }).tap();
   await expect(page.locator('#mobile-bar')).toBeVisible();

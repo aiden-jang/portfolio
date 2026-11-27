@@ -1,23 +1,33 @@
-import { useState } from 'react';
+import { useLayoutEffect } from 'react';
+import { DinnerTable } from '../src/ui/showcase/DinnerTable';
+import { WorthCharacter } from '../src/ui/showcase/DinnerRating';
 import { createRoot } from 'react-dom/client';
-import { WORK_ITEMS, workId } from '../src/data/workItems';
+import { workId } from '../src/data/workItems';
 import { AboutReel } from '../src/ui/sections/AboutReel';
 import { ExperienceHistory } from '../src/ui/sections/Experience';
-import { followWorkRow, openWorkRow, useWorkIndexReturn } from '../src/ui/workIndexNavigation';
+import {
+  acceptWorkOrigin,
+  followWorkIndex,
+  followWorkRow,
+  indexHref,
+  openWorkRow,
+  useWorkIndexReturn,
+} from '../src/ui/workIndexNavigation';
 import rearFinishImage from '../wing-art/desktop-rear/12.jpg';
 import './index.css';
+import './exhibition.css';
 
 const entries = [
-  ['everythingisfine', 'meanwhile.', 'The living globe', 'atlas-globe-desktop.webp'],
-  ['iodine', 'Iodine', 'Undo an edit', 'scenes/iodine-inside-desktop.webp'],
-  ['batch', '120 calls → 1', 'Batching requests', 'batch-share.png'],
-  ['bloomnote', 'bloomnote', 'Grow a note', 'bloomnote-garden.jpg'],
-  ['iguess', 'iguess', 'Draw a guess', 'iguess.jpg'],
-  ['mrrp', 'mrrp', 'Meet Bean', 'scenes/mrrp-room-art-desktop.webp'],
+  ['everythingisfine', 'meanwhile.', 'Earth’s live signals', 'atlas-globe-desktop.webp'],
+  ['iodine', 'iodine', 'Recovery for agent edits', 'scenes/iodine-inside-desktop.webp'],
+  ['batch', '120 calls → 1', 'From a minute to two seconds', 'batch-share.png'],
+  ['bloomnote', 'bloomnote', 'A note grown into a garden', 'bloomnote-garden.jpg'],
+  ['iguess', 'iguess', 'A drawing game with a live guess', 'iguess.jpg'],
+  ['mrrp', 'mrrp', 'A little room for Bean', 'scenes/mrrp-room-art-desktop.webp'],
   ['wherever', 'wherever', 'Choose dinner', 'scenes/wherever-pizza.jpg'],
   ['owewell', 'owewell', 'Split the bill', 'scenes/owewell-result-desktop.webp'],
   ['worth', 'worth', 'Save a favorite', 'worth-verdict.webp'],
-  ['platform', 'platform', 'One account for the apps', 'platform-hub.webp'],
+  ['platform', 'Shared sign-in', 'One account for the apps', 'platform-hub.webp'],
   ['f40', 'F40 study', 'Clay to paint', rearFinishImage],
 ];
 const cases: Record<string, string> = {
@@ -27,14 +37,95 @@ const cases: Record<string, string> = {
 };
 
 function demoHref(id: string) {
+  if (['wherever', 'owewell', 'worth'].includes(id)) return '/work/?story=dinner#project-' + id;
   if (id === 'platform') return undefined;
   if (id === 'batch') return '/#batching-study';
   if (id === 'f40') return '/#f40-study';
   return '/#project-' + id;
 }
+const dinnerUrl = '/work/?story=dinner';
+const photo = '/projects/scenes/wherever-pizza.jpg';
+
+function DinnerFeature() {
+  return (
+    <a
+      className="index-dinner-feature"
+      href={dinnerUrl}
+      onClick={followWorkRow}
+      data-work-row="dinner"
+      aria-label="Play Dinner for two, from wherever through owewell to worth"
+    >
+      <div className="index-dinner-intro">
+        <p className="index-dinner-apps">
+          wherever <span>·</span> owewell <span>·</span> worth
+        </p>
+        <h2>
+          Dinner
+          <br /> for two.
+        </h2>
+        <p className="index-dinner-caption">Pick a place, split the bill, keep a favorite.</p>
+        <span className="index-dinner-play">
+          Choose dinner <b aria-hidden="true">→</b>
+        </span>
+      </div>
+      <div className="index-dinner-art" aria-hidden="true">
+        <div className="index-dinner-photo">
+          <img src={photo} alt="" />
+        </div>
+        <div className="index-dinner-check">
+          <span>
+            Neighborhood
+            <br />
+            Pizza Kitchen
+          </span>
+          <div>
+            <small>Dinner for two</small>
+            <strong>$48.00</strong>
+          </div>
+        </div>
+        <div className="index-dinner-stamp">
+          <WorthCharacter />
+        </div>
+      </div>
+    </a>
+  );
+}
+
+function DinnerExhibit() {
+  useLayoutEffect(() => {
+    acceptWorkOrigin();
+    if (location.hash === '#project-owewell' || location.hash === '#project-worth') {
+      document
+        .getElementById(location.hash.slice(1))
+        ?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+  }, []);
+  function read(id: string, trigger: HTMLElement) {
+    trigger.dataset.workRow = 'dinner';
+    openWorkRow(trigger, '/#work/' + id);
+  }
+  return (
+    <main className="index-dinner-story">
+      <nav className="dinner-return" aria-label="Portfolio">
+        <a href={indexHref()} onClick={followWorkIndex}>
+          ← Work index
+        </a>
+        <a href="/#sec-contact">Contact</a>
+      </nav>
+      <DinnerTable
+        dinner="https://wherever.aidenjang.com"
+        bill="https://owewell.aidenjang.com"
+        worth="https://worth.aidenjang.com"
+        onReadDinner={(el) => read('wherever', el)}
+        onReadBill={(el) => read('owewell', el)}
+        onReadWorth={(el) => read('worth', el)}
+      />
+    </main>
+  );
+}
+
 export function WorkIndex() {
   useWorkIndexReturn();
-  const [cover, setCover] = useState(entries[0]);
   return (
     <div className="index-page">
       <header className="index-nav">
@@ -46,70 +137,65 @@ export function WorkIndex() {
         </nav>
       </header>
       <main>
-        <h1>
-          Work index<span>.</span>
-        </h1>
-        <div className="index-spread">
-          <div className="index-list">
-            {entries.map((entry) => {
-              const [id, title, description] = entry;
-              const item = WORK_ITEMS.find((item) => workId(item) === id);
+        <h1>Work index</h1>
+        <DinnerFeature />
+        <section className="index-projects" aria-labelledby="projects-heading">
+          <h2 id="projects-heading">Projects</h2>
+          <div className="index-catalog">
+            {entries.map(([id, title, description, image]) => {
               const demo = demoHref(id);
               const reader = cases[id] ?? (id === 'f40' ? demo! : '/#work/' + id);
-              const readerLabel = cases[id]
-                ? 'Case study'
-                : id === 'f40'
-                  ? 'Clay to paint'
-                  : 'Project notes';
+              const label = cases[id] ? 'Case study' : id === 'f40' ? 'Study' : 'Project notes';
+              const asset = id === 'f40' ? image : '/projects/' + image;
               return (
-                <div
-                  key={id}
-                  onFocus={() => setCover(entry)}
-                  onPointerEnter={() => setCover(entry)}
-                >
+                <article className={'index-project index-project-' + id} key={id}>
                   <a
-                    className="index-entry"
-                    data-work-row={id}
-                    href={reader}
+                    className="index-project-cover"
+                    href={demo ?? reader}
                     onClick={followWorkRow}
-                    aria-label={title + ' — ' + readerLabel}
+                    data-work-row={'cover-' + id}
+                    aria-label={title + ' — ' + description}
                   >
-                    <strong>{title}</strong>
-                    <span>
-                      {readerLabel} <i aria-hidden="true">→</i>
-                    </span>
+                    <img src={asset} alt="" loading="lazy" width="180" height="126" />
                   </a>
-                  {demo && demo !== reader && (
+                  <div>
                     <a
-                      className="index-demo"
-                      href={demo}
-                      data-work-row={'demo-' + id}
+                      className="index-project-name"
+                      href={reader}
+                      data-work-row={id}
                       onClick={followWorkRow}
-                      aria-label={title + ' demo: ' + description}
+                      aria-label={title + ' — ' + label}
                     >
-                      Demo <span aria-hidden="true">→</span>
+                      {title}
                     </a>
-                  )}
-                  {item?.link && (
+                    <p>{description}</p>
+                  </div>
+                  <div className="index-project-links">
+                    {demo && demo !== reader && (
+                      <a
+                        href={demo}
+                        data-work-row={'demo-' + id}
+                        onClick={followWorkRow}
+                        aria-label={title + ' demo: ' + description}
+                      >
+                        Try <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
                     <a
-                      className="index-external"
-                      href={item.link.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={item.link.label}
+                      href={reader}
+                      data-work-row={'notes-' + id}
+                      onClick={followWorkRow}
+                      aria-label={label + ' for ' + title}
                     >
-                      {id === 'iodine' ? 'Source' : 'Open app'} ↗
+                      {label}
+                      <span aria-hidden="true">↗</span>
                     </a>
-                  )}
-                </div>
+                  </div>
+                </article>
               );
             })}
           </div>
-          <figure className="index-cover">
-            <img src={cover[0] === 'f40' ? cover[3] : '/projects/' + cover[3]} alt="" />
-            <figcaption>{cover[1]}</figcaption>
-          </figure>
-        </div>
+        </section>
         <section className="index-history" id="experience">
           <ExperienceHistory onOpen={(item, row) => openWorkRow(row, '/#work/' + workId(item))} />
         </section>
@@ -133,4 +219,10 @@ export function WorkIndex() {
     </div>
   );
 }
-createRoot(document.getElementById('work-root')!).render(<WorkIndex />);
+createRoot(document.getElementById('work-root')!).render(
+  new URLSearchParams(location.search).get('story') === 'dinner' ? (
+    <DinnerExhibit />
+  ) : (
+    <WorkIndex />
+  ),
+);

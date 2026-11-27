@@ -91,10 +91,13 @@ for (const [width, height] of [
       await page.goBack();
       await expect(row).toBeFocused();
       await expect(page.locator('.experience-more')).toHaveJSProperty('open', true);
-      const platform = page.getByRole('link', { name: 'platform — Project notes', exact: true });
-      await platform.click();
+      const signIn = page.getByRole('link', {
+        name: 'Shared sign-in — Project notes',
+        exact: true,
+      });
+      await signIn.click();
       await page.getByRole('button', { name: 'Close', exact: true }).press('Escape');
-      await expect(platform).toBeFocused();
+      await expect(signIn).toBeFocused();
     });
   });
 }

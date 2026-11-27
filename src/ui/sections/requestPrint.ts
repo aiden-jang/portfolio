@@ -182,9 +182,9 @@ function path(context: CanvasRenderingContext2D, coordinates: Point[]) {
   for (let i = 1; i < coordinates.length; i++) context.lineTo(coordinates[i].x, coordinates[i].y);
   context.closePath();
 }
-const face = '#625080';
-const edge = '#312341';
-const endInk = '#342a50';
+const face = '#f4ba91';
+const edge = '#995f46';
+const endInk = '#caf6df';
 
 function printHeight(width: number, height: number) {
   return Math.min(height, width * (width < 650 ? 0.86 : 0.405));
@@ -271,7 +271,13 @@ export function createRequestPrint(canvas: HTMLCanvasElement) {
         ink.restore();
       }
       path(ink, coords);
-      ink.fillStyle = gather > 0.82 ? endInk : face;
+      const warmth = Math.sin(Math.PI * v) * thin * (1 - gather);
+      ink.fillStyle =
+        gather > 0.82
+          ? endInk
+          : warmth > 0.03
+            ? `rgb(${Math.round(244 - 53 * warmth)} ${Math.round(186 + 35 * warmth)} ${Math.round(145 + 98 * warmth)})`
+            : face;
       ink.fill();
     }
     if (progress > 0.88) {

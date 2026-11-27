@@ -15,6 +15,7 @@ import { Icon } from './playable/StudioIcon';
 import { LeafHandoff } from './playable/LeafHandoff';
 import './playable/studio-desk.css';
 import './playable/studio-room.css';
+import './playable/evening-exhibit.css';
 
 const StudioRoom = lazy(() =>
   import('./playable/StudioRoom').then(({ Room }) => ({ default: Room })),
@@ -27,11 +28,13 @@ function smooth(n: number) {
 
 export function Duet({
   flower,
+  backToGarden,
   drawTitle,
   drawLink,
   roomLink,
 }: {
   flower: PlantedFlower | null;
+  backToGarden: () => void;
   drawTitle: ReactNode;
   drawLink: ReactNode;
   roomLink: ReactNode;
@@ -49,7 +52,9 @@ export function Duet({
   const [master] = useState(createPaper);
   const [marked, setMarked] = useState(false);
   const [state, setState] = useState<'desk' | 'flight' | 'room' | 'static'>('desk');
-  const [warm, setWarm] = useState(location.hash === '#project-mrrp');
+  const [warm, setWarm] = useState(
+    location.hash === '#project-mrrp' || location.hash.startsWith('#sill/'),
+  );
   const [reduced, setReduced] = useState(
     () => matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
@@ -228,9 +233,9 @@ export function Duet({
           <div className="studio-layout">
             <header className="studio-intro">
               <h2 tabIndex={-1} id="studio-desk-title">
-                <span>Draw</span> <span>with me.</span>
+                <span>Draw</span> <span>Bean.</span>
               </h2>
-              <p>Add a mark to Bean’s portrait, then hang it in her room.</p>
+              <p>Make your mark. Hang the portrait in her room.</p>
             </header>
             <div className="worktop">
               <DrawingPad
@@ -264,6 +269,7 @@ export function Duet({
               <Suspense fallback={null}>
                 <StudioRoom
                   flower={flower}
+                  backToGarden={backToGarden}
                   active={state === 'room' || state === 'static'}
                   marked={marked}
                   master={master}

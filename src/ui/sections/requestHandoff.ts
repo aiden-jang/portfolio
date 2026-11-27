@@ -55,7 +55,7 @@ export function connectRequestHandoff(
     mark.setAttribute(
       'fill',
       'rgb(' +
-        [mix(255, 98, ink), mix(208, 80, ink), mix(172, 128, ink)].map(Math.round).join(' ') +
+        [mix(255, 244, ink), mix(200, 186, ink), mix(150, 145, ink)].map(Math.round).join(' ') +
         ')',
     );
     if (!svg.isConnected) document.body.append(svg);

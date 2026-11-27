@@ -26,8 +26,8 @@ for (const width of [1440, 1024, 768, 390, 320]) {
       width + 1,
     );
     await page.getByRole('link', { name: 'Work index' }).click();
-    await expect(page.getByRole('link', { name: 'platform — Project notes' })).toBeVisible();
-    await expect(page.locator('.index-entry')).toHaveCount(11);
+    await expect(page.getByRole('link', { name: 'Shared sign-in — Project notes' })).toBeVisible();
+    await expect(page.locator('.index-project')).toHaveCount(11);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
       width + 1,
     );

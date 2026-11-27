@@ -72,16 +72,16 @@ for (const viewport of [
     await expect(status).toHaveText('Edit undone');
 
     const batch = page.getByRole('figure', { name: 'Request batching comparison' });
-    await travelTo('#batching-study', 0.63);
+    await travelTo('#batching-study', 0.84);
     await expect(batch.getByText('120 → 1', { exact: true })).toBeInViewport();
-    await expect(batch.getByText('60s → 2s', { exact: true })).toBeInViewport();
+    await expect(batch.getByText('2s', { exact: true })).toBeInViewport();
     await expect(batch.getByText('Line items', { exact: true })).toHaveCount(0);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await editor.scrollIntoViewIfNeeded();
     await expect(status).toHaveText('Edit undone');
     await batch.scrollIntoViewIfNeeded();
-    await expect(batch.getByText('60s → 2s', { exact: true })).toBeInViewport();
+    await expect(batch.getByText('2s', { exact: true })).toBeInViewport();
   });
 }
 

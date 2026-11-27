@@ -40,6 +40,10 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       <div className="batch-graphic" aria-hidden="true">
         <span className="batch-fallback">{after ? '1' : '120'}</span>
         <RequestPulse onPaint={onPulsePaint} />
+        <div className="batch-end-time">
+          <strong>2s</strong>
+          <span>batched load</span>
+        </div>
       </div>
       <figcaption className="batch-caption">
         <div className="batch-measure" aria-hidden="true">
@@ -47,8 +51,8 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
           <span>API requests</span>
         </div>
         <div className="batch-measure" aria-hidden="true">
-          <strong>60s → 2s</strong>
-          <span>Page load</span>
+          <strong>60s</strong>
+          <span>Original load</span>
         </div>
         <span className="sr-only">
           120 separate API calls became one batched request. Page load went from about 60 seconds to

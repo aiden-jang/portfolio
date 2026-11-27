@@ -7,7 +7,8 @@ import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
 import { Icon } from './playable/StudioIcon';
 import { useFlowerGrowth } from './playable/useFlowerGrowth';
-import { gardenFlowers as flowers, type PlantedFlower } from './playable/gardenFlowers';
+import { gardenFlowers as flowers } from './playable/gardenFlowers';
+import type { useGardenVisit } from './playable/useGardenVisit';
 import { FlowerNoteEditor } from './playable/FlowerNoteEditor';
 import { FullGarden } from './playable/FullGarden';
 import './bloom-garden.css';
@@ -20,9 +21,7 @@ export function BloomPreview({
   description,
   url,
   onRead,
-  onPlant,
-  onVisitSill,
-  plants,
+  garden,
 }: {
   image: string;
   caption: string;
@@ -30,20 +29,17 @@ export function BloomPreview({
   description: string;
   url?: string;
   onRead: (trigger: HTMLElement) => void;
-  onVisitSill: (flower: PlantedFlower) => void;
-  onPlant: (flower: PlantedFlower) => void;
-  plants: PlantedFlower[];
+  garden: ReturnType<typeof useGardenVisit>;
 }) {
+  const { selected, choose, plants, plant: onPlant } = garden;
   const article = useRef<HTMLElement>(null);
   const edit = useRef<HTMLButtonElement>(null);
   const inspector = useRef<HTMLButtonElement>(null);
-  const [selected, choose] = useState(plants.at(-1)?.index ?? 1);
   const notes = flowers.map(
     (flower, index) => plants.find((plant) => plant.index === index)?.note ?? flower.phrase,
   );
   const personal = plants.map((plant) => plant.index);
   const [composing, setComposing] = useState(false);
-  const [showGarden, setShowGarden] = useState(false);
   const [sharedExample, setSharedExample] = useState(false);
   const [growth, setGrowth] = useState(0);
   const [view, setView] = usePreviewSelection('bloomnote', states?.length ?? 1);
@@ -187,7 +183,7 @@ export function BloomPreview({
                 states?.length ?? 1,
               );
               if (linked !== null && !personal.length) setSharedExample(true);
-              else setShowGarden(true);
+              else garden.open();
             }}
             type="button"
           >
@@ -197,7 +193,7 @@ export function BloomPreview({
         </footer>
       </div>
       <i className="studio-note-pollen" aria-hidden="true" />
-      {showGarden && (
+      {garden.showGarden && (
         <FullGarden
           selected={selected}
           choose={choose}
@@ -205,15 +201,8 @@ export function BloomPreview({
           personal={personal}
           returnFocus={inspector}
           onPlant={onPlant}
-          onVisitSill={() => {
-            setShowGarden(false);
-            onVisitSill({
-              index: selected,
-              note: notes[selected],
-              example: !personal.includes(selected),
-            });
-          }}
-          onClose={() => setShowGarden(false)}
+          onVisitSill={garden.visitSill}
+          onClose={garden.close}
         />
       )}
       {sharedExample && (

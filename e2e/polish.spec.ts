@@ -44,8 +44,8 @@ test('phone reader keeps source and sharing available with independent Escape di
       configurable: true,
     });
   });
-  await page.goto('/#sec-work');
-  const trigger = page.getByRole('button', { name: 'How I built it: platform', exact: true });
+  await page.goto('/work/');
+  const trigger = page.getByRole('link', { name: 'Shared sign-in — Project notes', exact: true });
   await trigger.click();
   const dialog = page.getByRole('dialog');
   const more = dialog.getByLabel('Source and sharing', { exact: true });

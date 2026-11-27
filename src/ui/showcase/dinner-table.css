@@ -2,7 +2,7 @@
 html:root #project-wherever.meal-story,
 html:root #sec-more-work #project-wherever.meal-story {
   --meal-inset: var(--portfolio-header-height, 72px);
-  --meal-run: 174svh;
+  --meal-run: 138svh;
   --meal-height: calc(100svh - var(--meal-inset));
   --meal-ink: #3d2928;
   --meal-red: #943b2a;
@@ -31,10 +31,10 @@ html:root #sec-more-work #project-wherever.meal-story {
   scroll-margin-top: var(--meal-inset);
 }
 .meal-story .meal-anchor-bill {
-  top: calc(var(--meal-run) * 0.5);
+  top: calc(var(--meal-run) * 0.515);
 }
 .meal-story .meal-anchor-entry {
-  top: calc(var(--meal-run) * 0.855);
+  top: calc(var(--meal-run) * 0.932);
 }
 .meal-stage {
   --photo-card: 1;
@@ -128,6 +128,10 @@ html:root #sec-more-work #project-wherever.meal-story {
   inset: 0 auto 0 4px;
   width: 6px;
   border-inline: 1px dashed #793e2c9c;
+}
+.meal-intro,
+.meal-card-deck {
+  opacity: var(--photo-card);
 }
 .meal-intro {
   position: absolute;
@@ -259,7 +263,7 @@ html:root #sec-more-work #project-wherever.meal-story {
 .meal-head .meal-notes {
   font: 520 clamp(12px, 1.01cqw, 16px)/1 var(--font-display);
 }
-.meal-story:is([data-moment='picked'], [data-phase='owewell']) .meal-head {
+.meal-stage[data-photo-header] .meal-head {
   color: #fff3d9;
   text-shadow: 0 1px 5px #270e09;
 }
@@ -290,7 +294,7 @@ html:root #sec-more-work #project-wherever.meal-story {
   position: absolute;
   inset: 0;
   filter: drop-shadow(2px 7px 5px #44271849);
-  clip-path: inset(-12px calc(-12px + (100% + 24px) * var(--photo-entry)) -20px -12px);
+  opacity: clamp(0, calc((1 - var(--photo-entry)) * 13), 1);
 }
 .meal-ticket-stock::before,
 .meal-ticket-stock::after {
@@ -356,6 +360,7 @@ html:root .portfolio-chrome .project-scenes #project-wherever.meal-story .meal-n
 }
 .meal-entry-fold {
   grid-template-rows: var(--entry-lines);
+  opacity: clamp(0, calc((var(--photo-entry) - 0.9) * 10), 1);
 }
 .meal-fold-inside {
   min-height: 0;
@@ -436,7 +441,7 @@ html:root .portfolio-chrome .project-scenes #project-wherever.meal-story .meal-n
   position: absolute;
   z-index: 2;
   inset: 0;
-  transform: translateY(calc((1 - var(--photo-entry)) * 112%));
+  opacity: clamp(0, calc(var(--photo-entry) * 22), 1);
   background-color: #b9bea0;
   background-image:
     repeating-linear-gradient(90deg, #31423112 0 1px, transparent 1px 3px),
@@ -541,7 +546,24 @@ html:root .portfolio-chrome .project-scenes #project-wherever.meal-story .meal-n
     transform: none;
   }
 }
+@keyframes meal-separate-shares {
+  from {
+    opacity: 0;
+    transform: translate(var(--share-inset), -7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
+  .meal-story[data-paid] .meal-shares > div {
+    --share-inset: 6px;
+    animation: meal-separate-shares 290ms ease-out both;
+  }
+  .meal-story[data-paid] .meal-shares > div + div {
+    --share-inset: -6px;
+  }
   .meal-character {
     animation: meal-stamp-step 0.52s cubic-bezier(0.2, 0.8, 0.25, 1) both;
   }

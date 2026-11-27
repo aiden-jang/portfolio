@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { gardenFlowers, type PlantedFlower } from './gardenFlowers';
-import { usePageScrollLock } from '../../usePageScrollLock';
 import { FlowerNoteEditor } from './FlowerNoteEditor';
 import { Icon } from './StudioIcon';
 import './full-garden.css';
@@ -30,15 +29,22 @@ export function FullGarden({
   const [editing, setEditing] = useState(false);
   const [planting, setPlanting] = useState(0);
   const owned = personal.includes(selected);
-  usePageScrollLock(true);
   useLayoutEffect(() => {
     const el = dialog.current!;
     const trigger = returnFocus.current;
     el.showModal();
-    el.focus({ preventScroll: true });
+    el.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus({ preventScroll: true });
     return () => {
       el.close();
-      trigger?.focus({ preventScroll: true });
+      const href = location.href;
+      const previewY: unknown = history.state?.gardenReturnY;
+      if (typeof previewY === 'number' || location.hash === '#project-bloomnote') {
+        requestAnimationFrame(() => {
+          if (location.href !== href || document.querySelector('dialog[open]')) return;
+          if (typeof previewY === 'number') window.scrollTo({ top: previewY, behavior: 'instant' });
+          trigger?.focus({ preventScroll: true });
+        });
+      }
     };
   }, [returnFocus]);
   function finishEdit() {

@@ -1,0 +1,283 @@
+/* The earth is the light source. Keep the event target and its labels in the globe's coordinate system. */
+html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-feature::before {
+  background: #091219 url('/projects/globe-stars-desktop.svg') center / cover;
+  inset: calc(-1 * var(--portfolio-header-height)) auto 0 50%;
+  width: 100vw;
+  mask-image: none;
+  opacity: 1;
+}
+html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-title h3 {
+  font:
+    430 clamp(78px, 9.9vw, 158px)/0.94 Fraunces,
+    Georgia,
+    serif;
+  letter-spacing: -0.08em;
+  margin-left: -0.043em;
+  color: #f2eee3;
+}
+#project-everythingisfine .earthquake-detail .creative-quake-hook {
+  max-width: 23ch;
+  font: 460 clamp(18px, 1.85vw, 30px)/1.19 var(--font-display);
+  color: #d4e1dd;
+}
+#project-everythingisfine .earthquake-detail .creative-quake-hook strong {
+  font-weight: inherit;
+}
+#project-everythingisfine .earthquake-detail .earthquake-compare {
+  border: none;
+  border-bottom: 1px solid #a7c5c3;
+  border-radius: 0;
+  padding-inline: 0;
+  gap: 1em;
+  background: none;
+  color: #e3eeea;
+}
+#project-everythingisfine .earthquake-detail > .featured-text-action {
+  color: #b3c9c8;
+}
+#project-everythingisfine .quake-journey-readings {
+  background: #08171df5;
+  border: 0;
+  border-left: 2px solid #f4c58a;
+  border-radius: 0;
+}
+#project-everythingisfine .quake-journey-readings dd {
+  font-family: var(--font-mono);
+  letter-spacing: -0.09em;
+}
+
+@media (min-width: 768px) {
+  html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-intro {
+    pointer-events: none;
+  }
+  html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-intro :is(button, a) {
+    pointer-events: auto;
+  }
+  html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-title {
+    align-self: start;
+    padding-top: clamp(38px, 7svh, 90px);
+  }
+  html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-detail {
+    align-self: end;
+    padding-bottom: clamp(32px, 6svh, 96px);
+  }
+  html:root .portfolio-chrome #sec-work #project-everythingisfine .orbit-feature {
+    width: min(83vw, calc(85svh * 1120 / 732), 1450px);
+  }
+}
+@media (max-width: 767px) {
+  html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-feature::before {
+    background-image: url('/projects/globe-stars-mobile.svg');
+  }
+  html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-title h3 {
+    font-size: clamp(52px, 15.3vw, 91px);
+    padding-top: 4px;
+  }
+  #project-everythingisfine .earthquake-detail .creative-quake-hook {
+    font-size: clamp(18px, 5.2vw, 25px);
+    max-width: 27ch;
+  }
+}
+
+/* One large editor surface. The line itself is the illustration. */
+html:root #sec-work .work-exhibit #project-iodine.portfolio-undo {
+  --undo-ground: #11151c;
+  --undo-type: #e8edec;
+  --undo-secondary: #a9b9c2;
+  --undo-rule: #66798365;
+  --undo-accent: #ffc896;
+  background: linear-gradient(160deg, #0a141d 0%, #131a25 42%, #191b22 77%, #1c1c20 100%);
+}
+#project-iodine .undo-sheet {
+  align-content: stretch;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(18px, 3svh, 40px);
+  min-height: calc(100svh - var(--portfolio-header-height));
+  padding-top: clamp(25px, 5svh, 60px);
+  padding-bottom: clamp(28px, 6svh, 70px);
+}
+html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
+  font: 500 clamp(70px, min(12vw, 16svh), 184px)/0.94 var(--font-display);
+  letter-spacing: -0.089em;
+}
+#project-iodine .editor-caret {
+  display: inline-block;
+  width: 0.068em;
+  height: 0.68em;
+  margin-left: 0.07em;
+  background: #ffc896;
+}
+#project-iodine .undo-heading {
+  align-items: center;
+}
+#project-iodine .undo-heading a {
+  color: #c6d3da;
+}
+html:root .portfolio-chrome #sec-work #project-iodine.portfolio-undo .undo-buffer {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-self: stretch;
+  position: relative;
+}
+#project-iodine .undo-file {
+  border: 0;
+  border-block-end: 1px solid var(--undo-rule);
+  padding-block: 0.65em;
+}
+#project-iodine .undo-lines {
+  align-self: center;
+  gap: clamp(14px, 2.2svh, 28px);
+}
+#project-iodine .undo-row {
+  color: #97acb7;
+}
+html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
+  position: relative;
+  isolation: isolate;
+  padding: 0.22em 0;
+  color: #f1f4f0;
+  font-size: clamp(12px, 4.62cqi, 69px);
+}
+#project-iodine .recovery-line::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(-1 * var(--portfolio-gutter)) 0;
+  border-left: 3px solid var(--undo-accent);
+  background: linear-gradient(90deg, #d9b79713, transparent);
+}
+#project-iodine .undo-buffer[data-restored='true'] .recovery-line::after {
+  border-color: #a5d7c0;
+  background: linear-gradient(90deg, #76d2ad16, transparent);
+}
+#project-iodine .undo-actions {
+  border: 0;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+}
+#project-iodine .undo-actions button {
+  border-radius: 3px;
+  min-width: auto;
+  padding-inline: 1.1em;
+}
+#project-iodine .undo-actions button[data-action='reset'] {
+  color: var(--undo-type);
+  border-color: #96ada3;
+}
+@media (max-width: 700px) {
+  #project-iodine .undo-heading {
+    gap: 5px;
+    align-items: start;
+  }
+  #project-iodine .undo-sheet {
+    gap: clamp(26px, 6svh, 72px);
+    padding-top: clamp(23px, 4.8svh, 54px);
+  }
+  html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
+    font-size: clamp(65px, 21vw, 120px);
+  }
+  #project-iodine .undo-actions {
+    gap: 8px;
+  }
+  #project-iodine .undo-actions p {
+    max-width: 18ch;
+  }
+}
+
+/* The original one hundred and twenty separate pieces reassemble on scroll. */
+html:root .portfolio-chrome #sec-experience:has(.batch-print-lane) {
+  --batch-stock: #181c20;
+  --batch-ink: #edf1e9;
+}
+#sec-experience #batching-study .batch-print {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(14px, 2.4svh, 32px);
+}
+#sec-experience #batching-study .batch-caption {
+  grid-row: 1;
+  width: 100%;
+  justify-content: space-between;
+}
+#sec-experience #batching-study .batch-graphic {
+  grid-row: 2;
+}
+#sec-experience #batching-study .batch-measure {
+  align-items: start;
+  flex-direction: column-reverse;
+  gap: 8px;
+}
+#sec-experience #batching-study .batch-measure strong {
+  font-size: clamp(34px, 4.3vw, 74px);
+}
+#sec-experience #batching-study .batch-measure span {
+  font: 460 clamp(12px, 1.05vw, 16px)/1.2 var(--font-mono);
+  color: #b9c9c7;
+}
+#sec-experience .batch-end-time {
+  position: absolute;
+  bottom: 11%;
+  left: 62%;
+  color: #caf6df;
+  visibility: hidden;
+  pointer-events: none;
+}
+#sec-experience .batch-end-time strong {
+  display: block;
+  font: 450 clamp(48px, 10vw, 148px)/0.9 var(--font-display);
+  letter-spacing: -0.08em;
+}
+#sec-experience .batch-end-time span {
+  font: 475 clamp(12px, 1.16vw, 17px)/1.5 var(--font-mono);
+}
+#sec-experience .batch-print[data-phase='after'] .batch-end-time {
+  visibility: visible;
+}
+#sec-experience .batch-folio {
+  border-color: #69787866;
+}
+@media (max-width: 700px) {
+  #sec-experience #batching-study .batch-caption {
+    display: flex;
+    column-gap: 12px;
+  }
+  #sec-experience #batching-study .batch-measure strong {
+    font-size: clamp(30px, 8.6vw, 52px);
+  }
+  #sec-experience .batch-end-time {
+    bottom: 26%;
+    left: 52%;
+  }
+}
+@media (max-width: 767px) {
+  #project-everythingisfine .earthquake-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+  #project-everythingisfine .earthquake-record {
+    display: block;
+    max-width: 32ch;
+    line-height: 1.35;
+    font-size: 10px;
+  }
+  #project-everythingisfine .earthquake-record::before {
+    content: none;
+  }
+  #project-everythingisfine .earthquake-record a {
+    white-space: nowrap;
+  }
+  #project-everythingisfine .earthquake-footer .earthquake-app {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+  html:root
+    .portfolio-chrome
+    #sec-work
+    #project-everythingisfine
+    .earthquake-feature[data-comparing='false'] {
+    padding-block-end: 4px;
+  }
+}

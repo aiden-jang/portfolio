@@ -6,6 +6,7 @@ import { useReducedMotion } from '../../hooks/reducedMotion';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './iodine-timed.css';
 import './playable-iodine.css';
+import './night-engineering.css';
 import { OpenEvidence } from '../creative/evidenceNavigation';
 import { ControlIcon } from '../ControlIcon';
 
@@ -50,7 +51,8 @@ export function IodinePresentation() {
       <div className="undo-sheet" data-study-pin>
         <header className="undo-heading">
           <h3 id="iodine-proof-heading">
-            <span className="sr-only">Iodine. </span>Undo.
+            iodine
+            <span className="editor-caret" aria-hidden="true" />
           </h3>
           <a
             aria-label="Read the iodine case study"

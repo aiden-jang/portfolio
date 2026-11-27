@@ -9,10 +9,24 @@ for (const [width, height] of [
   }) => {
     await page.setViewportSize({ width, height });
     await page.route('**/*.glb', (route) => route.abort());
-    await page.goto('/work/');
-    await page.getByRole('link', { name: 'owewell Split the bill' }).click();
+    await page.goto('/#project-wherever');
     const dinner = page.locator('#project-wherever');
+    await expect(dinner).toHaveAttribute('data-moment', 'vote');
+    expect(
+      await dinner.evaluate((scene) => {
+        const room = document.querySelector('#project-mrrp');
+        const f40 = document.querySelector('#f40-study');
+        return (
+          !!room &&
+          !!f40 &&
+          Boolean(room.compareDocumentPosition(scene) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+          Boolean(scene.compareDocumentPosition(f40) & Node.DOCUMENT_POSITION_FOLLOWING)
+        );
+      }),
+    ).toBe(true);
+    await dinner.getByRole('button', { name: /Pick Neighborhood/ }).press('Enter');
     await expect(dinner).toHaveAttribute('data-moment', 'bill');
+    await expect(dinner.getByRole('button', { name: 'Split $48', exact: true })).toBeFocused();
     const photo = await dinner.getByRole('img', { name: /Pepperoni pizza/ }).elementHandle();
     await expect(dinner.getByRole('link', { name: 'Open app: owewell' })).toHaveAttribute(
       'href',
@@ -20,20 +34,14 @@ for (const [width, height] of [
     );
     await dinner.getByRole('button', { name: 'Split $48', exact: true }).click();
     await expect(dinner.getByText('$24.00', { exact: true })).toHaveCount(2);
-    await page.evaluate(() => {
-      location.hash = 'project-worth';
-    });
     await expect(dinner).toHaveAttribute('data-moment', 'entry');
     await dinner.getByRole('button', { name: 'Favorite', exact: true }).click();
     await expect(dinner.locator('.meal-character')).toBeInViewport();
     expect(
       await photo?.evaluate((node) => node === document.querySelector('.meal-photo img')),
     ).toBe(true);
-    await page.evaluate(() => {
-      location.hash = 'project-wherever';
-    });
+    await dinner.evaluate((scene) => scene.scrollIntoView({ block: 'start', behavior: 'instant' }));
     await expect(dinner).toHaveAttribute('data-moment', 'vote');
-    await dinner.getByRole('button', { name: /Pick Neighborhood/ }).press('Enter');
-    await expect(dinner).toHaveAttribute('data-moment', 'picked');
+    await expect(page).toHaveURL(/\/#project-wherever$/);
   });
 }

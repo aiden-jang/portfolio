@@ -140,9 +140,10 @@ export function EarthquakeFeature({ item, preview }: Props) {
               ref={compareButton}
               type="button"
               className="featured-primary earthquake-compare"
+              aria-label="Compare the Kamchatka reports"
               onClick={(event) => launchComparison(event.currentTarget)}
             >
-              Compare the Kamchatka reports <ControlIcon name="arrow" />
+              Compare reports <ControlIcon name="arrow" />
             </button>
             <a
               className="featured-text-action"

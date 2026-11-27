@@ -58,7 +58,7 @@ test('the Work index returns to the same project on a phone', async ({ page }) =
   const scene = page.locator('#project-bloomnote');
   await expect(scene.getByRole('heading')).toBeInViewport();
   await page.getByRole('link', { name: 'Work index' }).click();
-  await expect(page.getByRole('heading', { name: 'Work index.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Work index', exact: true })).toBeVisible();
   await page.goBack();
   await expect(scene.getByRole('heading')).toBeInViewport();
 });

@@ -1,0 +1,208 @@
+/* The foreground flowers occupy the same horizon as the illustrated field. */
+html:root #sec-more-work #project-bloomnote.studio-garden {
+  background:
+    linear-gradient(90deg, #131a27c9, #25223734 50%, transparent 75%),
+    url('../../../../studio-art/evening-garden.svg') center 61% / cover #232331;
+}
+html:root #sec-more-work .studio-garden-head h2 {
+  font-size: clamp(45px, 6.7vw, 106px);
+  letter-spacing: -0.065em;
+}
+#project-bloomnote .studio-garden-page {
+  width: min(calc(100% - 2 * var(--portfolio-gutter)), 1600px);
+  gap: 0;
+}
+#project-bloomnote .studio-garden-body {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 5vw;
+}
+#project-bloomnote .studio-letter-from {
+  letter-spacing: 0.015em;
+  color: #f3d8c8;
+}
+#project-bloomnote .studio-garden-letter blockquote {
+  max-width: 16ch;
+  font-size: clamp(40px, 4.75vw, 77px);
+  line-height: 1.04;
+}
+#project-bloomnote .studio-flower-bed {
+  align-self: end;
+  padding-bottom: clamp(15px, 4.5svh, 65px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+}
+#project-bloomnote .studio-flower {
+  --plant-size: clamp(140px, 31svh, 340px);
+  position: relative;
+  color: #f3dece;
+}
+#project-bloomnote .studio-flower:nth-child(3) {
+  --plant-size: clamp(135px, 26svh, 310px);
+}
+#project-bloomnote .studio-flower[aria-pressed='true'] {
+  --plant-size: clamp(260px, 57svh, 565px);
+}
+#project-bloomnote .studio-flower[aria-pressed='false'] svg {
+  filter: saturate(0.73) brightness(0.89);
+}
+#project-bloomnote .studio-flower-name {
+  padding-inline: 5px;
+  text-shadow: 0 1px 6px #172120;
+}
+#project-bloomnote .studio-note-tools .studio-grow {
+  border: 0;
+  border-bottom: 1px solid #e0c5aa94;
+  border-radius: 0;
+  padding: 0;
+}
+#project-bloomnote .studio-garden-foot {
+  align-self: end;
+}
+html:root #sec-more-work .studio-route[data-mode] {
+  --ground: #292027;
+  --ink: #ffeed3;
+  --muted: #d6bfb5;
+}
+html:root .studio-route .studio-desk-pin {
+  background:
+    radial-gradient(ellipse at 78% 29%, #7e525054, transparent 60%),
+    linear-gradient(112deg, #211e23 4%, #39282e 54%, #493237 100%);
+}
+html:root .studio-route .studio-layout {
+  width: min(calc(100% - 2 * var(--portfolio-gutter)), 1560px);
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.45fr);
+}
+html:root #sec-more-work .studio-route[data-mode] .studio-intro h2 {
+  font:
+    510 clamp(86px, 9vw, 154px)/0.9 var(--font-display),
+    sans-serif;
+  letter-spacing: -0.075em;
+}
+html:root .studio-route :is(.studio-intro, .studio-actions) {
+  padding-left: 0;
+}
+html:root .studio-route .studio-intro p {
+  max-width: 23ch;
+}
+html:root .studio-route .studio-actions button {
+  color: #feebd3;
+  background: transparent;
+  border-bottom: 1px solid #d8b8a6a3;
+  border-radius: 0;
+  min-height: 44px;
+  padding: 0;
+}
+html:root .studio-route .sketchbook {
+  --sheet-angle: -2.5deg;
+  top: 50%;
+  width: 85%;
+  left: 0;
+  color: #43313a;
+}
+html:root .studio-route .paper-front {
+  background: linear-gradient(117deg, #fff2d7, #f9e6cd 84%);
+  border-radius: 2px;
+  padding-top: 5%;
+}
+html:root .studio-route .paper-under {
+  border-radius: 1px;
+  box-shadow: 2px 18px 35px -10px #110b0c5c;
+  transform: rotate(1.4deg);
+}
+html:root .studio-route .coils {
+  display: none;
+}
+html:root .studio-route .paper-front .game-sign {
+  color: #33232d;
+}
+html:root .studio-route .room-unit,
+html:root .studio-route .studio-room-foot {
+  background: #241f25;
+  color: #f8e5ce;
+}
+html:root #sec-more-work .studio-route[data-mode] .studio-room-name h3 {
+  color: #fae9cf;
+}
+html:root .studio-route .studio-room-name :is(a, button),
+html:root #sec-more-work .studio-route[data-mode] .studio-room-feedback,
+html:root .studio-route .sill-garden-return,
+html:root .studio-route .room-tools button {
+  color: #e1cec2;
+}
+html:root .studio-route .room-unit[data-light='evening'] .native-room::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, #512f4717, transparent 49%, #d78c4030);
+  mix-blend-mode: soft-light;
+}
+@media (max-width: 740px) {
+  html:root #sec-more-work #project-bloomnote.studio-garden {
+    background:
+      linear-gradient(165deg, #17223566, #39313c0a 69%),
+      url('../../../../studio-art/evening-garden.svg') 59% bottom / cover #272433;
+  }
+  html:root #sec-more-work .studio-garden-head h2 {
+    font-size: clamp(47px, 13.5vw, 72px);
+  }
+  #project-bloomnote .studio-garden-body {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: space-evenly;
+    row-gap: 8px;
+  }
+  #project-bloomnote .studio-garden-letter blockquote {
+    font-size: clamp(31px, min(9.5vw, 4.85svh), 48px);
+    max-width: 17ch;
+  }
+  #project-bloomnote .studio-flower-bed {
+    padding: 0;
+    align-self: center;
+  }
+  #project-bloomnote .studio-flower {
+    --plant-size: 16.5svh;
+  }
+  #project-bloomnote .studio-flower:nth-child(3) {
+    --plant-size: 15svh;
+  }
+  #project-bloomnote .studio-flower[aria-pressed='true'] {
+    --plant-size: 28svh;
+  }
+  #project-bloomnote .studio-garden-foot {
+    margin-top: 6px;
+  }
+  html:root #sec-more-work .studio-route[data-mode] .studio-intro h2 {
+    font-size: clamp(54px, min(16.5vw, 9.7svh), 80px);
+    margin-bottom: 10px;
+  }
+  html:root .studio-route .studio-intro p {
+    max-width: 32ch;
+  }
+  html:root .studio-route .sketchbook {
+    left: 2%;
+    width: 83%;
+  }
+  html:root .studio-route .studio-actions {
+    margin-top: 6px;
+  }
+  html:root .studio-route .worktop {
+    max-width: min(100%, 55svh);
+  }
+}
+@media (max-height: 710px) and (max-width: 740px) {
+  html:root #sec-more-work .studio-garden-head h2 {
+    font-size: 43px;
+  }
+  #project-bloomnote .studio-flower[aria-pressed='true'] {
+    --plant-size: 23svh;
+  }
+  #project-bloomnote .studio-note-tools {
+    margin-top: 5px;
+  }
+  #project-bloomnote .studio-garden-page {
+    padding-block: 12px 5px;
+  }
+  #project-bloomnote .studio-letter-from {
+    margin-bottom: 6px;
+  }
+}

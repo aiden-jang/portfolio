@@ -1,7 +1,5 @@
-import { useState } from 'react';
-import { type PlantedFlower } from '../showcase/playable/gardenFlowers';
 import { DinnerTable } from '../showcase/DinnerTable';
-import { usePlantedGarden } from '../showcase/playable/usePlantedGarden';
+import { useGardenVisit } from '../showcase/playable/useGardenVisit';
 import { BloomPreview } from '../showcase/BloomPreview';
 import { Duet } from '../showcase/Duet';
 
@@ -50,6 +48,7 @@ const mrrp = orderedCollection.find((item) => item.mark === 'mrrp')!;
 const wherever = orderedCollection.find((item) => item.mark === 'wherever')!;
 const owewell = orderedCollection.find((item) => item.mark === 'owewell')!;
 const worth = orderedCollection.find((item) => item.mark === 'worth')!;
+
 function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
   if (!item.link) return null;
   return (
@@ -60,36 +59,22 @@ function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
 }
 
 export function MoreProjectsSection({ onOpen }: Props) {
-  const { plants, plant } = usePlantedGarden();
-  const [cutting, setCutting] = useState<PlantedFlower | null>(null);
-  const windowsill = cutting ?? plants.at(-1) ?? null;
+  const garden = useGardenVisit();
   return (
     <Section id="sec-more-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="bloom-gallery pointer-events-auto">
         <h2 className="sr-only">More projects</h2>
         <BloomPreview
           {...PREVIEWS.bloomnote}
-          plants={plants}
-          onPlant={(flower) => {
-            plant(flower);
-            setCutting(null);
-          }}
-          onVisitSill={(flower) => {
-            setCutting(flower);
-            requestAnimationFrame(() => {
-              location.hash = 'project-mrrp';
-              const room = document.getElementById('project-mrrp');
-              room?.scrollIntoView({ block: 'start', behavior: 'instant' });
-              room?.focus({ preventScroll: true });
-            });
-          }}
+          garden={garden}
           url={bloomnote.link?.url}
           onRead={(trigger) => onOpen(bloomnote, trigger)}
         />
         <div className="garage-work bloom-gallery-rest">
           <div className="project-scenes">
             <Duet
-              flower={windowsill}
+              flower={garden.flower}
+              backToGarden={garden.backToGarden}
               drawTitle={
                 <button
                   type="button"

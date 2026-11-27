@@ -43,9 +43,8 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
   const title = useRef<HTMLHeadingElement>(null);
   const drag = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
   const ignoreClick = useRef(false);
-  const { moment, act } = useDinnerSequence(track, stage);
+  const { moment, paid, act } = useDinnerSequence(track, stage);
   const [announcement, announce] = useState('');
-  const [hops, setHops] = useState(0);
   const [missingPhoto, setMissingPhoto] = useState(false);
   const voting = moment === 'vote';
   const atBill = moment === 'bill' || moment === 'split';
@@ -55,22 +54,21 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
   const app = atWorth ? 'worth' : atBill ? 'owewell' : 'wherever';
   const href = atWorth ? worth : atBill ? bill : dinner;
 
-  function pick() {
-    act('pick');
-    announce('You and Alex picked ' + restaurant + '.');
+  function pick(keyboard = false) {
+    act('pick', keyboard);
+    announce('You and Alex picked ' + restaurant + '. Dinner for two is $48.');
     title.current?.focus({ preventScroll: true });
   }
 
-  function split() {
-    act('split');
+  function split(event: React.MouseEvent<HTMLButtonElement>) {
+    act('split', event.detail === 0);
     announce('The $48 bill is split equally. Your share is $24. Alex owes you $24.');
     title.current?.focus({ preventScroll: true });
   }
 
   function favorite() {
     act('favorite');
-    setHops((count) => count + 1);
-    announce(restaurant + ' is a Favorite in Places.');
+    announce(restaurant + (isFavorite ? ' removed from Favorites.' : ' is a Favorite in Places.'));
   }
 
   function start(event: PointerEvent<HTMLButtonElement>) {
@@ -113,6 +111,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
       className="meal-story"
       ref={track}
       data-phase={app}
+      data-paid={paid || undefined}
       data-moment={moment}
       aria-label="Dinner with wherever, owewell, and worth"
     >
@@ -187,7 +186,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
             ) : atWorth ? (
               <>
                 <MealIcon name="check" />
-                Saved in Places
+                {paid ? 'Saved in Places · $24 each' : 'Saved in Places'}
               </>
             ) : atBill ? (
               <>Dinner for two</>
@@ -238,7 +237,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
                   Favorite
                 </button>
                 {isFavorite && (
-                  <span className="meal-character" key={hops}>
+                  <span className="meal-character">
                     <WorthCharacter />
                   </span>
                 )}
@@ -256,7 +255,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
             onPointerUp={finish}
             onPointerCancel={finish}
             onClick={(event) => {
-              if (!ignoreClick.current || event.detail === 0) pick();
+              if (!ignoreClick.current || event.detail === 0) pick(event.detail === 0);
               ignoreClick.current = false;
             }}
           />

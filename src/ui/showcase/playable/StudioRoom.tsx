@@ -1,7 +1,8 @@
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Cat, type RoomAction, type RoomPositions } from '../mrrp/renderer.js';
+import { clamp } from '../../../math';
 import { useBeanToyDrag } from '../useBeanToyDrag';
-import { Icon } from './StudioIcon';
+import { RoomFooter } from './RoomFooter';
 import { gardenFlowers, type PlantedFlower } from './gardenFlowers';
 import { useSillFlower } from './useSillFlower';
 
@@ -20,9 +21,6 @@ function roomTime(hour: number) {
     homeHour: 18,
   };
 }
-function clamp(value: number, low: number, high: number) {
-  return Math.max(low, Math.min(high, value));
-}
 function variable(el: HTMLElement, name: string, val: string) {
   if (el.style.getPropertyValue(name) !== val) el.style.setProperty(name, val);
 }
@@ -34,6 +32,7 @@ export type RoomParts = {
 
 export function Room({
   flower,
+  backToGarden,
   active,
   marked,
   master,
@@ -44,6 +43,7 @@ export function Room({
   returnToPad,
 }: {
   flower: PlantedFlower | null;
+  backToGarden: () => void;
   active: boolean;
   marked: boolean;
   master: HTMLCanvasElement;
@@ -55,9 +55,14 @@ export function Room({
 }) {
   const host = useRef<HTMLDivElement>(null);
   const hotspots = useRef<HTMLDivElement>(null);
+  const sillTarget = useRef<HTMLButtonElement>(null);
   const [reserve, setReserve] = useState(150);
   const [paintPixels, setPaintPixels] = useState(true);
-  const [reply, setReply] = useState<{ plant: PlantedFlower | null; text: string } | null>(null);
+  const [reply, setReply] = useState<{
+    plant: PlantedFlower | null;
+    text: string;
+    note?: boolean;
+  } | null>(null);
   const welcome = flower
     ? `Tap ${flower.example ? 'the' : 'your'} ${gardenFlowers[flower.index].name.toLowerCase()} on the sill.`
     : 'Tap Bean or drag her mouse.';
@@ -76,7 +81,9 @@ export function Room({
     const measure = () => setReserve(Math.max(100, window.innerHeight - el.clientHeight));
     const nearby = new IntersectionObserver(
       ([entry]) => {
-        if (entry) setPaintPixels(entry.isIntersecting);
+        if (!entry) return;
+        if (!entry.isIntersecting) sillTarget.current?.removeAttribute('data-painted');
+        setPaintPixels(entry.isIntersecting);
       },
       { rootMargin: '360px 0px' },
     );
@@ -97,7 +104,7 @@ export function Room({
       const canvas = box?.querySelector<HTMLCanvasElement>(':scope > canvas');
       if (!box || !layer || !canvas || !canvas.width || !canvas.height) return;
       const w = box.clientWidth,
-        h = box.clientHeight;
+        h = box.parentElement!.clientHeight;
       const fill = Math.max(w / canvas.width, h / canvas.height);
       const width = canvas.width * fill,
         height = canvas.height * fill;
@@ -136,8 +143,10 @@ export function Room({
       ] as const)
         variable(layer, '--' + name, pct(point));
       if (!layer.dataset.positioned) layer.dataset.positioned = 'true';
+      const target = sillTarget.current;
+      if (sillFlower && target && !target.dataset.painted) target.dataset.painted = 'true';
     },
-    [flower],
+    [flower, sillFlower],
   );
 
   function say(text: string) {
@@ -245,9 +254,20 @@ export function Room({
               {flower && (
                 <button
                   type="button"
+                  key={flower.index}
+                  ref={sillTarget}
                   className="room-hit hit-flower"
                   aria-label={`Read ${flower.example ? 'the' : 'your'} ${gardenFlowers[flower.index].name} note on the windowsill`}
-                  onClick={() => say(flower.note)}
+                  aria-expanded={reply?.plant === flower && !!reply.note}
+                  onClick={(event) => {
+                    setReply({ plant: flower, text: flower.note, note: true });
+                    if (event.detail === 0)
+                      requestAnimationFrame(() => {
+                        document
+                          .getElementById('sill-garden-return')
+                          ?.focus({ preventScroll: true });
+                      });
+                  }}
                 >
                   <span>{gardenFlowers[flower.index].name}</span>
                 </button>
@@ -265,36 +285,16 @@ export function Room({
           </div>
         </div>
       </div>
-      <footer className="studio-room-foot">
-        <div className="studio-room-name">
-          <h3 id="studio-room-title" tabIndex={-1}>
-            Bean’s room
-          </h3>
-          <span>{roomLink}</span>
-        </div>
-        <p className="studio-room-feedback" role="status">
-          {feedback}
-        </p>
-        <div className="room-tools" role="group" aria-label="Room controls">
-          <button type="button" onClick={returnToPad} aria-label="Return to drawing pad">
-            <Icon name="back" size={17} />
-            <span>Drawing pad</span>
-          </button>
-          <button type="button" onClick={toss}>
-            <Icon name="mouse" size={18} />
-            <span>Toss mouse</span>
-          </button>
-          <button
-            type="button"
-            onClick={light}
-            aria-pressed={morning}
-            aria-label={morning ? 'Evening light' : 'Morning light'}
-          >
-            <Icon name={morning ? 'moon' : 'sun'} size={18} />
-            <span>{morning ? 'Evening' : 'Morning'}</span>
-          </button>
-        </div>
-      </footer>
+      <RoomFooter
+        roomLink={roomLink}
+        feedback={feedback}
+        reading={!!flower && reply?.plant === flower && !!reply.note}
+        backToGarden={backToGarden}
+        returnToPad={returnToPad}
+        toss={toss}
+        morning={morning}
+        light={light}
+      />
     </div>
   );
 }

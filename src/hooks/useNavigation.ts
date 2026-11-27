@@ -14,6 +14,10 @@ import {
   pageSectionBounds,
 } from '../three/orbitRegion';
 
+function sectionAnchor(hash: string) {
+  return hash.startsWith('#sill/') ? 'project-mrrp' : hash.slice(1);
+}
+
 const SNAP_LOCK_MS = 900;
 // The GLB swap is async, so cycling faster than this queues loads nobody sees.
 const CAR_LOCK_MS = 600;
@@ -152,7 +156,7 @@ export function useNavigation(sceneOnly = false) {
         const from = new URL(event.oldURL);
         if (/^#(?:work|quake)\//.test(from.hash) || storyAtLocation(from)) return;
       }
-      const anchor = location.hash.slice(1);
+      const anchor = sectionAnchor(location.hash);
       const index = SECTION_IDS.indexOf(anchor as SectionId);
       if (index < 0) {
         if (projectArrivalAnchors.includes(anchor)) {
@@ -224,7 +228,7 @@ export function useNavigation(sceneOnly = false) {
     const linkFrame = requestAnimationFrame(() => {
       if (!restoreCaseReturn()) {
         restoreSectionLink();
-        const anchor = initialHash.slice(1);
+        const anchor = sectionAnchor(initialHash);
         if (SECTION_IDS.includes(anchor as SectionId) || projectArrivalAnchors.includes(anchor)) {
           initialLanding = window.scrollY;
         }

@@ -7,7 +7,7 @@ export function Brand({ onHome }: { onHome: () => void }) {
         aria-label="Aiden Jang, back to the top"
         className="pointer-events-auto cursor-pointer block p-0 m-0 bg-transparent border-0 text-left"
       >
-        <span className="garage-brand">AJ / portfolio</span>
+        <span className="garage-brand">AJ</span>
       </button>
     </header>
   );
