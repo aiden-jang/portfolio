@@ -84,19 +84,6 @@ html:root #project-worth .project-preview img.dinner-rating-photo {
     aspect-ratio: 1.94;
   }
 }
-[data-carry='flower'] {
-  overflow: visible;
-  contain: none !important;
-}
-[data-carry='flower'] > i {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 99px;
-  background: color-mix(in srgb, #71885f, #f6eed9 calc(var(--pass) * 100%));
-  transform: rotate(calc(39deg * var(--pass)));
-  opacity: clamp(0, calc((1 - var(--pass)) * 12), 1);
-}
 [data-carried-source],
 [data-carried-target] {
   opacity: 0 !important;

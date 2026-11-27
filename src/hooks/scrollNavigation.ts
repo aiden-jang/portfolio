@@ -72,3 +72,21 @@ export function smoothScrollTo(targetY: number): void {
   };
   scrollRaf = requestAnimationFrame(step);
 }
+
+export function sectionLanding(section: HTMLElement) {
+  if (section.id === 'sec-more-work') {
+    const heading = section.querySelector(
+      '.bloom-garden-inner:not([hidden]) #bloom-garden-title, .bloom-draft:not([hidden]) #bloom-draft-title',
+    );
+    const header = document.querySelector('.portfolio-header');
+    if (heading) {
+      return (
+        heading.getBoundingClientRect().top +
+        scrollY -
+        (header?.getBoundingClientRect().height ?? 0) -
+        14
+      );
+    }
+  }
+  return section.getBoundingClientRect().top + scrollY;
+}

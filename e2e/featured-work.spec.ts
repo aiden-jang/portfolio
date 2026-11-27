@@ -90,15 +90,16 @@ for (const [width, height] of [
     await expect(inspect).toBeInViewport({ ratio: 1 });
     await inspect.press('Enter');
     await expect(
-      page.getByRole('heading', { name: 'One earthquake. Two readings.' }),
+      page.getByRole('heading', { name: 'Off the east coast of Kamchatka' }),
     ).toBeFocused();
-    const evidence = page.getByRole('region', { name: 'Off the east coast of Kamchatka' });
+    const evidence = page.getByRole('group', { name: 'Choose depth reading' });
     await expect(evidence).toContainText('54.7 km');
     await expect(evidence).toContainText('71.0 km');
     await page.getByRole('button', { name: /EMSC.*71.0 km/ }).click();
     await expect(page).toHaveURL(/#quake\/kamchatka\/EMSC$/);
     const casePath = await page
-      .getByRole('link', { name: 'See how I matched the reports' })
+      .locator('.linked-quake-report')
+      .getByRole('link', { name: /Case study/ })
       .getAttribute('href');
     await page.goBack();
     await expect(inspect).toBeFocused();

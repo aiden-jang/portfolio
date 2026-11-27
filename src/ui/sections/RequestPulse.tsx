@@ -85,11 +85,12 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
     const canvas = ref.current!;
     const tracks = requestTracks();
     const owner = canvas.closest('figure')!;
-    let current = Number(owner.dataset.pulse || 0),
-      target = current,
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let target = Number(owner.dataset.pulse || 0),
+      current = reduced ? target : 0,
       frame = 0,
       last = 0;
-    let catchingUp = false;
+    let catchingUp = target - current > 0.6;
     let visible = false;
     const draw = () => render(canvas, current, tracks);
     const resize = () => {
@@ -148,6 +149,7 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     resize();
+    onPaint(current);
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();

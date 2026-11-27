@@ -5,6 +5,8 @@ import { useThree } from '@react-three/fiber';
 import { PerspectiveCamera, type Camera } from 'three';
 import { CONTACT_DESKTOP_MIN_WIDTH, contactFrame } from './contactFrame';
 import { phoneOpeningFrame } from './phoneOpeningFrame';
+import { floorElevation, framingDistanceMultiplier, orbitPosition } from './cameraPose';
+import { placeCamera } from './studio/cameraFraming';
 import { clamp } from '../math';
 
 export function useContactArrival() {
@@ -13,7 +15,7 @@ export function useContactArrival() {
     const study = !reduced && useFinishStudy.getState().active;
     const contact = pose && document.getElementById('sec-contact')?.getBoundingClientRect();
     if (!pose || !contact || (contact.top >= size.height && !study) || contact.bottom <= 0) {
-      if (pose && applyPhoneOpeningView(camera, size.width, size.height, scroll)) return;
+      if (pose && applyPhoneOpeningView(camera, size.width, size.height, scroll)) return false;
       const aspect = size.width / size.height;
       if (
         camera.view?.enabled ||
@@ -22,13 +24,14 @@ export function useContactArrival() {
         if (camera instanceof PerspectiveCamera) camera.aspect = aspect;
         camera.clearViewOffset();
       }
-      return;
+      return false;
     }
     Object.assign(pose, KEYFRAMES.at(-1)!);
+    const top = study ? finishStudyFrame.top : contact.top;
     const view = contactFrame({
       ...size,
       sectionHeight: contact.height,
-      sectionTop: study ? finishStudyFrame.top : contact.top,
+      sectionTop: Math.abs(top) < 1 ? 0 : top,
       progress: 1,
     });
     const desktop = size.width >= CONTACT_DESKTOP_MIN_WIDTH;
@@ -36,7 +39,7 @@ export function useContactArrival() {
     const paint = study ? p * p * (3 - 2 * p) : 1;
     const clay = 1 - paint;
     if (desktop) view.offsetX += size.width * 0.13 * clay;
-    else view.offsetY += view.fullHeight * 0.043 * paint;
+
     // Treat a tall Contact section as one scene and show only its current viewport slice.
     if (
       !camera.view?.enabled ||
@@ -56,12 +59,22 @@ export function useContactArrival() {
         view.height,
       );
     }
-    const bearing = desktop ? pose.azimuth : 0.5;
-    const elevation = desktop ? pose.elevation : 0.135;
+    const bearing = desktop ? 0.38 : 0.29;
+    const elevation = desktop ? 0.63 : 0.61;
     pose.azimuth = bearing + ((desktop ? 0.84 : 0.71) - bearing) * clay;
     pose.elevation = elevation + ((desktop ? 0.23 : 0.3) - elevation) * clay;
-    pose.distance *= view.distanceMultiplier * (1 - (desktop ? 0.03 : 0.142) * paint);
+    pose.distance *= view.distanceMultiplier;
     pose.distance *= 1 - (desktop ? 0.15 : 0.08) * clay;
+    const distance = pose.distance * framingDistanceMultiplier(size.width / size.height);
+    const angle = Math.max(pose.elevation, floorElevation(distance, pose.targetY));
+    placeCamera(
+      camera,
+      orbitPosition(pose.azimuth, angle, distance, pose.targetY),
+      pose.targetY,
+      null,
+      0,
+    );
+    return true;
   };
 }
 

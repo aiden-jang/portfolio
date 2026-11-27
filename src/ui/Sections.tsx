@@ -1,6 +1,6 @@
 import { ProjectHandoffs } from './showcase/ProjectHandoffs';
 import './connected-cut.css';
-import { OriginalGlobeOpening } from './showcase/opening/OriginalGlobeOpening';
+import './showcase/opening/featured-globe-cut.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { caseStudyLane, isPortfolioProject } from '../data/workBrowsing';
 import { WORK_ITEMS, workId } from '../data/workItems';
@@ -124,7 +124,6 @@ export function Sections() {
       <MoreProjectsSection onOpen={openWork} />
       <AboutSection />
       <ContactSection />
-      <OriginalGlobeOpening />
       <ProjectHandoffs />
       <WorkModal
         item={activeWork}

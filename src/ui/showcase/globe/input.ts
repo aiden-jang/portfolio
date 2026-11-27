@@ -21,14 +21,17 @@ export function attachGlobeInput(canvas: HTMLCanvasElement, options: Options) {
   };
   const down = (e: PointerEvent) => {
     if (e.button !== 0) return;
-    options.takeControl();
+    if (e.pointerType !== 'touch') {
+      options.takeControl();
+      canvas.focus({ preventScroll: true });
+      canvas.setPointerCapture(e.pointerId);
+    }
     vx = vy = 0;
-    canvas.focus({ preventScroll: true });
-    canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     last = performance.now();
     if (pointers.size === 1) press = { x: e.clientX, y: e.clientY, moved: false };
     if (pointers.size === 2) {
+      options.takeControl();
       pinch = spread();
       if (press) press.moved = true;
     }
@@ -47,7 +50,19 @@ export function attachGlobeInput(canvas: HTMLCanvasElement, options: Options) {
       return;
     }
     if (!press) return;
-    if (!press.moved && Math.hypot(e.clientX - press.x, e.clientY - press.y) < 6) return;
+    if (!press.moved) {
+      const x = Math.abs(e.clientX - press.x);
+      const y = Math.abs(e.clientY - press.y);
+      if (Math.hypot(x, y) < 6) return;
+      if (e.pointerType === 'touch') {
+        if (y >= x) {
+          press = null;
+          return;
+        }
+        options.takeControl();
+        canvas.setPointerCapture(e.pointerId);
+      }
+    }
     press.moved = true;
     const factor = 135 / Math.min(canvas.clientWidth, canvas.clientHeight) / pose.zoom;
     const dx = (prev.x - e.clientX) * factor,
@@ -62,7 +77,7 @@ export function attachGlobeInput(canvas: HTMLCanvasElement, options: Options) {
     options.change();
   };
   const up = (e: PointerEvent) => {
-    pointers.delete(e.pointerId);
+    if (!pointers.delete(e.pointerId)) return;
     pinch = 0;
     if (e.type === 'pointerup' && press && !press.moved)
       options.pick(e.clientX, e.clientY, e.pointerType === 'touch');

@@ -20,8 +20,9 @@ html[data-featured-globe-cut]
 }
 @media (prefers-reduced-motion: no-preference) {
   html[data-featured-globe-cut][data-before-globe-cut] #sec-work {
-    opacity: 0;
-    pointer-events: none;
+    /* The globe's track reaches into Intro. Clip it until the cut so it
+       cannot intercept gestures over the car or its controls. */
+    clip-path: inset(100%);
   }
   html[data-featured-globe-cut][data-showroom-handoff]
     :is(.portfolio-scene, .opening-poster, .car-type-overlap) {
@@ -33,11 +34,25 @@ html[data-featured-globe-cut]
   html[data-featured-globe-cut] .portfolio-chrome #sec-work {
     overflow: visible;
     z-index: 8;
-    translate: 0 var(--globe-cut-offset, 0px);
   }
   html[data-featured-globe-cut] #sec-work .earthquake-feature[data-comparing='false'] {
     min-height: calc(100svh - var(--portfolio-header-height) - 12px);
     isolation: isolate;
+  }
+}
+@media (prefers-reduced-motion: no-preference) and (min-height: 620px) {
+  /* Start the sticky globe at the cut. Return its leading space at the end
+     of the track so the Work anchor and the following editor keep their positions. */
+  html[data-featured-globe-cut] #sec-work .quake-journey-run {
+    display: flow-root;
+    --globe-cut-lead: 93svh;
+  }
+  html[data-featured-globe-cut] #sec-work .quake-journey-run > .earthquake-feature {
+    margin-block-start: calc(-1 * var(--globe-cut-lead));
+  }
+  html[data-featured-globe-cut] #sec-work .quake-journey-run::after {
+    box-sizing: content-box;
+    padding-block-end: var(--globe-cut-lead);
   }
 }
 @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
@@ -46,7 +61,7 @@ html[data-featured-globe-cut]
     margin-inline-end: calc(-1 * var(--portfolio-gutter));
   }
   html[data-featured-globe-cut] #project-everythingisfine .earthquake-title {
-    z-index: 1;
+    z-index: 3;
   }
   html[data-featured-globe-cut] #project-everythingisfine .orbit-feature {
     position: relative;
@@ -85,7 +100,7 @@ html[data-featured-globe-cut]
     inset: calc(-1 * var(--portfolio-header-height)) auto 0 50%;
     width: 100vw;
     opacity: 1;
-    background: url('/projects/globe-stars-desktop.svg') center / cover;
+    background: #091219 url('/projects/globe-stars-desktop.svg') center / cover;
     mask-image: none;
   }
   html[data-featured-globe-cut]:root
@@ -119,5 +134,75 @@ html[data-featured-globe-cut]
     .earthquake-title
     h3 {
     font-size: clamp(45px, 13.5vw, 64px);
+  }
+}
+
+#project-everythingisfine[data-report-open] .quake-reading-track {
+  visibility: visible;
+  opacity: 1;
+}
+#project-everythingisfine[data-report-open] .orbit-viewport {
+  pointer-events: none;
+}
+#project-everythingisfine[data-report-open] .orbit-actions {
+  display: none;
+}
+#project-everythingisfine[data-report-agency='EMSC'][data-report-open]
+  .quake-journey-readings
+  dl
+  > div:first-child,
+#project-everythingisfine[data-report-agency='USGS'][data-report-open]
+  .quake-journey-readings
+  dl
+  > div:last-child {
+  opacity: 0.55;
+}
+.linked-quake-report h4 {
+  font-size: clamp(18px, 2.1vw, 32px);
+  font-weight: 500;
+  line-height: 1.1;
+}
+.linked-quake-report p {
+  color: #afc7c9;
+  font-size: 14px;
+}
+.linked-quake-report [role='group'] {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.linked-quake-report [role='group'] button {
+  border-bottom: 1px solid #527075;
+  font-size: 13px;
+  min-height: 44px;
+}
+.linked-quake-report [aria-pressed='true'] {
+  color: #f3cf98;
+  border-color: currentColor !important;
+}
+
+@media (min-width: 768px) {
+  html[data-featured-globe-cut] #project-everythingisfine[data-report-open] .earthquake-title {
+    z-index: 3;
+  }
+}
+
+@media (max-width: 767px) {
+  html[data-featured-globe-cut]:root
+    .portfolio-chrome
+    #sec-work
+    #project-everythingisfine
+    .preview-thumbnail {
+    height: clamp(242px, 41svh, 365px);
+  }
+  html[data-featured-globe-cut]:root #sec-work #project-everythingisfine .orbit-art {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    aspect-ratio: auto;
+  }
+  html[data-featured-globe-cut] #sec-work #project-everythingisfine .orbit-art img {
+    object-fit: contain;
   }
 }

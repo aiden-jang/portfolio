@@ -1,3 +1,4 @@
+import { alignGlobeReading, visibleGlobeEvents } from './globe/projection';
 import { lerp, lerpAngle } from '../../math';
 import { kamchatkaExample } from '../../data/kamchatkaExample';
 import { createGlobeScene, loadAurora, loadGeography } from './globe/scene';
@@ -33,7 +34,7 @@ const featured: GlobeEvent = {
 const openingZoom = (compact?: boolean) => {
   const phone = matchMedia('(max-width: 767px)').matches;
   if (compact) return phone ? 1.04 : 0.99;
-  return phone ? 1.32 : 1.24;
+  return phone ? 0.91 : 0.94;
 };
 
 type Options = {
@@ -69,8 +70,8 @@ export function createOrbitGlobe(
     options.weather,
   );
   const initial = {
-    lon: 165,
-    lat: 42,
+    lon: 149,
+    lat: 36,
     zoom: openingZoom(options.compact),
   };
   const pose: GlobePose = { ...initial };
@@ -85,6 +86,7 @@ export function createOrbitGlobe(
   let journey = 0;
   let origin: GlobePose | undefined;
   let retained = false;
+  let inspecting = false;
   let lastPulse = 0;
   let lastSweep = 0;
   options.onRotation(rotating);
@@ -110,23 +112,7 @@ export function createOrbitGlobe(
         lastSweep = reduced.matches ? 0 : time / 1000;
       }
       globe.render(pose, journey, lastPulse, lastSweep);
-      if (art && journey > 0) {
-        const surface = canvas.getBoundingClientRect();
-        const marker = globe.project(featured.lon, featured.lat, surface);
-        if (marker && surface.width && surface.height) {
-          art.style.setProperty(
-            '--event-x',
-            `${((marker.x - surface.left) / surface.width) * 100}%`,
-          );
-          art.style.setProperty(
-            '--event-y',
-            `${((marker.y - surface.top) / surface.height) * 100}%`,
-          );
-        }
-      } else if (art?.style.getPropertyValue('--event-x')) {
-        art.style.removeProperty('--event-x');
-        art.style.removeProperty('--event-y');
-      }
+      alignGlobeReading(canvas, art, globe, journey > 0 ? featured : undefined);
       if (moving || (rotating && journey === 0) || idle) frame = requestAnimationFrame(draw);
       else previous = 0;
     } catch {
@@ -141,19 +127,6 @@ export function createOrbitGlobe(
     frame = 0;
     previous = 0;
     input.stop();
-  };
-  const visibleEvents = () => {
-    const rect = canvas.closest('.preview-thumbnail')!.getBoundingClientRect();
-    return selectable.flatMap((event) => {
-      const at = globe.project(event.lon, event.lat);
-      return at &&
-        at.x > rect.left + 12 &&
-        at.x < rect.right - 12 &&
-        at.y > rect.top + 12 &&
-        at.y < rect.bottom - 65
-        ? [{ event, ...at }]
-        : [];
-    });
   };
   const select = (event: GlobeEvent | undefined) => {
     lastShown = event?.id;
@@ -186,13 +159,14 @@ export function createOrbitGlobe(
     pick: (x, y, touch) => {
       let best: (typeof events)[number] | undefined,
         score = Infinity;
-      for (const candidate of visibleEvents()) {
+      for (const candidate of visibleGlobeEvents(canvas, selectable, globe)) {
         const distance = Math.hypot(candidate.x - x, candidate.y - y);
         if (distance <= (touch ? 22 : 12) && distance < score) {
           score = distance;
           best = candidate.event;
         }
       }
+      if (best && touch) takeControl();
       select(best);
     },
   });
@@ -205,13 +179,13 @@ export function createOrbitGlobe(
   };
   const steer = (event: Event) => {
     const t = (event as CustomEvent<number>).detail;
-    if (retained || t === journey) return;
+    if (inspecting || retained || t === journey) return;
     journey = t;
     if (journey > 0) {
       if (!origin) origin = { ...pose };
       input.stop();
       globe.highlight(featured);
-      const close = matchMedia('(max-width: 767px)').matches ? 1.87 : 1.88;
+      const close = 1.07;
       pose.lon =
         (lerpAngle((origin.lon * Math.PI) / 180, (featured.lon * Math.PI) / 180, t) * 180) /
         Math.PI;
@@ -243,6 +217,31 @@ export function createOrbitGlobe(
   holdUntil = performance.now() + OPENING_HOLD_MS;
   wake();
   return {
+    inspectFeatured: () => {
+      const saved = { pose: { ...pose }, journey, rotating, origin, retained };
+      inspecting = true;
+      input.stop();
+      setRotating(false);
+      retained = false;
+      journey = 1;
+      Object.assign(pose, {
+        lon: featured.lon,
+        lat: featured.lat,
+        zoom: 1.07,
+      });
+      globe.highlight(featured);
+      wake();
+      return () => {
+        inspecting = false;
+        Object.assign(pose, saved.pose);
+        journey = saved.journey;
+        origin = saved.origin;
+        retained = saved.retained;
+        globe.highlight(selectable.find((event) => event.id === lastShown));
+        setRotating(saved.rotating);
+        wake();
+      };
+    },
     capture: () => {
       if (!art || disposed || !canvas.width) return;
       setRotating(false);
@@ -270,7 +269,7 @@ export function createOrbitGlobe(
     },
     showEvent: () => {
       takeControl();
-      const visible = visibleEvents();
+      const visible = visibleGlobeEvents(canvas, selectable, globe);
       const last = visible.findIndex(({ event }) => event.id === lastShown);
       select(visible.length ? visible[(last + 1) % visible.length]?.event : undefined);
     },

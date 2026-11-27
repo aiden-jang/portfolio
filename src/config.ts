@@ -65,6 +65,7 @@ export const KEYFRAMES: Keyframe[] = [
   { azimuth: 0.55, elevation: 0.099, distance: 9, targetY: 0.7 }, // contact:    low front three-quarter
 ];
 
+export const GLOBE_CUT_VIEWPORT_FRACTION = 0.93;
 export const SECTION_IDS = [
   'sec-intro',
   'sec-work',

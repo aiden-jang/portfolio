@@ -1,6 +1,5 @@
 export const FINISH_MEDIA = '/showroom/finish-study/';
-const frameWidth = 352;
-const frameHeight = 760;
+
 const columns = 4;
 const framesPerSheet = 12;
 const lastFrame = 32;
@@ -9,12 +8,15 @@ export function finishFrames(canvas: HTMLCanvasElement, progress: () => number) 
   const context = canvas.getContext('2d');
   let sheets: HTMLImageElement[] = [];
   let drawn = -1;
+  let format = '';
 
   function draw() {
     const frame = Math.round(progress() * lastFrame);
     const sheet = sheets[Math.floor(frame / framesPerSheet)];
     if (!context || !sheet?.complete || !sheet.naturalWidth || frame === drawn) return;
     const cell = frame % framesPerSheet;
+    const frameWidth = canvas.width,
+      frameHeight = canvas.height;
     context.drawImage(
       sheet,
       (cell % columns) * frameWidth,
@@ -32,12 +34,19 @@ export function finishFrames(canvas: HTMLCanvasElement, progress: () => number) 
 
   return {
     draw,
-    load() {
-      if (!context || sheets.length) return;
+    load(short: boolean) {
+      const next = short ? 'short' : 'phone';
+      if (!context || (sheets.length && next === format)) return;
+      for (const sheet of sheets) sheet.onload = null;
+      format = next;
+      drawn = -1;
+      canvas.hidden = true;
+      canvas.width = short ? 375 : 390;
+      canvas.height = short ? 780 : 844;
       sheets = Array.from({ length: Math.ceil((lastFrame + 1) / framesPerSheet) }, (_, index) => {
         const image = new Image();
         image.onload = draw;
-        image.src = `${FINISH_MEDIA}mobile-frames-${index}.webp`;
+        image.src = `${FINISH_MEDIA}${format}/frames-${index}.webp`;
         return image;
       });
     },

@@ -1,8 +1,6 @@
 import { useGarageExhibit } from '../garageExhibits/state';
 import { applyF40HeadlightPreset, isGarageAfterHours } from '../garageStudio/lighting';
-import { activeOrbit, repaintStudio, useGarageStudio } from '../garageStudio/state';
-import { stopOrbitMotion } from '../garageStudio/orbitMotion';
-import { clearStudioCut } from '../garageStudio/studioCut';
+import { repaintStudio, useGarageStudio } from '../garageStudio/state';
 import { useAppStore } from '../store';
 import { useGarageStudy } from './state';
 
@@ -38,9 +36,7 @@ export function StudioLightControl({ waiting }: { waiting: boolean }) {
       (preset === 'night') === afterHours
     )
       return;
-    stopOrbitMotion(activeOrbit(), 'requested');
-    clearStudioCut();
-    useGarageStudy.setState({ look: preset, playing: false });
+    useGarageStudy.setState({ look: preset });
     applyF40HeadlightPreset(preset);
     repaintStudio();
   }

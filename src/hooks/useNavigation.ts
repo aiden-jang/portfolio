@@ -1,9 +1,9 @@
 import { lastScrollInput, prepareSectionArrival, projectArrivalAnchors } from './scrollArrival';
 import { handleNavigationKey } from './navigationKeyboard';
 import { useCallback, useEffect, useRef } from 'react';
-import { SECTION_IDS, type SectionId } from '../config';
+import { GLOBE_CUT_VIEWPORT_FRACTION, SECTION_IDS, type SectionId } from '../config';
 import { clamp } from '../math';
-import { cancelSmoothScroll, smoothScrollTo } from './scrollNavigation';
+import { cancelSmoothScroll, sectionLanding, smoothScrollTo } from './scrollNavigation';
 import { useAppStore } from '../store';
 import { sectionProgress } from './sectionProgress';
 import { storyAtLocation } from '../ui/creative/storyRoutes';
@@ -19,23 +19,6 @@ const SNAP_LOCK_MS = 900;
 const CAR_LOCK_MS = 600;
 // Below this, a mouse's horizontal jitter would cycle the car on its own.
 const MIN_WHEEL_DELTA = 10;
-function sectionLanding(section: HTMLElement) {
-  if (section.id === 'sec-more-work') {
-    const heading = section.querySelector(
-      '.bloom-garden-inner:not([hidden]) #bloom-garden-title, .bloom-draft:not([hidden]) #bloom-draft-title',
-    );
-    const header = document.querySelector('.portfolio-header');
-    if (heading) {
-      return (
-        heading.getBoundingClientRect().top +
-        scrollY -
-        (header?.getBoundingClientRect().height ?? 0) -
-        14
-      );
-    }
-  }
-  return section.getBoundingClientRect().top + scrollY;
-}
 
 export function useNavigation(sceneOnly = false) {
   const setSectionIndex = useAppStore((s) => s.setSectionIndex);
@@ -100,6 +83,9 @@ export function useNavigation(sceneOnly = false) {
       !!document.querySelector(
         'dialog[open], [role="dialog"][aria-modal="true"]:not([aria-hidden="true"])',
       );
+    const stickyGlobe = window.matchMedia?.(
+      '(min-height: 620px) and (prefers-reduced-motion: no-preference)',
+    );
     // Clearing the lock as well as the tween is what stops the section highlight from staying
     // frozen on the jump target once the user scrolls away from it.
     const yieldToUser = () => {
@@ -148,11 +134,13 @@ export function useNavigation(sceneOnly = false) {
         if (!target || Math.abs(target.top) > 2) return;
       }
       snapLockUntil.current = 0;
-      const idx = SECTION_IDS.reduce((active, id, index) => {
-        const section = document.getElementById(id);
-        return section && section.getBoundingClientRect().top <= window.innerHeight * 0.15
-          ? index
-          : active;
+      const idx = bounds.reduce((active, { id, top }) => {
+        const atGlobeCut =
+          id === 'sec-work' &&
+          stickyGlobe?.matches &&
+          document.documentElement.hasAttribute('data-featured-globe-cut');
+        const threshold = atGlobeCut ? GLOBE_CUT_VIEWPORT_FRACTION : 0.15;
+        return top <= innerHeight * threshold ? SECTION_IDS.indexOf(id as SectionId) : active;
       }, 0);
       currentSection.current = idx;
       setSectionIndex(idx);

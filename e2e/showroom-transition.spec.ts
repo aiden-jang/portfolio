@@ -17,7 +17,7 @@ for (const [width, height] of [
       reducedMotion: 'no-preference',
     });
 
-    test('the floor follows the car into Featured work and Contact shows its own fixed frame', async ({
+    test('the globe cuts over the showroom and Contact shows its own fixed frame', async ({
       page,
     }) => {
       // The browser checks the stage's CSS opacity without continuously drawing the 3D scene.
@@ -39,14 +39,18 @@ for (const [width, height] of [
       await expect(dock).toHaveCSS('opacity', '1');
       await scrollTo(page, workTop - height * 0.755);
       await expect(root).toHaveAttribute('data-showroom-handoff', '');
-      const edgeDistance = () =>
-        stage.evaluate((el) =>
-          Math.abs(
-            el.getBoundingClientRect().bottom -
-              document.querySelector('#sec-work')!.getBoundingClientRect().top,
+      await expect(root).not.toHaveAttribute('data-before-globe-cut');
+      await expect
+        .poll(() =>
+          page.evaluate(() =>
+            Boolean(
+              document
+                .elementFromPoint(innerWidth / 2, innerHeight * 0.65)
+                ?.closest('#project-everythingisfine'),
+            ),
           ),
-        );
-      await expect.poll(edgeDistance).toBeLessThan(2);
+        )
+        .toBe(true);
       await expect(stage).toHaveCSS('opacity', '1');
 
       await work.evaluate((section) => {

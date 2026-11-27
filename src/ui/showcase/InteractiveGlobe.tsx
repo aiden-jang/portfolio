@@ -3,9 +3,9 @@ import { GlobeControls, GlobeScreenshotButton } from './GlobeControls';
 import { GlobeEventCard, type GlobeEvidence } from './GlobeEventCard';
 import { useCallback, useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react';
 import { ScreenshotViewer } from '../ScreenshotViewer';
-import { GlobeArtwork } from './GlobeArtwork';
+import { GlobeArtwork, GlobeCaption } from './GlobeArtwork';
 import { previewLink } from '../previewLinks';
-import { setQuakeManual, useQuakeOpening } from './quakeProgress';
+import { setQuakeManual, syncQuakeCamera } from './quakeProgress';
 import { loadRecordedWeather } from './globe/recordedWeatherAssets';
 import type { EvidenceFrame } from '../creative/evidenceNavigation';
 
@@ -15,6 +15,7 @@ type GlobeProps = {
   image: string;
   caption: string;
   journey?: boolean;
+  inspecting?: boolean;
   evidence?: GlobeEvidence;
   onCompare?: (trigger: HTMLButtonElement) => void;
 };
@@ -24,6 +25,7 @@ export function InteractiveGlobe({
   caption,
   onCompare,
   journey,
+  inspecting = false,
   evidence,
   frameRef,
 }: GlobeProps) {
@@ -171,6 +173,7 @@ export function InteractiveGlobe({
           select: setSelected,
           exit: () => exitRef.current(),
         });
+        if (journey) syncQuakeCamera(target);
         const date = new Date(snapshot.metadata.generated);
         setCaptured(date.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' }));
         setPhase('ready');
@@ -186,7 +189,9 @@ export function InteractiveGlobe({
     };
   }, [mode, journey]);
   const ready = !!mode && phase === 'ready';
-  useQuakeOpening(figure, !!journey && mode === 'auto' && !reduced, ready);
+  useEffect(() => {
+    if (ready && inspecting) return handle.current?.inspectFeatured();
+  }, [ready, inspecting]);
   useGlobeCardPosition(figure, ready && !!selected);
   useEffect(() => {
     if (ready && requestedFocus.current) {
@@ -215,7 +220,7 @@ export function InteractiveGlobe({
             onPosterUnavailable={onPosterUnavailable}
             onScreenshotUnavailable={() => setScreenshotUnavailable(true)}
           />
-          <div className="orbit-actions">
+          <div className="orbit-actions" hidden={inspecting}>
             {!ready && (
               <button
                 ref={launch}
@@ -254,7 +259,7 @@ export function InteractiveGlobe({
               onInspect={() => setViewer(true)}
             />
           </div>
-          {ready && selected && (
+          {ready && selected && !inspecting && (
             <GlobeEventCard
               event={selected}
               evidence={
@@ -274,15 +279,7 @@ export function InteractiveGlobe({
             />
           )}
         </div>
-        <figcaption aria-live="polite" className={phase === 'error' ? 'orbit-fallback' : 'sr-only'}>
-          {phase === 'error'
-            ? 'The globe could not start. Retry it, view the screenshot, or open Compare agency reports.'
-            : ready
-              ? `Drag to rotate and select a marker. Recorded USGS earthquakes${captured ? ' · ' + captured + ' UTC' : ''}, NOAA wind and aurora, and RainViewer radar.`
-              : phase === 'loading'
-                ? 'Preparing globe…'
-                : 'Recorded Kamchatka earthquake. Explore the globe to browse more recorded events.'}
-        </figcaption>
+        <GlobeCaption phase={phase} captured={captured} />
       </figure>
       {viewer && (
         <ScreenshotViewer

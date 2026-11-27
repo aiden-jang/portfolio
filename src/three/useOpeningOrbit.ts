@@ -114,10 +114,6 @@ export function useOpeningOrbit() {
     let shot: ReturnType<typeof sampleCorvetteLoop> | undefined;
     const unfinished = motion.phase === 'waiting' || motion.phase === 'playing';
     const readyModel = !motion.awaitingSwap && !store.carLoadError && store.refs.carModel;
-    if (corvette && motion.themeName !== store.themeName && playback !== 'paused' && !photo) {
-      motion.themeName = store.themeName;
-      motion.elapsed = 0;
-    }
     const afterHours = corvette && motion.themeName === 'night';
 
     if (reduced) {

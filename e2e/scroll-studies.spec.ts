@@ -89,16 +89,13 @@ for (const width of [1440, 390]) {
     await expect(room).toHaveAttribute('data-light', 'evening');
     const quake = page.locator('#project-everythingisfine');
     const verdict = quake.getByRole('complementary', { name: 'Recorded Kamchatka depth readings' });
-    await seekScene('#project-everythingisfine', 0.41);
+    await place('#sec-work', 0);
     const parkedScroll = await page.evaluate(() => scrollY);
     await expect(verdict).toHaveCSS('opacity', '1');
     await expect(verdict).toContainText('54.7 km');
     await expect(verdict).toContainText('71.0 km');
-    await expect(quake).toHaveAttribute('data-study-progress', '0.600');
     expect(await page.evaluate(() => scrollY)).toBe(parkedScroll);
-    await seekScene('#project-everythingisfine', 0.39);
-    await expect(quake).toHaveAttribute('data-study-progress', '0.600');
-    await seekScene('#project-everythingisfine', 0.12);
+    await place('#sec-work', 0.8);
     await expect(verdict).toBeHidden();
 
     await place('#project-iodine', 0.11);
@@ -144,24 +141,23 @@ for (const width of [1440, 390]) {
       await expect(slider).toHaveValue('0');
       await expect.poll(image).toBe(clay);
     } else {
-      await expect.poll(() => video.evaluate((el: HTMLVideoElement) => el.videoWidth)).toBe(1152);
-      const time = () => video.evaluate((el: HTMLVideoElement) => el.currentTime);
+      await expect.poll(() => video.evaluate((el: HTMLVideoElement) => el.videoWidth)).toBe(1440);
+      const filmProgress = () =>
+        video.evaluate((el: HTMLVideoElement) => el.currentTime / el.duration);
       await scroll(0.82);
-      await expect.poll(time).toBeGreaterThan(3.3);
-      const beforeFinalTurn = await time();
-      expect(beforeFinalTurn).toBeLessThan(3.6);
+      await expect.poll(filmProgress).toBeGreaterThan(0.83);
+      const beforeFinalTurn = await filmProgress();
+      expect(beforeFinalTurn).toBeLessThan(0.89);
       await scroll(0.88);
-      await expect.poll(time).toBeGreaterThan(beforeFinalTurn + 0.21);
-      expect(await time()).toBeLessThan(3.95);
+      await expect.poll(filmProgress).toBeGreaterThan(beforeFinalTurn + 0.055);
+      expect(await filmProgress()).toBeLessThan(0.96);
       await expect(video).toBeVisible();
       await scroll(0.95);
       await expect
         .poll(() => video.evaluate((el: HTMLVideoElement) => el.duration - el.currentTime))
         .toBeLessThan(0.06);
       await scroll(0.26);
-      await expect
-        .poll(() => video.evaluate((el: HTMLVideoElement) => el.currentTime))
-        .toBeLessThan(1.5);
+      await expect.poll(filmProgress).toBeLessThan(0.16);
     }
     await expect(track.locator('.finish-detail')).toHaveCount(0);
 

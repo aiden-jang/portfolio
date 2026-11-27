@@ -1,3 +1,4 @@
+import { useFinishStudy } from '../../three/finishStudy';
 import { copyText } from '../../browserSharing';
 import { F40_INDEX } from '../../config';
 import { useAppStore } from '../../store';
@@ -13,10 +14,11 @@ const SOCIAL_LINKS = [
 ];
 
 export function ContactSection() {
+  const recorded = useFinishStudy((s) => s.recorded);
   const needsPoster = useAppStore((s) => s.sceneUnavailable || s.renderedCarIndex !== F40_INDEX);
   return (
     <Section id="sec-contact" side="center">
-      {needsPoster && <ContactPoster className="contact-poster" />}
+      {(needsPoster || recorded) && <ContactPoster className="contact-poster" />}
       <div className={PANEL_BASE}>
         <div className="contact-copy-block">
           <h2 className={H2}>Let’s talk.</h2>

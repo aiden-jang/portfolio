@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { GLOBE_CUT_VIEWPORT_FRACTION } from '../config';
+import { advanceQuake } from '../ui/showcase/quakeProgress';
 import { clamp } from '../math';
 import { useAppStore } from '../store';
 
@@ -18,8 +20,11 @@ function revealMarker(poster: HTMLElement, rect: DOMRect, viewport: number) {
   if (!height || !width) return false;
   // The shared poster and canvas frame uses a different camera crop on phones.
   const narrow = image.naturalWidth < image.naturalHeight;
-  const x = width * (narrow ? 177 / 390 : 585 / 1120);
-  const y = height * (narrow ? 159 / 440 : 287 / 732);
+  const scale = Math.min(width / image.naturalWidth, height / image.naturalHeight);
+  const imageWidth = narrow ? image.naturalWidth * scale : width;
+  const imageHeight = narrow ? image.naturalHeight * scale : height;
+  const x = (width - imageWidth) / 2 + imageWidth * (narrow ? 177 / 390 : 585 / 1120);
+  const y = (height - imageHeight) / 2 + imageHeight * (narrow ? 159 / 440 : 287 / 732);
   const viewportY = rect.top + (y / height) * rect.height;
   if (viewportY < viewport * 0.22 || viewportY > viewport * 0.68) return false;
 
@@ -37,11 +42,13 @@ export function useShowroomTransition() {
     const contact = document.getElementById('sec-contact');
     if (!intro || !work || !contact) return;
 
+    const quake = work.querySelector<HTMLElement>('.quake-journey-run');
     const root = document.documentElement;
     root.setAttribute('data-featured-globe-cut', '');
     const { refs } = useAppStore.getState();
-    let workOffset = 0;
     let frame = 0;
+    let focus = 0;
+    let previousTime = 0;
     let visitedIntro = false;
     let highlighted = !!location.hash && location.hash !== '#sec-intro';
     let lastScroll = scrollY;
@@ -52,7 +59,7 @@ export function useShowroomTransition() {
       pulsingPoster?.style.removeProperty('--kamchatka-y');
       pulsingPoster = null;
     };
-    const paint = () => {
+    const paint = (now: number) => {
       frame = 0;
       const h = Math.max(1, innerHeight);
       const progress = scrollY / h;
@@ -69,14 +76,26 @@ export function useShowroomTransition() {
       const contactTop = contact.getBoundingClientRect().top;
       const contactProgress = (h - contactTop) / h;
       const inContact = contactProgress > 0;
-      const workTop = work.getBoundingClientRect().top - workOffset;
+      const workTop = work.getBoundingClientRect().top;
       const handingOff = !reduced && !inContact && workTop > 1 && workTop < h;
       refs.floorReflection = 1;
       root.toggleAttribute('data-showroom-handoff', handingOff);
-      const beforeCut = !reduced && workTop > h * 0.34;
+      const beforeCut = !reduced && workTop > h * GLOBE_CUT_VIEWPORT_FRACTION;
       root.toggleAttribute('data-before-globe-cut', beforeCut);
-      workOffset = !reduced && !beforeCut ? -Math.max(0, workTop - (phone ? 84 : 88)) : 0;
-      root.style.setProperty('--globe-cut-offset', workOffset + 'px');
+      // Use the section's natural position. Its pinned position can stay still while scrolling.
+      if (quake) {
+        const target = reduced ? 1 : smoothProgress(-workTop / h, -0.72, 0.08);
+        const gap = target - focus;
+        const dt = Math.min(80, Math.max(8, now - previousTime));
+        const visible = !beforeCut && workTop > -h;
+        focus =
+          !visible || reduced || Math.abs(gap) < 0.0008
+            ? target
+            : focus + gap * (1 - Math.exp(-dt / 64));
+        previousTime = now;
+        advanceQuake(quake, focus, reduced);
+        if (focus !== target) schedule();
+      }
 
       if (!reduced) {
         // Finish the fade where the dock stops fitting in the Intro viewport.
@@ -95,6 +114,7 @@ export function useShowroomTransition() {
 
       if (pulsingPoster && (pulsingPoster !== poster || !movingForward)) clearPulse();
       if (
+        !beforeCut &&
         !highlighted &&
         visitedIntro &&
         movingForward &&
@@ -113,19 +133,31 @@ export function useShowroomTransition() {
     const endPulse = (event: AnimationEvent) => {
       if (event.target === pulsingPoster && event.animationName === 'kamchatka-pulse') clearPulse();
     };
+    const revealFocusedGlobe = (event: FocusEvent) => {
+      if (
+        root.hasAttribute('data-before-globe-cut') &&
+        event.target instanceof Node &&
+        quake?.contains(event.target) &&
+        work.getBoundingClientRect().top > innerHeight * GLOBE_CUT_VIEWPORT_FRACTION
+      ) {
+        work.scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
+    };
     addEventListener('scroll', schedule, { passive: true });
     addEventListener('resize', schedule);
     media.addEventListener('change', schedule);
     work.addEventListener('load', schedule, true);
+    work.addEventListener('focusin', revealFocusedGlobe);
     work.addEventListener('animationend', endPulse);
     work.addEventListener('animationcancel', endPulse);
-    paint();
+    paint(performance.now());
     return () => {
       cancelAnimationFrame(frame);
       removeEventListener('scroll', schedule);
       removeEventListener('resize', schedule);
       media.removeEventListener('change', schedule);
       work.removeEventListener('load', schedule, true);
+      work.removeEventListener('focusin', revealFocusedGlobe);
       work.removeEventListener('animationend', endPulse);
       work.removeEventListener('animationcancel', endPulse);
       clearPulse();
@@ -133,12 +165,7 @@ export function useShowroomTransition() {
       root.removeAttribute('data-showroom-handoff');
       root.removeAttribute('data-featured-globe-cut');
       root.removeAttribute('data-before-globe-cut');
-      for (const name of [
-        '--header-scrim',
-        '--stage-opacity',
-        '--garage-controls-opacity',
-        '--globe-cut-offset',
-      ]) {
+      for (const name of ['--header-scrim', '--stage-opacity', '--garage-controls-opacity']) {
         root.style.removeProperty(name);
       }
     };

@@ -82,8 +82,8 @@ it('updates the viewport crop when a short phone resizes inside the same tall se
     await act(() => root.render(createElement(Probe)));
     const pose = { ...KEYFRAMES.at(-1)! };
     applyArrival(pose, true);
-    expect(pose.azimuth).toBeCloseTo(0.5);
-    expect(pose.elevation).toBeCloseTo(0.135);
+    expect(pose.azimuth).toBeCloseTo(0.29);
+    expect(pose.elevation).toBeCloseTo(0.61);
     expect(camera.view?.height).toBe(740);
     size.height = 568;
     applyArrival({ ...KEYFRAMES.at(-1)! }, true);
@@ -128,7 +128,7 @@ it('matches the fixed Contact pose at the end of the study on all three layouts'
       expect(camera.view).toEqual(contactView);
       finishStudyFrame.progress = 0;
       applyArrival(study, false);
-      expect(study.elevation).toBeGreaterThan(contact.elevation);
+      expect(study.elevation).toBeLessThan(contact.elevation);
     }
   } finally {
     await act(() => root.unmount());

@@ -1,3 +1,4 @@
+import { GardenLeafCut } from './GardenLeafCut';
 import { useEffect, useRef } from 'react';
 import { lerp } from '../../math';
 import { easedProgress } from '../../hooks/useScrollStudy';
@@ -6,7 +7,7 @@ import { dinnerPhoto } from './DinnerRating';
 
 type Frame = { x: number; y: number; w: number; h: number };
 type Cut = {
-  id: 'receipt' | 'flower';
+  id: 'receipt';
   source: string;
   destination: string;
   ready: string;
@@ -23,25 +24,10 @@ const cuts: Cut[] = [
     start: 1.18,
     end: 0.46,
   },
-  {
-    id: 'flower',
-    source: '#project-bloomnote [aria-pressed=true] .bloom-garden-plant',
-    destination: '#project-iguess .iguess-draw-board',
-    ready: '#project-bloomnote:not([data-composing=true])',
-    start: 1.24,
-    end: 0.52,
-  },
 ];
 
-function fit(element: HTMLElement, cut: Cut, from: boolean): Frame {
+function fit(element: HTMLElement): Frame {
   const r = element.getBoundingClientRect();
-  if (cut.id === 'flower') {
-    if (from) return { x: r.left + r.width * 0.48, y: r.top + r.height * 0.54, w: 3, h: 37 };
-    const k = Math.min(r.width / 960, r.height / 605);
-    const x = r.left + (r.width - 960 * k) / 2 + 334 * k;
-    const y = r.top + (r.height - 605 * k) / 2 + 137 * k;
-    return { x, y, w: 9 * k, h: 46 * k };
-  }
   return { x: r.left, y: r.top, w: r.width, h: r.height };
 }
 
@@ -81,8 +67,8 @@ export function ProjectHandoffs() {
         if (scene.target !== target) scene.target?.removeAttribute('data-carried-target');
         scene.source = source;
         scene.target = target;
-        const end = fit(target, cut, false);
-        const start = fit(source, cut, true);
+        const end = fit(target);
+        const start = fit(source);
         const height = innerHeight;
         const p = 1 - easedProgress(end.y / height, cut.end, cut.start);
         const isDinner = cut.id === 'receipt';
@@ -180,9 +166,7 @@ export function ProjectHandoffs() {
 
   return (
     <div ref={ref} className="project-handoffs-art" aria-hidden="true">
-      <div data-carry="flower" hidden>
-        <i />
-      </div>
+      <GardenLeafCut />
       <div data-carry="receipt" hidden>
         <img src={dinnerPhoto} decoding="async" alt="" />
       </div>

@@ -38,27 +38,28 @@ for (const viewport of [
       }, progress);
 
     const globe = page.locator('.orbit-feature');
-    await page.evaluate(() => {
-      const observer = new MutationObserver(() => {
-        const ready = document.querySelector('.orbit-feature[data-globe-phase="ready"]');
-        if (!ready) return;
-        const stage = ready.closest<HTMLElement>('.quake-journey-run');
-        document.documentElement.dataset.testOpeningFocus = stage?.dataset.globeFocusLimit ?? '1';
-        observer.disconnect();
-      });
-      observer.observe(document, {
-        subtree: true,
-        childList: true,
-        attributes: true,
-        attributeFilter: ['data-globe-phase'],
-      });
-    });
     const readings = globe.getByRole('complementary', {
       name: 'Recorded Kamchatka depth readings',
     });
-    await travelTo('#project-everythingisfine', 0.58);
+    const title = page.getByRole('heading', { name: 'meanwhile.', exact: true });
+    await page.locator('#sec-work').evaluate((el) => {
+      scrollTo({
+        top: scrollY + el.getBoundingClientRect().top - innerHeight * 0.83,
+        behavior: 'instant',
+      });
+    });
     await expect(globe).toHaveAttribute('data-globe-phase', 'ready');
-    await expect(page.locator('html')).toHaveAttribute('data-test-opening-focus', '0');
+    await expect(readings).toBeHidden();
+    const rebound = await title.evaluate(async (element) => {
+      scrollBy({ top: innerHeight * 0.14, behavior: 'instant' });
+      const first = element.getBoundingClientRect().top;
+      await new Promise<void>((done) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => done())),
+      );
+      return Math.abs(element.getBoundingClientRect().top - first);
+    });
+    expect(rebound).toBeLessThan(1.5);
+    await travelTo('#project-everythingisfine', 0.58);
     await expect(globe.getByRole('button', { name: 'Pause rotation' })).toBeAttached();
     await expect(readings).toHaveCSS('opacity', '1');
 

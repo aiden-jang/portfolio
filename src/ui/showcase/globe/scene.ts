@@ -178,9 +178,9 @@ export function createGlobeScene(
     if (overlays) {
       const detail = Math.min(1, Math.max(0, (journey - 0.04) / 0.6));
       const strength = 1 - detail * detail * (3 - 2 * detail);
-      overlays.setStrength(0.12 + strength * 0.88);
+      overlays.setStrength(0.32 + strength * 0.68);
       overlays.setSweep(sweepTime);
-      markers.fade(strength * strength);
+      markers.fade(0.24 + 0.76 * strength * strength);
       featuredMarker.pulse(pulseTime);
     }
     camera.position.copy(vector(pose.lon, pose.lat, fit / pose.zoom));

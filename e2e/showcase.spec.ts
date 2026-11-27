@@ -231,7 +231,7 @@ test('globe waits for featured work and a failed start keeps the preview and ret
   await page.route('**/projects/globe-geography.bin.gz', (r) =>
     r.fulfill({ status: 503, body: 'Unavailable' }),
   );
-  await page.locator('.orbit-preview').scrollIntoViewIfNeeded();
+  await page.locator('#sec-intro').getByRole('link', { name: 'Featured work' }).click();
   await expect(page.locator('.orbit-feature')).toHaveAttribute('data-globe-phase', 'error', {
     timeout: 60000,
   });

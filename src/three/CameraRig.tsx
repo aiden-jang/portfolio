@@ -59,8 +59,8 @@ export function CameraRig({ getScrollT, lineup }: { getScrollT: () => number; li
       scrollT = getScrollT();
     const aspect = height > 0 ? width / height : FRAME_BASE_ASPECT;
     interpolateKeyframe(KEYFRAMES, scrollT, kf, width < 768 ? 12 : undefined);
-    contactArrival(kf, reduced, isCleanMode ? 1 : scrollT);
     updateIntroFov(camera, width, scrollT);
+    if (contactArrival(kf, reduced, isCleanMode ? 1 : scrollT)) return;
     const swing = isCleanMode ? 0 : openingOrbit(s, camera, dt, reduced, scrollT, width, aspect);
     const studioShot = updateCameraView(s, dt, reduced, scrollT, width);
     if (refs.holdOpeningPose || s.isDown || scrollT > 0 || hasManualView) s.introT = 1;

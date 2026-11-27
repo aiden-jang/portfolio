@@ -2,6 +2,7 @@ import { F40_INDEX } from '../../config';
 import { useAppStore } from '../../store';
 import {
   finishStudyMotion,
+  useFinishStudy,
   finishStudyProgress,
   finishStudySpan,
   finishStudyStart,
@@ -11,12 +12,18 @@ import { useFinishStudyMatch } from './useFinishStudyMatch';
 import { useEffect, useRef } from 'react';
 import { FINISH_MEDIA, finishFrames } from './finishFrames';
 import './about-framing.css';
-const narrowQuery = '(max-width: 767px)';
+const shortFilmQuery = '(max-width: 599px) and (max-height: 779px)';
+const narrowQuery = '(max-width: 599px)';
+const tabletQuery = '(max-width: 899px)';
+const compactQuery = '(max-aspect-ratio: 7/5)';
 
 function ClayPoster() {
   return (
     <picture className="finish-poster" aria-hidden="true">
-      <source media={narrowQuery} srcSet={FINISH_MEDIA + 'mobile-clay.webp'} />
+      <source media={shortFilmQuery} srcSet={FINISH_MEDIA + 'short/clay.webp'} />
+      <source media={narrowQuery} srcSet={FINISH_MEDIA + 'phone/clay.webp'} />
+      <source media={tabletQuery} srcSet={FINISH_MEDIA + 'tablet-clay.webp'} />
+      <source media={compactQuery} srcSet={FINISH_MEDIA + 'compact-clay.webp'} />
       <img src={FINISH_MEDIA + 'desktop-clay.webp'} alt="" loading="lazy" decoding="async" />
     </picture>
   );
@@ -27,7 +34,9 @@ export function AboutFraming() {
     (state) => state.renderedCarIndex === F40_INDEX && !state.sceneUnavailable,
   );
   const track = useRef<HTMLDivElement>(null);
-  useFinishStudyMatch(track, liveReady);
+  useFinishStudyMatch(track);
+  const recorded = useFinishStudy((s) => s.recorded);
+  const live = liveReady && !recorded;
   const video = useRef<HTMLVideoElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const range = useRef<HTMLInputElement>(null);
@@ -38,6 +47,9 @@ export function AboutFraming() {
     const slider = range.current!;
     const motion = matchMedia('(prefers-reduced-motion: no-preference)');
     const narrow = matchMedia(narrowQuery);
+    const tablet = matchMedia(tabletQuery);
+    const compact = matchMedia(compactQuery);
+    const shortFilm = matchMedia(shortFilmQuery);
     const liveMotion = matchMedia(finishStudyMotion);
     const short = matchMedia('(max-height: 490px)');
     let nearby = false;
@@ -64,9 +76,8 @@ export function AboutFraming() {
       else seek();
     }
     function configure() {
-      const moving =
-        nearby && motion.matches && !short.matches && !(liveReady && liveMotion.matches);
-      if (moving && narrow.matches) phoneFrames.load();
+      const moving = nearby && motion.matches && !short.matches && !(live && liveMotion.matches);
+      if (moving && narrow.matches) phoneFrames.load(shortFilm.matches);
       else phoneFrames.clear();
       if (!moving || narrow.matches) {
         if (player.hasAttribute('src')) {
@@ -76,7 +87,8 @@ export function AboutFraming() {
         lane.removeAttribute('data-film-ready');
         return;
       }
-      const source = FINISH_MEDIA + 'desktop.mp4';
+      const format = tablet.matches ? 'tablet' : compact.matches ? 'compact' : 'desktop';
+      const source = FINISH_MEDIA + format + '.mp4';
       if (player.getAttribute('src') !== source) {
         lane.removeAttribute('data-film-ready');
         player.src = source;
@@ -121,7 +133,7 @@ export function AboutFraming() {
       { rootMargin: '720px' },
     );
     observer.observe(lane);
-    for (const query of [motion, narrow, short, liveMotion])
+    for (const query of [motion, narrow, shortFilm, short, liveMotion, compact, tablet])
       query.addEventListener('change', updateMedia);
     addEventListener('scroll', schedule, { passive: true });
     addEventListener('resize', schedule);
@@ -134,7 +146,7 @@ export function AboutFraming() {
       observer.disconnect();
       phoneFrames.clear();
       cancelAnimationFrame(frame);
-      for (const query of [motion, narrow, short, liveMotion])
+      for (const query of [motion, narrow, shortFilm, short, liveMotion, compact, tablet])
         query.removeEventListener('change', updateMedia);
       removeEventListener('scroll', schedule);
       removeEventListener('resize', schedule);
@@ -144,7 +156,7 @@ export function AboutFraming() {
       player.removeEventListener('seeked', seek);
       slider.removeEventListener('input', useSlider);
     };
-  }, [liveReady]);
+  }, [live]);
 
   return (
     <figure id="f40-study" className="about-framing-study" aria-labelledby="finish-study-title">

@@ -50,6 +50,7 @@ export function GlobeArtwork({
             <canvas
               ref={canvas}
               id={canvasId}
+              data-cinema={journey || undefined}
               tabIndex={ready ? 0 : -1}
               role="img"
               aria-label="Interactive globe. Drag or use arrow keys to rotate. Press zero to reset, Escape to finish."
@@ -59,5 +60,19 @@ export function GlobeArtwork({
       </div>
       {journey && <QuakeReadings />}
     </div>
+  );
+}
+
+export function GlobeCaption({ phase, captured }: { phase: string; captured: string }) {
+  return (
+    <figcaption aria-live="polite" className={phase === 'error' ? 'orbit-fallback' : 'sr-only'}>
+      {phase === 'error'
+        ? 'The globe could not start. Retry it, view the screenshot, or open Compare agency reports.'
+        : phase === 'ready'
+          ? `Drag to rotate and select a marker. Recorded USGS earthquakes${captured ? ' · ' + captured + ' UTC' : ''}, NOAA wind and aurora, and RainViewer radar.`
+          : phase === 'loading'
+            ? 'Preparing globe…'
+            : 'Recorded Kamchatka earthquake. Explore the globe to browse more recorded events.'}
+    </figcaption>
   );
 }

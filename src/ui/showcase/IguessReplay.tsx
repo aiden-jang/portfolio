@@ -6,115 +6,10 @@ import './iguess-replay.css';
 import { frameCatDrawing } from './frameCatDrawing';
 import { useDrawingMark } from './useDrawingMark';
 
-// A playable cat round for the match to Bean. Coordinates share her sitting pose.
-const outlines = [
-  [
-    [2, 4],
-    [1.7, 2],
-    [2, 0.9],
-    [3, 1],
-    [5.5, 4],
-    [8, 4.1],
-    [11, 4],
-    [14.8, 1],
-  ],
-  [
-    [1.8, 4],
-    [1.2, 7],
-    [1.8, 9.5],
-    [3.5, 11],
-    [3.3, 14],
-    [2.8, 16],
-    [1.5, 17.2],
-    [2.4, 18],
-    [6, 18.2],
-    [9, 18.4],
-    [14.6, 18.1],
-    [16.1, 17],
-    [15.5, 16],
-    [15.2, 12],
-    [14.5, 10.5],
-    [16.3, 9],
-    [16.7, 6],
-    [16, 4],
-  ],
-  [
-    [4, 7.4],
-    [4.8, 6.8],
-    [5.7, 7.2],
-  ],
-  [
-    [11.6, 7.2],
-    [12.6, 6.8],
-    [13.3, 7.3],
-  ],
-  [
-    [7.3, 8.6],
-    [8.3, 9.3],
-    [9.2, 8.5],
-  ],
-  [
-    [8.2, 9.4],
-    [8.2, 9.8],
-    [7.5, 10.2],
-  ],
-  [
-    [8.2, 9.8],
-    [9.2, 10.1],
-  ],
-  [
-    [5.8, 13.8],
-    [5.6, 16.5],
-    [4.6, 17.4],
-  ],
-  [
-    [11.9, 13.7],
-    [12.1, 16.6],
-    [13.1, 17.5],
-  ],
-  [
-    [14.7, 1.1],
-    [15.6, 0.7],
-    [16.1, 1.5],
-    [16, 4.2],
-  ],
-];
-const paths = outlines.map((stroke) =>
-  stroke.flatMap(([x, y], i) => {
-    if (!i) return [[x, y]];
-    const [a, b] = stroke[i - 1];
-    const steps = Math.ceil(Math.hypot(x - a, y - b) * 4);
-    return Array.from({ length: steps }, (_, j) => [
-      a + ((x - a) * (j + 1)) / steps,
-      b + ((y - b) * (j + 1)) / steps,
-    ]);
-  }),
-);
-const pointCount = paths.reduce((n, p) => n + p.length, 0);
+import { paintCat, pointCount, firstStrokeLength } from './catDrawing';
+
 const answer = 'Cat';
 const guess = 'Two ears…';
-function paint(canvas: HTMLCanvasElement, visible: number, ink = '#f7f0df') {
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  ctx.clearRect(0, 0, 960, 605);
-  ctx.lineWidth = 5;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.strokeStyle = ink;
-  for (const path of paths) {
-    if (visible <= 0) break;
-    ctx.beginPath();
-    path.slice(0, visible).forEach(([x, y], i) => {
-      const sx = 300 + x * 20,
-        sy = 112 + y * 20;
-      if (i) ctx.lineTo(sx, sy);
-      else ctx.moveTo(sx, sy);
-    });
-    ctx.stroke();
-    visible -= path.length;
-  }
-}
-
 export function IguessReplay({
   active,
   onAnswer,
@@ -132,7 +27,7 @@ export function IguessReplay({
     const master = document.createElement('canvas');
     master.width = 960;
     master.height = 605;
-    paint(master, pointCount, '#504047');
+    paintCat(master, pointCount, '#504047');
     paintMarks(master, '#197363');
     const paper = frameCatDrawing(master);
     onPrint(paper);
@@ -157,17 +52,47 @@ export function IguessReplay({
       ?.dispatchEvent(new CustomEvent('drawing-grip', { detail: false }));
   }, []);
 
+  const leafInk = useRef(-1);
+  const fromLeaf = useRef(false);
+  const lastProgress = useRef(0);
+  const [guiding, setGuiding] = useState(false);
+  useEffect(() => {
+    const board = canvas.current!;
+    const guide = (event: Event) => {
+      const amount = (event as CustomEvent<number>).detail;
+      const wasGuided = leafInk.current >= 0;
+      leafInk.current = amount;
+      if (wasGuided !== amount >= 0) setGuiding(amount >= 0);
+      if ((amount < 0 && !wasGuided) || grip.current) return;
+      const finished = board.closest('.duet')?.getAttribute('data-finish-cat') === 'true';
+      const count = finished
+        ? pointCount
+        : Math.round(firstStrokeLength * (amount < 0 ? 1 : amount));
+      if (amount < 0 && !finished) {
+        fromLeaf.current = true;
+        lastProgress.current = 0;
+      }
+      cache.current.drawn = count;
+      paintCat(board, count);
+      paintMarks();
+    };
+    board.addEventListener('leaf-ink', guide);
+    return () => board.removeEventListener('leaf-ink', guide);
+  }, [paintMarks]);
   const cache = useRef({ drawn: -1, label: '' });
   const draw = useCallback(
     (progress: number) => {
       const element = canvas.current;
-      if (!element) return;
+      if (!element || leafInk.current >= 0) return;
+      if (progress < lastProgress.current) fromLeaf.current = false;
+      lastProgress.current = progress;
+      const initial = fromLeaf.current ? firstStrokeLength : 0;
       const visible =
         element.closest('.duet')?.getAttribute('data-finish-cat') === 'true'
           ? pointCount
-          : Math.round(pointCount * (0.18 + 0.82 * easedProgress(progress, 0, 0.59)));
+          : Math.round(initial + (pointCount - initial) * easedProgress(progress, 0, 0.59));
       if (cache.current.drawn !== visible) {
-        paint(element, visible);
+        paintCat(element, visible);
         paintMarks();
       }
       cache.current.drawn = visible;
@@ -187,11 +112,11 @@ export function IguessReplay({
   );
   const redraw = useCallback(() => {
     if (!canvas.current) return;
-    paint(canvas.current, Math.max(0, cache.current.drawn));
+    paintCat(canvas.current, Math.max(0, cache.current.drawn));
     paintMarks();
   }, [paintMarks]);
   const finishDrawing = useTimedScene(demo, draw, {
-    enabled: active && !holding,
+    enabled: active && !holding && !guiding,
     duration: 3040,
     hold: 1250,
   });
@@ -200,7 +125,7 @@ export function IguessReplay({
     const el = canvas.current!;
     const lane = el.closest('.duet');
     const finish = () => {
-      paint(el, pointCount);
+      paintCat(el, pointCount);
       paintMarks();
       setResult(answer);
       cache.current = { drawn: pointCount, label: answer };

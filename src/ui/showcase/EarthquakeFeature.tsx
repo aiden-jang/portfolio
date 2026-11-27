@@ -2,14 +2,10 @@ import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import type { WorkDetail } from '../../types';
 import type { ProductPreview } from '../../data/projectPreviews';
 import { kamchatkaExample as example } from '../../data/kamchatkaExample';
-import { EarthquakeGlobeStill } from './EarthquakeEvidence';
-import { DepthSection } from './DepthSection';
 import { InteractiveGlobe } from './InteractiveGlobe';
 import { ControlIcon } from '../ControlIcon';
 import { OpenEvidence, type EvidenceFrame } from '../creative/evidenceNavigation';
 import { evidenceHref } from '../creative/storyRoutes';
-import { useScrollStudy } from '../../hooks/useScrollStudy';
-import { advanceQuake, settleQuake } from './quakeProgress';
 
 type Props = {
   item: WorkDetail;
@@ -29,7 +25,6 @@ export function EarthquakeFeature({ item, preview }: Props) {
   const compareButton = useRef<HTMLButtonElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const journey = useRef<HTMLElement>(null);
-  useScrollStudy(journey, !comparing, advanceQuake, settleQuake, undefined, 0.055);
   useLayoutEffect(() => {
     const sync = () => {
       setComparing(location.hash.startsWith(compareRoute));
@@ -45,10 +40,8 @@ export function EarthquakeFeature({ item, preview }: Props) {
   }, []);
   useLayoutEffect(() => {
     if (comparing) {
-      heading.current?.parentElement?.scrollIntoView({
-        block: 'start',
-        behavior: 'instant',
-      });
+      if (returnScroll.current === null)
+        journey.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
       heading.current?.focus({ preventScroll: true });
     } else if (returnScroll.current !== null) {
       const position = returnScroll.current;
@@ -79,69 +72,59 @@ export function EarthquakeFeature({ item, preview }: Props) {
     <article
       ref={journey}
       id="project-everythingisfine"
-      className={
-        'garage-project garage-project-featured' + (!comparing ? ' quake-journey-run' : '')
-      }
+      className="garage-project garage-project-featured quake-journey-run"
+      data-report-open={comparing || undefined}
+      data-report-agency={agency}
     >
-      <div className="earthquake-feature" data-comparing={comparing} data-study-pin>
-        {comparing ? (
-          <>
-            <div className="earthquake-heading">
-              <button type="button" className="earthquake-back" onClick={closeComparison}>
-                <span aria-hidden="true">← </span>Back to the globe preview
-              </button>
-              <h3 ref={heading} tabIndex={-1}>
-                One earthquake. <br />
-                Two readings.
-              </h3>
-            </div>
-            <figure className="earthquake-still">
-              <EarthquakeGlobeStill />
-              <figcaption>Kamchatka</figcaption>
-            </figure>
-            <section className="earthquake-inspection" aria-labelledby="recorded-earthquake">
-              <h4 id="recorded-earthquake">{example.place}</h4>
-              <p className="earthquake-date">
-                <time dateTime={example.timestamp}>
-                  {example.date} · {example.time}
-                </time>
-                {' · Recorded event'}
-              </p>
-              <DepthSection
-                selected={agency}
-                onSelect={(choice) => {
-                  setAgency(choice);
-                  history.replaceState(history.state, '', compareRoute + '/' + choice);
-                }}
-              />
-              <p className="earthquake-interpretation">
-                Both agencies agreed on magnitude. Their depth estimates differed by about 16 km.
-              </p>
-              <a
-                className="featured-text-action"
-                href={evidenceHref('everythingisfine', { agency })}
-                onClick={(event) => openEvidence?.(event, 'everythingisfine')}
-              >
-                See how I matched the reports <ControlIcon name="arrow" />
-              </a>
-            </section>
-          </>
-        ) : (
-          <div className="earthquake-intro earthquake-title">
-            <h3>{item.shortName}</h3>
-          </div>
-        )}
-        <div className="earthquake-orbit-slot" hidden={comparing}>
+      <div className="earthquake-feature" data-comparing="false" data-study-pin>
+        <div className="earthquake-intro earthquake-title">
+          <h3>{item.shortName}</h3>
+        </div>
+        <div className="earthquake-orbit-slot">
           <InteractiveGlobe
             image={preview.image}
             caption={preview.caption}
             onCompare={launchComparison}
             journey
+            inspecting={comparing}
             frameRef={globeFrame}
             evidence={{ agency, setAgency, openEvidence }}
           />
         </div>
-        {!comparing && (
+        {comparing ? (
+          <div className="earthquake-intro earthquake-detail linked-quake-report">
+            <h4 tabIndex={-1} ref={heading}>
+              {example.place}
+            </h4>
+            <p>Two depth estimates, 16.3 km apart.</p>
+            <div role="group" aria-label="Choose depth reading">
+              {example.sources.map(({ name, depthKm }) => (
+                <button
+                  key={name}
+                  aria-pressed={agency === name}
+                  onClick={() => {
+                    setAgency(name);
+                    history.replaceState(history.state, '', compareRoute + '/' + name);
+                  }}
+                >
+                  {name} <strong>{depthKm.toFixed(1)} km</strong>
+                </button>
+              ))}
+            </div>
+            <button className="featured-text-action" onClick={closeComparison}>
+              ← Back to globe
+            </button>
+            <a
+              className="featured-text-action"
+              href={evidenceHref('everythingisfine', { agency })}
+              onClick={(event) =>
+                openEvidence?.(event, 'everythingisfine', () => globeFrame.current?.capture())
+              }
+            >
+              Case study ↗
+            </a>
+          </div>
+        ) : (
           <div className="earthquake-intro earthquake-detail">
             <div className="quake-journey-copy">
               <p className="creative-quake-hook">

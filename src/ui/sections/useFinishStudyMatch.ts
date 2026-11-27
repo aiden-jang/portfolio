@@ -1,4 +1,6 @@
 import { useLayoutEffect, type RefObject } from 'react';
+import { useAppStore } from '../../store';
+import { F40_INDEX } from '../../config';
 import { clamp } from '../../math';
 import {
   finishStudyFrame,
@@ -8,7 +10,7 @@ import {
 } from '../../three/finishStudy';
 import './finish-study-match.css';
 
-export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady: boolean) {
+export function useFinishStudyMatch(track: RefObject<HTMLDivElement>) {
   useLayoutEffect(() => {
     const film = track.current;
     const stage = film?.firstElementChild as HTMLElement | undefined;
@@ -31,9 +33,16 @@ export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady:
       // A fragment jump can leave the aligned section a fraction of a CSS pixel below the top.
       const inStudy = motion.matches && bounds.top < innerHeight && contactTop > 1;
       const progress = finishStudyProgress(bounds.top, bounds.height - stage.offsetHeight);
-      const active = inStudy && liveReady;
+      const app = useAppStore.getState();
+      const liveReady = app.renderedCarIndex === F40_INDEX && !app.sceneUnavailable;
+      const recorded =
+        bounds.height > 0 &&
+        bounds.top < innerHeight &&
+        (useFinishStudy.getState().recorded || (contactTop > 1 && (!liveReady || !motion.matches)));
+      if (recorded !== useFinishStudy.getState().recorded) useFinishStudy.setState({ recorded });
+      const active = inStudy && !recorded && liveReady;
       const poster =
-        inStudy && !liveReady && progress >= 0.995
+        inStudy && recorded && progress >= 0.995
           ? contact.querySelector<HTMLImageElement>('.contact-poster img')
           : null;
       const usePoster = Boolean(poster?.complete && poster.naturalWidth);
@@ -67,6 +76,13 @@ export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady:
 
     const observer = new IntersectionObserver(schedule, { rootMargin: '160px 0px' });
     observer.observe(film);
+    const unsubscribe = useAppStore.subscribe((state, previous) => {
+      if (
+        state.renderedCarIndex !== previous.renderedCarIndex ||
+        state.sceneUnavailable !== previous.sceneUnavailable
+      )
+        schedule();
+    });
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     motion.addEventListener('change', schedule);
@@ -74,6 +90,8 @@ export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady:
     update();
     return () => {
       observer.disconnect();
+      unsubscribe();
+      useFinishStudy.setState({ recorded: false });
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
@@ -84,5 +102,5 @@ export function useFinishStudyMatch(track: RefObject<HTMLDivElement>, liveReady:
       film.removeAttribute('data-study-leaving');
       show(false);
     };
-  }, [track, liveReady]);
+  }, [track]);
 }
