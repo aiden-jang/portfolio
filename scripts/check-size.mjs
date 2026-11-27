@@ -12,6 +12,7 @@ const SLACK = 40;
 const CEILINGS = {
   'src/ui/WorkModal.tsx': 71,
   'src/ui/CommandMenu.tsx': 119,
+  'src/ui/showcase/playable/DrawingPad.tsx': 337,
   'src/three/CameraRig.tsx': 108,
   'scripts/check-size.mjs': 65,
   'scripts/check-comments.mjs': 47,
@@ -22,7 +23,6 @@ const CEILINGS = {
 const UNLISTED_LIMIT = 300;
 const SOURCE = /\.(ts|tsx|mjs|js)$/;
 
-// Counted the way `wc -l` does, so these numbers match whatever anyone checks them against.
 const lines = (file) => {
   const parts = readFileSync(join(ROOT, file), 'utf8').split('\n');
   if (parts.at(-1) === '') parts.pop();

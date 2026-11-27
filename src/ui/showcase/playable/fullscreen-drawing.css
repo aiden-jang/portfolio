@@ -1,0 +1,360 @@
+@font-face {
+  font-family: 'Studio Bricolage';
+  src: url('../../../../studio-art/bricolage.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+html:root #sec-more-work .studio-route {
+  --studio-inset: var(--portfolio-header-height);
+  --studio-view: calc(100svh - var(--studio-inset));
+  --studio-travel: 92svh;
+  --studio-dwell: 23svh;
+  --room-mix: 0;
+  --tools-mix: 0;
+  position: relative;
+  width: 100vw;
+  height: calc(var(--studio-view) + var(--studio-travel) + var(--studio-dwell));
+  margin-left: calc(50% - 50vw);
+  text-align: left;
+  text-shadow: none;
+  isolation: isolate;
+  background: #221f24;
+}
+.studio-route :is(.studio-desk-track, .studio-room-track) {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  scroll-margin-top: var(--studio-inset);
+}
+.studio-route .studio-desk-track {
+  height: 100%;
+  position: relative;
+}
+.studio-route .studio-room-track {
+  position: absolute;
+  inset: var(--studio-travel) 0 0;
+  pointer-events: none;
+}
+.studio-room-track .studio-room-run {
+  position: absolute;
+  inset: calc(0px - var(--studio-travel)) 0 0;
+  pointer-events: none;
+}
+.studio-route :is(.studio-desk-pin, .studio-room-pin) {
+  position: sticky;
+  top: var(--studio-inset);
+  height: var(--studio-view);
+  width: 100%;
+  overflow: clip;
+}
+.studio-route .studio-room-pin {
+  opacity: var(--room-mix);
+  pointer-events: none;
+}
+.studio-route[data-mode='desk'] .studio-room-pin,
+.studio-route[data-mode='room'] .studio-desk-pin {
+  visibility: hidden;
+}
+.studio-route:is([data-mode='room'], [data-mode='static']) .studio-room-pin {
+  pointer-events: auto;
+}
+.studio-leaf-flight {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 29;
+  visibility: hidden;
+}
+#project-iguess .ink-stage {
+  position: absolute;
+  inset: 0;
+  color: #f3ead8;
+  background: var(--ink-ground);
+  font-family: var(--font-display), sans-serif;
+  color-scheme: dark;
+  --edge: var(--portfolio-gutter);
+}
+#project-iguess .ink-surface {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  background: var(--ink-ground);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: crosshair;
+  touch-action: pan-y pinch-zoom;
+}
+#project-iguess .ink-surface[data-touch-pencil] {
+  touch-action: none;
+}
+#project-iguess .ink-tip {
+  position: absolute;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+#project-iguess :is(.ink-mast, .ink-footer) {
+  position: absolute;
+  inset-inline: var(--edge);
+  pointer-events: none;
+}
+#project-iguess :is(.ink-mast, .ink-footer) :is(a, button) {
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+#project-iguess .ink-mast {
+  top: clamp(17px, 3.3svh, 40px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+html:root #sec-more-work .studio-route .ink-mast h2,
+html:root #sec-more-work .studio-route .ink-mast h2 button {
+  padding: 0;
+  margin: 0;
+  width: auto;
+  border: 0;
+  background: transparent;
+  color: #f3ead8;
+  font:
+    625 clamp(38px, 4.6vw, 79px)/1 'Studio Bricolage',
+    var(--font-display),
+    sans-serif;
+  letter-spacing: -0.065em;
+}
+#project-iguess .ink-mast a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38em;
+  min-height: 44px;
+  font: 500 clamp(13px, 0.98vw, 16px)/1.3 var(--font-display);
+  color: #c8c0c2;
+}
+#project-iguess .ink-footer {
+  bottom: max(clamp(20px, 4.8svh, 58px), env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 20px;
+  align-items: end;
+}
+#project-iguess .ink-answer {
+  min-width: 0;
+}
+html:root #sec-more-work .studio-route .ink-guess {
+  margin: 0;
+  color: #f3ead8;
+  font:
+    495 clamp(28px, 3.65vw, 63px)/1.05 var(--font-display),
+    sans-serif;
+  letter-spacing: -0.045em;
+}
+html:root #sec-more-work .studio-route .ink-hint {
+  margin: 7px 0 0;
+  color: #c5bcbe;
+  font:
+    430 clamp(13px, 1.04vw, 16px)/1.35 var(--font-display),
+    sans-serif;
+}
+#project-iguess .ink-tools,
+#project-iguess .ink-palette {
+  display: flex;
+  align-items: center;
+}
+#project-iguess .ink-tools {
+  gap: 8px;
+  justify-self: center;
+}
+#project-iguess .ink-footer button {
+  scroll-margin-block-end: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #e8dfd6;
+  font:
+    500 14px/1.25 var(--font-display),
+    sans-serif;
+}
+#project-iguess .ink-palette button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+}
+#project-iguess .ink-palette button span {
+  height: 17px;
+  width: 17px;
+  display: block;
+  background: var(--swatch);
+  border-radius: 50%;
+}
+#project-iguess .ink-palette button[aria-pressed='true'] span {
+  outline: 1.5px solid var(--swatch);
+  outline-offset: 4px;
+}
+#project-iguess .ink-undo:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+#project-iguess .ink-footer .ink-hang {
+  justify-self: end;
+  align-self: end;
+  gap: 12px;
+  color: #f3ead8;
+  font-weight: 570;
+  border-bottom: 1px solid #a9a096;
+}
+#project-iguess .ink-hang svg {
+  flex: none;
+}
+#project-iguess .ink-footer .ink-done,
+#project-iguess .finger-hint {
+  display: none;
+}
+#project-iguess :is(a, button):focus-visible {
+  outline: 2px solid #f3e5bd;
+  outline-offset: 3px;
+}
+#project-iguess .ink-surface:focus-visible {
+  outline: 2px dashed #b3aa93;
+  outline-offset: -6px;
+}
+#project-iguess #studio-desk-title:focus {
+  outline: 0;
+}
+#project-iguess ::selection {
+  color: #221f24;
+  background: #97e2c3;
+}
+.studio-route[data-mode='flight'] :is(.ink-mast, .ink-footer, .ink-tip) {
+  visibility: hidden;
+}
+.studio-route[data-mode='flight'] .room-aperture {
+  overflow: visible;
+}
+@media (hover: hover) {
+  #project-iguess .ink-mast a:hover,
+  #project-iguess .ink-footer .ink-hang:hover {
+    color: #97e2c3;
+  }
+  #project-iguess .ink-palette button:hover span {
+    outline: 1px solid var(--swatch);
+    outline-offset: 4px;
+  }
+}
+@media (pointer: coarse) {
+  #project-iguess .finger-hint {
+    display: inline;
+  }
+  #project-iguess .mouse-hint {
+    display: none;
+  }
+  #project-iguess .ink-footer .ink-done {
+    display: inline-flex;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  #project-iguess .ink-answer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 8px;
+  }
+  #project-iguess .ink-answer .ink-guess {
+    grid-area: 1 / 1;
+  }
+  #project-iguess .ink-answer .ink-hint {
+    grid-area: 2 / 1;
+  }
+  #project-iguess .ink-answer .ink-done {
+    grid-area: 1 / 2 / 3 / 3;
+  }
+}
+@media (max-width: 800px) {
+  #project-iguess .ink-footer {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'answer answer' 'tools hang';
+    gap: 11px 0;
+  }
+  #project-iguess .ink-answer {
+    grid-area: answer;
+  }
+  #project-iguess .ink-tools {
+    grid-area: tools;
+    justify-self: start;
+    margin-left: -12px;
+    gap: 0;
+  }
+  #project-iguess .ink-undo span {
+    display: none;
+  }
+  #project-iguess .ink-hang {
+    grid-area: hang;
+  }
+  #project-iguess .ink-footer .ink-hang {
+    font-size: 13px;
+    gap: 6px;
+  }
+}
+@media (max-width: 400px) {
+  #project-iguess .ink-footer .ink-hang {
+    gap: 4px;
+  }
+  #project-iguess .ink-footer .ink-done {
+    font-size: 12px;
+  }
+}
+@media (max-width: 359px) {
+  #project-iguess .ink-tools {
+    flex-wrap: wrap;
+  }
+}
+@media (max-height: 710px) {
+  #project-iguess .ink-mast {
+    top: 10px;
+  }
+  #project-iguess .ink-footer {
+    bottom: max(11px, env(safe-area-inset-bottom));
+    gap: 4px 0;
+  }
+  #project-iguess .ink-hint {
+    margin-top: 3px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:root #sec-more-work .studio-route {
+    height: auto;
+  }
+  .studio-route :is(.studio-desk-track, .studio-room-track, .studio-room-run) {
+    position: relative;
+    inset: auto;
+    height: auto;
+  }
+  .studio-route :is(.studio-desk-pin, .studio-room-pin) {
+    position: relative;
+    top: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+  .studio-leaf-flight {
+    display: none;
+  }
+}

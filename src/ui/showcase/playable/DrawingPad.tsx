@@ -1,183 +1,248 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type RefObject,
+  type MutableRefObject,
+  type CSSProperties,
+  type PointerEvent,
+  type KeyboardEvent,
+} from 'react';
 import { pointCount } from '../catDrawing';
-import { Icon } from './StudioIcon';
+import { DrawingControls } from './DrawingControls';
+import { DrawingInstructions } from './Pencils';
 import {
   createPaper,
-  savePortrait,
-  inks,
+  H,
+  W,
   inkStroke,
   keyboardTip,
-  pointFromClient,
   makeInkSurface,
   paintBase,
+  paperColor,
   restore,
-  W,
-  H,
+  savePortrait,
   type Stroke,
   type XY,
 } from './portrait';
-import { DrawingInstructions, Pencils } from './Pencils';
+import { inkPoint, printProjection, screenProjection, type SheetGeometry } from './sheetGeometry';
+
+type Props = {
+  board: RefObject<HTMLCanvasElement>;
+  master: HTMLCanvasElement;
+  geometry: MutableRefObject<SheetGeometry>;
+  active: boolean;
+  drawingChanged: () => void;
+  title: ReactNode;
+  link: ReactNode;
+  hang: () => void;
+};
 
 export function DrawingPad({
-  master,
   board,
+  master,
+  geometry,
   active,
   drawingChanged,
   title,
   link,
-}: {
-  title: React.ReactNode;
-  link: React.ReactNode;
-  master: HTMLCanvasElement;
-  board: React.RefObject<HTMLCanvasElement>;
-  active: boolean;
-  drawingChanged: () => void;
-}) {
+  hang,
+}: Props) {
   const [scratch] = useState(makeInkSurface);
-  const [base] = useState(() => {
-    const paper = createPaper();
-    paintBase(paper.getContext('2d')!, scratch, pointCount);
-    return paper;
+  const [guide] = useState(() => {
+    const c = createPaper();
+    paintBase(c.getContext('2d')!, scratch, pointCount);
+    return c;
   });
-  const showPoints = useRef(pointCount);
-  const [history] = useState(restore);
-  const strokes = useRef<Stroke[]>(history);
-  const [count, setCount] = useState(history.length);
-  const [selected, setSelected] = useState(0);
-  const [touchPencil, enableTouchPencil] = useState(false);
-  const pendingTouch = useRef<{ point: XY; x: number; y: number } | null>(null);
-  const [usingKeys, setUsingKeys] = useState(false);
-  const [tip, setTip] = useState<XY>([728, 207]);
+  const [initial] = useState(restore);
+  const strokes = useRef<Stroke[]>(initial);
+  const [snapshot, setSnapshot] = useState(initial);
+  const [guess, setGuess] = useState('');
+  const [selected, setSelected] = useState(2);
+  const [freeTouch, setFreeTouch] = useState(false);
+  const [keyboard, setKeyboard] = useState(false);
+  const [tip, setTip] = useState<XY>([W / 2, H / 2]);
   const [penDown, setPenDown] = useState(true);
+  const [notice, setNotice] = useState('');
+  const pixels = useRef(1);
+  const revealed = useRef(pointCount);
+  const frame = useRef(0);
+  const gesture = useRef<{
+    id: number;
+    stroke: Stroke | null;
+    start: XY;
+    x: number;
+    y: number;
+  } | null>(null);
   const keyStroke = useRef<Stroke | null>(null);
-  const pointer = useRef<number | null>(null);
-  const livePath = useRef<Stroke | null>(null);
-  const sheet = useRef<HTMLDivElement>(null);
-  const [status, setStatus] = useState('');
 
-  const paintBoard = useCallback(() => {
-    const face = board.current?.getContext('2d');
-    if (!face) return;
-    face.clearRect(0, 0, W, H);
-    if (showPoints.current >= pointCount || strokes.current.length > 0) {
-      face.drawImage(master, 0, 0);
-    } else if (showPoints.current > 0) {
-      paintBase(face, scratch, showPoints.current);
+  useEffect(() => {
+    let live = true;
+    if (!snapshot.length) setGuess('');
+    else
+      void import('./guessDrawing')
+        .then(({ guessDrawing }) => {
+          if (live) setGuess(guessDrawing(snapshot));
+        })
+        .catch(() => {
+          if (live) setGuess('');
+        });
+    return () => {
+      live = false;
+    };
+  }, [snapshot]);
+
+  const paintScreen = useCallback(() => {
+    frame.current = 0;
+    const canvas = board.current;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
+    const d = pixels.current,
+      p = geometry.current.screen;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = paperColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(d * p.scale, 0, 0, d * p.scale, d * p.x, d * p.y);
+    if (!strokes.current.length) {
+      if (revealed.current >= pointCount) ctx.drawImage(guide, 0, 0);
+      else if (revealed.current > 0) paintBase(ctx, scratch, revealed.current);
+    } else {
+      for (const stroke of strokes.current) inkStroke(ctx, stroke);
     }
-  }, [board, master, scratch]);
+  }, [board, geometry, guide, scratch]);
+
+  const schedulePaint = useCallback(() => {
+    if (!frame.current) frame.current = requestAnimationFrame(paintScreen);
+  }, [paintScreen]);
+
+  const printSheet = useCallback(() => {
+    const ctx = master.getContext('2d')!;
+    const p = printProjection(strokes.current);
+    geometry.current.print = p;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    master.dataset.ground = paperColor;
+    ctx.setTransform(p.scale, 0, 0, p.scale, p.x, p.y);
+    if (strokes.current.length) {
+      for (const stroke of strokes.current) inkStroke(ctx, stroke);
+    } else ctx.drawImage(guide, 0, 0);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    master.dataset.marked = String(strokes.current.length > 0);
+    drawingChanged();
+  }, [drawingChanged, geometry, guide, master]);
+
+  const commit = useCallback(() => {
+    printSheet();
+    savePortrait(strokes.current);
+    setSnapshot(strokes.current.slice());
+    schedulePaint();
+  }, [printSheet, schedulePaint]);
 
   useLayoutEffect(() => {
-    const paper = board.current;
-    if (!paper) return;
-    const reveal = (event: Event) => {
-      const visible = (event as CustomEvent<number>).detail;
-      if (showPoints.current === visible) return;
-      showPoints.current = visible;
-      paintBoard();
-    };
-    paper.addEventListener('studio-ink', reveal);
-    return () => paper.removeEventListener('studio-ink', reveal);
-  }, [board, paintBoard]);
-
-  const paint = useCallback(() => {
-    const ctx = master.getContext('2d')!;
-    ctx.clearRect(0, 0, W, H);
-    ctx.drawImage(base, 0, 0);
-    for (const path of strokes.current) inkStroke(ctx, path);
-    master.dataset.marked = String(strokes.current.length > 0);
-    paintBoard();
-    drawingChanged();
-  }, [master, base, paintBoard, drawingChanged]);
-  useLayoutEffect(paint, [paint]);
-  useEffect(() => {
-    if (!active) {
-      enableTouchPencil(false);
-      pendingTouch.current = null;
-      pointer.current = null;
-      livePath.current = null;
-      setUsingKeys(false);
-      keyStroke.current = null;
+    const canvas = board.current!;
+    function size() {
+      const width = canvas.clientWidth,
+        height = canvas.clientHeight;
+      if (!width || !height) return;
+      pixels.current = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * pixels.current);
+      canvas.height = Math.round(height * pixels.current);
+      geometry.current.screen = screenProjection(width, height, strokes.current);
+      paintScreen();
     }
-  }, [active]);
+    function reveal(e: Event) {
+      revealed.current = (e as CustomEvent<number>).detail;
+      if (!strokes.current.length) schedulePaint();
+    }
+    size();
+    printSheet();
+    const observer = new ResizeObserver(size);
+    observer.observe(canvas);
+    canvas.addEventListener('studio-ink', reveal);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame.current);
+      canvas.removeEventListener('studio-ink', reveal);
+    };
+  }, [board, geometry, paintScreen, printSheet, schedulePaint]);
 
-  function save() {
-    setCount(strokes.current.length);
-    savePortrait(strokes.current);
-  }
-  function undo() {
-    if (!strokes.current.length || pointer.current !== null) return;
-    strokes.current.pop();
+  useEffect(() => {
+    if (active) return;
+    if (gesture.current?.stroke) commit();
+    gesture.current = null;
     keyStroke.current = null;
-    paint();
-    save();
-    setStatus('Last mark removed.');
-  }
-  function addStroke(point: XY) {
+    setFreeTouch(false);
+    setKeyboard(false);
+  }, [active, commit]);
+
+  function add(point: XY) {
     const stroke = { ink: selected, points: [point] };
     strokes.current = [...strokes.current.slice(-95), stroke];
     return stroke;
   }
-  function drawDown(e: React.PointerEvent<HTMLCanvasElement>) {
-    if (!active || e.button !== 0 || pointer.current !== null) return;
-    const point = pointFromClient(e.currentTarget, sheet.current!, e.clientX, e.clientY);
-    const passiveTouch = e.pointerType === 'touch' && !touchPencil;
-    if (!passiveTouch) e.preventDefault();
+  function down(e: PointerEvent<HTMLCanvasElement>) {
+    if (!active || e.button !== 0 || !e.isPrimary || gesture.current) return;
+    const passive = e.pointerType === 'touch' && !freeTouch;
+    if (!passive) e.preventDefault();
     e.currentTarget.focus({ preventScroll: true });
-    pointer.current = e.pointerId;
+    setKeyboard(false);
     keyStroke.current = null;
-    setUsingKeys(false);
+    const start = inkPoint(e.currentTarget, geometry.current.screen, e.clientX, e.clientY);
+    gesture.current = {
+      id: e.pointerId,
+      start,
+      x: e.clientX,
+      y: e.clientY,
+      stroke: passive ? null : add(start),
+    };
     e.currentTarget.setPointerCapture(e.pointerId);
-    if (passiveTouch) {
-      // A vertical first gesture belongs to the page. A tap or a sideways mark belongs to the pad.
-      pendingTouch.current = { point, x: e.clientX, y: e.clientY };
+    if (!passive) schedulePaint();
+  }
+  function move(e: PointerEvent<HTMLCanvasElement>) {
+    const g = gesture.current;
+    if (!active || g?.id !== e.pointerId) return;
+    if (!g.stroke) {
+      const dx = Math.abs(e.clientX - g.x),
+        dy = Math.abs(e.clientY - g.y);
+      if (dx < 5 || dx < dy * 1.25) return;
+      g.stroke = add(g.start);
+    }
+    const actual = e.nativeEvent;
+    const events = actual.getCoalescedEvents?.() || [];
+    const points = g.stroke.points;
+    for (const event of events.length ? events : [actual]) {
+      const pt = inkPoint(e.currentTarget, geometry.current.screen, event.clientX, event.clientY);
+      const last = points[points.length - 1];
+      if (points.length < 4800 && Math.hypot(pt[0] - last[0], pt[1] - last[1]) > 0.8)
+        points.push(pt);
+    }
+    schedulePaint();
+  }
+  function end(e: PointerEvent<HTMLCanvasElement>) {
+    const g = gesture.current;
+    if (g?.id !== e.pointerId) return;
+    gesture.current = null;
+    if (!g.stroke && e.type === 'pointerup' && Math.hypot(e.clientX - g.x, e.clientY - g.y) < 5)
+      g.stroke = add(g.start);
+    if (g.stroke) commit();
+  }
+  function undo() {
+    if (!strokes.current.length || gesture.current) return;
+    strokes.current = strokes.current.slice(0, -1);
+    keyStroke.current = null;
+    commit();
+    setNotice('Last mark removed.');
+  }
+  function key(e: KeyboardEvent<HTMLCanvasElement>) {
+    if (!active) return;
+    if (e.key === 'Escape') {
+      setFreeTouch(false);
+      setKeyboard(false);
       return;
     }
-    livePath.current = addStroke(point);
-    paint();
-    setCount(strokes.current.length);
-  }
-  function drawMove(e: React.PointerEvent<HTMLCanvasElement>) {
-    if (!active || e.pointerId !== pointer.current) return;
-    if (!livePath.current && pendingTouch.current) {
-      const start = pendingTouch.current;
-      const dx = Math.abs(e.clientX - start.x),
-        dy = Math.abs(e.clientY - start.y);
-      if (dx < 4 || dx < dy * 1.2) return;
-      pendingTouch.current = null;
-      livePath.current = addStroke(start.point);
-      setCount(strokes.current.length);
-    }
-    if (!livePath.current) return;
-    const native = e.nativeEvent;
-    const events =
-      typeof native.getCoalescedEvents === 'function' ? native.getCoalescedEvents() : [];
-    const path = livePath.current.points;
-    for (const move of events.length ? events : [native]) {
-      const point = pointFromClient(e.currentTarget, sheet.current!, move.clientX, move.clientY);
-      const last = path[path.length - 1];
-      if (path.length < 4800 && Math.hypot(point[0] - last[0], point[1] - last[1]) > 1)
-        path.push(point);
-    }
-    paint();
-  }
-  function drawEnd(e: React.PointerEvent<HTMLCanvasElement>) {
-    if (e.pointerId !== pointer.current) return;
-    const pending = pendingTouch.current;
-    if (
-      pending &&
-      e.type === 'pointerup' &&
-      Math.hypot(e.clientX - pending.x, e.clientY - pending.y) < 6
-    ) {
-      addStroke(pending.point);
-      paint();
-    }
-    pendingTouch.current = null;
-    pointer.current = null;
-    livePath.current = null;
-    save();
-  }
-  function drawKey(e: React.KeyboardEvent<HTMLCanvasElement>) {
-    if (!active) return;
     if (
       e.key === 'Backspace' ||
       e.key === 'Delete' ||
@@ -189,111 +254,83 @@ export function DrawingPad({
     }
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
-      setUsingKeys(true);
+      setKeyboard(true);
       keyStroke.current = null;
       setPenDown(!penDown);
-      setStatus(penDown ? 'Pencil lifted.' : 'Pencil touching paper.');
+      setNotice(penDown ? 'Pencil lifted.' : 'Pencil touching paper.');
       return;
     }
     const next = keyboardTip(e.key, tip, e.shiftKey);
     if (!next) return;
     e.preventDefault();
-    setUsingKeys(true);
+    setKeyboard(true);
     if (penDown) {
-      if (!keyStroke.current) keyStroke.current = addStroke(tip);
+      if (!keyStroke.current) keyStroke.current = add(tip);
       keyStroke.current.points.push(next);
-      paint();
-      save();
+      commit();
     }
     setTip(next);
   }
-  const ink = inks[selected];
+  const view = geometry.current.screen;
   return (
-    <div className="drawing-unit" aria-hidden={!active}>
-      <div className="sketchbook" ref={sheet}>
-        <div className="paper-under" aria-hidden="true" />
-        <div className="paper-front">
-          <div className="paper-head">
-            <span className="game-sign">
-              <img
-                src={new URL('../../../../studio-art/iguess.svg', import.meta.url).href}
-                alt=""
-              />
-              {title}
-            </span>
-            <span className="paper-mode">{link}</span>
-          </div>
-          <div className="canvas-place" style={{ '--ink': ink.color } as React.CSSProperties}>
-            <canvas
-              ref={board}
-              id="drawing-board"
-              className="studio-draw-board"
-              data-touch-pencil={touchPencil || undefined}
-              width={W}
-              height={H}
-              tabIndex={active ? 0 : -1}
-              data-mark-count={count}
-              aria-label="Bean’s portrait, drawing canvas"
-              aria-describedby="keyboard-drawing"
-              onPointerDown={drawDown}
-              onPointerMove={drawMove}
-              onPointerUp={drawEnd}
-              onPointerCancel={drawEnd}
-              onLostPointerCapture={drawEnd}
-              onKeyDown={drawKey}
-              onFocus={(e) => setUsingKeys(e.currentTarget.matches(':focus-visible'))}
-              onBlur={() => {
-                setUsingKeys(false);
-                keyStroke.current = null;
-              }}
-            />
-            {usingKeys && (
-              <span
-                className="pencil-tip"
-                style={{
-                  left: `${(tip[0] / W) * 100}%`,
-                  top: `${(tip[1] / H) * 100}%`,
-                }}
-                data-down={penDown}
-                aria-hidden="true"
-              />
-            )}
-          </div>
-          <div className="paper-foot">
-            <span className="drawing-cue">
-              <Icon name="pencil" size={15} />
-              <span>{usingKeys ? 'Arrows draw · Space lifts' : 'Draw on the page'}</span>
-            </span>
-            <button
-              type="button"
-              className="undo"
-              onClick={undo}
-              disabled={!count}
-              aria-label="Undo last mark"
-            >
-              <Icon name="undo" size={15} />
-              Undo
-            </button>
-          </div>
-        </div>
-        <div className="coils" aria-hidden="true">
-          {Array.from({ length: 8 }, (_, i) => (
-            <i key={i} />
-          ))}
-        </div>
-      </div>
-      <Pencils
-        selected={selected}
-        select={(index, name) => {
-          setSelected(index);
-          enableTouchPencil(true);
+    <div className="ink-stage" style={{ '--ink-ground': paperColor } as CSSProperties}>
+      <canvas
+        id="drawing-board"
+        ref={board}
+        className="ink-surface"
+        data-mark-count={snapshot.length}
+        data-touch-pencil={freeTouch || undefined}
+        aria-label="Draw on the full-screen canvas"
+        aria-describedby="keyboard-drawing"
+        tabIndex={active ? 0 : -1}
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={end}
+        onPointerCancel={end}
+        onLostPointerCapture={end}
+        onKeyDown={key}
+        onFocus={(e) => setKeyboard(e.currentTarget.matches(':focus-visible'))}
+        onBlur={() => {
+          setKeyboard(false);
           keyStroke.current = null;
-          setStatus(`${name} pencil selected.`);
         }}
+      >
+        Your drawing appears here and in the frame on Bean’s wall.
+      </canvas>
+      {keyboard && (
+        <i
+          aria-hidden="true"
+          className="ink-tip"
+          style={{
+            left: tip[0] * view.scale + view.x,
+            top: tip[1] * view.scale + view.y,
+          }}
+        />
+      )}
+      <DrawingControls
+        title={title}
+        link={link}
+        marked={snapshot.length > 0}
+        guess={guess}
+        keyboard={keyboard}
+        freeTouch={freeTouch}
+        selected={selected}
+        select={(ink, name) => {
+          setSelected(ink);
+          setFreeTouch(true);
+          keyStroke.current = null;
+          setNotice(name + ' pencil selected.');
+        }}
+        done={() => {
+          setFreeTouch(false);
+          setNotice('Drawing finished. Swipe to scroll.');
+        }}
+        undo={undo}
+        hang={hang}
       />
       <DrawingInstructions />
       <span className="sr-only" role="status">
-        {status}
+        {notice}
       </span>
     </div>
   );

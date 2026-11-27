@@ -1,13 +1,14 @@
 import { paintCat } from '../catDrawing';
 
 export const inks = [
-  { name: 'Poppy', color: '#c84634', dark: '#a32e27', bright: '#f46c51' },
-  { name: 'Cobalt', color: '#3d55bb', dark: '#2c3c8f', bright: '#687fdd' },
-  { name: 'Spruce', color: '#29725a', dark: '#225342', bright: '#50a17b' },
+  { name: 'Poppy', color: '#ffa48b' },
+  { name: 'Cobalt', color: '#aebfff' },
+  { name: 'Spruce', color: '#97e2c3' },
 ];
 export const W = 1000,
   H = 600;
-export const stockInk = '#3b2747';
+export const stockInk = '#f3ead8';
+export const paperColor = '#221f24';
 export type XY = [number, number];
 export type Stroke = { ink: number; points: XY[] };
 export const drawingStorageKey = 'aiden-portfolio-portrait-v1';
@@ -82,29 +83,6 @@ export function inkStroke(ctx: CanvasRenderingContext2D, s: Stroke) {
   for (let i = 1; i < s.points.length; i++) ctx.lineTo(...s.points[i]);
   ctx.stroke();
 }
-export function pointFromClient(
-  face: HTMLCanvasElement,
-  sheet: HTMLElement,
-  clientX: number,
-  clientY: number,
-): XY {
-  const rect = face.getBoundingClientRect();
-  const angle =
-    (parseFloat(getComputedStyle(sheet).getPropertyValue('--sheet-angle')) * Math.PI) / 180;
-  const dx = clientX - rect.left - rect.width / 2,
-    dy = clientY - rect.top - rect.height / 2;
-  return [
-    Math.min(
-      W,
-      Math.max(0, ((dx * Math.cos(angle) + dy * Math.sin(angle)) / face.offsetWidth) * W + W / 2),
-    ),
-    Math.min(
-      H,
-      Math.max(0, ((-dx * Math.sin(angle) + dy * Math.cos(angle)) / face.offsetHeight) * H + H / 2),
-    ),
-  ];
-}
-
 export function keyboardTip(key: string, tip: XY, largeStep: boolean): XY | null {
   const steps: Record<string, XY> = {
     ArrowLeft: [-1, 0],

@@ -211,7 +211,7 @@ diff --git a/Cat.tsx b/Cat.tsx
        const drawn = doodleRef.current;
 -      if (drawn) {
 +      if (room?.print) {
-+        blit(FRAME_EMPTY, fx, 12, { w: INK, f: "#c69a63", h: "#ffeac8" });
++        blit(FRAME_EMPTY, fx, 12, { w: INK, f: "#c69a63", h: room.print.dataset.ground || "#ffeac8" });
 +      } else if (drawn) {
          blit(FRAME_EMPTY, fx, 12, { w: INK, f: "#c69a63", h: "#cfe0e4" });
          for (let dy = 0; dy < FRAME_HOLE.h; dy++) {

@@ -10,10 +10,10 @@ import {
 } from 'react';
 import { DrawingPad } from './playable/DrawingPad';
 import type { PlantedFlower } from './playable/gardenFlowers';
-import { createPaper } from './playable/portrait';
-import { Icon } from './playable/StudioIcon';
+import { createPaper, W, H } from './playable/portrait';
+import { identity, printedAreaOnScreen, type SheetGeometry } from './playable/sheetGeometry';
 import { LeafHandoff } from './playable/LeafHandoff';
-import './playable/studio-desk.css';
+import './playable/fullscreen-drawing.css';
 import './playable/studio-room.css';
 import './playable/evening-exhibit.css';
 
@@ -50,6 +50,7 @@ export function Duet({
   const focusAfter = useRef<'desk' | 'room' | null>(null);
   const schedule = useRef<() => void>(() => {});
   const [master] = useState(createPaper);
+  const geometry = useRef<SheetGeometry>({ screen: identity, print: identity });
   const [marked, setMarked] = useState(false);
   const [state, setState] = useState<'desk' | 'flight' | 'room' | 'static'>('desk');
   const [warm, setWarm] = useState(
@@ -130,43 +131,37 @@ export function Duet({
       const t = Math.max(0, Math.min(1, (raw - 0.12) / 0.78));
       el.dataset.flight = t.toFixed(3);
       landing.current = t > 0 && t < 1 ? t : null;
-      if (t <= 0 || t >= 1) {
+      const ready = camera && art && art.offsetWidth && art.parentElement?.dataset.positioned;
+      if (t <= 0 || (t >= 1 && ready)) {
         if (camera) camera.style.removeProperty('transform');
-        el.style.setProperty('--paper-mix', t <= 0 ? '1' : '0');
         el.style.setProperty('--room-mix', t <= 0 ? '0' : '1');
         el.style.setProperty('--tools-mix', t <= 0 ? '0' : '1');
         changeMode(t <= 0 ? 'desk' : 'room');
         return;
       }
       changeMode('flight');
-      const ready = art && camera && art.offsetWidth && art.parentElement?.dataset.positioned;
-      const show = ready ? smooth(t / 0.18) : smooth((t - 0.28) / 0.52);
-      el.style.setProperty('--paper-mix', String(1 - show));
-      el.style.setProperty('--room-mix', String(show));
-      el.style.setProperty('--tools-mix', String(smooth((t - 0.77) / 0.23)));
-      if (!ready) return;
-      const field = camera.parentElement!.getBoundingClientRect(),
-        initial = paper.getBoundingClientRect();
+      if (!ready) {
+        el.style.setProperty('--room-mix', '0');
+        el.style.setProperty('--tools-mix', '0');
+        return;
+      }
+      // At takeoff the painted paper in the room sits exactly over the visitor’s ink.
+      const field = camera.parentElement!.getBoundingClientRect();
+      const source = printedAreaOnScreen(paper, geometry.current);
       const layer = art.parentElement!;
-      const fx = layer.offsetLeft + art.offsetLeft + art.offsetWidth / 2,
-        fy = layer.offsetTop + art.offsetTop + art.offsetHeight / 2;
-      const ix = initial.left + initial.width / 2 - field.left,
-        iy = initial.top + initial.height / 2 - field.top;
-      const zoom = paper.offsetWidth / art.offsetWidth,
-        tilt =
-          (parseFloat(
-            getComputedStyle(paper.closest('.sketchbook')!).getPropertyValue('--sheet-angle'),
-          ) *
-            Math.PI) /
-          180;
-      const q = smooth((t - 0.08) / 0.92),
-        scale = zoom ** (1 - q),
-        angle = tilt * (1 - q);
-      const a = Math.cos(angle) * scale,
-        b = Math.sin(angle) * scale;
+      const fx = layer.offsetLeft + art.offsetLeft + art.offsetWidth / 2;
+      const fy = layer.offsetTop + art.offsetTop + art.offsetHeight / 2;
+      const ix = source.x - field.left,
+        iy = source.y - field.top;
+      const fittedWidth = Math.min(art.offsetWidth, (art.offsetHeight * W) / H);
+      const zoom = source.width / fittedWidth;
+      const q = smooth(t);
+      const scale = zoom ** (1 - q);
       const cx = ix + (fx - ix) * q,
         cy = iy + (fy - iy) * q;
-      camera.style.transform = `matrix(${a},${b},${-b},${a},${cx - a * fx + b * fy},${cy - b * fx - a * fy})`;
+      camera.style.transform = `matrix(${scale},0,0,${scale},${cx - scale * fx},${cy - scale * fy})`;
+      el.style.setProperty('--room-mix', String(smooth(t / 0.09)));
+      el.style.setProperty('--tools-mix', String(smooth((t - 0.77) / 0.23)));
     }
     function queue() {
       if (!frame) frame = requestAnimationFrame(paint);
@@ -230,30 +225,16 @@ export function Duet({
         aria-labelledby="studio-desk-title"
       >
         <div ref={desk} className="studio-desk-pin">
-          <div className="studio-layout">
-            <header className="studio-intro">
-              <h2 tabIndex={-1} id="studio-desk-title">
-                <span>Draw</span> <span>Bean.</span>
-              </h2>
-              <p>Make your mark. Hang the portrait in her room.</p>
-            </header>
-            <div className="worktop">
-              <DrawingPad
-                master={master}
-                board={board}
-                active={state === 'desk' || state === 'static'}
-                drawingChanged={redraw}
-                title={drawTitle}
-                link={drawLink}
-              />
-            </div>
-            <div className="studio-actions">
-              <button type="button" onClick={() => go('room')}>
-                Hang my drawing
-                <Icon name="arrow" size={20} />
-              </button>
-            </div>
-          </div>
+          <DrawingPad
+            master={master}
+            board={board}
+            geometry={geometry}
+            active={state === 'desk' || state === 'static'}
+            drawingChanged={redraw}
+            title={drawTitle}
+            link={drawLink}
+            hang={() => go('room')}
+          />
         </div>
       </article>
       <article
@@ -284,7 +265,7 @@ export function Duet({
           </div>
         </div>
       </article>
-      <LeafHandoff lane={lane} board={board} />
+      <LeafHandoff lane={lane} board={board} geometry={geometry} />
     </div>
   );
 }

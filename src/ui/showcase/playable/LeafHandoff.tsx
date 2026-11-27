@@ -2,6 +2,7 @@ import { useEffect, useRef, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { pointCount } from '../catDrawing';
 import { stockInk } from './portrait';
+import type { SheetGeometry } from './sheetGeometry';
 
 const ear = [
   [340, 192],
@@ -37,9 +38,11 @@ function mix(a: number, b: number, t: number) {
 export function LeafHandoff({
   lane,
   board,
+  geometry,
 }: {
   lane: RefObject<HTMLDivElement>;
   board: RefObject<HTMLCanvasElement>;
+  geometry: RefObject<SheetGeometry>;
 }) {
   const svg = useRef<SVGSVGElement>(null);
   useEffect(() => {
@@ -112,14 +115,7 @@ export function LeafHandoff({
       showInk(0);
       source.setAttribute('data-shed', '');
       const box = canvas!.getBoundingClientRect();
-      const viewW = canvas!.offsetWidth,
-        viewH = canvas!.offsetHeight;
-      const angle =
-        (parseFloat(
-          getComputedStyle(canvas!.closest('.sketchbook')!).getPropertyValue('--sheet-angle'),
-        ) *
-          Math.PI) /
-        180;
+      const surface = geometry.current!.screen;
       const rx = leaf.rx.baseVal.value,
         ry = leaf.ry.baseVal.value;
       const cx = leaf.cx.baseVal.value,
@@ -128,17 +124,10 @@ export function LeafHandoff({
       const travel = ease(progress / revealAt);
       const opening = ease((progress - 0.52) / (revealAt - 0.52));
       const arc = Math.sin(travel * Math.PI);
-      const cos = Math.cos(angle),
-        sin = Math.sin(angle);
-      // Place the outline on the same crop, scale and rotation as the canvas portrait.
-      const paperPoint = (x: number, y: number) => {
-        const px = ((203 + ((x - 259) * 595) / 441) / 1000 - 0.5) * viewW;
-        const py = ((38 + ((y - 113) * 524) / 388) / 600 - 0.5) * viewH;
-        return {
-          x: box.left + box.width * 0.5 + px * cos - py * sin,
-          y: box.top + box.height * 0.5 + px * sin + py * cos,
-        };
-      };
+      const paperPoint = (x: number, y: number) => ({
+        x: box.left + surface.x + (203 + ((x - 259) * 595) / 441) * surface.scale,
+        y: box.top + surface.y + (38 + ((y - 113) * 524) / 388) * surface.scale,
+      });
       const destination = paperPoint(359, 158);
       const xCenter = mix(center.x, destination.x, travel) + arc * Math.min(164, innerWidth * 0.43);
       const yCenter =
@@ -175,7 +164,7 @@ export function LeafHandoff({
       outline.setAttribute('fill', stock);
       outline.setAttribute('fill-opacity', String(1 - opening));
       outline.style.stroke = `color-mix(in srgb, ${stock}, ${stockInk} ${opening * 100}%)`;
-      outline.setAttribute('stroke-width', String(mix(1, (7.8 * viewW) / 1000, opening)));
+      outline.setAttribute('stroke-width', String(mix(1, 7.8 * surface.scale, opening)));
       layer!.style.visibility = 'visible';
     }
     function schedule() {
@@ -215,7 +204,7 @@ export function LeafHandoff({
       media.removeEventListener('change', schedule);
       finish(pointCount);
     };
-  }, [lane, board]);
+  }, [lane, board, geometry]);
 
   return createPortal(
     <svg ref={svg} className="studio-leaf-flight" aria-hidden="true">

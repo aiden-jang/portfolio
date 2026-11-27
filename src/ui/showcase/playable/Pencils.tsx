@@ -1,5 +1,4 @@
 import type { CSSProperties } from 'react';
-import { Icon } from './StudioIcon';
 import { inks } from './portrait';
 
 export function Pencils({
@@ -10,44 +9,29 @@ export function Pencils({
   select: (index: number, name: string) => void;
 }) {
   return (
-    <div className="pencils" role="group" aria-label="Pencil color">
-      {inks.map((item, index) => (
+    <div className="ink-palette" role="group" aria-label="Pencil color">
+      {inks.map((ink, n) => (
         <button
-          key={item.name}
           type="button"
-          className="wood-pencil"
-          style={
-            {
-              '--lead': item.color,
-              '--shade': item.dark,
-              '--light': item.bright,
-              '--index': index,
-            } as CSSProperties
-          }
-          aria-label={`${item.name} pencil`}
-          aria-pressed={selected === index}
-          onClick={() => select(index, item.name)}
+          key={ink.name}
+          aria-label={ink.name + ' pencil'}
+          title={ink.name}
+          aria-pressed={selected === n}
+          onClick={() => select(n, ink.name)}
+          style={{ '--swatch': ink.color } as CSSProperties}
         >
-          <span className="pencil-body">
-            <span className="pencil-print">{item.name}</span>
-            <b />
-          </span>
-          <span className="pencil-wood" />
-          <span className="pencil-point" />
-          <span className="pencil-selected">
-            <Icon name="tick" size={13} />
-          </span>
+          <span aria-hidden="true" />
         </button>
       ))}
     </div>
   );
 }
-
 export function DrawingInstructions() {
   return (
-    <span className="sr-only" id="keyboard-drawing">
-      Choose a pencil to draw freely with a finger, or drag a mouse. With a keyboard, arrow keys
-      draw, Space lifts or lowers your pencil, and Backspace undoes a mark.
+    <span id="keyboard-drawing" className="sr-only">
+      Drag to draw. On a phone choose a color to draw in every direction, then tap Done to scroll on
+      the canvas. With a keyboard, arrow keys draw, Space lifts the pencil, and Backspace undoes a
+      mark.
     </span>
   );
 }

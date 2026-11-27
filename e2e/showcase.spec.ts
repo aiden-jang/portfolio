@@ -15,14 +15,31 @@ for (const [width, height] of [
     await canvas.press('ArrowRight');
     await canvas.press('ArrowDown');
     await expect(canvas).toHaveAttribute('data-mark-count', '1');
-    const marks = await canvas.evaluate((el) => (el as HTMLCanvasElement).toDataURL());
+    await desk.getByRole('button', { name: 'Poppy pencil' }).click();
+    await canvas.focus();
+    await canvas.press('Shift+ArrowLeft');
+    await canvas.press('Shift+ArrowUp');
+    await expect(canvas).toHaveAttribute('data-mark-count', '2');
+    await expect(canvas).toBeInViewport({ ratio: 0.98 });
+    expect((await canvas.boundingBox())?.width).toBe(width);
     await desk.getByRole('button', { name: 'Hang my drawing' }).click();
     const room = page.locator('#project-mrrp');
     const frame = room.locator('.framed-print');
     await expect(room.getByRole('button', { name: 'Pet Bean' })).toBeInViewport();
+    await expect(frame).toHaveAccessibleName('Your drawing in the picture frame');
     await expect
-      .poll(() => frame.evaluate((el) => (el as HTMLCanvasElement).toDataURL()))
-      .toBe(marks);
+      .poll(() =>
+        frame.evaluate((el: HTMLCanvasElement) => {
+          const pixels = el.getContext('2d')!.getImageData(0, 0, el.width, el.height).data;
+          const colors = new Set<string>();
+          for (let i = 0; i < pixels.length; i += 4) {
+            if (pixels[i + 3] === 255)
+              colors.add([pixels[i], pixels[i + 1], pixels[i + 2]].join(','));
+          }
+          return [...colors];
+        }),
+      )
+      .toEqual(expect.arrayContaining(['151,226,195', '255,164,139']));
     const status = room.getByRole('status');
     await room.getByRole('button', { name: 'Pet Bean' }).click();
     await expect(status).toContainText('Bean leans into your hand');
@@ -33,8 +50,11 @@ for (const [width, height] of [
     await room.getByRole('button', { name: 'Morning light' }).click();
     await expect(status).toContainText('Morning light');
     await room.getByRole('button', { name: 'Return to drawing pad' }).click();
+    await expect(canvas).toHaveAttribute('data-mark-count', '2');
+    const undo = desk.getByRole('button', { name: 'Undo last mark' });
+    await undo.click();
     await expect(canvas).toHaveAttribute('data-mark-count', '1');
-    await desk.getByRole('button', { name: 'Undo last mark' }).click();
+    await undo.click();
     await expect(canvas).toHaveAttribute('data-mark-count', '0');
   });
 }
