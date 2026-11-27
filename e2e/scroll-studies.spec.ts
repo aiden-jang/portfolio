@@ -39,7 +39,11 @@ for (const width of [1440, 390]) {
       }, offset);
     }
     await place('.orbit-feature', 0.2);
-    await expect(page.getByRole('button', { name: 'Retry globe', exact: true })).toBeVisible();
+    const retryGlobe = page.getByRole('button', { name: 'Retry globe', exact: true });
+    const exploreGlobe = page.getByRole('button', { name: 'Explore globe', exact: true });
+    await expect(retryGlobe.or(exploreGlobe)).toBeVisible();
+    if (await exploreGlobe.isVisible()) await exploreGlobe.click();
+    await expect(retryGlobe).toBeVisible();
     await expect(recovery).toHaveText('Agent edit');
     await place('#project-iodine', 0.1);
     const parkedEditor = await page.evaluate(() => scrollY);
@@ -118,7 +122,12 @@ for (const width of [1440, 390]) {
     await expect.poll(progress).toBeLessThan(0.4);
     await expect(email).toBeHidden();
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await track.getByRole('slider').fill('100');
+    await page.evaluate(() => {
+      location.hash = 'f40-study';
+    });
+    const slider = track.getByRole('slider');
+    await expect(slider).toBeInViewport();
+    await slider.fill('100');
     await expect.poll(progress).toBe(1);
   });
 }
