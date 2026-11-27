@@ -68,33 +68,79 @@ html:root #sec-about .about-framing-notes {
   width: auto;
 }
 
-@media (max-width: 599px) and (max-height: 779px) and (orientation: portrait) {
-  html:root .portfolio-chrome .rear-finish #sec-contact {
-    --contact-anchor: max(calc(var(--portfolio-header-height) + 38px), 23svh);
-    --contact-overlap: 45svh;
-    margin-top: calc(-1 * var(--contact-overlap));
-    min-height: 100svh;
-    padding-top: var(--contact-anchor);
-  }
-  .rear-finish #sec-contact .panel {
-    position: sticky;
-    top: var(--contact-anchor);
-    margin-top: calc(var(--contact-overlap) - 100svh);
-  }
-  .rear-finish #sec-contact .panel:not(:focus-within) {
-    opacity: var(--contact-arrival, 0);
-    pointer-events: none;
-  }
-  .rear-finish[data-contact-entered] #sec-contact .panel :is(a, button),
-  .rear-finish #sec-contact .panel:focus-within :is(a, button) {
-    pointer-events: auto;
-  }
+/* The same painted frame stays pinned while the contact address takes the title's place. */
+html:root .portfolio-chrome .rear-finish #sec-contact {
+  --email-top: max(calc(var(--portfolio-header-height) + 32px), 25svh);
+  min-height: 100svh;
+  margin-top: -100svh;
+  padding: var(--email-top) var(--portfolio-gutter) 0;
+  display: block;
+  pointer-events: none;
+}
+html:root .rear-finish #sec-contact .panel {
+  pointer-events: none;
+  transform: translateY(calc(-1 * var(--contact-offset, 0px)));
+  visibility: hidden;
+  width: fit-content;
+  max-width: 100%;
+}
+html:root .rear-finish[data-contact-entered] #sec-contact .panel {
+  visibility: visible;
+}
+html:root .rear-finish #sec-contact .contact-copy-block {
+  width: fit-content;
+  overflow: clip;
+}
+html:root .rear-finish #sec-contact .contact-email {
+  margin: 0;
+  transform: translateY(calc((1 - var(--handoff, 0)) * 105%));
+}
+html:root .rear-finish #sec-contact .contact-email-actions {
+  gap: clamp(6px, 1vw, 16px);
+}
+html:root .rear-finish #sec-contact .address-title {
+  margin: 0;
+  line-height: 1.1;
+  font-size: inherit;
+}
+html:root .rear-finish #sec-contact .contact-email-link {
+  color: #f4ede4;
+  font: 460 clamp(24px, 3.35vw, 64px)/1.15 var(--font-display);
+  letter-spacing: -0.045em;
+}
+html:root .rear-finish #sec-contact :is(a, button) {
+  pointer-events: auto;
+}
+html:root .rear-finish #sec-contact .contact-footer {
+  visibility: hidden;
+}
+html:root .rear-finish[data-contact-entered] #sec-contact .contact-footer {
+  visibility: visible;
+}
+html:root
   .rear-finish[data-contact-entered]
-    .scroll-film
-    :is(.scroll-film-range, .about-framing-notes):not(:focus-within) {
-    visibility: hidden;
+  .scroll-film
+  :is(.scroll-film-range, .about-framing-notes) {
+  visibility: hidden;
+}
+@media (max-width: 899px) {
+  html:root .portfolio-chrome .rear-finish #sec-contact {
+    --email-top: max(calc(var(--portfolio-header-height) + 26px), 18svh);
   }
-  .rear-finish .scroll-film :is(.scroll-film-range, .about-framing-notes):not(:focus-within) {
-    opacity: var(--study-controls, 1);
+  html:root .rear-finish #sec-contact .contact-email-link {
+    font-size: clamp(20px, 7.35vw, 40px);
   }
+}
+@media (prefers-reduced-motion: reduce), (max-height: 490px) {
+  html:root .portfolio-chrome .rear-finish #sec-contact {
+    margin-top: -18svh;
+  }
+}
+
+html:root .rear-finish #sec-contact h2.address-title {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
 }

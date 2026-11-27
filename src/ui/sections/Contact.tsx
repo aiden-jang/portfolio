@@ -21,9 +21,9 @@ export function ContactSection({ sharedBackdrop = false } = {}) {
       {!sharedBackdrop && (needsPoster || recorded) && <ContactPoster className="contact-poster" />}
       <div className={PANEL_BASE}>
         <div className="contact-copy-block">
-          <h2 className={H2}>Let’s talk.</h2>
+          {!sharedBackdrop && <h2 className={H2}>Let’s talk.</h2>}
 
-          <EmailActions />
+          <EmailActions headline={sharedBackdrop} />
         </div>
       </div>
       <footer className="contact-footer">
@@ -49,7 +49,8 @@ export function ContactSection({ sharedBackdrop = false } = {}) {
   );
 }
 
-function EmailActions() {
+function EmailActions({ headline }: { headline: boolean }) {
+  const Title = headline ? 'h2' : 'div';
   const { result: copyState, run } = useShareFeedback(EMAIL);
   const copied = copyState === 'copied';
   const failed = copyState === 'failed';
@@ -62,9 +63,11 @@ function EmailActions() {
   return (
     <div className="contact-email">
       <div className="contact-email-actions">
-        <a href={`mailto:${EMAIL}`} className="contact-email-link">
-          {EMAIL} <span aria-hidden="true">↗</span>
-        </a>
+        <Title className="address-title">
+          <a href={`mailto:${EMAIL}`} className="contact-email-link">
+            {EMAIL} <span aria-hidden="true">↗</span>
+          </a>
+        </Title>
         <button
           type="button"
           onClick={() => void run(() => copyText(EMAIL))}

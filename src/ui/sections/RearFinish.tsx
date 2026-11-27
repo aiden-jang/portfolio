@@ -47,7 +47,6 @@ export function RearFinish() {
     const context = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const short = matchMedia(formats.short);
-    const compact = matchMedia(formats.short + ' and (orientation: portrait)');
     const narrow = matchMedia(formats.phone);
     let format = '';
     let frames: HTMLImageElement[] = [];
@@ -100,26 +99,23 @@ export function RearFinish() {
       const travel = rangeTravel();
       const fixed = reduced.matches || !travel;
       const laneBounds = lane.getBoundingClientRect();
-      const arrival = 1 - laneBounds.bottom / window.innerHeight;
-      const contactEntered = compact.matches
-        ? arrival > 0.09
-        : contact.getBoundingClientRect().top < window.innerHeight * 0.65;
-      if (compact.matches) {
-        const controls = reduced.matches
-          ? Number(!contactEntered)
-          : clamp(1 - arrival / 0.09, 0, 1);
-        const email = reduced.matches
-          ? Number(contactEntered)
-          : clamp((arrival - 0.09) / 0.11, 0, 1);
-        root.style.setProperty('--study-controls', String(controls));
-        root.style.setProperty('--contact-arrival', String(email));
-        if (contactEntered !== root.hasAttribute('data-contact-entered')) {
-          root.toggleAttribute('data-contact-entered', contactEntered);
-          if (contactEntered && lane.contains(document.activeElement)) {
-            emailLink.focus({ preventScroll: true });
-          } else if (!contactEntered && contact.contains(document.activeElement)) {
-            input.focus({ preventScroll: true });
-          }
+      const contactTop = contact.getBoundingClientRect().top;
+      const handoff = fixed
+        ? Number(contactTop <= window.innerHeight * 0.55)
+        : clamp((-laneBounds.top / travel - 0.8) / 0.18, 0, 1);
+      const contactEntered = handoff > 0;
+      root.style.setProperty('--handoff', String(handoff));
+      root.style.setProperty(
+        '--contact-offset',
+        Math.min(window.innerHeight, Math.max(0, contactTop)) + 'px',
+      );
+      if (contactEntered !== root.hasAttribute('data-contact-entered')) {
+        const focused = document.activeElement;
+        root.toggleAttribute('data-contact-entered', contactEntered);
+        if (contactEntered && lane.contains(focused)) {
+          emailLink.focus({ preventScroll: true });
+        } else if (!contactEntered && contact.contains(focused)) {
+          input.focus({ preventScroll: true });
         }
       }
       // Finish the paint while the stage is still pinned, then let the page bring in the email.
@@ -161,7 +157,7 @@ export function RearFinish() {
     }
 
     function showFocusedContact() {
-      if (compact.matches && !root.hasAttribute('data-contact-entered')) {
+      if (!root.hasAttribute('data-contact-entered') && document.activeElement === emailLink) {
         contact.scrollIntoView({ block: 'start', behavior: 'instant' });
       }
     }

@@ -90,6 +90,8 @@ for (const width of [1440, 390]) {
         const travel = el.clientHeight - el.firstElementChild!.clientHeight;
         scrollBy({ top: el.getBoundingClientRect().top + travel * fraction, behavior: 'instant' });
       }, fraction);
+    const email = page.getByRole('heading', { name: 'me@aidenjang.com', exact: true });
+    await expect(email).toBeHidden();
     const start = await track.getByRole('slider').boundingBox();
     await scrub(0.44);
     await expect.poll(progress).toBeGreaterThan(0.48);
@@ -106,13 +108,15 @@ for (const width of [1440, 390]) {
     const pixels = () =>
       stage.locator('canvas').evaluate((el) => (el as HTMLCanvasElement).toDataURL());
     const paint = await pixels();
+    await expect(email).toBeInViewport();
     await page.evaluate(() => {
       location.hash = 'sec-contact';
     });
-    await expect(page.locator('.contact-email-link')).toBeInViewport();
+    await expect(email.getByRole('link')).toBeInViewport();
     expect(await pixels()).toBe(paint);
     await scrub(0.3);
     await expect.poll(progress).toBeLessThan(0.4);
+    await expect(email).toBeHidden();
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await track.getByRole('slider').fill('100');
     await expect.poll(progress).toBe(1);

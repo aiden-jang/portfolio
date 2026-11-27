@@ -252,7 +252,9 @@ for (const width of [1440, 390]) {
 
       await page.evaluate(() => (location.hash = 'sec-contact'));
       await expect(page.locator('.contact-email-link')).toBeInViewport();
-      await expect(page.getByRole('heading', { name: 'Let’s talk.', exact: true })).toBeAttached();
+      await expect(
+        page.getByRole('heading', { name: 'me@aidenjang.com', exact: true }),
+      ).toBeVisible();
       await expect(page.locator('#desktop-dock')).toBeHidden();
       await expect(page.locator('#mobile-bar')).toBeHidden();
       await expect(page.getByRole('button', { name: 'Garage controls', exact: true })).toHaveCount(

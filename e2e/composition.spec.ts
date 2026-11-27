@@ -4,6 +4,7 @@ import { captureShowroom } from './showroomFrame';
 for (const [width, height] of [
   [1440, 900],
   [390, 844],
+  [375, 667],
   [320, 568],
 ]) {
   test(`Contact separates its copy and fixed car at ${width}px`, async ({ page }) => {
@@ -24,7 +25,9 @@ for (const [width, height] of [
     }
     await page.evaluate(() => (location.hash = 'sec-contact'));
     await expect(page.locator('.contact-email-link')).toBeInViewport();
-    await expect(page.getByRole('heading', { name: 'Let’s talk.', exact: true })).toBeAttached();
+    await expect(
+      page.getByRole('heading', { name: 'me@aidenjang.com', exact: true }),
+    ).toBeVisible();
     await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
     await expect(async () => {
       const { copy, contact, header, email, copyButton, layoutWidth } = await page.evaluate(() => {
@@ -41,10 +44,10 @@ for (const [width, height] of [
       });
       if (width >= 900) {
         expect(copy.right).toBeLessThan(layoutWidth / 2);
-        expect(copy.top - contact.top).toBeCloseTo(Math.max(120, height * 0.17), 0);
+        expect(copy.top - contact.top).toBeCloseTo(height * 0.25, 0);
       } else {
-        expect(Math.abs(copy.left + copy.width / 2 - layoutWidth / 2)).toBeLessThan(2);
-        expect(email.top - header.bottom).toBeGreaterThanOrEqual(34);
+        expect(email.left).toBeGreaterThan(0);
+        expect(email.top - header.bottom).toBeGreaterThanOrEqual(25);
         expect(email.right).toBeLessThan(copyButton.left);
         expect(copyButton.right).toBeLessThanOrEqual(layoutWidth);
       }
