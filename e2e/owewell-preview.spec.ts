@@ -42,6 +42,6 @@ for (const [width, height] of [
     ).toBe(true);
     await dinner.evaluate((scene) => scene.scrollIntoView({ block: 'start', behavior: 'instant' }));
     await expect(dinner).toHaveAttribute('data-moment', 'vote');
-    await expect(page).toHaveURL(/\/#project-wherever$/);
+    await expect(page).toHaveURL((url) => url.pathname === '/' && url.hash === '#project-wherever');
   });
 }
