@@ -1,4 +1,3 @@
-import { F40_INDEX } from './cars';
 import type { Keyframe, Theme, ThemeName } from './types';
 
 const DUSK: Theme = {
@@ -48,8 +47,7 @@ export const THEMES: Record<ThemeName, Theme> = {
 
 export { CARS, DEFAULT_CAR_INDEX, F40_INDEX, GARAGE_INDICES, adjacentCar } from './cars';
 
-// Warm the closing car and a lightweight garage option.
-export const PREFETCH_MODEL_INDICES = [F40_INDEX, 1] as const;
+export const PREFETCH_MODEL_INDICES = [1] as const;
 
 export const KEYFRAMES: Keyframe[] = [
   {

@@ -1,25 +1,20 @@
 import { expect, test } from '@playwright/test';
 import { PNG } from 'pngjs';
 
-test('Contact shows its fixed car and email while the F40 is loading', async ({ page }) => {
+test('a direct Contact link shows the fixed F40 without requesting its model', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  let release!: () => void;
-  const held = new Promise<void>((resolve) => (release = resolve));
-  await page.route('**/models/ferrari-f120-f40.glb', async (route) => {
-    await held;
-    await route.continue();
+  const requests: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().endsWith('/models/ferrari-f120-f40.glb')) requests.push(request.url());
   });
   await page.goto('/#sec-contact', { waitUntil: 'domcontentloaded' });
   const poster = page.locator('.rear-paint img');
-  try {
-    await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
-    await expect.poll(() => poster.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBe(390);
-    await expect(page.locator('.car-loading-progress')).toBeHidden();
-    await page.getByRole('link', { name: /me@aidenjang.com/ }).click({ trial: true });
-  } finally {
-    release();
-  }
+  await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
+  await expect.poll(() => poster.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBe(390);
+  await expect(page.locator('.car-loading-progress')).toBeHidden();
+  await page.getByRole('link', { name: /me@aidenjang.com/ }).click({ trial: true });
   await expect(poster).toBeVisible();
+  expect(requests).toEqual([]);
 });
 
 for (const [width, height] of [
@@ -27,23 +22,24 @@ for (const [width, height] of [
   [390, 844],
   [375, 667],
 ]) {
-  test(`the F40 fallback holds through the Contact handoff at ${width} × ${height}`, async ({
-    page,
-  }) => {
+  test(`the fixed F40 holds without a model download at ${width} × ${height}`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.addInitScript(() => {
-      const get = HTMLCanvasElement.prototype.getContext;
-      HTMLCanvasElement.prototype.getContext = function (
-        this: HTMLCanvasElement,
-        type: string,
-        ...args: unknown[]
-      ) {
-        if (type.startsWith('webgl')) return null;
-        return Reflect.apply(get, this, [type, ...args]);
-      } as typeof get;
+      Object.defineProperty(navigator, 'connection', {
+        value: { effectiveType: '4g', saveData: false },
+      });
     });
-    await page.goto('/#f40-study', { waitUntil: 'domcontentloaded' });
+    const modelRequests: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().endsWith('.glb')) modelRequests.push(new URL(request.url()).pathname);
+    });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.opening-poster img')).toHaveCount(0, { timeout: 60_000 });
+    await expect
+      .poll(() => modelRequests.includes('/models/mercedes-benz-w198-300-sl.glb'))
+      .toBe(true);
+    expect(modelRequests).not.toContain('/models/ferrari-f120-f40.glb');
     await page.evaluate(() => document.fonts.ready.then(() => {}));
     const track = page.locator('.scroll-film-track');
     const contact = page.locator('#sec-contact');
@@ -68,10 +64,15 @@ for (const [width, height] of [
       expect(bounds[2] - bounds[0]).toBeGreaterThan(width * 0.32);
       return bounds;
     };
+    await track.evaluate((el) => el.scrollIntoView({ block: 'start', behavior: 'instant' }));
     await expect
       .poll(() => track.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
       .toBeLessThan(2);
-    await position(height * 0.4);
+    await track.evaluate((el) => {
+      const travel =
+        (el as HTMLElement).offsetHeight - (el.firstElementChild as HTMLElement).offsetHeight;
+      scrollBy({ top: el.getBoundingClientRect().top + travel * 0.83, behavior: 'instant' });
+    });
     await expect(page.locator('.rear-finish')).toHaveAttribute('data-finish', '1');
     const held = await outline();
     await position(0);
@@ -87,6 +88,7 @@ for (const [width, height] of [
     await track.getByRole('slider').fill('100');
     await expect(track.getByRole('slider')).toHaveAttribute('aria-valuetext', 'Paint');
     await expect(page.locator('.rear-paint')).toHaveCSS('opacity', '1');
+    expect(modelRequests).not.toContain('/models/ferrari-f120-f40.glb');
   });
 }
 
