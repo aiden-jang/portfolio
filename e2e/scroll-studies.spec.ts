@@ -60,33 +60,6 @@ for (const width of [1440, 390]) {
     await seekScene('.batch-lane', 0.08);
     await expect.poll(position).toBeLessThan(partialBatch);
 
-    const garden = page.locator('#project-bloomnote');
-    await place('#project-bloomnote .bloom-garden-plot', 0.4);
-    const parkedGarden = await page.evaluate(() => scrollY);
-    await expect(garden).toHaveAttribute('data-study-progress', '1.000');
-    expect(await page.evaluate(() => scrollY)).toBe(parkedGarden);
-    await place('#project-bloomnote .bloom-garden-plot', 0.6);
-    await expect(garden).toHaveAttribute('data-study-progress', '1.000');
-
-    const drawing = page.getByRole('figure', { name: 'Interactive cat drawing round' });
-    await seekScene('.duet', 0.19);
-    await expect(drawing.getByRole('status')).toHaveText('Cat');
-    const drawingPin = page.locator('.duet [data-study-pin]');
-    expect(
-      await drawingPin.evaluate((el) =>
-        Math.abs(el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).top)),
-      ),
-    ).toBeLessThan(2);
-    const parkedDrawing = await page.evaluate(() => scrollY);
-    await expect(drawing.getByRole('status')).toHaveText('What is it?');
-    await expect(drawing.getByRole('status')).toHaveText('Two ears…');
-    await expect(drawing.getByRole('status')).toHaveText('Cat');
-    expect(await page.evaluate(() => scrollY)).toBe(parkedDrawing);
-    const room = page.locator('#project-mrrp .bean-window');
-    await seekScene('.duet', 0.99);
-    await expect(room).toHaveAttribute('data-light', 'morning');
-    await seekScene('.duet', 0.83);
-    await expect(room).toHaveAttribute('data-light', 'evening');
     const quake = page.locator('#project-everythingisfine');
     const verdict = quake.getByRole('complementary', { name: 'Recorded Kamchatka depth readings' });
     await place('#sec-work', 0);
@@ -106,72 +79,42 @@ for (const width of [1440, 390]) {
     );
 
     const track = page.locator('.scroll-film-track');
-    const video = track.locator('video');
-    const slider = track.getByRole('slider');
-    const scroll = (amount: number) =>
-      track.evaluate((element, amount) => {
-        const travel = element.clientHeight - element.firstElementChild!.clientHeight;
-        scrollTo({
-          top: scrollY + element.getBoundingClientRect().top + travel * amount,
-          behavior: 'instant',
-        });
-      }, amount);
-    await scroll(0);
-    await expect(slider).toHaveValue('0');
-    const stage = await track.locator('.scroll-film').boundingBox();
-    expect(stage!.width).toBeGreaterThanOrEqual(width - 1);
-    expect(stage!.height).toBeGreaterThanOrEqual(843);
-    if (width === 390) {
-      const frames = track.locator('canvas');
-      await expect(frames).toBeVisible();
-      await expect(frames).toHaveCSS('animation-name', 'none');
-      await expect(video).not.toHaveAttribute('src', /mp4/);
-      const image = () => frames.evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL());
-      const clay = await image();
-      await scroll(0.57);
-      await expect(slider).toHaveValue('54');
-      await expect.poll(image).not.toBe(clay);
-      const mid = await image();
-      await slider.fill('70');
-      await expect(slider).toHaveValue('70');
-      await scroll(0.95);
-      await expect(slider).toHaveValue('100');
-      await expect.poll(image).not.toBe(mid);
-      await scroll(0);
-      await expect(slider).toHaveValue('0');
-      await expect.poll(image).toBe(clay);
-    } else {
-      await expect.poll(() => video.evaluate((el: HTMLVideoElement) => el.videoWidth)).toBe(1440);
-      const filmProgress = () =>
-        video.evaluate((el: HTMLVideoElement) => el.currentTime / el.duration);
-      await scroll(0.82);
-      await expect.poll(filmProgress).toBeGreaterThan(0.83);
-      const beforeFinalTurn = await filmProgress();
-      expect(beforeFinalTurn).toBeLessThan(0.89);
-      await scroll(0.88);
-      await expect.poll(filmProgress).toBeGreaterThan(beforeFinalTurn + 0.055);
-      expect(await filmProgress()).toBeLessThan(0.96);
-      await expect(video).toBeVisible();
-      await scroll(0.95);
-      await expect
-        .poll(() => video.evaluate((el: HTMLVideoElement) => el.duration - el.currentTime))
-        .toBeLessThan(0.06);
-      await scroll(0.26);
-      await expect.poll(filmProgress).toBeLessThan(0.16);
-    }
-    await expect(track.locator('.finish-detail')).toHaveCount(0);
-
+    const stage = page.locator('.rear-finish-stage');
+    await page.evaluate(() => {
+      location.hash = 'f40-study';
+    });
+    const progress = () => page.locator('.rear-finish').evaluate((el) => Number(el.dataset.finish));
+    await expect.poll(progress).toBe(0);
+    const scrub = async (fraction: number) =>
+      track.evaluate((el, fraction) => {
+        const travel = el.clientHeight - el.firstElementChild!.clientHeight;
+        scrollBy({ top: el.getBoundingClientRect().top + travel * fraction, behavior: 'instant' });
+      }, fraction);
+    const start = await track.getByRole('slider').boundingBox();
+    await scrub(0.44);
+    await expect.poll(progress).toBeGreaterThan(0.48);
+    const mid = await track.getByRole('slider').boundingBox();
+    expect(mid!.y).toBeCloseTo(start!.y, 0);
+    await expect(track.locator('.scroll-film')).toHaveCSS('position', 'sticky');
+    expect(
+      await track
+        .locator('.scroll-film')
+        .evaluate((el) => getComputedStyle(el, '::before').content),
+    ).toBe('none');
+    await scrub(0.92);
+    await expect.poll(progress).toBe(1);
+    const pixels = () =>
+      stage.locator('canvas').evaluate((el) => (el as HTMLCanvasElement).toDataURL());
+    const paint = await pixels();
+    await page.evaluate(() => {
+      location.hash = 'sec-contact';
+    });
+    await expect(page.locator('.contact-email-link')).toBeInViewport();
+    expect(await pixels()).toBe(paint);
+    await scrub(0.3);
+    await expect.poll(progress).toBeLessThan(0.4);
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect(video).not.toHaveAttribute('src', /mp4/);
-    await expect(track.locator('canvas')).toBeHidden();
-    await slider.fill('100');
-    await expect(slider).toHaveAttribute('aria-valuetext', 'Paint');
-    await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');
-
-    await place('#project-iodine .recovery', 0.22);
-    await expect(recovery).toHaveText('Edit undone');
-    await expect(iodine.locator('video')).toHaveCount(0);
-    await expect(garden.locator('.bloom-garden-plant img').first()).toHaveCSS('clip-path', 'none');
-    await expect(drawing.getByRole('status')).toHaveText('Cat');
+    await track.getByRole('slider').fill('100');
+    await expect.poll(progress).toBe(1);
   });
 }

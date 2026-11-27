@@ -63,13 +63,7 @@ for (const width of [1440, 390]) {
       await expect(intro).toBeVisible();
       await select('Front wheel close-up');
       await expect(intro).toBeHidden();
-      if (width < 768) {
-        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-        await page
-          .getByRole('navigation', { name: 'Mobile navigation' })
-          .getByRole('link', { name: 'Contact', exact: true })
-          .click();
-      } else await page.locator('#nav').getByRole('link', { name: 'Contact', exact: true }).click();
+      await page.evaluate(() => (location.hash = 'sec-contact'));
       await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
       await page.keyboard.press('?');
       const dialog = page.getByRole('dialog', { name: 'Command menu' });

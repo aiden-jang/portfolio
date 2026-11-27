@@ -10,8 +10,7 @@ import type { WorkDetail } from '../types';
 vi.mock('./morph', () => ({ runMorph: vi.fn((update: () => void) => update()) }));
 vi.mock('./sections/Intro', () => ({ IntroSection: () => null }));
 vi.mock('./sections/Experience', () => ({ ExperienceSection: () => null }));
-vi.mock('./sections/About', () => ({ AboutSection: () => null }));
-vi.mock('./sections/Contact', () => ({ ContactSection: () => null }));
+vi.mock('./sections/RearFinish', () => ({ RearFinish: () => null }));
 vi.mock('./sections/Work', () => ({
   WorkSection: () => null,
   MoreProjectsSection: ({ onOpen }: { onOpen: (item: WorkDetail, el: HTMLElement) => void }) =>

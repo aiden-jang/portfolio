@@ -13,12 +13,12 @@ const SOCIAL_LINKS = [
   { label: 'LinkedIn', url: 'https://linkedin.com/in/aidenjang' },
 ];
 
-export function ContactSection() {
+export function ContactSection({ sharedBackdrop = false } = {}) {
   const recorded = useFinishStudy((s) => s.recorded);
   const needsPoster = useAppStore((s) => s.sceneUnavailable || s.renderedCarIndex !== F40_INDEX);
   return (
     <Section id="sec-contact" side="center">
-      {(needsPoster || recorded) && <ContactPoster className="contact-poster" />}
+      {!sharedBackdrop && (needsPoster || recorded) && <ContactPoster className="contact-poster" />}
       <div className={PANEL_BASE}>
         <div className="contact-copy-block">
           <h2 className={H2}>Let’s talk.</h2>

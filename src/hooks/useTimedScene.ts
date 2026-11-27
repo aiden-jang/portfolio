@@ -106,7 +106,8 @@ export function useTimedScene(
     }
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        const entry = entries[entries.length - 1];
         visible = entry.isIntersecting && entry.intersectionRatio > 0;
         if (!visible && restartAfterExit && timeline.elapsed >= duration) {
           timeline.elapsed = 0;
@@ -114,7 +115,13 @@ export function useTimedScene(
           cueUntil = 0;
           draw(0);
         }
-        if (visible && !preference.matches && entry.intersectionRatio >= startThreshold)
+        if (
+          visible &&
+          !preference.matches &&
+          entries.some(
+            (sample) => sample.isIntersecting && sample.intersectionRatio >= startThreshold,
+          )
+        )
           timeline.started = true;
         schedule();
       },

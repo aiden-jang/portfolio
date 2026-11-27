@@ -48,6 +48,6 @@ test('the settled car stays in front of the stationary title on a short desktop'
   await expect(overlap).toBeVisible();
   expect(await title.boundingBox()).toEqual(before);
 
-  await page.locator('#nav a[href="#sec-experience"]').click();
+  await page.evaluate(() => (location.hash = 'sec-experience'));
   await expect(overlap).toHaveCount(0);
 });

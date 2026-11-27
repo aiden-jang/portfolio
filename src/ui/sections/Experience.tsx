@@ -1,7 +1,6 @@
-import { useContext, useRef } from 'react';
-import { OpenEvidence, batchingStory } from '../creative/evidenceNavigation';
+import { useRef } from 'react';
+import { batchingStory } from '../creative/evidenceNavigation';
 import { BatchingSpread } from './BatchingSpread';
-import { evidenceHref } from '../creative/storyRoutes';
 import { workId, WORK_ITEMS } from '../../data/workItems';
 import { isPortfolioProject } from '../../data/workBrowsing';
 import './experience.css';
@@ -69,7 +68,6 @@ type Props = {
 };
 
 const leadId = batchingStory;
-const loadTime = { before: 60, after: 2 };
 const supportingIds = [
   'monolith-django-rest-react-rewrite',
   'sponsorships-audience-extension-blackout-periods',
@@ -84,89 +82,70 @@ const additional = work.filter(
   (item) => workId(item) !== leadId && !supportingIds.includes(workId(item)),
 );
 
-export function ExperienceSection({ onOpen }: Props) {
+export function ExperienceSection() {
+  const lane = useRef<HTMLDivElement>(null);
   return (
     <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">
       <div data-nosnippet className="experience-content pointer-events-auto">
-        {lead && <LeadOutcome />}
-        <h2 id="experience-history-title">Experience</h2>
-        <div className="experience-proof-strip" aria-label="Selected engineering outcomes">
-          {supporting.map((item) => (
-            <HighlightRow key={item.title} item={item} onOpen={onOpen} />
-          ))}
-        </div>
-        <div className="experience-grid">
-          <div className="experience-history">
-            <ol role="list">
-              {ROLES.map(({ company, roles }) => (
-                <li key={company} className="experience-employer">
-                  <strong>{company}</strong>
-                  <ol className="experience-roles" role="list">
-                    {roles.map(({ title, period }) => (
-                      <li key={period}>
-                        <span>{title}</span>
-                        <span className="experience-period">{period}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </li>
-              ))}
-            </ol>
+        {lead && (
+          <div className="batch-lane batch-print-lane" id="batching-study" ref={lane}>
+            <article
+              className="experience-lead batch-print-sheet"
+              data-study-pin
+              aria-labelledby="experience-lead-title"
+            >
+              <h2 id="experience-lead-title" className="sr-only">
+                120 calls → 1
+              </h2>
+              <BatchingSpread lane={lane} />
+            </article>
           </div>
-          <div className="experience-proof">
-            {additional.length > 0 && (
-              <details className="experience-more">
-                <summary>
-                  More engineering work <span aria-hidden="true">+</span>
-                </summary>
-                {additional.map((item) => (
-                  <HighlightRow key={item.title} item={item} onOpen={onOpen} />
-                ))}
-              </details>
-            )}
-          </div>
-        </div>
+        )}
       </div>
     </Section>
   );
 }
 
-function LeadOutcome() {
-  const lane = useRef<HTMLDivElement>(null);
-  const open = useContext(OpenEvidence);
+export function ExperienceHistory({ onOpen }: Props) {
   return (
-    <div className="batch-lane" id="batching-study" ref={lane}>
-      <article className="experience-lead" data-study-pin aria-labelledby="experience-lead-title">
-        <div className="experience-batch-copy">
-          <h2 id="experience-lead-title">
-            120 calls <span>→</span> 1
-          </h2>
-          <p className="experience-measure">
-            <span className="sr-only">
-              Page load went from {loadTime.before} seconds to {loadTime.after} seconds.
-            </span>
-            <span className="experience-from" aria-hidden="true">
-              {loadTime.before}s
-            </span>
-            <span className="experience-change" aria-hidden="true">
-              →
-            </span>
-            <span aria-hidden="true">{loadTime.after}s</span>
-          </p>
-
-          <div className="experience-lead-actions">
-            <a
-              href={evidenceHref(leadId, undefined)}
-              onClick={(event) => open?.(event, leadId)}
-              className="experience-case"
-              aria-describedby="experience-lead-title"
-            >
-              How I batched the requests <ControlIcon name="arrow" />
-            </a>
-          </div>
+    <div className="experience-content">
+      <h2 id="experience-history-title">Experience</h2>
+      <div className="experience-proof-strip" aria-label="Selected engineering outcomes">
+        {supporting.map((item) => (
+          <HighlightRow key={item.title} item={item} onOpen={onOpen} />
+        ))}
+      </div>
+      <div className="experience-grid">
+        <div className="experience-history">
+          <ol role="list">
+            {ROLES.map(({ company, roles }) => (
+              <li key={company} className="experience-employer">
+                <strong>{company}</strong>
+                <ol className="experience-roles" role="list">
+                  {roles.map(({ title, period }) => (
+                    <li key={period}>
+                      <span>{title}</span>
+                      <span className="experience-period">{period}</span>
+                    </li>
+                  ))}
+                </ol>
+              </li>
+            ))}
+          </ol>
         </div>
-        <BatchingSpread lane={lane} />
-      </article>
+        <div className="experience-proof">
+          {additional.length > 0 && (
+            <details className="experience-more">
+              <summary>
+                More engineering work <span aria-hidden="true">+</span>
+              </summary>
+              {additional.map((item) => (
+                <HighlightRow key={item.title} item={item} onOpen={onOpen} />
+              ))}
+            </details>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

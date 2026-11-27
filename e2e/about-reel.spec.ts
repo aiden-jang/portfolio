@@ -22,7 +22,7 @@ for (const [width, format, videoWidth] of [
 ] as const) {
   test(`About plays the responsive reel on demand at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/#sec-about');
+    await page.goto('/work/#about');
     const reel = page.getByRole('figure', { name: 'Selected work in motion' });
     await expect(reel).toBeVisible();
     const video = reel.locator('video');
@@ -64,7 +64,7 @@ for (const [width, format, videoWidth] of [
       .poll(() => video.evaluate((player: HTMLVideoElement) => player.currentTime))
       .toBeLessThan(5);
     await expect(video).toHaveJSProperty('paused', false);
-    await page.getByRole('button', { name: 'Aiden Jang, back to the top' }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await expect(video).not.toBeInViewport();
     await expect(video).toHaveJSProperty('paused', true);
   });
@@ -75,7 +75,7 @@ test('the reel keeps playing at the viewport edge and resumes after leaving it',
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
-  await page.goto('/#sec-about');
+  await page.goto('/work/#about');
   const video = page.locator('.about-reel-stage video');
   await video.scrollIntoViewIfNeeded();
   await expect(video).toHaveJSProperty('paused', false);

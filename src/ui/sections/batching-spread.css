@@ -20,6 +20,175 @@
   text-align: center;
   padding: 0;
 }
+
+html:root .portfolio-chrome #sec-experience:has(.batch-print-lane) {
+  --batch-stock: #e7e5ef;
+  --batch-ink: #342a50;
+  padding-block: 0;
+  background: var(--batch-stock);
+}
+
+html:root #sec-experience .experience-content .batch-print-lane {
+  --batch-travel: clamp(270px, 74svh, 700px);
+  width: 100%;
+  margin: 0;
+  border: 0;
+  color: var(--batch-ink);
+  background: var(--batch-stock);
+}
+
+html:root #sec-experience .experience-content .batch-print-lane::before {
+  content: none;
+}
+
+html:root #sec-experience #batching-study .batch-print-sheet {
+  display: block;
+  min-height: 0;
+  height: max(385px, calc(100svh - var(--portfolio-header-height)));
+  padding: clamp(18px, 4.3svh, 46px) 0 clamp(9px, 1.7svh, 21px);
+  top: var(--portfolio-header-height);
+}
+
+#sec-experience #batching-study .batch-print {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  gap: clamp(15px, 3.6svh, 42px);
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  color: var(--batch-ink);
+  background: transparent;
+}
+
+.batch-graphic {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+#sec-experience #batching-study .batch-graphic .request-pulse {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: none;
+}
+
+.batch-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  font: 790 clamp(100px, 29vw, 420px)/0.8 var(--font-display);
+  letter-spacing: -0.07em;
+}
+.batch-print[data-print-ready] .batch-fallback {
+  display: none;
+}
+#batching-study .batch-caption {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.97fr);
+  align-items: end;
+  gap: clamp(14px, 4vw, 65px);
+  padding: 0;
+  color: var(--batch-ink);
+}
+#batching-study .batch-caption > strong {
+  font: 610 clamp(58px, min(7.2vw, 12.8svh), 118px)/0.91 var(--font-display);
+  letter-spacing: -0.07em;
+}
+html:root #sec-experience #batching-study .batch-caption p {
+  align-self: end;
+  max-width: 34ch;
+  min-height: 1.3lh;
+  margin: 0;
+  font: 450 clamp(18px, min(1.8vw, 3.8svh), 28px)/1.28 var(--font-display);
+  letter-spacing: -0.025em;
+  color: var(--batch-ink);
+  text-wrap: pretty;
+}
+.batch-folio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid #67617f70;
+  font: 530 clamp(12px, 1.12vw, 17px)/1.2 var(--font-display);
+}
+.batch-folio .experience-case,
+.batch-gesture {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+}
+.batch-folio .experience-case:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.28em;
+}
+html:root #sec-experience .batch-folio a:focus-visible {
+  outline: 2px solid var(--batch-ink);
+}
+#batching-study .batch-folio svg {
+  width: 1.1em;
+  height: 1.1em;
+  display: block;
+  padding: 0;
+}
+.batch-gesture svg {
+  transform: rotate(90deg);
+}
+.batch-print:not([data-phase='before']) .batch-gesture {
+  visibility: hidden;
+}
+
+@media (max-width: 700px) {
+  html:root #sec-experience .experience-content .batch-print-lane {
+    --batch-travel: clamp(260px, 58svh, 480px);
+  }
+  #sec-experience #batching-study .batch-print {
+    gap: clamp(14px, 3svh, 28px);
+  }
+  #batching-study .batch-caption {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  #batching-study .batch-caption > strong {
+    font-size: clamp(50px, 15vw, 84px);
+  }
+  html:root #sec-experience #batching-study .batch-caption p {
+    font-size: clamp(16px, 4.6vw, 24px);
+  }
+}
+
+@media (max-height: 550px) and (min-width: 701px) {
+  html:root #sec-experience #batching-study .batch-print-sheet {
+    min-height: 260px;
+    height: calc(100svh - var(--portfolio-header-height));
+    padding-block: 8px;
+  }
+  #sec-experience #batching-study .batch-print {
+    gap: 7px;
+  }
+  #batching-study .batch-caption > strong {
+    font-size: 43px;
+  }
+  html:root #sec-experience #batching-study .batch-caption p {
+    min-height: 0;
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .batch-gesture {
+    display: none;
+  }
+}
 @media (max-width: 767px) and (max-height: 699px) {
   #batching-study .experience-batch-copy h2 {
     font-size: clamp(34px, 10.5vw, 48px);
@@ -27,4 +196,15 @@
   #batching-study .experience-batch-copy {
     gap: 4px;
   }
+}
+
+html:root #sec-experience #batching-study .batch-load-time {
+  display: flex;
+  align-items: baseline;
+  gap: 0.52em;
+  min-width: 0;
+  white-space: nowrap;
+}
+#batching-study .batch-load-time b {
+  font-weight: 610;
 }

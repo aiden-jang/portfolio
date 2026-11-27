@@ -99,7 +99,7 @@ for (const width of [1440, 390]) {
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
     await page.goto('/#sec-about', { waitUntil: 'domcontentloaded' });
     const study = page.getByRole('figure', { name: 'Framing the showroom' });
-    const slider = study.getByRole('slider', { name: 'Ferrari camera and finish' });
+    const slider = study.getByRole('slider', { name: 'Ferrari finish' });
     await slider.scrollIntoViewIfNeeded();
     await slider.focus();
     await slider.press('End');

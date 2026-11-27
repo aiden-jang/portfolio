@@ -14,24 +14,15 @@ for (const [width, height] of [
     await page.goto('/');
     await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 60_000 });
     await page.screenshot({ path: test.info().outputPath(`intro-${width}.png`) });
-    const jump = async (name: string) => {
-      if (width < 768) {
-        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-        await page
-          .getByRole('navigation', { name: 'Mobile navigation' })
-          .getByRole('link', { name, exact: true })
-          .click();
-      } else await page.locator('#nav').getByRole('link', { name, exact: true }).click();
-    };
     if (width !== 320) {
-      await jump('Featured work');
+      await page.locator('#sec-intro').getByRole('link', { name: 'Featured work' }).click();
       await expect(page.locator('#project-everythingisfine h3')).toBeInViewport();
       await page.screenshot({ path: test.info().outputPath(`projects-${width}.png`) });
-      await jump('About');
-      await expect(page.locator('#sec-about h2')).toBeInViewport();
+      await page.evaluate(() => (location.hash = 'f40-study'));
+      await expect(page.getByRole('heading', { name: 'Framing the showroom' })).toBeInViewport();
       await page.screenshot({ path: test.info().outputPath(`about-${width}.png`) });
     }
-    await jump('Contact');
+    await page.evaluate(() => (location.hash = 'sec-contact'));
     await expect(page.locator('.contact-email-link')).toBeInViewport();
     await expect(page.getByRole('heading', { name: 'Let’s talk.', exact: true })).toBeAttached();
     await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');

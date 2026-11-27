@@ -1,0 +1,315 @@
+html:root #sec-more-work #project-bloomnote.studio-garden {
+  --garden-page: #edf0dc;
+  --garden-ink: #293d32;
+  --garden-moss: #536b54;
+  --petal: #ac562f;
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  background: var(--garden-page);
+  color: var(--garden-ink);
+  text-align: left;
+  text-shadow: none;
+  color-scheme: light;
+  scroll-margin-top: var(--portfolio-header-height);
+}
+#project-bloomnote.studio-garden[data-selected-flower='0'] {
+  --petal: #9268a4;
+}
+#project-bloomnote.studio-garden[data-selected-flower='2'] {
+  --petal: #ab5770;
+}
+.studio-garden-page {
+  min-height: calc(100svh - var(--portfolio-header-height));
+  width: min(100% - var(--portfolio-gutter) * 2, 1300px);
+  margin: auto;
+  padding: clamp(23px, 4.8svh, 50px) 0 clamp(13px, 2svh, 26px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(18px, 3.5svh, 45px);
+}
+.studio-garden-head,
+.studio-garden-foot,
+.studio-note-tools,
+.studio-garden-head button,
+.studio-garden-head a,
+.studio-garden-foot button,
+.studio-grow {
+  display: flex;
+  align-items: center;
+}
+.studio-garden-head {
+  justify-content: space-between;
+}
+html:root #sec-more-work .studio-garden-head h2 {
+  margin: 0;
+  font:
+    400 clamp(36px, 4.7vw, 71px)/1 Fraunces,
+    Georgia,
+    serif;
+  letter-spacing: -0.045em;
+  color: inherit;
+}
+.studio-garden-head h2 button {
+  padding: 0;
+  gap: 8px;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+.studio-garden-head h2 svg {
+  align-self: flex-start;
+  margin-top: 7px;
+  color: var(--garden-moss);
+}
+.studio-garden-head a,
+.studio-garden-foot button {
+  gap: 6px;
+  min-height: 44px;
+  color: var(--garden-moss);
+  font: 550 13px/1.3 var(--font-display);
+}
+.studio-garden-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 100px);
+  align-items: center;
+}
+.studio-garden-letter {
+  min-width: 0;
+  max-width: 100%;
+}
+.studio-letter-from,
+.studio-note-form label {
+  display: block;
+  margin: 0 0 16px;
+  font: 520 clamp(13px, 1.1vw, 17px)/1.3 var(--font-display);
+  color: var(--garden-moss);
+}
+.studio-garden-letter blockquote {
+  width: fit-content;
+  max-width: 15ch;
+  margin: 0;
+  color: var(--garden-ink);
+  font:
+    400 clamp(44px, 5.35vw, 83px)/1.03 Fraunces,
+    Georgia,
+    serif;
+  letter-spacing: -0.046em;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+.studio-note-tools {
+  gap: 16px;
+  margin-top: clamp(20px, 3.8svh, 40px);
+}
+.studio-note-tools button {
+  min-height: 44px;
+  font: 560 14px/1.2 var(--font-display);
+  color: var(--garden-moss);
+}
+.studio-note-tools .studio-grow {
+  gap: 11px;
+  border: 1px solid #9fac95;
+  border-radius: 30px;
+  padding: 0 17px;
+  color: var(--garden-ink);
+  background: transparent;
+}
+.studio-note-form {
+  max-width: 580px;
+}
+.studio-note-form textarea {
+  display: block;
+  width: 100%;
+  resize: none;
+  min-height: 3.6em;
+  border-bottom: 1px solid #9fac95;
+  outline-offset: 5px;
+  padding: 5px 0 12px;
+  background: transparent;
+  color: var(--garden-ink);
+  caret-color: var(--garden-moss);
+  font:
+    400 clamp(30px, 3.7vw, 57px)/1.09 Fraunces,
+    Georgia,
+    serif;
+  letter-spacing: -0.027em;
+}
+.studio-note-form textarea::placeholder {
+  color: #61705d;
+}
+.studio-flower-bed {
+  display: grid;
+  grid-template-columns: 1fr 1.13fr 1fr;
+  align-items: end;
+  min-width: 0;
+  position: relative;
+  align-self: center;
+}
+.studio-flower-bed::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  height: 1px;
+  background: #a6b39a;
+  pointer-events: none;
+}
+.studio-flower {
+  --plant-size: clamp(170px, 28svh, 315px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-width: 0;
+  color: var(--garden-moss);
+}
+.studio-flower.flower-1 {
+  --plant-size: clamp(270px, 50svh, 515px);
+}
+.studio-flower.flower-2 {
+  --plant-size: clamp(145px, 24svh, 278px);
+}
+.studio-botanical {
+  width: 100%;
+  height: var(--plant-size);
+  display: block;
+}
+.studio-botanical svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.studio-flower-head {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.studio-flower-name {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  font: 500 13px/1.3 var(--font-display);
+}
+.studio-flower[aria-pressed='true'] .studio-flower-name {
+  color: var(--garden-ink);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.studio-garden-foot {
+  border-top: 1px solid #bdc6b0;
+  justify-content: flex-end;
+}
+.studio-note-pollen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 7px;
+  background: var(--petal);
+  border-radius: 80% 20% 70% 35%;
+  pointer-events: none;
+  opacity: 0;
+}
+.studio-garden [data-shed] {
+  opacity: 0;
+}
+.studio-garden :is(a, button, textarea):focus-visible {
+  outline: 2px solid #38583e;
+  outline-offset: 4px;
+}
+@media (hover: hover) {
+  .studio-garden
+    :is(
+      .studio-garden-head a,
+      .studio-garden-foot button,
+      .studio-garden-head button,
+      .studio-flower:hover .studio-flower-name
+    ):hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .studio-note-tools .studio-grow:hover {
+    background: #e0e6cf;
+    border-color: var(--garden-moss);
+  }
+}
+@media (max-width: 739px) {
+  .studio-garden-page {
+    width: calc(100% - 44px);
+    padding: 23px 0 8px;
+    gap: 12px;
+  }
+  html:root #sec-more-work .studio-garden-head h2 {
+    font-size: 40px;
+  }
+  .studio-garden-head a,
+  .studio-garden-foot button {
+    font-size: 12px;
+  }
+  .studio-garden-head h2 svg {
+    width: 14px;
+    height: 14px;
+  }
+  .studio-garden-body {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    row-gap: clamp(22px, 3.5svh, 35px);
+  }
+  .studio-letter-from,
+  .studio-note-form label {
+    font-size: 12px;
+    margin-bottom: 9px;
+  }
+  .studio-garden-letter blockquote {
+    font-size: clamp(35px, min(11vw, 5.35svh), 54px);
+    max-width: 16.5ch;
+  }
+  .studio-note-tools {
+    margin-top: 14px;
+  }
+  .studio-note-tools .studio-grow {
+    font-size: 12px;
+    min-height: 38px;
+    padding: 0 14px;
+    gap: 9px;
+  }
+  .studio-flower {
+    --plant-size: clamp(105px, 16.5svh, 164px);
+  }
+  .studio-flower.flower-1 {
+    --plant-size: clamp(148px, 28svh, 248px);
+  }
+  .studio-flower.flower-2 {
+    --plant-size: clamp(96px, 14.4svh, 145px);
+  }
+  .studio-flower-name {
+    font-size: 11.5px;
+    min-height: 33px;
+  }
+  .studio-flower-bed::after {
+    bottom: 33px;
+  }
+}
+@media (max-width: 739px) and (max-height: 720px) {
+  .studio-garden-page {
+    padding-top: 12px;
+    gap: 6px;
+  }
+  .studio-garden-body {
+    row-gap: 16px;
+  }
+  html:root #sec-more-work .studio-garden-head h2 {
+    font-size: 34px;
+  }
+  .studio-garden-letter blockquote {
+    font-size: clamp(32px, 9vw, 38px);
+  }
+  .studio-note-tools {
+    margin-top: 10px;
+  }
+}

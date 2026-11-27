@@ -173,18 +173,7 @@ for (const width of [1440, 390]) {
       await accessible(page);
       await page.keyboard.press('Escape');
 
-      if (width === 390) {
-        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-        await page
-          .getByRole('navigation', { name: 'Mobile navigation' })
-          .getByRole('link', { name: 'Featured work', exact: true })
-          .click();
-      } else {
-        await page
-          .locator('#nav')
-          .getByRole('link', { name: 'Featured work', exact: true })
-          .click();
-      }
+      await page.locator('#sec-intro').getByRole('link', { name: 'Featured work' }).click();
       await expect(page.locator('#project-everythingisfine h3')).toBeInViewport();
       const carBefore = new URL(page.url()).searchParams.get('car');
       if (width !== 390) {
@@ -260,15 +249,7 @@ for (const width of [1440, 390]) {
       await expect(screenshot).toBeFocused();
       await page.emulateMedia({ reducedMotion: 'reduce' });
 
-      if (width === 390) {
-        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-        await page
-          .getByRole('navigation', { name: 'Mobile navigation' })
-          .getByRole('link', { name: 'Contact' })
-          .click();
-      } else {
-        await page.locator('#nav').getByRole('link', { name: 'Contact', exact: true }).click();
-      }
+      await page.evaluate(() => (location.hash = 'sec-contact'));
       await expect(page.locator('.contact-email-link')).toBeInViewport();
       await expect(page.getByRole('heading', { name: 'Let’s talk.', exact: true })).toBeAttached();
       await expect(page.locator('#desktop-dock')).toBeHidden();

@@ -13,8 +13,6 @@ import { FEATURED_PROJECTS, visibleProjects } from '../../data/workBrowsing';
 import { workId } from '../../data/workItems';
 import type { WorkDetail } from '../../types';
 import { Section } from './shared';
-import { ProjectPreview } from '../ProjectPreview';
-import { ControlIcon } from '../ControlIcon';
 import '../showcase/live-project-index.css';
 import '../showcase/editorial-motion.css';
 import './editorial-cut.css';
@@ -49,9 +47,6 @@ const mrrp = orderedCollection.find((item) => item.mark === 'mrrp')!;
 const wherever = orderedCollection.find((item) => item.mark === 'wherever')!;
 const owewell = orderedCollection.find((item) => item.mark === 'owewell')!;
 const worth = orderedCollection.find((item) => item.mark === 'worth')!;
-const supportingProjects = orderedCollection.filter(
-  (item) => ![bloomnote, iguess, mrrp, wherever, owewell, worth].includes(item),
-);
 function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
   if (!item.link) return null;
   return (
@@ -94,86 +89,8 @@ export function MoreProjectsSection({ onOpen }: Props) {
               onReadWorth={(trigger) => onOpen(worth, trigger)}
             />
           </div>
-          <div className="project-gallery gallery-companions">
-            {supportingProjects.map((item) => (
-              <Project key={item.title} item={item} onOpen={onOpen} />
-            ))}
-          </div>
         </div>
       </div>
     </Section>
-  );
-}
-
-function Project({ item, onOpen }: { item: WorkDetail } & Props) {
-  const name = item.shortName ?? item.title;
-  const preview = PREVIEWS[item.mark ?? ''];
-  const description = preview?.description ?? item.summary;
-  const title = (
-    <div className="project-title">
-      <h3>
-        <button
-          type="button"
-          onClick={(event) => onOpen(item, event.currentTarget)}
-          aria-label={`How I built it: ${name}`}
-        >
-          {name}
-          <ControlIcon name="arrow" />
-        </button>
-      </h3>
-    </div>
-  );
-  const link = item.link && (
-    <div className="garage-project-links">
-      <a
-        href={item.link.url}
-        target="_blank"
-        aria-describedby="external-link-hint"
-        rel="noopener"
-        aria-label={item.contribution ? `View changes on GitHub: ${name}` : `Open app: ${name}`}
-      >
-        {item.contribution ? 'View changes on GitHub' : 'Open app'}
-        <span aria-hidden="true">↗</span>
-      </a>
-    </div>
-  );
-  const media = preview && (
-    <ProjectPreview
-      image={preview.image}
-      name={name}
-      caption={preview.caption}
-      states={preview.states}
-    />
-  );
-  const copy = (
-    <div className="garage-project-copy">
-      <div className="project-card-heading">
-        {title}
-        {link}
-      </div>
-      {item.contribution && <p className="project-role">Open-source contributor</p>}
-      <p>{item.mark === 'auth' ? 'One sign-in across the apps.' : description}</p>
-    </div>
-  );
-  return (
-    <article id={`project-${workId(item)}`} className="garage-project garage-project-compact">
-      <div className="project-card-media">
-        {item.mark === 'auth' && !location.search.includes('preview=platform') ? (
-          <div className="platform-viewport">
-            <img
-              className="platform-cover"
-              src="/projects/platform-hub.webp"
-              width={1050}
-              height={740}
-              alt="The shared accounts hub and its connected apps"
-              loading="lazy"
-            />
-          </div>
-        ) : (
-          media
-        )}
-      </div>
-      {copy}
-    </article>
   );
 }

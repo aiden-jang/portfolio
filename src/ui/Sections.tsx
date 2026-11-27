@@ -5,8 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { caseStudyLane, isPortfolioProject } from '../data/workBrowsing';
 import { WORK_ITEMS, workId } from '../data/workItems';
 import { runMorph } from './morph';
-import { AboutSection } from './sections/About';
-import { ContactSection } from './sections/Contact';
+import { RearFinish } from './sections/RearFinish';
 import { ExperienceSection } from './sections/Experience';
 import { IntroSection } from './sections/Intro';
 import { MoreProjectsSection, WorkSection } from './sections/Work';
@@ -120,10 +119,9 @@ export function Sections() {
     <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
       <IntroSection />
       <WorkSection />
-      <ExperienceSection onOpen={openWork} />
+      <ExperienceSection />
       <MoreProjectsSection onOpen={openWork} />
-      <AboutSection />
-      <ContactSection />
+      <RearFinish />
       <ProjectHandoffs />
       <WorkModal
         item={activeWork}

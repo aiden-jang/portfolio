@@ -1,0 +1,50 @@
+.playable-header .route-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.1vw, 36px);
+  font: 500 clamp(13px, 1vw, 16px)/1.3 var(--font-display);
+  color: var(--color-fg);
+}
+.playable-header .route-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+  letter-spacing: 0;
+  font-family: var(--font-display);
+}
+.playable-header .route-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+html:root .playable-header .route-nav a[aria-label^='Résumé'] {
+  padding-inline: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+}
+html:root .portfolio-chrome #sec-about {
+  padding: 0;
+  margin: 0;
+}
+html:root #sec-about .about-copy,
+html:root #sec-about .about-framing-study {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 580px) {
+  .playable-header .route-nav {
+    gap: 17px;
+  }
+  .playable-header .route-nav .route-contact-link {
+    display: none;
+  }
+}
+/* Prevent the preceding panel's controls from showing through the masthead of the next scene. */
+body[data-car-view='reading'] .portfolio-chrome .playable-header {
+  background: #191a18;
+  backdrop-filter: none;
+  border-bottom-color: #ffffff12;
+}

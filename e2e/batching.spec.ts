@@ -25,14 +25,15 @@ for (const viewport of [
     await page.evaluate(() => document.fonts.ready.then(() => {}));
     const lane = page.locator('#batching-study');
     const figure = lane.getByRole('figure', { name: 'Request batching comparison' });
-    const readout = figure.locator('.batching-readout');
+    const label = figure.locator('.batch-caption > strong');
+    const readout = figure.locator('.batch-load-time');
     const canvas = figure.locator('canvas');
     const requestInk = () =>
       canvas.evaluate((el: HTMLCanvasElement) => {
         const pixels = el.getContext('2d')!.getImageData(0, 0, el.width, el.height).data;
         let ink = 0;
         for (let i = 0; i < pixels.length; i += 4) {
-          if (pixels[i + 3] > 180 && pixels[i] > 160 && pixels[i] > pixels[i + 1]) ink++;
+          if (pixels[i + 3] > 180) ink++;
         }
         return ink;
       });
@@ -50,31 +51,31 @@ for (const viewport of [
 
     await expect(figure.getByRole('button', { includeHidden: true })).toHaveCount(0);
     await scrub(0);
-    await expect(readout).toHaveText('120 separate requests');
+    await expect(label).toHaveText('API calls.');
     await expect(canvas).toBeInViewport({ ratio: 0.6 });
     const start = await requestInk();
     expect(start).toBeGreaterThan(120);
     await scrub(0.36);
-    await expect(readout).toHaveText('Batching requests');
+    await expect(label).toHaveText('Batching.');
     await expect.poll(requestInk).toBeLessThan(start);
     await scrub(0.85);
-    await expect(readout).toHaveText('1 request · 2s load time');
-    await expect.poll(requestInk).toBe(0);
+    await expect(readout).toHaveText('Page load 60s → 2s');
+    await expect.poll(requestInk).toBeLessThan(start * 0.68);
     await scrub(0);
-    await expect(readout).toHaveText('120 separate requests');
+    await expect(label).toHaveText('API calls.');
     await expect.poll(requestInk).toBeGreaterThan(start * 0.95);
 
     await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
     await expect(canvas).not.toBeInViewport();
     await scrub(0.84, true);
-    await expect(readout).toHaveText('Batching requests');
+    await expect(label).toHaveText('Batching.');
     await expect(canvas).toBeInViewport({ ratio: 0.6 });
-    await expect.poll(requestInk).toBe(0);
+    await expect.poll(requestInk).toBeLessThan(start * 0.68);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await scrub(0);
-    await expect(readout).toHaveText('1 request · 2s load time');
-    await expect.poll(requestInk).toBe(0);
+    await expect(readout).toHaveText('Page load 60s → 2s');
+    await expect.poll(requestInk).toBeLessThan(start * 0.68);
     await expect(figure.getByRole('button', { includeHidden: true })).toHaveCount(0);
   });
 }

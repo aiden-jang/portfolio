@@ -8,9 +8,7 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-test('phone navigation uses the persistent menu without intro-only section dots', async ({
-  page,
-}) => {
+test('phone navigation exposes Work without intro-only section dots', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#mobile-bar')).toBeVisible();
   await expect(page.locator('#mobile-bar').getByText('Garage', { exact: true })).toBeVisible();
@@ -20,18 +18,11 @@ test('phone navigation uses the persistent menu without intro-only section dots'
   await expect(
     page.getByRole('navigation', { name: 'Section progress' }).filter({ visible: true }),
   ).toHaveCount(0);
-  await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-  const navigation = page.getByRole('navigation', { name: 'Mobile navigation' });
-  await expect(navigation.getByRole('link')).toHaveCount(6);
-  await navigation.getByRole('link', { name: 'More projects', exact: true }).click();
-  const gardenHeading = page.getByRole('heading', { name: 'bloomnote', exact: true });
-  await expect(gardenHeading).toBeInViewport();
-  await expect(gardenHeading).toBeFocused();
-  await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-  await navigation.getByRole('link', { name: 'About', exact: true }).click();
-  await expect(page.locator('#sec-about h2')).toBeInViewport();
-  await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-  await navigation.getByRole('link', { name: 'Intro', exact: true }).click();
+  await page.getByRole('link', { name: 'Work index' }).tap();
+  await expect(page.getByRole('heading', { name: 'Work index.' })).toBeVisible();
+  await page.getByRole('link', { name: 'bloomnote Grow a note' }).tap();
+  await expect(page.getByRole('heading', { name: 'How I built it: bloomnote' })).toBeInViewport();
+  await page.getByRole('button', { name: 'Aiden Jang, back to the top' }).tap();
   await expect(page.locator('#mobile-bar')).toBeVisible();
 });
 
@@ -44,9 +35,9 @@ test('phone controls have a touch close action and omit keyboard instructions', 
   // Exercise the touch controls while the lazy 3D scene is still loading.
   await page.route('**/assets/Scene-*.js', () => {});
   await page.goto('/');
-  const menu = page.getByRole('button', { name: /^Menu(?:$|: )/ });
-  await menu.click();
-  await page.getByRole('button', { name: 'Search controls' }).click();
+  const brand = page.getByRole('button', { name: 'Aiden Jang, back to the top' });
+  await brand.focus();
+  await page.keyboard.press('Control+k');
   const dialog = page.getByRole('dialog', { name: 'Command menu' });
   await expect(
     dialog.getByText('↑ ↓ browse · Home End jump · Enter run', { exact: true }),
@@ -58,16 +49,14 @@ test('phone controls have a touch close action and omit keyboard instructions', 
   await expect(dialog.getByText('Garage shared', { exact: true })).toBeVisible();
   await dialog.getByRole('button', { name: 'Close controls', exact: true }).click();
   await expect(dialog).toHaveCount(0);
-  await expect(menu).toBeFocused();
+  await expect(brand).toBeFocused();
   await page.setViewportSize({ width: 320, height: 844 });
-  await menu.tap();
-  await page.getByRole('button', { name: 'Search controls' }).tap();
+  await page.keyboard.press('Control+k');
   await expect(dialog.locator('.keyboard-hint').filter({ visible: true })).toHaveCount(0);
   await dialog.getByRole('button', { name: 'Close controls', exact: true }).tap();
-  await expect(menu).toBeFocused();
+  await expect(brand).toBeFocused();
 
   await page.setViewportSize({ width: 844, height: 844 });
-  const brand = page.getByRole('button', { name: 'Aiden Jang, back to the top' });
   await brand.focus();
   await page.keyboard.press('Control+k');
   await expect(dialog.locator('.keyboard-hint').filter({ visible: true })).toHaveCount(0);

@@ -1,13 +1,18 @@
 import { useCallback, useContext, useRef, useState, type Ref } from 'react';
 import example from '../../data/iodineExample.json';
 import { evidenceHref } from '../creative/storyRoutes';
+import { useScrollArrival } from '../../hooks/scrollArrival';
 import { useTimedScene } from '../../hooks/useTimedScene';
 import './iodine-timed.css';
-import { ProjectScene } from './ProjectScene';
+import './playable-iodine.css';
 import { OpenEvidence } from '../creative/evidenceNavigation';
 import { ControlIcon } from '../ControlIcon';
 
+const [first, editedLine, last] = example.after.trimEnd().split('\n');
+const [prefix, suffix] = editedLine.split('name.trim()');
+
 export function IodinePresentation() {
+  const stage = useRef<HTMLElement>(null);
   const frame = useRef<HTMLDivElement>(null);
   const openCase = useContext(OpenEvidence);
   const [restored, restore] = useState(false);
@@ -15,43 +20,113 @@ export function IodinePresentation() {
   const draw = useCallback((progress: number) => {
     restore(progress >= 1);
   }, []);
-  useTimedScene(frame, draw, {
+  const seek = useTimedScene(frame, draw, {
     enabled: !manual,
-    duration: 900,
-    hold: 1450,
+    duration: 1900,
+    hold: 2150,
     startThreshold: 0.4,
   });
+  const arrive = useCallback(
+    (fast: boolean) => {
+      if (fast) seek(0.64, 240);
+    },
+    [seek],
+  );
+  useScrollArrival(stage, !manual, arrive, frame);
 
   const href = evidenceHref('iodine', {
     edit: restored ? 'restored' : 'edited',
   });
   return (
-    <ProjectScene
+    <article
       id="project-iodine"
-      theme="iodine"
-      title={
-        <a
-          className="iodine-case-link"
-          aria-label="Read the iodine case study"
-          href={href}
-          onClick={(event) => openCase?.(event, 'iodine')}
-        >
-          iodine <ControlIcon name="arrow" />
-        </a>
-      }
-      links={null}
+      className="portfolio-undo"
+      aria-labelledby="iodine-proof-heading"
+      ref={stage}
     >
-      <div className="iodine-scene-content">
-        <RecoveryEditor
-          restored={restored}
-          frame={frame}
-          onToggleEdit={() => {
-            setManual(true);
-            restore(!restored);
-          }}
-        />
+      <div className="undo-sheet" data-study-pin>
+        <header className="undo-heading">
+          <h3 id="iodine-proof-heading">
+            <span className="sr-only">Iodine. </span>Undo.
+          </h3>
+          <a
+            aria-label="Read the iodine case study"
+            href={href}
+            onClick={(event) => openCase?.(event, 'iodine')}
+          >
+            Iodine case study <ControlIcon name="arrow" />
+          </a>
+        </header>
+        <div className="recovery undo-buffer" ref={frame} data-restored={restored}>
+          <div className="undo-file">
+            <code>{example.file}</code>
+            <span role="status" aria-live={manual ? 'polite' : 'off'}>
+              {restored ? 'Edit undone' : 'Agent edit'}
+            </span>
+          </div>
+          <div className="undo-lines">
+            <pre className="sr-only">
+              <code>{restored ? example.restored : example.after}</code>
+            </pre>
+            <div className="undo-row" data-line="1" aria-hidden="true">
+              <code>{first}</code>
+            </div>
+            <div className="undo-row recovery-line" data-line="2" aria-hidden="true">
+              <code>
+                {prefix}
+                <span className="undo-expression">
+                  name
+                  <span className="undo-token">
+                    <mark>.trim()</mark>
+                  </span>
+                </span>
+                {suffix}
+              </code>
+            </div>
+            <div className="undo-row" data-line="3" aria-hidden="true">
+              <code>{last}</code>
+            </div>
+          </div>
+          <div className="undo-actions">
+            <button
+              type="button"
+              onClick={() => {
+                setManual(true);
+                restore(!restored);
+              }}
+            >
+              {restored ? (
+                <ControlIcon name="reset" />
+              ) : (
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m9 4.5-5 5 5 5M4.5 9.5H14a5 5 0 0 1 0 10H9" />
+                </svg>
+              )}
+              {restored ? 'Reset edit' : 'Undo edit'}
+            </button>
+            <p>
+              {restored ? (
+                <>
+                  <code>{example.feedback.type}</code> sent to the agent.
+                </>
+              ) : (
+                'Snapshot saved for this edit.'
+              )}
+            </p>
+          </div>
+        </div>
       </div>
-    </ProjectScene>
+    </article>
   );
 }
 
@@ -67,8 +142,7 @@ export function RecoveryEditor({
   onToggleEdit?: () => void;
 }) {
   const source = useRef<HTMLDivElement>(null);
-  const [first, second, last] = example.after.trimEnd().split('\n');
-  const [start, end] = second!.trim().split('.trim()');
+  const [start, end] = editedLine.trim().split('.trim()');
   return (
     <div className="recovery" ref={frame} data-restored={restored}>
       <div className="recovery-meta">

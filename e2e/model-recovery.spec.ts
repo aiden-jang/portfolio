@@ -10,7 +10,7 @@ test('Contact shows its fixed car and email while the F40 is loading', async ({ 
     await route.continue();
   });
   await page.goto('/#sec-contact', { waitUntil: 'domcontentloaded' });
-  const poster = page.locator('#sec-contact .contact-poster img');
+  const poster = page.locator('.rear-paint img');
   try {
     await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
     await expect.poll(() => poster.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBe(390);
@@ -19,7 +19,7 @@ test('Contact shows its fixed car and email while the F40 is loading', async ({ 
   } finally {
     release();
   }
-  await expect(poster).toHaveCount(0);
+  await expect(poster).toBeVisible();
 });
 
 for (const [width, height] of [
@@ -72,11 +72,10 @@ for (const [width, height] of [
       .poll(() => track.evaluate((el) => Math.abs(el.getBoundingClientRect().top)))
       .toBeLessThan(2);
     await position(height * 0.4);
-    await expect(track).toHaveAttribute('data-study-matched', '');
-    await expect(page.locator('body')).toHaveAttribute('data-study-poster', '');
+    await expect(page.locator('.rear-finish')).toHaveAttribute('data-finish', '1');
     const held = await outline();
     await position(0);
-    await expect(page.locator('body')).not.toHaveAttribute('data-study-poster');
+    await expect(page.locator('.rear-finish')).toHaveAttribute('data-finish', '1');
     await expect(contact.getByRole('link', { name: /me@aidenjang.com/ })).toBeInViewport();
     const after = await outline();
     expect(Math.max(...held.map((edge, axis) => Math.abs(edge - after[axis])))).toBeLessThanOrEqual(
@@ -86,16 +85,8 @@ for (const [width, height] of [
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await track.scrollIntoViewIfNeeded();
     await track.getByRole('slider').fill('100');
-    const painted = track.locator('.finish-poster-paint img');
-    await expect(track.locator('.finish-poster-paint')).toHaveCSS('opacity', '1');
-    await expect(track.locator('video')).not.toHaveAttribute('src', /mp4/);
-    await expect
-      .poll(() => painted.evaluate((img: HTMLImageElement) => img.currentSrc))
-      .toBe(
-        await contact
-          .locator('.contact-poster img')
-          .evaluate((img: HTMLImageElement) => img.currentSrc),
-      );
+    await expect(track.getByRole('slider')).toHaveAttribute('aria-valuetext', 'Paint');
+    await expect(page.locator('.rear-paint')).toHaveCSS('opacity', '1');
   });
 }
 

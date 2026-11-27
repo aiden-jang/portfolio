@@ -13,6 +13,12 @@ export default defineConfig({
   build: {
     target: 'es2022',
     sourcemap: true,
+    rollupOptions: {
+      input: {
+        portfolio: resolve(__dirname, 'index.html'),
+        work: resolve(__dirname, 'work/index.html'),
+      },
+    },
   },
   server: { port: 5173, open: true },
 });

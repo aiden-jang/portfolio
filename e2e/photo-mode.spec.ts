@@ -95,13 +95,7 @@ for (const width of [1440, 390, 320]) {
       await expect(photo).toHaveCount(0);
       await expect(trigger).toBeFocused();
       expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('');
-      if (width < 768) {
-        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-        await page
-          .getByRole('navigation', { name: 'Mobile navigation' })
-          .getByRole('link', { name: 'Contact', exact: true })
-          .click();
-      } else await page.locator('#nav').getByRole('link', { name: 'Contact', exact: true }).click();
+      await page.evaluate(() => (location.hash = 'sec-contact'));
       await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
       await page.keyboard.press('Control+k');
       await page.getByRole('combobox', { name: 'Search portfolio controls' }).fill('photo');

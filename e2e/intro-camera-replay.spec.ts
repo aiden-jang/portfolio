@@ -14,15 +14,7 @@ for (const width of [1440, 390]) {
     const restart = page.getByRole('button', { name: 'Restart camera' });
     const dock = page.locator(width < 768 ? '#mobile-bar' : '#desktop-dock');
     const homepage = page.getByRole('button', { name: 'Aiden Jang, back to the top' });
-    const selectIntro = async () => {
-      const nav = page.getByRole('navigation', { name: 'Mobile navigation' });
-      if (width < 768) {
-        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-        await nav.getByRole('link', { name: 'Intro', exact: true }).click();
-      } else {
-        await page.locator('#nav').getByRole('link', { name: 'Intro', exact: true }).click();
-      }
-    };
+    const selectIntro = () => homepage.click();
     await expect(playing).toBeVisible({ timeout: 60_000 });
     expect(
       await page

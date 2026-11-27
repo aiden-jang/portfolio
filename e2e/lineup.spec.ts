@@ -111,15 +111,7 @@ for (const width of [1440, 390]) {
         page.getByRole('button', { name: /Lighting: After Hours/ }).filter({ visible: true }),
       ).toBeVisible();
       expect(new URL(page.url()).search).toBe(initialSetup);
-      if (phone) {
-        await page.getByRole('button', { name: /^Menu(?:$|: )/ }).click();
-        await page
-          .getByRole('navigation', { name: 'Mobile navigation' })
-          .getByRole('link', { name: 'Contact', exact: true })
-          .click();
-      } else {
-        await page.locator('#nav').getByRole('link', { name: 'Contact', exact: true }).click();
-      }
+      await page.evaluate(() => (location.hash = 'sec-contact'));
       await expect(page.locator('body')).toHaveAttribute('data-contact-view', 'visible');
       await page.keyboard.press('?');
       await expect(menu).toBeVisible();

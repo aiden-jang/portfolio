@@ -120,6 +120,9 @@ function onHashChange() {
 export const projectArrivalAnchors = [
   'project-everythingisfine',
   'project-iodine',
+  'project-bloomnote',
+  'project-iguess',
+  'project-mrrp',
   'project-wherever',
   'project-owewell',
   'project-worth',
