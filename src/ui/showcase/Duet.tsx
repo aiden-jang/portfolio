@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from 'react';
 import { DrawingPad } from './playable/DrawingPad';
+import type { PlantedFlower } from './playable/gardenFlowers';
 import { createPaper } from './playable/portrait';
 import { Icon } from './playable/StudioIcon';
 import { LeafHandoff } from './playable/LeafHandoff';
@@ -27,10 +28,12 @@ function smooth(n: number) {
 }
 
 export function Duet({
+  flower,
   drawTitle,
   drawLink,
   roomLink,
 }: {
+  flower: PlantedFlower | null;
   drawTitle: ReactNode;
   drawLink: ReactNode;
   roomLink: ReactNode;
@@ -253,6 +256,7 @@ export function Duet({
       <article
         ref={stop}
         id="project-mrrp"
+        tabIndex={-1}
         className="studio-room-track"
         aria-label="Bean’s room in mrrp"
       >
@@ -261,6 +265,7 @@ export function Duet({
             {warm && (
               <Suspense fallback={null}>
                 <StudioRoom
+                  flower={flower}
                   active={state === 'room' || state === 'static'}
                   marked={marked}
                   master={master}

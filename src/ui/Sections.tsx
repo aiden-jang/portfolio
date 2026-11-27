@@ -10,6 +10,7 @@ import { ExperienceSection } from './sections/Experience';
 import { IntroSection } from './sections/Intro';
 import { MoreProjectsSection, WorkSection } from './sections/Work';
 import { WorkModal } from './WorkModal';
+import { readWorkOrigin } from './workIndexNavigation';
 import type { WorkDetail } from '../types';
 
 export function Sections() {
@@ -42,6 +43,7 @@ export function Sections() {
       if (nextId === activeId.current) return;
       activeId.current = nextId;
       if (first && item) {
+        readWorkOrigin(workId(item));
         const target = isPortfolioProject(item)
           ? document.getElementById(`project-${workId(item)}`)
           : document.getElementById('sec-experience');
@@ -83,8 +85,12 @@ export function Sections() {
   }, []);
 
   const closeWork = useCallback(() => {
-    if (window.history.state?.portfolioWork) {
+    if (window.history.state?.portfolioWork || window.history.state?.portfolioWorkIndex) {
       window.history.back();
+      return;
+    }
+    if (typeof history.state?.workIndexFallback === 'string') {
+      location.replace('/work/#row-' + encodeURIComponent(history.state.workIndexFallback));
       return;
     }
     activeId.current = null;

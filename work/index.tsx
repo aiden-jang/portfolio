@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { WORK_ITEMS, workId } from '../src/data/workItems';
 import { AboutReel } from '../src/ui/sections/AboutReel';
 import { ExperienceHistory } from '../src/ui/sections/Experience';
+import { openWorkRow, rememberWorkRow, useWorkIndexReturn } from '../src/ui/workIndexNavigation';
 import rearFinishImage from '../wing-art/desktop-rear/12.jpg';
 import './index.css';
 
@@ -25,12 +26,14 @@ const destinations: Record<string, string> = {
   platform: 'work/platform',
 };
 export function WorkIndex() {
+  useWorkIndexReturn();
   const [cover, setCover] = useState(entries[0]);
   return (
     <div className="index-page">
       <header className="index-nav">
         <a href="/">AJ / portfolio</a>
         <nav aria-label="Portfolio">
+          <a href="#experience">Experience</a>
           <a href="/?garage=studio">Garage</a>
           <a href="/#sec-contact">Contact</a>
         </nav>
@@ -50,10 +53,28 @@ export function WorkIndex() {
                   onFocus={() => setCover(entry)}
                   onPointerEnter={() => setCover(entry)}
                 >
-                  <a className="index-entry" href={'/#' + (destinations[id] ?? 'project-' + id)}>
+                  <a
+                    className="index-entry"
+                    data-work-row={id}
+                    href={'/#' + (destinations[id] ?? 'project-' + id)}
+                    onClick={(event) => {
+                      if (
+                        event.metaKey ||
+                        event.ctrlKey ||
+                        event.shiftKey ||
+                        event.altKey ||
+                        event.button !== 0
+                      )
+                        return;
+                      if (id === 'platform') {
+                        event.preventDefault();
+                        openWorkRow(event.currentTarget, id);
+                      } else rememberWorkRow(event.currentTarget);
+                    }}
+                  >
                     <strong>{title}</strong>
                     <span>{description}</span>
-                    <i aria-hidden="true">↗</i>
+                    <i aria-hidden="true">→</i>
                   </a>
                   {item?.link && (
                     <a
@@ -76,11 +97,7 @@ export function WorkIndex() {
           </figure>
         </div>
         <section className="index-history" id="experience">
-          <ExperienceHistory
-            onOpen={(item) => {
-              window.location.href = '/#work/' + workId(item);
-            }}
-          />
+          <ExperienceHistory onOpen={(item, row) => openWorkRow(row, workId(item))} />
         </section>
         <section className="index-about" id="about">
           <div>
@@ -96,8 +113,8 @@ export function WorkIndex() {
         </section>
       </main>
       <footer>
-        <a href="/">Back to the Corvette ↗</a>
-        <a href="/#sec-contact">Contact ↗</a>
+        <a href="/">Back to the Corvette →</a>
+        <a href="/#sec-contact">Contact →</a>
       </footer>
     </div>
   );

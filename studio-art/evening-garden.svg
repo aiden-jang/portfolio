@@ -1,0 +1,649 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs>
+ <linearGradient id="sky" x2=".23" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#1b2739"/><stop offset=".35" stop-color="#384052"/><stop offset=".64" stop-color="#9f7172"/><stop offset=".80" stop-color="#df9a79"/><stop offset="1" stop-color="#d5a278"/></linearGradient>
+ <radialGradient id="halo"><stop stop-color="#ffca88" stop-opacity=".6"/><stop offset=".48" stop-color="#efb28b" stop-opacity=".30"/><stop offset="1" stop-color="#e1a385" stop-opacity="0"/></radialGradient>
+ <linearGradient id="shade"><stop stop-color="#101f2b" stop-opacity=".56"/><stop offset=".54" stop-color="#1e2631" stop-opacity=".06"/><stop offset="1" stop-color="#252234" stop-opacity="0"/></linearGradient>
+ <g id="blades" fill="currentColor"><path d="M-2 1Q-6-30-23-45Q-9-39 0-9Q-4-48 3-72Q1-32 3-10Q12-41 27-52Q13-27 6 1Z"/></g>
+ <g id="spike" stroke="currentColor" stroke-linecap="round" fill="currentColor">
+ <path d="M0 0Q4-26-5-72M0-19Q10-42 17-58M0-12Q-6-35-20-47" fill="none" stroke-width="1.4"/>
+ <path d="M-5-70q-9-4-6-11 6 4 6 11m1 5q4-10 7-9 0 8-7 9m1 5q-8-3-8-9 6 1 8 9m1 6q7-7 8-11 1 9-8 11m18-4q1-10 6-13 1 7-6 13m-3 6q-3-5-2-11 4 4 2 11m-30 7q-8-2-10-8 5 0 10 8"/></g>
+ <g id="fern" stroke="currentColor" stroke-width="1.5" fill="currentColor"><path d="M0 0Q-3-36 22-80" fill="none"/>
+<path d="M0.0 -10.0q-17.0 -2 -21.0 -15q11.9 2 21.0 15m0 0q4 -13 25.0 -19q-4 12 -25.0 19"/>
+<path d="M0.2 -16.8q-15.6 -2 -19.6 -15q10.9 2 19.6 15m0 0q4 -13 23.6 -19q-4 12 -23.6 19"/>
+<path d="M0.8 -23.6q-14.2 -2 -18.2 -15q9.9 2 18.2 15m0 0q4 -13 22.2 -19q-4 12 -22.2 19"/>
+<path d="M1.8 -30.4q-12.8 -2 -16.8 -15q9.0 2 16.8 15m0 0q4 -13 20.8 -19q-4 12 -20.8 19"/>
+<path d="M3.2 -37.2q-11.4 -2 -15.4 -15q8.0 2 15.4 15m0 0q4 -13 19.4 -19q-4 12 -19.4 19"/>
+<path d="M4.9 -44.0q-10.0 -2 -14.0 -15q7.0 2 14.0 15m0 0q4 -13 18.0 -19q-4 12 -18.0 19"/>
+<path d="M7.1 -50.8q-8.6 -2 -12.6 -15q6.0 2 12.6 15m0 0q4 -13 16.6 -19q-4 12 -16.6 19"/>
+<path d="M9.7 -57.6q-7.2 -2 -11.2 -15q5.0 2 11.2 15m0 0q4 -13 15.2 -19q-4 12 -15.2 19"/>
+<path d="M12.6 -64.4q-5.8 -2 -9.8 -15q4.1 2 9.8 15m0 0q4 -13 13.8 -19q-4 12 -13.8 19"/>
+</g>
+ <g id="umbel" stroke="currentColor" stroke-width="1.2" fill="none"><path d="M0 0Q0-28 3-56m0 0-15-11m15 11-6-15m6 15 5-15m-5 15 17-11"/><g fill="currentColor" stroke="none"><ellipse cx="-13" cy="-68" rx="6" ry="2"/><ellipse cx="-4" cy="-72" rx="6" ry="2.5"/><ellipse cx="9" cy="-72" rx="6" ry="2"/><ellipse cx="21" cy="-68" rx="5" ry="2"/></g></g>
+<g id="field-flower">
+<path d="M0 0Q-2-14 1-27M0-6q-8-3-9-8 7 1 9 8m0-5q4-7 10-8-3 6-10 8" fill="#54746d" stroke="#54746d" stroke-width=".8"/>
+<g transform="translate(1 -27)" fill="currentColor"><ellipse cy="-3" rx="1.8" ry="3.7"/><ellipse cy="-3" rx="1.8" ry="3.7" transform="rotate(72)"/><ellipse cy="-3" rx="1.8" ry="3.7" transform="rotate(144)"/><ellipse cy="-3" rx="1.8" ry="3.7" transform="rotate(216)"/><ellipse cy="-3" rx="1.8" ry="3.7" transform="rotate(288)"/><circle r="1.5" fill="#d4b081"/></g></g></defs><path fill="url(#sky)" d="M0 0h1600v900H0z"/><ellipse cx="1220" cy="569" rx="430" ry="270" fill="url(#halo)"/>
+<circle cx="1212" cy="531" r="34" fill="#ffd9aa"/><g fill="#b38c91" opacity=".27"><path d="M825 419q110-12 178-8t119 2q-105 9-178 7zM1101 461q75-8 132-3t155-1q-97 8-166 6zM1268 390q83-10 191-10l-56 5z"/></g>
+<circle cx="808" cy="115" r="1" fill="#f9e8d4" opacity="0.49"/>
+<circle cx="542" cy="254" r="0.8" fill="#f9e8d4" opacity="0.58"/>
+<circle cx="1069" cy="192" r="1.6" fill="#f9e8d4" opacity="0.53"/>
+<circle cx="579" cy="84" r="1.3" fill="#f9e8d4" opacity="0.39"/>
+<circle cx="347" cy="389" r="1.6" fill="#f9e8d4" opacity="0.46"/>
+<circle cx="1292" cy="315" r="0.8" fill="#f9e8d4" opacity="0.51"/>
+<circle cx="701" cy="246" r="0.8" fill="#f9e8d4" opacity="0.27"/>
+<circle cx="1362" cy="377" r="1" fill="#f9e8d4" opacity="0.60"/>
+<circle cx="1564" cy="163" r="1.6" fill="#f9e8d4" opacity="0.39"/>
+<circle cx="1435" cy="344" r="1.6" fill="#f9e8d4" opacity="0.47"/>
+<circle cx="1480" cy="295" r="0.8" fill="#f9e8d4" opacity="0.31"/>
+<circle cx="63" cy="108" r="1" fill="#f9e8d4" opacity="0.62"/>
+<circle cx="170" cy="131" r="1.3" fill="#f9e8d4" opacity="0.37"/>
+<circle cx="504" cy="206" r="0.8" fill="#f9e8d4" opacity="0.48"/>
+<circle cx="828" cy="69" r="1.3" fill="#f9e8d4" opacity="0.44"/>
+<circle cx="132" cy="212" r="1.6" fill="#f9e8d4" opacity="0.54"/>
+<circle cx="596" cy="315" r="1.3" fill="#f9e8d4" opacity="0.33"/>
+<circle cx="549" cy="72" r="1.3" fill="#f9e8d4" opacity="0.53"/>
+<circle cx="509" cy="76" r="1.3" fill="#f9e8d4" opacity="0.29"/>
+<circle cx="750" cy="191" r="1.6" fill="#f9e8d4" opacity="0.61"/>
+<circle cx="554" cy="35" r="0.8" fill="#f9e8d4" opacity="0.56"/>
+<circle cx="218" cy="266" r="1" fill="#f9e8d4" opacity="0.29"/>
+<circle cx="452" cy="427" r="1" fill="#f9e8d4" opacity="0.35"/>
+<circle cx="664" cy="234" r="1.6" fill="#f9e8d4" opacity="0.44"/>
+<circle cx="443" cy="410" r="0.8" fill="#f9e8d4" opacity="0.54"/>
+<circle cx="1524" cy="423" r="1.3" fill="#f9e8d4" opacity="0.46"/>
+<circle cx="928" cy="94" r="1.6" fill="#f9e8d4" opacity="0.44"/>
+<circle cx="260" cy="193" r="1" fill="#f9e8d4" opacity="0.61"/>
+<circle cx="571" cy="262" r="1.3" fill="#f9e8d4" opacity="0.37"/>
+<circle cx="372" cy="282" r="0.8" fill="#f9e8d4" opacity="0.38"/>
+<circle cx="558" cy="365" r="1.3" fill="#f9e8d4" opacity="0.39"/>
+<circle cx="100" cy="56" r="1" fill="#f9e8d4" opacity="0.34"/>
+<circle cx="138" cy="90" r="1.6" fill="#f9e8d4" opacity="0.26"/>
+<circle cx="248" cy="77" r="1.3" fill="#f9e8d4" opacity="0.58"/>
+<circle cx="685" cy="200" r="1.3" fill="#f9e8d4" opacity="0.47"/>
+<circle cx="84" cy="353" r="0.8" fill="#f9e8d4" opacity="0.43"/>
+<circle cx="460" cy="261" r="1" fill="#f9e8d4" opacity="0.38"/>
+<circle cx="1211" cy="145" r="1.6" fill="#f9e8d4" opacity="0.28"/>
+<circle cx="912" cy="143" r="0.8" fill="#f9e8d4" opacity="0.57"/>
+<circle cx="103" cy="381" r="1.3" fill="#f9e8d4" opacity="0.64"/>
+<circle cx="1284" cy="372" r="1.3" fill="#f9e8d4" opacity="0.34"/>
+<circle cx="1125" cy="127" r="1" fill="#f9e8d4" opacity="0.33"/>
+<circle cx="544" cy="242" r="1" fill="#f9e8d4" opacity="0.51"/>
+<circle cx="844" cy="52" r="0.8" fill="#f9e8d4" opacity="0.34"/>
+<circle cx="124" cy="28" r="0.8" fill="#f9e8d4" opacity="0.52"/>
+<circle cx="399" cy="237" r="1.6" fill="#f9e8d4" opacity="0.44"/>
+<circle cx="641" cy="117" r="1.6" fill="#f9e8d4" opacity="0.50"/>
+<circle cx="317" cy="354" r="1.6" fill="#f9e8d4" opacity="0.38"/>
+<path fill="#9f7c80" d="M0 572Q110 556 263 578T521 565Q648 544 718 553T949 566Q1101 533 1202 557T1456 539L1600 555V900H0Z"/>
+<path fill="#776676" d="M0 589Q145 551 260 578T538 608Q737 641 886 611T1081 594Q1230 571 1270 584T1478 575L1600 592V900H0Z"/>
+<path fill="#65596a" d="M0 610Q160 577 325 605T453 624Q690 676 908 620T1223 601Q1381 631 1600 598V900H0Z"/>
+<path fill="#484958" d="M0 635Q158 628 339 653T713 646Q947 600 1156 631T1600 617V900H0Z"/>
+<g color="#494b57"><path fill="#494b57" d="M0 900 L0 670 L20 673 L40 675 L60 678 L80 680 L100 682 L120 684 L140 685 L160 687 L180 687 L200 688 L220 688 L240 688 L260 688 L280 687 L300 687 L320 686 L340 685 L360 684 L380 684 L400 683 L420 682 L440 681 L460 681 L480 680 L500 680 L520 679 L540 678 L560 678 L580 677 L600 676 L620 675 L640 674 L660 672 L680 671 L700 669 L720 667 L740 665 L760 663 L780 661 L800 658 L820 656 L840 654 L860 653 L880 651 L900 650 L920 649 L940 648 L960 648 L980 648 L1000 649 L1020 650 L1040 651 L1060 652 L1080 654 L1100 656 L1120 658 L1140 660 L1160 662 L1180 664 L1200 666 L1220 668 L1240 670 L1260 671 L1280 673 L1300 674 L1320 675 L1340 676 L1360 676 L1380 677 L1400 678 L1420 678 L1440 679 L1460 680 L1480 681 L1500 681 L1520 682 L1540 683 L1560 684 L1580 685 L1600 686V900Z"/>
+<use href="#blades" transform="translate(-4.2 672) rotate(13) scale(-0.31 0.31)"/>
+<use href="#fern" transform="translate(21.6 676) rotate(11) scale(-0.33 0.33)"/>
+<use href="#blades" transform="translate(31.3 677) rotate(14) scale(0.35 0.35)"/>
+<use href="#blades" transform="translate(38.2 678) rotate(8) scale(-0.36 0.36)"/>
+<use href="#blades" transform="translate(57.1 680) rotate(23) scale(-0.37 0.37)"/>
+<use href="#spike" transform="translate(76.9 683) rotate(-24) scale(0.39 0.39)"/>
+<use href="#spike" transform="translate(85.3 684) rotate(19) scale(0.38 0.38)"/>
+<use href="#blades" transform="translate(98.4 685) rotate(5) scale(0.31 0.31)"/>
+<use href="#spike" transform="translate(134.6 688) rotate(4) scale(-0.36 0.36)"/>
+<use href="#blades" transform="translate(147.5 689) rotate(17) scale(0.39 0.39)"/>
+<use href="#fern" transform="translate(162.6 690) rotate(12) scale(0.31 0.31)"/>
+<use href="#umbel" transform="translate(163.1 690) rotate(-23) scale(-0.42 0.42)"/>
+<use href="#umbel" transform="translate(196.8 691) rotate(-9) scale(-0.25 0.25)"/>
+<use href="#spike" transform="translate(212.0 691) rotate(1) scale(0.27 0.27)"/>
+<use href="#blades" transform="translate(227.1 691) rotate(13) scale(-0.26 0.26)"/>
+<use href="#fern" transform="translate(237.6 691) rotate(6) scale(0.31 0.31)"/>
+<use href="#blades" transform="translate(241.2 691) rotate(10) scale(0.31 0.31)"/>
+<use href="#blades" transform="translate(273.4 690) rotate(16) scale(-0.37 0.37)"/>
+<use href="#blades" transform="translate(274.2 690) rotate(8) scale(0.37 0.37)"/>
+<use href="#spike" transform="translate(300.0 690) rotate(-24) scale(0.42 0.42)"/>
+<use href="#blades" transform="translate(303.2 690) rotate(6) scale(-0.33 0.33)"/>
+<use href="#fern" transform="translate(318.9 689) rotate(-7) scale(0.27 0.27)"/>
+<use href="#blades" transform="translate(338.9 688) rotate(-4) scale(0.40 0.40)"/>
+<use href="#blades" transform="translate(349.0 688) rotate(-11) scale(0.33 0.33)"/>
+<use href="#fern" transform="translate(379.3 687) rotate(-9) scale(0.32 0.32)"/>
+<use href="#blades" transform="translate(379.8 687) rotate(12) scale(-0.40 0.40)"/>
+<use href="#blades" transform="translate(406.6 685) rotate(0) scale(0.37 0.37)"/>
+<use href="#blades" transform="translate(425.0 685) rotate(-12) scale(0.33 0.33)"/>
+<use href="#blades" transform="translate(432.2 685) rotate(-4) scale(0.41 0.41)"/>
+<use href="#spike" transform="translate(454.9 684) rotate(21) scale(0.42 0.42)"/>
+<use href="#spike" transform="translate(460.9 684) rotate(4) scale(-0.37 0.37)"/>
+<use href="#spike" transform="translate(490.9 683) rotate(-9) scale(0.23 0.23)"/>
+<use href="#fern" transform="translate(503.8 682) rotate(12) scale(0.29 0.29)"/>
+<use href="#spike" transform="translate(502.0 683) rotate(17) scale(-0.40 0.40)"/>
+<use href="#spike" transform="translate(538.9 681) rotate(-20) scale(0.28 0.28)"/>
+<use href="#blades" transform="translate(536.7 682) rotate(-22) scale(-0.23 0.23)"/>
+<use href="#blades" transform="translate(564.8 681) rotate(13) scale(0.26 0.26)"/>
+<use href="#fern" transform="translate(567.2 681) rotate(-10) scale(0.38 0.38)"/>
+<use href="#blades" transform="translate(595.5 679) rotate(8) scale(0.40 0.40)"/>
+<use href="#fern" transform="translate(607.1 679) rotate(4) scale(0.37 0.37)"/>
+<use href="#blades" transform="translate(627.2 678) rotate(22) scale(-0.42 0.42)"/>
+<use href="#umbel" transform="translate(644.0 677) rotate(-2) scale(-0.41 0.41)"/>
+<use href="#umbel" transform="translate(659.6 675) rotate(-19) scale(0.39 0.39)"/>
+<use href="#umbel" transform="translate(678.1 674) rotate(-23) scale(-0.27 0.27)"/>
+<use href="#umbel" transform="translate(687.1 673) rotate(-6) scale(0.42 0.42)"/>
+<use href="#fern" transform="translate(698.5 672) rotate(-7) scale(0.22 0.22)"/>
+<use href="#fern" transform="translate(720.5 670) rotate(9) scale(0.31 0.31)"/>
+<use href="#spike" transform="translate(735.7 669) rotate(-15) scale(-0.30 0.30)"/>
+<use href="#spike" transform="translate(756.9 666) rotate(6) scale(-0.33 0.33)"/>
+<use href="#fern" transform="translate(768.4 665) rotate(-24) scale(0.34 0.34)"/>
+<use href="#blades" transform="translate(773.3 664) rotate(21) scale(0.42 0.42)"/>
+<use href="#blades" transform="translate(788.9 663) rotate(-16) scale(0.41 0.41)"/>
+<use href="#umbel" transform="translate(797.4 662) rotate(-18) scale(-0.31 0.31)"/>
+<use href="#fern" transform="translate(817.0 660) rotate(-2) scale(0.29 0.29)"/>
+<use href="#umbel" transform="translate(843.7 657) rotate(-10) scale(-0.26 0.26)"/>
+<use href="#fern" transform="translate(846.9 657) rotate(1) scale(0.25 0.25)"/>
+<use href="#spike" transform="translate(871.7 655) rotate(-12) scale(-0.41 0.41)"/>
+<use href="#fern" transform="translate(881.2 654) rotate(-19) scale(-0.27 0.27)"/>
+<use href="#fern" transform="translate(890.0 653) rotate(-13) scale(0.38 0.38)"/>
+<use href="#umbel" transform="translate(915.7 652) rotate(10) scale(-0.33 0.33)"/>
+<use href="#umbel" transform="translate(922.0 652) rotate(17) scale(0.26 0.26)"/>
+<use href="#blades" transform="translate(942.7 651) rotate(-1) scale(0.37 0.37)"/>
+<use href="#blades" transform="translate(973.1 651) rotate(21) scale(-0.31 0.31)"/>
+<use href="#blades" transform="translate(978.3 651) rotate(7) scale(-0.35 0.35)"/>
+<use href="#blades" transform="translate(984.9 651) rotate(8) scale(-0.24 0.24)"/>
+<use href="#fern" transform="translate(1019.2 653) rotate(14) scale(0.41 0.41)"/>
+<use href="#fern" transform="translate(1035.5 654) rotate(-9) scale(0.33 0.33)"/>
+<use href="#blades" transform="translate(1033.8 653) rotate(-14) scale(0.35 0.35)"/>
+<use href="#spike" transform="translate(1050.1 655) rotate(-2) scale(-0.25 0.25)"/>
+<use href="#blades" transform="translate(1071.5 656) rotate(-17) scale(0.37 0.37)"/>
+<use href="#umbel" transform="translate(1087.5 658) rotate(1) scale(0.42 0.42)"/>
+<use href="#blades" transform="translate(1106.0 660) rotate(22) scale(0.40 0.40)"/>
+<use href="#blades" transform="translate(1122.3 661) rotate(16) scale(0.35 0.35)"/>
+<use href="#spike" transform="translate(1136.3 663) rotate(10) scale(0.34 0.34)"/>
+<use href="#blades" transform="translate(1153.0 665) rotate(18) scale(0.24 0.24)"/>
+<use href="#umbel" transform="translate(1170.3 666) rotate(20) scale(-0.39 0.39)"/>
+<use href="#umbel" transform="translate(1177.6 667) rotate(16) scale(-0.31 0.31)"/>
+<use href="#blades" transform="translate(1194.2 669) rotate(14) scale(0.23 0.23)"/>
+<use href="#umbel" transform="translate(1213.7 671) rotate(-8) scale(0.37 0.37)"/>
+<use href="#umbel" transform="translate(1238.1 673) rotate(-12) scale(0.36 0.36)"/>
+<use href="#blades" transform="translate(1243.9 673) rotate(3) scale(-0.39 0.39)"/>
+<use href="#fern" transform="translate(1258.1 674) rotate(-4) scale(-0.33 0.33)"/>
+<use href="#blades" transform="translate(1261.9 674) rotate(8) scale(0.41 0.41)"/>
+<use href="#fern" transform="translate(1294.8 677) rotate(6) scale(0.27 0.27)"/>
+<use href="#spike" transform="translate(1314.2 678) rotate(11) scale(-0.23 0.23)"/>
+<use href="#blades" transform="translate(1317.2 678) rotate(-15) scale(0.33 0.33)"/>
+<use href="#blades" transform="translate(1326.1 678) rotate(-14) scale(0.36 0.36)"/>
+<use href="#spike" transform="translate(1358.4 679) rotate(-18) scale(-0.29 0.29)"/>
+<use href="#spike" transform="translate(1360.8 680) rotate(-5) scale(0.26 0.26)"/>
+<use href="#blades" transform="translate(1375.9 680) rotate(11) scale(0.22 0.22)"/>
+<use href="#fern" transform="translate(1396.8 681) rotate(-6) scale(-0.43 0.43)"/>
+<use href="#umbel" transform="translate(1405.8 681) rotate(-11) scale(-0.36 0.36)"/>
+<use href="#fern" transform="translate(1429.2 682) rotate(-22) scale(-0.28 0.28)"/>
+<use href="#fern" transform="translate(1435.9 682) rotate(1) scale(0.33 0.33)"/>
+<use href="#blades" transform="translate(1461.7 683) rotate(22) scale(0.23 0.23)"/>
+<use href="#blades" transform="translate(1470.5 683) rotate(8) scale(-0.30 0.30)"/>
+<use href="#blades" transform="translate(1479.5 684) rotate(10) scale(-0.23 0.23)"/>
+<use href="#blades" transform="translate(1518.3 685) rotate(-18) scale(0.37 0.37)"/>
+<use href="#fern" transform="translate(1512.5 685) rotate(-7) scale(0.23 0.23)"/>
+<use href="#blades" transform="translate(1547.4 687) rotate(18) scale(0.28 0.28)"/>
+<use href="#umbel" transform="translate(1549.5 687) rotate(7) scale(0.36 0.36)"/>
+<use href="#blades" transform="translate(1579.3 688) rotate(-10) scale(0.27 0.27)"/>
+<use href="#blades" transform="translate(1585.8 689) rotate(-3) scale(0.29 0.29)"/>
+<use href="#umbel" transform="translate(1606.9 690) rotate(19) scale(0.34 0.34)"/>
+</g>
+<g color="#343e47"><path fill="#343e47" d="M0 900 L0 733 L20 736 L40 738 L60 739 L80 741 L100 741 L120 742 L140 742 L160 741 L180 741 L200 739 L220 738 L240 736 L260 733 L280 731 L300 728 L320 726 L340 723 L360 720 L380 718 L400 715 L420 713 L440 711 L460 709 L480 708 L500 706 L520 705 L540 704 L560 703 L580 703 L600 702 L620 702 L640 701 L660 701 L680 700 L700 700 L720 700 L740 699 L760 699 L780 699 L800 699 L820 699 L840 700 L860 700 L880 701 L900 702 L920 704 L940 706 L960 708 L980 710 L1000 713 L1020 716 L1040 718 L1060 721 L1080 724 L1100 727 L1120 730 L1140 733 L1160 735 L1180 737 L1200 739 L1220 740 L1240 741 L1260 741 L1280 741 L1300 741 L1320 740 L1340 739 L1360 737 L1380 736 L1400 734 L1420 732 L1440 729 L1460 727 L1480 725 L1500 723 L1520 721 L1540 719 L1560 718 L1580 716 L1600 715V900Z"/>
+<use href="#spike" transform="translate(5.6 737) rotate(8) scale(0.56 0.56)"/>
+<use href="#blades" transform="translate(13.2 738) rotate(-13) scale(-0.55 0.55)"/>
+<use href="#spike" transform="translate(39.6 741) rotate(-2) scale(0.47 0.47)"/>
+<use href="#fern" transform="translate(52.3 742) rotate(23) scale(-0.54 0.54)"/>
+<use href="#fern" transform="translate(64.6 743) rotate(4) scale(-0.49 0.49)"/>
+<use href="#umbel" transform="translate(85.6 744) rotate(-14) scale(0.64 0.64)"/>
+<use href="#blades" transform="translate(102.3 745) rotate(-9) scale(0.84 0.84)"/>
+<use href="#blades" transform="translate(115.0 745) rotate(-24) scale(0.51 0.51)"/>
+<use href="#blades" transform="translate(128.7 745) rotate(10) scale(-0.48 0.48)"/>
+<use href="#spike" transform="translate(155.9 745) rotate(-1) scale(-0.42 0.42)"/>
+<use href="#spike" transform="translate(156.4 745) rotate(-16) scale(-0.55 0.55)"/>
+<use href="#fern" transform="translate(171.9 744) rotate(-18) scale(0.49 0.49)"/>
+<use href="#fern" transform="translate(189.6 743) rotate(-13) scale(0.55 0.55)"/>
+<use href="#blades" transform="translate(215.3 741) rotate(-9) scale(-0.70 0.70)"/>
+<use href="#blades" transform="translate(231.2 740) rotate(-16) scale(-0.47 0.47)"/>
+<use href="#spike" transform="translate(251.0 737) rotate(-10) scale(0.56 0.56)"/>
+<use href="#blades" transform="translate(266.4 736) rotate(-9) scale(-0.71 0.71)"/>
+<use href="#spike" transform="translate(269.5 735) rotate(13) scale(-0.74 0.74)"/>
+<use href="#blades" transform="translate(294.3 732) rotate(-23) scale(-0.59 0.59)"/>
+<use href="#blades" transform="translate(309.3 730) rotate(21) scale(0.63 0.63)"/>
+<use href="#spike" transform="translate(312.8 730) rotate(-16) scale(0.51 0.51)"/>
+<use href="#spike" transform="translate(349.9 725) rotate(-24) scale(0.55 0.55)"/>
+<use href="#blades" transform="translate(351.1 724) rotate(1) scale(0.67 0.67)"/>
+<use href="#blades" transform="translate(379.5 721) rotate(1) scale(0.80 0.80)"/>
+<use href="#umbel" transform="translate(379.2 721) rotate(15) scale(0.51 0.51)"/>
+<use href="#umbel" transform="translate(415.3 716) rotate(-24) scale(0.48 0.48)"/>
+<use href="#fern" transform="translate(425.6 715) rotate(-19) scale(0.68 0.68)"/>
+<use href="#blades" transform="translate(435.0 714) rotate(16) scale(0.70 0.70)"/>
+<use href="#blades" transform="translate(445.2 713) rotate(-8) scale(-0.48 0.48)"/>
+<use href="#spike" transform="translate(457.9 712) rotate(20) scale(-0.75 0.75)"/>
+<use href="#umbel" transform="translate(473.3 711) rotate(12) scale(0.53 0.53)"/>
+<use href="#umbel" transform="translate(505.5 709) rotate(22) scale(-0.78 0.78)"/>
+<use href="#umbel" transform="translate(514.9 708) rotate(3) scale(-0.43 0.43)"/>
+<use href="#spike" transform="translate(538.9 707) rotate(-13) scale(-0.80 0.80)"/>
+<use href="#spike" transform="translate(557.0 706) rotate(-12) scale(0.59 0.59)"/>
+<use href="#umbel" transform="translate(564.9 706) rotate(-15) scale(0.62 0.62)"/>
+<use href="#blades" transform="translate(571.0 706) rotate(-14) scale(0.56 0.56)"/>
+<use href="#fern" transform="translate(598.8 705) rotate(-13) scale(-0.84 0.84)"/>
+<use href="#fern" transform="translate(613.0 705) rotate(1) scale(-0.64 0.64)"/>
+<use href="#spike" transform="translate(620.2 705) rotate(-18) scale(-0.84 0.84)"/>
+<use href="#blades" transform="translate(640.3 704) rotate(-13) scale(-0.48 0.48)"/>
+<use href="#blades" transform="translate(671.5 703) rotate(-8) scale(0.77 0.77)"/>
+<use href="#spike" transform="translate(667.4 704) rotate(17) scale(0.70 0.70)"/>
+<use href="#blades" transform="translate(683.1 703) rotate(-10) scale(-0.58 0.58)"/>
+<use href="#umbel" transform="translate(715.9 703) rotate(5) scale(0.80 0.80)"/>
+<use href="#umbel" transform="translate(720.2 703) rotate(2) scale(-0.68 0.68)"/>
+<use href="#blades" transform="translate(755.0 702) rotate(16) scale(0.46 0.46)"/>
+<use href="#blades" transform="translate(764.6 702) rotate(-22) scale(-0.80 0.80)"/>
+<use href="#blades" transform="translate(774.1 702) rotate(-15) scale(0.73 0.73)"/>
+<use href="#umbel" transform="translate(794.6 702) rotate(-12) scale(-0.58 0.58)"/>
+<use href="#umbel" transform="translate(803.8 702) rotate(8) scale(0.66 0.66)"/>
+<use href="#umbel" transform="translate(832.5 703) rotate(18) scale(0.46 0.46)"/>
+<use href="#fern" transform="translate(845.4 703) rotate(-2) scale(-0.78 0.78)"/>
+<use href="#blades" transform="translate(846.8 703) rotate(11) scale(-0.65 0.65)"/>
+<use href="#blades" transform="translate(882.4 704) rotate(-6) scale(0.56 0.56)"/>
+<use href="#fern" transform="translate(899.4 705) rotate(-3) scale(-0.47 0.47)"/>
+<use href="#umbel" transform="translate(908.5 706) rotate(-14) scale(0.43 0.43)"/>
+<use href="#fern" transform="translate(931.0 708) rotate(-19) scale(-0.65 0.65)"/>
+<use href="#blades" transform="translate(928.4 708) rotate(-22) scale(0.45 0.45)"/>
+<use href="#fern" transform="translate(958.1 711) rotate(-8) scale(0.65 0.65)"/>
+<use href="#fern" transform="translate(963.1 711) rotate(18) scale(-0.53 0.53)"/>
+<use href="#spike" transform="translate(986.6 714) rotate(9) scale(-0.47 0.47)"/>
+<use href="#spike" transform="translate(1010.6 717) rotate(-14) scale(0.82 0.82)"/>
+<use href="#blades" transform="translate(1009.4 717) rotate(7) scale(0.56 0.56)"/>
+<use href="#blades" transform="translate(1039.8 721) rotate(5) scale(-0.46 0.46)"/>
+<use href="#blades" transform="translate(1056.5 724) rotate(-13) scale(-0.74 0.74)"/>
+<use href="#umbel" transform="translate(1059.4 724) rotate(-22) scale(-0.46 0.46)"/>
+<use href="#blades" transform="translate(1091.9 729) rotate(-14) scale(0.48 0.48)"/>
+<use href="#blades" transform="translate(1091.2 729) rotate(-12) scale(0.84 0.84)"/>
+<use href="#umbel" transform="translate(1106.9 731) rotate(21) scale(-0.53 0.53)"/>
+<use href="#fern" transform="translate(1127.3 734) rotate(2) scale(0.49 0.49)"/>
+<use href="#fern" transform="translate(1150.2 737) rotate(-18) scale(-0.54 0.54)"/>
+<use href="#blades" transform="translate(1168.8 739) rotate(-17) scale(0.67 0.67)"/>
+<use href="#umbel" transform="translate(1186.3 741) rotate(-6) scale(0.78 0.78)"/>
+<use href="#blades" transform="translate(1189.4 741) rotate(-1) scale(-0.52 0.52)"/>
+<use href="#blades" transform="translate(1210.5 743) rotate(-3) scale(0.62 0.62)"/>
+<use href="#blades" transform="translate(1235.6 744) rotate(10) scale(0.79 0.79)"/>
+<use href="#fern" transform="translate(1253.5 744) rotate(7) scale(0.65 0.65)"/>
+<use href="#umbel" transform="translate(1252.6 744) rotate(9) scale(0.81 0.81)"/>
+<use href="#umbel" transform="translate(1283.9 744) rotate(21) scale(-0.53 0.53)"/>
+<use href="#spike" transform="translate(1299.5 744) rotate(23) scale(0.50 0.50)"/>
+<use href="#blades" transform="translate(1310.9 743) rotate(-6) scale(-0.64 0.64)"/>
+<use href="#blades" transform="translate(1313.4 743) rotate(-6) scale(-0.72 0.72)"/>
+<use href="#umbel" transform="translate(1338.5 742) rotate(0) scale(-0.75 0.75)"/>
+<use href="#blades" transform="translate(1359.4 740) rotate(-5) scale(0.63 0.63)"/>
+<use href="#spike" transform="translate(1373.7 739) rotate(-19) scale(0.51 0.51)"/>
+<use href="#umbel" transform="translate(1397.8 737) rotate(1) scale(-0.70 0.70)"/>
+<use href="#blades" transform="translate(1404.5 736) rotate(7) scale(0.45 0.45)"/>
+<use href="#fern" transform="translate(1412.6 735) rotate(-12) scale(0.77 0.77)"/>
+<use href="#umbel" transform="translate(1440.9 732) rotate(-15) scale(0.72 0.72)"/>
+<use href="#blades" transform="translate(1444.0 732) rotate(23) scale(-0.54 0.54)"/>
+<use href="#umbel" transform="translate(1463.5 730) rotate(12) scale(-0.46 0.46)"/>
+<use href="#fern" transform="translate(1486.8 727) rotate(16) scale(0.55 0.55)"/>
+<use href="#blades" transform="translate(1502.9 726) rotate(-21) scale(0.81 0.81)"/>
+<use href="#spike" transform="translate(1508.6 725) rotate(9) scale(0.78 0.78)"/>
+<use href="#fern" transform="translate(1529.0 723) rotate(7) scale(-0.50 0.50)"/>
+<use href="#fern" transform="translate(1557.7 721) rotate(17) scale(0.70 0.70)"/>
+<use href="#fern" transform="translate(1559.8 721) rotate(-21) scale(0.77 0.77)"/>
+<use href="#blades" transform="translate(1575.9 719) rotate(-5) scale(-0.68 0.68)"/>
+<use href="#umbel" transform="translate(1595.3 718) rotate(-21) scale(-0.55 0.55)"/>
+</g>
+<g opacity="0.64">
+<use href="#field-flower" color="#c8a8ad" transform="translate(131 744) rotate(12) scale(0.64)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(217 764) rotate(-11) scale(0.38)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(189 749) rotate(-5) scale(0.54)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(170 758) rotate(-6) scale(0.56)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(181 748) rotate(-12) scale(0.52)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(197 751) rotate(-2) scale(0.61)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(282 766) rotate(-13) scale(0.38)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(117 745) rotate(0) scale(0.55)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(157 750) rotate(-16) scale(0.43)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(168 750) rotate(-3) scale(0.39)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(100 752) rotate(-15) scale(0.39)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(162 750) rotate(3) scale(0.37)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(120 744) rotate(5) scale(0.56)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(166 755) rotate(13) scale(0.54)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(189 755) rotate(0) scale(0.54)"/>
+<use href="#field-flower" color="#c8a8ad" transform="translate(167 753) rotate(-10) scale(0.40)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(616 743) rotate(-14) scale(0.45)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(352 721) rotate(5) scale(0.36)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(472 735) rotate(1) scale(0.39)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(557 736) rotate(14) scale(0.45)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(316 715) rotate(6) scale(0.44)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(493 732) rotate(-8) scale(0.52)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(553 732) rotate(4) scale(0.37)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(491 734) rotate(7) scale(0.60)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(429 726) rotate(-15) scale(0.38)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(465 730) rotate(-7) scale(0.50)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(480 729) rotate(-18) scale(0.58)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(405 721) rotate(7) scale(0.40)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(482 726) rotate(-1) scale(0.44)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(671 751) rotate(-13) scale(0.37)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(481 732) rotate(-4) scale(0.60)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(370 720) rotate(-14) scale(0.46)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(496 727) rotate(-2) scale(0.60)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(464 725) rotate(-12) scale(0.59)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(474 726) rotate(8) scale(0.45)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(488 727) rotate(5) scale(0.55)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(406 724) rotate(-17) scale(0.28)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(335 723) rotate(-9) scale(0.32)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(424 729) rotate(-7) scale(0.48)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(397 729) rotate(-9) scale(0.29)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(527 740) rotate(5) scale(0.49)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(482 733) rotate(13) scale(0.44)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(535 740) rotate(5) scale(0.54)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(505 736) rotate(4) scale(0.39)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(376 718) rotate(-7) scale(0.38)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(434 723) rotate(-0) scale(0.54)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(611 743) rotate(9) scale(0.57)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(542 735) rotate(2) scale(0.39)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(594 747) rotate(2) scale(0.48)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(442 725) rotate(2) scale(0.48)"/>
+<use href="#field-flower" color="#d9bd9c" transform="translate(495 738) rotate(6) scale(0.37)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(635 726) rotate(4) scale(0.36)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(799 747) rotate(-3) scale(0.34)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(716 742) rotate(16) scale(0.29)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(687 732) rotate(-11) scale(0.47)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(672 729) rotate(-6) scale(0.55)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(721 740) rotate(12) scale(0.39)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(667 738) rotate(2) scale(0.39)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(700 737) rotate(3) scale(0.46)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(807 742) rotate(11) scale(0.37)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(688 732) rotate(12) scale(0.55)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(698 742) rotate(2) scale(0.32)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(674 733) rotate(3) scale(0.48)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(732 734) rotate(-12) scale(0.28)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(746 744) rotate(1) scale(0.39)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(637 733) rotate(17) scale(0.32)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(725 736) rotate(14) scale(0.35)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(709 743) rotate(-3) scale(0.58)"/>
+<use href="#field-flower" color="#c0acc7" transform="translate(688 730) rotate(2) scale(0.47)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1115 774) rotate(1) scale(0.71)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1233 785) rotate(6) scale(0.53)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1168 774) rotate(-3) scale(0.51)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1140 775) rotate(-18) scale(0.64)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1222 775) rotate(-16) scale(0.36)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1266 779) rotate(13) scale(0.60)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1138 767) rotate(-15) scale(0.43)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1291 790) rotate(-12) scale(0.73)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1307 785) rotate(-16) scale(0.56)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1026 767) rotate(-7) scale(0.69)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(993 762) rotate(-1) scale(0.41)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1164 768) rotate(9) scale(0.48)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1147 773) rotate(-8) scale(0.40)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1103 764) rotate(11) scale(0.72)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1162 776) rotate(0) scale(0.37)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1168 770) rotate(4) scale(0.49)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(978 752) rotate(-16) scale(0.58)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1154 771) rotate(4) scale(0.62)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1075 772) rotate(-9) scale(0.60)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1224 782) rotate(12) scale(0.41)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1243 779) rotate(-13) scale(0.40)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(991 758) rotate(5) scale(0.45)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1182 769) rotate(7) scale(0.63)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1100 767) rotate(16) scale(0.70)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1138 775) rotate(18) scale(0.62)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1107 774) rotate(-10) scale(0.67)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1303 788) rotate(-10) scale(0.34)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1155 775) rotate(18) scale(0.41)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1090 773) rotate(3) scale(0.73)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1179 776) rotate(4) scale(0.37)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1130 777) rotate(11) scale(0.63)"/>
+<use href="#field-flower" color="#c49d96" transform="translate(1271 785) rotate(-13) scale(0.65)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1432 758) rotate(9) scale(0.55)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1441 760) rotate(-2) scale(0.57)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1508 766) rotate(-2) scale(0.37)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1504 762) rotate(-5) scale(0.42)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1459 769) rotate(3) scale(0.48)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1466 764) rotate(-1) scale(0.47)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1521 775) rotate(-6) scale(0.50)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1477 760) rotate(1) scale(0.43)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1456 765) rotate(6) scale(0.33)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1509 767) rotate(11) scale(0.47)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1467 769) rotate(2) scale(0.52)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1500 762) rotate(-14) scale(0.30)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1528 774) rotate(-13) scale(0.38)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1484 761) rotate(18) scale(0.52)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1435 755) rotate(2) scale(0.64)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1477 764) rotate(9) scale(0.41)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1422 760) rotate(3) scale(0.55)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1501 765) rotate(2) scale(0.42)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1440 765) rotate(-17) scale(0.50)"/>
+<use href="#field-flower" color="#d7b48f" transform="translate(1525 764) rotate(-14) scale(0.57)"/></g>
+<g color="#26343b"><path fill="#26343b" d="M0 900 L0 811 L20 812 L40 811 L60 811 L80 810 L100 809 L120 807 L140 805 L160 802 L180 800 L200 796 L220 793 L240 790 L260 786 L280 783 L300 780 L320 776 L340 774 L360 771 L380 769 L400 767 L420 766 L440 765 L460 765 L480 765 L500 766 L520 767 L540 769 L560 770 L580 772 L600 775 L620 777 L640 779 L660 782 L680 784 L700 787 L720 789 L740 791 L760 793 L780 795 L800 796 L820 798 L840 799 L860 801 L880 802 L900 803 L920 804 L940 805 L960 806 L980 807 L1000 808 L1020 809 L1040 810 L1060 810 L1080 810 L1100 810 L1120 810 L1140 809 L1160 808 L1180 807 L1200 805 L1220 803 L1240 800 L1260 797 L1280 794 L1300 791 L1320 788 L1340 785 L1360 781 L1380 778 L1400 775 L1420 772 L1440 770 L1460 768 L1480 766 L1500 765 L1520 765 L1540 764 L1560 765 L1580 766 L1600 767V900Z"/>
+<use href="#fern" transform="translate(-9.6 814) rotate(-12) scale(0.74 0.74)"/>
+<use href="#fern" transform="translate(28.4 815) rotate(-16) scale(-0.71 0.71)"/>
+<use href="#umbel" transform="translate(45.0 814) rotate(-22) scale(1.07 1.07)"/>
+<use href="#spike" transform="translate(73.8 813) rotate(-15) scale(1.18 1.18)"/>
+<use href="#umbel" transform="translate(88.4 812) rotate(-18) scale(0.82 0.82)"/>
+<use href="#spike" transform="translate(112.8 811) rotate(1) scale(-1.12 1.12)"/>
+<use href="#spike" transform="translate(135.4 808) rotate(-12) scale(-0.71 0.71)"/>
+<use href="#fern" transform="translate(145.1 807) rotate(-4) scale(0.94 0.94)"/>
+<use href="#fern" transform="translate(166.5 804) rotate(21) scale(0.80 0.80)"/>
+<use href="#blades" transform="translate(186.6 802) rotate(-22) scale(1.15 1.15)"/>
+<use href="#spike" transform="translate(220.1 796) rotate(4) scale(-0.95 0.95)"/>
+<use href="#umbel" transform="translate(224.7 795) rotate(7) scale(0.94 0.94)"/>
+<use href="#blades" transform="translate(259.8 789) rotate(3) scale(-0.78 0.78)"/>
+<use href="#blades" transform="translate(266.4 788) rotate(20) scale(1.04 1.04)"/>
+<use href="#fern" transform="translate(299.6 783) rotate(-24) scale(0.80 0.80)"/>
+<use href="#blades" transform="translate(319.3 780) rotate(0) scale(0.89 0.89)"/>
+<use href="#fern" transform="translate(332.3 778) rotate(-15) scale(1.09 1.09)"/>
+<use href="#umbel" transform="translate(364.9 773) rotate(6) scale(-1.01 1.01)"/>
+<use href="#blades" transform="translate(378.3 772) rotate(-24) scale(-1.11 1.11)"/>
+<use href="#blades" transform="translate(394.0 771) rotate(21) scale(0.95 0.95)"/>
+<use href="#fern" transform="translate(414.2 769) rotate(23) scale(1.18 1.18)"/>
+<use href="#blades" transform="translate(433.5 768) rotate(8) scale(0.84 0.84)"/>
+<use href="#blades" transform="translate(462.0 768) rotate(5) scale(-0.86 0.86)"/>
+<use href="#blades" transform="translate(492.7 769) rotate(9) scale(-0.97 0.97)"/>
+<use href="#blades" transform="translate(516.6 770) rotate(-8) scale(-0.81 0.81)"/>
+<use href="#blades" transform="translate(536.9 771) rotate(-6) scale(1.17 1.17)"/>
+<use href="#fern" transform="translate(554.1 773) rotate(-1) scale(0.99 0.99)"/>
+<use href="#blades" transform="translate(569.2 774) rotate(-16) scale(1.17 1.17)"/>
+<use href="#spike" transform="translate(600.0 778) rotate(-21) scale(-0.92 0.92)"/>
+<use href="#spike" transform="translate(618.4 780) rotate(2) scale(-1.02 1.02)"/>
+<use href="#spike" transform="translate(628.0 781) rotate(-15) scale(0.84 0.84)"/>
+<use href="#umbel" transform="translate(661.1 785) rotate(-10) scale(-1.03 1.03)"/>
+<use href="#fern" transform="translate(682.0 787) rotate(-8) scale(1.03 1.03)"/>
+<use href="#blades" transform="translate(692.0 789) rotate(13) scale(1.00 1.00)"/>
+<use href="#umbel" transform="translate(706.9 790) rotate(-1) scale(0.94 0.94)"/>
+<use href="#umbel" transform="translate(742.6 794) rotate(12) scale(1.06 1.06)"/>
+<use href="#blades" transform="translate(765.0 796) rotate(1) scale(-0.91 0.91)"/>
+<use href="#blades" transform="translate(773.1 797) rotate(-14) scale(0.83 0.83)"/>
+<use href="#fern" transform="translate(811.1 800) rotate(4) scale(-0.73 0.73)"/>
+<use href="#spike" transform="translate(827.6 801) rotate(7) scale(-0.80 0.80)"/>
+<use href="#blades" transform="translate(848.7 803) rotate(4) scale(0.73 0.73)"/>
+<use href="#fern" transform="translate(875.0 805) rotate(-5) scale(0.72 0.72)"/>
+<use href="#fern" transform="translate(878.2 805) rotate(14) scale(0.82 0.82)"/>
+<use href="#blades" transform="translate(909.4 807) rotate(20) scale(1.06 1.06)"/>
+<use href="#umbel" transform="translate(930.2 808) rotate(0) scale(0.78 0.78)"/>
+<use href="#fern" transform="translate(938.0 808) rotate(-24) scale(0.89 0.89)"/>
+<use href="#fern" transform="translate(959.6 809) rotate(18) scale(-0.74 0.74)"/>
+<use href="#fern" transform="translate(978.1 810) rotate(5) scale(1.20 1.20)"/>
+<use href="#blades" transform="translate(1016.0 812) rotate(-14) scale(1.11 1.11)"/>
+<use href="#fern" transform="translate(1021.6 812) rotate(-23) scale(1.17 1.17)"/>
+<use href="#umbel" transform="translate(1056.7 813) rotate(-11) scale(0.79 0.79)"/>
+<use href="#spike" transform="translate(1073.1 813) rotate(3) scale(-0.73 0.73)"/>
+<use href="#umbel" transform="translate(1094.8 813) rotate(1) scale(-1.19 1.19)"/>
+<use href="#blades" transform="translate(1115.9 813) rotate(-15) scale(0.89 0.89)"/>
+<use href="#blades" transform="translate(1146.6 812) rotate(18) scale(0.71 0.71)"/>
+<use href="#fern" transform="translate(1165.9 811) rotate(-14) scale(1.14 1.14)"/>
+<use href="#blades" transform="translate(1169.0 810) rotate(8) scale(-1.00 1.00)"/>
+<use href="#blades" transform="translate(1197.1 808) rotate(11) scale(1.06 1.06)"/>
+<use href="#blades" transform="translate(1217.5 806) rotate(-5) scale(1.19 1.19)"/>
+<use href="#spike" transform="translate(1237.3 804) rotate(3) scale(1.09 1.09)"/>
+<use href="#umbel" transform="translate(1269.2 799) rotate(-14) scale(-0.79 0.79)"/>
+<use href="#blades" transform="translate(1279.9 797) rotate(-1) scale(-1.14 1.14)"/>
+<use href="#blades" transform="translate(1303.2 794) rotate(-18) scale(1.17 1.17)"/>
+<use href="#fern" transform="translate(1318.2 791) rotate(-18) scale(0.73 0.73)"/>
+<use href="#umbel" transform="translate(1347.8 786) rotate(12) scale(-1.09 1.09)"/>
+<use href="#blades" transform="translate(1367.0 783) rotate(16) scale(-0.98 0.98)"/>
+<use href="#blades" transform="translate(1389.8 780) rotate(7) scale(0.92 0.92)"/>
+<use href="#fern" transform="translate(1418.5 775) rotate(9) scale(1.09 1.09)"/>
+<use href="#umbel" transform="translate(1438.2 773) rotate(-13) scale(1.02 1.02)"/>
+<use href="#fern" transform="translate(1443.5 772) rotate(6) scale(-0.97 0.97)"/>
+<use href="#blades" transform="translate(1478.0 769) rotate(14) scale(1.00 1.00)"/>
+<use href="#blades" transform="translate(1491.7 769) rotate(-9) scale(0.76 0.76)"/>
+<use href="#blades" transform="translate(1522.3 767) rotate(-18) scale(-1.07 1.07)"/>
+<use href="#spike" transform="translate(1541.3 767) rotate(9) scale(1.20 1.20)"/>
+<use href="#blades" transform="translate(1546.0 767) rotate(12) scale(-1.16 1.16)"/>
+<use href="#spike" transform="translate(1590.2 769) rotate(-1) scale(0.95 0.95)"/>
+<use href="#fern" transform="translate(1590.0 769) rotate(-1) scale(1.14 1.14)"/>
+</g>
+<g opacity="0.78">
+<use href="#field-flower" color="#cdb1b3" transform="translate(5 831) rotate(2) scale(1.39)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(-21 830) rotate(-18) scale(1.42)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(-16 834) rotate(7) scale(1.28)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(28 836) rotate(-11) scale(0.93)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(36 835) rotate(13) scale(1.37)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(-14 839) rotate(14) scale(1.12)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(23 839) rotate(5) scale(1.02)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(22 841) rotate(0) scale(1.08)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(-91 825) rotate(8) scale(0.80)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(-26 834) rotate(-16) scale(0.81)"/>
+<use href="#field-flower" color="#cdb1b3" transform="translate(16 835) rotate(-0) scale(1.07)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(313 845) rotate(19) scale(0.69)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(253 840) rotate(-4) scale(0.80)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(270 841) rotate(11) scale(1.07)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(288 836) rotate(-12) scale(0.92)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(323 843) rotate(9) scale(0.77)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(250 841) rotate(17) scale(0.66)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(303 846) rotate(-13) scale(1.08)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(316 836) rotate(-17) scale(0.70)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(342 839) rotate(-6) scale(0.85)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(275 834) rotate(-2) scale(0.53)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(167 831) rotate(-4) scale(1.07)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(265 843) rotate(12) scale(0.61)"/>
+<use href="#field-flower" color="#cfaa89" transform="translate(239 840) rotate(4) scale(0.58)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(659 857) rotate(-10) scale(0.94)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(683 860) rotate(-14) scale(0.73)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(554 845) rotate(19) scale(0.61)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(643 855) rotate(-8) scale(0.84)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(658 850) rotate(11) scale(0.71)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(534 848) rotate(-12) scale(1.25)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(763 867) rotate(-5) scale(0.62)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(624 860) rotate(-16) scale(1.12)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(489 842) rotate(-18) scale(0.77)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(540 842) rotate(12) scale(1.19)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(435 838) rotate(1) scale(0.96)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(720 860) rotate(-12) scale(1.09)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(455 844) rotate(13) scale(1.15)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(646 858) rotate(6) scale(1.09)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(556 850) rotate(2) scale(1.18)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(594 853) rotate(15) scale(1.03)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(569 849) rotate(17) scale(0.78)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(616 856) rotate(-5) scale(1.30)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(733 867) rotate(-15) scale(1.12)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(637 860) rotate(0) scale(1.20)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(581 854) rotate(-18) scale(0.64)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(580 849) rotate(4) scale(1.24)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(672 860) rotate(-18) scale(1.04)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(502 841) rotate(-4) scale(0.78)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(561 849) rotate(-14) scale(0.98)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(729 861) rotate(-7) scale(1.16)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(709 861) rotate(-6) scale(1.08)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(341 823) rotate(10) scale(1.07)"/>
+<use href="#field-flower" color="#c6a0a7" transform="translate(466 845) rotate(-8) scale(1.26)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(941 873) rotate(-9) scale(0.66)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(1019 876) rotate(-1) scale(0.73)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(900 871) rotate(11) scale(0.94)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(992 869) rotate(-2) scale(0.98)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(896 866) rotate(3) scale(0.65)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(956 869) rotate(4) scale(0.76)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(942 869) rotate(-3) scale(0.53)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(967 879) rotate(-11) scale(0.95)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(908 870) rotate(-15) scale(0.92)"/>
+<use href="#field-flower" color="#d1b68e" transform="translate(941 875) rotate(-14) scale(1.07)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1347 855) rotate(6) scale(1.03)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1347 861) rotate(18) scale(0.89)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1420 866) rotate(-10) scale(0.81)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1365 867) rotate(-15) scale(1.27)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1265 858) rotate(0) scale(1.09)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1514 878) rotate(5) scale(1.14)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1486 868) rotate(4) scale(0.68)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1199 845) rotate(14) scale(1.11)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1367 858) rotate(8) scale(0.60)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1405 866) rotate(18) scale(0.95)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1412 870) rotate(-11) scale(0.87)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1534 883) rotate(-12) scale(1.23)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1354 862) rotate(15) scale(1.07)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1276 849) rotate(-10) scale(1.11)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1381 858) rotate(3) scale(0.90)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1385 865) rotate(5) scale(0.81)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1443 868) rotate(-12) scale(0.58)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1309 862) rotate(3) scale(1.03)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1284 851) rotate(-17) scale(1.19)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1379 859) rotate(4) scale(0.90)"/>
+<use href="#field-flower" color="#bfa2b8" transform="translate(1229 852) rotate(7) scale(0.96)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1520 818) rotate(2) scale(0.90)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1619 835) rotate(9) scale(0.73)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1477 823) rotate(-8) scale(0.85)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1593 824) rotate(5) scale(1.05)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1501 818) rotate(15) scale(0.53)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1552 819) rotate(-2) scale(0.68)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1578 830) rotate(8) scale(0.73)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1524 824) rotate(15) scale(0.63)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1577 821) rotate(19) scale(0.99)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1512 827) rotate(-18) scale(0.63)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1495 822) rotate(-7) scale(1.05)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1559 820) rotate(2) scale(0.83)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1524 821) rotate(10) scale(0.60)"/>
+<use href="#field-flower" color="#d8b48d" transform="translate(1585 828) rotate(-3) scale(0.60)"/></g>
+<g color="#172930"><path fill="#172930" d="M0 900 L0 906 L20 905 L40 904 L60 902 L80 901 L100 899 L120 897 L140 895 L160 893 L180 891 L200 889 L220 887 L240 885 L260 883 L280 882 L300 881 L320 880 L340 880 L360 880 L380 880 L400 881 L420 883 L440 885 L460 887 L480 890 L500 892 L520 895 L540 899 L560 902 L580 905 L600 908 L620 910 L640 913 L660 915 L680 917 L700 918 L720 918 L740 919 L760 918 L780 918 L800 917 L820 915 L840 914 L860 912 L880 910 L900 908 L920 905 L940 903 L960 901 L980 899 L1000 897 L1020 896 L1040 894 L1060 893 L1080 891 L1100 890 L1120 889 L1140 889 L1160 888 L1180 887 L1200 887 L1220 886 L1240 886 L1260 886 L1280 886 L1300 886 L1320 886 L1340 886 L1360 886 L1380 887 L1400 888 L1420 889 L1440 891 L1460 892 L1480 894 L1500 896 L1520 898 L1540 901 L1560 903 L1580 906 L1600 909V900Z"/>
+<use href="#umbel" transform="translate(1.1 909) rotate(12) scale(1.13 1.13)"/>
+<use href="#blades" transform="translate(24.4 908) rotate(-15) scale(1.29 1.29)"/>
+<use href="#blades" transform="translate(57.8 905) rotate(12) scale(-1.13 1.13)"/>
+<use href="#spike" transform="translate(76.2 904) rotate(-15) scale(1.95 1.95)"/>
+<use href="#blades" transform="translate(103.9 902) rotate(12) scale(1.54 1.54)"/>
+<use href="#blades" transform="translate(143.1 898) rotate(-20) scale(-1.18 1.18)"/>
+<use href="#umbel" transform="translate(169.6 895) rotate(16) scale(1.68 1.68)"/>
+<use href="#blades" transform="translate(179.4 894) rotate(8) scale(-1.89 1.89)"/>
+<use href="#blades" transform="translate(203.7 891) rotate(18) scale(1.75 1.75)"/>
+<use href="#blades" transform="translate(241.9 888) rotate(-17) scale(-1.30 1.30)"/>
+<use href="#spike" transform="translate(268.5 886) rotate(-21) scale(1.90 1.90)"/>
+<use href="#spike" transform="translate(288.7 884) rotate(3) scale(1.55 1.55)"/>
+<use href="#umbel" transform="translate(324.2 883) rotate(-1) scale(-1.51 1.51)"/>
+<use href="#fern" transform="translate(354.4 883) rotate(-24) scale(-1.92 1.92)"/>
+<use href="#umbel" transform="translate(377.3 883) rotate(12) scale(-1.67 1.67)"/>
+<use href="#blades" transform="translate(408.3 885) rotate(7) scale(0.77 0.77)"/>
+<use href="#fern" transform="translate(420.6 886) rotate(1) scale(-0.89 0.89)"/>
+<use href="#umbel" transform="translate(447.2 888) rotate(20) scale(-0.93 0.93)"/>
+<use href="#fern" transform="translate(482.3 893) rotate(3) scale(0.70 0.70)"/>
+<use href="#blades" transform="translate(513.3 897) rotate(-5) scale(-0.82 0.82)"/>
+<use href="#spike" transform="translate(525.3 899) rotate(5) scale(0.78 0.78)"/>
+<use href="#spike" transform="translate(564.9 906) rotate(-24) scale(0.80 0.80)"/>
+<use href="#blades" transform="translate(578.1 908) rotate(7) scale(-0.85 0.85)"/>
+<use href="#fern" transform="translate(614.8 913) rotate(-15) scale(-0.53 0.53)"/>
+<use href="#spike" transform="translate(648.2 917) rotate(-9) scale(0.94 0.94)"/>
+<use href="#spike" transform="translate(676.5 919) rotate(5) scale(0.52 0.52)"/>
+<use href="#fern" transform="translate(692.4 920) rotate(15) scale(0.52 0.52)"/>
+<use href="#spike" transform="translate(720.5 921) rotate(-24) scale(-0.75 0.75)"/>
+<use href="#blades" transform="translate(735.8 922) rotate(-11) scale(-0.71 0.71)"/>
+<use href="#spike" transform="translate(764.0 921) rotate(8) scale(0.62 0.62)"/>
+<use href="#blades" transform="translate(790.3 920) rotate(4) scale(0.73 0.73)"/>
+<use href="#umbel" transform="translate(819.2 918) rotate(23) scale(0.60 0.60)"/>
+<use href="#fern" transform="translate(843.3 916) rotate(16) scale(0.70 0.70)"/>
+<use href="#fern" transform="translate(890.7 912) rotate(-5) scale(0.73 0.73)"/>
+<use href="#fern" transform="translate(902.4 910) rotate(-9) scale(-0.62 0.62)"/>
+<use href="#blades" transform="translate(944.1 906) rotate(-20) scale(0.92 0.92)"/>
+<use href="#blades" transform="translate(962.4 904) rotate(20) scale(0.82 0.82)"/>
+<use href="#fern" transform="translate(981.7 902) rotate(-4) scale(0.85 0.85)"/>
+<use href="#fern" transform="translate(1013.5 899) rotate(-7) scale(-0.55 0.55)"/>
+<use href="#fern" transform="translate(1029.3 898) rotate(16) scale(0.62 0.62)"/>
+<use href="#fern" transform="translate(1062.8 895) rotate(-9) scale(0.90 0.90)"/>
+<use href="#fern" transform="translate(1089.0 894) rotate(8) scale(0.67 0.67)"/>
+<use href="#fern" transform="translate(1111.4 893) rotate(-23) scale(0.80 0.80)"/>
+<use href="#blades" transform="translate(1137.2 892) rotate(-8) scale(-0.56 0.56)"/>
+<use href="#spike" transform="translate(1168.7 891) rotate(-2) scale(0.79 0.79)"/>
+<use href="#blades" transform="translate(1210.3 890) rotate(-22) scale(-0.62 0.62)"/>
+<use href="#umbel" transform="translate(1220.6 889) rotate(2) scale(0.57 0.57)"/>
+<use href="#spike" transform="translate(1258.7 889) rotate(0) scale(1.31 1.31)"/>
+<use href="#fern" transform="translate(1274.2 889) rotate(11) scale(1.94 1.94)"/>
+<use href="#blades" transform="translate(1303.1 889) rotate(-1) scale(1.78 1.78)"/>
+<use href="#umbel" transform="translate(1326.8 889) rotate(19) scale(1.06 1.06)"/>
+<use href="#spike" transform="translate(1367.5 890) rotate(-17) scale(1.95 1.95)"/>
+<use href="#umbel" transform="translate(1381.0 890) rotate(-4) scale(-1.90 1.90)"/>
+<use href="#blades" transform="translate(1422.3 892) rotate(-6) scale(1.98 1.98)"/>
+<use href="#blades" transform="translate(1431.6 893) rotate(10) scale(1.84 1.84)"/>
+<use href="#blades" transform="translate(1463.2 895) rotate(6) scale(1.64 1.64)"/>
+<use href="#blades" transform="translate(1494.1 899) rotate(5) scale(1.51 1.51)"/>
+<use href="#umbel" transform="translate(1526.1 902) rotate(-6) scale(-1.96 1.96)"/>
+<use href="#umbel" transform="translate(1536.6 903) rotate(16) scale(-1.92 1.92)"/>
+<use href="#spike" transform="translate(1565.2 907) rotate(20) scale(-1.67 1.67)"/>
+<use href="#umbel" transform="translate(1609.7 913) rotate(16) scale(-1.99 1.99)"/>
+</g>
+<path fill="url(#shade)" d="M0 0h1600v900H0z"/></svg>

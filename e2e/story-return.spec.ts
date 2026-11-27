@@ -36,10 +36,23 @@ for (const width of [1440, 390]) {
       ['How I built it: iguess', 'iguess'],
       ['How I built it: worth', 'worth'],
     ]) {
+      if (id === 'worth') {
+        await page
+          .locator('#project-worth')
+          .evaluate((entry) => entry.scrollIntoView({ block: 'start', behavior: 'instant' }));
+      }
       const trigger = page.getByRole('button', { name: label, exact: true });
       await trigger.scrollIntoViewIfNeeded();
-      const readingPosition = await page.evaluate(() => scrollY);
-      await trigger.click();
+      // The sticky header can settle as the browser moves the pointer target into view.
+      const [readingPosition] = await Promise.all([
+        trigger.evaluate(
+          (button) =>
+            new Promise<number>((resolve) =>
+              button.addEventListener('pointerdown', () => resolve(window.scrollY), { once: true }),
+            ),
+        ),
+        trigger.click(),
+      ]);
       await expect(page.getByRole('dialog')).toBeVisible();
       await expect(page).toHaveURL(new RegExp(`#work/${id}$`));
       await page.keyboard.press('Escape');

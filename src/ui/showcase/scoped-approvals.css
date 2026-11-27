@@ -1,0 +1,101 @@
+.scope-study {
+  --scope-ink: #f2edf8;
+  --scope-accent: #d3c1ef;
+  margin-top: clamp(28px, 4vw, 50px);
+  padding-top: 24px;
+  border-top: 1px solid #413c48;
+}
+.scope-study > header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 5px 20px;
+  margin-bottom: 18px;
+}
+.scope-study h4 {
+  font: 520 clamp(22px, 2.4vw, 31px)/1.15 var(--font-display);
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+}
+.scope-study header p,
+.scope-study header > span,
+.scope-study .scope-cases p {
+  color: #c1b9c8;
+  line-height: 1.5;
+}
+.scope-study header > span {
+  font-size: 12px;
+}
+.scope-study .scope-toggle {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid #554c61;
+  border-radius: 9px;
+  gap: 3px;
+  background: #17151c;
+}
+.scope-toggle button {
+  min-height: 44px;
+  padding: 3px 15px;
+  border-radius: 6px;
+  color: #cabfd4;
+  cursor: pointer;
+  font: 540 14px/1.35 var(--font-display);
+}
+.scope-toggle button[aria-pressed='true'] {
+  color: #261d30;
+  background: var(--scope-accent);
+}
+.scope-toggle button:focus-visible {
+  outline: 2px solid #f3dfaf;
+  outline-offset: 1px;
+}
+.scope-study .scope-cases > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 16px;
+  row-gap: 3px;
+  margin-top: 17px;
+  padding: 14px 0;
+  border-block: 1px solid #39343f;
+  color: var(--scope-ink);
+}
+.scope-cases code {
+  font: 500 clamp(17px, 2vw, 23px)/1.5 var(--font-mono);
+  overflow-wrap: anywhere;
+}
+.scope-cases mark {
+  color: var(--scope-accent);
+  background: none;
+}
+.scope-cases [data-decision='asked'] mark {
+  color: #efba98;
+}
+.scope-cases strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+.scope-cases p {
+  grid-column: 2;
+  margin: 0;
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  .scope-study .scope-cases > div {
+    grid-template-columns: 1fr;
+  }
+  .scope-cases p {
+    grid-column: 1;
+  }
+  .scope-cases code {
+    margin-bottom: 6px;
+  }
+}
+@media (forced-colors: active) {
+  .scope-toggle button[aria-pressed='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -3px;
+  }
+}

@@ -157,6 +157,7 @@ function HighlightRow({ item, onOpen }: { item: WorkDetail } & Props) {
     <button
       type="button"
       onClick={(event) => onOpen(item, event.currentTarget)}
+      data-work-row={id}
       className={`experience-outcome${id === 'agentic-ai-playwright-framework' ? ' experience-outcome-qualitative' : ''}`}
     >
       {outcome ? (

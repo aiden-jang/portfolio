@@ -94,6 +94,15 @@
   width: clamp(60px, 9cqw, 120px);
   height: clamp(49px, 6.5cqw, 93px);
 }
+.studio-route .hit-flower {
+  left: var(--sill-x);
+  top: var(--sill-y);
+  width: max(44px, var(--sill-w));
+  height: max(44px, var(--sill-h));
+}
+.studio-route .studio-room-feedback {
+  overflow-wrap: anywhere;
+}
 .studio-route .room-hit span {
   position: absolute;
   bottom: 100%;

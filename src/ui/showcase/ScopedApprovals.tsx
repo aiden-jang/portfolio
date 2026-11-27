@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import evidence from './approval-decisions.json';
+import './scoped-approvals.css';
 
 export function ScopedApprovals() {
   const { rule, inside, outside } = evidence;
@@ -26,7 +27,7 @@ export function ScopedApprovals() {
           Outside scope
         </button>
       </div>
-      <div className="scope-cases scope-cases-single" aria-live="polite">
+      <div className="scope-cases scope-cases-single" aria-live="polite" aria-atomic="true">
         <div data-decision={choice.decision}>
           <code>
             <span>{rule.program}</span> <mark>{choice.target}</mark>

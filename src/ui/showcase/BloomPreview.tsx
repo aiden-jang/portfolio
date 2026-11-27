@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ScreenshotViewer } from '../ScreenshotViewer';
 import type { PreviewState } from '../../data/projectPreviews';
 import { usePreviewSelection } from '../usePreviewSelection';
@@ -7,21 +7,11 @@ import { copyText } from '../../browserSharing';
 import { useShareFeedback } from '../useShareFeedback';
 import { Icon } from './playable/StudioIcon';
 import { useFlowerGrowth } from './playable/useFlowerGrowth';
-import anemone from '../../../studio-art/anemone.svg?raw';
-import gerbera from '../../../studio-art/gerbera.svg?raw';
-import ranunculus from '../../../studio-art/ranunculus.svg?raw';
+import { gardenFlowers as flowers, type PlantedFlower } from './playable/gardenFlowers';
+import { FlowerNoteEditor } from './playable/FlowerNoteEditor';
+import { FullGarden } from './playable/FullGarden';
 import './bloom-garden.css';
 import './playable/studio-garden.css';
-
-const flowers = [
-  { name: 'Anemone', phrase: 'You notice the little things.', art: anemone },
-  {
-    name: 'Gerbera',
-    phrase: 'You made a rainy walk feel like home.',
-    art: gerbera,
-  },
-  { name: 'Ranunculus', phrase: 'You make room for me.', art: ranunculus },
-];
 
 export function BloomPreview({
   image,
@@ -30,6 +20,9 @@ export function BloomPreview({
   description,
   url,
   onRead,
+  onPlant,
+  onVisitSill,
+  plants,
 }: {
   image: string;
   caption: string;
@@ -37,17 +30,21 @@ export function BloomPreview({
   description: string;
   url?: string;
   onRead: (trigger: HTMLElement) => void;
+  onVisitSill: (flower: PlantedFlower) => void;
+  onPlant: (flower: PlantedFlower) => void;
+  plants: PlantedFlower[];
 }) {
   const article = useRef<HTMLElement>(null);
   const edit = useRef<HTMLButtonElement>(null);
-  const input = useRef<HTMLTextAreaElement>(null);
   const inspector = useRef<HTMLButtonElement>(null);
-  const [selected, choose] = useState(1);
-  const [notes, setNotes] = useState(flowers.map((flower) => flower.phrase));
-  const [personal, setPersonal] = useState<number[]>([]);
+  const [selected, choose] = useState(plants.at(-1)?.index ?? 1);
+  const notes = flowers.map(
+    (flower, index) => plants.find((plant) => plant.index === index)?.note ?? flower.phrase,
+  );
+  const personal = plants.map((plant) => plant.index);
   const [composing, setComposing] = useState(false);
-  const [sentence, setSentence] = useState('');
   const [showGarden, setShowGarden] = useState(false);
+  const [sharedExample, setSharedExample] = useState(false);
   const [growth, setGrowth] = useState(0);
   const [view, setView] = usePreviewSelection('bloomnote', states?.length ?? 1);
   const { result, run } = useShareFeedback(`bloomnote:${view}`);
@@ -88,24 +85,10 @@ export function BloomPreview({
     };
   }, [states]);
 
-  useLayoutEffect(() => {
-    if (composing) input.current?.focus({ preventScroll: true });
-  }, [composing]);
-
   useFlowerGrowth(article, growth, selected, composing);
 
-  function plant(event: FormEvent) {
-    event.preventDefault();
-    const text = sentence.trim();
-    if (!text) {
-      input.current?.setCustomValidity('Write a short note first.');
-      input.current?.reportValidity();
-      return;
-    }
-    setNotes((current) => current.map((note, i) => (i === selected ? text : note)));
-    setPersonal((current) => (current.includes(selected) ? current : [...current, selected]));
+  function finishEditing() {
     setComposing(false);
-    setGrowth((n) => n + 1);
     requestAnimationFrame(() => edit.current?.focus({ preventScroll: true }));
   }
 
@@ -140,37 +123,15 @@ export function BloomPreview({
         <div className="studio-garden-body">
           <div className="studio-garden-letter">
             {composing ? (
-              <form onSubmit={plant} className="studio-note-form">
-                <label htmlFor="studio-note">A note for someone</label>
-                <textarea
-                  id="studio-note"
-                  ref={input}
-                  rows={3}
-                  maxLength={105}
-                  value={sentence}
-                  required
-                  placeholder="You made my day when…"
-                  onChange={(event) => {
-                    event.currentTarget.setCustomValidity('');
-                    setSentence(event.target.value);
-                  }}
-                />
-                <div className="studio-note-tools">
-                  <button type="submit" className="studio-grow">
-                    Grow a flower
-                    <Icon name="arrow" size={16} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setComposing(false);
-                      requestAnimationFrame(() => edit.current?.focus({ preventScroll: true }));
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+              <FlowerNoteEditor
+                initial={personal.includes(selected) ? notes[selected] : ''}
+                onGrow={(note) => {
+                  onPlant({ index: selected, note });
+                  finishEditing();
+                  setGrowth((n) => n + 1);
+                }}
+                onCancel={finishEditing}
+              />
             ) : (
               <>
                 <p className="studio-letter-from">
@@ -184,10 +145,7 @@ export function BloomPreview({
                     ref={edit}
                     type="button"
                     className="studio-grow"
-                    onClick={() => {
-                      setSentence(personal.includes(selected) ? notes[selected] : '');
-                      setComposing(true);
-                    }}
+                    onClick={() => setComposing(true)}
                   >
                     Write a note
                     <Icon name="pencil" size={15} />
@@ -220,7 +178,19 @@ export function BloomPreview({
           </div>
         </div>
         <footer className="studio-garden-foot">
-          <button ref={inspector} onClick={() => setShowGarden(true)} type="button">
+          <button
+            ref={inspector}
+            onClick={() => {
+              const linked = previewIndex(
+                new URLSearchParams(location.search).get('preview'),
+                'bloomnote',
+                states?.length ?? 1,
+              );
+              if (linked !== null && !personal.length) setSharedExample(true);
+              else setShowGarden(true);
+            }}
+            type="button"
+          >
             View full garden
             <Icon name="external" size={14} />
           </button>
@@ -228,12 +198,31 @@ export function BloomPreview({
       </div>
       <i className="studio-note-pollen" aria-hidden="true" />
       {showGarden && (
+        <FullGarden
+          selected={selected}
+          choose={choose}
+          notes={notes}
+          personal={personal}
+          returnFocus={inspector}
+          onPlant={onPlant}
+          onVisitSill={() => {
+            setShowGarden(false);
+            onVisitSill({
+              index: selected,
+              note: notes[selected],
+              example: !personal.includes(selected),
+            });
+          }}
+          onClose={() => setShowGarden(false)}
+        />
+      )}
+      {sharedExample && (
         <ScreenshotViewer
           image={states?.[view]?.image ?? image}
           name="bloomnote"
           caption={states?.[view]?.caption ?? caption}
           returnFocus={inspector.current}
-          onClose={() => setShowGarden(false)}
+          onClose={() => setSharedExample(false)}
           onShare={
             states
               ? () => {

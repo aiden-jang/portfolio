@@ -68,7 +68,7 @@ footer {
 }
 .index-nav nav {
   display: flex;
-  gap: 24px;
+  gap: clamp(12px, 3vw, 24px);
 }
 .index-nav a,
 footer a,
@@ -261,7 +261,37 @@ footer a,
     gap: 12px;
   }
   .index-history .experience-outcome {
-    grid-template-columns: 1fr 1.7fr 15px;
+    grid-template-columns: minmax(0, 1fr) 20px;
+    gap: 9px 12px;
+    padding-block: 18px;
+  }
+  .index-history .experience-figure {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: baseline;
+    gap: 3px 10px;
+  }
+  .index-history .experience-arrow {
+    grid-area: 1 / 2;
+    justify-self: end;
+  }
+  .index-history .experience-story {
+    grid-area: 2 / 1 / auto / -1;
+    gap: 1px;
+  }
+  .index-history .experience-story:first-child {
+    grid-area: 1 / 1;
+  }
+  .index-history .experience-grid {
+    grid-template-areas: 'history' 'proof';
+    row-gap: 14px;
+  }
+  .index-history .experience-employer {
+    display: block;
+  }
+  .index-history .experience-roles li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
   .index-about .about-reel {
     margin-top: 20px;

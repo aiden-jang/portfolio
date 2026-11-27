@@ -8,6 +8,7 @@ export type RoomPositions = {
   bean: [number, number];
   mouse: [number, number];
   box: [number, number];
+  sill: [number, number, number, number];
 };
 
 export const Cat: ComponentType<{
@@ -36,6 +37,7 @@ export const Cat: ComponentType<{
     action: { kind: RoomAction; count: number } | null;
     landing?: { current: number | null };
     print?: HTMLCanvasElement | null;
+    flower?: HTMLCanvasElement;
     onFirstFrame?: () => void;
     onPositions: (points: RoomPositions) => void;
     toy?: { current: { x: number; held: boolean } | null };

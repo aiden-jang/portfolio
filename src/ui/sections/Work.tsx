@@ -1,4 +1,7 @@
+import { useState } from 'react';
+import { type PlantedFlower } from '../showcase/playable/gardenFlowers';
 import { DinnerTable } from '../showcase/DinnerTable';
+import { usePlantedGarden } from '../showcase/playable/usePlantedGarden';
 import { BloomPreview } from '../showcase/BloomPreview';
 import { Duet } from '../showcase/Duet';
 
@@ -57,18 +60,36 @@ function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
 }
 
 export function MoreProjectsSection({ onOpen }: Props) {
+  const { plants, plant } = usePlantedGarden();
+  const [cutting, setCutting] = useState<PlantedFlower | null>(null);
+  const windowsill = cutting ?? plants.at(-1) ?? null;
   return (
     <Section id="sec-more-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="bloom-gallery pointer-events-auto">
         <h2 className="sr-only">More projects</h2>
         <BloomPreview
           {...PREVIEWS.bloomnote}
+          plants={plants}
+          onPlant={(flower) => {
+            plant(flower);
+            setCutting(null);
+          }}
+          onVisitSill={(flower) => {
+            setCutting(flower);
+            requestAnimationFrame(() => {
+              location.hash = 'project-mrrp';
+              const room = document.getElementById('project-mrrp');
+              room?.scrollIntoView({ block: 'start', behavior: 'instant' });
+              room?.focus({ preventScroll: true });
+            });
+          }}
           url={bloomnote.link?.url}
           onRead={(trigger) => onOpen(bloomnote, trigger)}
         />
         <div className="garage-work bloom-gallery-rest">
           <div className="project-scenes">
             <Duet
+              flower={windowsill}
               drawTitle={
                 <button
                   type="button"

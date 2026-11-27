@@ -79,7 +79,7 @@ for (const width of [1440, 390]) {
       .locator('#project-bloomnote')
       .getByRole('button', { name: 'View full garden' });
     await garden.click();
-    await expect(page.getByRole('dialog', { name: 'bloomnote screenshot' })).toBeVisible();
+    await expect(page.getByRole('dialog', { name: 'Full garden' })).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(garden).toBeFocused();
   });

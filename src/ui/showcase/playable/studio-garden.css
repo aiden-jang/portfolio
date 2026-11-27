@@ -1,17 +1,19 @@
 html:root #sec-more-work #project-bloomnote.studio-garden {
-  --garden-page: #edf0dc;
-  --garden-ink: #293d32;
-  --garden-moss: #536b54;
+  --garden-page: #1c2b36;
+  --garden-ink: #fff3dd;
+  --garden-moss: #ead6c3;
   --petal: #ac562f;
   position: relative;
   min-width: 0;
   margin: 0;
   padding: 0;
-  background: var(--garden-page);
+  background:
+    linear-gradient(90deg, #14202e66, transparent 72%),
+    url('../../../../studio-art/evening-garden.svg') 60% center / cover var(--garden-page);
   color: var(--garden-ink);
   text-align: left;
   text-shadow: none;
-  color-scheme: light;
+  color-scheme: dark;
   scroll-margin-top: var(--portfolio-header-height);
 }
 #project-bloomnote.studio-garden[data-selected-flower='0'] {
@@ -138,7 +140,7 @@ html:root #sec-more-work .studio-garden-head h2 {
   letter-spacing: -0.027em;
 }
 .studio-note-form textarea::placeholder {
-  color: #61705d;
+  color: #d4c4bd;
 }
 .studio-flower-bed {
   display: grid;
@@ -155,7 +157,7 @@ html:root #sec-more-work .studio-garden-head h2 {
   right: 0;
   bottom: 40px;
   height: 1px;
-  background: #a6b39a;
+  background: transparent;
   pointer-events: none;
 }
 .studio-flower {
@@ -201,7 +203,6 @@ html:root #sec-more-work .studio-garden-head h2 {
   text-underline-offset: 5px;
 }
 .studio-garden-foot {
-  border-top: 1px solid #bdc6b0;
   justify-content: flex-end;
 }
 .studio-note-pollen {
@@ -219,7 +220,7 @@ html:root #sec-more-work .studio-garden-head h2 {
   opacity: 0;
 }
 .studio-garden :is(a, button, textarea):focus-visible {
-  outline: 2px solid #38583e;
+  outline: 2px solid #ffdfaa;
   outline-offset: 4px;
 }
 @media (hover: hover) {
@@ -234,7 +235,7 @@ html:root #sec-more-work .studio-garden-head h2 {
     text-underline-offset: 4px;
   }
   .studio-note-tools .studio-grow:hover {
-    background: #e0e6cf;
+    background: #3c4341;
     border-color: var(--garden-moss);
   }
 }

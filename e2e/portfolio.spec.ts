@@ -197,6 +197,7 @@ for (const width of [1440, 390]) {
       await expect(story).toBeVisible();
       await expect(page.getByRole('dialog')).toHaveCount(0);
 
+      await page.goto('/?preview=bloomnote:0#project-bloomnote');
       const screenshot = page.getByRole('button', {
         name: 'View full garden',
         exact: true,
