@@ -103,3 +103,77 @@
     margin-top: 6px;
   }
 }
+
+.quake-journey-run:not([data-quake-manual]) .orbit-done {
+  display: none;
+}
+.pin-depth-section {
+  display: none;
+}
+#project-everythingisfine[data-report-open] .pin-depth-section {
+  position: relative;
+  display: block;
+  height: clamp(94px, 14svh, 138px);
+  margin: 10px 0 5px 3px;
+  border-top: 1px solid #63878f;
+  border-left: 1px solid #64858e;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 calc(25% - 1px),
+    #668e972d calc(25% - 1px) 25%
+  );
+}
+#project-everythingisfine[data-report-open] .quake-journey-readings dl {
+  position: absolute;
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.pin-depth-section .depth-surface {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  color: #aac4c8;
+  font: 10px/1.2 var(--font-mono);
+}
+.pin-depth-section i {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  left: -3px;
+  right: 0;
+  transform: translateY(-50%);
+  font: 500 clamp(10px, 0.86vw, 13px)/1.1 var(--font-mono);
+  color: #ffcd91;
+}
+.pin-depth-section i::before {
+  content: '';
+  width: clamp(9px, 1.8vw, 34px);
+  margin-right: 5px;
+  border-top: 2px solid currentColor;
+}
+.pin-depth-section i[data-source='EMSC'] {
+  color: #9edbd0;
+}
+#project-everythingisfine[data-report-agency='USGS'] i[data-source='EMSC'],
+#project-everythingisfine[data-report-agency='EMSC'] i[data-source='USGS'] {
+  opacity: 0.68;
+}
+#project-everythingisfine[data-report-open] .quake-journey-readings {
+  top: clamp(4px, calc(var(--pin-y) - 44px), max(4px, calc(100% - 162px)));
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-report-open] .pin-depth-section {
+    animation: open-depth 260ms ease-out both;
+    transform-origin: top left;
+  }
+  @keyframes open-depth {
+    from {
+      clip-path: inset(0 0 90% 0);
+    }
+    to {
+      clip-path: inset(0);
+    }
+  }
+}

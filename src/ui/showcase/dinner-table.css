@@ -532,20 +532,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever.meal-story .meal-n
   transform: none;
   opacity: 1;
 }
-@keyframes meal-stamp-step {
-  0% {
-    transform: translateY(-45%) rotate(-9deg) scale(0.9);
-  }
-  45% {
-    transform: translateY(3%) rotate(3deg) scale(1.08, 0.9);
-  }
-  73% {
-    transform: translateY(-9%) rotate(-2deg) scale(0.98, 1.03);
-  }
-  100% {
-    transform: none;
-  }
-}
 @keyframes meal-separate-shares {
   from {
     opacity: 0;
@@ -563,9 +549,6 @@ html:root .portfolio-chrome .project-scenes #project-wherever.meal-story .meal-n
   }
   .meal-story[data-paid] .meal-shares > div + div {
     --share-inset: -6px;
-  }
-  .meal-character {
-    animation: meal-stamp-step 0.52s cubic-bezier(0.2, 0.8, 0.25, 1) both;
   }
 }
 html:root .meal-story .meal-pick {
@@ -742,4 +725,157 @@ html:root .meal-story .meal-pick {
   .meal-character {
     width: 60px;
   }
+}
+
+/* Window light gives way to a pool of lamplight over the print and guest check. */
+.meal-story .meal-linen {
+  background: radial-gradient(ellipse at 73% 43%, #ad7955 0%, #6d473b 38%, #362a2b 70%, #241f24);
+}
+.meal-story .meal-linen div {
+  background-color: #c09266;
+  filter: brightness(0.81) saturate(0.85);
+}
+.meal-story .meal-linen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 73% 46%,
+    #ffe2a824 0%,
+    transparent 21%,
+    #35212b65 65%,
+    #1c1823db 100%
+  );
+}
+.meal-story .meal-intro,
+.meal-story .meal-intro p,
+.meal-story .meal-head {
+  color: #fff0d5;
+}
+.meal-story .meal-intro p {
+  color: #ead8c7;
+}
+.meal-story .meal-archive {
+  background: radial-gradient(ellipse at 55% 41%, #7b7057, #49483f 53%, #24252a);
+}
+.meal-story .meal-book {
+  box-shadow:
+    0 3px #cbbd9f,
+    0 6px #736f5b,
+    0 9px #40473c,
+    4px 21px 26px #19171abb;
+}
+.meal-story .meal-slip {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  visibility: hidden;
+  --saved-x: calc(var(--entry-x) + var(--entry-w) * 0.33);
+  --saved-y: calc(var(--entry-y) + var(--entry-h) - 1.2cqh);
+  left: calc(
+    var(--slip-left, 60cqw) * (1 - var(--photo-entry)) + var(--saved-x) * var(--photo-entry)
+  );
+  top: calc(
+    var(--slip-top, 70cqh) * (1 - var(--photo-entry)) + var(--saved-y) * var(--photo-entry)
+  );
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  width: max-content;
+  padding: 9px clamp(12px, 1.3cqw, 19px) 12px;
+  color: #533a31;
+  background: linear-gradient(101deg, #ebd9af, #fcf1d9 48%, #f3e4c5);
+  border-top: 1px dashed #b39574;
+  font: 520 clamp(12px, 1.06cqw, 16px)/1.3 var(--font-mono);
+  transform: rotate(calc(1deg - 7deg * var(--photo-entry)));
+  transform-origin: 0 0;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 94%,
+    92% 99%,
+    83% 95%,
+    74% 100%,
+    60% 95%,
+    45% 99%,
+    33% 96%,
+    19% 100%,
+    7% 96%,
+    0 100%
+  );
+}
+.meal-slip strong {
+  font-weight: 650;
+  color: #813c2d;
+}
+.meal-story:is([data-moment='split'], [data-moment='entry'], [data-moment='favorite']) .meal-slip {
+  visibility: visible;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .meal-character[data-stamping='true'] {
+    animation: worth-press 0.48s ease-out both;
+  }
+  .meal-story .meal-favorite[aria-pressed='true'] {
+    animation: worth-imprint 0.48s ease-out both;
+  }
+  @keyframes worth-press {
+    0%,
+    100% {
+      transform: none;
+    }
+    35% {
+      transform: translateX(-15%) rotate(-16deg);
+    }
+    55% {
+      transform: translateX(-23%) translateY(4%) rotate(-19deg) scaleY(0.9);
+    }
+  }
+  @keyframes worth-imprint {
+    0%,
+    35% {
+      transform: rotate(0);
+    }
+    55% {
+      transform: rotate(-5deg) scale(0.92);
+    }
+    100% {
+      transform: rotate(-4deg);
+    }
+  }
+}
+@media (max-width: 740px) {
+  .meal-stage {
+    --entry-h: 25cqh;
+    --entry-y: 17cqh;
+  }
+  .meal-story .meal-linen::after {
+    background: radial-gradient(
+      ellipse at 60% 60%,
+      #ffe0a422,
+      transparent 23%,
+      #33212b77 72%,
+      #1d1822df
+    );
+  }
+  .meal-story .meal-slip {
+    --saved-x: calc(var(--entry-x) + 6cqw);
+    font-size: 12px;
+  }
+}
+
+/* A window-sized patch of evening light falls through the same two panes as Bean’s room. */
+.meal-story .meal-linen::before {
+  inset: -12% -9% auto auto;
+  width: 55%;
+  height: 80%;
+  opacity: 0.57;
+  background:
+    linear-gradient(90deg, transparent 47%, #795740 48% 51%, transparent 52%),
+    linear-gradient(0deg, transparent 47%, #795740 48% 51%, transparent 52%), #f5c186;
+  transform: skewY(-14deg) rotate(-8deg);
+  mask-image: linear-gradient(168deg, transparent 0%, #000 18%, #000b 65%, transparent 96%);
+  filter: blur(3px);
+  z-index: 1;
+  mix-blend-mode: soft-light;
 }

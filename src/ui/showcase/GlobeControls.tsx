@@ -74,7 +74,7 @@ export function GlobeControls({
       >
         <ControlIcon name="reset" />
       </button>
-      <button type="button" onClick={onDone}>
+      <button type="button" className="orbit-done" onClick={onDone}>
         Done
       </button>
     </>

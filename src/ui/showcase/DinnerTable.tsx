@@ -186,7 +186,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
             ) : atWorth ? (
               <>
                 <MealIcon name="check" />
-                {paid ? 'Saved in Places · $24 each' : 'Saved in Places'}
+                Saved in Places
               </>
             ) : atBill ? (
               <>Dinner for two</>
@@ -236,14 +236,18 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
                   <MealIcon name="heart" />
                   Favorite
                 </button>
-                {isFavorite && (
-                  <span className="meal-character">
+                {atWorth && (
+                  <span className="meal-character" data-stamping={isFavorite}>
                     <WorthCharacter />
                   </span>
                 )}
               </div>
             </div>
           </div>
+        </div>
+        <div className="meal-slip" aria-hidden={!isSplit && !atWorth}>
+          <span>$48 ÷ 2</span>
+          <strong>$24 each</strong>
         </div>
         {voting && (
           <button

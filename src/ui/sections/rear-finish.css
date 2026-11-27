@@ -149,3 +149,9 @@ html:root .rear-finish #sec-contact h2.address-title {
   overflow: visible;
   clip: auto;
 }
+
+@media (max-width: 599px) and (prefers-reduced-motion: no-preference) {
+  .rear-finish-stage > :is(picture, canvas) {
+    transform: translateY(var(--arrival-offset, 0));
+  }
+}

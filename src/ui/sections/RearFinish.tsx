@@ -99,6 +99,11 @@ export function RearFinish() {
       const travel = rangeTravel();
       const fixed = reduced.matches || !travel;
       const laneBounds = lane.getBoundingClientRect();
+      const approach =
+        narrow.matches && !reduced.matches
+          ? Math.min(innerHeight * 0.21, Math.max(0, laneBounds.top) * 0.45)
+          : 0;
+      root.style.setProperty('--arrival-offset', -approach + 'px');
       const contactTop = contact.getBoundingClientRect().top;
       const handoff = fixed
         ? Number(contactTop <= window.innerHeight * 0.55)

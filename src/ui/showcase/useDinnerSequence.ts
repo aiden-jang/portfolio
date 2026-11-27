@@ -35,6 +35,7 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
     const bill = section.querySelector<HTMLElement>('#project-owewell');
     const journal = section.querySelector<HTMLElement>('#project-worth');
     if (!bill || !journal) return;
+    const ticket = pin.querySelector<HTMLElement>('.meal-ticket')!;
     let frame = 0;
     let active = true;
     let inset = parseFloat(getComputedStyle(pin).top) || 0;
@@ -120,6 +121,15 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
         pin.style.setProperty('--bill-lines', String(unroll * (1 - file)) + 'fr');
         pin.style.setProperty('--entry-lines', String(ramp(file, 0.7, 0.95)) + 'fr');
       }
+      if (!offscreen && (current === 'split' || file > 0)) {
+        const paper = ticket.getBoundingClientRect();
+        const table = pin.getBoundingClientRect();
+        pin.style.setProperty('--slip-left', paper.left - table.left + paper.width * 0.12 + 'px');
+        pin.style.setProperty(
+          '--slip-top',
+          Math.min(table.height - 52, paper.bottom - table.top - 4) + 'px',
+        );
+      }
       if (guide || focusTarget) queue();
     };
 
@@ -139,6 +149,7 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
     };
     const size = new ResizeObserver(resize);
     size.observe(pin);
+    size.observe(ticket);
     size.observe(section);
     size.observe(document.body);
     apply.current = (action, keyboard) => {

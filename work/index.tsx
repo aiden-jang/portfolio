@@ -1,6 +1,5 @@
 import { useLayoutEffect } from 'react';
 import { DinnerTable } from '../src/ui/showcase/DinnerTable';
-import { WorthCharacter } from '../src/ui/showcase/DinnerRating';
 import { createRoot } from 'react-dom/client';
 import { workId } from '../src/data/workItems';
 import { AboutReel } from '../src/ui/sections/AboutReel';
@@ -43,54 +42,6 @@ function demoHref(id: string) {
   if (id === 'f40') return '/#f40-study';
   return '/#project-' + id;
 }
-const dinnerUrl = '/work/?story=dinner';
-const photo = '/projects/scenes/wherever-pizza.jpg';
-
-function DinnerFeature() {
-  return (
-    <a
-      className="index-dinner-feature"
-      href={dinnerUrl}
-      onClick={followWorkRow}
-      data-work-row="dinner"
-      aria-label="Play Dinner for two, from wherever through owewell to worth"
-    >
-      <div className="index-dinner-intro">
-        <p className="index-dinner-apps">
-          wherever <span>·</span> owewell <span>·</span> worth
-        </p>
-        <h2>
-          Dinner
-          <br /> for two.
-        </h2>
-        <p className="index-dinner-caption">Pick a place, split the bill, keep a favorite.</p>
-        <span className="index-dinner-play">
-          Choose dinner <b aria-hidden="true">→</b>
-        </span>
-      </div>
-      <div className="index-dinner-art" aria-hidden="true">
-        <div className="index-dinner-photo">
-          <img src={photo} alt="" />
-        </div>
-        <div className="index-dinner-check">
-          <span>
-            Neighborhood
-            <br />
-            Pizza Kitchen
-          </span>
-          <div>
-            <small>Dinner for two</small>
-            <strong>$48.00</strong>
-          </div>
-        </div>
-        <div className="index-dinner-stamp">
-          <WorthCharacter />
-        </div>
-      </div>
-    </a>
-  );
-}
-
 function DinnerExhibit() {
   useLayoutEffect(() => {
     acceptWorkOrigin();
@@ -138,7 +89,18 @@ export function WorkIndex() {
       </header>
       <main>
         <h1>Work index</h1>
-        <DinnerFeature />
+        <a
+          className="index-migration"
+          href="/#work/monolith-django-rest-react-rewrite"
+          data-work-row="migration-proof"
+          onClick={followWorkRow}
+        >
+          <strong>30,000+</strong>
+          <span>
+            Active newsletters on the publisher platform we migrated from PHP to Django REST.
+          </span>
+          <span aria-hidden="true">↗</span>
+        </a>
         <section className="index-projects" aria-labelledby="projects-heading">
           <h2 id="projects-heading">Projects</h2>
           <div className="index-catalog">

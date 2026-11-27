@@ -119,13 +119,7 @@ export function FullGarden({
               key={flower.name}
               aria-label={flower.name}
               aria-pressed={index === selected}
-              data-place={
-                index === selected
-                  ? 'focus'
-                  : index === (selected + 1) % gardenFlowers.length
-                    ? 'far'
-                    : 'near'
-              }
+              data-flower={flower.name}
               onClick={() => {
                 choose(index);
                 setEditing(false);

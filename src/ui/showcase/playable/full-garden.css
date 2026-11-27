@@ -129,27 +129,43 @@ html:has(.full-garden[open]) {
   transform: translateX(-50%);
   color: #fff1d5;
 }
-.garden-specimens [data-place='focus'] {
-  left: 52%;
-  bottom: 6%;
-  width: 47%;
-  height: 74%;
-  z-index: 2;
-  --lean: 3deg;
-}
-.garden-specimens [data-place='far'] {
-  left: 14%;
-  bottom: 16%;
-  width: 25%;
-  height: 36%;
-  --lean: -8deg;
-}
-.garden-specimens [data-place='near'] {
-  left: 87%;
-  bottom: 1%;
+.garden-specimens button {
+  bottom: 4%;
   width: 29%;
-  height: 45%;
-  --lean: 8deg;
+  height: 48%;
+  --lean: -2deg;
+}
+.garden-specimens [data-flower='Anemone'] {
+  left: 17%;
+}
+.garden-specimens [data-flower='Gerbera'] {
+  left: 50%;
+  height: 62%;
+  --lean: 2deg;
+}
+.garden-specimens [data-flower='Ranunculus'] {
+  left: 83%;
+  --lean: 4deg;
+}
+.garden-specimens button[aria-pressed='true'] {
+  z-index: 1;
+  height: 80%;
+  width: 34%;
+}
+.full-garden .garden-specimens button:focus-visible {
+  outline: none;
+}
+.full-garden .garden-specimens button:focus-visible .garden-specimen-label {
+  outline: 2px solid #ffdfaa;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .garden-specimens button {
+    transition:
+      height 280ms ease-out,
+      width 280ms ease-out;
+  }
 }
 .garden-specimen-art {
   display: block;
@@ -188,7 +204,7 @@ html:has(.full-garden[open]) {
   color: #d4c4bd;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .garden-specimens [data-place='focus'] .studio-flower-head {
+  .garden-specimens [aria-pressed='true'] .studio-flower-head {
     animation: garden-petal-open 0.65s cubic-bezier(0.18, 0.77, 0.25, 1) both;
     transform-origin: center;
     transform-box: fill-box;
@@ -233,26 +249,6 @@ html:has(.full-garden[open]) {
   }
   .garden-specimens {
     grid-area: 3 / 1;
-  }
-  .garden-specimens [data-place='focus'] {
-    left: 51%;
-    bottom: 5%;
-    width: 48%;
-    height: 87%;
-  }
-  .garden-specimens [data-place='far'] {
-    --lean: -4deg;
-    left: 15%;
-    bottom: 15%;
-    width: 25%;
-    height: 48%;
-  }
-  .garden-specimens [data-place='near'] {
-    --lean: 4deg;
-    left: 84%;
-    bottom: 0;
-    width: 29%;
-    height: 53%;
   }
   .garden-specimen-label {
     min-height: 31px;

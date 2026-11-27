@@ -34,9 +34,20 @@ for (const [width, height] of [
     );
     await dinner.getByRole('button', { name: 'Split $48', exact: true }).click();
     await expect(dinner.getByText('$24.00', { exact: true })).toHaveCount(2);
+    const receipt = dinner.getByText('$24 each', { exact: true });
+    await expect(receipt).toBeVisible();
+    await expect(receipt).toBeInViewport();
+    const splitReceipt = await receipt.elementHandle();
     await expect(dinner).toHaveAttribute('data-moment', 'entry');
-    await dinner.getByRole('button', { name: 'Favorite', exact: true }).click();
+    await expect(receipt).toBeVisible();
+    await expect(receipt).toBeInViewport();
+    expect(await receipt.evaluate((node, original) => original === node, splitReceipt)).toBe(true);
     await expect(dinner.locator('.meal-character')).toBeInViewport();
+    await dinner.getByRole('button', { name: 'Favorite', exact: true }).click();
+    await expect(dinner.getByRole('button', { name: 'Favorite', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
     expect(
       await photo?.evaluate((node) => node === document.querySelector('.meal-photo img')),
     ).toBe(true);

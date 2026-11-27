@@ -42,7 +42,7 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
         <RequestPulse onPaint={onPulsePaint} />
         <div className="batch-end-time">
           <strong>2s</strong>
-          <span>batched load</span>
+          <span>to open Ad Slot Details</span>
         </div>
       </div>
       <figcaption className="batch-caption">
@@ -55,8 +55,8 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
           <span>Original load</span>
         </div>
         <span className="sr-only">
-          120 separate API calls became one batched request. Page load went from about 60 seconds to
-          2 seconds.
+          120 separate API calls became one batched request. Ad Slot Details opened in 2 seconds
+          instead of about 60.
         </span>
       </figcaption>
       <div className="batch-folio">
