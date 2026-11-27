@@ -79,7 +79,6 @@ it('removes closed story controls from keyboard navigation', async () => {
         onClose: noop,
         onPrevious: noop,
         onNext: noop,
-        position: null,
       }),
     ),
   );

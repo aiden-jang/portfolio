@@ -1,6 +1,4 @@
 import {
-  cloneElement,
-  isValidElement,
   lazy,
   Suspense,
   useCallback,
@@ -272,11 +270,7 @@ export function Duet({
                   parts={{ world, print, landing }}
                   onReady={roomReady}
                   reduced={reduced}
-                  roomLink={
-                    isValidElement<{ label?: string }>(roomLink)
-                      ? cloneElement(roomLink, { label: 'mrrp' })
-                      : roomLink
-                  }
+                  roomLink={roomLink}
                   returnToPad={() => go('desk')}
                 />
               </Suspense>

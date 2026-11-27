@@ -1,3 +1,4 @@
+import { nextWorkState } from '../workIndexNavigation';
 import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { App } from '../../App';
@@ -106,7 +107,7 @@ export function EvidenceRoute() {
       restoration: history.scrollRestoration,
       frame,
     };
-    history.pushState({ portfolioEvidence: id }, '', event.currentTarget.href);
+    history.pushState({ ...nextWorkState(), portfolioEvidence: id }, '', event.currentTarget.href);
     show(id);
     return true;
   };

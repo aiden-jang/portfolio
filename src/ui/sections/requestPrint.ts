@@ -186,6 +186,19 @@ const face = '#625080';
 const edge = '#312341';
 const endInk = '#342a50';
 
+function printHeight(width: number, height: number) {
+  return Math.min(height, width * (width < 650 ? 0.86 : 0.405));
+}
+
+export function firstRequestCorners(box: DOMRect) {
+  const height = printHeight(box.width, box.height);
+  const tile = plate[0].tile;
+  return [tile[0], tile[SAMPLES], tile[SAMPLES + 1], tile[tile.length - 1]].map((p) => ({
+    x: box.left + (p.x / WIDTH) * box.width,
+    y: box.top + (box.height - height) / 2 + (p.y / HEIGHT) * height,
+  }));
+}
+
 export function createRequestPrint(canvas: HTMLCanvasElement) {
   const context = canvas.getContext('2d');
   if (!context) return;
@@ -204,19 +217,18 @@ export function createRequestPrint(canvas: HTMLCanvasElement) {
     canvas.width = Math.max(1, Math.round(width * ratio));
     canvas.height = Math.max(1, Math.round(height * ratio));
   }
-  function paint(progress: number) {
+  function paint(progress: number, firstInTransit = false) {
     if (!cssWidth || !cssHeight) return;
-    const narrow = cssWidth < 650;
     const printWidth = cssWidth;
-    const printHeight = Math.min(cssHeight, cssWidth * (narrow ? 0.86 : 0.405));
-    const top = (cssHeight - printHeight) * 0.5;
+    const height = printHeight(cssWidth, cssHeight);
+    const top = (cssHeight - height) * 0.5;
     ink.resetTransform();
     ink.clearRect(0, 0, canvas.width, canvas.height);
     ink.setTransform(
       (printWidth / WIDTH) * pixelRatio,
       0,
       0,
-      (printHeight / HEIGHT) * pixelRatio,
+      (height / HEIGHT) * pixelRatio,
       0,
       top * pixelRatio,
     );
@@ -228,6 +240,7 @@ export function createRequestPrint(canvas: HTMLCanvasElement) {
     }
     const extrusion = 8 * (1 - smooth(progress / 0.23));
     for (const { tile, stream, target, index, digit, position } of plate) {
+      if (firstInTransit && index === 0) continue;
       const v = index / (TILE_COUNT - 1);
       const release = smooth((progress - 0.025 * digit - 0.055 * position) / 0.38);
       const gather = smooth((progress - 0.47 - 0.095 * v) / 0.36);

@@ -7,6 +7,7 @@ type Props = {
   dinner: string;
   bill: string;
   worth: string;
+  onReadDinner: (trigger: HTMLElement) => void;
   onReadBill: (trigger: HTMLElement) => void;
   onReadWorth: (trigger: HTMLElement) => void;
 };
@@ -36,7 +37,7 @@ function MealIcon({ name }: { name: 'external' | 'swipe' | 'check' | 'split' | '
   );
 }
 
-export function DinnerTable({ dinner, bill, worth, onReadBill, onReadWorth }: Props) {
+export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onReadWorth }: Props) {
   const track = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -161,16 +162,16 @@ export function DinnerTable({ dinner, bill, worth, onReadBill, onReadWorth }: Pr
             {app}
             <MealIcon name="external" />
           </a>
-          {(atBill || atWorth) && (
-            <button
-              type="button"
-              className="meal-notes"
-              aria-label={'How I built it: ' + app}
-              onClick={(event) => (atWorth ? onReadWorth : onReadBill)(event.currentTarget)}
-            >
-              Project notes
-            </button>
-          )}
+          <button
+            type="button"
+            className="meal-notes"
+            aria-label={'How I built it: ' + app}
+            onClick={(event) =>
+              (atWorth ? onReadWorth : atBill ? onReadBill : onReadDinner)(event.currentTarget)
+            }
+          >
+            Project notes
+          </button>
         </header>
         <div className="meal-ticket">
           <div className="meal-ticket-stock" aria-hidden="true" />

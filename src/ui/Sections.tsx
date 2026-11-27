@@ -10,7 +10,7 @@ import { ExperienceSection } from './sections/Experience';
 import { IntroSection } from './sections/Intro';
 import { MoreProjectsSection, WorkSection } from './sections/Work';
 import { WorkModal } from './WorkModal';
-import { readWorkOrigin } from './workIndexNavigation';
+import { nextWorkState, returnToWorkIndex } from './workIndexNavigation';
 import type { WorkDetail } from '../types';
 
 export function Sections() {
@@ -43,7 +43,6 @@ export function Sections() {
       if (nextId === activeId.current) return;
       activeId.current = nextId;
       if (first && item) {
-        readWorkOrigin(workId(item));
         const target = isPortfolioProject(item)
           ? document.getElementById(`project-${workId(item)}`)
           : document.getElementById('sec-experience');
@@ -80,19 +79,20 @@ export function Sections() {
       : window.location.hash || (isPortfolioProject(item) ? `#${section}` : '#sec-experience');
     lastCard.current = el;
     activeId.current = workId(item);
-    window.history.pushState({ portfolioWork: true }, '', `#work/${workId(item)}`);
+    window.history.pushState(
+      { ...nextWorkState(), portfolioWork: true },
+      '',
+      `#work/${workId(item)}`,
+    );
     runMorph(() => setActiveWork(item), el, true);
   }, []);
 
   const closeWork = useCallback(() => {
-    if (window.history.state?.portfolioWork || window.history.state?.portfolioWorkIndex) {
+    if (window.history.state?.portfolioWork) {
       window.history.back();
       return;
     }
-    if (typeof history.state?.workIndexFallback === 'string') {
-      location.replace('/work/#row-' + encodeURIComponent(history.state.workIndexFallback));
-      return;
-    }
+    if (returnToWorkIndex()) return;
     activeId.current = null;
     window.history.replaceState(null, '', originHash.current);
     runMorph(
@@ -134,14 +134,6 @@ export function Sections() {
         onClose={closeWork}
         onPrevious={previousWork}
         onNext={nextWork}
-        position={
-          activeWork
-            ? {
-                current: caseStudyLane(activeWork, 'all').indexOf(activeWork) + 1,
-                total: caseStudyLane(activeWork, 'all').length,
-              }
-            : null
-        }
       />
     </main>
   );

@@ -100,12 +100,24 @@ export function MoreProjectsSection({ onOpen }: Props) {
                 </button>
               }
               drawLink={<AppLink item={iguess} />}
-              roomLink={<AppLink item={mrrp} />}
+              roomLink={
+                <>
+                  <AppLink item={mrrp} label="mrrp" />
+                  <button
+                    type="button"
+                    aria-label="How I built it: mrrp"
+                    onClick={(event) => onOpen(mrrp, event.currentTarget)}
+                  >
+                    Project notes
+                  </button>
+                </>
+              }
             />
             <DinnerTable
               dinner={wherever.link!.url}
               bill={owewell.link!.url}
               worth={worth.link!.url}
+              onReadDinner={(trigger) => onOpen(wherever, trigger)}
               onReadBill={(trigger) => onOpen(owewell, trigger)}
               onReadWorth={(trigger) => onOpen(worth, trigger)}
             />

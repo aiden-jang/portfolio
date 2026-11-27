@@ -1,6 +1,6 @@
+import { followWorkIndex, indexHref } from './workIndexNavigation';
 import { createPortal } from 'react-dom';
 import type { WorkDetail } from '../types';
-import { caseStudyLane } from '../data/workBrowsing';
 import { WorkModalLinks } from './WorkModalLinks';
 import { WorkModalNav } from './WorkModalNav';
 import { WorkStoryEnding } from './WorkStoryEnding';
@@ -14,14 +14,11 @@ type Props = {
   onClose: () => void;
   onPrevious: () => void;
   onNext: () => void;
-  position: { current: number; total: number } | null;
 };
-export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props) {
+export function WorkModal({ item, onClose, onPrevious, onNext }: Props) {
   const dialog = useWorkDialog(item, { onClose, onPrevious, onNext });
   const { dialogRef, closeRef, onTouchStart, onTouchEnd, navigation } = dialog;
   if (!item) return null;
-  const lane = caseStudyLane(item, 'all');
-  const next = lane[(lane.indexOf(item) + 1) % lane.length];
   return createPortal(
     <div
       role="dialog"
@@ -38,6 +35,9 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
         className="work-modal-panel relative flex flex-col w-full max-w-[960px] max-h-[85dvh] overflow-hidden bg-[#0a0a14] border border-[var(--color-line)] rounded-xl"
       >
         <header className="work-modal-heading">
+          <a href={indexHref()} onClick={followWorkIndex} className="work-modal-index">
+            Work index
+          </a>
           <h3 id="work-modal-title" className="work-modal-title">
             {item.displayTitle ?? item.title}
           </h3>
@@ -61,11 +61,7 @@ export function WorkModal({ item, onClose, onPrevious, onNext, position }: Props
           <WorkStoryEnding item={item} />
         </ScrollBody>
         <div className="work-modal-footer">
-          <WorkModalNav
-            {...navigation}
-            position={position}
-            nextName={next.navigationTitle ?? next.shortName ?? next.displayTitle ?? next.title}
-          />
+          <WorkModalNav {...navigation} item={item} />
           <WorkModalLinks key={item.title} item={item} />
         </div>
       </div>

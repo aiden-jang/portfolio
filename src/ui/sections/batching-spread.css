@@ -30,6 +30,7 @@ html:root .portfolio-chrome #sec-experience:has(.batch-print-lane) {
 
 html:root #sec-experience .experience-content .batch-print-lane {
   --batch-travel: clamp(270px, 74svh, 700px);
+  scroll-margin-top: var(--portfolio-header-height);
   width: 100%;
   margin: 0;
   border: 0;
@@ -87,26 +88,30 @@ html:root #sec-experience #batching-study .batch-print-sheet {
   display: none;
 }
 #batching-study .batch-caption {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.97fr);
-  align-items: end;
-  gap: clamp(14px, 4vw, 65px);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: clamp(24px, 7vw, 110px);
+  row-gap: 8px;
   padding: 0;
   color: var(--batch-ink);
 }
-#batching-study .batch-caption > strong {
-  font: 610 clamp(58px, min(7.2vw, 12.8svh), 118px)/0.91 var(--font-display);
-  letter-spacing: -0.07em;
+.batch-measure {
+  display: flex;
+  gap: clamp(8px, 1.2vw, 19px);
+  align-items: baseline;
 }
-html:root #sec-experience #batching-study .batch-caption p {
-  align-self: end;
-  max-width: 34ch;
-  min-height: 1.3lh;
-  margin: 0;
-  font: 450 clamp(18px, min(1.8vw, 3.8svh), 28px)/1.28 var(--font-display);
-  letter-spacing: -0.025em;
-  color: var(--batch-ink);
-  text-wrap: pretty;
+.batch-measure strong {
+  white-space: nowrap;
+  font: 565 clamp(34px, min(5vw, 8.6svh), 80px)/0.98 var(--font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.065em;
+}
+.batch-measure span {
+  color: #514565;
+  white-space: nowrap;
+  font: 490 clamp(14px, 1.35vw, 21px)/1.2 var(--font-display);
+  letter-spacing: -0.02em;
 }
 .batch-folio {
   display: flex;
@@ -155,14 +160,16 @@ html:root #sec-experience .batch-folio a:focus-visible {
     gap: clamp(14px, 3svh, 28px);
   }
   #batching-study .batch-caption {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: clamp(21px, 9vw, 62px);
   }
-  #batching-study .batch-caption > strong {
-    font-size: clamp(50px, 15vw, 84px);
+  .batch-measure {
+    flex-direction: column;
+    gap: 6px;
   }
-  html:root #sec-experience #batching-study .batch-caption p {
-    font-size: clamp(16px, 4.6vw, 24px);
+  .batch-measure strong {
+    font-size: clamp(29px, 8.45vw, 47px);
   }
 }
 
@@ -175,12 +182,8 @@ html:root #sec-experience .batch-folio a:focus-visible {
   #sec-experience #batching-study .batch-print {
     gap: 7px;
   }
-  #batching-study .batch-caption > strong {
-    font-size: 43px;
-  }
-  html:root #sec-experience #batching-study .batch-caption p {
-    min-height: 0;
-    font-size: 15px;
+  .batch-measure strong {
+    font-size: 32px;
   }
 }
 
@@ -198,13 +201,13 @@ html:root #sec-experience .batch-folio a:focus-visible {
   }
 }
 
-html:root #sec-experience #batching-study .batch-load-time {
-  display: flex;
-  align-items: baseline;
-  gap: 0.52em;
-  min-width: 0;
-  white-space: nowrap;
-}
-#batching-study .batch-load-time b {
-  font-weight: 610;
+.request-handoff {
+  position: fixed;
+  z-index: 25;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
 }

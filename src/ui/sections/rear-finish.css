@@ -67,3 +67,34 @@ html:root .portfolio-chrome .rear-finish #sec-contact::after {
 html:root #sec-about .about-framing-notes {
   width: auto;
 }
+
+@media (max-width: 599px) and (max-height: 779px) and (orientation: portrait) {
+  html:root .portfolio-chrome .rear-finish #sec-contact {
+    --contact-anchor: max(calc(var(--portfolio-header-height) + 38px), 23svh);
+    --contact-overlap: 45svh;
+    margin-top: calc(-1 * var(--contact-overlap));
+    min-height: 100svh;
+    padding-top: var(--contact-anchor);
+  }
+  .rear-finish #sec-contact .panel {
+    position: sticky;
+    top: var(--contact-anchor);
+    margin-top: calc(var(--contact-overlap) - 100svh);
+  }
+  .rear-finish #sec-contact .panel:not(:focus-within) {
+    opacity: var(--contact-arrival, 0);
+    pointer-events: none;
+  }
+  .rear-finish[data-contact-entered] #sec-contact .panel :is(a, button),
+  .rear-finish #sec-contact .panel:focus-within :is(a, button) {
+    pointer-events: auto;
+  }
+  .rear-finish[data-contact-entered]
+    .scroll-film
+    :is(.scroll-film-range, .about-framing-notes):not(:focus-within) {
+    visibility: hidden;
+  }
+  .rear-finish .scroll-film :is(.scroll-film-range, .about-framing-notes):not(:focus-within) {
+    opacity: var(--study-controls, 1);
+  }
+}

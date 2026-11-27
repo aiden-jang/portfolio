@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { WORK_ITEMS, workId } from '../src/data/workItems';
 import { AboutReel } from '../src/ui/sections/AboutReel';
 import { ExperienceHistory } from '../src/ui/sections/Experience';
-import { openWorkRow, rememberWorkRow, useWorkIndexReturn } from '../src/ui/workIndexNavigation';
+import { followWorkRow, openWorkRow, useWorkIndexReturn } from '../src/ui/workIndexNavigation';
 import rearFinishImage from '../wing-art/desktop-rear/12.jpg';
 import './index.css';
 
@@ -20,11 +20,18 @@ const entries = [
   ['platform', 'platform', 'One account for the apps', 'platform-hub.webp'],
   ['f40', 'F40 study', 'Clay to paint', rearFinishImage],
 ];
-const destinations: Record<string, string> = {
-  batch: 'sec-experience',
-  f40: 'sec-about',
-  platform: 'work/platform',
+const cases: Record<string, string> = {
+  everythingisfine: '/cases/meanwhile/',
+  iodine: '/cases/iodine/',
+  batch: '/cases/request-batching/',
 };
+
+function demoHref(id: string) {
+  if (id === 'platform') return undefined;
+  if (id === 'batch') return '/#batching-study';
+  if (id === 'f40') return '/#f40-study';
+  return '/#project-' + id;
+}
 export function WorkIndex() {
   useWorkIndexReturn();
   const [cover, setCover] = useState(entries[0]);
@@ -47,6 +54,13 @@ export function WorkIndex() {
             {entries.map((entry) => {
               const [id, title, description] = entry;
               const item = WORK_ITEMS.find((item) => workId(item) === id);
+              const demo = demoHref(id);
+              const reader = cases[id] ?? (id === 'f40' ? demo! : '/#work/' + id);
+              const readerLabel = cases[id]
+                ? 'Case study'
+                : id === 'f40'
+                  ? 'Clay to paint'
+                  : 'Project notes';
               return (
                 <div
                   key={id}
@@ -56,26 +70,26 @@ export function WorkIndex() {
                   <a
                     className="index-entry"
                     data-work-row={id}
-                    href={'/#' + (destinations[id] ?? 'project-' + id)}
-                    onClick={(event) => {
-                      if (
-                        event.metaKey ||
-                        event.ctrlKey ||
-                        event.shiftKey ||
-                        event.altKey ||
-                        event.button !== 0
-                      )
-                        return;
-                      if (id === 'platform') {
-                        event.preventDefault();
-                        openWorkRow(event.currentTarget, id);
-                      } else rememberWorkRow(event.currentTarget);
-                    }}
+                    href={reader}
+                    onClick={followWorkRow}
+                    aria-label={title + ' — ' + readerLabel}
                   >
                     <strong>{title}</strong>
-                    <span>{description}</span>
-                    <i aria-hidden="true">→</i>
+                    <span>
+                      {readerLabel} <i aria-hidden="true">→</i>
+                    </span>
                   </a>
+                  {demo && demo !== reader && (
+                    <a
+                      className="index-demo"
+                      href={demo}
+                      data-work-row={'demo-' + id}
+                      onClick={followWorkRow}
+                      aria-label={title + ' demo: ' + description}
+                    >
+                      Demo <span aria-hidden="true">→</span>
+                    </a>
+                  )}
                   {item?.link && (
                     <a
                       className="index-external"
@@ -97,7 +111,7 @@ export function WorkIndex() {
           </figure>
         </div>
         <section className="index-history" id="experience">
-          <ExperienceHistory onOpen={(item, row) => openWorkRow(row, workId(item))} />
+          <ExperienceHistory onOpen={(item, row) => openWorkRow(row, '/#work/' + workId(item))} />
         </section>
         <section className="index-about" id="about">
           <div>

@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import { createRequestPrint } from './requestPrint';
+import { connectRequestHandoff } from './requestHandoff';
 
 export function RequestPulse({ onPaint }: { onPaint: (position: number) => void }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -16,7 +17,13 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
       last = 0;
     let catchingUp = target - current > 0.6;
     let visible = false;
-    const draw = () => print.paint(current);
+    let firstInTransit = false;
+    const draw = () => print.paint(current, firstInTransit);
+    const disconnectHandoff = connectRequestHandoff(canvas, (inTransit) => {
+      if (inTransit === firstInTransit) return;
+      firstInTransit = inTransit;
+      draw();
+    });
     const resize = () => {
       print.resize();
       draw();
@@ -40,18 +47,15 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
       frame = requestAnimationFrame(tick);
     };
     const update = (event: Event) => {
-      const { value, instant, catchUp } = (
+      const { value, instant } = (
         event as CustomEvent<{
           value: number;
           instant?: boolean;
-          catchUp?: boolean;
         }>
       ).detail;
       const jumpsForward = value - current > 0.6;
       catchingUp =
-        value !== current &&
-        !instant &&
-        (!!catchUp || jumpsForward || (catchingUp && value >= target));
+        value !== current && !instant && (jumpsForward || (catchingUp && value >= target));
       target = value;
       if (instant || (!catchingUp && current - target > 0.6)) {
         cancelAnimationFrame(frame);
@@ -77,6 +81,7 @@ export function RequestPulse({ onPaint }: { onPaint: (position: number) => void 
     resize();
     onPaint(current);
     return () => {
+      disconnectHandoff();
       delete owner.dataset.printReady;
       cancelAnimationFrame(frame);
       observer.disconnect();

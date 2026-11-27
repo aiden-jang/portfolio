@@ -100,6 +100,18 @@
   width: max(44px, var(--sill-w));
   height: max(44px, var(--sill-h));
 }
+.studio-route .studio-room-name > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.studio-route .studio-room-name button {
+  border: 0;
+  padding: 0;
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .studio-route .studio-room-feedback {
   overflow-wrap: anywhere;
 }
@@ -158,7 +170,7 @@ html:root #sec-more-work .studio-route .studio-room-name h3 {
 .studio-route .studio-room-name {
   gap: 14px;
 }
-.studio-route .studio-room-name a {
+.studio-route .studio-room-name :is(a, button) {
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -187,7 +199,7 @@ html:root #sec-more-work .studio-route .studio-room-name h3 {
   white-space: nowrap;
 }
 .studio-route .room-tools button:hover,
-.studio-route .studio-room-name a:hover {
+.studio-route .studio-room-name :is(a, button):hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -207,7 +219,7 @@ html:root #sec-more-work .studio-route .studio-room-name h3 {
   html:root #sec-more-work .studio-route .studio-room-name h3 {
     font-size: 19px;
   }
-  .studio-route .studio-room-name a {
+  .studio-route .studio-room-name :is(a, button) {
     font-size: 12px;
     min-height: 30px;
   }

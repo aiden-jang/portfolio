@@ -73,14 +73,29 @@ for (const viewport of [
 
     const batch = page.getByRole('figure', { name: 'Request batching comparison' });
     await travelTo('#batching-study', 0.63);
-    await expect(batch.getByText('Batching.', { exact: true })).toBeInViewport();
-    await expect(batch.locator('.batch-load-time', { hasText: /60s → 2s/ })).toBeInViewport();
+    await expect(batch.getByText('120 → 1', { exact: true })).toBeInViewport();
+    await expect(batch.getByText('60s → 2s', { exact: true })).toBeInViewport();
     await expect(batch.getByText('Line items', { exact: true })).toHaveCount(0);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await editor.scrollIntoViewIfNeeded();
     await expect(status).toHaveText('Edit undone');
     await batch.scrollIntoViewIfNeeded();
-    await expect(batch.locator('.batch-load-time', { hasText: /60s → 2s/ })).toBeInViewport();
+    await expect(batch.getByText('60s → 2s', { exact: true })).toBeInViewport();
   });
 }
+
+test.describe('Iodine on a short phone', () => {
+  test.use({ viewport: { width: 375, height: 667 }, isMobile: true, hasTouch: true });
+
+  test('the first tap keeps the automatic Undo result', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/#project-iodine', { waitUntil: 'domcontentloaded' });
+    const editor = page.locator('#project-iodine');
+    await expect(editor.getByRole('status')).toHaveText('Edit undone');
+    await editor.getByRole('button', { name: 'Undo edit' }).tap();
+    await expect(editor.getByRole('status')).toHaveText('Edit undone');
+    await editor.getByRole('button', { name: 'Reset edit' }).tap();
+    await expect(editor.getByRole('status')).toHaveText('Agent edit');
+  });
+});

@@ -133,9 +133,9 @@ html:root .portfolio-chrome #sec-work #project-iodine.portfolio-undo .undo-buffe
 }
 html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
   margin: 0;
-  color: var(--undo-secondary);
+  color: var(--undo-type);
   box-shadow: none;
-  font: 450 clamp(12px, 2.35cqi, 34px)/1.15 var(--font-mono);
+  font: 450 clamp(12px, 4.58cqi, 65px)/1.3 var(--font-mono);
   letter-spacing: -0.035em;
 }
 
@@ -144,8 +144,22 @@ html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
   align-items: baseline;
   vertical-align: baseline;
   color: var(--undo-type);
-  font-size: clamp(24px, 6.2cqi, 90px);
-  letter-spacing: -0.065em;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.undo-kept-name {
+  position: relative;
+}
+.undo-kept-name::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -0.095em;
+  height: max(2px, 0.055em);
+  background: var(--undo-accent);
+}
+.undo-kept-name[data-lifted]::after {
+  visibility: hidden;
 }
 
 .undo-token {
@@ -208,7 +222,7 @@ html:root #sec-work #project-iodine.portfolio-undo .undo-row .undo-token mark {
 .undo-actions button:hover {
   background: #ffe0c7;
 }
-.undo-buffer[data-restored='true'] .undo-actions button {
+.undo-actions button[data-action='reset'] {
   color: var(--undo-type);
   background: transparent;
   border-color: #b4acc6;
@@ -230,13 +244,13 @@ html:root #sec-work #project-iodine .undo-actions p {
 
 @media (prefers-reduced-motion: no-preference) {
   .undo-token {
-    transition: grid-template-columns 280ms ease-out;
+    transition: none;
   }
   .undo-token mark::after {
     transition: transform 130ms ease-out;
   }
   .undo-buffer[data-restored='true'] .undo-token {
-    transition-delay: 130ms;
+    transition: grid-template-columns 0s 210ms;
   }
 }
 
@@ -266,10 +280,7 @@ html:root #sec-work #project-iodine .undo-actions p {
     font-size: clamp(9px, 3.75cqi, 17px);
   }
   html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
-    font-size: clamp(10px, 4.15cqi, 19px);
-  }
-  .undo-expression {
-    font-size: clamp(16px, 6.5cqi, 32px);
+    font-size: clamp(12px, 4.72cqi, 27px);
   }
   .undo-actions p {
     max-width: 23ch;
@@ -287,8 +298,5 @@ html:root #sec-work #project-iodine .undo-actions p {
   .undo-lines {
     gap: 6px;
     padding-block: 14px;
-  }
-  .undo-expression {
-    font-size: 44px;
   }
 }

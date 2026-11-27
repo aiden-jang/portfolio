@@ -43,9 +43,11 @@ export function RearFinish() {
     const canvas = frame.current!;
     const input = slider.current!;
     const contact = root.querySelector<HTMLElement>('#sec-contact')!;
+    const emailLink = contact.querySelector<HTMLAnchorElement>('.contact-email-link')!;
     const context = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const short = matchMedia(formats.short);
+    const compact = matchMedia(formats.short + ' and (orientation: portrait)');
     const narrow = matchMedia(formats.phone);
     let format = '';
     let frames: HTMLImageElement[] = [];
@@ -97,13 +99,35 @@ export function RearFinish() {
       }
       const travel = rangeTravel();
       const fixed = reduced.matches || !travel;
-      const position = lane.getBoundingClientRect().top;
+      const laneBounds = lane.getBoundingClientRect();
+      const arrival = 1 - laneBounds.bottom / window.innerHeight;
+      const contactEntered = compact.matches
+        ? arrival > 0.09
+        : contact.getBoundingClientRect().top < window.innerHeight * 0.65;
+      if (compact.matches) {
+        const controls = reduced.matches
+          ? Number(!contactEntered)
+          : clamp(1 - arrival / 0.09, 0, 1);
+        const email = reduced.matches
+          ? Number(contactEntered)
+          : clamp((arrival - 0.09) / 0.11, 0, 1);
+        root.style.setProperty('--study-controls', String(controls));
+        root.style.setProperty('--contact-arrival', String(email));
+        if (contactEntered !== root.hasAttribute('data-contact-entered')) {
+          root.toggleAttribute('data-contact-entered', contactEntered);
+          if (contactEntered && lane.contains(document.activeElement)) {
+            emailLink.focus({ preventScroll: true });
+          } else if (!contactEntered && contact.contains(document.activeElement)) {
+            input.focus({ preventScroll: true });
+          }
+        }
+      }
       // Finish the paint while the stage is still pinned, then let the page bring in the email.
       const progress = fixed
-        ? contact.getBoundingClientRect().top < window.innerHeight * 0.65
+        ? contactEntered
           ? 1
           : manual
-        : clamp((-position / travel - 0.06) / 0.74, 0, 1);
+        : clamp((-laneBounds.top / travel - 0.06) / 0.74, 0, 1);
       root.style.setProperty('--finish-paint', String(progress));
       root.dataset.finish = String(progress);
       const value = Math.round(progress * 100);
@@ -136,6 +160,12 @@ export function RearFinish() {
       schedule();
     }
 
+    function showFocusedContact() {
+      if (compact.matches && !root.hasAttribute('data-contact-entered')) {
+        contact.scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         nearby = entries[entries.length - 1].isIntersecting;
@@ -148,6 +178,7 @@ export function RearFinish() {
     addEventListener('resize', schedule);
     reduced.addEventListener('change', schedule);
     input.addEventListener('input', scrub);
+    contact.addEventListener('focusin', showFocusedContact);
     render();
     return () => {
       alive = false;
@@ -157,6 +188,7 @@ export function RearFinish() {
       removeEventListener('resize', schedule);
       reduced.removeEventListener('change', schedule);
       input.removeEventListener('input', scrub);
+      contact.removeEventListener('focusin', showFocusedContact);
     };
   }, []);
 

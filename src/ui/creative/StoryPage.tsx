@@ -1,3 +1,4 @@
+import { followRelatedStory, followWorkIndex, indexHref, workOrigin } from '../workIndexNavigation';
 import { useEffect, useState } from 'react';
 import { WORK_ITEMS, workId } from '../../data/workItems';
 import { copyText } from '../../browserSharing';
@@ -54,6 +55,7 @@ export function StoryPage({
 }) {
   const item = WORK_ITEMS.find((candidate) => workId(candidate) === id)!;
   const story = stories[id];
+  const fromIndex = Boolean(workOrigin());
   const root = portfolioPath(location.pathname);
   const [phase, setPhase] = useState<IodinePhase>(() =>
     new URLSearchParams(location.search).get('edit') === 'restored' ? 'restored' : 'edited',
@@ -102,8 +104,11 @@ export function StoryPage({
     <IodineSession.Provider value={{ phase, setPhase }}>
       <div className="creative-case" data-case={id} data-opening="evidence">
         <header className="creative-case-nav">
-          <a href={root + section} onClick={returnClick}>
-            <ControlIcon name="arrow" /> Portfolio
+          <a
+            href={fromIndex ? indexHref() : root + section}
+            onClick={fromIndex ? followWorkIndex : returnClick}
+          >
+            <ControlIcon name="arrow" /> {fromIndex ? 'Work index' : 'Portfolio'}
           </a>
           <span className="case-opening-label">{story.label}</span>
           <ResumeButton />
@@ -144,12 +149,15 @@ export function StoryPage({
           <WorkStoryEnding item={item} />
           <aside className="creative-case-next">
             <p>{story.nextDetail}</p>
-            <a href={next}>
+            <a href={next} onClick={followRelatedStory}>
               {story.nextLabel} <ControlIcon name="arrow" />
             </a>
           </aside>
           <footer className="creative-case-footer">
             <a href={root + '#sec-contact'}>Contact Aiden</a>
+            <a href={indexHref()} onClick={followWorkIndex}>
+              Work index
+            </a>
             <a href={root + section} onClick={returnClick}>
               Back to the portfolio
             </a>

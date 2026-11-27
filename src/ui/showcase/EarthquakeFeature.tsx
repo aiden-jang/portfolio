@@ -5,6 +5,7 @@ import { kamchatkaExample as example } from '../../data/kamchatkaExample';
 import { InteractiveGlobe } from './InteractiveGlobe';
 import { ControlIcon } from '../ControlIcon';
 import { OpenEvidence, type EvidenceFrame } from '../creative/evidenceNavigation';
+import { nextWorkState } from '../workIndexNavigation';
 import { evidenceHref } from '../creative/storyRoutes';
 
 type Props = {
@@ -58,7 +59,11 @@ export function EarthquakeFeature({ item, preview }: Props) {
   const launchComparison = (trigger: HTMLElement) => {
     returnScroll.current = window.scrollY;
     open.current = trigger;
-    history.pushState({ quakeComparison: true }, '', compareRoute + '/' + agency);
+    history.pushState(
+      { ...nextWorkState(), quakeComparison: true },
+      '',
+      compareRoute + '/' + agency,
+    );
     setComparing(true);
   };
   const closeComparison = () => {

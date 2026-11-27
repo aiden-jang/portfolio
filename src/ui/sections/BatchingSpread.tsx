@@ -1,6 +1,5 @@
 import { useCallback, useContext, useRef, useState, type RefObject } from 'react';
 import { useReducedMotion } from '../../hooks/reducedMotion';
-import { lastScrollInput, useScrollArrival } from '../../hooks/scrollArrival';
 import { useScrollStudy } from '../../hooks/useScrollStudy';
 import { RequestPulse } from './RequestPulse';
 import { ControlIcon } from '../ControlIcon';
@@ -13,57 +12,15 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
   const open = useContext(OpenEvidence);
   const figure = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
-  const arrivalProgress = useRef<number | null>(null);
-  const previousProgress = useRef(0);
-  const landOnBatch = useCallback(
-    (active: boolean) => {
-      const element = figure.current;
-      const track = lane.current;
-      const pin = track?.querySelector<HTMLElement>('[data-study-pin]');
-      if (!active || !element || !track || !pin) {
-        arrivalProgress.current = null;
-        return;
-      }
-      const travel = Math.max(1, track.offsetHeight - pin.offsetHeight);
-      const progress =
-        (parseFloat(getComputedStyle(pin).top) - track.getBoundingClientRect().top) / travel;
-      if (progress < 0.42) return;
-      arrivalProgress.current = Math.min(1, progress);
-      paintRequestPulse(element, 1, { catchUp: true });
-    },
-    [lane],
-  );
-  useScrollArrival(lane, !reducedMotion, landOnBatch, figure);
-
   const draw = useCallback(
     (_stage: HTMLElement, progress: number) => {
       const element = figure.current;
       if (!element) return;
-      const previous = previousProgress.current;
-      previousProgress.current = progress;
-      if (reducedMotion) {
-        arrivalProgress.current = null;
-        paintRequestPulse(element, 1, { instant: true });
-        return;
-      }
-      const arrival = arrivalProgress.current;
-      if (arrival !== null) {
-        if (progress >= arrival - 0.04) {
-          arrivalProgress.current = Math.max(progress, arrival);
-          return;
-        }
-        arrivalProgress.current = null;
-      }
-      if (
-        progress >= 0.42 &&
-        progress - previous > 0.38 &&
-        performance.now() - lastScrollInput() < 750
-      ) {
-        arrivalProgress.current = progress;
-        paintRequestPulse(element, 1, { catchUp: true });
-        return;
-      }
-      paintRequestPulse(element, Math.max(0, Math.min(1, (progress - 0.035) / 0.685)));
+      const value = reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - 0.035) / 0.685));
+      element.dataset.pulse = String(value);
+      element.dispatchEvent(
+        new CustomEvent('pulse-position', { detail: { value, instant: reducedMotion } }),
+      );
     },
     [reducedMotion],
   );
@@ -85,20 +42,14 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
         <RequestPulse onPaint={onPulsePaint} />
       </div>
       <figcaption className="batch-caption">
-        <strong aria-hidden="true">
-          {after ? 'API call.' : phase === 'batching' ? 'Batching.' : 'API calls.'}
-        </strong>
-        <p className={after ? 'batch-load-time' : undefined} aria-hidden="true">
-          {after ? (
-            <>
-              <span>Page load</span> <b>60s → 2s</b>
-            </>
-          ) : phase === 'before' ? (
-            'One mark per request.'
-          ) : (
-            ''
-          )}
-        </p>
+        <div className="batch-measure" aria-hidden="true">
+          <strong>120 → 1</strong>
+          <span>API requests</span>
+        </div>
+        <div className="batch-measure" aria-hidden="true">
+          <strong>60s → 2s</strong>
+          <span>Page load</span>
+        </div>
         <span className="sr-only">
           120 separate API calls became one batched request. Page load went from about 60 seconds to
           2 seconds.
@@ -118,13 +69,4 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
       </div>
     </figure>
   );
-}
-
-function paintRequestPulse(
-  figure: HTMLElement,
-  value: number,
-  options?: { instant?: boolean; catchUp?: boolean },
-) {
-  figure.dataset.pulse = String(value);
-  figure.dispatchEvent(new CustomEvent('pulse-position', { detail: { value, ...options } }));
 }

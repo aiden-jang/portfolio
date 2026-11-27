@@ -1,3 +1,4 @@
+import { acceptWorkOrigin } from './ui/workIndexNavigation';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { EvidenceRoute } from './ui/creative/EvidenceRoute';
@@ -14,6 +15,7 @@ import './ui/showcase/work-sequence.css';
 const root = document.getElementById('root');
 if (!root) throw new Error('#root element not found');
 
+acceptWorkOrigin();
 const story = storyAtLocation(location);
 
 createRoot(root).render(

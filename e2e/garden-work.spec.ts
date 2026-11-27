@@ -91,7 +91,7 @@ for (const [width, height] of [
       await page.goBack();
       await expect(row).toBeFocused();
       await expect(page.locator('.experience-more')).toHaveJSProperty('open', true);
-      const platform = page.getByRole('link', { name: /platform One account/ });
+      const platform = page.getByRole('link', { name: 'platform — Project notes', exact: true });
       await platform.click();
       await page.getByRole('button', { name: 'Close', exact: true }).press('Escape');
       await expect(platform).toBeFocused();

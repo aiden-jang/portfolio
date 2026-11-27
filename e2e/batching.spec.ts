@@ -25,8 +25,13 @@ for (const viewport of [
     await page.evaluate(() => document.fonts.ready.then(() => {}));
     const lane = page.locator('#batching-study');
     const figure = lane.getByRole('figure', { name: 'Request batching comparison' });
-    const label = figure.locator('.batch-caption > strong');
-    const readout = figure.locator('.batch-load-time');
+    const measures = figure.locator('.batch-measure');
+    const expectMeasures = async () => {
+      await expect(measures.nth(0)).toHaveText('120 → 1API requests');
+      await expect(measures.nth(1)).toHaveText('60s → 2sPage load');
+      await expect(measures.nth(0)).toBeInViewport({ ratio: 1 });
+      await expect(measures.nth(1)).toBeInViewport({ ratio: 1 });
+    };
     const canvas = figure.locator('canvas');
     const requestInk = () =>
       canvas.evaluate((el: HTMLCanvasElement) => {
@@ -51,30 +56,36 @@ for (const viewport of [
 
     await expect(figure.getByRole('button', { includeHidden: true })).toHaveCount(0);
     await scrub(0);
-    await expect(label).toHaveText('API calls.');
+    await expect(figure).toHaveAttribute('data-phase', 'before');
+    await expectMeasures();
     await expect(canvas).toBeInViewport({ ratio: 0.6 });
     const start = await requestInk();
     expect(start).toBeGreaterThan(120);
     await scrub(0.36);
-    await expect(label).toHaveText('Batching.');
+    await expect(figure).toHaveAttribute('data-phase', 'batching');
+    await expectMeasures();
     await expect.poll(requestInk).toBeLessThan(start);
     await scrub(0.85);
-    await expect(readout).toHaveText('Page load 60s → 2s');
+    await expect(figure).toHaveAttribute('data-phase', 'after');
+    await expectMeasures();
     await expect.poll(requestInk).toBeLessThan(start * 0.68);
     await scrub(0);
-    await expect(label).toHaveText('API calls.');
+    await expect(figure).toHaveAttribute('data-phase', 'before');
+    await expectMeasures();
     await expect.poll(requestInk).toBeGreaterThan(start * 0.95);
 
     await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
     await expect(canvas).not.toBeInViewport();
     await scrub(0.84, true);
-    await expect(label).toHaveText('Batching.');
+    await expect(figure).toHaveAttribute('data-phase', 'batching');
+    await expectMeasures();
     await expect(canvas).toBeInViewport({ ratio: 0.6 });
     await expect.poll(requestInk).toBeLessThan(start * 0.68);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await scrub(0);
-    await expect(readout).toHaveText('Page load 60s → 2s');
+    await expect(figure).toHaveAttribute('data-phase', 'after');
+    await expectMeasures();
     await expect.poll(requestInk).toBeLessThan(start * 0.68);
     await expect(figure.getByRole('button', { includeHidden: true })).toHaveCount(0);
   });
