@@ -69,7 +69,9 @@ for (const viewport of [
     await expect.poll(requestInk).toBeLessThan(start);
     if (viewport.width === 375) {
       const travel = await lane.evaluate(
-        (el) => el.offsetHeight - el.querySelector<HTMLElement>('[data-study-pin]')!.offsetHeight,
+        (el) =>
+          (el as HTMLElement).offsetHeight -
+          el.querySelector<HTMLElement>('[data-study-pin]')!.offsetHeight,
       );
       expect(travel).toBe(307);
     }
