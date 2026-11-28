@@ -28,7 +28,7 @@ for (const viewport of [
     const measures = figure.locator('.batch-measure');
     const expectMeasures = async () => {
       await expect(measures.nth(0)).toHaveText('120 → 1API requests');
-      await expect(measures.nth(1)).toHaveText('60s → 2sPage load');
+      await expect(measures.nth(1)).toHaveText('60sOriginal load');
       await expect(measures.nth(0)).toBeInViewport({ ratio: 1 });
       await expect(measures.nth(1)).toBeInViewport({ ratio: 1 });
     };
@@ -47,7 +47,9 @@ for (const viewport of [
         (el, { fraction, fast }) => {
           const pin = el.querySelector<HTMLElement>('[data-study-pin]')!;
           const top = el.getBoundingClientRect().top - (parseFloat(getComputedStyle(pin).top) || 0);
-          const delta = top + ((el as HTMLElement).offsetHeight - pin.offsetHeight) * fraction;
+          const travel = (el as HTMLElement).offsetHeight - pin.offsetHeight;
+          const trim = parseFloat(getComputedStyle(el).getPropertyValue('--batch-hold-trim')) || 0;
+          const delta = top + Math.min(travel, (travel + trim) * fraction);
           if (fast) window.dispatchEvent(new WheelEvent('wheel', { deltaY: delta }));
           window.scrollBy({ top: delta, behavior: 'instant' });
         },
@@ -65,7 +67,13 @@ for (const viewport of [
     await expect(figure).toHaveAttribute('data-phase', 'batching');
     await expectMeasures();
     await expect.poll(requestInk).toBeLessThan(start);
-    await scrub(0.85);
+    if (viewport.width === 375) {
+      const travel = await lane.evaluate(
+        (el) => el.offsetHeight - el.querySelector<HTMLElement>('[data-study-pin]')!.offsetHeight,
+      );
+      expect(travel).toBe(307);
+    }
+    await scrub(0.7);
     await expect(figure).toHaveAttribute('data-phase', 'after');
     await expectMeasures();
     await expect.poll(requestInk).toBeLessThan(start * 0.68);
@@ -76,8 +84,8 @@ for (const viewport of [
 
     await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
     await expect(canvas).not.toBeInViewport();
-    await scrub(0.84, true);
-    await expect(figure).toHaveAttribute('data-phase', 'batching');
+    await scrub(0.72, true);
+    await expect(figure).toHaveAttribute('data-phase', 'after');
     await expectMeasures();
     await expect(canvas).toBeInViewport({ ratio: 0.6 });
     await expect.poll(requestInk).toBeLessThan(start * 0.68);
