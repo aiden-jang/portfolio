@@ -14,7 +14,12 @@ const artwork = import.meta.glob('../../../wing-art/*/*.jpg', {
 }) as Record<string, string>;
 const lastFrame = 12;
 const paintStart = 0.035;
-const paintEnd = 0.82;
+const originalPaintEnd = 0.82;
+const paintDistance = (originalPaintEnd - paintStart) * 0.75;
+const savedTravel = originalPaintEnd - paintStart - paintDistance;
+const travel = 1 - savedTravel;
+const paintFrom = paintStart / travel;
+const paintTo = (paintStart + paintDistance) / travel;
 const formats = {
   short: '(max-width: 599px) and (max-height: 779px)',
   phone: '(max-width: 599px)',
@@ -138,8 +143,10 @@ export function RearFinish() {
       const timeline = fixed ? 0 : clamp(-lane.getBoundingClientRect().top / span, 0, 1);
       const handoff = fixed
         ? Number(contactTop <= innerHeight * 0.55)
-        : easedProgress(timeline, 0.81, 0.97);
-      const closing = fixed ? handoff : easedProgress(timeline, 0.73, 0.9);
+        : easedProgress(timeline, (0.84 - savedTravel) / travel, (0.97 - savedTravel) / travel);
+      const closing = fixed
+        ? handoff
+        : easedProgress(timeline, paintTo, (0.9 - savedTravel) / travel);
       const contactEntered = handoff > 0;
 
       const offset = clamp(contactTop, 0, innerHeight);
@@ -170,7 +177,7 @@ export function RearFinish() {
         ? contactEntered
           ? 1
           : manual
-        : clamp((timeline - paintStart) / (paintEnd - paintStart), 0, 1);
+        : clamp((timeline - paintFrom) / (paintTo - paintFrom), 0, 1);
       const changed = progress !== lastProgress;
       if (changed) {
         const value = Math.round(progress * 100);
@@ -194,7 +201,7 @@ export function RearFinish() {
       if (span && !reduced.matches) {
         const start = scrollY + lane.getBoundingClientRect().top;
         scrollTo({
-          top: start + span * (paintStart + manual * (paintEnd - paintStart)),
+          top: start + span * (paintFrom + manual * (paintTo - paintFrom)),
           behavior: 'instant',
         });
       }
@@ -258,7 +265,13 @@ export function RearFinish() {
             className="about-framing-study"
             aria-labelledby="finish-study-title"
           >
-            <div className="scroll-film-track" ref={track}>
+            <div
+              className="scroll-film-track"
+              ref={track}
+              style={{
+                height: `calc(var(--stage-height) + var(--scroll-travel) * ${travel})`,
+              }}
+            >
               <div className="scroll-film">
                 <div className="film-heading">
                   <h3 id="finish-study-title">I build tools that make complex work easier.</h3>
@@ -275,15 +288,6 @@ export function RearFinish() {
                     aria-valuetext="Clay"
                   />
                   <span aria-hidden="true">Paint</span>
-                </div>
-                <div className="about-framing-notes">
-                  <span>
-                    Model by{' '}
-                    <a href="https://sketchfab.com/3d-models/ee082e412b0a4b2090e8492117841e95">
-                      vecarz
-                    </a>
-                    , CC BY 4.0.
-                  </span>
                 </div>
               </div>
             </div>

@@ -92,9 +92,15 @@ test('Behind the render switches finishes and returns focus to Garage', async ({
   await expect(garage).toBeFocused();
 });
 
-for (const width of [1440, 390]) {
-  test(`About keeps the finish study in the scroll at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 844 });
+for (const [width, height] of [
+  [1440, 900],
+  [390, 844],
+  [375, 667],
+]) {
+  test(`About keeps the finish study and credits available at ${width}×${height}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.route('**/_vercel/**', (route) => route.fulfill({ body: '' }));
     await page.goto('/#sec-about', { waitUntil: 'domcontentloaded' });
@@ -106,7 +112,14 @@ for (const width of [1440, 390]) {
     await slider.focus();
     await slider.press('End');
     await expect(slider).toHaveAttribute('aria-valuetext', 'Paint');
-    await expect(study.getByRole('link', { name: 'vecarz' })).toBeVisible();
+    await expect(study.getByRole('link', { name: 'vecarz' })).toHaveCount(0);
+    await page.goto('/#sec-contact');
+    await page.getByRole('button', { name: '3D model credits' }).click();
+    const credits = page.getByRole('dialog', { name: '3D model credits' });
+    const closing = credits.getByRole('region', { name: 'Car in the closing frame' });
+    await expect(closing).toContainText('by vecarz');
+    await expect(closing.getByRole('link', { name: 'CC BY 4.0' })).toBeVisible();
+    await expect(credits.locator('.model-credit-detail').first()).toContainText('Ferrari F40');
     await expect(page.getByRole('button', { name: 'Open this shot in Studio' })).toHaveCount(0);
     await expect(page.getByRole('link', { name: 'How I built the showroom' })).toHaveCount(0);
   });

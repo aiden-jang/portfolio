@@ -46,7 +46,7 @@ html:root
 }
 html:root .portfolio-chrome .rear-finish .scroll-film {
   position: sticky;
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: 1fr auto;
 }
 html:root .portfolio-chrome .rear-finish #sec-about .scroll-film::before,
 html:root .portfolio-chrome .rear-finish #sec-contact::after {
@@ -64,20 +64,16 @@ html:root .rear-finish .film-heading h3 {
 .rear-finish .scroll-film-range {
   max-width: 640px;
 }
-.rear-finish .scroll-film :is(.scroll-film-range, .about-framing-notes) {
+.rear-finish .scroll-film .scroll-film-range {
   opacity: calc(1 - var(--finish-exit, 0));
 }
-.rear-finish [data-finish-ended] :is(.scroll-film-range, .about-framing-notes) {
+.rear-finish [data-finish-ended] .scroll-film-range {
   visibility: hidden;
 }
 @media (prefers-reduced-motion: reduce), (max-height: 490px) {
   html:root .portfolio-chrome .rear-finish .scroll-film {
     position: relative;
   }
-}
-
-html:root #sec-about .about-framing-notes {
-  width: auto;
 }
 
 /* The same painted frame stays pinned while the contact address takes the title's place. */

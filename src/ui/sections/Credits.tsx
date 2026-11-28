@@ -3,13 +3,10 @@ import { usePageScrollLock } from '../usePageScrollLock';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CARS, F40_INDEX } from '../../config';
-import { useAppStore } from '../../store';
 import './credits.css';
 
 export function Credits() {
-  const current = useAppStore((state) =>
-    state.sceneUnavailable || state.isCarLoading || state.carLoadError ? null : CARS[F40_INDEX],
-  );
+  const current = CARS[F40_INDEX];
   const credit = current?.credit;
   const credited = CARS.filter((car) => !!car.credit);
   const [open, setOpen] = useState(false);
@@ -81,6 +78,9 @@ export function Credits() {
                   <div>
                     <h3>{current.name}</h3>
                     <CreditDetails credit={credit} />
+                    <p className="text-[0.68rem] text-[var(--color-muted)]">
+                      Clay and paint finishes, lighting, and rear framing adapted for this study.
+                    </p>
                   </div>
                 </section>
               )}

@@ -120,8 +120,10 @@ for (const width of [1440, 390]) {
         .locator('.scroll-film')
         .evaluate((el) => getComputedStyle(el, '::before').content),
     ).toBe('none');
-    await scrub(0.92);
+    await scrub(0.79);
     await expect.poll(progress).toBe(1);
+    await expect(email).toBeHidden();
+    await scrub(0.92);
     const paintedStill = stage.locator('.rear-paint img');
     const paint = await paintedStill.evaluate((el: HTMLImageElement) => el.currentSrc);
     await expect(stage.locator('.rear-paint')).toHaveCSS('opacity', '1');
