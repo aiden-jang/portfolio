@@ -88,14 +88,27 @@ for (const viewport of [
 test.describe('Iodine on a short phone', () => {
   test.use({ viewport: { width: 375, height: 667 }, isMobile: true, hasTouch: true });
 
-  test('the first tap reapplies an automatically undone edit', async ({ page }) => {
+  test('Undo and the agent context survive a case-study round trip', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.goto('/#project-iodine', { waitUntil: 'domcontentloaded' });
     const editor = page.locator('#project-iodine');
     await expect(editor.getByRole('status')).toHaveText('Edit undone');
+    const agentContext = editor.locator('.undo-agent-context');
+    await expect(agentContext.getByText('edit_reverted', { exact: true })).toBeInViewport();
+    const caseLink = editor.getByRole('link', { name: 'Read the iodine case study' });
+    await caseLink.tap();
+    const evidence = page.getByRole('region', { name: 'Recorded Iodine edit recovery' });
+    await expect(evidence.locator('.undo-agent-context')).toHaveAttribute('data-restored', 'true');
+    await page.goBack();
+    await expect(caseLink).toBeFocused();
+    await expect(agentContext).toHaveAttribute('data-restored', 'true');
     await editor.getByRole('button', { name: 'Reapply edit' }).tap({ timeout: 5000 });
+    await expect(agentContext.getByText('edit_reverted', { exact: true })).toHaveCount(0);
     await expect(editor.getByRole('status')).toHaveText('Agent edit');
     await editor.getByRole('button', { name: 'Undo edit' }).tap();
     await expect(editor.getByRole('status')).toHaveText('Edit undone');
+    await expect(
+      agentContext.getByText('Read the file again before changing it.', { exact: false }),
+    ).toBeInViewport({ ratio: 1 });
   });
 });

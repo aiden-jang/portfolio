@@ -1,0 +1,112 @@
+#project-iodine .undo-sheet {
+  align-content: center;
+  grid-template-rows: auto auto;
+  gap: clamp(22px, 4svh, 46px);
+}
+
+html:root .portfolio-chrome #sec-more-work #project-iodine.portfolio-undo .undo-buffer {
+  grid-template-rows: auto auto auto auto;
+}
+
+#project-iodine .undo-actions {
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-block: 10px 13px;
+}
+
+#project-iodine .undo-actions button {
+  min-inline-size: 9em;
+}
+
+#project-iodine .undo-actions .undo-file-result {
+  max-width: none;
+  font-size: clamp(13px, 1.16vw, 16px);
+}
+
+.undo-agent-context {
+  --agent-ink: #e3eee7;
+  --agent-muted: #aebdc2;
+  --agent-accent: #b6dbc7;
+  display: grid;
+  grid-template-columns: minmax(140px, 0.24fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 8px clamp(16px, 3vw, 40px);
+  padding: 13px clamp(13px, 1.5vw, 22px);
+  border-top: 1px solid #48575d;
+  background: #121b22;
+  color: var(--agent-ink);
+  font: 450 clamp(13px, 1.1vw, 16px)/1.44 var(--font-display);
+}
+
+.undo-agent-context[data-restored='true'] {
+  border-color: #6d9682;
+  background: #182621;
+}
+
+.undo-agent-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 11px;
+}
+
+.undo-agent-label strong {
+  font-weight: 630;
+}
+
+.undo-agent-label code {
+  color: var(--agent-accent);
+  font: 510 0.78em/1.5 var(--font-mono);
+}
+
+.undo-agent-message {
+  display: grid;
+}
+
+.undo-agent-message > * {
+  grid-area: 1 / 1;
+  margin: 0;
+}
+
+.undo-agent-message blockquote {
+  max-width: 66ch;
+}
+
+.undo-agent-message [aria-hidden='true'] {
+  visibility: hidden;
+}
+
+.undo-agent-context .undo-agent-message p {
+  margin: 0;
+}
+
+.undo-agent-message blockquote p + p {
+  margin-top: 3px;
+  color: var(--agent-accent);
+}
+
+.undo-agent-waiting {
+  color: var(--agent-muted);
+}
+
+.iodine-case-evidence > .undo-agent-context {
+  margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+  .undo-agent-context {
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+  }
+
+  #project-iodine .undo-sheet {
+    grid-template-rows: auto auto;
+    gap: 18px;
+    padding-block: 24px;
+  }
+
+  #project-iodine .undo-heading {
+    flex-direction: row;
+    align-items: center;
+  }
+}

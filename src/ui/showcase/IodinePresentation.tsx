@@ -8,6 +8,7 @@ import './playable-iodine.css';
 import './night-engineering.css';
 import { OpenEvidence } from '../creative/evidenceNavigation';
 import { ControlIcon } from '../ControlIcon';
+import { UndoAgentContext } from './UndoAgentContext';
 
 const [first, editedLine, last] = example.after.trimEnd().split('\n');
 const [prefix, suffix] = editedLine.split('name.trim()');
@@ -54,7 +55,9 @@ export function IodinePresentation() {
           <a
             aria-label="Read the iodine case study"
             href={href}
-            onClick={(event) => openCase?.(event, 'iodine')}
+            onClick={(event) => {
+              if (openCase?.(event, 'iodine')) setManual(true);
+            }}
           >
             Iodine case study <ControlIcon name="arrow" />
           </a>
@@ -117,16 +120,11 @@ export function IodinePresentation() {
               )}
               {restored ? 'Reapply edit' : 'Undo edit'}
             </button>
-            <p>
-              {restored ? (
-                <>
-                  <code>{example.feedback.type}</code> sent to the agent.
-                </>
-              ) : (
-                'Snapshot saved for this edit.'
-              )}
+            <p className="undo-file-result">
+              {restored ? 'Original line restored' : 'Snapshot saved'}
             </p>
           </div>
+          <UndoAgentContext restored={restored} announce={manual} />
         </div>
       </div>
     </article>

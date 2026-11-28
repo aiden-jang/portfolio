@@ -124,7 +124,7 @@ for (const [width, height] of [
     const recording = page.getByRole('button', { name: 'Play Iodine demo', exact: true });
     await expect(recording).toBeVisible();
     await expect(page.locator('.iodine-case-screenshot video')).toHaveJSProperty('paused', true);
-    await page.getByRole('button', { name: 'Replay edit', exact: true }).press('Enter');
+    await page.getByRole('button', { name: 'Reset edit', exact: true }).press('Enter');
     await page.getByRole('button', { name: 'Undo edit', exact: true }).press('Enter');
     await expect(page).toHaveURL(/cases\/iodine\/\?edit=restored$/);
     await page.reload();
@@ -138,7 +138,7 @@ for (const [width, height] of [
       'href',
       /editSnapshots\.ts#L92-L107$/,
     );
-    await page.getByRole('button', { name: 'Replay edit', exact: true }).press('Enter');
+    await page.getByRole('button', { name: 'Reset edit', exact: true }).press('Enter');
     await expect(page.locator('.iodine-case-evidence .recovery')).toHaveAttribute(
       'data-restored',
       'false',
@@ -245,7 +245,7 @@ for (const [width, height] of [
     expect(saved).toMatch(/\/cases\/iodine\/\?edit=restored$/);
     await page.goto(saved!);
     await expect(evidence.getByText('Edit undone', { exact: true })).toBeVisible();
-    await evidence.getByRole('button', { name: 'Replay edit', exact: true }).click();
+    await evidence.getByRole('button', { name: 'Reset edit', exact: true }).click();
     await expect(code).toContainText('.trim()');
 
     await page.goto('/cases/meanwhile/?agency=EMSC');

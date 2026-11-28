@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import example from '../../data/iodineExample.json';
 import { IodineSession } from '../showcase/iodine-session';
 import { RecoveryEditor } from '../showcase/IodinePresentation';
+import { UndoAgentContext } from '../showcase/UndoAgentContext';
 import './case-opening.css';
 import type { EvidenceFrame } from './evidenceNavigation';
 
@@ -42,25 +43,17 @@ export function IodineCaseOpening({ role }: { role: string }) {
   const restored = phase === 'restored';
   return (
     <section className="iodine-case-evidence" aria-label="Recorded Iodine edit recovery">
-      <RecoveryEditor restored={restored} inspectable />
+      <RecoveryEditor
+        restored={restored}
+        inspectable
+        onToggleEdit={() => setPhase(restored ? 'edited' : 'restored')}
+      />
+      <UndoAgentContext restored={restored} announce />
       <div className="iodine-case-notes">
-        <div>
-          <p role="status">
-            {restored
-              ? 'Iodine restored the snapshot and queued feedback for the agent.'
-              : 'Iodine saved the previous version before the agent changed this line.'}
-          </p>
-          <button type="button" onClick={() => setPhase(restored ? 'edited' : 'restored')}>
-            {restored ? 'Replay edit' : 'Undo edit'}
-          </button>
-          {restored && <p>{example.feedback.guidance}</p>}
-        </div>
-        <div>
-          <p>{role}</p>
-          <a href={example.source + '#L92-L107'} target="_blank" rel="noopener noreferrer">
-            View Iodine’s restore code
-          </a>
-        </div>
+        <p>{role}</p>
+        <a href={example.source + '#L92-L107'} target="_blank" rel="noopener noreferrer">
+          View Iodine’s restore code
+        </a>
       </div>
       <details className="iodine-case-screenshot">
         <summary>Editor recording</summary>
