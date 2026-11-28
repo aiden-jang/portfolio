@@ -39,8 +39,14 @@ for (const width of [1440, 390]) {
       }, offset);
     }
     await place('.orbit-feature', 0.2);
-    const retryGlobe = page.getByRole('button', { name: 'Retry globe', exact: true });
-    const exploreGlobe = page.getByRole('button', { name: 'Explore globe', exact: true });
+    const retryGlobe = page.getByRole('button', {
+      name: 'Retry globe',
+      exact: true,
+    });
+    const exploreGlobe = page.getByRole('button', {
+      name: 'Explore globe',
+      exact: true,
+    });
     await expect(retryGlobe.or(exploreGlobe)).toBeVisible();
     if (await exploreGlobe.isVisible()) await exploreGlobe.click();
     await expect(retryGlobe).toBeVisible();
@@ -65,7 +71,9 @@ for (const width of [1440, 390]) {
     await expect.poll(position).toBeLessThan(partialBatch);
 
     const quake = page.locator('#project-everythingisfine');
-    const verdict = quake.getByRole('complementary', { name: 'Recorded Kamchatka depth readings' });
+    const verdict = quake.getByRole('complementary', {
+      name: 'Recorded Kamchatka depth readings',
+    });
     await place('#sec-work', 0);
     const parkedScroll = await page.evaluate(() => scrollY);
     await expect(verdict).toHaveCSS('opacity', '1');
@@ -91,9 +99,15 @@ for (const width of [1440, 390]) {
     const scrub = async (fraction: number) =>
       track.evaluate((el, fraction) => {
         const travel = el.clientHeight - el.firstElementChild!.clientHeight;
-        scrollBy({ top: el.getBoundingClientRect().top + travel * fraction, behavior: 'instant' });
+        scrollBy({
+          top: el.getBoundingClientRect().top + travel * fraction,
+          behavior: 'instant',
+        });
       }, fraction);
-    const email = page.getByRole('heading', { name: 'me@aidenjang.com', exact: true });
+    const email = page.getByRole('heading', {
+      name: 'me@aidenjang.com',
+      exact: true,
+    });
     await expect(email).toBeHidden();
     const start = await track.getByRole('slider').boundingBox();
     await scrub(0.44);
@@ -108,15 +122,16 @@ for (const width of [1440, 390]) {
     ).toBe('none');
     await scrub(0.92);
     await expect.poll(progress).toBe(1);
-    const pixels = () =>
-      stage.locator('canvas').evaluate((el) => (el as HTMLCanvasElement).toDataURL());
-    const paint = await pixels();
+    const paintedStill = stage.locator('.rear-paint img');
+    const paint = await paintedStill.evaluate((el: HTMLImageElement) => el.currentSrc);
+    await expect(stage.locator('.rear-paint')).toHaveCSS('opacity', '1');
     await expect(email).toBeInViewport();
     await page.evaluate(() => {
       location.hash = 'sec-contact';
     });
     await expect(email.getByRole('link')).toBeInViewport();
-    expect(await pixels()).toBe(paint);
+    await expect(stage.locator('.rear-paint')).toHaveCSS('opacity', '1');
+    expect(await paintedStill.evaluate((el: HTMLImageElement) => el.currentSrc)).toBe(paint);
     await scrub(0.3);
     await expect.poll(progress).toBeLessThan(0.4);
     await expect(email).toBeHidden();

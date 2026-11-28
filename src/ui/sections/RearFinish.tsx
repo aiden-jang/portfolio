@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { clamp } from '../../math';
+import { easedProgress } from '../../hooks/useScrollStudy';
 import { ContactSection } from './Contact';
 import { Section } from './shared';
 import './about.css';
@@ -12,6 +13,8 @@ const artwork = import.meta.glob('../../../wing-art/*/*.jpg', {
   query: '?url',
 }) as Record<string, string>;
 const lastFrame = 12;
+const paintStart = 0.035;
+const paintEnd = 0.82;
 const formats = {
   short: '(max-width: 599px) and (max-height: 779px)',
   phone: '(max-width: 599px)',
@@ -34,17 +37,20 @@ function FinishStill({ frame }: { frame: number }) {
 export function RearFinish() {
   const ending = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
-  const frame = useRef<HTMLCanvasElement>(null);
+  const baseFrame = useRef<HTMLCanvasElement>(null);
+  const blendFrame = useRef<HTMLCanvasElement>(null);
   const slider = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const root = ending.current!;
     const lane = track.current!;
-    const canvas = frame.current!;
+    const base = baseFrame.current!;
+    const blend = blendFrame.current!;
     const input = slider.current!;
     const contact = root.querySelector<HTMLElement>('#sec-contact')!;
     const emailLink = contact.querySelector<HTMLAnchorElement>('.contact-email-link')!;
-    const context = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
+    const baseContext = base.getContext('2d', { alpha: false });
+    const blendContext = blend.getContext('2d', { alpha: false });
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const short = matchMedia(formats.short);
     const narrow = matchMedia(formats.phone);
@@ -55,7 +61,13 @@ export function RearFinish() {
     let manual = 0;
     let alive = true;
     let nearby = false;
-    let drawn = -1;
+    let baseIndex = -1;
+    let blendIndex = -1;
+    let span = 0;
+    let lastProgress = -1;
+    let lastHandoff = -1;
+    let lastShade = -1;
+    let lastOffset = -1;
 
     function schedule() {
       if (!next) next = requestAnimationFrame(render);
@@ -63,7 +75,7 @@ export function RearFinish() {
 
     function load(size: string) {
       ready = false;
-      drawn = -1;
+      baseIndex = blendIndex = -1;
       root.removeAttribute('data-frames-ready');
       const pending = Array.from({ length: lastFrame + 1 }, (_, index) => {
         const image = new Image();
@@ -74,9 +86,9 @@ export function RearFinish() {
         () => {
           if (!alive || format !== size) return;
           frames = pending;
-          canvas.width = frames[0].naturalWidth;
-          canvas.height = frames[0].naturalHeight;
-          ready = Boolean(context);
+          base.width = blend.width = frames[0].naturalWidth;
+          base.height = blend.height = frames[0].naturalHeight;
+          ready = Boolean(baseContext && blendContext);
           schedule();
         },
         () => {
@@ -85,35 +97,65 @@ export function RearFinish() {
       );
     }
 
-    function rangeTravel() {
-      return Math.max(0, lane.offsetHeight - (lane.firstElementChild as HTMLElement).offsetHeight);
+    function measure() {
+      span = Math.max(0, lane.offsetHeight - (lane.firstElementChild as HTMLElement).offsetHeight);
+      schedule();
+    }
+
+    function paintArtwork(progress: number) {
+      if (!ready || !baseContext || !blendContext || progress <= 0 || progress >= 1) {
+        root.removeAttribute('data-frames-ready');
+        return;
+      }
+
+      const position = progress * lastFrame;
+      const low = Math.floor(position);
+      const high = low + 1;
+      // The canvas pixels change only at frame boundaries. Opacity blends between them.
+      if (baseIndex !== low) {
+        baseContext.drawImage(frames[low], 0, 0);
+        baseIndex = low;
+      }
+      if (blendIndex !== high) {
+        blendContext.drawImage(frames[high], 0, 0);
+        blendIndex = high;
+      }
+      blend.style.opacity = String(position - low);
+      root.setAttribute('data-frames-ready', '');
     }
 
     function render() {
       next = 0;
-      const size = short.matches ? 'short' : narrow.matches ? 'phone' : 'desktop';
-      if (nearby && size !== format) {
-        format = size;
-        load(size);
+      if (nearby) {
+        const size = short.matches ? 'short' : narrow.matches ? 'phone' : 'desktop';
+        if (size !== format) {
+          format = size;
+          load(size);
+        }
       }
-      const travel = rangeTravel();
-      const fixed = reduced.matches || !travel;
-      const laneBounds = lane.getBoundingClientRect();
-      const approach =
-        narrow.matches && !reduced.matches
-          ? Math.min(innerHeight * 0.21, Math.max(0, laneBounds.top) * 0.45)
-          : 0;
-      root.style.setProperty('--arrival-offset', -approach + 'px');
+      const fixed = reduced.matches || !span;
       const contactTop = contact.getBoundingClientRect().top;
+      const timeline = fixed ? 0 : clamp(-lane.getBoundingClientRect().top / span, 0, 1);
       const handoff = fixed
-        ? Number(contactTop <= window.innerHeight * 0.55)
-        : clamp((-laneBounds.top / travel - 0.8) / 0.18, 0, 1);
+        ? Number(contactTop <= innerHeight * 0.55)
+        : easedProgress(timeline, 0.81, 0.97);
+      const closing = fixed ? handoff : easedProgress(timeline, 0.73, 0.9);
       const contactEntered = handoff > 0;
-      root.style.setProperty('--handoff', String(handoff));
-      root.style.setProperty(
-        '--contact-offset',
-        Math.min(window.innerHeight, Math.max(0, contactTop)) + 'px',
-      );
+
+      const offset = clamp(contactTop, 0, innerHeight);
+      if (offset !== lastOffset) {
+        lastOffset = offset;
+        contact.style.setProperty('--contact-offset', offset + 'px');
+      }
+      if (handoff !== lastHandoff) {
+        lastHandoff = handoff;
+        contact.style.setProperty('--handoff', String(handoff));
+      }
+      if (closing !== lastShade) {
+        lastShade = closing;
+        lane.style.setProperty('--finish-exit', String(closing));
+        lane.toggleAttribute('data-finish-ended', closing === 1);
+      }
       if (contactEntered !== root.hasAttribute('data-contact-entered')) {
         const focused = document.activeElement;
         root.toggleAttribute('data-contact-entered', contactEntered);
@@ -123,42 +165,44 @@ export function RearFinish() {
           input.focus({ preventScroll: true });
         }
       }
-      // Finish the paint while the stage is still pinned, then let the page bring in the email.
+
       const progress = fixed
         ? contactEntered
           ? 1
           : manual
-        : clamp((-laneBounds.top / travel - 0.06) / 0.74, 0, 1);
-      root.style.setProperty('--finish-paint', String(progress));
-      root.dataset.finish = String(progress);
-      const value = Math.round(progress * 100);
-      input.value = String(value);
-      input.setAttribute(
-        'aria-valuetext',
-        value === 0 ? 'Clay' : value === 100 ? 'Paint' : value + '% paint',
-      );
-      const index = progress * lastFrame;
-      if (!ready || !context || drawn === index || !nearby) return;
-      const low = Math.floor(index);
-      const high = Math.ceil(index);
-      context.drawImage(frames[low], 0, 0);
-      if (low !== high) {
-        context.globalAlpha = index - low;
-        context.drawImage(frames[high], 0, 0);
-        context.globalAlpha = 1;
+        : clamp((timeline - paintStart) / (paintEnd - paintStart), 0, 1);
+      const changed = progress !== lastProgress;
+      if (changed) {
+        const value = Math.round(progress * 100);
+        const text = String(value);
+        lastProgress = progress;
+        root.dataset.finish = String(progress);
+        lane.style.setProperty('--finish-paint', String(progress));
+        base.parentElement!.style.setProperty('--finish-paint', String(progress));
+        const label = value === 0 ? 'Clay' : value === 100 ? 'Paint' : value + '% paint';
+        if (input.value !== text) input.value = text;
+        if (input.getAttribute('aria-valuetext') !== label)
+          input.setAttribute('aria-valuetext', label);
       }
-      drawn = index;
-      root.setAttribute('data-frames-ready', '');
+      if (changed || (ready && baseIndex < 0 && progress > 0 && progress < 1)) {
+        paintArtwork(progress);
+      }
     }
 
     function scrub() {
       manual = input.valueAsNumber / 100;
-      const travel = rangeTravel();
-      if (travel && !reduced.matches) {
+      if (span && !reduced.matches) {
         const start = scrollY + lane.getBoundingClientRect().top;
-        scrollTo({ top: start + travel * (0.06 + manual * 0.74), behavior: 'instant' });
+        scrollTo({
+          top: start + span * (paintStart + manual * (paintEnd - paintStart)),
+          behavior: 'instant',
+        });
       }
       schedule();
+    }
+
+    function onScroll() {
+      if (nearby) schedule();
     }
 
     function showFocusedContact() {
@@ -170,23 +214,27 @@ export function RearFinish() {
     const observer = new IntersectionObserver(
       (entries) => {
         nearby = entries[entries.length - 1].isIntersecting;
-        if (nearby) schedule();
+        schedule();
       },
       { rootMargin: '700px 0px' },
     );
     observer.observe(root);
-    addEventListener('scroll', schedule, { passive: true });
-    addEventListener('resize', schedule);
+    const geometry = new ResizeObserver(measure);
+    geometry.observe(lane);
+    geometry.observe(lane.firstElementChild!);
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', measure);
     reduced.addEventListener('change', schedule);
     input.addEventListener('input', scrub);
     contact.addEventListener('focusin', showFocusedContact);
-    render();
+    measure();
     return () => {
       alive = false;
       observer.disconnect();
+      geometry.disconnect();
       cancelAnimationFrame(next);
-      removeEventListener('scroll', schedule);
-      removeEventListener('resize', schedule);
+      removeEventListener('scroll', onScroll);
+      removeEventListener('resize', measure);
       reduced.removeEventListener('change', schedule);
       input.removeEventListener('input', scrub);
       contact.removeEventListener('focusin', showFocusedContact);
@@ -199,7 +247,8 @@ export function RearFinish() {
         <div className="rear-finish-stage">
           <FinishStill frame={0} />
           <FinishStill frame={lastFrame} />
-          <canvas ref={frame} />
+          <canvas ref={baseFrame} />
+          <canvas ref={blendFrame} />
         </div>
       </div>
       <Section id="sec-about" side="left" desktopVertical="top" mobileVertical="top">

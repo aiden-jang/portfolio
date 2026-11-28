@@ -3,7 +3,7 @@ import { PhotoCapture } from './PhotoCapture';
 import { LoadingBar } from '../ui/LoadingBar';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
-import { F40_INDEX, SECTION_IDS, THEMES } from '../config';
+import { F40_INDEX, THEMES } from '../config';
 import { Car } from './Car';
 import { CameraRig } from './CameraRig';
 import { lazy, Suspense } from 'react';
@@ -22,7 +22,9 @@ import { useLineup } from '../lineup/state';
 const Effects = lazy(() => import('./Effects').then((module) => ({ default: module.Effects })));
 
 const LineupScene = lazy(() =>
-  import('../lineup/LineupScene').then((module) => ({ default: module.LineupScene })),
+  import('../lineup/LineupScene').then((module) => ({
+    default: module.LineupScene,
+  })),
 );
 
 type Props = {
@@ -36,9 +38,7 @@ export function Scene({ getScrollT }: Props) {
   );
   const paused = useScenePaused();
   const active = useSceneActivity();
-  const contactVisible = useAppStore((state) => state.isContactVisible);
-  const studyVisible = useFinishStudy((state) => state.active);
-  const closing = contactVisible || studyVisible;
+  const closing = useFinishStudy((state) => state.active);
   const sectionIndex = useAppStore((state) => state.sectionIndex);
   const openingStudio = useAppStore(isOpeningStudio);
   const lineup = useLineup((state) => state.active);
@@ -51,9 +51,7 @@ export function Scene({ getScrollT }: Props) {
         frameloop={
           loadingInitialF40
             ? 'never'
-            : paused ||
-                !active ||
-                (sectionIndex > 0 && sectionIndex < SECTION_IDS.length - 1 && !closing)
+            : paused || !active || (sectionIndex > 0 && !closing && !lineup && !garageStudio)
               ? 'demand'
               : 'always'
         }

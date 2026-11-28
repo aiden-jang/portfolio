@@ -121,18 +121,24 @@ export function useNavigation(sceneOnly = false) {
         previousCar: prevCarThrottled,
       });
     };
+    let scrollFrame = 0;
+    const scheduleScroll = () => {
+      scrollFrame ||= requestAnimationFrame(onScroll);
+    };
     const onScroll = () => {
+      cancelAnimationFrame(scrollFrame);
+      scrollFrame = 0;
       const bounds = pageSectionBounds();
       const contactVisible = contactIsVisible(window.innerHeight, bounds);
-      document.body.dataset.contactView = contactVisible ? 'visible' : 'hidden';
+      const contactView = contactVisible ? 'visible' : 'hidden';
+      const dataset = document.body.dataset;
+      if (dataset.contactView !== contactView) dataset.contactView = contactView;
       if (useAppStore.getState().isContactVisible !== contactVisible)
         useAppStore.getState().setContactVisible(contactVisible);
-      document.body.dataset.carControls = hasFullIntroView(window.innerHeight, bounds)
-        ? 'visible'
-        : 'hidden';
-      document.body.dataset.carView = carIsVisibleAt(window.innerHeight * 0.15, bounds)
-        ? 'visible'
-        : 'reading';
+      const carControls = hasFullIntroView(window.innerHeight, bounds) ? 'visible' : 'hidden';
+      const carView = carIsVisibleAt(window.innerHeight * 0.15, bounds) ? 'visible' : 'reading';
+      if (dataset.carControls !== carControls) dataset.carControls = carControls;
+      if (dataset.carView !== carView) dataset.carView = carView;
       if (performance.now() < snapLockUntil.current) {
         const target = bounds.find(({ id }) => id === SECTION_IDS[currentSection.current]);
         if (!target || Math.abs(target.top) > 2) return;
@@ -147,7 +153,7 @@ export function useNavigation(sceneOnly = false) {
         return top <= innerHeight * threshold ? SECTION_IDS.indexOf(id as SectionId) : active;
       }, 0);
       currentSection.current = idx;
-      setSectionIndex(idx);
+      if (useAppStore.getState().sectionIndex !== idx) setSectionIndex(idx);
     };
 
     const restoreSectionLink = (event?: HashChangeEvent) => {
@@ -222,9 +228,6 @@ export function useNavigation(sceneOnly = false) {
       return true;
     };
     let active = true;
-    const refreshLayout = () => {
-      if (active) onScroll();
-    };
     const initialHash = location.hash;
     const initialInput = lastScrollInput();
     let initialLanding: number | undefined;
@@ -236,12 +239,12 @@ export function useNavigation(sceneOnly = false) {
           initialLanding = window.scrollY;
         }
       }
-      refreshLayout();
+      onScroll();
     });
     void document.fonts?.ready.then(() => {
       if (active) {
         restoreCaseReturn();
-        refreshLayout();
+        onScroll();
       }
     });
     onScroll();
@@ -270,11 +273,12 @@ export function useNavigation(sceneOnly = false) {
     window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
     window.addEventListener('keydown', onKey);
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', scheduleScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => {
       active = false;
       cancelAnimationFrame(linkFrame);
+      cancelAnimationFrame(scrollFrame);
       cancelSmoothScroll();
       layoutObserver.disconnect();
       document.removeEventListener('click', rememberCase);
@@ -282,7 +286,7 @@ export function useNavigation(sceneOnly = false) {
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('keydown', onKey);
-      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', scheduleScroll);
       window.removeEventListener('resize', onScroll);
     };
   }, [sceneOnly, getScrollT, goToSection, setSectionIndex, cycleCarThrottled, prevCarThrottled]);

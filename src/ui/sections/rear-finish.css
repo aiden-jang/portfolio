@@ -53,7 +53,8 @@ html:root .portfolio-chrome .rear-finish #sec-contact::after {
   content: none;
 }
 .rear-finish .film-heading {
-  opacity: clamp(0, calc((1 - var(--finish-paint, 0)) * 4), 1);
+  opacity: calc(1 - var(--finish-exit, 0));
+  transform: translateY(calc(-12px * var(--finish-exit, 0)));
 }
 html:root .rear-finish .film-heading h3 {
   max-width: 19ch;
@@ -62,6 +63,12 @@ html:root .rear-finish .film-heading h3 {
 }
 .rear-finish .scroll-film-range {
   max-width: 640px;
+}
+.rear-finish .scroll-film :is(.scroll-film-range, .about-framing-notes) {
+  opacity: calc(1 - var(--finish-exit, 0));
+}
+.rear-finish [data-finish-ended] :is(.scroll-film-range, .about-framing-notes) {
+  visibility: hidden;
 }
 @media (prefers-reduced-motion: reduce), (max-height: 490px) {
   html:root .portfolio-chrome .rear-finish .scroll-film {
@@ -98,7 +105,8 @@ html:root .rear-finish #sec-contact .contact-copy-block {
 }
 html:root .rear-finish #sec-contact .contact-email {
   margin: 0;
-  transform: translateY(calc((1 - var(--handoff, 0)) * 105%));
+  opacity: var(--handoff, 0);
+  transform: translateY(calc((1 - var(--handoff, 0)) * 16px));
 }
 html:root .rear-finish #sec-contact .contact-email-actions {
   gap: clamp(6px, 1vw, 16px);
@@ -121,12 +129,7 @@ html:root .rear-finish #sec-contact .contact-footer {
 }
 html:root .rear-finish[data-contact-entered] #sec-contact .contact-footer {
   visibility: visible;
-}
-html:root
-  .rear-finish[data-contact-entered]
-  .scroll-film
-  :is(.scroll-film-range, .about-framing-notes) {
-  visibility: hidden;
+  opacity: var(--handoff, 0);
 }
 @media (max-width: 899px) {
   html:root .portfolio-chrome .rear-finish #sec-contact {
@@ -150,8 +153,9 @@ html:root .rear-finish #sec-contact h2.address-title {
   clip: auto;
 }
 
-@media (max-width: 599px) and (prefers-reduced-motion: no-preference) {
-  .rear-finish-stage > :is(picture, canvas) {
-    transform: translateY(var(--arrival-offset, 0));
+@media (prefers-reduced-motion: reduce), (max-height: 490px) {
+  .rear-finish .film-heading,
+  html:root .rear-finish #sec-contact .contact-email {
+    transform: none;
   }
 }

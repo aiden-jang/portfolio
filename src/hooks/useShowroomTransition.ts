@@ -53,6 +53,9 @@ export function useShowroomTransition() {
     let highlighted = !!location.hash && location.hash !== '#sec-intro';
     let lastScroll = scrollY;
     let pulsingPoster: HTMLElement | null = null;
+    let lastScrim = -1;
+    let lastDock = -1;
+    root.style.setProperty('--stage-opacity', '1');
     const clearPulse = () => {
       pulsingPoster?.removeAttribute(PULSE);
       pulsingPoster?.style.removeProperty('--kamchatka-x');
@@ -97,20 +100,24 @@ export function useShowroomTransition() {
         if (focus !== target) schedule();
       }
 
-      if (!reduced) {
-        // Finish the fade where the dock stops fitting in the Intro viewport.
-        const dockEnd = Math.max(0.015, (intro.offsetHeight + 0.5) / h - 1);
-        const dock = 1 - smoothProgress(progress, dockEnd * 0.64, dockEnd);
-        root.style.setProperty('--garage-controls-opacity', String(dock));
-      } else {
-        root.style.removeProperty('--garage-controls-opacity');
+      // Finish the fade where the dock stops fitting in the Intro viewport.
+      const dockEnd = Math.max(0.015, (intro.offsetHeight + 0.5) / h - 1);
+      const dock = reduced ? -1 : 1 - smoothProgress(progress, dockEnd * 0.64, dockEnd);
+      if (dock !== lastDock) {
+        lastDock = dock;
+        if (reduced) root.style.removeProperty('--garage-controls-opacity');
+        else root.style.setProperty('--garage-controls-opacity', String(dock));
+      }
+      if (headerScrim !== lastScrim) {
+        lastScrim = headerScrim;
+        root.style.setProperty('--header-scrim', String(headerScrim));
       }
 
-      const poster = reduced ? null : work.querySelector<HTMLElement>(ART);
+      const poster =
+        !reduced && (pulsingPoster || (!beforeCut && !highlighted && workTop > -h))
+          ? work.querySelector<HTMLElement>(ART)
+          : null;
       const rect = poster?.getBoundingClientRect();
-
-      root.style.setProperty('--header-scrim', String(headerScrim));
-      root.style.setProperty('--stage-opacity', '1');
 
       if (pulsingPoster && (pulsingPoster !== poster || !movingForward)) clearPulse();
       if (
