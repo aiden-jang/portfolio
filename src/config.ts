@@ -78,7 +78,7 @@ export const SECTION_LABELS: Record<SectionId, string> = {
   'sec-intro': 'Intro',
   'sec-experience': 'Experience',
   'sec-work': 'Featured work',
-  'sec-more-work': 'More projects',
+  'sec-more-work': 'Projects',
   'sec-about': 'About',
   'sec-contact': 'Contact',
 };

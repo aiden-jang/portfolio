@@ -52,13 +52,14 @@ test('the header remains legible through the showroom cut and links to Contact',
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
 });
 
-test('the Work index returns to the same project on a phone', async ({ page }) => {
+test('Projects and browser Back return to the same page on a phone', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/#project-bloomnote');
   const scene = page.locator('#project-bloomnote');
   await expect(scene.getByRole('heading')).toBeInViewport();
-  await page.getByRole('link', { name: 'Work index' }).click();
-  await expect(page.getByRole('heading', { name: 'Work index', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Projects', exact: true }).click();
+  await expect(page).toHaveURL(/#sec-more-work$/);
+  await expect(page.getByRole('heading', { name: 'Projects', exact: true })).toBeInViewport();
   await page.goBack();
   await expect(scene.getByRole('heading')).toBeInViewport();
 });

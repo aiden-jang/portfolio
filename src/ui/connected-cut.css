@@ -39,19 +39,19 @@ html:root .portfolio-chrome #sec-work .earthquake-feature[data-comparing='false'
 }
 
 html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-title h3,
-html:root .portfolio-chrome #sec-work #project-iodine .project-scene-heading h3,
+html:root .portfolio-chrome #sec-more-work #project-iodine .project-scene-heading h3,
 html:root #sec-experience .experience-batch-copy h2 {
   color: #eeeee9;
   font: 450 var(--proof-title)/0.99 var(--font-display);
   letter-spacing: -0.04em;
 }
-html:root .portfolio-chrome #sec-work #project-iodine .project-scene-body {
+html:root .portfolio-chrome #sec-more-work #project-iodine .project-scene-body {
   padding-block: var(--proof-inset) clamp(30px, 5svh, 52px);
   background:
     radial-gradient(ellipse at 66% 66%, #18241f, transparent 70%),
     linear-gradient(var(--color-bg), #131915);
 }
-html:root .portfolio-chrome #sec-work #project-iodine .recovery {
+html:root .portfolio-chrome #sec-more-work #project-iodine .recovery {
   width: min(100%, 1068px);
   margin-inline: auto;
 }
@@ -285,14 +285,14 @@ html:root .portfolio-chrome #sec-more-work #project-worth .worth-ranking-list > 
 }
 
 @media (min-width: 980px) {
-  html:root .portfolio-chrome #sec-work #project-iodine .project-scene-body {
+  html:root .portfolio-chrome #sec-more-work #project-iodine .project-scene-body {
     min-height: 61svh;
     align-items: center;
   }
 }
 
 /* Use the earlier Iodine player and keep the headings on the shared reading line. */
-html:root .portfolio-chrome #sec-work .work-exhibit #project-iodine .project-scene-body {
+html:root .portfolio-chrome #sec-more-work #project-iodine .project-scene-body {
   min-height: auto;
   align-items: stretch;
   background: linear-gradient(#151919, #131915);
@@ -300,7 +300,7 @@ html:root .portfolio-chrome #sec-work .work-exhibit #project-iodine .project-sce
 html:root .portfolio-chrome #sec-work .work-exhibit {
   margin-block: 0;
 }
-html:root .portfolio-chrome #sec-work #project-iodine .iodine-scene-content .recovery {
+html:root .portfolio-chrome #sec-more-work #project-iodine .iodine-scene-content .recovery {
   width: 100%;
 }
 

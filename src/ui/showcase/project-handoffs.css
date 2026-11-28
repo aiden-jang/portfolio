@@ -96,7 +96,7 @@ html #sec-work .earthquake-feature[data-comparing='false']::before {
   mask-image: linear-gradient(transparent, #000 6% 88%, transparent);
   opacity: 1;
 }
-html #sec-work #project-iodine .project-scene-body {
+html #sec-more-work #project-iodine .project-scene-body {
   background:
     radial-gradient(ellipse at 60% 52%, #192720, transparent 63%),
     linear-gradient(#10181c, #131915 54%);

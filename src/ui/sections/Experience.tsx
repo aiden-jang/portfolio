@@ -82,11 +82,15 @@ const additional = work.filter(
   (item) => workId(item) !== leadId && !supportingIds.includes(workId(item)),
 );
 
-export function ExperienceSection() {
+export function ExperienceSection({ onOpen }: Props) {
   const lane = useRef<HTMLDivElement>(null);
   return (
     <Section id="sec-experience" side="left" desktopVertical="top" mobileVertical="top">
       <div data-nosnippet className="experience-content pointer-events-auto">
+        <header className="experience-opening">
+          <h2>Experience</h2>
+          <ExperienceRoles />
+        </header>
         {lead && (
           <div className="batch-lane batch-print-lane" id="batching-study" ref={lane}>
             <article
@@ -94,13 +98,18 @@ export function ExperienceSection() {
               data-study-pin
               aria-labelledby="experience-lead-title"
             >
-              <h2 id="experience-lead-title" className="sr-only">
+              <h3 id="experience-lead-title" className="sr-only">
                 120 calls → 1
-              </h2>
+              </h3>
               <BatchingSpread lane={lane} />
             </article>
           </div>
         )}
+        <div className="experience-followup">
+          <h3>Selected engineering work</h3>
+          <ExperienceOutcomes onOpen={onOpen} />
+          <MoreEngineeringWork onOpen={onOpen} />
+        </div>
       </div>
     </Section>
   );
@@ -110,43 +119,60 @@ export function ExperienceHistory({ onOpen }: Props) {
   return (
     <div className="experience-content">
       <h2 id="experience-history-title">Experience</h2>
-      <div className="experience-proof-strip" aria-label="Selected engineering outcomes">
-        {supporting.map((item) => (
-          <HighlightRow key={item.title} item={item} onOpen={onOpen} />
-        ))}
-      </div>
+      <ExperienceOutcomes onOpen={onOpen} />
       <div className="experience-grid">
-        <div className="experience-history">
-          <ol role="list">
-            {ROLES.map(({ company, roles }) => (
-              <li key={company} className="experience-employer">
-                <strong>{company}</strong>
-                <ol className="experience-roles" role="list">
-                  {roles.map(({ title, period }) => (
-                    <li key={period}>
-                      <span>{title}</span>
-                      <span className="experience-period">{period}</span>
-                    </li>
-                  ))}
-                </ol>
-              </li>
-            ))}
-          </ol>
-        </div>
+        <ExperienceRoles />
         <div className="experience-proof">
-          {additional.length > 0 && (
-            <details className="experience-more">
-              <summary>
-                More engineering work <span aria-hidden="true">+</span>
-              </summary>
-              {additional.map((item) => (
-                <HighlightRow key={item.title} item={item} onOpen={onOpen} />
-              ))}
-            </details>
-          )}
+          <MoreEngineeringWork onOpen={onOpen} />
         </div>
       </div>
     </div>
+  );
+}
+
+function ExperienceRoles() {
+  return (
+    <div className="experience-history">
+      <ol role="list">
+        {ROLES.map(({ company, roles }) => (
+          <li key={company} className="experience-employer">
+            <strong>{company}</strong>
+            <ol className="experience-roles" role="list">
+              {roles.map(({ title, period }) => (
+                <li key={period}>
+                  <span>{title}</span>
+                  <span className="experience-period">{period}</span>
+                </li>
+              ))}
+            </ol>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function ExperienceOutcomes({ onOpen }: Props) {
+  return (
+    <div className="experience-proof-strip" aria-label="Selected engineering outcomes">
+      {supporting.map((item) => (
+        <HighlightRow key={item.title} item={item} onOpen={onOpen} />
+      ))}
+    </div>
+  );
+}
+
+function MoreEngineeringWork({ onOpen }: Props) {
+  if (!additional.length) return null;
+  return (
+    <details className="experience-more">
+      <summary>
+        More engineering work <span aria-hidden="true">+</span>
+      </summary>
+      {additional.map((item) => (
+        <HighlightRow key={item.title} item={item} onOpen={onOpen} />
+      ))}
+    </details>
   );
 }
 

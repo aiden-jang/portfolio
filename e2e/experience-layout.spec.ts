@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-for (const width of [2560, 1440, 1024, 768, 390, 320]) {
+for (const width of [2560, 1440, 1024, 768, 390, 375, 320]) {
   test(`experience history and outcomes do not overlap at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: width === 320 ? 568 : 1000 });
+    await page.setViewportSize({ width, height: width === 320 ? 568 : width === 375 ? 667 : 900 });
     await page.addInitScript(() => {
       const get = HTMLCanvasElement.prototype.getContext;
       HTMLCanvasElement.prototype.getContext = function (
@@ -12,12 +12,6 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
         if (/webgl/.test(type)) return null;
         return Reflect.apply(get, this, [type, ...args]);
       } as typeof get;
-    });
-    await page.addInitScript(() => {
-      Object.defineProperty(navigator, 'clipboard', {
-        value: { writeText: async (value: string) => sessionStorage.setItem('copied-case', value) },
-        configurable: true,
-      });
     });
     await page.goto('/#sec-experience');
     await page.evaluate(() => document.fonts.ready);
@@ -33,9 +27,15 @@ for (const width of [2560, 1440, 1024, 768, 390, 320]) {
     await expect(page).toHaveURL(/request-batching/);
     await page.goBack();
     await expect(lead).toBeFocused();
-    await page.getByRole('link', { name: 'Work index' }).click();
-    const experience = page.locator('#experience');
-    await expect(experience.getByRole('heading', { name: 'Experience' })).toBeVisible();
+    await page.getByRole('link', { name: 'Experience', exact: true }).click();
+    await expect(page).toHaveURL(/#sec-experience$/);
+    const experience = section;
+    await expect(
+      experience.getByRole('heading', { name: 'Experience', exact: true }),
+    ).toBeInViewport();
+    await expect(
+      experience.getByRole('heading', { name: 'Experience', exact: true }),
+    ).toBeFocused();
     await expect(
       experience.locator('.experience-history').getByText('LiveIntent', { exact: true }),
     ).toHaveCount(1);

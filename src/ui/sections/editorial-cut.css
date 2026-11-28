@@ -1,5 +1,5 @@
 /* The recording and working buffer share the editor surface. */
-html:root #sec-work .work-exhibit #project-iodine .project-scene-body {
+html:root #sec-more-work #project-iodine .project-scene-body {
   display: flex;
   flex-direction: column;
   justify-content: center;

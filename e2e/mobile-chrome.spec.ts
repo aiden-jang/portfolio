@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-test('phone navigation exposes Work without intro-only section dots', async ({ page }) => {
+test('phone navigation jumps to Experience and Projects on the homepage', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#mobile-bar')).toBeVisible();
   await expect(page.locator('#mobile-bar').getByText('Garage', { exact: true })).toBeVisible();
@@ -18,10 +18,12 @@ test('phone navigation exposes Work without intro-only section dots', async ({ p
   await expect(
     page.getByRole('navigation', { name: 'Section progress' }).filter({ visible: true }),
   ).toHaveCount(0);
-  await page.getByRole('link', { name: 'Work index' }).tap();
-  await expect(page.getByRole('heading', { name: 'Work index', exact: true })).toBeVisible();
-  await page.getByRole('link', { name: 'bloomnote — Grow a note' }).tap();
-  await expect(page.getByRole('heading', { name: 'How I built it: bloomnote' })).toBeInViewport();
+  const nav = page.getByRole('navigation', { name: 'Portfolio navigation' });
+  await nav.getByRole('link', { name: 'Experience', exact: true }).tap();
+  await expect(page.getByRole('heading', { name: 'Experience', exact: true })).toBeInViewport();
+  await nav.getByRole('link', { name: 'Projects', exact: true }).tap();
+  await expect(page.getByRole('heading', { name: 'Projects', exact: true })).toBeInViewport();
+  await expect(page.locator('#sec-more-work #project-iodine')).toBeInViewport();
   await page.getByRole('button', { name: 'Aiden Jang, back to the top' }).tap();
   await expect(page.locator('#mobile-bar')).toBeVisible();
 });

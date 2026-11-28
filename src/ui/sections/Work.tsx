@@ -35,7 +35,6 @@ export function WorkSection() {
         <h2 className="sr-only">Featured work</h2>
         <div className="work-exhibit">
           <EarthquakeFeature item={meanwhile} preview={PREVIEWS.everythingisfine} />
-          <IodinePresentation />
         </div>
       </div>
     </Section>
@@ -48,6 +47,7 @@ const mrrp = orderedCollection.find((item) => item.mark === 'mrrp')!;
 const wherever = orderedCollection.find((item) => item.mark === 'wherever')!;
 const owewell = orderedCollection.find((item) => item.mark === 'owewell')!;
 const worth = orderedCollection.find((item) => item.mark === 'worth')!;
+const platform = orderedCollection.find((item) => workId(item) === 'platform')!;
 
 function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
   if (!item.link) return null;
@@ -63,7 +63,10 @@ export function MoreProjectsSection({ onOpen }: Props) {
   return (
     <Section id="sec-more-work" side="center" desktopVertical="top" mobileVertical="top">
       <div className="bloom-gallery pointer-events-auto">
-        <h2 className="sr-only">More projects</h2>
+        <header className="projects-opening">
+          <h2>Projects</h2>
+        </header>
+        <IodinePresentation />
         <BloomPreview
           {...PREVIEWS.bloomnote}
           garden={garden}
@@ -108,6 +111,15 @@ export function MoreProjectsSection({ onOpen }: Props) {
             />
           </div>
         </div>
+        <article id="project-platform" className="platform-summary">
+          <div>
+            <h3>Shared sign-in</h3>
+            <p>One account for the apps, with shared sign-in, recovery, and account settings.</p>
+          </div>
+          <button type="button" onClick={(event) => onOpen(platform, event.currentTarget)}>
+            Project notes <span aria-hidden="true">↗</span>
+          </button>
+        </article>
       </div>
     </Section>
   );

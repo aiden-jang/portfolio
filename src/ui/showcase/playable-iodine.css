@@ -1,4 +1,4 @@
-#sec-work .work-exhibit #project-iodine.portfolio-undo {
+#sec-more-work #project-iodine.portfolio-undo {
   --undo-ground: #23233e;
   --undo-type: #f2eff7;
   --undo-secondary: #c5c2db;
@@ -37,7 +37,7 @@
   gap: 12px;
 }
 
-html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
+html:root .portfolio-chrome #sec-more-work #project-iodine .undo-heading h3 {
   max-width: none;
   margin: 0 0 0 -0.035em;
   color: var(--undo-type);
@@ -65,7 +65,7 @@ html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
   text-underline-offset: 0.28em;
 }
 
-html:root .portfolio-chrome #sec-work #project-iodine.portfolio-undo .undo-buffer {
+html:root .portfolio-chrome #sec-more-work #project-iodine.portfolio-undo .undo-buffer {
   display: block;
   overflow: visible;
   width: 100%;
@@ -131,7 +131,7 @@ html:root .portfolio-chrome #sec-work #project-iodine.portfolio-undo .undo-buffe
   font: inherit;
   white-space: pre;
 }
-html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
+html:root #sec-more-work #project-iodine.portfolio-undo .undo-row.recovery-line {
   margin: 0;
   color: var(--undo-type);
   box-shadow: none;
@@ -167,7 +167,7 @@ html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
   grid-template-columns: 1fr;
 }
 
-html:root #sec-work #project-iodine.portfolio-undo .undo-row .undo-token mark {
+html:root #sec-more-work #project-iodine.portfolio-undo .undo-row .undo-token mark {
   position: relative;
   display: block;
   min-width: 0;
@@ -228,7 +228,7 @@ html:root #sec-work #project-iodine.portfolio-undo .undo-row .undo-token mark {
   border-color: #b4acc6;
 }
 
-html:root #sec-work #project-iodine .undo-actions p {
+html:root #sec-more-work #project-iodine .undo-actions p {
   margin: 0;
   color: var(--undo-secondary);
   font: 430 clamp(13px, 1.12vw, 17px)/1.4 var(--font-display);
@@ -265,7 +265,7 @@ html:root #sec-work #project-iodine .undo-actions p {
     flex-direction: column;
     gap: 8px;
   }
-  html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
+  html:root .portfolio-chrome #sec-more-work #project-iodine .undo-heading h3 {
     font-size: clamp(98px, 29vw, 157px);
   }
   .undo-heading a {
@@ -279,7 +279,7 @@ html:root #sec-work #project-iodine .undo-actions p {
     grid-template-columns: 5cqi minmax(0, 1fr);
     font-size: clamp(9px, 3.75cqi, 17px);
   }
-  html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
+  html:root #sec-more-work #project-iodine.portfolio-undo .undo-row.recovery-line {
     font-size: clamp(12px, 4.72cqi, 27px);
   }
   .undo-actions p {
@@ -292,7 +292,7 @@ html:root #sec-work #project-iodine .undo-actions p {
     gap: 22px;
     padding-block: 21px;
   }
-  html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
+  html:root .portfolio-chrome #sec-more-work #project-iodine .undo-heading h3 {
     font-size: 80px;
   }
   .undo-lines {

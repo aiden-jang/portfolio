@@ -172,7 +172,10 @@ export function useNavigation(sceneOnly = false) {
       snapLockUntil.current = 0;
       prepareSectionArrival(section.id);
       window.scrollTo({
-        top: section.id === 'sec-more-work' ? sectionLanding(section) : section.offsetTop,
+        top:
+          section.id === 'sec-more-work' || section.id === 'sec-experience'
+            ? sectionLanding(section)
+            : section.offsetTop,
         behavior: 'instant',
       });
       currentSection.current = index;

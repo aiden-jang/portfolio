@@ -79,7 +79,7 @@ html:root .portfolio-chrome .project-scenes .project-scene h3 {
 #sec-more-work .gallery-companions {
   gap: clamp(26px, 3.2vw, 50px);
 }
-#sec-work #project-iodine .project-scene-body {
+#sec-more-work #project-iodine .project-scene-body {
   border: 0;
   background: transparent;
   padding-inline: 0;
@@ -411,7 +411,7 @@ html:root #project-mrrp.room-shot .bean-room-canvas canvas {
 #project-iodine {
   --scene-run: min(45svh, 360px);
 }
-html:root #sec-work #project-iodine .project-scene-body {
+html:root #sec-more-work #project-iodine .project-scene-body {
   padding: clamp(12px, 2.8svh, 25px) 0 clamp(16px, 3svh, 34px);
   background: var(--color-bg);
   border: 0;

@@ -2,7 +2,7 @@ html:root .work-exhibit #project-iodine {
   width: 100%;
 }
 
-html:root #sec-work .work-exhibit #project-iodine .project-scene-body {
+html:root #sec-more-work #project-iodine .project-scene-body {
   display: grid;
   grid-template: auto 1fr / minmax(0, 1fr);
   width: 100vw;
@@ -15,7 +15,7 @@ html:root #sec-work .work-exhibit #project-iodine .project-scene-body {
   background: radial-gradient(ellipse at 38% 24%, #243031, #14191b 68%, #111115);
 }
 
-html:root #sec-work .work-exhibit #project-iodine .project-scene-heading {
+html:root #sec-more-work #project-iodine .project-scene-heading {
   margin: 0;
   padding: 0;
 }

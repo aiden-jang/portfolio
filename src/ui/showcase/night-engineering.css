@@ -80,7 +80,7 @@ html:root .portfolio-chrome #sec-work #project-everythingisfine .earthquake-titl
 }
 
 /* One large editor surface. The line itself is the illustration. */
-html:root #sec-work .work-exhibit #project-iodine.portfolio-undo {
+html:root #sec-more-work #project-iodine.portfolio-undo {
   --undo-ground: #11151c;
   --undo-type: #e8edec;
   --undo-secondary: #a9b9c2;
@@ -96,7 +96,7 @@ html:root #sec-work .work-exhibit #project-iodine.portfolio-undo {
   padding-top: clamp(25px, 5svh, 60px);
   padding-bottom: clamp(28px, 6svh, 70px);
 }
-html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
+html:root .portfolio-chrome #sec-more-work #project-iodine .undo-heading h3 {
   font: 500 clamp(70px, min(12vw, 16svh), 184px)/0.94 var(--font-display);
   letter-spacing: -0.089em;
 }
@@ -113,7 +113,7 @@ html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
 #project-iodine .undo-heading a {
   color: #c6d3da;
 }
-html:root .portfolio-chrome #sec-work #project-iodine.portfolio-undo .undo-buffer {
+html:root .portfolio-chrome #sec-more-work #project-iodine.portfolio-undo .undo-buffer {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   align-self: stretch;
@@ -131,7 +131,7 @@ html:root .portfolio-chrome #sec-work #project-iodine.portfolio-undo .undo-buffe
 #project-iodine .undo-row {
   color: #97acb7;
 }
-html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
+html:root #sec-more-work #project-iodine.portfolio-undo .undo-row.recovery-line {
   position: relative;
   isolation: isolate;
   padding: 0.22em 0;
@@ -173,10 +173,10 @@ html:root #sec-work #project-iodine.portfolio-undo .undo-row.recovery-line {
     gap: clamp(26px, 6svh, 72px);
     padding-top: clamp(23px, 4.8svh, 54px);
   }
-  html:root .portfolio-chrome #sec-work #project-iodine .undo-heading h3 {
+  html:root .portfolio-chrome #sec-more-work #project-iodine .undo-heading h3 {
     font-size: clamp(65px, 21vw, 120px);
   }
-  html:root .portfolio-chrome #sec-work #project-iodine.portfolio-undo .undo-buffer {
+  html:root .portfolio-chrome #sec-more-work #project-iodine.portfolio-undo .undo-buffer {
     grid-template-rows: auto auto auto;
     align-content: center;
   }

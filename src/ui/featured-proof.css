@@ -1,4 +1,4 @@
-html:root .portfolio-chrome #sec-work #project-iodine .project-scene-body {
+html:root .portfolio-chrome #sec-more-work #project-iodine .project-scene-body {
   min-height: min(65svh, 650px);
   padding-block: clamp(34px, 5.8svh, 64px) clamp(46px, 8svh, 76px);
   gap: clamp(21px, 4svh, 36px);
@@ -53,7 +53,7 @@ html:root #project-iodine .recovery[data-restored='true'] .recovery-line {
     inset: auto;
     margin: 6px var(--portfolio-gutter) 0;
   }
-  html:root .portfolio-chrome #sec-work #project-iodine .project-scene-body {
+  html:root .portfolio-chrome #sec-more-work #project-iodine .project-scene-body {
     min-height: min(60svh, 510px);
   }
 }

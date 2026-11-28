@@ -1,5 +1,6 @@
 import { ProjectHandoffs } from './showcase/ProjectHandoffs';
 import './connected-cut.css';
+import './one-page-route.css';
 import './showcase/opening/featured-globe-cut.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { caseStudyLane, isPortfolioProject } from '../data/workBrowsing';
@@ -125,7 +126,7 @@ export function Sections() {
     <main id="scroll" tabIndex={-1} className="relative z-10 outline-none">
       <IntroSection />
       <WorkSection />
-      <ExperienceSection />
+      <ExperienceSection onOpen={openWork} />
       <MoreProjectsSection onOpen={openWork} />
       <RearFinish />
       <ProjectHandoffs />
