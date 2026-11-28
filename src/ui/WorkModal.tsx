@@ -35,12 +35,6 @@ export function WorkModal({ item, onClose, onPrevious, onNext }: Props) {
         className="work-modal-panel relative flex flex-col w-full max-w-[960px] max-h-[85dvh] overflow-hidden bg-[#0a0a14] border border-[var(--color-line)] rounded-xl"
       >
         <header className="work-modal-heading">
-          <a href={indexHref()} onClick={followWorkIndex} className="work-modal-index">
-            Work index
-          </a>
-          <h3 id="work-modal-title" className="work-modal-title">
-            {item.displayTitle ?? item.title}
-          </h3>
           <button
             ref={closeRef}
             type="button"
@@ -50,6 +44,12 @@ export function WorkModal({ item, onClose, onPrevious, onNext }: Props) {
           >
             ×
           </button>
+          <a href={indexHref()} onClick={followWorkIndex} className="work-modal-index">
+            Work index
+          </a>
+          <h3 id="work-modal-title" className="work-modal-title">
+            {item.displayTitle ?? item.title}
+          </h3>
         </header>
         <ScrollBody key={item.title} storyId={item.title}>
           <span data-nosnippet className="sr-only">

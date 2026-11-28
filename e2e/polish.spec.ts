@@ -49,7 +49,12 @@ test('phone reader keeps source and sharing available with independent Escape di
   await trigger.click();
   const dialog = page.getByRole('dialog');
   const more = dialog.getByLabel('Source and sharing', { exact: true });
-  await expect(dialog.getByRole('button', { name: 'Close', exact: true })).toBeFocused();
+  const close = dialog.getByRole('button', { name: 'Close', exact: true });
+  await expect(close).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(more).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(close).toBeFocused();
   await page.keyboard.press('Shift+Tab');
   await expect(more).toBeFocused();
   await more.press('Enter');
@@ -63,5 +68,12 @@ test('phone reader keeps source and sharing available with independent Escape di
   await expect(menu.getByRole('link', { name: 'Source code', exact: true })).toBeHidden();
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+
+  await trigger.press('Enter');
+  await expect(close).toBeFocused();
+  await close.press('Enter');
+  await expect(dialog).toHaveCount(0);
+  await expect(page).toHaveURL(/\/work\/$/);
   await expect(trigger).toBeFocused();
 });
