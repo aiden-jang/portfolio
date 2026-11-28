@@ -77,10 +77,9 @@ for (const width of [1440, 390]) {
 
     await place('#project-iodine', 0.11);
     await expect(recovery).toHaveText('Edit undone');
-    await expect(iodine.getByRole('link', { name: 'Read the iodine case study' })).toHaveAttribute(
-      'href',
-      /edit=restored/,
-    );
+    await expect(
+      iodine.getByRole('link', { name: 'My open-source contributions' }),
+    ).toHaveAttribute('href', /edit=restored/);
 
     const track = page.locator('.scroll-film-track');
     const stage = page.locator('.rear-finish-stage');

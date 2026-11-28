@@ -187,7 +187,7 @@ for (const width of [1440, 390]) {
       await accessible(page);
 
       await page.emulateMedia({ reducedMotion: 'no-preference' });
-      const story = page.getByRole('link', { name: 'Read the meanwhile. case study' });
+      const story = page.getByRole('link', { name: 'How I matched the reports' });
       await story.click();
       await expect(page.getByRole('heading', { name: 'One quake. Two depths.' })).toBeVisible();
       await expect(page).toHaveURL(/\/cases\/meanwhile\//);

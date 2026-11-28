@@ -147,13 +147,12 @@ export function EarthquakeFeature({ item, preview }: Props) {
             </button>
             <a
               className="featured-text-action"
-              aria-label="Read the meanwhile. case study"
               href={evidenceHref('everythingisfine', { agency })}
               onClick={(event) =>
                 openEvidence?.(event, 'everythingisfine', () => globeFrame.current?.capture())
               }
             >
-              Case study <ControlIcon name="arrow" />
+              How I matched the reports <ControlIcon name="arrow" />
             </a>
           </div>
         )}

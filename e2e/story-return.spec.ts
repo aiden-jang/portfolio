@@ -18,7 +18,7 @@ for (const width of [1440, 390]) {
     });
     await page.goto('/#sec-work');
     await page.evaluate(() => document.fonts.ready);
-    const iodine = page.getByRole('link', { name: 'Read the iodine case study', exact: true });
+    const iodine = page.getByRole('link', { name: 'My open-source contributions', exact: true });
     await iodine.scrollIntoViewIfNeeded();
     await iodine.focus();
     const position = await page.evaluate(() => scrollY);

@@ -84,7 +84,7 @@ for (const [width, height] of [
       name: 'Compare the Kamchatka reports',
       exact: true,
     });
-    const story = page.getByRole('link', { name: 'Read the meanwhile. case study' });
+    const story = page.getByRole('link', { name: 'How I matched the reports' });
     await expect(inspect).toHaveCount(1, { timeout: 5000 });
     await expect(page.locator('.earthquake-record')).toContainText('Radar by RainViewer');
     await expect(inspect).toBeInViewport({ ratio: 1 });
@@ -117,7 +117,7 @@ for (const [width, height] of [
     await expect(story).toBeVisible();
     const iodine = page.locator('#project-iodine');
     await expect(iodine.getByRole('status')).toHaveText('Edit undone');
-    await iodine.getByRole('link', { name: 'Read the iodine case study' }).click();
+    await iodine.getByRole('link', { name: 'My open-source contributions' }).click();
     await expect(page.getByRole('heading', { name: 'An edit you can take back.' })).toBeVisible();
     await expect(page).toHaveURL(/cases\/iodine\/\?edit=restored$/);
     await page.getByText('Editor recording', { exact: true }).click();

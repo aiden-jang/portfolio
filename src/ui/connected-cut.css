@@ -316,3 +316,10 @@ html:root .portfolio-chrome #sec-more-work #project-iodine .iodine-scene-content
     cursor: grabbing;
   }
 }
+
+@media (max-width: 375px) {
+  .earthquake-detail > .featured-text-action {
+    margin-inline-start: 7px;
+    font-size: 13px;
+  }
+}

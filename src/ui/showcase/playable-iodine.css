@@ -46,6 +46,7 @@ html:root .portfolio-chrome #sec-more-work #project-iodine .undo-heading h3 {
     Georgia,
     serif;
   letter-spacing: -0.062em;
+  white-space: nowrap;
 }
 
 .undo-heading a {
@@ -58,6 +59,7 @@ html:root .portfolio-chrome #sec-more-work #project-iodine .undo-heading h3 {
 }
 
 .undo-heading a svg {
+  flex-shrink: 0;
   width: 1.1em;
 }
 .undo-heading a:hover {

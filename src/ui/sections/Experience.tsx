@@ -14,7 +14,8 @@ const OUTCOMES: Record<string, { figure: string; label: string; title: string; d
     figure: '30,000+',
     label: 'newsletters served',
     title: 'Replaced a live PHP backend',
-    detail: 'Two engineers, six months. Django REST and PostgreSQL, with a React interface.',
+    detail:
+      'Two engineers, six months. I owned the database models, API serializers, and the React components that used them.',
   },
   'agentic-ai-playwright-framework': {
     figure: 'Playwright',

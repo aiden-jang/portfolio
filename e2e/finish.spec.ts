@@ -169,7 +169,7 @@ for (const width of [1440, 390]) {
     const failedFrame = (await thumbnail.boundingBox())!;
     expect(failedFrame.width).toBeCloseTo(originalFrame.width, 0);
     expect(failedFrame.height).toBeCloseTo(originalFrame.height, 0);
-    await project.getByRole('link', { name: 'Read the meanwhile. case study' }).click();
+    await project.getByRole('link', { name: 'How I matched the reports' }).click();
     await expect(page.getByRole('heading', { name: 'One quake. Two depths.' })).toBeVisible();
   });
 }

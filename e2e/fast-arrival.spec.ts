@@ -95,7 +95,7 @@ test.describe('Iodine on a short phone', () => {
     await expect(editor.getByRole('status')).toHaveText('Edit undone');
     const agentContext = editor.locator('.undo-agent-context');
     await expect(agentContext.getByText('edit_reverted', { exact: true })).toBeInViewport();
-    const caseLink = editor.getByRole('link', { name: 'Read the iodine case study' });
+    const caseLink = editor.getByRole('link', { name: 'My open-source contributions' });
     await caseLink.tap();
     const evidence = page.getByRole('region', { name: 'Recorded Iodine edit recovery' });
     await expect(evidence.locator('.undo-agent-context')).toHaveAttribute('data-restored', 'true');

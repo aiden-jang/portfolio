@@ -60,6 +60,12 @@ html:root .bloom-gallery .bloom-gallery-rest {
   #sec-experience .experience-proof-strip .experience-story > span {
     display: none;
   }
+  #sec-experience
+    .experience-outcome[data-work-row='monolith-django-rest-react-rewrite']
+    .experience-story
+    > span {
+    display: block;
+  }
   #project-bloomnote .bloom-garden-letter blockquote {
     font-size: clamp(24px, 7.3vw, 33px);
   }

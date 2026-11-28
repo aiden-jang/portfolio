@@ -53,13 +53,12 @@ export function IodinePresentation() {
             <span className="editor-caret" aria-hidden="true" />
           </h3>
           <a
-            aria-label="Read the iodine case study"
             href={href}
             onClick={(event) => {
               if (openCase?.(event, 'iodine')) setManual(true);
             }}
           >
-            Iodine case study <ControlIcon name="arrow" />
+            <span>My open-source contributions</span> <ControlIcon name="arrow" />
           </a>
         </header>
         <div className="recovery undo-buffer" ref={frame} data-restored={restored}>
