@@ -154,7 +154,7 @@ html:root #sec-experience .batch-folio a:focus-visible {
 
 @media (max-width: 700px) {
   html:root #sec-experience .experience-content .batch-print-lane {
-    --batch-travel: clamp(260px, 58svh, 480px);
+    --batch-travel: calc(clamp(260px, 58svh, 480px) - var(--batch-hold-trim, 0px));
   }
   #sec-experience #batching-study .batch-print {
     gap: clamp(14px, 3svh, 28px);
@@ -210,4 +210,16 @@ html:root #sec-experience .batch-folio a:focus-visible {
   height: 1px;
   overflow: visible;
   pointer-events: none;
+}
+
+@media (max-width: 767px) and (max-height: 699px) {
+  html:root #sec-experience .experience-content .batch-print-lane {
+    --batch-hold-trim: 80px;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 499px) {
+  html:root #sec-experience .experience-content .batch-print-lane {
+    --batch-hold-trim: 70px;
+  }
 }

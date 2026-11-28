@@ -13,10 +13,15 @@ export function BatchingSpread({ lane }: { lane: RefObject<HTMLDivElement> }) {
   const figure = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
   const draw = useCallback(
-    (_stage: HTMLElement, progress: number) => {
+    (stage: HTMLElement, progress: number, span: number) => {
       const element = figure.current;
       if (!element) return;
-      const value = reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - 0.035) / 0.685));
+      const trim = parseFloat(getComputedStyle(stage).getPropertyValue('--batch-hold-trim')) || 0;
+      // Use the original distance for the collapse even when its final hold is shorter.
+      const collapseProgress = (progress * span) / (span + trim);
+      const value = reducedMotion
+        ? 1
+        : Math.max(0, Math.min(1, (collapseProgress - 0.035) / 0.685));
       element.dataset.pulse = String(value);
       element.dispatchEvent(
         new CustomEvent('pulse-position', { detail: { value, instant: reducedMotion } }),

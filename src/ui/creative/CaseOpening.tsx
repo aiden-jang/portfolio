@@ -11,31 +11,25 @@ import type { EvidenceFrame } from './evidenceNavigation';
 
 export function BatchingCaseOpening() {
   return (
-    <section className="batch-case-opening" aria-labelledby="batch-case-result">
-      <div className="batch-case-top">
-        <div id="batch-case-result" className="batch-case-result">
-          <p className="batch-case-time" aria-label="60 seconds to 2 seconds">
-            <span>60s</span>
-            <span aria-hidden="true">→</span>
-            <strong>2s</strong>
-          </p>
-          <p>Ad Slot Details load time</p>
-        </div>
-        <figure className="batching-spread batch-case-figure" data-phase="after">
-          <svg viewBox="0 0 640 288" aria-hidden="true" className="batch-handoff-graphic">
-            <path d="M225 144h190" stroke="#c2e2d0" strokeWidth="5" strokeLinecap="round" />
-          </svg>
-          <figcaption className="batching-readout">1 batched request</figcaption>
-        </figure>
-      </div>
+    <section className="batch-case-opening" aria-label="Ad Slot Details before and after">
       <dl className="batch-case-contract">
         <div>
           <dt>Before</dt>
-          <dd>One request for each linked line item.</dd>
+          <dd>
+            <strong>
+              120 requests <span>·</span> <span>~60s</span>
+            </strong>
+            The browser fetched each linked line item separately.
+          </dd>
         </div>
         <div>
           <dt>After</dt>
-          <dd>One response with the linked line items already joined.</dd>
+          <dd>
+            <strong>
+              1 request <span>·</span> <span>2s</span>
+            </strong>
+            The API returned the linked line items together.
+          </dd>
         </div>
       </dl>
     </section>

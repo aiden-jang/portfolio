@@ -35,12 +35,12 @@ const stories = {
   },
   'ad-slot-details-120-1-api-call': {
     label: 'Ad Slot Details',
-    title: '120 API calls became one.',
-    role: 'I rewrote the fetch at Zeta Global to return the linked line items as one response.',
-    next: 'everythingisfine',
-    nextLabel: 'See how I matched earthquake reports',
+    title: 'Ad Slot Details went from about a minute to two seconds.',
+    role: 'For a large ad slot, the browser made around 120 requests before the page was ready. At Zeta Global, I changed the API to return the linked line items in one response.',
+    next: 'monolith-django-rest-react-rewrite',
+    nextLabel: 'How two engineers replaced a live publisher backend',
     nextDetail:
-      'In meanwhile., I had to decide which records belong together while retaining both sources’ measurements.',
+      'See how I took ownership across the database, API, and interface in a six-month rewrite.',
   },
 } as const;
 
@@ -48,10 +48,12 @@ export function StoryPage({
   id,
   frame,
   returnToPortfolio,
+  openRelatedWork,
 }: {
   id: StoryId;
   frame?: EvidenceFrame;
   returnToPortfolio?: () => void;
+  openRelatedWork?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 }) {
   const item = WORK_ITEMS.find((candidate) => workId(candidate) === id)!;
   const story = stories[id];
@@ -77,10 +79,10 @@ export function StoryPage({
     history.replaceState(history.state, '', browserUrl);
     setShare('idle');
   }, [browserUrl, shareUrl]);
-  const next =
-    story.next === 'publisher-account-migrations'
-      ? root + '#work/' + story.next
-      : evidenceHref(story.next, undefined);
+  const relatedWork =
+    story.next === 'publisher-account-migrations' ||
+    story.next === 'monolith-django-rest-react-rewrite';
+  const next = relatedWork ? root + '#work/' + story.next : evidenceHref(story.next, undefined);
   const section =
     id === 'ad-slot-details-120-1-api-call'
       ? '#sec-experience'
@@ -149,7 +151,13 @@ export function StoryPage({
           <WorkStoryEnding item={item} />
           <aside className="creative-case-next">
             <p>{story.nextDetail}</p>
-            <a href={next} onClick={followRelatedStory}>
+            <a
+              href={next}
+              onClick={(event) => {
+                if (id === 'ad-slot-details-120-1-api-call') openRelatedWork?.(event);
+                followRelatedStory(event);
+              }}
+            >
               {story.nextLabel} <ControlIcon name="arrow" />
             </a>
           </aside>

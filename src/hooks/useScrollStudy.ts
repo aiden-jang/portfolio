@@ -9,7 +9,7 @@ export function easedProgress(value: number, from: number, to: number) {
 export function useScrollStudy(
   ref: RefObject<HTMLElement>,
   enabled: boolean,
-  draw: (el: HTMLElement, t: number) => void,
+  draw: (el: HTMLElement, t: number, span: number) => void,
   settle?: (t: number) => number,
   follow?: readonly [start: number, end: number],
   reverseBuffer = 0,
@@ -35,7 +35,7 @@ export function useScrollStudy(
     let timer: ReturnType<typeof setTimeout> | undefined;
     const paint = (t: number) => {
       displayed = t;
-      if (stage) draw(stage, t);
+      if (stage) draw(stage, t, span);
     };
     const stopSettling = () => {
       clearTimeout(timer);

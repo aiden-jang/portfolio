@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ControlIcon } from './ControlIcon';
 import './career-evidence.css';
 
 const testSteps = [
@@ -53,23 +52,7 @@ function PlaywrightSequence() {
 export function CareerEvidence({ id }: { id: string }) {
   if (id === 'monolith-django-rest-react-rewrite') {
     return (
-      <figure className="career-evidence">
-        <figcaption>
-          <strong>Moving publisher onboarding</strong>
-          <span>Six months · Two engineers</span>
-        </figcaption>
-        <div className="career-evidence-migration">
-          <div>
-            <strong>Live PHP platform</strong>
-            <span>Publisher onboarding</span>
-          </div>
-          <ControlIcon name="arrow" />
-          <div>
-            <strong>Django REST + PostgreSQL</strong>
-            <span>React publisher interface</span>
-          </div>
-        </div>
-      </figure>
+      <p className="work-modal-summary">Platform scale · 30,000+ active publisher newsletters</p>
     );
   }
   if (id === 'agentic-ai-playwright-framework') return <PlaywrightSequence />;

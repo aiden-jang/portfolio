@@ -25,6 +25,19 @@ for (const width of [2560, 1440, 1024, 768, 390, 375, 320]) {
     await expect(lead).toBeVisible();
     await lead.click();
     await expect(page).toHaveURL(/request-batching/);
+    if (width === 375) {
+      await page
+        .getByRole('link', { name: 'How two engineers replaced a live publisher backend' })
+        .click();
+      const migration = page.getByRole('dialog', { name: 'Replacing a live publisher backend' });
+      await expect(migration).toContainText('I owned the PostgreSQL models');
+      await migration.getByRole('button', { name: 'Close', exact: true }).click();
+      await expect(
+        page.getByRole('heading', {
+          name: 'Ad Slot Details went from about a minute to two seconds.',
+        }),
+      ).toBeVisible();
+    }
     await page.goBack();
     await expect(lead).toBeFocused();
     await page.getByRole('link', { name: 'Experience', exact: true }).click();

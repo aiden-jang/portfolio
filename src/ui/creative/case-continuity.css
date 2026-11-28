@@ -8,53 +8,11 @@
   border-radius: 11px;
   color: #e9eee7;
 }
-.batch-case-top {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  align-items: center;
-  min-width: 0;
-}
-.batch-case-result p {
-  margin: 0;
-}
-.batch-case-result p:last-child {
-  margin-top: 9px;
-  color: #c3cdc1;
-  font-size: clamp(13px, 1.4vw, 16px);
-}
-html:root .creative-case .batch-case-result > .batch-case-time {
-  display: flex;
-  align-items: baseline;
-  gap: clamp(8px, 1.25vw, 22px);
-  color: #aab6ad;
-  font: 470 clamp(44px, 6.4vw, 104px)/1 var(--font-display);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.04em;
-  white-space: nowrap;
-}
-.batch-case-time strong {
-  color: #c9ebd9;
-  font-weight: 480;
-}
-.batch-case-time span:nth-child(2) {
-  font-size: 0.53em;
-  letter-spacing: 0;
-  align-self: center;
-}
-.batch-case-figure svg {
-  max-height: clamp(131px, 19vw, 242px);
-}
-.batch-case-figure .batching-readout {
-  padding: 0 0 13px;
-  text-align: center;
-}
 .batch-case-contract {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0 clamp(20px, 4vw, 58px);
-  border-top: 1px solid #516058;
   margin: 0;
-  padding-block-start: clamp(16px, 2.4vw, 30px);
 }
 .batch-case-contract dt {
   color: #c9decf;
@@ -67,6 +25,13 @@ html:root .creative-case .batch-case-result > .batch-case-time {
   line-height: 1.48;
   margin: 5px 0 0;
   text-wrap: pretty;
+}
+.batch-case-contract strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #c9ebd9;
+  font-size: clamp(17px, 3vw, 32px);
+  line-height: 1.15;
 }
 .quake-case-chosen {
   display: flex;
@@ -131,15 +96,11 @@ html:root .orbit-event .orbit-evidence a {
   font-weight: 550;
 }
 @media (max-width: 760px) {
-  .batch-case-top {
-    grid-template-columns: 1fr;
+  .batch-case-contract strong span:first-child {
+    display: none;
   }
-  html:root .creative-case .batch-case-result > .batch-case-time {
-    font-size: clamp(43px, 12vw, 68px);
-  }
-  .batch-case-figure .batching-readout {
-    margin-top: -5px;
-    padding-bottom: 15px;
+  .batch-case-contract strong span:last-child {
+    display: block;
   }
   .quake-opening[data-agency] .quake-opening-globe {
     min-height: clamp(104px, 33vw, 155px);
@@ -153,9 +114,6 @@ html:root .orbit-event .orbit-evidence a {
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .batch-handoff-graphic {
-    view-transition-name: case-batch-line;
-  }
   html[data-case-continuity]
     :is(
       .earthquake-feature[data-comparing='false'] .orbit-art,
@@ -164,13 +122,10 @@ html:root .orbit-event .orbit-evidence a {
     ) {
     view-transition-name: case-quake-globe;
   }
-  ::view-transition-group(case-batch-line),
   ::view-transition-group(case-quake-globe) {
     animation-duration: 470ms;
     animation-timing-function: cubic-bezier(0.22, 0.8, 0.25, 1);
   }
-  ::view-transition-old(case-batch-line),
-  ::view-transition-new(case-batch-line),
   ::view-transition-old(case-quake-globe),
   ::view-transition-new(case-quake-globe) {
     block-size: 100%;

@@ -195,7 +195,7 @@ export const WORK_ITEMS: WorkDetail[] = [
     displayTitle: 'Replacing a live publisher backend',
     context: 'Zeta Global · 2024–present',
     summary:
-      'With one other engineer, I migrated the backend from PHP to Django REST in six months and rebuilt the interface in React.',
+      'In six months, another engineer and I replaced the PHP backend for publisher onboarding. I owned the PostgreSQL models, Django serializers, and the React components and TypeScript hooks that used that data.',
     body: [
       'The replacement supports publisher onboarding on a platform serving more than 30,000 active newsletters. It moved a live system from a PHP monolith to Django REST and PostgreSQL.',
       'I owned PostgreSQL models and Django serializers alongside React and TypeScript components and hooks. Working across the API and interface kept the data contract consistent during the migration.',

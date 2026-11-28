@@ -21,7 +21,7 @@ export function EvidenceRoute() {
     frame?: EvidenceFrame;
   } | null>(null);
 
-  const show = (value: StoryId | null) => {
+  const show = (value: StoryId | null, restoreToLink = true) => {
     if (active.current === value) return;
     active.current = value;
     const token = Symbol();
@@ -37,7 +37,7 @@ export function EvidenceRoute() {
       restoreFrame.current = requestAnimationFrame(() => {
         if (token !== routeToken.current) return;
         window.scrollTo({ top: bookmark.scrollY, behavior: 'instant' });
-        bookmark.link.focus({ preventScroll: true });
+        if (restoreToLink) bookmark.link.focus({ preventScroll: true });
         document.title = bookmark.title;
         history.scrollRestoration = bookmark.restoration;
       });
@@ -55,6 +55,7 @@ export function EvidenceRoute() {
       }
     };
     if (
+      !restoreToLink ||
       previous ||
       matchMedia('(prefers-reduced-motion: reduce)').matches ||
       !document.startViewTransition
@@ -123,6 +124,25 @@ export function EvidenceRoute() {
           id={open}
           frame={origin.current?.frame}
           returnToPortfolio={() => history.back()}
+          openRelatedWork={(event) => {
+            if (
+              event.defaultPrevented ||
+              event.button !== 0 ||
+              event.metaKey ||
+              event.ctrlKey ||
+              event.shiftKey ||
+              event.altKey
+            )
+              return;
+            event.preventDefault();
+            history.pushState(
+              { ...nextWorkState(), portfolioWork: true },
+              '',
+              event.currentTarget.href,
+            );
+            show(null, false);
+            dispatchEvent(new HashChangeEvent('hashchange'));
+          }}
         />
       )}
     </OpenEvidence.Provider>

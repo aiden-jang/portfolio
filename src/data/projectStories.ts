@@ -150,9 +150,9 @@ export const CAREER_STORIES: Record<string, { problem: string; decision: string;
       problem:
         'A legacy PHP monolith was carrying a live publisher platform while its replacement was being built.',
       decision:
-        'I worked across PostgreSQL models, Django REST and React, keeping the API and interface aligned with the other engineer during the migration.',
+        'I worked across the database, API and interface so the React replacement and the Django REST API shared the same data contract.',
       result:
-        'Two engineers completed the backend migration in six months. The platform serves more than 30,000 active publisher newsletters.',
+        'We moved publisher onboarding from the PHP monolith to Django REST and PostgreSQL, with a rebuilt React interface.',
     },
     'agentic-ai-playwright-framework': {
       problem:

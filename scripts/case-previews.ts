@@ -5,7 +5,7 @@ import type { Plugin } from 'vite';
 const origin = 'https://www.aidenjang.com';
 const cases = {
   'request-batching': {
-    title: '120 calls became one. | Aiden Jang',
+    title: 'Ad Slot Details went from about a minute to two seconds. | Aiden Jang',
     description: 'How a batched API response cut page load from 60 seconds to 2.',
     image: '/projects/batch-share.png',
     alt: '120 requests collapse into one. 60 seconds to 2 seconds.',
