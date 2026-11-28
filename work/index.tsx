@@ -12,14 +12,12 @@ import {
   openWorkRow,
   useWorkIndexReturn,
 } from '../src/ui/workIndexNavigation';
-import rearFinishImage from '../wing-art/desktop-rear/12.jpg';
 import './index.css';
 import './exhibition.css';
 
 const entries = [
   ['everythingisfine', 'meanwhile.', 'Earth’s live signals', 'atlas-globe-desktop.webp'],
   ['iodine', 'iodine', 'Recovery for agent edits', 'scenes/iodine-inside-desktop.webp'],
-  ['batch', '120 calls → 1', 'From a minute to two seconds', 'batch-share.png'],
   ['bloomnote', 'bloomnote', 'A note grown into a garden', 'bloomnote-garden.jpg'],
   ['iguess', 'iguess', 'A drawing game with a live guess', 'iguess.jpg'],
   ['mrrp', 'mrrp', 'A little room for Bean', 'scenes/mrrp-room-art-desktop.webp'],
@@ -27,19 +25,15 @@ const entries = [
   ['owewell', 'owewell', 'Split the bill', 'scenes/owewell-result-desktop.webp'],
   ['worth', 'worth', 'Save a favorite', 'worth-verdict.webp'],
   ['platform', 'Shared sign-in', 'One account for the apps', 'platform-hub.webp'],
-  ['f40', 'F40 study', 'Clay to paint', rearFinishImage],
 ];
 const cases: Record<string, string> = {
   everythingisfine: '/cases/meanwhile/',
   iodine: '/cases/iodine/',
-  batch: '/cases/request-batching/',
 };
 
 function demoHref(id: string) {
   if (['wherever', 'owewell', 'worth'].includes(id)) return '/work/?story=dinner#project-' + id;
   if (id === 'platform') return undefined;
-  if (id === 'batch') return '/#batching-study';
-  if (id === 'f40') return '/#f40-study';
   return '/#project-' + id;
 }
 function DinnerExhibit() {
@@ -101,14 +95,17 @@ export function WorkIndex() {
           </span>
           <span aria-hidden="true">↗</span>
         </a>
+        <section className="index-history" id="experience">
+          <ExperienceHistory onOpen={(item, row) => openWorkRow(row, '/#work/' + workId(item))} />
+        </section>
         <section className="index-projects" aria-labelledby="projects-heading">
           <h2 id="projects-heading">Projects</h2>
           <div className="index-catalog">
             {entries.map(([id, title, description, image]) => {
               const demo = demoHref(id);
-              const reader = cases[id] ?? (id === 'f40' ? demo! : '/#work/' + id);
-              const label = cases[id] ? 'Case study' : id === 'f40' ? 'Study' : 'Project notes';
-              const asset = id === 'f40' ? image : '/projects/' + image;
+              const reader = cases[id] ?? '/#work/' + id;
+              const label = cases[id] ? 'Case study' : 'Project notes';
+              const asset = '/projects/' + image;
               return (
                 <article className={'index-project index-project-' + id} key={id}>
                   <a
@@ -157,9 +154,6 @@ export function WorkIndex() {
               );
             })}
           </div>
-        </section>
-        <section className="index-history" id="experience">
-          <ExperienceHistory onOpen={(item, row) => openWorkRow(row, '/#work/' + workId(item))} />
         </section>
         <section className="index-about" id="about">
           <div>

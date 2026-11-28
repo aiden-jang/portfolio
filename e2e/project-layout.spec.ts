@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-for (const width of [1440, 1024, 768, 390, 320]) {
+for (const width of [1440, 1024, 768, 390, 375, 320]) {
   test(`project scenes and Work fit at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: width < 600 ? 667 : 900 });
+    await page.setViewportSize({ width, height: width === 390 ? 844 : width < 600 ? 667 : 900 });
     await page.route('**/*.glb', (route) => route.abort());
     if (width === 320)
       await page.route('**/projects/scenes/wherever-pizza.jpg', (route) =>
@@ -37,7 +37,17 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     await listing.getByRole('link', { name: 'Projects index' }).click();
     await expect(page).toHaveURL(/\/work\/#projects-heading$/);
     await expect(page.getByRole('link', { name: 'Shared sign-in — Project notes' })).toBeVisible();
-    await expect(page.locator('.index-project')).toHaveCount(11);
+    await expect(page.locator('.index-project')).toHaveCount(9);
+    await expect(page.getByRole('link', { name: /^(120 calls → 1|F40 study)/ })).toHaveCount(0);
+    const projects = page.getByRole('heading', { name: 'Projects', exact: true });
+    expect(
+      await projects.evaluate((heading) =>
+        Boolean(
+          document.querySelector('#experience')!.compareDocumentPosition(heading) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+        ),
+      ),
+    ).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
       width + 1,
     );
