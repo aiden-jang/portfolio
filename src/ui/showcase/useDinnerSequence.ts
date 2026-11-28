@@ -35,7 +35,7 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
     const bill = section.querySelector<HTMLElement>('#project-owewell');
     const journal = section.querySelector<HTMLElement>('#project-worth');
     if (!bill || !journal) return;
-    const ticket = pin.querySelector<HTMLElement>('.meal-ticket')!;
+    const entranceMarker = section.querySelector<HTMLElement>('.supper-entrance');
     let frame = 0;
     let active = true;
     let inset = parseFloat(getComputedStyle(pin).top) || 0;
@@ -46,7 +46,6 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
     let lastMoment: DinnerMoment | undefined;
     let previousLens = -1;
     let previousFile = -1;
-    let previousUnroll = -1;
 
     const paint = (now: number) => {
       frame = 0;
@@ -60,8 +59,9 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
         }
       }
       const bounds = section.getBoundingClientRect();
-      const run = Math.max(1, bounds.height - pin.clientHeight);
-      const startY = scrollY + bounds.top - inset;
+      const entrance = entranceMarker?.offsetHeight ?? 0;
+      const run = Math.max(1, bounds.height - pin.clientHeight - entrance);
+      const startY = scrollY + bounds.top - inset + entrance;
       let p = clamp((scrollY - startY) / run, 0, 1);
       const offscreen = bounds.top > innerHeight + 32 || bounds.bottom < -32;
       if (offscreen) {
@@ -74,7 +74,7 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
           hash === '#project-worth' || hash === '#project-owewell'
             ? section.querySelector<HTMLElement>(hash)
             : null;
-        p = linked ? linked.offsetTop / run : 0;
+        p = linked ? (linked.offsetTop - entrance) / run : 0;
       }
       const reduced = motion.matches;
       if (guide && (document.hidden || Math.abs(scrollY - guide.lastY) > 2)) guide = null;
@@ -86,7 +86,7 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
         const duration = splitting ? 680 : 780;
         const elapsed = now - start;
         const t = reduced ? Number(elapsed >= hold) : ramp(elapsed, hold, hold + duration);
-        const targetY = startY + (splitting ? journal : bill).offsetTop;
+        const targetY = startY - entrance + (splitting ? journal : bill).offsetTop;
         const nextY = Math.round(fromY + (targetY - fromY) * t);
         if (nextY !== scrollY) window.scrollTo({ top: nextY, behavior: 'instant' });
         guide.lastY = scrollY;
@@ -97,11 +97,11 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
         }
       }
 
-      const onBill = p >= 0.46;
+      const onBill = p >= 0.35;
       const onEntry = p >= 0.85;
       const picked = guidedPick || p >= 0.19;
       let current: DinnerMoment = picked ? 'picked' : 'vote';
-      if (onBill) current = hasSplit || p >= 0.63 ? 'split' : 'bill';
+      if (onBill) current = hasSplit || p >= 0.55 ? 'split' : 'bill';
       if (onEntry) current = favorite ? 'favorite' : 'entry';
       if (current !== lastMoment) {
         lastMoment = current;
@@ -109,26 +109,13 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
       }
       const lens = reduced ? Number(picked) : ramp(p, 0.055, 0.25);
       const file = reduced ? Number(onEntry) : ramp(p, 0.695, 0.878);
-      const unroll = reduced ? Number(onBill) : ramp(p, 0.32, 0.487);
-      if (lens !== previousLens || file !== previousFile || unroll !== previousUnroll) {
+      if (lens !== previousLens || file !== previousFile) {
         previousLens = lens;
         previousFile = file;
-        previousUnroll = unroll;
         pin.toggleAttribute('data-photo-header', lens > 0.94 && file < 0.29);
         pin.style.setProperty('--photo-card', String(1 - lens));
         pin.style.setProperty('--photo-table', String(lens * (1 - file)));
         pin.style.setProperty('--photo-entry', String(file));
-        pin.style.setProperty('--bill-lines', String(unroll * (1 - file)) + 'fr');
-        pin.style.setProperty('--entry-lines', String(ramp(file, 0.7, 0.95)) + 'fr');
-      }
-      if (!offscreen && (current === 'split' || file > 0)) {
-        const paper = ticket.getBoundingClientRect();
-        const table = pin.getBoundingClientRect();
-        pin.style.setProperty('--slip-left', paper.left - table.left + paper.width * 0.12 + 'px');
-        pin.style.setProperty(
-          '--slip-top',
-          Math.min(table.height - 52, paper.bottom - table.top - 4) + 'px',
-        );
       }
       if (guide || focusTarget) queue();
     };
@@ -149,7 +136,6 @@ export function useDinnerSequence(track: RefObject<HTMLElement>, stage: RefObjec
     };
     const size = new ResizeObserver(resize);
     size.observe(pin);
-    size.observe(ticket);
     size.observe(section);
     size.observe(document.body);
     apply.current = (action, keyboard) => {

@@ -31,10 +31,11 @@ for (const width of [1440, 1024, 768, 390, 320]) {
     const listing = page.locator('#sec-more-work');
     await expect(listing.locator('#project-iodine')).toHaveCount(1);
     await expect(listing.getByRole('heading', { name: 'Shared sign-in', exact: true })).toHaveCount(
-      1,
+      0,
     );
     await expect(listing.locator('#batching-study, #f40-study')).toHaveCount(0);
-    await page.goto('/work/');
+    await listing.getByRole('link', { name: 'Projects index' }).click();
+    await expect(page).toHaveURL(/\/work\/#projects-heading$/);
     await expect(page.getByRole('link', { name: 'Shared sign-in — Project notes' })).toBeVisible();
     await expect(page.locator('.index-project')).toHaveCount(11);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(

@@ -1,0 +1,199 @@
+.supper-entrance {
+  position: absolute;
+  pointer-events: none;
+  height: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .project-scenes:has(.studio-route + .meal-story) {
+    --box-travel: 45svh;
+    --box-view: calc(100svh - var(--portfolio-header-height));
+  }
+  html:root #sec-more-work .studio-route:has(+ .meal-story) {
+    --studio-dwell: calc(23svh + var(--box-travel));
+  }
+  html:root #sec-more-work .studio-route + #project-wherever.meal-story {
+    margin-top: calc(-1 * (var(--box-view) + var(--box-travel)));
+    scroll-margin-top: calc(var(--meal-inset) - var(--box-travel) - 4px);
+    height: calc(var(--box-view) + var(--box-travel) + var(--meal-run));
+    z-index: 2;
+    background: transparent;
+    pointer-events: none;
+  }
+  .studio-route + .meal-story .supper-entrance {
+    height: var(--box-travel);
+  }
+  .studio-route + .meal-story .meal-anchor-bill {
+    top: calc(var(--box-travel) + var(--meal-run) * 0.45);
+  }
+  .studio-route + .meal-story .meal-anchor-entry {
+    top: calc(var(--box-travel) + var(--meal-run) * 0.932);
+  }
+  .studio-route + .meal-story .meal-stage {
+    pointer-events: none;
+  }
+  .studio-route + .meal-story[data-cut='open'] .meal-stage {
+    pointer-events: auto;
+  }
+  .studio-route + .meal-story:not([data-cut='open']):not([data-cut='opening']) .meal-stage {
+    visibility: hidden;
+  }
+}
+.meal-story .meal-anchor-bill {
+  top: calc(var(--meal-run) * 0.45);
+}
+#project-wherever .meal-stage {
+  --supper-photo-x: 8cqw;
+  --supper-photo-y: 23cqh;
+  --supper-photo-w: 42cqw;
+  --supper-photo-h: 56cqh;
+  --supper-paper-x: 56cqw;
+  --supper-paper-y: 25cqh;
+  --supper-paper-w: 34cqw;
+  background: #58483b;
+}
+#project-wherever .meal-photo,
+#project-wherever .meal-pick {
+  left: var(--supper-photo-x);
+  top: var(--supper-photo-y);
+  width: var(--supper-photo-w);
+  height: var(--supper-photo-h);
+}
+#project-wherever .meal-photo {
+  padding: clamp(5px, 0.65cqw, 11px);
+  background: #f2e5ca;
+  transform-origin: center;
+  transform: translateX(var(--card-drag))
+    rotate(calc(-3deg + 3deg * var(--photo-table) - 1deg * var(--photo-entry)));
+}
+#project-wherever .meal-photo::after {
+  opacity: 0;
+}
+#project-wherever .meal-intro {
+  left: 8cqw;
+  top: 12cqh;
+  width: auto;
+  opacity: var(--photo-card);
+}
+#project-wherever .meal-intro h2 {
+  font-size: clamp(36px, 5.3cqh, 62px);
+  line-height: 1;
+}
+#project-wherever .meal-intro h2 span {
+  display: inline;
+}
+#project-wherever .meal-ticket {
+  top: var(--supper-paper-y);
+  left: var(--supper-paper-x);
+  width: var(--supper-paper-w);
+  padding: clamp(16px, 2.3cqw, 36px);
+  transform: none;
+}
+#project-wherever .meal-ticket-stock {
+  opacity: 1;
+  filter: drop-shadow(1px 5px 5px #37251c35);
+}
+#project-wherever .meal-ticket .meal-name {
+  font-size: clamp(30px, min(3.55cqw, 6.2cqh), 58px);
+}
+#project-wherever .supper-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  border-block: 1px dashed #b69b75;
+  padding: clamp(9px, 1.7cqh, 18px) 0;
+  margin-top: clamp(14px, 2.5cqh, 26px);
+  font: 500 clamp(12px, 1.05cqw, 17px) var(--font-mono);
+  color: #523c2f;
+}
+#project-wherever .supper-total b {
+  font-size: clamp(22px, 2.5cqw, 40px);
+  font-weight: 575;
+  line-height: 1;
+  letter-spacing: -0.065em;
+}
+#project-wherever .meal-ticket-note {
+  margin: 12px 0 4px;
+}
+#project-wherever .meal-bill-fold[aria-hidden='true'],
+#project-wherever .meal-entry-fold[aria-hidden='true'] {
+  display: none;
+}
+#project-wherever .supper-share {
+  margin-top: 8px;
+  color: #803a2c;
+  font: 610 clamp(16px, 1.7cqw, 26px) var(--font-mono);
+}
+#project-wherever .meal-book {
+  inset: 14cqh 4cqw 7cqh;
+}
+#project-wherever .meal-head {
+  color: #fff3d9;
+  text-shadow: 0 1px 5px #270e09;
+}
+@media (max-width: 740px) {
+  #project-wherever .meal-stage {
+    --supper-photo-x: 11cqw;
+    --supper-photo-y: 17cqh;
+    --supper-photo-w: 78cqw;
+    --supper-photo-h: 33cqh;
+    --supper-paper-x: 11cqw;
+    --supper-paper-y: 51cqh;
+    --supper-paper-w: 78cqw;
+  }
+  #project-wherever .meal-book {
+    inset: 12cqh 5cqw 3cqh;
+  }
+  #project-wherever .meal-intro {
+    left: 11cqw;
+    top: 10cqh;
+  }
+  #project-wherever .meal-intro h2 {
+    font-size: clamp(27px, 4.4cqh, 40px);
+  }
+  #project-wherever .meal-ticket {
+    padding: clamp(13px, 2cqh, 19px) 5cqw;
+  }
+  #project-wherever .meal-ticket .meal-name {
+    font-size: clamp(25px, 4.5cqh, 35px);
+    line-height: 0.98;
+  }
+  #project-wherever .meal-ticket-note {
+    margin: 8px 0 4px;
+  }
+  #project-wherever .meal-ticket .supper-total {
+    margin-top: 10px;
+    padding: 8px 0;
+  }
+  #project-wherever .meal-ticket .meal-verdict {
+    min-height: 50px;
+    margin-top: 2px;
+  }
+  #project-wherever .meal-character {
+    width: 55px;
+  }
+}
+@media (max-width: 740px) and (max-height: 715px) {
+  #project-wherever .meal-stage {
+    --supper-photo-y: 18cqh;
+    --supper-photo-h: 25cqh;
+    --supper-paper-y: 44cqh;
+  }
+  #project-wherever .meal-ticket .meal-name span {
+    display: inline;
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #project-wherever[data-cut='opening'] .meal-stage {
+    background: transparent;
+  }
+  #project-wherever[data-cut='opening'] .meal-archive {
+    visibility: hidden;
+  }
+  #project-wherever[data-cut='opening'] :is(.meal-ticket, .meal-intro, .meal-head) {
+    opacity: var(--paper-arrival, 0);
+    translate: 0 calc((1 - var(--paper-arrival, 0)) * 12px);
+  }
+}

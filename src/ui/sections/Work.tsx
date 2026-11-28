@@ -22,7 +22,7 @@ type Props = { onOpen: (item: WorkDetail, el: HTMLElement) => void };
 const projects = visibleProjects('all');
 const meanwhile = projects.find((item) => item.mark === 'everythingisfine')!;
 const collection = projects.filter((item) => !FEATURED_PROJECTS.includes(workId(item)));
-const editorialOrder = ['bloomnote', 'mrrp', 'worth', 'wherever', 'owewell', 'iguess', 'platform'];
+const editorialOrder = ['bloomnote', 'mrrp', 'worth', 'wherever', 'owewell', 'iguess'];
 const orderedCollection = editorialOrder
   .map((id) => collection.find((item) => workId(item) === id))
   .filter((item): item is WorkDetail => !!item)
@@ -47,7 +47,6 @@ const mrrp = orderedCollection.find((item) => item.mark === 'mrrp')!;
 const wherever = orderedCollection.find((item) => item.mark === 'wherever')!;
 const owewell = orderedCollection.find((item) => item.mark === 'owewell')!;
 const worth = orderedCollection.find((item) => item.mark === 'worth')!;
-const platform = orderedCollection.find((item) => workId(item) === 'platform')!;
 
 function AppLink({ item, label }: { item: WorkDetail; label?: string }) {
   if (!item.link) return null;
@@ -65,6 +64,7 @@ export function MoreProjectsSection({ onOpen }: Props) {
       <div className="bloom-gallery pointer-events-auto">
         <header className="projects-opening">
           <h2>Projects</h2>
+          <a href="/work/#projects-heading">Projects index ↗</a>
         </header>
         <IodinePresentation />
         <BloomPreview
@@ -111,15 +111,6 @@ export function MoreProjectsSection({ onOpen }: Props) {
             />
           </div>
         </div>
-        <article id="project-platform" className="platform-summary">
-          <div>
-            <h3>Shared sign-in</h3>
-            <p>One account for the apps, with shared sign-in, recovery, and account settings.</p>
-          </div>
-          <button type="button" onClick={(event) => onOpen(platform, event.currentTarget)}>
-            Project notes <span aria-hidden="true">↗</span>
-          </button>
-        </article>
       </div>
     </Section>
   );

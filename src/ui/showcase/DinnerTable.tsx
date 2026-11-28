@@ -2,6 +2,8 @@ import { useRef, useState, type PointerEvent } from 'react';
 import { dinnerPhoto, WorthCharacter } from './DinnerRating';
 import { useDinnerSequence } from './useDinnerSequence';
 import './dinner-table.css';
+import { useBoxCut } from './useBoxCut';
+import './supper-cut.css';
 
 type Props = {
   dinner: string;
@@ -43,6 +45,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
   const title = useRef<HTMLHeadingElement>(null);
   const drag = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
   const ignoreClick = useRef(false);
+  useBoxCut(track, stage);
   const { moment, paid, act } = useDinnerSequence(track, stage);
   const [announcement, announce] = useState('');
   const [missingPhoto, setMissingPhoto] = useState(false);
@@ -115,6 +118,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
       data-moment={moment}
       aria-label="Dinner with wherever, owewell, and worth"
     >
+      <span className="supper-entrance" aria-hidden="true" />
       <span id="project-owewell" className="meal-anchor meal-anchor-bill" aria-hidden="true" />
       <span id="project-worth" className="meal-anchor meal-anchor-entry" aria-hidden="true" />
       <div className="meal-stage" ref={stage} data-study-pin>
@@ -125,9 +129,8 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
           <h2>
             <span>Pizza</span> <span>tonight?</span>
           </h2>
-          <p>Pick a place for you and Alex.</p>
         </div>
-        <div className="meal-card-deck" aria-hidden="true" />
+
         <div className="meal-archive" aria-hidden="true">
           <div className="meal-book">
             <i />
@@ -177,6 +180,10 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
           <h3 className="meal-name" ref={title} tabIndex={-1} aria-label={restaurant}>
             <span>Neighborhood</span> <span>Pizza Kitchen</span>
           </h3>
+          <div className="supper-total">
+            <span>Dinner for two</span>
+            <b>$48.00</b>
+          </div>
           <div className="meal-ticket-note">
             {voting ? (
               <>
@@ -189,7 +196,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
                 Saved in Places
               </>
             ) : atBill ? (
-              <>Dinner for two</>
+              <>{isSplit ? 'Paid by you' : 'Guest check'}</>
             ) : (
               <>
                 <MealIcon name="check" />
@@ -199,10 +206,6 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
           </div>
           <div className="meal-bill-fold" aria-hidden={!atBill}>
             <div className="meal-fold-inside">
-              <div className="meal-bill-total">
-                <span>Paid by you</span>
-                <b>$48.00</b>
-              </div>
               {isSplit ? (
                 <div className="meal-shares">
                   <div>
@@ -224,6 +227,7 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
           </div>
           <div className="meal-entry-fold" aria-hidden={!atWorth}>
             <div className="meal-fold-inside">
+              <div className="supper-share">$24 each</div>
               <div className="meal-verdict">
                 <button
                   className="meal-favorite"
@@ -244,10 +248,6 @@ export function DinnerTable({ dinner, bill, worth, onReadDinner, onReadBill, onR
               </div>
             </div>
           </div>
-        </div>
-        <div className="meal-slip" aria-hidden={!isSplit && !atWorth}>
-          <span>$48 ÷ 2</span>
-          <strong>$24 each</strong>
         </div>
         {voting && (
           <button
