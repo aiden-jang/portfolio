@@ -1,3 +1,5 @@
+import { GLOBE_CUT_VIEWPORT_FRACTION } from '../config';
+import { useAppStore } from '../store';
 import { useEffect, useState } from 'react';
 
 function opensAtIntro() {
@@ -46,4 +48,38 @@ export function useShowroomEntry(requested: boolean) {
     };
   }, [requested, started]);
   return started || requested;
+}
+
+// Keep a loaded car for the return trip. A cold renderer can wait behind the opening still.
+export function useOpeningRenderer(entered: boolean, required: boolean) {
+  const [start, setStart] = useState(false);
+  const warm = useAppStore((s) => Boolean(s.refs.carModel || s.carLoadError || s.sceneUnavailable));
+  useEffect(() => {
+    if (!entered || required || warm) return;
+    const work = document.getElementById('sec-work');
+    if (!work) return;
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    let timer = 0;
+    const onCar = () =>
+      work.getBoundingClientRect().top >
+      innerHeight * (motion.matches ? 0.15 : GLOBE_CUT_VIEWPORT_FRACTION);
+    function check() {
+      clearTimeout(timer);
+      if (!onCar()) setStart(false);
+      else {
+        timer = window.setTimeout(() => setStart(onCar()), 240);
+      }
+    }
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    motion.addEventListener('change', check);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+      motion.removeEventListener('change', check);
+    };
+  }, [entered, required, warm]);
+  return entered && (required || warm || start);
 }

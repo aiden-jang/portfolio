@@ -35,6 +35,8 @@ for (const [width, height] of [
       const work = page.locator('#sec-work');
       const workTop = await work.evaluate((el) => scrollY + el.getBoundingClientRect().top);
 
+      // This pass checks an already-rendered car underneath the cut.
+      await expect(page.locator('.car-choice-status').first()).toHaveText('', { timeout: 90_000 });
       await expect(dock).toBeVisible();
       await expect(dock).toHaveCSS('opacity', '1');
       await scrollTo(page, workTop - height * 0.755);

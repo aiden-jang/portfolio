@@ -98,12 +98,16 @@ export function OpeningPoster() {
     };
     const onScroll = () => {
       const work = document.getElementById('sec-work');
-      if (work && work.getBoundingClientRect().top < innerHeight * 0.3) end();
-      else
-        picture.current?.style.setProperty(
+      if (!picture.current) return;
+      const away = !!work && work.getBoundingClientRect().top < innerHeight * 0.3;
+      if (away && (!corvette || refs.carModel)) end();
+      else {
+        picture.current.hidden = away;
+        picture.current.style.setProperty(
           '--opening-scroll',
           String(Math.max(0, 1 - scrollY / innerHeight)),
         );
+      }
     };
     const unsubscribe = useAppStore.subscribe((state) => {
       if (

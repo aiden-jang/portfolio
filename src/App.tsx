@@ -6,7 +6,8 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useNavigation } from './hooks/useNavigation';
-import { useShowroomEntry } from './hooks/useShowroomEntry';
+import { DEFAULT_CAR_INDEX } from './config';
+import { useOpeningRenderer, useShowroomEntry } from './hooks/useShowroomEntry';
 import { useSceneUrl } from './hooks/useSceneUrl';
 import { CarControls } from './ui/CarControls';
 import { useShowroomTransition } from './hooks/useShowroomTransition';
@@ -55,6 +56,11 @@ export function App() {
   const lineup = useLineup((state) => state.active);
   const garageStudio = useGarageStudio((state) => state.active);
   const showScene = useShowroomEntry(isCleanMode || garageStudio || lineup);
+  const corvette = useAppStore((s) => s.carIndex === DEFAULT_CAR_INDEX);
+  const renderScene = useOpeningRenderer(
+    showScene,
+    isCleanMode || garageStudio || lineup || photoMode || renderStudy || !corvette,
+  );
   useSceneUrl();
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -81,7 +87,7 @@ export function App() {
       >
         Skip to content
       </a>
-      {showScene && (
+      {renderScene && (
         <SceneBoundary>
           <Suspense
             fallback={
